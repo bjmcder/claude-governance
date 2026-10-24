@@ -69,3 +69,15 @@ Cold verification of draft 0.2, with the three new pairs: verify-offld-0.2.md. T
 | S: participants named, generalized from one vendor | Accepted: "the operations among threads that one programming model gives take a mask of their participants". |
 | RATIONALE: "after their last use" | Accepted: "released once after the last work that uses them completes". |
 | Optional: "the offload form of STND.CONC.11" | Kept: device threads are concurrent tasks under the Terms, so STND.CONC.11 reaches them and STND.OFFLD.18 is its form for a submission. |
+
+# Dispositions: STND.OFFLD 0.3 to 0.4
+
+Delta verification of draft 0.3: verify-offld-0.3.md. Numbering is unchanged. Reading copy for ratification: offld-1.0-ratification.md.
+
+| Finding | Disposition |
+| --- | --- |
+| N1: "continues with no error" for migration beyond accelerator memory | Accepted: "the run is able to thrash (o1, H4)". |
+| P2: the resubmission sentence | Accepted: "a resubmission that the default contract of STND.ANNEX.6 admits after such an error does not use that context, and draws on inputs held on the host". |
+| P3: processes do not share a context | Accepted: "share its memory, and the components and libraries of one process that share a context share its queues and its error state". |
+| P4: trailing clause on STND.OFFLD.7 in the onset paragraph | Accepted: put in parentheses. |
+| P5: "Once ... has completed" in STND.OFFLD.10 | Accepted: "After the last offloaded work that uses an allocation ... has completed". |
