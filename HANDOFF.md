@@ -1,12 +1,12 @@
 # Governance distribution at ledger entry 109 — handoff for local work
 
-This is the working governance corpus as of 2026-10-24: the snapshot of repository commit `e2b3563` plus ledger entries 46 to 109, all ratified by the custodian and applied with the harness's own commands. `verify` passes. Entries 46 to 109 are **not yet committed** to the repository.
+This is the working governance corpus as of 2026-10-24: the snapshot of repository commit `e2b3563` plus ledger entries 46 to 109, all ratified by the custodian and applied with the harness's own commands. `verify` passes. Entries 46 to 109 are committed to a local git repository rooted at this directory; history before the snapshot of `e2b3563` did not carry over.
 
 ## Contents
 
 | Path | What it is |
 | --- | --- |
-| `harness/` | The runnable harness: `governance/` (the corpus, system of record), `govharness/` (Python 3.11+, standard library only), `tests/`, `records/` (units, reviews, decisions), `README.md` (its corpus description is stale, about entry 45) |
+| `harness/` | The runnable harness: `governance/` (the corpus, system of record), `govharness/` (Python 3.11+, standard library only), `tests/`, `records/` (units, reviews, decisions, and the findings log of entries 1 to 45), `rendered/` (the six reading copies of `compose`), `README.md` |
 | `rendered/` | A reading copy of each document, composed by `govharness.derive.reading_copy.compose` (one file per document; the `_PROJECT` templates have none) |
 | `docs/COMMIT_MSG.txt` | Commit message for entries 46 to 109 |
 | `docs/CORPUS.md`, `docs/adoption-README.md`, `docs/scientific-software-constitution.md` | The project's corpus guide, adoption-folder note, and pointer document, as they stand in the claude.ai project |
@@ -20,14 +20,14 @@ This is the working governance corpus as of 2026-10-24: the snapshot of reposito
 cd harness
 python -B -m govharness verify governance        # every check passes
 python -B -m govharness check --out-dir /tmp/r governance
-python -B -m unittest discover -s tests -t .     # 16 known failures, see below
+python -B -m unittest discover -s tests -t .     # all 129 pass
 ```
 
 Last ledger entry: seq 109, `2026-10-24T08:38:00+00:00`, hash prefix `bcac6332a0872122`.
 
-## Committing to the repository
+## Repository
 
-Replace the repository's `governance/`, `govharness/`, `tests/`, and `records/` with those in `harness/`, review the diff against `e2b3563`, and commit with `docs/COMMIT_MSG.txt`. No patch file is shipped; `git diff` after the copy is the patch. Harness code for STND.HARN.26 to .28 (unit 0006) is already in `govharness/`.
+The repository is local. Its first commit is the handoff snapshot (`e2b3563` plus entries 46 to 109) with `docs/COMMIT_MSG.txt` as its message; later commits update the harness tests and README to the current corpus. `SHA256SUMS` lists the files as delivered. Harness code for STND.HARN.26 to .28 (unit 0006) is in `govharness/`.
 
 ## How the work has been run (the custodian's standing process)
 
@@ -47,8 +47,7 @@ Replace the repository's `governance/`, `govharness/`, `tests/`, and `records/` 
 
 ## Open items
 
-- **Tests:** 16 of 129 fail, the same set before and after entries 100 to 109. They encode expectations of an earlier corpus (pair counts, rendered copies, retrieval budgets, amendment helpers) and need updating to the current corpus.
-- **Harness README** describes the corpus at about entry 45; needs a rewrite.
 - **STND.HARN.18:** map the optional secret store per file and authorization; the remote-write row remains under the transition of entry 53.
+- **Corpus README:** the LVL1 row of `governance/README.md` omits `HDES/` (with `FPGA/` and `ASIC/`); it lies inside the corpus, so correct it by a transaction, not an edit alone.
 - **HW:** at its next revision, add an informative Note that for a multi-process run the execution path of HW.8 is the whole run (ruled with STND.MPI.6).
 - **Next standards, in the custodian's order:** OpenMP (after 6.1 is published), CUDA / accelerator offload (agnostic form), then BUILD (CMake, Automake, Makefiles), C, Rust, Fortran (classic and modern), Verilog/SystemVerilog, and Lean4. Each follows the determinism and agnostic directions above.

@@ -4,7 +4,8 @@ Each case damages an in-memory copy of the corpus in one known way and
 asserts that the named check reports at least the stated severity.
 Nothing is written to disk. The clean corpus must report no failure and
 no warning in the l and g families, other than the g.18 review findings
-of confirmed bundles, which is the standard's self-conformance. Ported from ``archive/tools-flat/test_drafting.py``.
+of confirmed bundles, which is the standard's self-conformance. Ported
+from ``archive/tools-flat/test_drafting.py``.
 """
 
 from __future__ import annotations
