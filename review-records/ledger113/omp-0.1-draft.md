@@ -1,0 +1,255 @@
+# OpenMP standard (STND.OMP) 1.0
+
+Adopted by The Custodian as revision 1.0 in ledger entry 114 (2026-10-24). This reading copy is composed from the per-provision files in STND/OMP/ of the governance harness; the harness files are the system of record.
+
+## Purpose and scope
+
+This standard holds the practice that is specific to the use of OpenMP, in every language in which the work uses it, on the host and on devices. It adds to STND.CONC, STND.CODE, HW, NUMER, and STND.VVUQ only what the directive model of OpenMP makes necessary. It covers the facilities that the work uses, the support of its implementations, the record of each run, and builds without OpenMP (STND.OMP.1, STND.OMP.2, STND.OMP.3, and STND.OMP.4); the data environment of constructs (STND.OMP.5, STND.OMP.6, STND.OMP.7, and STND.OMP.8); the synchronization of teams (STND.OMP.9, STND.OMP.10, STND.OMP.11, and STND.OMP.12); tasks (STND.OMP.13 and STND.OMP.14); reductions and schedules (STND.OMP.15 and STND.OMP.16); the runtime and the conduct of libraries (STND.OMP.17, STND.OMP.18, and STND.OMP.19); offload to devices (STND.OMP.20, STND.OMP.21, STND.OMP.22, STND.OMP.23, STND.OMP.24, and STND.OMP.25); and tests (STND.OMP.26 and STND.OMP.27).
+
+Every provision is a default (GOV.19), which a project replaces by a recorded decision with an alternative that meets the same higher-level outcome (REPRO.7). The failures of OpenMP code are governed by provisions that already bind at every class: STND.CONC.1 and STND.CONC.2 for asynchronous work and the failures of tasks, STND.CODE.7 for failures that code receives, HW.8 for faults, and HW.GPU.3 for offloaded work. The standard is compiler, vendor, implementation, and tool agnostic: it names no implementation, compiler, runtime, checker, or revision of the OpenMP specification, which it takes at the revision that the work's implementation documents, and it names directives, clauses, and routines of OpenMP by name and not by section (GOV.18). The rules of concurrency that hold for every model are in STND.CONC; the model-neutral rules of accelerator offload belong to a planned standard of their own; and the C++ rules for exceptions at the boundary of a construct are in STND.CXX.
+
+## Normative and informative parts
+
+The body of a numbered provision, including a table it contains, is normative. Everything else is informative.
+
+## Terms
+
+This section fixes meaning and imposes no obligation, as the Lexicon does. Concurrent task, Shared mutable object, Protection, Data race, and Lock have the meanings that STND.CONC gives them; an OpenMP task is a concurrent task, and so is each thread of a team. Execution path has the meaning that HW gives it. Directive, construct, region, structured block, clause, contention group, task, explicit task, tied task, untied task, deferred task, included task, data environment, data-sharing attribute, private, threadprivate, internal control variable, worksharing construct, barrier, device, host device, target region, map, and memory scope have the meanings that the OpenMP specification gives them.
+
+| Term | Definition |
+| --- | --- |
+| OpenMP specification | The OpenMP Application Programming Interface specification, at the revision that the OpenMP implementation of the work documents as the one it implements; where the work admits more than one OpenMP implementation, the earliest of the revisions that they document. |
+| OpenMP implementation | A compiler that translates the directives of OpenMP for the work, together with the runtime library that executes them. |
+| Feature | A directive, a clause, a modifier, a routine, or an environment variable of OpenMP. |
+| Team | The set of threads that execute one parallel region, as the OpenMP specification defines it. |
+| Offload policy | The setting of an OpenMP implementation that decides whether a target region runs on the host where no device is available: ending the run, which forbids running target regions on the host, running on the host alone, or choosing by default. |
+
+## Notes
+
+The custodian's directions of 2026-10-24 set the scope: the use of OpenMP in every language, on the host and on devices, agnostic of compiler, vendor, implementation, and tool, resting on general and timeless practice unless the revision 6.1 of the OpenMP specification is radically different. The research found it additive: its final public draft adds features and deprecates one form of atomic construct, and removes nothing (research/openmp-notes/r1-spec-trajectory.md). So the provisions rest on the core that is stable across the revisions 5.0 to 6.1: fork and join, worksharing, tasks, data-sharing attributes, reductions, atomics, and the memory model rebuilt in 5.0. The term OpenMP specification takes the revision that the implementation documents, as STND.MPI does for MPI; and because the drafts of 6.1 renumber the chapters of the specification, the provisions name directives and clauses and never sections. The sources are the research notes r1 to r4 of research/openmp-notes/, which read the specifications 5.2 and 6.0, the Examples, and the drafts of 6.1 in full text; a fact that they do not support is marked unverified.
+
+The standard adds OpenMP content to provisions that already hold the outcome, and does not restate them (GOV.31). STND.CONC holds the rules that hold for every model, and an OpenMP thread or task is a concurrent task under it: the protection of shared state (STND.CONC.3), the ordering of atomics (STND.CONC.4), the lifetimes of objects used by reference (STND.CONC.5), lock order (STND.CONC.7), the parent that waits for its tasks (STND.CONC.12), the conduct of libraries toward pools and settings of the whole process (STND.CONC.17), pools sized together on one node (STND.CONC.18), the dependence of results on the number of threads and the combination of reductions where bitwise identity is the criterion (STND.CONC.21 and STND.CONC.22), tests at several numbers of threads (STND.CONC.24), and run-time detection of data races (STND.CONC.25). This standard gives their OpenMP forms only where OpenMP sets a trap of its own. HW.CPU.3 governs the floating-point control state of each thread of a team, HW.CPU.4 records the threads of a run, and HW.CPU.5 reports oversubscription. HW.GPU.3 has offloaded work complete before its results are relied upon, HW.GPU.4 records data moved to and from devices, HW.13 and HW.14 govern what crosses between the host and a device, and HW.15 to HW.17 verify a device path against the reference path. In C++, an exception does not leave a structured block (STND.CXX.22). A program that combines OpenMP with MPI requests the thread support level that its use of threads needs (STND.MPI.3).
+
+The specification does not require an implementation to detect data races, deadlocks, or programs that do not conform, and gives a data race an unspecified result (r2, corrections; r4). Its validation suite found that 18 percent of its tests of revision 5.0 for C and C++, and 2 percent of those of 5.1, passed on all five compilers tried, with results that changed between releases of one compiler; no compiler documents full support of 5.2 or 6.0, and one accepts syntax that 6.0 removed (r1, r4). So the use of a feature rests on the documentation of each implementation that the work admits, for the language and the target of that use, and on a test that exercises it, and not on a revision number or on a clean compilation (STND.OMP.2). Revision 6.0 removed every feature that 5.0, 5.1, and 5.2 deprecated, among them the master construct, the environment variable and routine that enabled nested parallelism, and the minus operator of reductions, so a deprecated feature is a removal waiting to happen (STND.OMP.1). The initial values of the internal control variables are implementation defined, and the environment variables of OpenMP display them, which is what the record of STND.OMP.3 needs. The specification admits a program that is correct in parallel and wrong when built without OpenMP (r2, section 7), so a component states whether it builds and computes correctly that way, and is tested so where it states that it does (STND.OMP.4).
+
+In a parallel construct, each variable that the region references and that has no attribute of its own is shared, so a scratch variable declared outside the construct becomes a data race; in C and C++ the index of an inner loop declared outside the construct stays shared; and in a task, a variable not shared in the enclosing context becomes firstprivate, so the writes of the task to it are lost (r2, section 1). A default clause of none, and a defaultmap clause of none for target constructs, make each such omission an error at compilation, which is what STND.OMP.5 asks where a construct admits such a clause. A private copy starts with an undefined value; the original of a privatized variable has an unspecified value after the construct unless a lastprivate, reduction, or copyprivate clause defines it; and a lastprivate variable that the sequentially last iteration does not assign has an unspecified value (STND.OMP.6). A threadprivate variable keeps its value between parallel regions only where neither region is nested, the teams have the same size and binding, dynamic adjustment is off, and no pause or teams construct intervenes, and an untied task that accesses threadprivate storage does not conform (STND.OMP.7), which is the OpenMP form of STND.CONC.16. A routine that shares its local variables with tasks and returns before they complete leaves them a dangling reference; the specification leaves that lifetime to the code that creates the tasks (STND.OMP.8, the OpenMP form of STND.CONC.5 and STND.CONC.12). The procedures of Fortran with initialized local variables or with the attribute SAVE have static storage, which is shared, so they are not safe to call from several threads without a protection (r2, sections 1 and 9).
+
+Barriers and worksharing regions are reached by every thread of a team or by none, in the same order, so one inside control flow that differs between threads deadlocks (STND.OMP.9). A nowait clause lets threads proceed without a flush, and the values of lastprivate and reduction clauses are then defined only after a later synchronization; a masked region has no implied flush at its entry or exit (STND.OMP.10). An atomic construct without a memory-order clause behaves as relaxed, so a flag set by an atomic write does not publish the data written before it; this differs from the default of the languages whose atomics order by default, which is why STND.OMP.11 asks for an ordering clause, or for a default declared by a requires directive, where STND.CONC.4 would otherwise expect sequential consistency. A flush with a list does not order accesses to other variables, and the Examples call it extremely error prone (STND.OMP.11). Every unnamed critical construct shares one name, so unrelated critical sections exclude one another, and a critical region inside another of the same name deadlocks; a lock used across contention groups has unspecified behavior (STND.OMP.12).
+
+The items of depend clauses that order two tasks name identical or disjoint storage; a taskwait waits only for the children of the task that encounters it, so data written by their descendants needs a taskgroup or a barrier; and a detached task completes only when its event is fulfilled, so an error path that skips the fulfillment hangs the program (STND.OMP.13). Recursive creation of tasks without a cutoff is able to exhaust the limits of the implementation, and a task that the implementation merges into its parent, includes, or defers gives different results where code depends on the difference (STND.OMP.14). The specification leaves unspecified how many times, and in what order, the combiner of a declared reduction runs, so a combiner that is not associative and commutative gives results that depend on the schedule (STND.OMP.15). A static schedule, or an order clause with the reproducible modifier, gives the same mapping of iterations to threads for the same numbers of iterations and threads, but does not fix the order in which a reduction combines its partial results; with no schedule clause, revision 6.0 behaves as if the schedule were auto (STND.OMP.16). The custodian's directions on determinism apply: a declared dependence on the number of threads within the agreement that the acceptance criterion fixed is no defect (STND.VVUQ.82).
+
+The routines that set the number of threads or dynamic adjustment set the internal control variable of the current task, which every later region of the caller inherits, so a library that calls them changes the behavior of its caller (STND.OMP.17, the OpenMP form of STND.CONC.17); a library uses the clauses of its own constructs instead. A team is able to have fewer threads than requested, so state kept for each thread is sized from the team that the region has (STND.OMP.18). A branch, a longjmp, or an exception that leaves a structured block does not conform, and whether an exception that leaves certain constructs is caught or ends the program is implementation defined; a signal handler executes only directives and routines with the property of being safe in a signal handler, and in revision 6.0 only the entry points of tools have it (r2, section 6, by inference from that property) (STND.OMP.19). A process with an OpenMP runtime pauses its resources before it creates a child by copying itself (r2, section 5), which STND.CONC.19 governs.
+
+The rules for offload rest on research/openmp-notes/r3-offload.md. A target region runs on the host when no device is available or supported, or when its if clause is false, and under the default offload policy it does so silently; only the policy that ends the run when no device is available forbids that fallback (STND.OMP.20). A region with its data elsewhere than intended is the leading cause of offload defects: a scalar referenced in a target region is firstprivate, so the writes of the device to it are lost; a pointer whose target is not mapped keeps its host address; a structure mapped in part and referenced in full does not conform; an update of data that is not present on the device does nothing unless it carries the present modifier; and a copy back to the host happens only when the reference count of the data reaches its release, or under the always modifier or an update construct (STND.OMP.21 and STND.OMP.22). A device that does not meet a requires directive of the program is not a supported device, so code that relies on memory shared between host and device falls back to the host, or fails, on a device with separate memory, and one implementation documents dropping such devices; shared memory still needs synchronization between host and device (STND.OMP.23). The default memory scope of an atomic construct is the device, so an atomic that orders accesses between host threads and device threads carries a scope that includes both (STND.OMP.24). The floating-point environment inside and after a target region is unspecified, and the mathematical functions and the contraction of operations on a device differ from those of the host (STND.OMP.25); HW.5 has the hardware contract state the delivered arithmetic of each path, and STND.VVUQ.1 gives the tier of a comparison between them. Most of these rules are specific to the directive model of OpenMP; completion before results are read, the movement of data, and device arithmetic hold for every offload model and belong to the planned standard for offload, which this standard is to cite once it is adopted.
+
+Tests of offloaded code run once under the policy that ends the run when no device is available, so that a silent run on the host does not pass as a device run, and once on the host alone where the implementation supports it, each against a host reference (STND.OMP.26). A detector of data races sees offloaded regions only when they run on the host, and errors of mapping, stale data among them, escape race detectors; in one study no single tool caught every class of anomaly studied, so a check of mapping errors is a separate check (STND.OMP.27; r4). STND.CONC.24 asks for tests at several numbers of threads, among them one, and STND.CONC.25 for run-time detection of data races where the means exist.
+
+No OpenMP coding standard comparable to the safety and security coding standards of languages was found; one safety standard for C++ forbids pragmas outright, and one for C asks that each be documented and justified (r4). The literature on OpenMP for systems of high integrity proposes a restricted subset of OpenMP, a static allocation of tasks, memory bounded and allocated before parallel execution, and the exclusion of constructs whose order is not deterministic; such a subset, recorded as a decision, is one means for a project of CSQ0 or CSQ1 of meeting STND.CONC.28 and STND.OMP.2.
+
+Under STND.CLASS.10, each provision instantiates only DSGN, SIMPL, REPRO, VV, or a provision of HW, and applies from CSQ3; work of CSQ4 may omit it. The part of a provision that rests on a row of the table of STND.CLASS.10 applies from the class of that row: STND.OMP.2, which rests on DSGN.5, from CSQ2; and the parts that instantiate HW.4, HW.11, HW.13, or HW.14, which the Notes of HW apply from CSQ2, from CSQ2: the first sentence of STND.OMP.11, STND.OMP.21, STND.OMP.22, the first sentence of STND.OMP.23, STND.OMP.24, and STND.OMP.27. The parts that instantiate HW.3, HW.9, HW.15, or HW.19 apply from CSQ3, as the Notes of HW apply those; STND.OMP.25 and the second sentence of STND.OMP.23, which rest on DSGN.5, apply from CSQ2. The sentences of each provision with three modals share one onset. No provision raises the floor (GOV.11).
+
+## References
+
+| Identifier | Title |
+| --- | --- |
+| DSGN | Design |
+| GOV | Governance |
+| HW | Execution hardware |
+| HW.CPU | General-purpose processors |
+| HW.GPU | Accelerators |
+| REPRO | Reproducibility |
+| RSRC | Resources |
+| SIMPL | Simplicity |
+| STND.CLASS | Consequence-class criteria |
+| STND.CODE | Coding standard |
+| STND.CONC | Concurrency standard |
+| STND.CXX | C++ standard |
+| STND.MPI | Message Passing Interface standard |
+| STND.VVUQ | Verification, validation, and uncertainty quantification methods |
+| VV | Correctness |
+
+## Provisions
+
+### Environment
+
+#### STND.OMP.1 OpenMP facilities used
+
+Default. Instantiates SIMPL.6, REPRO.7.
+
+Each feature that the work uses SHOULD be one that the OpenMP specification defines and does not mark as deprecated (SIMPL.6). Where the work uses an extension of its OpenMP implementation, a decision record SHOULD state the extension, the reason for its use, and the behavior of the work on an OpenMP implementation that lacks it (REPRO.7).
+
+#### STND.OMP.2 Implemented features only
+
+Default. Instantiates DSGN.5, VV.1.
+
+Each feature that the work uses SHOULD be one that the documentation of each OpenMP implementation that the work admits states as implemented for the language and the device of that use (DSGN.5). Each such feature SHOULD be exercised by a test of the work on each OpenMP implementation that the work admits (DSGN.5, VV.1).
+
+#### STND.OMP.3 OpenMP run record
+
+Default. Instantiates HW.3, REPRO.2.
+
+Among the items that HW.3 asks of the record of each result, the record of each result that code using OpenMP computes SHOULD give the OpenMP implementation and its revision, the runtime library loaded at run time, the value at the start of the run of each internal control variable that sets the number of threads, their binding and places, dynamic adjustment, the number of active levels of parallelism, the policy of waiting threads, and the size of the stacks of threads, and the offload policy and the devices that the run uses (HW.3, REPRO.2).
+
+#### STND.OMP.4 Builds without OpenMP
+
+Default. Instantiates SIMPL.6, DSGN.1, VV.1.
+
+The documentation of each component that uses OpenMP SHOULD state whether the component builds, and computes its results within their stated tolerances, with OpenMP disabled (SIMPL.6, DSGN.1). Where that documentation states so, the checks of each change SHOULD build and test the component with OpenMP disabled (VV.1).
+
+### Data environment
+
+#### STND.OMP.5 Explicit data-sharing attributes
+
+Default. Instantiates SIMPL.6, DSGN.14.
+
+Each construct that creates a data environment SHOULD give each variable that its region references an explicit or a predetermined data-sharing attribute (SIMPL.6, DSGN.14). Where a construct admits a clause that makes an implicit data-sharing attribute or map an error, the construct SHOULD carry that clause (SIMPL.6).
+
+#### STND.OMP.6 Private and last values
+
+Default. Instantiates DSGN.14.
+
+Where no clause initializes a private copy of a variable, code SHOULD write that copy before it reads it (DSGN.14). Where no clause of a construct defines the value of an original variable that the construct privatizes, code SHOULD NOT rely on that value after the construct (DSGN.14). Each variable of a lastprivate clause SHOULD be assigned in the iteration or the section that is sequentially last, or carry the conditional modifier (DSGN.14).
+
+#### STND.OMP.7 Threadprivate persistence
+
+Default. Instantiates DSGN.14.
+
+Where code relies on the value of a threadprivate variable persisting from one parallel region to another, those regions SHOULD meet the conditions under which the OpenMP specification makes it persist, or copy the value in at the start of the later region (DSGN.14). Each task that accesses threadprivate storage SHOULD be a tied task (DSGN.14).
+
+#### STND.OMP.8 Shared locals and explicit tasks
+
+Default. Instantiates DSGN.14.
+
+A routine that shares one of its local variables with an explicit task SHOULD complete, before it returns, a taskwait, a taskgroup, or a barrier that waits for that task (DSGN.14).
+
+### Synchronization
+
+#### STND.OMP.9 Uniform team constructs
+
+Default. Instantiates DSGN.15.
+
+The threads of each team SHOULD encounter the same worksharing and barrier regions, in the same order (DSGN.15). Each worksharing and barrier construct SHOULD be reached under conditions that hold alike for every thread of its team (DSGN.15).
+
+#### STND.OMP.10 Consumers of nowait regions
+
+Default. Instantiates DSGN.15.
+
+Where a construct carries a nowait clause, each read of data that its region writes, a lastprivate or reduction result included, SHOULD follow a synchronization that completes that region (DSGN.15). Each read by another thread of data that a masked region writes SHOULD follow a synchronization that follows that region (DSGN.15).
+
+#### STND.OMP.11 Atomic memory order clauses
+
+Default. Instantiates DSGN.15, HW.11.
+
+Each atomic construct that orders accesses to other data between threads SHOULD carry a memory-order clause that orders them, or rely on a default memory order that a requires directive of its compilation unit declares (DSGN.15, HW.11). Code SHOULD NOT use a flush construct with a list (DSGN.15).
+
+#### STND.OMP.12 Named critical sections
+
+Default. Instantiates DSGN.15.
+
+Each critical construct SHOULD carry a name for the shared mutable objects that it protects (DSGN.15). Where a critical region is able to run inside another, the two SHOULD carry different names (DSGN.15). Each OpenMP lock SHOULD be set and unset only by threads of the contention group in which it was initialized (DSGN.15).
+
+### Tasks
+
+#### STND.OMP.13 Task dependences and waits
+
+Default. Instantiates DSGN.15.
+
+The items of the depend clauses that order two tasks SHOULD name identical or disjoint storage (DSGN.15). Before code reads data that tasks write, it SHOULD complete a wait that covers each task that writes that data, its descendants included (DSGN.15). The event of each detached task SHOULD be fulfilled on every path of the code that holds it, failures included (DSGN.15).
+
+#### STND.OMP.14 Bounded task creation
+
+Default. Instantiates RSRC.1, DSGN.1.
+
+Each recursive or repeated creation of tasks SHOULD stop deferring tasks at a stated cutoff (RSRC.1, DSGN.1). The results of code that creates tasks SHOULD be the same whether each task is deferred, included, or merged (DSGN.1).
+
+### Reductions and schedules
+
+#### STND.OMP.15 Declared reduction properties
+
+Default. Instantiates DSGN.1, REPRO.7.
+
+Each declared reduction SHOULD state, at its declaration, why its combiner is associative and commutative within the tolerance that judges its results, and why its initializer is an identity of its combiner (DSGN.1, REPRO.7).
+
+#### STND.OMP.16 Reproducible iteration mapping
+
+Default. Instantiates REPRO.3.
+
+Where a result relies on the mapping of the iterations of a loop to threads, the loop SHOULD carry a schedule or an order clause under which the OpenMP specification makes that mapping reproducible (REPRO.3). Code SHOULD NOT rely on such a clause to fix the order in which a reduction combines values (REPRO.3).
+
+### Runtime and libraries
+
+#### STND.OMP.17 Caller's control variables kept
+
+Default. Instantiates DSGN.14.
+
+Where its contract does not state otherwise, a library SHOULD leave each internal control variable of its caller unchanged, and set the number of threads and the other properties of the regions that it creates through clauses of its own constructs (DSGN.14).
+
+#### STND.OMP.18 Team size as obtained
+
+Default. Instantiates DSGN.1.
+
+Code SHOULD size the state that it keeps for each thread of a team from the number of threads that the team has, obtained inside its region, and not from the number that it requested (DSGN.1).
+
+#### STND.OMP.19 Structured block exits
+
+Default. Instantiates DSGN.1, DSGN.15.
+
+Code SHOULD leave the structured block of a construct only through the end of that block, or by ending the program (DSGN.1). Each exception raised in a structured block SHOULD be caught within that block by the thread that raised it (DSGN.1). A signal handler SHOULD contain no OpenMP directive and call no OpenMP routine (DSGN.15).
+
+### Offload
+
+#### STND.OMP.20 Device placement enforced
+
+Default. Instantiates HW.19, HW.9, HW.15, VV.1.
+
+Each run that relies on a target region running on a device SHOULD run under the offload policy that forbids running target regions on the host, or confirm from inside the region that it ran on a device and report each region that ran on the host (HW.19, HW.9). Each if clause of a device construct SHOULD have its path on the host stated and tested (HW.15, VV.1).
+
+#### STND.OMP.21 Structures and pointers on devices
+
+Default. Instantiates DSGN.4, HW.13.
+
+Where a target region references a member of a structure, its maps SHOULD cover the whole structure or each member that it references (DSGN.4, HW.13). Where a target region dereferences a pointer, the storage that the pointer addresses SHOULD be mapped, and the pointer attached to it on the device (DSGN.4, HW.13). A pointer attached on a device SHOULD keep its value while it is mapped (DSGN.4, HW.13).
+
+#### STND.OMP.22 Balanced and present mappings
+
+Default. Instantiates DSGN.14, HW.13, HW.14.
+
+Each mapping that code starts outside a structured data construct SHOULD be ended exactly once on every path, failures included (DSGN.14, HW.13). Each update of data on a device on which a result relies SHOULD carry the present modifier (HW.14). Where a result relies on data copied back from a device, the code SHOULD complete a copy that the reference count of that data does not suppress, by an update construct or an always modifier (HW.13).
+
+#### STND.OMP.23 Shared memory reliance
+
+Default. Instantiates DSGN.5, HW.4, HW.19.
+
+Each component that relies on memory shared between the host and a device SHOULD state that reliance in the hardware contract of its execution path (DSGN.5, HW.4). Where no device that a run uses meets that requirement, the run SHOULD end with a report to the operator, or run a variant of the component that maps its data (DSGN.5, HW.19).
+
+#### STND.OMP.24 Host and device atomics
+
+Default. Instantiates DSGN.15, HW.11.
+
+Each atomic construct that orders accesses between threads of the host and threads of a device SHOULD carry a memory scope that includes both (DSGN.15, HW.11).
+
+#### STND.OMP.25 Floating-point state on devices
+
+Default. Instantiates DSGN.5, HW.5.
+
+Code SHOULD rely on a floating-point environment only within the host code or the target region that sets it (DSGN.5, HW.5).
+
+### Tests
+
+#### STND.OMP.26 Offload test runs
+
+Default. Instantiates VV.1, HW.15.
+
+The tests of each target region SHOULD run it under the offload policy that forbids running target regions on the host, run it on the host alone under each OpenMP implementation that supports such a run, and compare each result with a reference computed on the host within a tolerance of the tier that STND.VVUQ.1 gives (VV.1, HW.15).
+
+#### STND.OMP.27 Mapping checks
+
+Default. Instantiates DSGN.15, HW.14.
+
+Where the means of the work include a check that detects at run time data missing from a device, stale on it, or mapped in error, the tests of each change to code with target regions SHOULD run under that check (DSGN.15, HW.14).
+
+## Revision History
+
+| Revision | Date | Change |
+| --- | --- | --- |
+| 1.0 | 2026-10-24 | Adopted. |
