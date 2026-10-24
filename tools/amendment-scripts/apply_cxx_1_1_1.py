@@ -26,32 +26,24 @@ NEW = ("STND.BUILD.11 and STND.BUILD.12 are the general rules for the settings o
        "warnings that fail the checks of a change, of which STND.CXX.4 and STND.CXX.25 are the C++ forms, and they "
        "reach further, to the settings of each link step and to each tool of the toolchain.")
 
-TERMS = [
-    ("Repository configuration, Static check, and Execution setting have the meanings that STND.CODE gives them; "
-     "Safety-related component has the meaning that STND.CLASS gives it.",
-     "Repository configuration, Static check, and Execution setting have the meanings that STND.CODE gives them; "
-     "Safety-related component has the meaning that STND.CLASS gives it; Reporting build has the meaning that "
-     "STND.BUILD gives it."),
-]
-
 OLD27 = "Library checks therefore remain a second layer that STND.CXX.27 lets a budget remove."
-NEW27 = ("Library checks therefore remain a second layer that STND.CXX.27 lets a budget remove. Each reporting build "
-         "is a build from which the work reports a result or makes a release, and so a build that STND.CXX.27 "
-         "reaches; the words of STND.CXX.27 do not leave out, as the term Reporting build does, a build from which "
-         "the work reports only the verdict of a test.")
+NEW27 = ("Library checks therefore remain a second layer that STND.CXX.27 lets a budget remove. Each build that "
+         "STND.BUILD calls a reporting build is a build from which the work reports a result or makes a release, "
+         "and so a build that STND.CXX.27 reaches.")
 
 READING = ("the informative Notes cite STND.BUILD.11 and STND.BUILD.12 as the general rules of which STND.CXX.4 and "
            "STND.CXX.25 are the C++ forms, where they named the standard for building software in words, and relate "
-           "the builds of STND.CXX.27 to the Reporting build of STND.BUILD, a term that the Terms import; References "
-           "lists STND.BUILD; no obligation changes")
+           "each reporting build of STND.BUILD to the builds that STND.CXX.27 reaches; References lists STND.BUILD; no "
+           "obligation, permission, or defined meaning changes")
 
 ROW = f"| 1.1.1 | {DATE} | Editorial amendment (GOV.41): {READING}. |"
 
 RATIONALE = (f"Editorial amendment of STND.CXX, revision 1.1.1, ratified by the custodian on {DATE}, on the adoption "
              f"of STND.BUILD: {READING}. The change is editorial because it replaces a description of STND.BUILD by "
              "a citation of the provisions that the Notes of STND.BUILD already name as the general rules of "
-             "STND.CXX.4 and STND.CXX.25, relates the words of STND.CXX.27 to a term of STND.BUILD without changing "
-             "what STND.CXX.27 asks, and changes no provision, mode, class onset, or term that this standard defines. Transition "
+             "STND.CXX.4 and STND.CXX.25, states that each build that a term of STND.BUILD names is one that the words "
+             "of STND.CXX.27 already reach, without changing what STND.CXX.27 asks, and changes no provision, mode, "
+             "class onset, or term of this standard, its Terms included. Transition "
              "(GOV.42): none, because no obligation changes. Review: the reconciliation reviews of the round, whose "
              "items R3 and R5 this closes; records review-records/round-2026-10-24/fixpass.md and fixpass-2.md."
              " Text authored by an agent, Claude (Anthropic), at the custodian's direction (REPRO.5)."
@@ -60,7 +52,7 @@ RATIONALE = (f"Editorial amendment of STND.CXX, revision 1.1.1, ratified by the 
 
 def apply(root: Path) -> None:
     root = Path(root)
-    replace_text(root, "STND/CXX/_doc.md", [(OLD, NEW), (OLD27, NEW27)] + TERMS)
+    replace_text(root, "STND/CXX/_doc.md", [(OLD, NEW), (OLD27, NEW27)])
     raise_revision(root, "STND/CXX", "1.1", "1.1.1", ROW)
     B.write_references(root, ["STND.CXX"])
     rec = record_transaction(root, Change(kind="amend", actor="The Custodian", role="custodians", at=AT,

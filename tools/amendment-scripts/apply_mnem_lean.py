@@ -11,7 +11,8 @@ ROW_AFTER = "| OFFLD | STND | Accelerator offload standard | none | Reads as off
 ROW = "| LEAN | STND | Lean standard | none | Reads as the language in covered work: the name of Lean and the extension of its source files; Lean has no established acronym | active |"
 RATIONALE = ("Register change, ratified by the custodian on " + DATE + ": MNEM gains LEAN under STND, for the standard"
              " on Lean; the mnemonic reads as the language in covered work, since it is the name of the language and the"
-             " extension of its source files, and Lean has no established acronym (STND.IDENT.18, STND.IDENT.23)."
+             " extension of its source files, and Lean has no established acronym; its letter distance from each mnemonic"
+             " under STND is at least 3, the nearest being DEPS, FTN, and HARN (STND.IDENT.18, STND.IDENT.23)."
              " Text authored by an agent, Claude (Anthropic), at the custodian's direction (REPRO.5)."
              " Under the ruling of ledger entry 15, this decision is the QA.7 review.")
 

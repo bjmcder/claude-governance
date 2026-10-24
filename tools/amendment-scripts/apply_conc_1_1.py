@@ -78,8 +78,12 @@ DOC = [
      "Records that concurrent tasks write to one file or one log appear in the order in which the tasks reach their "
      "writes, which the schedule sets unless a protocol of the tasks fixes it; a declared variation of that order is "
      "no defect under REPRO.3, and a result that relies on an order that nothing fixes rests on undeclared "
-     "variation (STND.CONC.30). STND.FTN.26 is the form of STND.CONC.30 for the records that the iterations of a DO "
-     "CONCURRENT construct and the images of a Fortran program write to one file."),
+     "variation (STND.CONC.30). REPRO.3 already asks that variation be declared, and HW.12 has each execution path "
+     "declare whether the scheduling of its concurrent work varies; STND.CONC.30 adds the scope, the writes of "
+     "concurrent tasks to one output, and the alternative of an order that a protocol of those tasks fixes. "
+     "STND.FTN.26 is the Fortran case of STND.CONC.30 in which no protocol fixes the order: it asks that code not "
+     "rely on the order of the records that the iterations of a DO CONCURRENT construct and the images of a Fortran "
+     "program write to one file."),
     ("and the record of operations left pending at the end of a run (STND.CONC.29).",
      "the record of operations left pending at the end of a run (STND.CONC.29); and the order of the writes of "
      "concurrent tasks to one output or one record (STND.CONC.30)."),
@@ -105,7 +109,8 @@ Where concurrent tasks write to one output or one record, the order in which the
 NEW_READING = ("new STND.CONC.30, a default from CSQ3 (DSGN.15, REPRO.3), has the order in which the writes of concurrent "
                "tasks to one output or one record appear stated, as an order that a protocol of the tasks fixes or as a "
                "variation that the record of the output declares; the Purpose lists it, the Notes give its reason "
-               "and name STND.FTN.26 as its Fortran form, and the class paragraph states its onset")
+               "and what it adds to REPRO.3 and HW.12, and name STND.FTN.26 as its Fortran case in which no protocol fixes "
+               "the order, and the class paragraph states its onset")
 
 READING = ("the Purpose and the Notes cite STND.OMP, adopted in ledger entry 114, STND.OFFLD, adopted in ledger "
            "entry 116, and STND.WFLOW in place of the planned standards for directive-based threading, for "
