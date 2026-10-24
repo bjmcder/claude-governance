@@ -38,7 +38,7 @@ A front-matter block between `---` lines holds the fields, one per line, written
 | `GUARD/`, `VV/`, `REPRO/`, `INTPR/`, `DSGN/`, `SIMPL/`, `RSRC/`, `QA/` | LVL0 | General Articles |
 | `GOV/` | LVL0 | Governance Article |
 | `LEX/` | LVL0 | Lexicon, one file per term |
-| `AGENT/`, `NUMER/`, `MEAS/`, `CPS/`, `ML/`, `HW/` (with `CPU/`, `GPU/`, `QPU/`, `EMBED/`, `FPGA/`, `ASIC/`) | LVL1 | Profiles and sub-profiles |
+| `AGENT/`, `NUMER/`, `MEAS/`, `CPS/`, `ML/`, `HW/` (with `CPU/`, `GPU/`, `QPU/`, `EMBED/`, `FPGA/`, `ASIC/`), `HDES/` (with `FPGA/`, `ASIC/`) | LVL1 | Profiles and sub-profiles |
 | `STND/` | LVL2 | Standards, one subdirectory each |
 | `KNOW/` | none | Knowledge base; informs, never governs (GOV.32) |
 | `TAG/` | none | Tag vocabulary, one subdirectory per facet |
