@@ -41,3 +41,37 @@ Reviews: `review-cold.md` and `review-pairs.md` in this folder. The scripts are 
 | 2 | STND.JL.27 could instantiate DSGN.14 | Optional; the coordinator asked for a decision | Done. STND.JL.27 instantiates DSGN.14 in place of DSGN.15 and cites it (DSGN.14, STND.CONC.16). The reason is that the rule concerns which state a task owns, as in STND.CONC.16, and not a protocol of shared state. Its onset stays CSQ3, because DSGN.14 rests on no row of STND.CLASS.10. The history row and RATIONALE say so. One effect: STND.JL.27 loses its three pairs, with AGENT.39, HDES.11, and HW.11, which rested on DSGN.15. No provision of a profile instantiates DSGN.14, so STND.JL.27 now has no STND.HARN.28 pair. STND.JL now has 167 pairs, down from 170. |
 | 3 | STND.PY.17 and STND.JL.24 do not say how a part is defined | Optional | Kept, for the same reason as the cold review's citation item: STND.CONC.23 applies on its own, and there is no conflict. A decision for the custodian. |
 | 4 | NUMER.2 matter name: "Independence of random streams" | Optional | Kept "Random streams of a computation divided among concurrent tasks", which follows the custodian's assignment at the adoption of STND.CONC. A decision for the custodian. |
+
+## STND.CONC 1.0.1 completed at the coalesce
+
+These items were deferred above, until the numbers of the new standards were final. Each citation below rests on the text of the standard it names: its provision bodies and Notes in `tools/amendment-scripts/content_*.py`, or `rendered/STND.OFFLD.md` and `rendered/STND.OMP.md`. The change stays editorial: it alters only the informative Notes and the derived References.
+
+| Provision of STND.CONC | Forms or applications now named in its Notes | Source in the citing standard |
+| --- | --- | --- |
+| STND.CONC.1 | STND.OFFLD takes each submission as an asynchronous operation; STND.WFLOW takes each job submitted to a scheduler as one. The Notes of STND.RUST apply it to a thread that panics or whose join handle is dropped, and those of STND.SV to the tasks of a testbench. | OFFLD Terms; WFLOW Terms and Notes; RUST Notes; SV Notes |
+| STND.CONC.2 | STND.OFFLD.8, the way the failure reaches device code. The Notes of STND.FTN read ERROR STOP as the halt it asks. | OFFLD Notes; FTN Notes |
+| STND.CONC.3 | STND.STDC.35 (bit-fields), STND.FTN.11 (SAVE, module, and common variables), STND.RUST.21 (`Send` and `Sync`), STND.OFFLD.5 (host storage under transfer), and STND.SV.5 to STND.SV.8, the protection for simulation processes | STDC.35 body; FTN Notes; RUST Notes; OFFLD Notes; SV Notes |
+| STND.CONC.5, STND.CONC.12 | STND.OMP.8 | OMP Notes |
+| STND.CONC.8 | STND.RUST.23, which makes it mechanical | RUST Notes |
+| STND.CONC.11 | STND.OFFLD.18. The Notes of STND.FTN apply it to DO CONCURRENT. | OFFLD Notes; FTN Notes |
+| STND.CONC.13 | STND.RUST.22 adds what the drop of a future makes necessary | RUST Notes |
+| STND.CONC.15 to STND.CONC.17 | The Notes of STND.RUST apply them to executors | RUST Notes |
+| STND.CONC.17 | STND.OMP.19. The Notes of STND.FTN apply it to a library that sets floating-point modes. | OMP Notes; FTN Notes |
+| STND.CONC.23 | STND.SV.23, the form for the random stimulus of a testbench | SV Notes |
+| STND.CONC.25 | It applies to C and Fortran by its own scope. STND.OMP.32 adds the mapping check that race detectors miss, and STND.OFFLD.30 the checks of device code. | STDC and FTN Notes; OMP Notes; OFFLD.30 body |
+| STND.CONC.27 | STND.RUST.33. One record meets STND.STDC.38 and STND.CONC.27. The second sentence of STND.BUILD.13 makes STND.CONC.27 specific. | RUST, STDC, and BUILD Notes |
+| STND.CONC.28 | STND.LEAN.19, with the row Code that runs of STND.LEAN.4 | LEAN Notes |
+
+Other dispositions:
+
+- **Correction.** The Notes said "the third sentence of STND.CONC.11", but STND.CONC.11 has two sentences. The text now reads "the second sentence".
+- **Not named, because the text does not support a form.**
+  - The STND.RUST Notes say only that STND.CONC.15 to STND.CONC.17 govern executors and state local to a thread; they name no Rust provision as a form of STND.CONC.16. The cold review had suggested one.
+  - The Notes of STND.FTN on STND.CONC.21, STND.CONC.22, and STND.CONC.24 are readings, not forms.
+  - The STND.WFLOW Notes on STND.CONC.10, STND.CONC.13, STND.CONC.14, and STND.CONC.29 are also readings, not forms.
+- **Cold review item 5, event-driven simulation.** Left to STND.SV. Its Notes apply the Term Concurrent task to simulation processes and the Term Event loop to the kernel, and the new STND.CONC sentence on STND.SV.5 to STND.SV.8 records that reading.
+- **STND.WFLOW.32.** Kept as the custodian's coordinator directed. It is "File system guarantees relied upon" in the final `content_wflow.py`.
+- **Rehearsal.** `apply_round_2026_10_24.py` gives 23 entries, 117 to 139, with STND.CONC 1.0.1 at entry 137. `verify` passes. `findings.py` on STND.CONC gives 5 g.18 review notes, the same as before the round, and no defect.
+  - The rehearsed copy is at `.scratch/amendments/round/governance`.
+  - `STND.CONC-draft.md`, `STND.CONC.diff`, and `STND.CONC-pairs.md` (354 pairs) are regenerated from it.
+  - References now also lists STND.BUILD, STND.FTN, STND.LEAN, STND.RUST, STND.STDC, STND.SV, and STND.WFLOW.
