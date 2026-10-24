@@ -35,16 +35,16 @@ RATIONALE = (
     " and no OpenMP in signal handlers (STND.OMP.19 to STND.OMP.22); device placement enforced or confirmed, device"
     " numbers checked and device allocations released by their paired routine, structures and pointers mapped,"
     " balanced mappings, the present modifier, and copies back that the reference count does not suppress, device"
-    " copies of global variables kept current, reliance on shared memory declared in the same requires directive and"
+    " copies of global variables kept current, reliance on shared memory declared by requires directives with the same clauses and"
     " answered where no device meets it, memory scopes of atomics between host and device, and no floating-point"
     " environment relied on across the target boundary (STND.OMP.23 to STND.OMP.30); and tests under mandatory"
     " offload and on the host alone against a host reference, mapping checks where the means exist, and tests under"
-    " each run-time schedule and binding in use (STND.OMP.31 to STND.OMP.33). No provision binds and none raises the"
+    " each schedule and binding of threads that the runs set (STND.OMP.31 to STND.OMP.33). No provision binds and none raises the"
     " floor (GOV.11): the failures of OpenMP code are governed by PRIME.4, STND.CONC.1, STND.CONC.2, STND.CODE.7,"
     " HW.8, and HW.GPU.3, which already bind at every class. Transition (GOV.42): none, because no project instrument"
-    " cites a draft of it. Review of STND.HARN.28 by the command pairs and by reading, a cold review, a pair review,"
-    " and cold verifications; record review-records/ledger113/. The review found no conflict that remains and no"
-    " matter that no shared-matters table gives."
+    " cites a draft of it. Review of STND.HARN.28 by the command pairs and by reading, a cold review, pair reviews of the draft and"
+    " of its changes, and cold verifications; record review-records/ledger113/. The review found no conflict that remains and no"
+    " matter left without an owner in a shared-matters table."
 )
 
 

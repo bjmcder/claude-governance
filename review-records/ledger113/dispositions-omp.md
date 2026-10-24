@@ -93,3 +93,22 @@ Review: review-pairs-omp-0.2.md (144 new pairs, STND.OMP.24 and the changed prov
 | GOV.31: STND.OMP.12 S1 in part restates STND.CONC.3 | Kept: the OpenMP content is that the protection of an atomically accessed location is the atomic construct and not a critical construct or a lock, which the Notes give. |
 
 The pairs of 0.3 (pairs-OMP-0.3.md) are the same 477 as those of 0.2.
+
+# Dispositions: STND.OMP 0.3 to 0.4
+
+Cold verification of draft 0.3: verify-omp-0.3.md. Numbering is unchanged.
+
+| Finding | Disposition |
+| --- | --- |
+| B1: STND.OMP.12 S3 "by an atomic construct" attaches to the handler | Accepted: "Code SHOULD NOT use an atomic construct to access a storage location that a signal handler accesses." |
+| B2: 6.0 did not remove every 5.x deprecation (r1: destroy on depobj undeprecated) | Accepted: the exception is stated. |
+| B3: not every initial value of an internal control variable is implementation defined | Accepted: "most of the internal control variables that STND.OMP.3 names" (r2 lists seven; cancellation starts false). |
+| B4: STND.CONC.24 misquoted | Accepted: three or more numbers, among them the smallest that a component admits. |
+| B5: RATIONALE stale and cut off | Accepted: "requires directives with the same clauses", "each schedule and binding of threads that the runs set", "no matter left without an owner in a shared-matters table"; the review list names the pair review of the changes. |
+| Title of STND.OMP.12 does not cover S3 | Accepted: "Locations accessed atomically". |
+| Handler sentence in the Notes indicative and uncited | Accepted: "STND.OMP.12 keeps atomic constructs off a location that a handler accesses, and the standard of the base language governs the access of the handler to it". |
+| Default device set by the environment not in r1 to r4 | Marked unverified. |
+| Threadprivate qualifier attributed to r2 | Accepted: the qualifier is stated as an inference from r2, rule 8. |
+| `fork` guidance from the Examples | Accepted: "The Examples of the specification warn". |
+| STND.OMP.1 "published or in public draft" not in the Notes | Accepted. |
+| STND.OMP.16 S1 "other than a test run" a second condition | Accepted: "each run of that code that produces a reported result", a restriction of the subject and no second condition. |
