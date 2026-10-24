@@ -28,7 +28,8 @@ harness/
 │   ├── AGENT/  NUMER/  MEAS/  CPS/  ML/
 │   ├── HW/{CPU,GPU,QPU,EMBED,FPGA,ASIC}/  HDES/{FPGA,ASIC}/       LVL1
 │   ├── STND/{DRAFT,IDENT,CLASS,DFLT,INSTR,HARN,VVUQ,CODE,THRT,
-│   │        KNOW,DEPS,PROJ,WPROC,CREW,DOCS,CXX,PY,JL,ANNEX,MPI}/   LVL2
+│   │        KNOW,DEPS,PROJ,WPROC,CREW,DOCS,CXX,PY,JL,ANNEX,MPI,
+│   │        CONC}/                                             LVL2
 │   ├── MNEM/                 the mnemonic register
 │   ├── KNOW/  TAG/{FIELD,PROB,METH,HW,QTY,ACTV,COMP}/
 │   └── _PROJECT/NAME/        LVL3 project template
@@ -97,13 +98,13 @@ harness/
 
 ## Current state
 
-As of ledger entry 110 (2026-10-24). `show governance ID` prints the current text and revision of any document.
+As of ledger entry 112 (2026-10-24). `show governance ID` prints the current text and revision of any document.
 
 | Level | Contents | Status |
 | --- | --- | --- |
 | LVL0 | 186 provisions in 11 parts, 155 Lexicon terms, the constitution record | Ratified, revision 1.6; pinned by ledger entry 1, amended by entries 2 to 7, 17, 23, 30, and 46 (entry 31 annotates 30) |
 | LVL1 | 7 profiles and 8 sub-profiles, each divided into numbered provisions | Adopted |
-| LVL2 | 20 standards, each divided into numbered provisions | Adopted |
+| LVL2 | 21 standards, each divided into numbered provisions | Adopted |
 | Knowledge and tags | `KNOW/` and the seven tag facets of `TAG/` | Planned |
 | LVL3 | Template with project constitution, register, and one example each of authorization, waiver, ruling, axiom, hazard, and safe range | Template |
 
@@ -136,8 +137,9 @@ As of ledger entry 110 (2026-10-24). `show governance ID` prints the current tex
 | STND.JL | 1.0 | 35 | Julia standard |
 | STND.ANNEX | 1.0 | 10 | Hardware type annex |
 | STND.MPI | 1.0 | 25 | Message Passing Interface standard |
+| STND.CONC | 1.0 | 29 | Concurrency standard |
 
-The ledger holds 110 transactions: 36 `adopt`, 60 `amend`, 5 `register`, 3 `review`, 3 `rule`, and 3 `annotate`. The mnemonic register `governance/MNEM/_doc.md` (STND.IDENT.19) holds every mnemonic in use; a new mnemonic, including that of a project or of a kind of LVL3 instrument, is registered by the custodians (STND.IDENT.23).
+The ledger holds 112 transactions: 37 `adopt`, 60 `amend`, 6 `register`, 3 `review`, 3 `rule`, and 3 `annotate`. The mnemonic register `governance/MNEM/_doc.md` (STND.IDENT.19) holds every mnemonic in use; a new mnemonic, including that of a project or of a kind of LVL3 instrument, is registered by the custodians (STND.IDENT.23).
 
 ## Commands
 

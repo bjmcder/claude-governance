@@ -1,6 +1,6 @@
 # Governance distribution at ledger entry 109 — handoff for local work
 
-This is the working governance corpus as of 2026-10-24: the snapshot of repository commit `e2b3563` plus ledger entries 46 to 110, all ratified by the custodian and applied with the harness's own commands. Entry 110 (HW 1.1.1) was applied in the local repository; its review records are in `review-records/ledger110/`. `verify` passes. Entries 46 to 109 are committed to a local git repository rooted at this directory; history before the snapshot of `e2b3563` did not carry over.
+This is the working governance corpus as of 2026-10-24: the snapshot of repository commit `e2b3563` plus ledger entries 46 to 112, all ratified by the custodian and applied with the harness's own commands. Entries 110 (HW 1.1.1), 111 (MNEM row CONC), and 112 (STND.CONC 1.0) were applied in the local repository; their review records are in `review-records/ledger110/` and `review-records/ledger111/`. `verify` passes. Entries 46 to 109 are committed to a local git repository rooted at this directory; history before the snapshot of `e2b3563` did not carry over.
 
 ## Contents
 
@@ -23,11 +23,11 @@ python -B -m govharness check --out-dir /tmp/r governance
 python -B -m unittest discover -s tests -t .     # all 129 pass
 ```
 
-Last ledger entry: seq 110, `2026-10-24T11:32:26+00:00`, hash prefix `02e186d1c4e6e5af` (HW 1.1.1).
+Last ledger entry: seq 112, `2026-10-24T13:18:37+00:00`, hash prefix `d6287d8699bd360d` (STND.CONC 1.0).
 
 ## Repository
 
-The repository is local. Its first commit is the handoff snapshot (`e2b3563` plus entries 46 to 109) with `docs/COMMIT_MSG.txt` as its message; later commits update the harness tests and README to the current corpus, add unit 0007 (the secret store in the derived environment), and apply HW 1.1.1. `SHA256SUMS` lists the files as delivered. Harness code for STND.HARN.26 to .28 (unit 0006) is in `govharness/`.
+The repository is local. Its first commit is the handoff snapshot (`e2b3563` plus entries 46 to 109) with `docs/COMMIT_MSG.txt` as its message; later commits update the harness tests and README to the current corpus, add unit 0007 (the secret store in the derived environment), and apply HW 1.1.1 and STND.CONC 1.0. `SHA256SUMS` lists the files as delivered. Harness code for STND.HARN.26 to .28 (unit 0006) is in `govharness/`.
 
 ## How the work has been run (the custodian's standing process)
 
@@ -48,4 +48,6 @@ The repository is local. Its first commit is the handoff snapshot (`e2b3563` plu
 ## Open items
 
 - **STND.HARN.18:** the remote-write row remains under the transition of entry 53; letting a write that an authorization names by destination and kind proceed without referral needs an authorization format that STND.PROJ does not yet fix. (The secret store is mapped per file and authorization by unit 0007; confirm on installation that the narrower `allowRead` wins over the store's `denyRead` pattern.)
-- **Next standards, in the custodian's order (revised 2026-10-24):** a model-neutral concurrency standard (working name STND.CONC) with conforming amendments of HW.12, HW.EMBED or HW.20, STND.CODE.3, and STND.VVUQ.62; then OpenMP (6.1 is additive, so timeless practice, citing constructs by name) and CUDA / accelerator offload (agnostic form, with annexes for HIP, SYCL, OpenCL, and OpenACC), both citing STND.CONC; then a separate standard for workflows and long-run resilience; then BUILD (CMake, Automake, Makefiles), C, Rust, Fortran (classic and modern), Verilog/SystemVerilog, and Lean4. Language standards later gain concurrency amendments that cite STND.CONC. Kokkos, OpenACC, and SYCL get their own standards only when a project adopts them; other parallel libraries come in through STND.DEPS. No LVL1 profile on concurrency for now. Each follows the determinism and agnostic directions above. Research: `research/openmp-notes/` and `research/concurrency-notes/`.
+- **NUMER.2:** at NUMER's next revision, add a row to its shared-matters table giving NUMER the keying and construction of random streams for a computation divided among tasks (STND.CONC.23, NUMER.24), as the custodian assigned at the adoption of STND.CONC.
+- **Language standards:** at their next revisions, STND.CXX (15, 23, 26), STND.PY (17), and STND.JL (24, 27) can cite STND.CONC for the model-neutral part of their concurrency rules.
+- **Next standards, in the custodian's order (revised 2026-10-24):** STND.CONC is adopted (entry 112; the custodian ruled that no amendment of HW.12, HW.20, or STND.CODE.3 is needed, since STND.CONC holds those rules); next OpenMP (6.1 is additive, so timeless practice, citing constructs by name) and CUDA / accelerator offload (agnostic form, with annexes for HIP, SYCL, OpenCL, and OpenACC), both citing STND.CONC; then a separate standard for workflows and long-run resilience; then BUILD (CMake, Automake, Makefiles), C, Rust, Fortran (classic and modern), Verilog/SystemVerilog, and Lean4. Language standards later gain concurrency amendments that cite STND.CONC. Kokkos, OpenACC, and SYCL get their own standards only when a project adopts them; other parallel libraries come in through STND.DEPS. No LVL1 profile on concurrency for now. Each follows the determinism and agnostic directions above. Research: `research/openmp-notes/` and `research/concurrency-notes/`.
