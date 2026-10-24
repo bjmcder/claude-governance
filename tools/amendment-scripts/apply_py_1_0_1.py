@@ -16,13 +16,16 @@ DATE = "2026-10-24"
 AT = "2026-10-24T19:02:00+00:00"
 
 ANCHOR = "a stream chosen by worker or process identity, or copied into forked processes, differs between runs."
+GUARD_OLD = "An argument of the public interface is untrusted input unless the threat model records otherwise,"
+GUARD_NEW = "An argument of the public interface is untrusted input unless the threat model of GUARD.16 records otherwise,"
 NOTE = (" STND.PY.17 states for the work in Python the rule of STND.CONC.23, which keys each stream of a computation divided among "
         "concurrent tasks to a part defined independently of the number of tasks and of the task that computes it. "
         "STND.PY.17 reaches further: it governs each division of work into parts, parts run as separate runs "
         "included, which STND.CONC.23 does not reach; both apply from CSQ3.")
 
 READING = ("the informative Notes cite STND.CONC.23 as the model-neutral rule that STND.PY.17 states for the work in "
-           "Python, and state the wider scope of STND.PY.17, and References lists STND.CONC")
+           "Python, and state the wider scope of STND.PY.17, and cite GUARD.16 for the threat model that records a "
+           "source of input as trusted; References lists STND.CONC and GUARD")
 
 ROW = f"| 1.0.1 | {DATE} | Editorial amendment (GOV.41): {READING}; no obligation changes. |"
 
@@ -40,7 +43,7 @@ RATIONALE = (
 
 def apply(root: Path) -> None:
     root = Path(root)
-    replace_text(root, "STND/PY/_doc.md", [(ANCHOR, ANCHOR + NOTE)])
+    replace_text(root, "STND/PY/_doc.md", [(ANCHOR, ANCHOR + NOTE), (GUARD_OLD, GUARD_NEW)])
     raise_revision(root, "STND/PY", "1.0", "1.0.1", ROW)
     B.write_references(root, ["STND.PY"])
     rec = record_transaction(root, Change(kind="amend", actor="The Custodian", role="custodians", at=AT,

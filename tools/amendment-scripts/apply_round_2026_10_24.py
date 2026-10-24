@@ -5,8 +5,9 @@ Run from harness/, so that govharness imports:
 
 The order matters: STND.CXX 1.1 before STND.STDC, whose C reading cites the amended text; NUMER 1.3 before
 STND.SV, which cites the new row of NUMER.2; STND.BUILD 1.0 before STND.WFLOW, which cites it, and
-STND.BUILD 1.0.1 after STND.WFLOW, citing it back; STND.BUILD before the language standards that cite it;
-STND.CONC 1.0.1 after every standard it cites; STND.PROJ 1.2 and STND.HARN 1.2 last. The lead sets each
+STND.BUILD 1.0.1 after STND.WFLOW, citing it back, and STND.CXX 1.1.1 after it, citing STND.BUILD; STND.BUILD
+before the language standards that cite it; STND.VVUQ 1.4 with the amendments at the start; STND.CONC 1.1 after
+every standard it cites; STND.PROJ 1.2 and STND.HARN 1.2 last. The lead sets each
 transaction's time here, one minute apart from START, and chains the mnemonic rows in the order of adoption;
 the individual scripts keep their placeholder times for their own rehearsals.
 """
@@ -21,14 +22,16 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 START = "2026-10-24T22:00:00+00:00"  # set to the time of application once ratified
 
-AMENDMENTS = ["apply_omp_1_0_1", "apply_cxx_1_1", "apply_py_1_0_1", "apply_jl_1_1", "apply_numer_1_3"]
+AMENDMENTS = ["apply_omp_1_0_1", "apply_cxx_1_1", "apply_py_1_0_1", "apply_jl_1_1", "apply_numer_1_3",
+              "apply_vvuq_1_4"]
 # (mnemonic script, adoption script); the mnemonic rows are chained after OFFLD in this order.
 STANDARDS = [("apply_mnem_build", "apply_build")]
 AFTER_BUILD = [("apply_mnem_wflow", "apply_wflow")]
 LANGUAGES = [("apply_mnem_c", "apply_c"), ("apply_mnem_rust", "apply_rust"),
              ("apply_mnem_fortran", "apply_fortran"), ("apply_mnem_hdl", "apply_hdl"),
              ("apply_mnem_lean", "apply_lean")]
-CLOSING = ["apply_conc_1_0_1"]
+AFTER_BUILD_1_0_1 = ["apply_cxx_1_1_1"]
+CLOSING = ["apply_conc_1_1"]
 HARNESS = ["apply_proj_1_2", "apply_harn_1_2"]
 
 OFFLD_ROW = ("| OFFLD | STND | Accelerator offload standard | none | Reads as offload; offload has no "
@@ -67,6 +70,8 @@ def apply(root: Path) -> None:
     adopt(STANDARDS)
     adopt(AFTER_BUILD)
     run("apply_build_1_0_1")
+    for name in AFTER_BUILD_1_0_1:
+        run(name)
     adopt(LANGUAGES)
     for name in CLOSING + HARNESS:
         run(name)

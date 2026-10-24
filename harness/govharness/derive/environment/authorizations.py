@@ -10,19 +10,23 @@ configuration is derived for (GUARD.12), is recorded no later than the
 derivation, is pinned in its current content by a transaction of type
 ``authorize`` of the human owner that no later ``revoke`` names, is
 signed where the work is assured or the corpus holds a signer register,
-and is standing, with no entry of a kind or at a destination whose
-effect is irrevocable (GUARD.11). Its expiry, where it has one, is
-tested again by the guard at each write; a revocation reaches the
-configuration only when it is derived again.
+and is standing. The row Standing is tested for each entry and kind:
+a kind whose effect is irrevocable at the entry's destination
+(GUARD.11) opens nothing, and its writes stay referred, while the
+other entries of the same authorization stand. Its expiry, where it
+has one, is tested again by the guard at each write; a revocation
+reaches the configuration only when it is derived again.
 
 The owner names the authorizations an environment takes, as the owner
 names the opened secrets; this module checks each one and returns the
 remote writes the guard matches. An authorization that fails a test is
 an error, so that the derivation stops with the reason rather than
 deriving a configuration that silently refers what the owner expected
-to pass. One per action stays referred, because a configuration cannot
-tell the one action it covers from a repetition; the owner's answer to
-the referral confirms it.
+to pass. A malformed entry fails closed: the record then does not state
+one authorization, so none of its entries is relied on and the
+derivation stops. One per action stays referred, because a
+configuration cannot tell the one action it covers from a repetition;
+the owner's answer to the referral confirms it.
 """
 
 from __future__ import annotations
@@ -108,21 +112,18 @@ def segments_safe(address: str) -> bool:
     return not any(part in {".", ".."} for part in re.split(r"[/:]", tail))
 
 
-def entry_problems(entry: Any, standing: bool) -> list[str]:
+def entry_problems(entry: Any) -> list[str]:
     """Return how one entry of ``remote_writes`` breaks STND.PROJ.6.
 
     Parameters
     ----------
     entry : Any
         The entry as the front matter holds it.
-    standing : bool
-        Whether the authorization is standing.
 
     Returns
     -------
     list[str]
-        One line per problem; empty when the entry is well formed and,
-        for a standing authorization, revocable (GUARD.11).
+        One line per problem; empty when the entry is well formed.
     """
     if not isinstance(entry, dict) or set(entry) != ENTRY_FIELDS:
         return [f"an entry does not hold exactly {sorted(ENTRY_FIELDS)}"]
@@ -158,18 +159,33 @@ def entry_problems(entry: Any, standing: bool) -> list[str]:
         problems.append(f"{destination}: branches without commit")
     if "post" in kinds and not TRACKER_RE.fullmatch(destination):
         problems.append(f"{destination}: no tracker address")
-    if standing and set(kinds) & set(IRREVOCABLE):
-        problems.append(
-            f"{destination}: a standing authorization covers an "
-            "irrevocable kind (GUARD.11)"
-        )
-    if standing and provisioned is not True:
-        problems.append(
-            f"{destination}: a standing authorization names a destination "
-            "not recorded as provisioned, a transmission beyond the "
-            "environment (GUARD.11)"
-        )
     return problems
+
+
+def irrevocable(entry: dict[str, Any], kind: str) -> str | None:
+    """Return why a kind of a well-formed entry is irrevocable, or None.
+
+    Parameters
+    ----------
+    entry : dict[str, Any]
+        An entry for which ``entry_problems`` returned nothing.
+    kind : str
+        One of its kinds.
+
+    Returns
+    -------
+    str | None
+        The reason the table of STND.PROJ.7 marks the kind irrevocable
+        at the entry's destination, or None where it is revocable.
+    """
+    if kind in IRREVOCABLE:
+        return "its effect is irrevocable (GUARD.11)"
+    if entry["provisioned"] is not True:
+        return (
+            "its destination is not recorded as provisioned, a "
+            "transmission beyond the environment (GUARD.11)"
+        )
+    return None
 
 
 def covers(scope: list[str], rel: PurePosixPath) -> bool:
@@ -356,7 +372,7 @@ def read_one(
         problems.append("remote_writes names no destination")
     else:
         for item in writes:
-            problems += entry_problems(item, standing is True)
+            problems += entry_problems(item)
     return meta, PurePosixPath(entry.path.as_posix()), recorded, problems
 
 
@@ -464,6 +480,14 @@ def read_authorizations(
             continue
         for item in meta["remote_writes"]:
             for kind in item["kinds"]:
+                reason = irrevocable(item, kind)
+                if reason:
+                    referred.append(
+                        f"{ident}: kind {kind} at {item['destination']} "
+                        f"opens nothing standing, since {reason}, so it is "
+                        "referred"
+                    )
+                    continue
                 if kind not in MATCHED:
                     referred.append(
                         f"{ident}: kind {kind} at {item['destination']} is "

@@ -54,15 +54,19 @@ HARN29 = "\n".join([
     "signature that STND.HARN.11 accepts |",
     "| Dates | Its date recorded is no later than that transaction and than the derivation, and its expiry, "
     "where it has one, is later than the write |",
-    "| Standing | It is standing, and no entry of it names a kind of write that the table of STND.PROJ.7 marks "
-    "irrevocable at that entry's destination |",
+    "| Standing | It is standing, and the table of STND.PROJ.7 does not mark irrevocable the kind of the remote "
+    "write at the destination of the entry that names it; each entry and kind is tested apart from the others |",
     "| Form | Each field holds a value of the form that STND.PROJ.6 gives |",
     "",
 ])
 
 NOTES_ANCHOR = "Scripts named in STND.DRAFT and STND.IDENT stay entry points until those standards cite " \
                "`python -m govharness` (GOV.42)."
-NOTES_NEW = NOTES_ANCHOR + "\n\n" + (
+# The anchor sentence is stale: STND.DRAFT 1.2.1 and STND.IDENT 1.3.2 already name the commands of the harness
+# package. It is replaced by one that cites a provision of STND.IDENT, so that References lists it (STND.DRAFT.34).
+NOTES_IDENT = ("STND.DRAFT and STND.IDENT name the commands of the harness package that report their checks, among "
+               "them the revision checks, which read the revision history of each adopted document (STND.IDENT.6).")
+NOTES_NEW = NOTES_IDENT + "\n\n" + (
     "STND.HARN.29 states when a derived configuration relies on an authorization under the row remote-write "
     "of STND.HARN.18; its two sentences are a bundle that is never applied apart. Its rows are tested when the "
     "configuration is derived, and the expiry again at each write, because the configuration is installed where "
@@ -74,8 +78,11 @@ NOTES_NEW = NOTES_ANCHOR + "\n\n" + (
     "An authorization per action is never relied on: a configuration that lets one write pass is unable to tell "
     "that write from a repetition of it, so the write is referred and the human owner's answer to the referral "
     "confirms it (PRIME.7, PRIME.14). A standing authorization of an irrevocable remote write has no effect "
-    "(GUARD.11), and STND.HARN.29 relies on none; the test is made for each entry, so that one irrevocable entry "
-    "voids the authorization rather than being read apart. The row Extension applies GUARD.12: an authorization "
+    "(GUARD.11), and STND.HARN.29 relies on none. GUARD.11 voids only the irrevocable write, so the row Standing "
+    "is tested for each entry and kind of write: an irrevocable one opens nothing and its writes are referred, "
+    "and the other entries of the same authorization stand. A malformed entry fails the row Form, and nothing of "
+    "that authorization is relied on, because the record then does not state what the human owner granted. The "
+    "row Extension applies GUARD.12: an authorization "
     "reaches a directed agent only where it says so, and a configuration is derived for one role or agent. The "
     "row Record is narrower than STND.DFLT.23, which for work that is not assured also accepts an agent's own "
     "entry of a grant (STND.DFLT.17): an agent is able to append such an entry, so a configuration that relied "
@@ -87,7 +94,8 @@ NOTES_NEW = NOTES_ANCHOR + "\n\n" + (
     "refers a write which an authorization in force names still meets STND.HARN.18, and its coverage report "
     "states each kind of write that it refers so (STND.HARN.19). STND.HARN.29 binds, because it instantiates "
     "GUARD.2, GUARD.11, and GUARD.12, and raises no floor (GOV.11): it asks of a harness only the reliance on an "
-    "authorization as the record states it, which GUARD.2 already asks of an agent, at the cost of wording and "
+    "authorization as the record states it, entry by entry, which GUARD.2 and GUARD.11 already ask of an agent, "
+    "at the cost of wording and "
     "of the checks the harness makes: reading each named authorization file and the ledger that pins it, "
     "verifying signatures where they are required, and comparing each remote write with the authorizations "
     "relied on.")
@@ -98,16 +106,18 @@ ROW_READING = ("new STND.HARN.29: a derived configuration that lets a remote wri
                "agent the configuration is derived for (GUARD.12), is pinned in its current content by an "
                "authorize transaction of the human owner in an intact ledger and revoked by no later "
                "transaction, is signed where the work is assured or a signer register exists, was recorded no "
-               "later than its transaction, and has no entry of a kind that STND.PROJ.7 marks irrevocable at its "
-               "destination (GUARD.11), and whose expiry, where it has one, is later than the write; destination, "
-               "kind, and branches are compared as whole values; the transition of ledger entry 53 for "
+               "later than its transaction, and whose expiry, where it has one, is later than the write; an entry "
+               "of a kind that STND.PROJ.7 marks irrevocable at its destination opens nothing (GUARD.11), each "
+               "entry and kind tested apart, so that the other entries of the authorization stand; destination, "
+               "kind, and branches are compared as whole values; the Notes cite STND.IDENT.6 in place of a stale "
+               "sentence on scripts; the transition of ledger entry 53 for "
                "STND.HARN.18 ends once a reviewed harness that implements STND.HARN.29 is installed")
 ROW = f"| 1.2 | {DATE} | Minor amendment (GOV.41): {ROW_READING}. |"
 
 RATIONALE = (f"Minor amendment of STND.HARN, revision 1.2, ratified by the custodian on {DATE}: {ROW_READING}. "
              "The change is minor because it adds an obligation on a harness that derives a configuration; it "
              "raises no floor (GOV.11), since it asks of a harness only what GUARD.2, GUARD.11, and GUARD.12 ask "
-             "of an agent, a ruling the custodian makes with this amendment. Transition (GOV.42): the transition "
+             "of an agent; the custodian decides that floor argument on ratification. Transition (GOV.42): the transition "
              "that ledger entry 53 set for STND.HARN.18, under which a derived configuration that refers every "
              "remote write meets STND.HARN.18, ends on the day a harness that implements STND.HARN.29, reviewed "
              "under QA.8, is installed and its configure entry records it (STND.HARN.20); until then a derived "

@@ -199,13 +199,14 @@ class InForce(unittest.TestCase):
                     reading(root)
 
     def test_irrevocable_standing(self) -> None:
-        """Behavior: a standing authorization of publication or
-        transmission, or naming a destination not recorded as
-        provisioned, is not in force; the same per action is, and stays
-        referred.
+        """Behavior: in a standing authorization, an entry of publication
+        or transmission, or naming a destination not recorded as
+        provisioned, opens nothing and its kind is reported as referred,
+        while the authorization stays in force; the same per action
+        opens nothing and stays referred.
 
         Reference: GUARD.11: an irrevocable remote write is authorized
-        only per action.
+        only per action; STND.HARN.29, row Standing, tested per entry.
         """
         for entry in (
             {**ENTRY, "kinds": ["publish"], "branches": []},
@@ -217,8 +218,10 @@ class InForce(unittest.TestCase):
                 root.mkdir()
                 write_authorization(root, remote_writes=[entry])
                 record(root)
-                with self.assertRaisesRegex(ValueError, "GUARD.11"):
-                    reading(root)
+                writes, referred = reading(root)
+                self.assertEqual(writes, ())
+                self.assertEqual(len(referred), 1)
+                self.assertIn("GUARD.11", referred[0])
                 write_authorization(
                     root, remote_writes=[entry], standing=False
                 )
@@ -226,6 +229,39 @@ class InForce(unittest.TestCase):
                 writes, referred = reading(root)
                 self.assertEqual(writes, ())
                 self.assertIn("per action", referred[0])
+
+    def test_irrevocable_entry_voids_only_its_writes(self) -> None:
+        """Behavior: beside an irrevocable entry, or an irrevocable kind
+        of the same entry, the revocable commit of a standing
+        authorization still opens; only the irrevocable writes are
+        referred.
+
+        Reference: GUARD.11 voids the irrevocable write, not the others;
+        STND.HARN.29, row Standing, tested for each entry.
+        """
+        other = "https://git.example.org/team/other.git"
+        cases = (
+            [ENTRY, {**ENTRY, "kinds": ["publish"], "branches": []}],
+            [ENTRY, {**ENTRY, "destination": other, "provisioned": False}],
+            [{**ENTRY, "kinds": ["commit", "transmit"]}],
+        )
+        for entries in cases:
+            with self.subTest(entries=entries):
+                root = self.root / str(len(list(self.root.iterdir())))
+                root.mkdir()
+                write_authorization(root, remote_writes=entries)
+                record(root)
+                writes, referred = reading(root)
+                self.assertEqual(
+                    writes,
+                    (
+                        RemoteWrite(
+                            IDENT, "commit", REPO, ("main",), FIELDS["expires"]
+                        ),
+                    ),
+                )
+                self.assertEqual(len(referred), 1)
+                self.assertIn("GUARD.11", referred[0])
 
     def test_malformed_entries(self) -> None:
         """Behavior: an entry with a missing or extra field, an unknown
@@ -263,6 +299,20 @@ class InForce(unittest.TestCase):
                 record(root)
                 with self.assertRaisesRegex(ValueError, "not in force"):
                     reading(root)
+
+    def test_malformed_entry_fails_closed(self) -> None:
+        """Behavior: a malformed entry beside a well-formed one stops the
+        derivation, so the well-formed entry opens nothing either.
+
+        Reference: STND.HARN.29, row Form: the record does not state one
+        authorization, so none of it is relied on (fail closed).
+        """
+        write_authorization(
+            self.root, remote_writes=[ENTRY, {**ENTRY, "kinds": ["push"]}]
+        )
+        record(self.root)
+        with self.assertRaisesRegex(ValueError, "not in force"):
+            reading(self.root)
 
     def test_record_in_the_ledger(self) -> None:
         """Behavior: an authorization that no transaction pins, whose

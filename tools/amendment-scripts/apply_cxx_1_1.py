@@ -42,6 +42,15 @@ CXX23 = [
 ]
 
 DOC = [
+    ("C++ written as a hardware description is code under this standard, and HDES governs its realization.",
+     "C++ written as a hardware description is code under this standard, and HDES governs its realization, whose "
+     "design record HDES.3 asks."),
+    ("STND.CXX.4 keeps the extensions that a foreign interface requires, those of a compiler for device code among "
+     "them.",
+     "STND.CXX.4 keeps the extensions that a foreign interface requires, those of a compiler for device code among "
+     "them. The general rules for the settings of each compilation and for the warnings that fail the checks of a "
+     "change, of which STND.CXX.4 and STND.CXX.25 are the C++ forms, belong to the standard for building software, "
+     "which holds them for every language."),
     ("only the C++ rules at their boundaries.",
      "only the C++ rules at their boundaries. The rules of concurrency that hold for every language are in "
      "STND.CONC, which this standard cites and does not restate."),
@@ -75,8 +84,9 @@ READING = ("STND.CXX cites STND.CONC for the model-neutral part of its concurren
            "objects shared with signal and interrupt handlers, citing STND.CONC.3 and instantiating DSGN.15 alone; "
            "STND.CXX.15 cites STND.CONC.6 in place of restating that the comment states whether concurrent calls are "
            "safe; the Notes name the C++ facilities that order accesses, give the second sentence of STND.CXX.26 as "
-           "the C++ form of STND.CONC.25, and describe the standards of other models as adopted; References lists "
-           "STND.CONC")
+           "the C++ form of STND.CONC.25, describe the standards of other models as adopted, name STND.CXX.4 and "
+           "STND.CXX.25 as the C++ forms of the general rules for build settings and warnings, and cite HDES.3 for "
+           "the design record of a realization; References lists STND.CONC and HDES")
 
 ROW = f"| 1.1 | {DATE} | Minor amendment (GOV.41): {READING}. |"
 

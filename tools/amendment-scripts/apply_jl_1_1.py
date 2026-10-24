@@ -51,6 +51,9 @@ DOC = [
      "verification of its invariants, which STND.CLASS.10 starts at CSQ2, stays with DSGN.15. STND.CONC.3, "
      "STND.CONC.16, and STND.CONC.23 apply from CSQ3, as "
      "STND.JL.27 and STND.JL.24 do, so the citations move no rule to another class."),
+    ("A size check of an argument of a declared public function throws an `ArgumentError` or a `DimensionMismatch`.",
+     "An argument of a declared public function is untrusted input unless the threat model of GUARD.16 records "
+     "otherwise, and a size check of such an argument throws an `ArgumentError` or a `DimensionMismatch`."),
     ("Distributed computing, GPU packages, ahead-of-time compilation with trimming, and Pkg apps are outside this "
      "standard; STND.CODE and the project instruments govern them.",
      "Distributed computing, GPU packages, ahead-of-time compilation with trimming, and Pkg apps are outside this "
@@ -66,7 +69,8 @@ READING = ("STND.JL.27 drops its second sentence, which stated the lock and atom
            "STND.CONC.3 for the protection of state that tasks share, with the Julia examples, and STND.CONC.23 as "
            "the model-neutral rule of which STND.JL.24 is the Julia form, and cite STND.OFFLD and HW.GPU for offload "
            "and STND.MPI and STND.CONC for distributed computing in place of STND.CODE and the project instruments "
-           "alone; References lists STND.CONC, STND.MPI, STND.OFFLD, and HW.GPU")
+           "alone, and cite GUARD.16 for the threat model that records a source of input as trusted; References "
+           "lists STND.CONC, STND.MPI, STND.OFFLD, HW.GPU, and GUARD")
 
 ROW = f"| 1.1 | {DATE} | Minor amendment (GOV.41): {READING}. |"
 
