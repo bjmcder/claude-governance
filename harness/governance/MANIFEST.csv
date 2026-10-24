@@ -5,7 +5,7 @@ DSGN,article,LVL0,Design,ratified,DSGN/,d6a6d37d662aa68914ea892ce78fc45bb8552502
 GOV,article,LVL0,Governance,ratified,GOV/,4e29d8b6dd4690db48fba20a324a53750d2e3a80ab2793641bbbf83ee3063acc,28681
 GUARD,article,LVL0,Safeguards,ratified,GUARD/,d1f65f60679834a939b446a300b74d146b9924ae729cf85c01622237ad4ddd44,9987
 HDES,profile,LVL1,Hardware design,adopted,HDES/,f7e4675d523cea8f3abdb4446bc8e759fe222229772255c026d1a51fdf77a123,62868
-HW,profile,LVL1,Execution hardware,adopted,HW/,f03eee35e62ce5f54a97f86746351d183142f7596e2963459e7585c16b322840,112168
+HW,profile,LVL1,Execution hardware,adopted,HW/,f3aa94d54083039967b27e95da9178f0eb1f5ba91d2cf5b5d52fe2921532137e,112908
 INTPR,article,LVL0,Interpretability,ratified,INTPR/,e2616075e5e9a87e40c3fa537523d2f171a1bddf874137f28e9746c9a62b48fe,6558
 KNOW,knowledge-base,,Knowledge base,planned,KNOW/,c177753716de5f94e8b85b7421da6a7f1b31466778538973c994b6161c0ad95b,266
 LEX,lexicon,LVL0,Lexicon,ratified,LEX/,6da577e1be59c323bde73f03c62458bf4ed3e4363f2ff5fd547005fe87a6d948,48949

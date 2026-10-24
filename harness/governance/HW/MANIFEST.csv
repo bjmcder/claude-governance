@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-HW,profile,LVL1,Execution hardware,adopted,_doc.md,fef52719789c7a13f06c23e46964c15863dc5e86759ad6ad98cc1ea858d9862c,23509
+HW,profile,LVL1,Execution hardware,adopted,_doc.md,ac6db53ab7c8fdc66b115b7de9c52830f296d4b742a7db9663283e4cfbfcfbaa,24249
 HW.1,provision,LVL1,Execution hardware selector,adopted,1.md,b0a7ca1e85498ad82bbb5d324bd668bfdcb19195f7a2254a69725783ff06c394,681
 HW.2,provision,LVL1,Hardware shared matters,adopted,2.md,8da9a8c43e04c92d67ea37d94c3c654b175f3b264c7928a8b110d90f00443ace,1172
 HW.3,provision,LVL1,Execution path record,adopted,3.md,50aa850151ab96fe72b5e34b44d17a5a592c62fc729ecf6b019bbb062f5ec066,713

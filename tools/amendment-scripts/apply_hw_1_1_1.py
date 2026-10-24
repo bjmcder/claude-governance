@@ -10,7 +10,7 @@ from pathlib import Path
 from govharness.workflows.amend import Change, raise_revision, record_transaction, replace_text
 
 DATE = "2026-10-24"
-AT = "2026-10-24T12:00:00+00:00"  # set to the time of application once ratified
+AT = "2026-10-24T11:32:26+00:00"
 
 ANCHOR = ("HW.8 states how PRIME.4 applies to detected, uncorrected hardware faults and to exhausted capacity, "
           "and binds at every class, adding nothing to the floor that PRIME.4 does not already hold.")
