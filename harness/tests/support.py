@@ -59,6 +59,44 @@ def live_ledger() -> list[Transaction]:
     return copy.deepcopy(read_ledger(ROOT))
 
 
+def next_editorial(revision: str) -> str:
+    """Return the editorial revision that follows a revision.
+
+    Parameters
+    ----------
+    revision : str
+        Revision number, such as ``1.4`` or ``1.1.1``.
+
+    Returns
+    -------
+    str
+        The next editorial revision, such as ``1.4.1`` or ``1.1.2``.
+    """
+    parts = revision.split(".")
+    if len(parts) == 2:
+        return f"{revision}.1"
+    return ".".join([*parts[:2], str(int(parts[2]) + 1)])
+
+
+def live_revision(document: str) -> str:
+    """Return the revision of a document in the live corpus.
+
+    Amendment tests raise a live document; reading its revision keeps
+    them true after the corpus is amended.
+
+    Parameters
+    ----------
+    document : str
+        Identifier of the document, such as ``STND.INSTR``.
+
+    Returns
+    -------
+    str
+        Its revision field.
+    """
+    return str(live_index()[document].meta["revision"])
+
+
 def corpus_of(index: Index) -> Corpus:
     """Return the corpus view of a (damaged) index.
 

@@ -13,11 +13,13 @@ import unittest
 from govharness.checks.base import CheckContext
 from govharness.checks.combination import matters_owned, selectors_defined
 from govharness.query.combination import review_pairs
-from tests.support import corpus_of, live_index
+from tests.support import corpus_of, live_index, live_ledger
 
 # The pairs listed by hand for the adoption of NUMER (ledger entry 59),
 # counted once per pair; claude/drafts/numer-1.0-harn28-review.md.
 NUMER_REVIEWED = 61
+NUMER_ADOPTION = 59
+PROFILE_KINDS = ("profile", "sub-profile")
 
 
 def status_of(index: dict, check: object) -> str:
@@ -99,17 +101,44 @@ class Combination(unittest.TestCase):
         self.assertEqual(status_of(index, matters_owned), "FAIL")
 
     def test_pairs_match_the_numer_review(self) -> None:
-        """Behavior: the pairs for NUMER, other than those with
-        STND.VVUQ or HW, are the pairs listed by hand at its adoption.
+        """Behavior: the pairs for NUMER, other than those with a
+        document adopted or a provision added after NUMER 1.0, are the
+        pairs listed by hand at its adoption.
 
-        Reference: the review record of NUMER 1.0 (61 pairs), made
-        before STND.VVUQ and HW were adopted.
+        Reference: the review record of NUMER 1.0 (61 pairs); the
+        ledger names the documents adopted after entry 59, and each
+        provision's ``adopted`` field dates it.
         """
-        later = ("STND.VVUQ.", "HW.")
+        ledger = live_ledger()
+        (numer,) = [t for t in ledger if t["seq"] == NUMER_ADOPTION]
+        on = str(numer["at"])[:10]
+        later = tuple(
+            f"{t['targets'][0]}."
+            for t in ledger
+            if t["type"] == "adopt" and t["seq"] > NUMER_ADOPTION
+        )
+        index = live_index()
+
+        def reviewed(ident: str) -> bool:
+            """Return True when a provision stood at NUMER's adoption.
+
+            Parameters
+            ----------
+            ident : str
+                Identifier of a provision.
+
+            Returns
+            -------
+            bool
+                Whether neither its document nor it came later.
+            """
+            added = str(index[ident].meta.get("adopted", ""))
+            return not ident.startswith(later) and added <= on
+
         pairs = [
             p
-            for p in review_pairs(corpus_of(live_index()), "NUMER")
-            if not any(s.startswith(later) for s in (p.first, p.second))
+            for p in review_pairs(corpus_of(index), "NUMER")
+            if reviewed(p.first) and reviewed(p.second)
         ]
         self.assertEqual(len(pairs), NUMER_REVIEWED)
 
@@ -117,13 +146,20 @@ class Combination(unittest.TestCase):
         """Behavior: no pair joins two provisions outside profiles.
 
         Reference: STND.HARN.28; every pair for a change of STND.DFLT
-        has a profile provision on one side.
+        has a provision of a document whose kind is profile or
+        sub-profile on one side.
         """
-        for pair in review_pairs(corpus_of(live_index()), "STND.DFLT"):
+        index = live_index()
+        profiles = tuple(
+            f"{ident}."
+            for ident, entry in index.items()
+            if entry.meta.get("kind") in PROFILE_KINDS
+        )
+        for pair in review_pairs(corpus_of(index), "STND.DFLT"):
             with self.subTest(pair):
                 self.assertTrue(
-                    pair.first.startswith(("AGENT", "NUMER"))
-                    or pair.second.startswith(("AGENT", "NUMER"))
+                    pair.first.startswith(profiles)
+                    or pair.second.startswith(profiles)
                 )
 
 

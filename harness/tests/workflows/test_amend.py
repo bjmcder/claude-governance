@@ -16,19 +16,21 @@ from govharness.workflows.amend import (
     record_transaction,
     replace_text,
 )
-from tests.support import corpus_copy
+from tests.support import corpus_copy, live_revision, next_editorial
 
 INSTR = "STND/INSTR/_doc.md"
-ROW = "| 1.1.1 | 2026-10-10 | Editorial amendment (GOV.40): a test. |"
+OLD = live_revision("STND.INSTR")
+NEW = next_editorial(OLD)
+ROW = f"| {NEW} | 2026-10-24 | Editorial amendment (GOV.40): a test. |"
 EDITORIAL = Change(
     kind="amend",
     actor="The Custodian",
     role="custodians",
-    at="2026-10-10T00:00:00+00:00",
+    at="2026-10-24T12:00:00+00:00",
     authority=["GOV.40"],
     targets=["STND.INSTR"],
     scope=["STND/INSTR"],
-    rationale="Editorial amendment of STND.INSTR, revision 1.1.1: a test.",
+    rationale=f"Editorial amendment of STND.INSTR, revision {NEW}: a test.",
 )
 
 
@@ -80,16 +82,18 @@ class AmendmentPrimitives(unittest.TestCase):
         """Behavior: the revision field changes and the history row goes
         after the last row; a stale old revision is refused.
 
-        Reference: STND.INSTR at 1.1 raised to 1.1.1, then a second
-        raise that still names 1.1.
+        Reference: STND.INSTR raised from its live revision to the next
+        editorial one, then a second raise that still names the old one.
         """
         with corpus_copy() as root:
-            raise_revision(root, "STND/INSTR", "1.1", "1.1.1", ROW)
+            raise_revision(root, "STND/INSTR", OLD, NEW, ROW)
             text = text_of(root, INSTR)
-            self.assertIn('revision: "1.1.1"', text)
+            self.assertIn(f'revision: "{NEW}"', text)
             self.assertTrue(text.endswith(ROW + "\n"))
             with self.assertRaises(ValueError):
-                raise_revision(root, "STND/INSTR", "1.1", "1.1.2", ROW)
+                raise_revision(
+                    root, "STND/INSTR", OLD, next_editorial(NEW), ROW
+                )
 
     def test_history_row_stays_in_its_section(self) -> None:
         """Behavior: the new row follows the last row of the Revision
@@ -105,7 +109,7 @@ class AmendmentPrimitives(unittest.TestCase):
             )
             path = root / INSTR
             path.write_text(text_of(root, INSTR) + later, encoding="utf-8")
-            raise_revision(root, "STND/INSTR", "1.1", "1.1.1", ROW)
+            raise_revision(root, "STND/INSTR", OLD, NEW, ROW)
             text = text_of(root, INSTR)
             self.assertTrue(text.endswith("| 1 | x |\n"))
             self.assertIn(ROW + "\n\n## Appendix", text)
@@ -121,7 +125,7 @@ class AmendmentPrimitives(unittest.TestCase):
         """
         with corpus_copy() as root:
             count = len(read_ledger(root))
-            raise_revision(root, "STND/INSTR", "1.1", "1.1.1", ROW)
+            raise_revision(root, "STND/INSTR", OLD, NEW, ROW)
             recorded = record_transaction(root, EDITORIAL)
             self.assertEqual(recorded.entry["seq"], count + 1)
             self.assertEqual(recorded.entry["actor"], "The Custodian")

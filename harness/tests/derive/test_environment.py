@@ -182,9 +182,14 @@ class Derivation(unittest.TestCase):
         """
         corpus = live_corpus()
         holder = corpus.by_id["STND.HARN.18"]
-        holder.body = holder.body.replace(
-            "| PRIME.7 | Refer |", "| PRIME.7 | Refuse |"
-        )
+        (row,) = [
+            line
+            for line in holder.body.splitlines()
+            if line.startswith("| remote-write |")
+        ]
+        self.assertTrue(row.endswith("| Refer |"))
+        refused = row.removesuffix("Refer |") + "Refuse |"
+        holder.body = holder.body.replace(row, refused)
         rules = json.loads(rendered(corpus)[claude_code.SETTINGS])[
             "permissions"
         ]

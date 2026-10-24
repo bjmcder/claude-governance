@@ -3,8 +3,8 @@
 Each case damages an in-memory copy of the corpus in one known way and
 asserts that the named check reports at least the stated severity.
 Nothing is written to disk. The clean corpus must report no failure and
-no warning in the l and g families, which is the standard's
-self-conformance. Ported from ``archive/tools-flat/test_drafting.py``.
+no warning in the l and g families, other than the g.18 review findings
+of confirmed bundles, which is the standard's self-conformance. Ported from ``archive/tools-flat/test_drafting.py``.
 """
 
 from __future__ import annotations
@@ -22,6 +22,11 @@ from tests.support import Index, corpus_of, live_index
 
 Mutation = Callable[[Index], None]
 RANK = {"PASS": 0, "INFO": 1, "WARN": 2, "FAIL": 3}
+# Provisions of STND.DRAFT with exactly three modals, whose bundles were
+# reviewed and ratified as never applied apart (ledger entry 52). g.18
+# reports each as a review finding, which in the standard's own group is
+# a warning; no record in the corpus clears it.
+CONFIRMED_BUNDLES = {"STND.DRAFT.35", "STND.DRAFT.39", "STND.DRAFT.42"}
 
 
 def statuses(mutation: Mutation) -> dict[str, str]:
@@ -407,14 +412,31 @@ class DraftingChecks(unittest.TestCase):
         self.assertEqual(unforced["l.4"], "FAIL")
 
     def test_clean_corpus_conforms(self) -> None:
-        """Behavior: the standard passes its own checks with no warning.
+        """Behavior: the standard passes its own checks with no warning
+        other than the g.18 review findings of its confirmed bundles.
 
         Reference: the live corpus, whose adoption of STND.DRAFT
-        recorded self-conformance (ledger entry 9 and later).
+        recorded self-conformance (ledger entry 9 and later), and the
+        three-modal provisions that entry 52 added.
         """
-        found = statuses(lambda e: None)
-        bad = {k: s for k, s in found.items() if s in {"FAIL", "WARN"}}
+        ctx = CheckContext(corpus_of(live_index()))
+        report = run_checks((lineage, drafting), ctx)
+        bad = {
+            r.key: r.status
+            for r in report.results
+            if r.status in {"FAIL", "WARN"} and r.key != "g.18"
+        }
         self.assertEqual(bad, {})
+        (atomicity,) = [r for r in report.results if r.key == "g.18"]
+        warned = {
+            line.split()[3]
+            for line in atomicity.details
+            if line.startswith("- WARN ")
+        }
+        self.assertEqual(warned, CONFIRMED_BUNDLES)
+        self.assertFalse(
+            [line for line in atomicity.details if "at most three" in line]
+        )
 
     def test_mutations_are_caught(self) -> None:
         """Behavior: each injected defect reaches its stated severity.

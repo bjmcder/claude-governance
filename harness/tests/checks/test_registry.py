@@ -17,6 +17,7 @@ FAMILIES = {
     "drafting",
     "revisions",
     "logic",
+    "combination",
 }
 
 
@@ -46,7 +47,9 @@ class Registry(unittest.TestCase):
     def test_families_are_decided(self) -> None:
         """Behavior: every check belongs to a family the decision names.
 
-        Reference: the family list of decision 0001.
+        Reference: the family list of decision 0001, and the
+        combination family that unit 0006 added under its rule for a
+        new family.
         """
         for check in registered():
             with self.subTest(check.key):

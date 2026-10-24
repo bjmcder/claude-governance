@@ -19,31 +19,33 @@ from govharness.cli.main import main
 from govharness.core.corpus import tree_digests
 from govharness.ledger.chain import read_ledger
 from govharness.workflows.rehearse import SourceChanged, rehearse
-from tests.support import corpus_copy
+from tests.support import corpus_copy, live_revision, next_editorial
 
-AMENDMENT = '''
+OLD = live_revision("STND.INSTR")
+NEW = next_editorial(OLD)
+AMENDMENT = f'''
 from pathlib import Path
 
 from govharness.workflows.amend import Change, raise_revision
 from govharness.workflows.amend import record_transaction
 
-ROW = "| 1.1.1 | 2026-10-10 | Editorial amendment (GOV.40): a test. |"
+ROW = "| {NEW} | 2026-10-24 | Editorial amendment (GOV.40): a test. |"
 
 
 def apply(root: Path) -> None:
-    """Raise STND.INSTR to 1.1.1 and record it."""
-    raise_revision(root, "STND/INSTR", "1.1", "1.1.1", ROW)
+    """Raise STND.INSTR to {NEW} and record it."""
+    raise_revision(root, "STND/INSTR", "{OLD}", "{NEW}", ROW)
     record_transaction(
         root,
         Change(
             kind="amend",
             actor="The Custodian",
             role="custodians",
-            at="2026-10-10T00:00:00+00:00",
+            at="2026-10-24T12:00:00+00:00",
             authority=["GOV.40"],
             targets=["STND.INSTR"],
             scope=["STND/INSTR"],
-            rationale="Editorial amendment of STND.INSTR, revision 1.1.1.",
+            rationale="Editorial amendment of STND.INSTR, revision {NEW}.",
         ),
     )
 '''

@@ -11,7 +11,13 @@ import unittest
 
 from govharness.core.corpus import Corpus
 from govharness.query.graph import build_graph, lineage
-from govharness.query.retrieval import context, find, show, stem
+from govharness.query.retrieval import (
+    MATCHES,
+    context,
+    find,
+    show,
+    stem,
+)
 from tests.support import live_entries
 
 CORPUS = Corpus(live_entries())
@@ -167,10 +173,11 @@ class Find(unittest.TestCase):
         """Behavior: where no item holds every word, the items holding
         the most are returned.
 
-        Reference: no file says "push"; LEX.remote-write defines remote
-        write.
+        Reference: no file says "zyzzyva"; LEX.remote-write defines
+        remote write.
         """
-        self.assertIn("LEX.remote-write", found("push remote write"))
+        self.assertEqual(found("zyzzyva"), [])
+        self.assertIn("LEX.remote-write", found("zyzzyva remote write"))
 
     def test_title_ranks_first(self) -> None:
         """Behavior: the item titled "Bulk actions" outranks items that
@@ -192,13 +199,19 @@ class Context(unittest.TestCase):
         """Behavior: the text shown stays within the budget, every item
         shown is whole, and the rest is named.
 
-        Reference: the budget argument (STND.HARN.2, STND.HARN.3).
+        Reference: the budget argument (STND.HARN.2, STND.HARN.3); the
+        matches for "remote write" that the budget leaves out.
         """
         text = context(CORPUS, GRAPH, "remote write", budget=1500)
-        shown = text.split("Also relevant, not shown:")[0]
+        shown, named = text.split("Also relevant, not shown:")
         self.assertLessEqual(len(shown), 1500 + 2)
         self.assertIn(CORPUS.by_id["LEX.remote-write"].body.strip(), shown)
-        self.assertIn("- GUARD.6 — Bulk actions", text)
+        matches = find(CORPUS, GRAPH, "remote write", MATCHES, False)
+        hidden = [m.node for m in matches if f"## {m.node} — " not in shown]
+        self.assertTrue(hidden)
+        for node in hidden:
+            with self.subTest(node):
+                self.assertIn(f"\n- {node} — ", named)
 
     def test_nothing_found(self) -> None:
         """Behavior: a query no item matches says so.
