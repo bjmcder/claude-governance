@@ -67,8 +67,10 @@ NOTES_NEW = NOTES_ANCHOR + "\n\n" + (
     "of STND.HARN.18; its two sentences are a bundle that is never applied apart. Its rows are tested when the "
     "configuration is derived, and the expiry again at each write, because the configuration is installed where "
     "the agent is unable to alter it and reads no ledger. A revocation therefore reaches a configuration only "
-    "when the configuration is derived again and installed; until then, a derivation of the same configuration "
-    "fails, which the check of STND.HARN.21 shows, and the coverage report of STND.HARN.19 states the interval. "
+    "when the configuration is derived again and installed; until then, a derivation that still names the "
+    "revoked authorization stops with the reason, one that no longer names it differs from the installed "
+    "configuration, which the check of STND.HARN.21 reports, and the coverage report of STND.HARN.19 states the "
+    "interval. "
     "An authorization per action is never relied on: a configuration that lets one write pass is unable to tell "
     "that write from a repetition of it, so the write is referred and the human owner's answer to the referral "
     "confirms it (PRIME.7, PRIME.14). A standing authorization of an irrevocable remote write has no effect "
@@ -85,7 +87,10 @@ NOTES_NEW = NOTES_ANCHOR + "\n\n" + (
     "refers a write which an authorization in force names still meets STND.HARN.18, and its coverage report "
     "states each kind of write that it refers so (STND.HARN.19). STND.HARN.29 binds, because it instantiates "
     "GUARD.2, GUARD.11, and GUARD.12, and raises no floor (GOV.11): it asks of a harness only the reliance on an "
-    "authorization as the record states it, which GUARD.2 already asks of an agent, at the cost of wording.")
+    "authorization as the record states it, which GUARD.2 already asks of an agent, at the cost of wording and "
+    "of the checks the harness makes: reading each named authorization file and the ledger that pins it, "
+    "verifying signatures where they are required, and comparing each remote write with the authorizations "
+    "relied on.")
 
 ROW_READING = ("new STND.HARN.29: a derived configuration that lets a remote write proceed without referral "
                "under STND.HARN.18 relies only on a standing authorization in the form of STND.PROJ.6 that, when "

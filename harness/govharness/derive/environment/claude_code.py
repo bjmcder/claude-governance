@@ -185,9 +185,15 @@ AUTHORIZED_GAP = (
     "and every such post stay, and a permission rule may outrank a "
     "hook's allow; until an installation test shows that the allow "
     "passes, an authorized write may still be referred, and, in an "
-    "unattended session, refused. Not seen: a program that changes the "
-    "configuration, the refs, or the account's ssh or gh configuration "
-    "between the check and the write, such as one started earlier; what "
+    "unattended session, refused. While the sandbox runs, it denies "
+    "shell commands every write to the work's .git/config, "
+    ".git/config.worktree, and .git/hooks, so a program started earlier "
+    "is unable to change them between the check and the push, and git "
+    "config and git remote set-url fail in the sandbox. Not seen: a "
+    "program that changes the refs, the common configuration of a linked "
+    "worktree that lies in a location opened for writing, or the "
+    "account's ssh or gh configuration between the check and the write; "
+    "what "
     "the remote does with the write, such as a redirection or a "
     "deployment; and the content of a post, which the authorization's "
     "destination alone bounds. The authorization is tested when the "
@@ -543,6 +549,26 @@ def hook_command(assured: bool) -> str:
     return f"{run} || printf '%s\\n' {shlex.quote(UNGUARDED)}"
 
 
+def git_metadata(inputs: Inputs) -> tuple[str, ...]:
+    """Return the git files of the work that a push reads and the guard checks.
+
+    Parameters
+    ----------
+    inputs : Inputs
+        The owner's statement of the environment.
+
+    Returns
+    -------
+    tuple[str, ...]
+        The repository's and the worktree's configuration and its hooks
+        directory, under ``<work>/.git``. A ``core.hooksPath`` needs no
+        entry: the guard refers every push while one is set, and the
+        sandbox keeps shell commands from setting one in these files.
+    """
+    git = f"{inputs.work.rstrip('/')}/.git"
+    return (f"{git}/config", f"{git}/config.worktree", f"{git}/hooks")
+
+
 def settings(outcomes: list[Outcome], inputs: Inputs) -> dict[str, object]:
     """Return the managed settings.
 
@@ -582,6 +608,10 @@ def settings(outcomes: list[Outcome], inputs: Inputs) -> dict[str, object]:
         filesystem["denyRead"] = [f"{inputs.store}/*", f"{inputs.store}/.*"]
         filesystem["allowRead"] = list(inputs.secret_paths)
         filesystem["denyWrite"].append(inputs.store)
+    if any(w.kind == "commit" for w in inputs.remote_writes):
+        # The guard reads these at the call; a program started earlier
+        # must not swap them before the push (security review M-a).
+        filesystem["denyWrite"] += list(git_metadata(inputs))
     return {
         "allowManagedHooksOnly": True,
         "allowManagedPermissionRulesOnly": True,

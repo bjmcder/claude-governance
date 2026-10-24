@@ -73,8 +73,8 @@ PROJ7 = provision(7, "Kinds of remote write", "\n".join([
     "",
     "| Kind | Remote write | Effect irrevocable |",
     "| --- | --- | --- |",
-    "| commit | Adding commits to a named branch of a remote repository whose update neither publishes nor "
-    "deploys, without rewriting or deleting history, a branch, or a tag | At a destination not recorded as "
+    "| commit | Adding commits to a named branch, whose update neither publishes nor deploys, of a remote "
+    "repository, without rewriting or deleting history, a branch, or a tag | At a destination not recorded as "
     "provisioned |",
     "| post | Adding an issue, a comment, or a review to a remote tracker, without editing, closing, or deleting "
     "one | At a destination not recorded as provisioned |",

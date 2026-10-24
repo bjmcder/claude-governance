@@ -148,7 +148,7 @@ An authorization file SHOULD name each kind of remote write that it covers by a 
 
 | Kind | Remote write | Effect irrevocable |
 | --- | --- | --- |
-| commit | Adding commits to a named branch of a remote repository whose update neither publishes nor deploys, without rewriting or deleting history, a branch, or a tag | At a destination not recorded as provisioned |
+| commit | Adding commits to a named branch, whose update neither publishes nor deploys, of a remote repository, without rewriting or deleting history, a branch, or a tag | At a destination not recorded as provisioned |
 | post | Adding an issue, a comment, or a review to a remote tracker, without editing, closing, or deleting one | At a destination not recorded as provisioned |
 | publish | Publication or release, including an update of a branch whose update publishes or deploys | Always |
 | transmit | Transmission of data beyond the provisioned environment, other than publication or release | Always |

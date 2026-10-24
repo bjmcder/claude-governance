@@ -489,6 +489,47 @@ class Configuration(unittest.TestCase):
             json.loads(plain[claude_code.SETTINGS])["permissions"]["ask"],
         )
 
+    def test_git_metadata_denied(self) -> None:
+        """Behavior: while a commit is authorized, the sandbox denies
+        shell writes to the work's git configuration, worktree
+        configuration, and hooks; without one, or with a post alone, it
+        does not.
+
+        Reference: security re-verification M-a: a program started
+        earlier must not swap what the guard read before the push.
+        """
+        corpus = read_corpus_live()
+        git = "/srv/work/.git"
+        metadata = [f"{git}/config", f"{git}/config.worktree", f"{git}/hooks"]
+
+        def denied(*writes: RemoteWrite) -> list[str]:
+            """Return the sandbox's denyWrite for some opened writes.
+
+            Parameters
+            ----------
+            *writes : RemoteWrite
+                The writes opened.
+
+            Returns
+            -------
+            list[str]
+                The denied locations.
+            """
+            inputs = Inputs(
+                work="/srv/work", home="/home/agent", remote_writes=writes
+            )
+            files = claude_code.render(corpus, inputs, "# guard\n")
+            settings = json.loads(files[claude_code.SETTINGS])
+            return settings["sandbox"]["filesystem"]["denyWrite"]
+
+        commit = RemoteWrite(IDENT, "commit", REPO, ("main",), "2027-01-01")
+        post = RemoteWrite(IDENT, "post", "https://e.org/a/b", (), "")
+        for path in metadata:
+            with self.subTest(path=path):
+                self.assertIn(path, denied(commit))
+                self.assertNotIn(path, denied())
+                self.assertNotIn(path, denied(post))
+
     def test_command_option(self) -> None:
         """Behavior: ``--authorization`` opens the writes of an
         authorization in force, and one that is not in force exits 1
