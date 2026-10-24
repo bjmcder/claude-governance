@@ -10,7 +10,7 @@ from pathlib import Path
 from govharness.workflows.amend import Change, record_transaction, replace_text
 
 DATE = "2026-10-24"
-AT = "2026-10-24T13:00:00+00:00"  # set to the time of application once ratified
+AT = "2026-10-24T13:17:36+00:00"
 ROW_AFTER = "| MPI | STND | Message Passing Interface standard | none | The established name of the interface | active |"
 ROW = "| CONC | STND | Concurrency standard | none | Reads as concurrency | active |"
 RATIONALE = ("Register change, ratified by the custodian on " + DATE + ": MNEM gains CONC under STND, for the "

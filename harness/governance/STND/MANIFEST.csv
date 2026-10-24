@@ -3,6 +3,7 @@ STND,standards,LVL2,Standards,planned,_doc.md,edfec58474885afb70deeaca3ab2bde347
 STND.ANNEX,standard,LVL2,Hardware type annex,adopted,ANNEX/,0d09d3d4aa21bcbe5de8565f63da0b49ea0faa94cc522721a171a4f49cf46565,34662
 STND.CLASS,standard,LVL2,Consequence-class criteria,adopted,CLASS/,ceb64012ae1eb4e7925c30eb86affeaf4c7c788a5f3e89337bc138f3ccb34acf,17877
 STND.CODE,standard,LVL2,Coding standard,adopted,CODE/,4462aa4503b9df857441a8c87bdb1b705e489b49a522ac2a6834c222431a10a5,12477
+STND.CONC,standard,LVL2,Concurrency standard,adopted,CONC/,511a8051a3a0d4b03422f04f4d02ab9d01ec7d859ec8a1f512b30e364524ca36,40884
 STND.CREW,standard,LVL2,Agent roles standard,adopted,CREW/,72a58a1a3628079d0512723e69bb524fd691a1be53d0e685481f6313b2fa2b00,39494
 STND.CXX,standard,LVL2,C++ standard,adopted,CXX/,2317e567decbd81d5a3fb113a7e58fab1a8ac5bdb7ed22ec6b7032ebfcda75e5,53031
 STND.DEPS,standard,LVL2,Dependency policy,adopted,DEPS/,8fed8233aa0a4ddfd224fed73fa635d479f4c85bb1aa6dbd0540cc717de2bf08,13015

@@ -9,7 +9,7 @@ import build as B  # noqa: E402
 import content_conc as C  # noqa: E402
 from govharness.workflows.amend import Change, record_transaction  # noqa: E402
 
-AT = "2026-10-24T13:05:00+00:00"  # set to the time of application once ratified
+AT = "2026-10-24T13:18:37+00:00"
 TAIL = (" Text authored by an agent, Claude (Anthropic), at the custodian's direction (REPRO.5)."
         " Under the ruling of ledger entry 15, this decision is the QA.7 review.")
 RATIONALE = (
@@ -47,7 +47,10 @@ RATIONALE = (
     " by which a parent learns of a failure, and one notice or call that ends the dependent tasks, and so raise no"
     " floor (GOV.11), as the custodian rules. Transition (GOV.42): none, because no project instrument cites a draft"
     " of it. Review of STND.HARN.28 by the command pairs and by reading, a cold review, a pair review, and cold"
-    " verifications; record review-records/ledger111/."
+    " verifications; record review-records/ledger111/. The review found one matter that no shared-matters table"
+    " gives, the keying and construction of random streams for a computation divided among tasks (STND.CONC.23,"
+    " NUMER.24); the custodian assigns it to NUMER, whose shared-matters table of NUMER.2 gains the row at its next"
+    " revision."
 )
 
 
