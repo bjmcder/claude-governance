@@ -50,3 +50,22 @@ No listed pair of the 523 conflicts, and no matter is unowned. Observations:
 ## Pairs of 0.2
 
 The command pairs gives 526 pairs for 0.2 (pairs-OFFLD-0.2.md): the 523 of 0.1 and 3 new ones (pairs-OFFLD-0.2-delta.md), all from STND.OFFLD.17, which now instantiates DSGN.15 (AGENT.39, HDES.11, HW.11). They go to the cold verification of 0.2 with the provisions whose text changed.
+
+# Dispositions: STND.OFFLD 0.2 to 0.3
+
+Cold verification of draft 0.2, with the three new pairs: verify-offld-0.2.md. The new pairs (104, 109, 121) show no conflict and no unowned matter. Numbering is unchanged; the pairs of 0.3 are those of 0.2.
+
+| Finding | Disposition |
+| --- | --- |
+| B1: "Work within one queue is ordered" | Accepted: "Work within an in-order queue is ordered, and some programming models make a queue out of order by default, ordering its work only by its dependences". |
+| B2: Notes claims beyond the research | Accepted: migration beyond accelerator memory "continues with no error and is able to thrash" (o1, H4); the cache per account is one vendor's runtime; the non-finite check is "in that study ... about one outcome in a hundred". |
+| B3: two conditions in STND.OFFLD.7 S1 and STND.OFFLD.10 | Accepted: STND.OFFLD.7 "SHOULD make no later submission through that context" and "a later result of a submission through that context"; STND.OFFLD.10 opens with its condition: "Once the last offloaded work that uses an allocation ... has completed, that allocation or registration SHOULD be released exactly once on every path, failures included." |
+| B4: resubmission stated in the indicative | Accepted: recast as the effect of STND.OFFLD.7 on the resubmission that STND.ANNEX.6 admits, with the unverified point named. |
+| S: the source of the STND.OFFLD.5 hazard | Accepted: marked an inference from o1's rule for a transfer in the other direction. |
+| S: "the instance of STND.CONC.3" against the Terms | Accepted: "the form for a transfer of the protection that STND.CONC.3 asks, since the host storage that a transfer reads is shared with an asynchronous operation". |
+| S: processes sharing contexts | Accepted: "where they share a context they share its error state". |
+| S: onset paragraph refers to an onset not yet named | Accepted: "... rest on DSGN.5 and apply from CSQ2, the three sentences of STND.OFFLD.7 together". |
+| S: STND.OFFLD.17 S2, confirm against what | Accepted: "confirm at run time that the number that its build fixes is that of the hardware model that executes it". |
+| S: participants named, generalized from one vendor | Accepted: "the operations among threads that one programming model gives take a mask of their participants". |
+| RATIONALE: "after their last use" | Accepted: "released once after the last work that uses them completes". |
+| Optional: "the offload form of STND.CONC.11" | Kept: device threads are concurrent tasks under the Terms, so STND.CONC.11 reaches them and STND.OFFLD.18 is its form for a submission. |

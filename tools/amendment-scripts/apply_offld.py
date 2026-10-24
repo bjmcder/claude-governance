@@ -21,7 +21,7 @@ RATIONALE = (
     " relied upon stated and dependences between queues expressed, host storage left unwritten while a transfer reads"
     " it, a mode that attributes each error to its submission, no use of a context that an error leaves unusable, and"
     " failures detected in device code recorded for the host (STND.OFFLD.4 to STND.OFFLD.8); authoritative copies"
-    " stated and made current before a read, allocations released once after their last use, addresses used only"
+    " stated and made current before a read, allocations released once after the last work that uses them completes, addresses used only"
     " where valid, a missing shared memory answered and tested, the memory scope of each synchronization, and no"
     " floating-point environment relied on across the boundary (STND.OFFLD.9 to STND.OFFLD.14); barriers reached by"
     " whole groups, no lockstep or convergence assumed, the participants of group operations named and their width"
