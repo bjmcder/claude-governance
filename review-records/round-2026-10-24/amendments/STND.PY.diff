@@ -1,0 +1,33 @@
+--- rendered/STND.PY.md
++++ STND.PY-draft.md
+@@ -1,6 +1,6 @@
+-# Python standard (STND.PY) 1.0
++# Python standard (STND.PY) 1.0.1
+ 
+-Adopted by The Custodian as revision 1.0 in ledger entry 104 (2026-10-23). This reading copy is composed from the per-provision files in STND/PY/ of the governance harness; the harness files are the system of record.
++Adopted by The Custodian as revision 1.0 in ledger entry 104 (2026-10-23); revised to 1.0.1 in entry 119 (2026-10-24). This reading copy is composed from the per-provision files in STND/PY/ of the governance harness; the harness files are the system of record.
+ 
+ ## Purpose and scope
+ 
+@@ -49,7 +49,7 @@
+ 
+ Versions. The project chooses the releases of Python and of its dependencies that it declares, under STND.DEPS.3 and STND.DEPS.4, and the repository configuration records them (STND.PY.13). A distributed package declares the oldest releases it supports so that its dependents know what they are able to combine with it, and its checks run on the oldest declared combination and on the newest combination that its declared ranges admit (STND.PY.14). A new Python release is able to precede the releases of dependencies that support it, which is why the newest combination is limited to releases consistent with one another. An application or an archived study that no other work imports pins its interpreter and packages as dependencies, and a qualified revision stays fixed under STND.DEPS.3. A change of the Python release on which the work runs is a change of the runtime of each execution path under HW.7 and of a pinned revision under STND.DEPS.5, and each run records the exact Python and library revisions (STND.DEPS.8); the lock file of the package installer is the exact record of those revisions (STND.DEPS.10). Running the checks of STND.PY.14 at release, and not at each change, is a deferral of verification under RSRC.12.
+ 
+-Randomness. STND.CODE.2 already asks that the source of randomness arrive through the interface; STND.PY.15 gives its Python form, a generator object passed through a parameter named rng as SPEC 7 names it, and keeps library code off the global random states of its libraries and of the random module, which are hidden global state (DSGN.14). SPEC 7 also lets the rng parameter accept a seed or None; this standard keeps that conversion at the entry point (STND.PY.16), because an integer passed to two functions gives them identical streams and None draws entropy that nobody records. Streams for parallel parts derive from the root seed and the part index through spawning, jump-ahead, or counter-based keys (STND.PY.17, STND.VVUQ.62); a stream chosen by worker or process identity, or copied into forked processes, differs between runs. NUMER.24 governs the evidence that the streams are independent.
++Randomness. STND.CODE.2 already asks that the source of randomness arrive through the interface; STND.PY.15 gives its Python form, a generator object passed through a parameter named rng as SPEC 7 names it, and keeps library code off the global random states of its libraries and of the random module, which are hidden global state (DSGN.14). SPEC 7 also lets the rng parameter accept a seed or None; this standard keeps that conversion at the entry point (STND.PY.16), because an integer passed to two functions gives them identical streams and None draws entropy that nobody records. Streams for parallel parts derive from the root seed and the part index through spawning, jump-ahead, or counter-based keys (STND.PY.17, STND.VVUQ.62); a stream chosen by worker or process identity, or copied into forked processes, differs between runs. STND.PY.17 states for the work in Python the rule of STND.CONC.23, which keys each stream of a computation divided among concurrent tasks to a part defined independently of the number of tasks and of the task that computes it. STND.PY.17 reaches further: it governs each division of work into parts, parts run as separate runs included, which STND.CONC.23 does not reach; both apply from CSQ3. NUMER.24 governs the evidence that the streams are independent.
+ 
+ Stable values. A generator library is able to keep the stream of a bit generator fixed for a seed while the sampling methods built on it change their output between releases, as the methods of NumPy's Generator have done. A test reference of exact drawn values therefore draws through a stable stream or holds stored data (STND.PY.18). A test whose verdict depends on a seeded stream states in advance how it is repeated after an upgrade of its generator library, because NUMER.26 forbids reseeding as the remedy for a failure without such a rule. The built-in hash of a str or bytes object varies between runs with the hash seed of the interpreter, and with it the iteration order of a set of strings (STND.PY.19).
+ 
+@@ -89,6 +89,7 @@
+ | SIMPL | Simplicity |
+ | STND.CLASS | Consequence-class criteria |
+ | STND.CODE | Coding standard |
++| STND.CONC | Concurrency standard |
+ | STND.DEPS | Dependency policy |
+ | STND.DOCS | Documentation standard |
+ | STND.DRAFT | Drafting standard |
+@@ -308,3 +309,4 @@
+ | Revision | Date | Change |
+ | --- | --- | --- |
+ | 1.0 | 2026-10-23 | Adopted. |
++| 1.0.1 | 2026-10-24 | Editorial amendment (GOV.41): the informative Notes cite STND.CONC.23 as the model-neutral rule that STND.PY.17 states for the work in Python, and state the wider scope of STND.PY.17, and References lists STND.CONC; no obligation changes. |
