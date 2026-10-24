@@ -19,7 +19,7 @@ RATIONALE = (
     " and timeless. In the drafters' design, the standard holds the practice of these languages for design and for"
     " verification, agnostic of simulator, synthesis tool, checker, vendor, and target, holds only what these"
     " languages make necessary beside HDES, STND.CODE, STND.CONC, STND.VVUQ, and STND.DEPS, and cites HDES.11 for"
-    " clock-domain crossings: 27 provisions, all defaults. The edition in force, the construct subset with the"
+    " clock-domain crossings: 27 provisions, all defaults. The language edition, the construct subset with the"
     " constructs each tool does not support, the settings of simulation, and verification constructs kept out of the"
     " synthesized set (STND.SV.1 to STND.SV.4); race freedom by construction, with nonblocking assignment for"
     " clocked state that another process reads, one writing process per variable, order from the scheduling of the"

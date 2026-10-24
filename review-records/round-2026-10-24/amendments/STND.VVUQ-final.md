@@ -169,7 +169,7 @@ Default treatment of common quantities:
 
 | Quantity | Tier of STND.VVUQ.1 | Treatment |
 | --- | --- | --- |
-| Reruns of the same build, and restarts from a checkpoint that holds the complete state | 1 | Asserted |
+| Reruns of the same build, and computations continued from saved state that holds the complete state of the computation | 1 | Asserted |
 | Integer and logical outputs that no floating-point comparison decides | 1 | Asserted |
 | Elementary functions and short kernels against a reference | 2 | Asserted |
 | Conservation, symmetry, and bounds that the model requires (VV.10) | 3 where the discrete scheme preserves the property; 4 where only the model does; 1 for counts | Asserted |
@@ -232,7 +232,7 @@ Each comparison that judges a numerical result SHOULD use the strictest tier of 
 
 Default. Instantiates NUMER.11, REPRO.3, VV.1, VV.3.
 
-Where bitwise identity across runs is an acceptance criterion, each reduction on the path of the result SHOULD use a fixed or order-independent summation (NUMER.11, REPRO.3, VV.1, VV.3). A checkpoint whose restart is judged by bitwise identity SHOULD hold the complete state of the computation, its random number states included (REPRO.3).
+Where bitwise identity across runs is an acceptance criterion, each reduction on the path of the result SHOULD use a fixed or order-independent summation (NUMER.11, REPRO.3, VV.1, VV.3). Where a computation that continues from state saved by an earlier run is judged by bitwise identity, the saved state SHOULD hold the complete state of the computation, its random number states included (REPRO.3).
 
 #### STND.VVUQ.3 Non-finite values
 
@@ -759,4 +759,4 @@ Where the upper limit of the one-sided 95 percent prediction interval of the fit
 | 1.2 | 2026-10-18 | Minor amendment (GOV.41), conforming on the adoption of HW: STND.VVUQ.77 measures a comparison of a learned and a numerical method under the conditions of HW.22; new STND.VVUQ.79 to STND.VVUQ.81, in a new section Execution paths, give the default extrapolation criterion for a comparison beyond the reach of the reference path (HW.17); the term Extrapolation abscissa is added. |
 | 1.2.1 | 2026-10-19 | Editorial amendment (GOV.41): the informative Notes describe ML and MEAS as adopted; no obligation changes. |
 | 1.3 | 2026-10-24 | Minor amendment (GOV.41): new STND.VVUQ.82 treats a difference between compared results that declared run-to-run variation explains, within the agreement of its tier, as no defect; discourages changes made only to remove it unless an acceptance criterion or the consequence class requires bitwise identity; and admits a deterministic mode as an option; new STND.VVUQ.83, binding on agents (GOV.48), forbids an agent to change or extend the work on its own initiative only to remove such a difference, and has it state each difference it leaves. |
-| 1.4 | 2026-10-24 | Minor amendment (GOV.41): STND.VVUQ.63 states the outcome that a test battery decides, a published battery of statistical tests of randomness named with its revision in the record of the work, in place of naming one battery; the Notes give that battery as an example and cite ML.2 and MEAS.2 for the matters that ML and MEAS own; References lists ML and MEAS. |
+| 1.4 | 2026-10-24 | Minor amendment (GOV.41): STND.VVUQ.63 states the outcome that a test battery decides, a published battery of statistical tests of randomness named with its revision in the record of the work, in place of naming one battery; the Notes give that battery as an example and cite ML.2 and MEAS.2 for the matters that ML and MEAS own; References lists ML and MEAS; and, as an editorial change, STND.VVUQ.2 and its row of the table of common quantities speak of a computation that continues from state saved by an earlier run, in place of a checkpoint and its restart. |

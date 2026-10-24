@@ -1,7 +1,8 @@
 """Rehearsable minor amendment: STND.VVUQ 1.4, the test of generators stated by its outcome (one transaction).
 
 STND.VVUQ.63 named one test battery in a provision; it now states the outcome that a battery decides, and the Notes
-give that battery as an example. Applied with the amendments at the start of apply_round_2026_10_24.py.
+give that battery as an example. An editorial change rides with it: STND.VVUQ.2 and its row of the table of common
+quantities say in plain words what they called a checkpoint, a word that STND.DFLT defines in another sense. Applied with the amendments at the start of apply_round_2026_10_24.py.
 Run from harness/, so that govharness imports:
     python3 -B -m govharness rehearse governance ../tools/amendment-scripts/apply_vvuq_1_4.py
 """
@@ -25,7 +26,17 @@ VVUQ63 = [
      "(NUMER.24, DSGN.17, REPRO.3, VV.1)."),
 ]
 
+VVUQ2 = [
+    ("A checkpoint whose restart is judged by bitwise identity SHOULD hold the complete state of the computation, its "
+     "random number states included (REPRO.3).",
+     "Where a computation that continues from state saved by an earlier run is judged by bitwise identity, the saved "
+     "state SHOULD hold the complete state of the computation, its random number states included (REPRO.3)."),
+]
+
 DOC = [
+    ("| Reruns of the same build, and restarts from a checkpoint that holds the complete state | 1 | Asserted |",
+     "| Reruns of the same build, and computations continued from saved state that holds the complete state of the "
+     "computation | 1 | Asserted |"),
     ("A random number generator that passes a test battery is not thereby proven sound.",
      "A random number generator that passes a test battery is not thereby proven sound. The BigCrush battery of the "
      "TestU01 library is one published battery that STND.VVUQ.63 admits; the record names the battery that was "
@@ -42,20 +53,26 @@ DOC = [
 READING = ("STND.VVUQ.63 states the outcome that a test battery decides, a published battery of statistical tests of "
            "randomness named with its revision in the record of the work, in place of naming one battery; the Notes "
            "give that battery as an example and cite ML.2 and MEAS.2 for the matters that ML and MEAS own; "
-           "References lists ML and MEAS")
+           "References lists ML and MEAS; and, as an editorial change, STND.VVUQ.2 and its row of the table of "
+           "common quantities speak of a computation that continues from state saved by an earlier run, in place of "
+           "a checkpoint and its restart")
 
 ROW = f"| 1.4 | {DATE} | Minor amendment (GOV.41): {READING}. |"
 
 RATIONALE = (
     f"Minor amendment of STND.VVUQ to revision 1.4, ratified by the custodian on {DATE}, on the custodian's standing "
     f"direction that provisions name no product or tool and state the outcome that a tool or a reviewer decides "
-    f"(GOV.18): {READING}. The change is minor and not editorial because the text of a default changes, and with it "
-    "what a project replaces when it replaces that default (REPRO.7). The obligation of the work does not narrow: a "
+    f"(GOV.18): {READING}. The change is minor and not editorial because the text of STND.VVUQ.63, a default, "
+    "changes what it asks, and with it what a project replaces when it replaces that default (REPRO.7). The change to STND.VVUQ.2 and its row is "
+    "editorial: STND.DFLT defines Checkpoint as a copy of an item's prior state kept before an action, so plain "
+    "words take the place of that word in another sense, and what STND.VVUQ.2 asks is unchanged. The obligation of "
+    "the work under STND.VVUQ.63 does not narrow: a "
     "generator that passed the battery that the provision named meets the new text, and the record of the work "
-    "names that battery. Class onset unchanged, CSQ3; the provision stays a default and raises no floor (GOV.11). "
+    "names that battery. Class onsets unchanged, CSQ3 for STND.VVUQ.63; both provisions stay defaults and raise no "
+    "floor (GOV.11). "
     "Transition (GOV.42): none, because a work that meets the old text meets the new one once its record names the "
     "battery, which it does when a change next touches the generator. Review of STND.HARN.28 by the command pairs; "
-    "record review-records/round-2026-10-24/fixpass.md, from reconciliation item R19."
+    "records review-records/round-2026-10-24/fixpass.md and fixpass-2.md, from reconciliation items R19 and R12."
     " Text authored by an agent, Claude (Anthropic), at the custodian's direction (REPRO.5)."
     " Under the ruling of ledger entry 15, this decision is the QA.7 review.")
 
@@ -63,7 +80,8 @@ RATIONALE = (
 def apply(root: Path) -> None:
     root = Path(root)
     replace_text(root, "STND/VVUQ/63.md", VVUQ63)
-    B.derive_fields(root, ["STND.VVUQ.63"])
+    replace_text(root, "STND/VVUQ/2.md", VVUQ2)
+    B.derive_fields(root, ["STND.VVUQ.2", "STND.VVUQ.63"])
     replace_text(root, "STND/VVUQ/_doc.md", DOC)
     raise_revision(root, "STND/VVUQ", "1.3", "1.4", ROW)
     B.write_references(root, ["STND.VVUQ"])
