@@ -16,7 +16,7 @@ import io
 import json
 import tempfile
 import unittest
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from govharness.cli.main import main
@@ -31,6 +31,7 @@ from tests.support import corpus_copy, live_entries
 NOW = datetime(2026, 10, 24, 12, 0, tzinfo=timezone.utc)
 REPO = "https://git.example.org/team/work.git"
 IDENT = "WORK.AUTH.1"
+ROLE = "Implementing agent"
 ENTRY = {
     "destination": REPO,
     "kinds": ["commit"],
@@ -105,7 +106,11 @@ def record(root: Path, kind: str = "authorize", **fields: object) -> None:
 
 
 def reading(
-    root: Path, assured: bool = False, verified: bool = False
+    root: Path,
+    assured: bool = False,
+    verified: bool = False,
+    role: str = ROLE,
+    horizon: timedelta | None = None,
 ) -> tuple[tuple[RemoteWrite, ...], tuple[str, ...]]:
     """Read the authorization of a root at ``NOW``.
 
@@ -114,24 +119,31 @@ def reading(
     root : Path
         Corpus root.
     assured : bool
-        Whether the work is assured.
+        Whether a verified signature is required, as for assured work.
     verified : bool
         Whether the ledger's signatures verify.
+    role : str
+        The role the configuration is derived for.
+    horizon : timedelta | None
+        The owner's bound on the time to expiry.
 
     Returns
     -------
     tuple[tuple[RemoteWrite, ...], tuple[str, ...]]
         The writes opened and the lines still referred.
     """
-    return read_authorizations(
+    found = read_authorizations(
         read_corpus(root),
         read_tree(root),
         read_ledger(root),
         (IDENT,),
         NOW,
+        role,
         assured,
         verified,
+        horizon,
     )
+    return found.writes, found.referred
 
 
 class InForce(unittest.TestCase):
@@ -355,6 +367,89 @@ class InForce(unittest.TestCase):
             reading(self.root)
 
 
+class ExtensionAndDuration(unittest.TestCase):
+    """GUARD.12 and GUARD.10: to whom, and for how long."""
+
+    def setUp(self) -> None:
+        """Make a corpus root with the authorization recorded."""
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+
+    def test_extension_to_the_role(self) -> None:
+        """Behavior: an authorization opens writes only for a role that
+        its field delegable_to names; another role, no role, and a
+        malformed field stop the derivation.
+
+        Reference: STND.HARN.29, row Extension; GUARD.12; PRIME.7, never
+        widened by delegation (cold review, Defect 2).
+        """
+        write_authorization(self.root)
+        record(self.root)
+        self.assertEqual(len(reading(self.root)[0]), 1)
+        for role in ("Research agent", ""):
+            with (
+                self.subTest(role=role),
+                self.assertRaisesRegex(ValueError, "does not extend"),
+            ):
+                reading(self.root, role=role)
+        bad = self.root / "bad"
+        bad.mkdir()
+        write_authorization(bad, delegable_to="Implementing agent")
+        record(bad)
+        with self.assertRaisesRegex(ValueError, "delegable_to"):
+            reading(bad)
+
+    def test_until_revoked_and_horizon(self) -> None:
+        """Behavior: an authorization that lapses only when revoked is in
+        force and opens a write with no expiry; an owner's horizon
+        refuses it, and refuses an expiry beyond the horizon.
+
+        Reference: STND.PROJ.6, field expires; GUARD.10, a stated
+        duration; security review M5, a horizon the owner sets.
+        """
+        write_authorization(self.root, expires="until revoked")
+        record(self.root)
+        writes, _ = reading(self.root)
+        self.assertEqual(writes[0].expires, "")
+        with self.assertRaisesRegex(ValueError, "horizon"):
+            reading(self.root, horizon=timedelta(days=90))
+        later = self.root / "later"
+        later.mkdir()
+        write_authorization(later)
+        record(later)
+        self.assertEqual(len(reading(later, horizon=timedelta(days=90))[0]), 1)
+        with self.assertRaisesRegex(ValueError, "beyond the horizon"):
+            reading(later, horizon=timedelta(days=30))
+
+    def test_forged_targets_and_dates(self) -> None:
+        """Behavior: a pinning transaction whose targets are a string,
+        a revoke whose targets are a string, and a date recorded after
+        the pinning transaction each stop the derivation.
+
+        Reference: security review L1 and L6.
+        """
+        cases = (
+            ({}, {"targets": IDENT + "0"}, "no authorize"),
+            ({"recorded": "2026-10-21"}, {}, "after its transaction"),
+        )
+        for index, (fields, entry, reason) in enumerate(cases):
+            with self.subTest(reason=reason):
+                root = self.root / str(index)
+                root.mkdir()
+                write_authorization(root, **fields)
+                record(root, **entry)
+                with self.assertRaisesRegex(ValueError, reason):
+                    reading(root)
+        root = self.root / "revoked"
+        root.mkdir()
+        write_authorization(root)
+        record(root)
+        record(root, "revoke", scope=[], targets="anything")
+        with self.assertRaisesRegex(ValueError, "revokes it"):
+            reading(root)
+
+
 class Configuration(unittest.TestCase):
     """The configuration carries the writes the authorizations open."""
 
@@ -378,9 +473,11 @@ class Configuration(unittest.TestCase):
         settings = json.loads(files[claude_code.SETTINGS])
         coverage = files[claude_code.COVERAGE]
         self.assertEqual(policy["remote_writes"][0]["destination"], REPO)
-        self.assertNotIn("Bash(git push *)", settings["permissions"]["ask"])
+        self.assertIn("Bash(git push *)", settings["permissions"]["ask"])
+        self.assertIn("Bash(gh issue comment *)", settings["permissions"]["ask"])
         self.assertIn("Bash(git push --force *)", settings["permissions"]["deny"])
-        self.assertIn("sole command of its call", coverage)
+        self.assertIn("one command of plain words", coverage)
+        self.assertIn("may outrank a hook's allow", coverage)
         self.assertIn("Referred: WORK.AUTH.2: per action.", coverage)
         self.assertIn("git.example.org is no opened domain", coverage)
         plain = claude_code.render(
@@ -406,16 +503,31 @@ class Configuration(unittest.TestCase):
             args = [
                 "environment", str(root), "--work", str(root),
                 "--home", str(root), "--authorization", IDENT,
+                "--role", ROLE,
             ]
-            with contextlib.redirect_stdout(io.StringIO()):
+            shown = io.StringIO()
+            with contextlib.redirect_stdout(shown):
                 code = main([*args, "--write", str(out)])
             policy = json.loads((out / claude_code.POLICY).read_text())
+            register = root / "SIGNR"
+            register.mkdir()
+            (register / "_doc.md").write_text(
+                "---\nid: \"SIGNR\"\n---\n\nNo signers.\n", encoding="utf-8"
+            )
+            unsigned = io.StringIO()
+            with contextlib.redirect_stderr(unsigned):
+                signed = main([*args, "--write", str(out)])
+            (register / "_doc.md").unlink()
+            register.rmdir()
             write_authorization(root, status="draft")
             err = io.StringIO()
             with contextlib.redirect_stderr(err):
                 bad = main([*args, "--write", str(out)])
         self.assertEqual(code, 0)
         self.assertEqual(policy["remote_writes"][0]["branches"], ["main"])
+        self.assertIn(f"authorization: {IDENT}: pinned by seq", shown.getvalue())
+        self.assertEqual(signed, 1)
+        self.assertIn("signature", unsigned.getvalue())
         self.assertEqual(bad, 1)
         self.assertIn("not in force", err.getvalue())
 

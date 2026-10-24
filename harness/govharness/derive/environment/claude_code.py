@@ -166,28 +166,36 @@ STORE_GAPS: dict[str, str] = {
 }
 # What authorizations of remote writes add to the gap of remote-write.
 AUTHORIZED_GAP = (
-    "A git push or a tracker post that a standing authorization in force "
-    "names by destination, kind, and branch proceeds without referral "
-    "(STND.HARN.29), and only as the sole command of its call, with no "
-    "assignment, no global option, and no option outside a short list; "
-    "the destination is compared as a whole address. A push reads its "
-    "destination from the remote's one address in the git configuration "
-    "that the guard reads (the repository's, the account's, and the "
-    "system's), and is referred while that configuration rewrites "
-    "addresses, sets a push address, includes another file, recurses "
-    "into submodules, pushes tags, or names a program for the transport, "
-    "or while the account's environment sets a variable of git; a "
-    "program that changes the configuration between the check and the "
-    "push, such as one started earlier, is not seen. Expiry is checked "
-    "at every call; a revocation takes effect once the configuration is "
-    "derived again and installed. The text rule that refers every push "
-    "is dropped, so the guard alone refers an unauthorized one."
+    "A git push or a tracker post that a standing authorization names "
+    "by destination, kind, and branches, compared as whole strings, gets "
+    "an allow from the guard (STND.HARN.29) only where the call is one "
+    "command of plain words, with no expansion, substitution, "
+    "redirection, here-document, or separator; git or gh is named "
+    "without a path; no assignment, global option, or option outside a "
+    "short list is given; a post carries literal text with no @ and no "
+    "file; and, for a push, the command runs inside the work, the first "
+    "repository found is the work's own and valid, the remote has one "
+    "address, the refspecs name local branches only, the repository "
+    "holds no hook, and the git configuration that the guard reads (the "
+    "repository's, the worktree's, the account's, and the system's) "
+    "rewrites no address and sets no push address, inclusion, alias, "
+    "credential helper, hooks path, transport program, proxy, pushing of "
+    "tags, or recursion into submodules, while the guard's environment "
+    "sets no variable of git or gh. The text rules that refer every push "
+    "and every such post stay, and a permission rule may outrank a "
+    "hook's allow; until an installation test shows that the allow "
+    "passes, an authorized write may still be referred, and, in an "
+    "unattended session, refused. Not seen: a program that changes the "
+    "configuration, the refs, or the account's ssh or gh configuration "
+    "between the check and the write, such as one started earlier; what "
+    "the remote does with the write, such as a redirection or a "
+    "deployment; and the content of a post, which the authorization's "
+    "destination alone bounds. The authorization is tested when the "
+    "configuration is derived; the guard tests its expiry at each "
+    "write, and a revocation takes effect once the configuration is "
+    "derived again and installed, which `environment --check` reports "
+    "until then."
 )
-# Text rules that an authorization of a kind makes the guard's alone,
-# since a permission rule outranks a hook's answer.
-AUTHORIZED_RULES: dict[str, tuple[str, ...]] = {
-    "commit": ("Bash(git push *)",),
-}
 # Text rules by outcome; each goes to "deny" or "ask" by the response.
 RULES: dict[str, tuple[str, ...]] = {
     "elevated-privilege": (
@@ -206,7 +214,12 @@ RULES: dict[str, tuple[str, ...]] = {
         "Bash(git commit --amend *)",
     ),
     "record-entries": (f"Edit(**/{LEDGER_FILE})",),
-    "remote-write": ("Bash(git push *)",),
+    "remote-write": (
+        "Bash(git push *)",
+        "Bash(gh issue create *)",
+        "Bash(gh issue comment *)",
+        "Bash(gh pr comment *)",
+    ),
     "selective-destruction": (
         "Bash(rm -r *)",
         "Bash(rm -rf *)",
@@ -478,7 +491,8 @@ def guard_policy(
                 "kind": w.kind,
                 "destination": w.destination,
                 "branches": list(w.branches),
-                "expires": w.expires,
+                # Null for one that lapses only when revoked.
+                "expires": w.expires or None,
             }
             for w in inputs.remote_writes
         ],
@@ -546,13 +560,8 @@ def settings(outcomes: list[Outcome], inputs: Inputs) -> dict[str, object]:
     """
     deny: list[str] = []
     ask: list[str] = []
-    guarded = {
-        rule
-        for write in inputs.remote_writes
-        for rule in AUTHORIZED_RULES.get(write.kind, ())
-    }
     for outcome in outcomes:
-        rules = [r for r in RULES.get(outcome.key, ()) if r not in guarded]
+        rules = RULES.get(outcome.key, ())
         (deny if outcome.response == "Refuse" else ask).extend(rules)
     deny += [edit_rule(loc) for loc in configuration_locations(inputs)]
     allow = [*ALLOWED_TOOLS]
@@ -702,7 +711,7 @@ def coverage_report(
                 ", ".join(
                     f"{w.authorization} ({w.kind} at {w.destination}"
                     + (f", {', '.join(w.branches)}" if w.branches else "")
-                    + f", until {w.expires})"
+                    + f", until {w.expires or 'revoked'})"
                     for w in inputs.remote_writes
                 )
                 or "none"

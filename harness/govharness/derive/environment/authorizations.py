@@ -4,12 +4,16 @@ STND.HARN.18 refers each remote write that no authorization in force
 names by destination and kind of write. STND.PROJ.6 fixes the fields of
 an authorization file that covers a remote write, and STND.PROJ.7 the
 kinds of write. STND.HARN.29 states when a derived configuration may
-rely on one: the file is adopted, granted by the human owner, recorded
-no later and expiring later than the time of the write, pinned in its
-current content by a transaction of type ``authorize`` of the human
-owner that no later ``revoke`` names, signed for assured work, and
-standing, naming no kind or destination whose effect is irrevocable
-(GUARD.11).
+rely on one, tested when the configuration is derived: the file is
+adopted, granted by the human owner, extends to the role the
+configuration is derived for (GUARD.12), is recorded no later than the
+derivation, is pinned in its current content by a transaction of type
+``authorize`` of the human owner that no later ``revoke`` names, is
+signed where the work is assured or the corpus holds a signer register,
+and is standing, with no entry of a kind or at a destination whose
+effect is irrevocable (GUARD.11). Its expiry, where it has one, is
+tested again by the guard at each write; a revocation reaches the
+configuration only when it is derived again.
 
 The owner names the authorizations an environment takes, as the owner
 names the opened secrets; this module checks each one and returns the
@@ -24,7 +28,8 @@ the referral confirms it.
 from __future__ import annotations
 
 import re
-from datetime import date, datetime
+from dataclasses import dataclass
+from datetime import date, datetime, timedelta
 from pathlib import PurePosixPath
 from typing import Any
 
@@ -35,6 +40,9 @@ from govharness.ledger.transactions import chain_problems
 GRANTOR = "The Human Owner"
 STATUS = "adopted"
 KIND = "auth"
+# The value of ``expires`` for an authorization whose stated duration is
+# until its revocation (GUARD.10).
+UNTIL_REVOKED = "until revoked"
 # The kinds of write of STND.PROJ.7; GUARD.11 names publication,
 # release, and transmission beyond the environment as irrevocable.
 KINDS = ("commit", "post", "publish", "transmit", "other")
@@ -190,9 +198,10 @@ def record_problems(
     rel: PurePosixPath,
     tree: Tree,
     ledger: list[dict[str, Any]],
-    assured: bool,
+    recorded: date | None,
+    signed: bool,
     verified: bool,
-) -> list[str]:
+) -> tuple[list[str], Any]:
     """Return how the ledger fails to record an authorization in force.
 
     Parameters
@@ -205,33 +214,39 @@ def record_problems(
         Snapshot of the corpus.
     ledger : list[dict[str, Any]]
         The ledger of the corpus, in order.
-    assured : bool
-        Whether the work is assured (CSQ0 or CSQ1).
+    recorded : date | None
+        The file's date recorded, where it is a date.
+    signed : bool
+        Whether the transaction must carry a verified signature: for
+        assured work, and wherever the corpus holds a signer register.
     verified : bool
         Whether every signature of the ledger verifies against the
         signer register, as the caller checked it.
 
     Returns
     -------
-    list[str]
-        One line per problem; empty when the ledger's chain is intact,
+    tuple[list[str], Any]
+        One line per problem, empty when the ledger's chain is intact,
         the latest transaction that pins the file is the human owner's
-        ``authorize`` of it, pins its current content, and no later
-        ``revoke`` names it.
+        ``authorize`` of it, dated no earlier than the file's date
+        recorded, pins its current content, and no later ``revoke``
+        names it; and the ``seq`` of that transaction, or None.
     """
     if chain_problems(ledger):
-        return ["the ledger's chain is broken (STND.HARN.8)"]
+        return ["the ledger's chain is broken (STND.HARN.8)"], None
     pinning = [
         (i, e) for i, e in enumerate(ledger) if covers(e.get("scope") or [], rel)
     ]
     if not pinning:
-        return ["no transaction of the ledger pins it"]
+        return ["no transaction of the ledger pins it"], None
     index, latest = pinning[-1]
+    targets = latest.get("targets")
     problems: list[str] = []
     if (
         latest.get("type") != "authorize"
         or latest.get("actor") != GRANTOR
-        or ident not in (latest.get("targets") or [])
+        or not isinstance(targets, list)
+        or ident not in targets
     ):
         problems.append(
             f"the latest transaction that pins it, seq {latest.get('seq')}, "
@@ -241,24 +256,32 @@ def record_problems(
         "corpus_hash"
     ):
         problems.append("its content changed after the ledger pinned it")
+    try:
+        if recorded and recorded > timestamp(latest.get("at")).date():
+            problems.append("its date recorded is after its transaction")
+    except ValueError:
+        problems.append("its transaction carries no timestamp")
     if any(
-        e.get("type") == "revoke" and ident in (e.get("targets") or [])
+        e.get("type") == "revoke"
+        and (not isinstance(e.get("targets"), list) or ident in e["targets"])
         for e in ledger[index + 1 :]
     ):
         problems.append("a later transaction revokes it")
-    if assured and not (latest.get("signature") and verified):
+    if signed and not (latest.get("signature") and verified):
         problems.append(
-            "for assured work, its transaction carries no signature that "
-            "the signer register verifies (STND.HARN.11)"
+            "its transaction carries no signature that the signer register "
+            "verifies (STND.HARN.11)"
         )
-    return problems
+    return problems, latest.get("seq")
 
 
 def read_one(
     corpus: Corpus,
     ident: str,
     now: datetime,
-) -> tuple[dict[str, Any], PurePosixPath, list[str]]:
+    role: str,
+    horizon: timedelta | None,
+) -> tuple[dict[str, Any], PurePosixPath, date | None, list[str]]:
     """Return an authorization's fields, its file, and its problems.
 
     Parameters
@@ -269,12 +292,18 @@ def read_one(
         Identifier of the authorization.
     now : datetime
         Time of the derivation, aware of its offset.
+    role : str
+        The role or agent for which the configuration is derived.
+    horizon : timedelta | None
+        The longest time from the derivation to an expiry that the owner
+        accepts, or None for no bound.
 
     Returns
     -------
-    tuple[dict[str, Any], PurePosixPath, list[str]]
-        The front matter, the path relative to the root, and one line
-        per field that keeps it from being in force (STND.HARN.29).
+    tuple[dict[str, Any], PurePosixPath, date | None, list[str]]
+        The front matter, the path relative to the root, the date
+        recorded where it is one, and one line per field that keeps it
+        from being in force (STND.HARN.29).
 
     Raises
     ------
@@ -290,17 +319,35 @@ def read_one(
         problems.append(f"status {meta.get('status')!r}, not {STATUS!r}")
     if meta.get("grantor") != GRANTOR:
         problems.append(f"grantor {meta.get('grantor')!r}, not {GRANTOR!r}")
+    recorded = None
     try:
         recorded = date.fromisoformat(str(meta.get("recorded")))
         if recorded > now.date():
             problems.append(f"recorded {recorded} is after the derivation")
     except ValueError:
         problems.append(f"recorded {meta.get('recorded')!r} is no date")
-    try:
-        if timestamp(meta.get("expires")) <= now:
-            problems.append(f"expired at {meta.get('expires')}")
-    except ValueError as error:
-        problems.append(f"expires: {error}")
+    expires = meta.get("expires")
+    if expires == UNTIL_REVOKED:
+        if horizon is not None:
+            problems.append("it lapses only when revoked, beyond the horizon")
+    else:
+        try:
+            moment = timestamp(expires)
+            if moment <= now:
+                problems.append(f"expired at {expires}")
+            elif horizon is not None and moment > now + horizon:
+                problems.append(f"its expiry {expires} is beyond the horizon")
+        except ValueError as error:
+            problems.append(f"expires: {error}")
+    delegable = meta.get("delegable_to")
+    if not isinstance(delegable, list) or not all(
+        isinstance(r, str) and r for r in delegable
+    ):
+        problems.append("delegable_to is no list of roles")
+    elif role not in delegable:
+        problems.append(
+            f"it does not extend to {role or 'an unnamed role'} (GUARD.12)"
+        )
     standing = meta.get("standing")
     if not isinstance(standing, bool):
         problems.append("standing is no boolean")
@@ -310,9 +357,28 @@ def read_one(
     else:
         for item in writes:
             problems += entry_problems(item, standing is True)
-    path = entry.path
-    rel = PurePosixPath(path.as_posix())
-    return meta, rel, problems
+    return meta, PurePosixPath(entry.path.as_posix()), recorded, problems
+
+
+@dataclass(frozen=True)
+class Reading:
+    """The remote writes that the named authorizations open.
+
+    Parameters
+    ----------
+    writes : tuple[RemoteWrite, ...]
+        One per destination and matched kind of each standing
+        authorization in force.
+    referred : tuple[str, ...]
+        One line per authorization, or kind, whose writes stay referred.
+    summary : tuple[str, ...]
+        One line per authorization read, with the transaction that pins
+        it, for the owner to compare with what was granted.
+    """
+
+    writes: tuple[RemoteWrite, ...]
+    referred: tuple[str, ...]
+    summary: tuple[str, ...]
 
 
 def read_authorizations(
@@ -321,9 +387,11 @@ def read_authorizations(
     ledger: list[dict[str, Any]],
     idents: tuple[str, ...],
     now: datetime,
-    assured: bool,
+    role: str,
+    signed: bool,
     verified: bool,
-) -> tuple[tuple[RemoteWrite, ...], tuple[str, ...]]:
+    horizon: timedelta | None = None,
+) -> Reading:
     """Return the remote writes that the named authorizations open.
 
     Parameters
@@ -338,17 +406,22 @@ def read_authorizations(
         Identifiers of the authorizations the owner names.
     now : datetime
         Time of the derivation, aware of its offset.
-    assured : bool
-        Whether the work is assured (CSQ0 or CSQ1).
+    role : str
+        The role or agent for which the configuration is derived; an
+        authorization that does not extend to it is not in force for
+        this configuration (GUARD.12).
+    signed : bool
+        Whether a verified signature is required: for assured work, and
+        wherever the corpus holds a signer register.
     verified : bool
         Whether every signature of the ledger verifies.
+    horizon : timedelta | None
+        The longest time to an expiry that the owner accepts.
 
     Returns
     -------
-    tuple[tuple[RemoteWrite, ...], tuple[str, ...]]
-        One remote write per destination and matched kind of each
-        standing authorization; and one line per authorization, or kind,
-        whose writes stay referred, with the reason.
+    Reading
+        The writes opened, the lines still referred, and the summary.
 
     Raises
     ------
@@ -359,15 +432,30 @@ def read_authorizations(
         raise ValueError("the time of the derivation has no UTC offset")
     writes: list[RemoteWrite] = []
     referred: list[str] = []
+    summary: list[str] = []
     errors: list[str] = []
     for ident in dict.fromkeys(idents):
-        meta, rel, problems = read_one(corpus, ident, now)
-        problems += record_problems(
-            ident, rel, tree, ledger, assured, verified
+        meta, rel, recorded, problems = read_one(
+            corpus, ident, now, role, horizon
         )
+        found, seq = record_problems(
+            ident, rel, tree, ledger, recorded, signed, verified
+        )
+        problems += found
         if problems:
             errors.append(f"{ident} is not in force: " + "; ".join(problems))
             continue
+        expires = "" if meta["expires"] == UNTIL_REVOKED else meta["expires"]
+        summary.append(
+            f"{ident}: pinned by seq {seq}; "
+            f"{'standing' if meta['standing'] else 'per action'}; expires "
+            f"{expires or 'when revoked'}; "
+            + "; ".join(
+                f"{', '.join(i['kinds'])} at {i['destination']}"
+                + (f" ({', '.join(i['branches'])})" if i["branches"] else "")
+                for i in meta["remote_writes"]
+            )
+        )
         if not meta["standing"]:
             referred.append(
                 f"{ident}: per action, so each write it covers is referred "
@@ -389,9 +477,9 @@ def read_authorizations(
                         kind,
                         item["destination"],
                         tuple(branches),
-                        str(meta["expires"]),
+                        str(expires),
                     )
                 )
     if errors:
         raise ValueError(" | ".join(errors))
-    return tuple(writes), tuple(referred)
+    return Reading(tuple(writes), tuple(referred), tuple(summary))

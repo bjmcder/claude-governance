@@ -1,6 +1,6 @@
 # Pairs for review before a change of STND.HARN (STND.HARN.28)
 
-15 pair(s).
+16 pair(s).
 
 | # | Changed side | Other provision | Bases |
 | --- | --- | --- | --- |
@@ -18,4 +18,5 @@
 | 12 | STND.HARN.23 | HDES.14 | PRIME.4 |
 | 13 | STND.HARN.23 | HW.8 | PRIME.4 |
 | 14 | STND.HARN.23 | HW.GPU.3 | PRIME.4 |
-| 15 | STND.HARN.29 | AGENT.17 | GUARD.2 |
+| 15 | STND.HARN.29 | AGENT.11 | GUARD.12 |
+| 16 | STND.HARN.29 | AGENT.17 | GUARD.2 |

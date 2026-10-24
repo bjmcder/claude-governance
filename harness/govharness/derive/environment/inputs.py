@@ -38,8 +38,9 @@ class RemoteWrite:
         For ``commit``, the branches the authorization covers there;
         empty for ``post``.
     expires : str
-        Timestamp at which the authorization lapses; the guard compares
-        it with its clock at every call.
+        Timestamp at which the authorization lapses, which the guard
+        compares with its clock at every call; empty for one that lapses
+        only when revoked.
     """
 
     authorization: str
