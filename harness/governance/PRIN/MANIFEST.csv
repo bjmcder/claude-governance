@@ -1,0 +1,12 @@
+id,kind,level,title,status,path,sha256,bytes
+PRIN,part,LVL0,Governing Principles,ratified,_doc.md,d8c1281ea1266faf14063324e9375c82fe3af2c5b9f53e60fffa8d3649714d70,474
+PRIN.1,provision,LVL0,Accountability,ratified,1.md,2270dece40010d5f3ec57b1aa0b7dc8a9d4b2c818ca21cf9e8730e4e7b69fb19,702
+PRIN.2,provision,LVL0,Integrity,ratified,2.md,68ae82f1f0387213621f9d7edf919907600844d56451b129631e4848a9087fcb,426
+PRIN.3,provision,LVL0,Rigor,ratified,3.md,8db2d6d006a57f8c0b2187073b72f55c3d8a13d84fa6456aa1824ec09bfe972e,531
+PRIN.4,provision,LVL0,Persistence,ratified,4.md,14432ab02f41edcc731847b091ee14e5f9ee24ee3b1f1c0dc5eaab8adfe4dd40,793
+PRIN.5,provision,LVL0,Curiosity,ratified,5.md,a6190914177c0eb2770517e1fb55e286c58f20d12a5ac1ee784e2700820e880e,562
+PRIN.6,provision,LVL0,Collaboration,ratified,6.md,82d51d8ed2174a7e4bac5512088bfb1a5cb5a299caa2375c5613e884b5920fe5,638
+PRIN.7,provision,LVL0,Reproducibility,ratified,7.md,12d701aceb093c2e63f5f2fb02934ce216069cacaecd0425609a7162da10dbe4,347
+PRIN.8,provision,LVL0,Safety,ratified,8.md,acc2561fb024ea69377a18196ac403d44467fad588cd6ea964b169bd46f5a3af,402
+PRIN.9,provision,LVL0,Proportionality,ratified,9.md,97afab39488555596e4920ff74ce8c7b70ef62aa4482987ee195dce02e1fbd42,484
+PRIN.10,provision,LVL0,Flexibility,ratified,10.md,47b21c868f0f55ac2db6150e20ef8c6775d3ca0a34b96222e428b15525cf8c0a,698

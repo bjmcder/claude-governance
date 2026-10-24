@@ -1,0 +1,33 @@
+id,kind,level,title,status,path,sha256,bytes
+STND.CXX,standard,LVL2,C++ standard,adopted,_doc.md,de122b50cc78ed5e05eb441f14148142373b460d02b8aa70d3e04e850ce48d2e,27498
+STND.CXX.1,provision,LVL2,Core Guidelines reference,adopted,1.md,3f97cee825752b722dc620931bf6c3a75e18111ebc1315f2010073d098e4d5ee,712
+STND.CXX.2,provision,LVL2,Language edition,adopted,2.md,03a4f9e34bc0ce7dfdda17b3fd21cd3bcf69a75489ee8d23bcd871381552fd7c,1117
+STND.CXX.3,provision,LVL2,Agent edition changes,adopted,3.md,69368b6a3002c4b58052a6282cc69ead726ede65f14cf15b0a2e3c326ec09253,964
+STND.CXX.4,provision,LVL2,Stated build settings,adopted,4.md,d79f84ae75a89ca8b56ba022fb9e54c55150b7679d9dffcb98bd2003604d727a,914
+STND.CXX.5,provision,LVL2,Owned resources,adopted,5.md,89b21b9499fb4cf9d17085ab9725e959445def3b0d9644fd1af833426c8ec1f0,785
+STND.CXX.6,provision,LVL2,Sequences and pointer arithmetic,adopted,6.md,8b92554cfee6cf78b2cb11ce85b7971b2b93ca81910139a8633b497e4afc5308,667
+STND.CXX.7,provision,LVL2,Device and register memory,adopted,7.md,db624aa477271baf3e74cfa675c188e3e89ec9eb76033dbf205e23c6a5a43dff,631
+STND.CXX.8,provision,LVL2,Standard library first,adopted,8.md,a7e2ddb9c64e7f80a238c008276e9859715db174d2b3cd041481c4a2094b470e,2114
+STND.CXX.9,provision,LVL2,Implementation-defined library behavior,adopted,9.md,3bf336adb1895e34cee7b8ab1e2f51dea4ebe6df89efb9acc791cee8bdb2b396,660
+STND.CXX.10,provision,LVL2,Header-only libraries,adopted,10.md,9f166614fce5f7dbef86fc6141a672ba389e95cddec7c8823e39b8f7e39d8bd8,1145
+STND.CXX.11,provision,LVL2,Constrained generic code,adopted,11.md,f44555fc2ce17f1c17a7eea4e6c7bc9e733f91486d91b67aed7e329fdb85f698,973
+STND.CXX.12,provision,LVL2,Compile-time checking,adopted,12.md,f764ddb9aa28930139accd3c36b54b49b20c786a6b490b4b1a2a1c4ab302abc2,448
+STND.CXX.13,provision,LVL2,Documented metaprogramming facilities,adopted,13.md,d19220e9ebdaf08acd12cbb202a94b35431fa95cdf919cc77c9eebe1404ac368,818
+STND.CXX.14,provision,LVL2,Naming conventions,adopted,14.md,d51b29c6160eb4d5b2988eb5c9d3561cdbba864ca070db4cc51f4f13754e5bf4,1210
+STND.CXX.15,provision,LVL2,Declaration comments,adopted,15.md,01f1b546ea81e960ad659eb3cdbedbfb47d4bb3c123f42cd82a42a0056535b41,856
+STND.CXX.16,provision,LVL2,C++ responses to listed failures,adopted,16.md,00e32595d86be07c59d0e0001e3f10c942c2304d0ff8436bfe9d288b23e05a02,572
+STND.CXX.17,provision,LVL2,Failure results kept visible,adopted,17.md,4e5e53f9482c4d1e3f10f9389467c12110cadcd39250e76275f93e7626bd493c,483
+STND.CXX.18,provision,LVL2,Checks no option removes,adopted,18.md,4dc994c0479dfecf06cad00b68bf11b637f1ac1ddcf13da6b226299da911ddb4,754
+STND.CXX.19,provision,LVL2,Failure channel,adopted,19.md,df8d04d4099425110c3b495f742687a90bf4f4de5f8f900f5d6005e76d8edd50,694
+STND.CXX.20,provision,LVL2,Foreign resource handles,adopted,20.md,303af888950516ef72c2f65528cbeabbb00e0ce0daf01ba21977e2f82e90c249,643
+STND.CXX.21,provision,LVL2,Status and release failures,adopted,21.md,b200abef75a55dca91d866ee34aefaecff5ea4fb932b5eeaf7c30647fbe4ce0b,911
+STND.CXX.22,provision,LVL2,C++ exceptions at foreign boundaries,adopted,22.md,c265990fc6a2e69db15c855888f7590cabf0f1ca4655607c179f2368664c4b16,775
+STND.CXX.23,provision,LVL2,Synchronization of shared state,adopted,23.md,8645736c275b03091935fc05adbaa22aaa629003238f041315db5dddd6076599,895
+STND.CXX.24,provision,LVL2,Compiler assumptions,adopted,24.md,2c879f70003ea04c1c3242ed11f648e109888b5980b45390229e12431841a469,535
+STND.CXX.25,provision,LVL2,C++ static checks,adopted,25.md,20887e8d78584e003cd31e24607c71a5b33c9827de237419eabe065010588888,673
+STND.CXX.26,provision,LVL2,Run-time error detection,adopted,26.md,1686315a25975533fc5bab95f99a93afa989d70b05054571dc087ab648ae58d1,707
+STND.CXX.27,provision,LVL2,Library precondition checks,adopted,27.md,b9c897684c524bec08347533a79b9e27294ae0ce4917a133032b6af55aec8f5e,681
+STND.CXX.28,provision,LVL2,High-assurance coding standard,adopted,28.md,315c36618a97c8635a11f98f00e077f76a863007035808a8ab53d7a460bc0829,712
+STND.CXX.29,provision,LVL2,Conformance claims,adopted,29.md,9372fba75c1bb7c5630a60d5a26bfd82303265f801682caa1c1027102c00272c,575
+STND.CXX.30,provision,LVL2,High-assurance language level,adopted,30.md,36aca5c74ca4aeeb42912208eebdda5a6751c6b8a03f6dc575157bb7dc49aba4,1226
+STND.CXX.31,provision,LVL2,High-assurance deviations,adopted,31.md,98eec9049033c488b643ca289ea0157db155430c0acf1d3cc60df8a649ab8029,683

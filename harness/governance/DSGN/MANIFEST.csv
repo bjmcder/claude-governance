@@ -1,0 +1,19 @@
+id,kind,level,title,status,path,sha256,bytes
+DSGN,article,LVL0,Design,ratified,_doc.md,95e8293f993b8024f5473d211974a88af6cbd163d69ffabaf12a5bfe607af31e,340
+DSGN.1,provision,LVL0,Contracts,ratified,1.md,682a7c3d1b1eb1322371c338b7b35c323790a136bb95a163590deaebaa8c5756,384
+DSGN.2,provision,LVL0,Contract checking,ratified,2.md,dd93998927801687e9d0524edcf308dae012ff9106d5335bd0789ed0d3e261e4,481
+DSGN.3,provision,LVL0,Mechanical checking,ratified,3.md,19b892455af6d6c09eed40165b642fcdca3a7b8699e0a691f208aacfaf8a62e3,338
+DSGN.4,provision,LVL0,Schemas,ratified,4.md,4c5e3225f6c0958015d6ef5c0f928d52f3f47fe65fb56f15947cc62879cdfd3c,404
+DSGN.5,provision,LVL0,External contracts,ratified,5.md,605d00bc6b12d205e5880d4c286d213d0eaead53a69156b15222d64591a461ff,621
+DSGN.6,provision,LVL0,Interface change,ratified,6.md,f0a766dc3972c15c98d12fb596920e9ab29c1b22df9a7d149f23b70f67ec2183,548
+DSGN.7,provision,LVL0,Dependency structure,ratified,7.md,6386fd16774d243b7fea1960967cf7c1a6843d739cb121c7b6a91ff261f42553,434
+DSGN.8,provision,LVL0,Separation of concerns,ratified,8.md,e6c6db3b8efcb03e95c5b1e17623e712b50981cdf77a29d0d2d184675ca00a05,336
+DSGN.9,provision,LVL0,Separability,ratified,9.md,babc32b986fd26dbcbcf1382f3405597abf51be1b523c7e3c225eab78ffe46b6,402
+DSGN.10,provision,LVL0,Composition,ratified,10.md,b04f0c037781aff62a20590c26543af67702fd042592344a0673dfe64e3dbd4f,378
+DSGN.11,provision,LVL0,Extension points,ratified,11.md,f779315ff880d40843734a6dec207c0d35733cb6735689e123194d20c2bd284d,488
+DSGN.12,provision,LVL0,Present-need abstraction,ratified,12.md,718c3d42067c190471281495135251b668650cd4d2d064fa4a704ca1add7db35,488
+DSGN.13,provision,LVL0,Room to scale,ratified,13.md,c4942d566099b2209d851b877861a388bbf950ceaa08be46fe40b1ba93addb94,413
+DSGN.14,provision,LVL0,State,ratified,14.md,cc86eadaed5116faba52e399887d7d210893c177313b4643163977fe1791d8f4,408
+DSGN.15,provision,LVL0,Concurrency,ratified,15.md,35019cf129ae103a50fa28ee60aae6ea5a8a6636ab6bb438b1cee083b5c04de8,307
+DSGN.16,provision,LVL0,Effects,ratified,16.md,b5d2fdd9a57c4637ed2a4738fbcf738282c2fbee80d1b7f84c72ae98a4d1b5b8,354
+DSGN.17,provision,LVL0,Randomness,ratified,17.md,100936bd979d6ac1352f6b600b2af9466bb7edfa6386062b3d6a9229cffd3dc7,356

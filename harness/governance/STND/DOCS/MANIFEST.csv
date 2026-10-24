@@ -1,0 +1,16 @@
+id,kind,level,title,status,path,sha256,bytes
+STND.DOCS,standard,LVL2,Documentation standard,adopted,_doc.md,ddb11e30f02ee9b497ef7eb8736fbce78cfd95066de7565a2a801fe20dfe9fd1,14151
+STND.DOCS.1,provision,LVL2,Voice of documentation,adopted,1.md,0ac26220a1bcf201c4455783e3375fdd4350bc4abbbba908a9f171b429985caa,468
+STND.DOCS.2,provision,LVL2,Explanatory content,adopted,2.md,f27a408e5659e0dd8fbdd7b627ecfeac91da9d0f22ebd16d32aead654d1ea9ff,421
+STND.DOCS.3,provision,LVL2,Agents kept out of documentation,adopted,3.md,cd500309b563cf60ff55d370a072f4cb49b9c4a5bbd9254a7f54982ae1c93e74,633
+STND.DOCS.4,provision,LVL2,Edit narration kept out,adopted,4.md,99f95953f18734c232b8f6cc68ea5a81e8d19d12c0339d7137a9252088cfb892,525
+STND.DOCS.5,provision,LVL2,Process records kept out,adopted,5.md,1ea1d59da4117c3590e373701cb9dd6583862c75cd37fbe6e8cc5567624c62e6,398
+STND.DOCS.6,provision,LVL2,Governance as subject,adopted,6.md,801ed013c3f3c2edfa433e90d505d701070b847771db86a009257796eb0dcd0c,486
+STND.DOCS.7,provision,LVL2,Required statements of agent use,adopted,7.md,bc86aa87622081e8f97df89a1c67eb7fcaf4f947d587871f3f25943591c101ea,659
+STND.DOCS.8,provision,LVL2,American English,adopted,8.md,6cdb32e79466d09c9e1a92a342879dea9942a9d2654bee28c2a873fa8b0e74a2,2021
+STND.DOCS.9,provision,LVL2,Specific statements,adopted,9.md,77b7e7113ef06d558aa6f3dd67ff3cc416490b91042c585c530074a7c1c95236,6197
+STND.DOCS.10,provision,LVL2,Agent writing,adopted,10.md,ed41f7b62e7c042c0a4b9c652ed34f2d5324153248aa25d6ea37ad044aa6c4e2,1105
+STND.DOCS.11,provision,LVL2,Documentation in step with the work,adopted,11.md,6f8e669177f7bc6530ded04a88f2792e361a659436b0ad58a301f1cafe732507,919
+STND.DOCS.12,provision,LVL2,One name per concept,adopted,12.md,e6c5d15d2fe80ccd7fd74f0a41306b01e1b085bc39be957dd1918b57df5a9f5c,600
+STND.DOCS.13,provision,LVL2,Checked examples,adopted,13.md,793e55b1bfaa88c7fd79bbfd94ef690ad1f7370bf70b2303353462cbd3b87207,822
+STND.DOCS.14,provision,LVL2,Documentation in change review,adopted,14.md,ba2e01af71f294a4b0b12ac09ba602544abc07723333a6ab7fc49681f4cfe04c,772

@@ -1,0 +1,13 @@
+id,kind,level,title,status,path,sha256,bytes
+STND.DEPS,standard,LVL2,Dependency policy,adopted,_doc.md,473acd4d307615d2e2ace4ac4f2e0237cfe6b0edf649d123b562f2c38b135757,6323
+STND.DEPS.1,provision,LVL2,Dependency selection criteria,adopted,1.md,4596d1b8218b4e67c8a7dbed4e8cf4e64edefe24ba252893ef0826eb130834c4,1151
+STND.DEPS.2,provision,LVL2,Thinly supported dependencies,adopted,2.md,6724f67d5ae5f30b061dfed86c75594c0d1973d043553b226f42e191a717c13e,484
+STND.DEPS.3,provision,LVL2,Initial revision choice,adopted,3.md,a9357b012f8ac661171d73ab1436ff9ce61e19f79d619f344a934a130a8dc40e,528
+STND.DEPS.4,provision,LVL2,Pinned revision review,adopted,4.md,e021be4f1bd7f0a686a843235bed9ea433bad8f4c750d5ca753e103271f6f20d,578
+STND.DEPS.5,provision,LVL2,Contract tests on update,adopted,5.md,cfa0ce27f5f98ca485cab94a6e48e10195bcb12e26d2e7850bebeb1b46fba49f,478
+STND.DEPS.6,provision,LVL2,Fetched component integrity,adopted,6.md,0c6391ddd43112ac11b5412cd43a69c099aa21cdf844138953e08a3fb16fde7f,708
+STND.DEPS.7,provision,LVL2,Advisories before release,adopted,7.md,22e70dd2ecaf25ecc9376f5062760aa862826456e0333192438aa1d67ad91095,780
+STND.DEPS.8,provision,LVL2,Toolchain revisions as inputs,adopted,8.md,a9259f19017a3843de39a0fc4972bb3b449c74eea5284fc6b0809774dedfac3c,497
+STND.DEPS.9,provision,LVL2,Development tool record,adopted,9.md,99ebfd5eaaf6aa8de9066dfdb82270e234c9694dca2a045786ae2567f655cbd4,479
+STND.DEPS.10,provision,LVL2,Package files as record,adopted,10.md,ad61708eba1c3e219184a5159a84f86efe71b921681a9cc73c1822385251d061,513
+STND.DEPS.11,provision,LVL2,Incorporated external material,adopted,11.md,1373e9b68ff5b4b0bed7371707e16e2670a15fa32be169c9094cf239bc51f1e8,496

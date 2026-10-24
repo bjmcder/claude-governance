@@ -1,0 +1,9 @@
+id,kind,level,title,status,path,sha256,bytes
+ML,profile,LVL1,Learned models,adopted,_doc.md,756bd449f503386d243e3a2a40ff9402c804956981bc258bc543683263a49a45,7146
+ML.1,provision,LVL1,Learned model use selector,adopted,1.md,45f40a8be9f081ff94a356eda06ab589f5a5d7bf077df7ea34ce45027bafff1e,479
+ML.2,provision,LVL1,Learned model use shared matters,adopted,2.md,05699294e5e170fac3ff82b919d72399eb93af92f012ec3989f864e819c2f74f,716
+ML.3,provision,LVL1,Learned model record,adopted,3.md,0093439b00502593fe26c2a0e0f16d3c42eeb051ef3e9ed7374079561447b30a,863
+ML.4,provision,LVL1,Evaluation independence,adopted,4.md,b1edc72a4e0beb67e15ae5620b86d49bee4d51da27baf77e36d44593425b8c97,473
+ML.5,provision,LVL1,Learned model error,adopted,5.md,6c7dee9e69f4c85c6f716e687937fc670fc9a6863e6d3906b4c37a5092165b1f,958
+ML.6,provision,LVL1,Out-of-domain inputs,adopted,6.md,7de151bff0e00039b382e9a9ba8ef73dd4dbdc435fabd48a5c5c05f217297895,734
+ML.7,provision,LVL1,Learned model updates,adopted,7.md,685671adc8889a90d8fd0bfa356442185240e32389be4766d0d9b7498fae2f4e,575

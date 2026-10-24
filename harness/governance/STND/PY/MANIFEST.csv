@@ -1,0 +1,33 @@
+id,kind,level,title,status,path,sha256,bytes
+STND.PY,standard,LVL2,Python standard,adopted,_doc.md,bc878867905c003a5f1053c02391299c8ebdf61ce28b9649c888c703cf402375,20975
+STND.PY.1,provision,LVL2,Style PEPs as baseline,adopted,1.md,c2703681936cf7a37b6e6be9b95ea147bbc1914fa5d2ae98fd99e3d4d71ba583,619
+STND.PY.2,provision,LVL2,Python linter coverage,adopted,2.md,f0772566194d76fa9682b2d765f7a82da74db39c3b37101af5a657a0c2ae901d,847
+STND.PY.3,provision,LVL2,Annotation coverage,adopted,3.md,2e8ed5d33b947752e6b9098bc20a5df66fad092204509d0b02a2928935902780,658
+STND.PY.4,provision,LVL2,Agent annotations,adopted,4.md,684e5e1aa47aa52b09bc148a69b53a9a9730be50c2365e8739b2efb162eb0108,564
+STND.PY.5,provision,LVL2,Strict type checking,adopted,5.md,6d43ce5701ba7c08678c32c299d6995dd6bde6b398bd62f338d2fdc526ea4d79,773
+STND.PY.6,provision,LVL2,Modules exempted from strict checking,adopted,6.md,29e411e927df1c4d2408181b9697077edebe64f32277ddcd06d4ba2bb1c00fc6,634
+STND.PY.7,provision,LVL2,Typed package marker,adopted,7.md,199b460c1dd0d952cbc9f595276bb0b2477c133693a15b46cad3c7f4899adea4,371
+STND.PY.8,provision,LVL2,Reasoned dynamic types and suppressions,adopted,8.md,3eaf21ef14154f4926494f7f5accd9ad097beff4a43d547f0ce511cd5ca38021,744
+STND.PY.9,provision,LVL2,Array annotations,adopted,9.md,d750d1885fd53f6bd8264229c0653a0f711fcb2e09d4173bb3f488e421e7946e,662
+STND.PY.10,provision,LVL2,Numpydoc docstrings,adopted,10.md,86cfb485cbb6f5ce3e3443a3508bea23b882b259c9b04bc83d0a01dcf867487c,930
+STND.PY.11,provision,LVL2,Parameter types in annotations,adopted,11.md,135149469245303847aa6171b69055fc68baf22076c380e87acc20c73101f5d1,650
+STND.PY.12,provision,LVL2,Doctest examples,adopted,12.md,e6c7ee54e2104c59f6ca40fead57ada632f1ee6de9ecdf37bae4bf623a995b93,653
+STND.PY.13,provision,LVL2,Declared Python releases,adopted,13.md,72c031ae53c017c7d9b8262051b9e4fcfe7b63d5b43dfd3dca61d409a7f624d9,519
+STND.PY.14,provision,LVL2,Checks on declared releases,adopted,14.md,c8a077586cd4fa04b42e946a0a65d6b2c348dccbdb97e87715673090a1360298,600
+STND.PY.15,provision,LVL2,Generator arguments,adopted,15.md,dcac3194aa71c30fec9093b46365b7245dd670186aaebc584e577ee1cc5faf89,621
+STND.PY.16,provision,LVL2,Generators built at entry points,adopted,16.md,148d7620d9e6134e580d3d7d538955446affabd3c0eb41500f48d6070c6c9d4d,627
+STND.PY.17,provision,LVL2,Streams for parallel parts,adopted,17.md,de739d283345f102e7bd2f9bdda825944116ad6f674b44bcca16aaadaa3195db,599
+STND.PY.18,provision,LVL2,Exact values from random draws,adopted,18.md,62c72cfd1d5948d3353f6996e9110c4c295c86cb8af8933d89cfcb80f0007682,916
+STND.PY.19,provision,LVL2,Values unstable across runs,adopted,19.md,51500f6ffb60978af7568d596bbfafa910bdeb6aa623309a559cc054f5ee5afa,558
+STND.PY.20,provision,LVL2,Tolerance parameters stated,adopted,20.md,51e6539f3df7d6b16e0ed5fec2672635e0aa8f4b84402f7bc807cf3795cf50d4,956
+STND.PY.21,provision,LVL2,Logging in library code,adopted,21.md,78cc0bf0d730f7a2ceb28800f78bb90faa0d4b3bf548f8dba6965241e01308c7,593
+STND.PY.22,provision,LVL2,Python responses to listed failures,adopted,22.md,159326c65039d09808d292601d9b35cff139e759df1f6c076e0e7dbcd8fba8fb,791
+STND.PY.23,provision,LVL2,Immutable parameter defaults,adopted,23.md,fcdd98f945d9033d225fa1b8a30069d20c1e9258258651c42b10be9810114e57,363
+STND.PY.24,provision,LVL2,Named text encodings,adopted,24.md,663e9d4ac26208d5b397bd20f4ef45db7db86d9225c0f24c0d835eca36986e15,426
+STND.PY.25,provision,LVL2,Assertions on untrusted input,adopted,25.md,7ea29996f8ac6413d01f98ae936c1e204657a6d0b94e188fee9363cb4a4e5a2f,384
+STND.PY.26,provision,LVL2,Run-time checks without assert,adopted,26.md,c2a4f5920f86e00ddbccaa673c9bdaef1918753100965a1be7742d17e34e3b7c,501
+STND.PY.27,provision,LVL2,Exhaustion caught by handlers,adopted,27.md,0dfc6d570e287fad05f89590b5ab6083771f368970eb6f780df51794bb4cae81,611
+STND.PY.28,provision,LVL2,Interrupts raised again,adopted,28.md,2e2b0ce2f3370adff601986488b29f27e8b9c3fb9b7d8a1cbcf878fb3abbbc85,469
+STND.PY.29,provision,LVL2,Scoped error settings,adopted,29.md,aa6a6830aae85863733ccee2052283989965e3f2a005f1fec7fc52b8969a3606,521
+STND.PY.30,provision,LVL2,Suppressed reports of listed failures,adopted,30.md,b5de64f8e67ccb035b95f46c329fca3a8740bdfa616fe9a2b809d83e56c8ce6d,514
+STND.PY.31,provision,LVL2,Relaxed numerical checks,adopted,31.md,aa92285816f372fc8c9802c05f539fd7512c8a5257dc935b508ba2bc5c892bb5,567

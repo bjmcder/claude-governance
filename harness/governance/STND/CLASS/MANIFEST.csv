@@ -1,0 +1,14 @@
+id,kind,level,title,status,path,sha256,bytes
+STND.CLASS,standard,LVL2,Consequence-class criteria,adopted,_doc.md,03dd0e4bd580c2bfe62d59ad6cfe8933971761e7760b5006865d96785b68a55c,6358
+STND.CLASS.1,provision,LVL2,Class criteria,adopted,1.md,0455cb5d35643d5d3eb7963864b6e0d9a402f7cbb56ae97acaa6e23b60541eef,1996
+STND.CLASS.2,provision,LVL2,Doubtful test,adopted,2.md,764cf7547b9dd0b609dd3a8dab3f2169b770c3e7e46ac5411935d0ecdcf507d0,422
+STND.CLASS.3,provision,LVL2,Cost threshold,adopted,3.md,7d17e8abc74f3aa4d363a693433bad6714265bd51bcf99228adf84c4edbf15c5,455
+STND.CLASS.4,provision,LVL2,Harm scenarios,adopted,4.md,afc147232ce8192980e1580ba1bed6cff2019bec810e4b3a870f7674b8b9983d,422
+STND.CLASS.5,provision,LVL2,Classification record,adopted,5.md,daa9c845033681248509570decafba73a338ea9a642887c7a5327c84ef8517e0,542
+STND.CLASS.6,provision,LVL2,Isolated components,adopted,6.md,2967334734454785cf413ebf6d8e65d787f60285c9c5abb120d1f3ecdfeaa079,556
+STND.CLASS.7,provision,LVL2,Reclassification events,adopted,7.md,2acb41660b00f03c0962b818194aaf5d178f913403df378916d7ca3e66392709,656
+STND.CLASS.10,provision,LVL2,Application by class,adopted,10.md,42b53a679a2622d3d26fd9f84e5aef07f8c21b02819dba610d8733bc2eb829a0,3038
+STND.CLASS.17,provision,LVL2,Hazard responses,adopted,17.md,20f4f12d2194533466e87724693a6336618718b7fe872fe9233812ff6bf5b204,535
+STND.CLASS.18,provision,LVL2,Reviewer independence,adopted,18.md,935a838f36a0f730d9b76d24d1219f657fc6a66d3a7d639445932910c9e97f50,1091
+STND.CLASS.19,provision,LVL2,Audit interval,adopted,19.md,92e4f7465b758562a4861bee4b8ee2274b8190098e22eb5ffd524d096452fc26,1322
+STND.CLASS.20,provision,LVL2,Proportionality judgment,adopted,20.md,84b534b1040f7cd53c7157aaed7f3b648320ce130208d449d7a792b9b572f445,484

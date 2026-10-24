@@ -1,0 +1,9 @@
+id,kind,level,title,status,path,sha256,bytes
+TAG,tag-vocabulary,,Tag vocabulary,planned,_doc.md,33d9408a5bc53327f92db785b57afcab375fbe3ec9862a54f5fe9f8b84ad252a,248
+TAG.ACTV,tag-facet,,Activity,planned,ACTV/,0bf4863c0c64a741c6521a31e44ed4863a2e3f11a7eb86eb62ed2f3a97368b50,118
+TAG.COMP,tag-facet,,Component (project-local),planned,COMP/,9e98055ff5b79ba8d8b09bcd3f4f5bac869141adfafe1c247823bb4efe482c41,152
+TAG.FIELD,tag-facet,,Domain: physical or application area,planned,FIELD/,bf78311ed402a14d577b9946408f731db3e2e0d8973b23d5395602ce78f8a58b,175
+TAG.HW,tag-facet,,Hardware,planned,HW/,753d0234dda4a05edacd73d554c330f9b399e5b6e2c13bb50665d3877b7c43fb,116
+TAG.METH,tag-facet,,Method,planned,METH/,58826dd564fb84cada9f65246ee9f96d76156383af4f7f134c0563ac510c05b4,114
+TAG.PROB,tag-facet,,Problem type,planned,PROB/,ad6c1eaccc5e7944f7ab9b2c2cf0bb1f91cca77b550d2341d0e6d58efe007e21,126
+TAG.QTY,tag-facet,,Quantity or phenomenon,planned,QTY/,33134addf66c2afde1a4368076609bb5fc6b8835f00107e5f126df80b5dc6e36,145

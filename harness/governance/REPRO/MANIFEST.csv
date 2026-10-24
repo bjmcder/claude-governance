@@ -1,0 +1,16 @@
+id,kind,level,title,status,path,sha256,bytes
+REPRO,article,LVL0,Reproducibility,ratified,_doc.md,00f30a17cfacc7a8d27cd4c1cafaadea2adefcc7419df54cd1c215a8b6e370a6,486
+REPRO.1,provision,LVL0,Recorded inputs,ratified,1.md,d9d346921f25944896f8255b7aa1443aa49efe5fa216811afe9a7297aeb43954,500
+REPRO.2,provision,LVL0,Computational environment,ratified,2.md,08533754c650068250556369b715f972172d3377d9cfec51d028348fc76ddbbf,378
+REPRO.3,provision,LVL0,Determinism,ratified,3.md,f6d3370d9a7ef4bb932cd1ef205a45fa4a2a1f5aaac94c0c10b69bb6210e014f,416
+REPRO.4,provision,LVL0,Provenance,ratified,4.md,cb14ebfaa144f0216b5fcd0a7f7948762b439df17dac6a8c68b1ba3d1c0ddd1e,498
+REPRO.5,provision,LVL0,Source history,ratified,5.md,2bd0d51dc1c203827c2ddf825853fdbaf83a3c203e3a7dce3394277f657ff961,411
+REPRO.6,provision,LVL0,Versioned data,ratified,6.md,ac39e8fcb6b4cfb81f06c3681f5729a8b21d9c94308202d1b307f26522324c30,416
+REPRO.7,provision,LVL0,Decision records,ratified,7.md,f8c362939ac23c6610e2bc2e6f115043125cff15c5ea618ff872989053f12e55,531
+REPRO.8,provision,LVL0,Dissent,ratified,8.md,067f381ac199884cbd90aa2d5662f54e5d5ccc033cd87db391f496934ae9822f,295
+REPRO.9,provision,LVL0,Dependency management,ratified,9.md,78d4203cd1f4bf5536d13de849a48cc5db610fcd037d0c086199bf730f9198a1,647
+REPRO.10,provision,LVL0,Workflows,ratified,10.md,cdc5e7473cd61bc723aaf8c45fc36b8b6b8fdcfb6a74dd636b3e7f97f05046b0,423
+REPRO.11,provision,LVL0,Agent steps,ratified,11.md,2206127b463f9e7b836cc49eda0571c50434a8d25cfd0397beb422db773c9204,401
+REPRO.12,provision,LVL0,Retention,ratified,12.md,8a9ed003110ff7bee6db17a9f00e69737370a056ece4a94d6ecf30c8a42c6b76,452
+REPRO.13,provision,LVL0,Preservation,ratified,13.md,3b8b04c3ef19dc25de676dc991197946b461624d15b0be653478bae759ab55e5,291
+REPRO.14,provision,LVL0,Project retirement,ratified,14.md,ea6a5b6fdb3bb4ef8efd5df87fb28b6e239cbc872a58ab39ee75cefd0efc002b,282

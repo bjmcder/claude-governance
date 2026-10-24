@@ -1,0 +1,14 @@
+id,kind,level,title,status,path,sha256,bytes
+RSRC,article,LVL0,Resources,ratified,_doc.md,e3faf5829da2249277e6acaef8561d82c0cc1242dbe6fd7bcf957ff3132d59a4,474
+RSRC.1,provision,LVL0,Budgets,ratified,1.md,55ad183d2cda1d50db9643c3c3332eacd1245a62d04f766dc56bc7c570444379,395
+RSRC.2,provision,LVL0,Unknown budgets,ratified,2.md,990643fc6ce4e27cb805280b1a00e9cdbfd369d92e35f97067f27f57b496647a,511
+RSRC.3,provision,LVL0,Resource observability,ratified,3.md,1e3ea0f10000234aa76668023aadad16ef0a82019781ef5996ccd2a8b5edd4a9,358
+RSRC.4,provision,LVL0,Measured optimization,ratified,4.md,037860fc895f055c87a4ace2e3aec4cf123e399dc79c8e69fa254fee2912e1b6,445
+RSRC.5,provision,LVL0,Algorithm first,ratified,5.md,5408e5999c3f741ecf4b338f30e5ca821586d5b0bc9e1b3d56ac62a1725fb69b,341
+RSRC.6,provision,LVL0,Supporting machinery,ratified,6.md,dae2aaedf26acbcf9af17e8be8a7de1b47bc7330271ec18707c8f1a8749a34d1,462
+RSRC.7,provision,LVL0,Reuse or recompute,ratified,7.md,8890a04e7449d2f161a899f3d826203709f70c4dfcdba80cb9201332645fc48a,431
+RSRC.8,provision,LVL0,Scale,ratified,8.md,1de3d630bb57649613c79b8c914165b1e2f55b2728dfccddbabd892d9c979880,633
+RSRC.9,provision,LVL0,Human time,ratified,9.md,e20b0c1c11fe3f52c5860d128ba248bf57d6f4e6293b179cbe7aee91451c26b6,381
+RSRC.10,provision,LVL0,Human attention,ratified,10.md,9fba842d28b83e5f4e79feaa0355983aa7bc6a2f83696ee6904022574f88434c,429
+RSRC.11,provision,LVL0,Targeted verification,ratified,11.md,b7ad18af7fa14abc7a01e4d7148f10d0d9930084f7442cbc0f857b27169bd6fa,393
+RSRC.12,provision,LVL0,Deferred verification,ratified,12.md,24c6f02b376cab3fe66d23bf064c78ba43aa3723083bb918c41e4be376c2a5e6,490

@@ -1,0 +1,85 @@
+id,kind,level,title,status,path,sha256,bytes
+STND.VVUQ,standard,LVL2,"Verification, validation, and uncertainty quantification methods",adopted,_doc.md,9d2d30facdc3ec497b634c7f38c569d2df622cb2b858b848801a2681ae70f969,37680
+STND.VVUQ.1,provision,LVL2,Comparison tier choice,adopted,1.md,29bb2e7fd3fbcd4479bc50368c04d0dd40769be0099f091609f6d0ec5ed0a297,2614
+STND.VVUQ.2,provision,LVL2,Bitwise identity,adopted,2.md,a05e45fc70d1a73f35efc80b0b6371a4e602d0dde7db5328d0a0a3b265b4bd0e,656
+STND.VVUQ.3,provision,LVL2,Non-finite values,adopted,3.md,13ae55317abc54d37b2e58740804788e5114c6745c2331df8de78762ab1d60de,680
+STND.VVUQ.4,provision,LVL2,Bounds in last-place units,adopted,4.md,70dc85064c64c7987835f90a38796a861a2be3b1ece8460bda0a060f9d6228c7,985
+STND.VVUQ.5,provision,LVL2,Relative and absolute parts,adopted,5.md,70cfc1b8b0ce5adf55564120a6a43cb46669adebe6d24c0bee09f384866a25cb,756
+STND.VVUQ.6,provision,LVL2,Noise floor estimate,adopted,6.md,90c3e13e49e4f6d1f2091056d3a57f865515ae46493761f354c637f160d99c93,543
+STND.VVUQ.7,provision,LVL2,Tolerance bracket,adopted,7.md,63f2842deb85b07ff72b8756d60188312cbf5c8eaea3f64d3239790252d28a4c,910
+STND.VVUQ.8,provision,LVL2,Tight and loose tolerances,adopted,8.md,1d2e2a67b09bef8be27dd8148b22b5e9b048fc85452336084e819dc65b7fa3ec,813
+STND.VVUQ.9,provision,LVL2,Error budget,adopted,9.md,dc57c62c63733f3d38e440dd4d9fe450671be99e8664d82a67656f3f3c74d7ad,867
+STND.VVUQ.10,provision,LVL2,Controlled component allocation,adopted,10.md,97ace0e549449463bb1009a16b7fca6cdfcee98e47647274061df06fc7853eec,630
+STND.VVUQ.11,provision,LVL2,Negligible components,adopted,11.md,fc91c4fd0a4391f8c6c49efca880a8e56cdffcd09358e10bee6c2735e8ba71d1,896
+STND.VVUQ.12,provision,LVL2,Aleatory and epistemic inputs,adopted,12.md,3908d58abb780c755570a6358cdbdebbad71b4ec34b645e48919e18e32dafe21,820
+STND.VVUQ.13,provision,LVL2,Asserted checks,adopted,13.md,cf7d3d35393f431614e82b375aaa9fe274df31cbe8985f8965e1985727936658,508
+STND.VVUQ.14,provision,LVL2,Tracked quantities,adopted,14.md,78c17459d5757ddbaad5a754a8ece911ec2b80b0dfa323ffebf277ac932ceaf2,681
+STND.VVUQ.15,provision,LVL2,Targeted components,adopted,15.md,d0e9eb8908ebdb8ccc04d24530045ef7cac988a7104952cec3de02bb6edbd2c5,763
+STND.VVUQ.16,provision,LVL2,Epistemic components,adopted,16.md,c773372059eec8026666bbfba9c028f29342d465ca5a0f4ddb7f74c8ac0061b8,684
+STND.VVUQ.17,provision,LVL2,Regression guard failures,adopted,17.md,7a2c572d9353199eb28188ca401e6c43477808c26e93d4179d407523455eb030,787
+STND.VVUQ.18,provision,LVL2,Preferred reference oracles,adopted,18.md,c346c3214d9d55eeef43715683ca4b9dff338b814cbde9e747dee5f2e7b0934b,566
+STND.VVUQ.19,provision,LVL2,Manufactured solution form,adopted,19.md,11ce8cf2d1b2899b15a030c1954f35f8cb5bda2e3e2174ea236661738404af60,528
+STND.VVUQ.20,provision,LVL2,Order test levels,adopted,20.md,4aabafd6a817b774472a81c7d2c9b55d0fa7f1a28939970145eb51954f8189e8,577
+STND.VVUQ.21,provision,LVL2,Order acceptance,adopted,21.md,ffbf2eec991dd400cd09c54c86b3cac11b56d0924ce07a693a840865c2236e0b,538
+STND.VVUQ.22,provision,LVL2,Oscillatory convergence,adopted,22.md,487eaf39d81a304a757ebd09c07c4f49754e9fd781d4580e530fd7115b916e0d,572
+STND.VVUQ.23,provision,LVL2,Discontinuous solutions,adopted,23.md,d63b10e6c7ebccafee0398a40464bfdd279e080cb37fcb9b68b90e104455f965,613
+STND.VVUQ.24,provision,LVL2,Error separation in order tests,adopted,24.md,b4bdc317ea2a330ac8ffb9b0818adc9e3ca0e6ddd4ad180c0f3de4b918e723e7,545
+STND.VVUQ.25,provision,LVL2,Adaptive methods,adopted,25.md,e45d34e2665d0ee941b4390516ccf6da1b6d10a877ea4a5adff3bed726e9c924,546
+STND.VVUQ.26,provision,LVL2,Error estimators,adopted,26.md,f6701ec527f7b6543b1b998457864d8776c87ca71ba3032d75ba1d0ede918372,747
+STND.VVUQ.27,provision,LVL2,Safety factor,adopted,27.md,d038284993e24ff4a5d5327dc7289199a261012983224c6e7cfa2e08553a27d4,918
+STND.VVUQ.28,provision,LVL2,Coverage of grid estimates,adopted,28.md,36fc38f79c419637b31a7ba28866e2e4d1fa6b8b01d8c9c5cbb0533865e972d7,626
+STND.VVUQ.29,provision,LVL2,Stopping error margin,adopted,29.md,72c5507216ec5fdfdf8b7e995384a47512c4cf25be463165c904b22acbdec3d0,829
+STND.VVUQ.30,provision,LVL2,Scaled stopping criteria,adopted,30.md,afab8bde8cf9fdd843dffea258275b37df11e502b8ebafb3ef91d67a46aa5471,423
+STND.VVUQ.31,provision,LVL2,Pointwise oscillation share,adopted,31.md,fcab093e2fed603a50561d2549d068c68e5d5729a5eb1f5202df855d89201ba3,491
+STND.VVUQ.32,provision,LVL2,Chaotic dynamics,adopted,32.md,e7b1a41bbc149bc5a2ca3c1d2357b1a60cef7e4f87c0909916c187b81dd611fc,546
+STND.VVUQ.33,provision,LVL2,Acceptance multiple,adopted,33.md,d0579fc8ce10e30ea4b011966cca075b99d286202cd17e87d03a62fe2ed6313a,906
+STND.VVUQ.34,provision,LVL2,Detection power,adopted,34.md,1eb12ba92d0af0ce06bde14b3715aba626f0bae989cbca12b8d37678b801a48f,599
+STND.VVUQ.35,provision,LVL2,Multiplicity control,adopted,35.md,937a5a765a315d739d66e93522235a1608088459e3398d6eb8a6b0ad4d0b66d6,474
+STND.VVUQ.36,provision,LVL2,Rounding estimates,adopted,36.md,30bf4c48abb16498dc2d8321da7d84f35052e25eb7245bb825bb37dcdb5b6c21,580
+STND.VVUQ.37,provision,LVL2,Probabilistic rounding bound,adopted,37.md,2c45d68974c64f4fea673d04fb20c97fc5868c7082daa5125ffd14462c622044,921
+STND.VVUQ.38,provision,LVL2,Reduced precision,adopted,38.md,1a35fb8b8b6e00a9d16b1efcfd9c22432496e3e89997e1a75828d40bff183e3e,520
+STND.VVUQ.39,provision,LVL2,Root-sum-square combination,adopted,39.md,2fa0e94e983895500f12d82080c69d0ac9a75542cdcdb123a3271b00914770ff,497
+STND.VVUQ.40,provision,LVL2,Sampling propagation,adopted,40.md,97434450d42a4c7ab1f78e399dcadb23d349dd2f4224d68a66dc7b66f62ee80d,639
+STND.VVUQ.41,provision,LVL2,Monte Carlo trial count,adopted,41.md,1610c6ee01493edd6b6760187405ade4769d46c781ae708ae541290805cbdf19,525
+STND.VVUQ.42,provision,LVL2,Adaptive Monte Carlo stopping,adopted,42.md,a4b28292de5b2910cd7bca8a434a7f7dc6cd7a52877a129fff611b3979279438,832
+STND.VVUQ.43,provision,LVL2,Propagation methods,adopted,43.md,52396527879f46d4a806902db8b188e3420f1b7c5ab4c28e7d2b7ee70768527c,848
+STND.VVUQ.44,provision,LVL2,Order-statistic limits,adopted,44.md,0ef0d2ee611a0c333993d4dfdcfc864409da900b65e545dee7e0002369912887,672
+STND.VVUQ.45,provision,LVL2,Sensitivity indices,adopted,45.md,856d0bb33146e1735ed1940da5b205966aa4e339ab569ebd2d2d46000721c95e,514
+STND.VVUQ.46,provision,LVL2,Surrogate checks,adopted,46.md,d0e55605e4766573fa77bd95c25c3f68227788159b72b01a26b40e9aa2c54e5c,1069
+STND.VVUQ.47,provision,LVL2,Model discrepancy,adopted,47.md,bbf696a53fe6dcbaf5b4a45ad5131dc177c31ef978a9a5c3cbfc916b8e25a906,697
+STND.VVUQ.48,provision,LVL2,Validation statement,adopted,48.md,456728bb081bf215556e9c48399c02ee9c6414238359e7e5f8416cec353b8494,1080
+STND.VVUQ.49,provision,LVL2,Input covariances,adopted,49.md,c1614be747dec15f0f9a8661a5e573a5b2ad5a8fafd8634fe144668f4d373a6b,544
+STND.VVUQ.50,provision,LVL2,Approximation effects,adopted,50.md,e91648c4b8699b7bc1f14f79bf32493f3dee06871eb0bd42382236ae112411e5,805
+STND.VVUQ.51,provision,LVL2,Independent forward computation,adopted,51.md,6e35b8bdc4b7b82741679744e5facd57c89cfdaf0697e8c59f50b7315e5d2276,565
+STND.VVUQ.52,provision,LVL2,Posterior calibration,adopted,52.md,f51f945300ca8f07ddb572a4b30b57e8172c18ad7936affc9b34a3d5c5f2d6e5,910
+STND.VVUQ.53,provision,LVL2,Interval coverage test,adopted,53.md,9a6ec27cc5154afb860d175341032962628bf6d6bc667889c0393a316a5b3334,514
+STND.VVUQ.54,provision,LVL2,Regularization choice,adopted,54.md,148390594f07a05f88b648d1481d14dd8f6ec33e817c5cb4c443a692fa9ce19e,678
+STND.VVUQ.55,provision,LVL2,Optimality measures,adopted,55.md,6051c27175bb073f091ef8beee506cf692b952816b4bac9ecbc26763073e0d90,564
+STND.VVUQ.56,provision,LVL2,Optimum claims,adopted,56.md,b859aebde5cc428808836b97bd99b6a8cdb96c30883dca72c875a669c4543c86,584
+STND.VVUQ.57,provision,LVL2,Dependent samples,adopted,57.md,0041410cc8657cfde51dba0b846e7fe42bced757e10252e880839a5e4494eddb,469
+STND.VVUQ.58,provision,LVL2,Markov chain diagnostics,adopted,58.md,cfa032a071940f1940d3ea70bd6a43813b49aae9b69b1b9cde906f9363da8f25,816
+STND.VVUQ.59,provision,LVL2,Markov chain precision,adopted,59.md,97d5e08cbe77268df3eef18e96563d09d156d38581b2a64d718afa0a2d8ad939,584
+STND.VVUQ.60,provision,LVL2,Importance weights,adopted,60.md,a0bfd3ccd82f3ad74220f04e57dadec00946b7d36d5aff8daa3b3d44045ba902,488
+STND.VVUQ.61,provision,LVL2,Tally reliability,adopted,61.md,df97812c998f90443adb3558e13533aebc918b6ef1960318e464a4ac9dda228c,1426
+STND.VVUQ.62,provision,LVL2,Stream construction,adopted,62.md,cdc3bf365e70bc19dbd4944942ece3966d3ac76db274e0b3c0aaab40c6d2fd0c,661
+STND.VVUQ.63,provision,LVL2,Generator testing,adopted,63.md,6796b0ce1c1f49855b6a39b63d50f533eb8f2d3f73a5640700c26d034ea02903,498
+STND.VVUQ.64,provision,LVL2,Fixed-seed and fresh-seed tests,adopted,64.md,4e9e3352c2e31c262a48484db9072557829b94fc8f393072db35ec4f606b2e37,607
+STND.VVUQ.65,provision,LVL2,Repetition rule,adopted,65.md,42c7d21a98da1588ed3d029094d39d56bb75832009e67845fd91eb48d63bd318,624
+STND.VVUQ.66,provision,LVL2,Computing derivatives,adopted,66.md,2dca9df6b837c40618a897ae861e94b1803cb933a8e2306c123adc49e8cf7b20,628
+STND.VVUQ.67,provision,LVL2,Derivatives through iterations,adopted,67.md,d7ed32a6644b7b49f2843839371598d8ddbfa34ccff4863e72fbb4ae3a4cd455,476
+STND.VVUQ.68,provision,LVL2,Implicit derivative error,adopted,68.md,36d9cc8f62b7f166dd1b31f4238b1a3396fbdc9c3c37829fc3fc3bea6c67e8ed,580
+STND.VVUQ.69,provision,LVL2,Taylor remainder test,adopted,69.md,6db7ce0333e9d4ff6b73a9b60fffe9b038c03193ea54382a98c3b126e31b648b,560
+STND.VVUQ.70,provision,LVL2,Dot-product test,adopted,70.md,817f32ea2997b39b971b456a0e9210da6224447ccc4a0d733f3d8155ec9aeeed,816
+STND.VVUQ.71,provision,LVL2,Independent derivative checks,adopted,71.md,faf51ff4596ec319d208d24388346972f28e5110868d0d1e9ad4b94979b8b0d3,897
+STND.VVUQ.72,provision,LVL2,Nonsmooth operations,adopted,72.md,1d0f3a695d0a59faeefa9a999f690f7711e18a8b8b634c36e4b39ad0bab25e93,529
+STND.VVUQ.73,provision,LVL2,Chaotic averages,adopted,73.md,c5b6c5aeadf33a29f54fa802b424558ac47d284a59c3fa0ce4f026d37b203737,454
+STND.VVUQ.74,provision,LVL2,Derivatives of expectations,adopted,74.md,7511078fece92c3dc6ecb9c6cf8dce373ad3b46539fc136e81941791bf0bf873,555
+STND.VVUQ.75,provision,LVL2,Derivative cost,adopted,75.md,ea1df91edeaf301f913e6311bdc377d55707b16a0aa1d7c983970b2974452037,479
+STND.VVUQ.76,provision,LVL2,Learned surrogates,adopted,76.md,6d7d22d98a053e225be5be4de85206150fb318a17faf6a5178dd366fd2662043,869
+STND.VVUQ.77,provision,LVL2,Fair comparison,adopted,77.md,04ae9573b05a087722a570098da7710571998e6784f277cb6cc4d3d76a94aca4,564
+STND.VVUQ.78,provision,LVL2,Continuous verification,adopted,78.md,bb8f0517f72eb2f2af95c92aaa59076658a1df6192e8414078cbdd6f53257fc9,524
+STND.VVUQ.79,provision,LVL2,Deterministic extrapolation fit,adopted,79.md,f8db720c9b4e54c4118e693a0be6dc916887b358b7b97f5f2d92cc0dd5d5d2f7,1052
+STND.VVUQ.80,provision,LVL2,Stochastic extrapolation fit,adopted,80.md,66642ca2b38532276a5da89b8d6dce5555d70f8a703b8f4a307c93f87b8d5f27,829
+STND.VVUQ.81,provision,LVL2,Extrapolation acceptance,adopted,81.md,a5aa0a156c50af69678b216212e2afcba96520f82000d84c941bb1eaf1e690d0,795
+STND.VVUQ.82,provision,LVL2,Declared variation in comparisons,adopted,82.md,7c71c02db34a1eb5dd48be2f589c83964898e5c5d8a992954a87e78a8965cb24,1032
+STND.VVUQ.83,provision,LVL2,Agent conduct toward known variation,adopted,83.md,aab7afcc5a3e6f0aedddd1f3eec7c336d77c8e3d79ac14581050a14cdc31d704,997

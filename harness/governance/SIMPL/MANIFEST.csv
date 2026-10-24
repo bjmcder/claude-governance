@@ -1,0 +1,13 @@
+id,kind,level,title,status,path,sha256,bytes
+SIMPL,article,LVL0,Simplicity,ratified,_doc.md,e8c69e290bd2725fc6f89bf06f3fb865cf4e50004396daccf2e806c3e1e4d23c,329
+SIMPL.1,provision,LVL0,Simplest sufficient design,ratified,1.md,bcd4b332664eb09c55486eecfb8cc3cad5c0d81834ad539d16b693113b647797,454
+SIMPL.2,provision,LVL0,Essential and accidental complexity,ratified,2.md,592923743c297de190e1561aa33a9530836dc1ad56134c174f528be0eca4bb7b,416
+SIMPL.3,provision,LVL0,No speculative building,ratified,3.md,ad4ea6cd0ec14caf82d26438d8b27bf5c1a82e78142f8858fb8b5962dd000dd6,447
+SIMPL.4,provision,LVL0,Dependency cost,ratified,4.md,f046ad2bc36c1ee40f330b045da5aa5578ea749b8ee3ac30fafd36346f1dc694,505
+SIMPL.5,provision,LVL0,Indirection,ratified,5.md,43a62f06eb01a09f3a419a2b2bce1efd5e22785e281f54a92cf01797d1620834,316
+SIMPL.6,provision,LVL0,Explicit behavior,ratified,6.md,8190a3599874201be08a4cb5079acd9e449048ae634450a558df6ac975b98d10,395
+SIMPL.7,provision,LVL0,Obvious implementation,ratified,7.md,b532cdbd9cdeff17e89d259cb81212541c440a2eee8f344dc3824be17c8a3e9c,384
+SIMPL.8,provision,LVL0,Deletion,ratified,8.md,137e18f75214f4f4c1fb3e172a343e43e4e0262005a3d257ca46ec5d8454f840,401
+SIMPL.9,provision,LVL0,Component retirement,ratified,9.md,d6683eb5d68a7797442e022d13c19ecd03c2d4f60cc5fb96b216ca6ba7c872bb,293
+SIMPL.10,provision,LVL0,Scope,ratified,10.md,04686e48c65d9dcc4ba681e213e2b74a457bf44303ddd540fc877d15ca69f061,294
+SIMPL.11,provision,LVL0,Isolated complexity,ratified,11.md,9a5aecea76e85730edc0df4acc6702a041b633bde4ca88755b039d27c724ea27,370

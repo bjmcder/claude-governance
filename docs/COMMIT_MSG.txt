@@ -1,0 +1,123 @@
+Enter ledger entries 46-109: LVL0 1.6, rulings, AGENT 1.1, profile combination, owner burden, NUMER 1.2, STND.VVUQ 1.2.1, STND.DRAFT 1.4, HW 1.1 and HDES 1.0.1 with their sub-profiles, CPS 1.0, MEAS 1.0, ML 1.0, STND.DFLT 1.5, STND.INSTR 1.3, STND.CODE, STND.THRT, STND.KNOW, STND.DEPS, STND.PROJ, STND.WPROC 1.0, STND.CREW 1.0, STND.PROJ 1.1,
+STND.DOCS 1.0, STND.INSTR 1.4, STND.CODE 1.1, STND.CXX 1.0, STND.PY 1.0,
+STND.JL 1.0, STND.ANNEX 1.0, STND.VVUQ 1.3, STND.MPI 1.0
+
+Ratified by The Custodian on 2026-10-11 (entries 46-63), 2026-10-17
+(entries 64-65), 2026-10-18 (entries 66-76), 2026-10-19 (entries 77-89),
+2026-10-20 (entries 90-96), 2026-10-21 (entries 97-99), 2026-10-23
+(entries 100-105), and 2026-10-24 (entries 106-109), and applied with the harness's own
+commands (rehearse, manifests, references, ledger append); verify passes
+on every check with the ledger at 109 entries.
+
+- 46 amend LVL0 1.6: GOV.18 reserves delegation and research-retrieval
+  limits to LVL3
+- 47 rule GOV.32: workbench is a project record; knowledge base is shared
+- 48 rule PRIME.10: meaning of secret
+- 49 adopt AGENT 1.0: 46 provisions; no transition period
+- 50 amend STND.DFLT 1.3: STND.DFLT.27 access descriptors
+- 51 amend STND.INSTR 1.1.1: editorial
+- 52 amend STND.DRAFT 1.3: profile combination (35-41); owner decisions
+  limited to those LVL0 assigns (42)
+- 53 amend STND.HARN 1.1: combination checks and review list (26-28);
+  remote writes by destination and kind (18); failure reports (23)
+- 54 register MNEM: HDES, HDES.FPGA, HDES.ASIC, PY, CXX, JL, DOCS,
+  WPROC, CREW
+- 55 amend AGENT 1.1: AGENT.15 SHALL; new AGENT.47 departures from intent
+- 56 amend STND.DFLT 1.4: STND.DFLT.12 no stop; default read bounds
+- 57 amend STND.INSTR 1.2: injected passages in the completion report
+- 58 amend STND.CLASS 1.3: CSQ1 human review before promotion or release
+- 59 adopt NUMER 1.0: numerical computation profile, 29 provisions;
+  STND.HARN.28 review by reading recorded in the rationale
+- 60 register MNEM: VVUQ under STND
+- 61 adopt STND.VVUQ 1.0: 78 default provisions of verification,
+  validation, and uncertainty-quantification methods
+- 62 annotate entry 61: its STND.HARN.28 pair review (1607 pairs)
+- 63 amend STND.VVUQ 1.1: STND.VVUQ.37, 40, 50, 61, 70 corrected after
+  the pair review and its cold review
+- 64 adopt HW 1.0: execution hardware profile, 22 provisions; feasibility
+  review and STND.HARN.28 pair review (725 pairs)
+- 65 amend NUMER 1.1: conforming on the adoption of HW (NUMER.2, NUMER.5)
+- 66 amend STND.DRAFT 1.4: Execution path defined by reference to HW
+- 67 amend STND.VVUQ 1.2: STND.VVUQ.77 cites HW.22; new STND.VVUQ.79-81,
+  the default extrapolation criterion for HW.17
+- 68 adopt HW.CPU 1.0: general-purpose processors, 5 provisions
+- 69 adopt HW.GPU 1.0: accelerators, 4 provisions
+- 70 adopt HW.QPU 1.0: quantum processors, 8 provisions
+- 71 adopt HW.EMBED 1.0: embedded controllers, 6 provisions
+- 72 adopt HDES 1.0: hardware design profile, 15 provisions, independent
+  of language, tool, and process kit
+- 73 adopt HDES.FPGA 1.0: programmable logic design, 5 provisions
+- 74 adopt HDES.ASIC 1.0: integrated circuit design (digital, analog,
+  mixed-signal) up to submission for fabrication, 12 provisions
+- 75 amend HW 1.0.1: editorial, Notes cite HDES.5
+- 76 amend NUMER 1.1.1: editorial, Notes cite HDES.5 and HDES.7
+- 77 adopt CPS 1.0: cyber-physical and actuation, 9 provisions
+- 78 adopt MEAS 1.0: measurement and instrumentation, 7 provisions
+- 79 adopt HW.FPGA 1.0: programmable logic execution, 4 provisions
+- 80 adopt HW.ASIC 1.0: integrated circuit execution, 4 provisions
+- 81 adopt ML 1.0: learned models, 7 provisions
+- 82 amend NUMER 1.2: conforming on MEAS (NUMER.2, NUMER.15)
+- 83 amend HW 1.0.2: editorial
+- 84 amend HW.EMBED 1.0.1: editorial
+- 85 amend HDES 1.0.1: editorial
+- 86 amend HDES.FPGA 1.0.1: editorial
+- 87 amend HDES.ASIC 1.0.1: editorial
+- 88 amend STND.VVUQ 1.2.1: editorial
+- 89 amend HW 1.1: HW.20 worst-case bound only for hazardous deadlines
+- 90 amend STND.DFLT 1.5: workbench directory (28); optional store of
+  non-credential secrets, where the human owner provides one (29-31);
+  grants entered without secrets (17)
+- 91 amend STND.INSTR 1.3: research material kept in the workbench (9)
+- 92 adopt STND.CODE 1.0: coding standard, 12 provisions (2 binding)
+- 93 adopt STND.THRT 1.0: threat-model template, 9 provisions
+- 94 adopt STND.KNOW 1.0: knowledge base and tags, 14 provisions;
+  evidence levels and reliance ceilings (GOV.33)
+- 95 adopt STND.DEPS 1.0: dependency policy, 11 provisions
+- 96 adopt STND.PROJ 1.0: project constitution template, 4 provisions
+- 97 adopt STND.WPROC 1.0: work process carried by the version history,
+  15 provisions; each main-line advance a release the human owner decides
+- 98 adopt STND.CREW 1.0: agent roles, 23 provisions; grounded estimates,
+  role and depth in briefs, reconciliation of delegated work, owner ruling
+  on costly capability levels
+- 99 amend STND.PROJ 1.1: roles to which each proposed authorization
+  extends (research retrieval to research agents alone); STND.PROJ.5
+  proposed cost discipline
+- 100 adopt STND.DOCS 1.0: documentation standard, 14 provisions; human
+  readers only, no agent or process content, American English, specific
+  statements, documentation consistent with the work (2 binding)
+- 101 amend STND.INSTR 1.4: STND.INSTR.10 carries the agent provisions of
+  other adopted LVL2 standards into agent instructions
+- 102 amend STND.CODE 1.1: STND.CODE.13 statements grouped by step
+- 103 adopt STND.CXX 1.0: C++ standard, 31 provisions (5 binding); high
+  assurance under any coding standard a decision record adopts
+- 104 adopt STND.PY 1.0: Python standard, 31 provisions (5 binding)
+- 105 adopt STND.JL 1.0: Julia standard, 35 provisions (3 binding)
+- 106 adopt STND.ANNEX 1.0: hardware type annex, 10 default provisions,
+  one default hardware contract per hardware type; replaces draft 0.6
+- 107 amend STND.VVUQ 1.3: declared variation is no defect (82); agents
+  do not churn over it (83, binding on agents)
+- 108 register MNEM: MPI under STND
+- 109 adopt STND.MPI 1.0: Message Passing Interface standard, 25
+  provisions (2 binding)
+
+HW, HDES, HDES.FPGA, HDES.ASIC, HW.FPGA, HW.ASIC, MEAS, CPS, and ML replace
+their planned stubs; every LVL1 profile is now adopted. STND.CODE,
+STND.THRT, STND.DEPS, and STND.PROJ replace their undivided drafts, and
+STND.KNOW its planned stub. STND.CXX, STND.PY, STND.JL, and STND.DOCS fill
+their registered mnemonics; no version, compiler, platform, or tool is
+named in them. STND.ANNEX replaces its draft, and every registered
+standard is now adopted.
+
+Harness unit 0006 (harness-unit0006.patch): checks m.1 and m.2
+(STND.HARN.26, STND.HARN.27) and the command pairs (STND.HARN.28); its
+NUMER pair test excludes the documents adopted after NUMER 1.0.
+
+Harness tests adjusted for a corpus with no draft standard: test_ledger_pins
+now edits TAG, which no transaction pins, and test_revisions builds its own
+draft standard in memory when the corpus holds none.
+
+Text authored by an agent, Claude (Anthropic), at the custodian's
+direction (REPRO.5).
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_012RJVZgKa1kdGYARRNZdo7R

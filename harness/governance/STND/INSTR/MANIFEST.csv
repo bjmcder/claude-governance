@@ -1,0 +1,12 @@
+id,kind,level,title,status,path,sha256,bytes
+STND.INSTR,standard,LVL2,Agent instructions,adopted,_doc.md,79200b2b0a0cbaa2f9a3e801b1a264a8657669c4d577167ea98180ebc8c33e4d,4005
+STND.INSTR.1,provision,LVL2,Agents governed,adopted,1.md,44efc66302740a75918ce610c3ba7308b41b0c56678b76d1b6594a1e190e79a3,422
+STND.INSTR.2,provision,LVL2,Recoverable prior state,adopted,2.md,bc5ddac9637a019df9df575c97eb12cb96f8225cf71afe5feeba747fb9fcbde0,528
+STND.INSTR.3,provision,LVL2,Protected locations,adopted,3.md,fc6263af02fb920d9df80d205cdf2cc5d7ad247b0da876eddd2e92a737d6011b,702
+STND.INSTR.4,provision,LVL2,Effect preview,adopted,4.md,df21d5a128f2cefbdac87a0286cb03c38615c9bcee936346aa4cf4fbc21663a6,612
+STND.INSTR.5,provision,LVL2,Failure stop,adopted,5.md,9d5bc33e09a024cfc2e8ccb131f9ec9d3d072554ada6662b3711269d3a6182dc,493
+STND.INSTR.6,provision,LVL2,Injected instructions,adopted,6.md,f25ef29efa9096494185526eac3c1508b93ee20b4ddd72cd7c82f386f1f5fe03,779
+STND.INSTR.7,provision,LVL2,Completion report,adopted,7.md,e26d9fe8a8be0b761a0602954e75cc56aa6af944d2781ca4f8fe3ece82facf74,499
+STND.INSTR.8,provision,LVL2,Session notes,adopted,8.md,f2285b8c8f884d0875e3f54328405fbb508ccf24af44e1f8e29d0673b95dd7b3,493
+STND.INSTR.9,provision,LVL2,Research placement,adopted,9.md,29e29ea6543154889dc1ae2ef6d48eb24c4924eff4efef2adf4c4aef00249b87,576
+STND.INSTR.10,provision,LVL2,Agent provisions of other standards,adopted,10.md,53436d9af8e9738d160c7a60d4f62b21755146bc46fc140fba4a09d5f4a8cbc4,516

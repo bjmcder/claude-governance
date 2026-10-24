@@ -1,0 +1,15 @@
+id,kind,level,title,status,path,sha256,bytes
+INTPR,article,LVL0,Interpretability,ratified,_doc.md,c3050416e8ebd5e0bebec0ce943002f0ef05c97415e5e2b34a52f77361dbf5a9,506
+INTPR.1,provision,LVL0,Readable code,ratified,1.md,9ce36d5134436be50b7b819be57352f985800bca527cabd449109acb96ddd4ae,477
+INTPR.2,provision,LVL0,Documentation purpose,ratified,2.md,f0f35653760064176414303e32f7b077df1ebab3554239bcafd025f984183bca,499
+INTPR.3,provision,LVL0,Documentation consistency,ratified,3.md,7cd4c9291c0d7c62d5e696a5fffbb418e033e28760ba48ad4c0723dbfbef0251,337
+INTPR.4,provision,LVL0,Units and conventions,ratified,4.md,52f5c7807f7ba604d917dcf554205e9d3375d7f9b4e8fb79d8f7f73910256503,435
+INTPR.5,provision,LVL0,Working-notes workspace,ratified,5.md,08f641b20b4b7a4299f7a07440d38442b7a713805e9ebd6ff98f5889e0facd86,551
+INTPR.6,provision,LVL0,State reporting,ratified,6.md,29a66dc81efd3205ee9ee31950fa91edf1b30dde3e8969e243ac373122a7107c,546
+INTPR.7,provision,LVL0,Anomalies,ratified,7.md,aff6b524036457f39f4b3e2c61c97ca9cf3ce4f38b2d35c2b686ad07a7c77830,558
+INTPR.8,provision,LVL0,Diagnostics,ratified,8.md,3f95385890ac83eb31c8cfefc9a22d280e5777b1d3ab16c52b93cea1b7b07361,414
+INTPR.9,provision,LVL0,Self-describing outputs,ratified,9.md,9d275aec100e333c37d38b6eb28a95f10ded2337186e09210cad9b8939794c5a,450
+INTPR.10,provision,LVL0,Visible limits,ratified,10.md,50d37c991ca597bf965b9e7caf095f70d40bdf6e16891efff829ee762fc0a0a7,371
+INTPR.11,provision,LVL0,Automated decisions,ratified,11.md,180aa40ec6f29138272aa191d81948dfc9c9a59ed7a86913b7f694e9b9931a9b,418
+INTPR.12,provision,LVL0,Graceful degradation,ratified,12.md,7238ea8b51d6d0900909eb8c13c71247e7adda67ebec455b2f8f8e31ee912283,611
+INTPR.13,provision,LVL0,Knowledge in artifacts,ratified,13.md,c3d2ad0c15e4b9baa682d10edf0b9a7044eb14899859b04c9e0c82aa6048c069,385

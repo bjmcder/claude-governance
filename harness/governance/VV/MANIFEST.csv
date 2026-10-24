@@ -1,0 +1,12 @@
+id,kind,level,title,status,path,sha256,bytes
+VV,article,LVL0,Correctness,ratified,_doc.md,536700b0131488312e178a7265ed382af407734b488a23a0293e3f3d284ec928,441
+VV.1,provision,LVL0,Evidence,ratified,1.md,c6f69dbe93735633a9bf4f6ae8550f1fb23247220a320edd04ecd0b7ad698d91,507
+VV.2,provision,LVL0,Citations,ratified,2.md,7a27da933a266ae3ca822a9d75628acd143bd818d9701684f6bb98824fb7a4b4,310
+VV.3,provision,LVL0,Acceptance criteria,ratified,3.md,f7b343f4182bcc77ace58d91c7d614a6a6378d1497f2be8e81dde27475fb2956,429
+VV.4,provision,LVL0,Verification and validation,ratified,4.md,ea65cc2d5a1db7c18261a2319813a1ad46b6e83ec73527d28db08dbdf169ab3e,484
+VV.5,provision,LVL0,Verification and validation status,ratified,5.md,11407a187decadfbc31a997e84f61003049b492d8aac47ec585fdc33d3ca6e86,478
+VV.6,provision,LVL0,Hierarchical verification,ratified,6.md,39b5ae7b7dc5d3e07f67fbda0ec511213d445d9cef9dccc9ed027537552f7ec0,471
+VV.7,provision,LVL0,Tests,ratified,7.md,69c8ffb18c3b91b38b370933abe43199bae4c0890eb1a431a720b269bb405177,446
+VV.8,provision,LVL0,Maintained correctness,ratified,8.md,78eebcd0cd673d6f275fb3a8b72720d9f2e725b268e8b9b0da856ada9b34ef7c,424
+VV.9,provision,LVL0,Axioms,ratified,9.md,f09308c51b23146f41324e310cd9a7d3589ce9793420607128cb1d9852432c7d,403
+VV.10,provision,LVL0,Invariants,ratified,10.md,b1bfe02f0d2070e0a9992623b262fa655925c3ede1e82d262a7fd48771d4e1a7,430

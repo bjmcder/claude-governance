@@ -1,0 +1,25 @@
+id,kind,level,title,status,path,sha256,bytes
+STND.IDENT,standard,LVL2,Identifier scheme and mnemonic register,adopted,_doc.md,c65420a2840d383c4597be7ffbab2ffdd6d7ff30f78465a1e79572f49913a3fb,7332
+STND.IDENT.1,provision,LVL2,Revision number,adopted,1.md,af83e6845936f1e8472dc125d867d8b730ef04a1e3d6f9d9353d77ccf651aa40,679
+STND.IDENT.2,provision,LVL2,Zero editorial segment,adopted,2.md,23e655738dbe90fe787343af24d6608f2cc860bb69ff348b488f9915f76a3ba3,477
+STND.IDENT.3,provision,LVL2,Revision classes,adopted,3.md,3483c9109c48157eae85d83440b031839d2a1cd72a134abdb473dd7152711d68,1396
+STND.IDENT.4,provision,LVL2,Doubtful class,adopted,4.md,24ca2e3f42a14c3e081df9d16e399dacf4055a385443278f50e38ab0dea94abf,697
+STND.IDENT.5,provision,LVL2,Segment step,adopted,5.md,bf61d6b03bd70ac7fb16b5b1c9805645f28bc91e19462daaf58256ccae2cf9c7,583
+STND.IDENT.6,provision,LVL2,Revision history,adopted,6.md,94ca37c8d2b317fa7fbea9ad9aee751a129e68fd06ed92a55a0758019c3b9e44,785
+STND.IDENT.7,provision,LVL2,Revision field,adopted,7.md,fdf1102b6b8ef1d24de21ee6b353a75fff7f34fc16578320c137ae5448fdae8c,517
+STND.IDENT.8,provision,LVL2,Revision transaction,adopted,8.md,1c934ac97ea585ecd62c19bbc9ac0ebcc529e909659d35411764889cea9edbf9,641
+STND.IDENT.9,provision,LVL2,No revision reuse,adopted,9.md,68db1119ea3bc8055bb505f8d9bdd27e8c271348459c75f24b94fd53d206b70b,462
+STND.IDENT.10,provision,LVL2,Revisions before adoption,adopted,10.md,b0b8deef8f115a6b11f86185d3c72b022f5b935ed500cd4ac30ee7fc75eedccb,604
+STND.IDENT.11,provision,LVL2,First adoption,adopted,11.md,63b0ba7453c4f04accd1ffe11c8dd73de362c5ef1c46ef04f2826fc3623b509b,525
+STND.IDENT.12,provision,LVL2,Adopter label,adopted,12.md,89f03b6aa9c9fdaa593c79b140ace7cc9365853baf2d527665a844b9cdba8de3,607
+STND.IDENT.13,provision,LVL2,Recorded review,adopted,13.md,59bcdcf532d025c9218157965c19e81832bd42d8eb73bb05be42b8132c6b2813,605
+STND.IDENT.14,provision,LVL2,Withdrawn identifiers,adopted,14.md,d3a4daae53bd6dcc2040871902103ca6f00bbf00f3931dd22f58797c577ef882,547
+STND.IDENT.15,provision,LVL2,Identifier form,adopted,15.md,c708b786ab9ed0379ff570a8112ebb3b0b0a5d4819fc0fef3b2f7d9e928e38db,1046
+STND.IDENT.16,provision,LVL2,Slug,adopted,16.md,6271f0abbae5426606dec0aca00576602462325713ed762d1b3636d32243fdc5,506
+STND.IDENT.17,provision,LVL2,Mnemonic form,adopted,17.md,a4908fdcfe6e6ce97319459e9fdcda8886525e1ae318a83c2e386a8ee2ac691e,371
+STND.IDENT.18,provision,LVL2,Mnemonic choice,adopted,18.md,8a9f8d225e631e6d4b18d14ebad3419019b0f69b63c03ca787d9993bea44aeb2,683
+STND.IDENT.19,provision,LVL2,Mnemonic register,adopted,19.md,559524850d05d096de5e37bd9b82a25bf50a198a2c5f2c5cbbd97f0868b6b31e,568
+STND.IDENT.20,provision,LVL2,Register transaction,adopted,20.md,037571aee2edc8fa5787d3cd80fe980ac789743b48373c4c83dba3b44ee021a4,413
+STND.IDENT.21,provision,LVL2,Permanent rows,adopted,21.md,22d2c580ee3c8acd9b80b859c7069fba3b52c4f3760f1143c8495dae5b072850,457
+STND.IDENT.22,provision,LVL2,Mnemonic and grade use,adopted,22.md,514d00722e7751e62c0184a7e82600c2ce6b63378ac949beb69f8f2d5ca91122,465
+STND.IDENT.23,provision,LVL2,Registering authority,adopted,23.md,01b0bf6ecc2aff4859d656e73bc1e7e0a0a48c92cc30bd1fd34319796763b93a,421

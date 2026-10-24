@@ -1,0 +1,62 @@
+# Decision 0002: derive an agent's environment from governance
+
+Status: proposed with the STND.HARN 0.1 draft (REPRO.7). Author: Claude, agent.
+
+## Context
+
+The human owner wants agents to run unattended, without approving routine actions, and without risking irreversible mass deletion. STND.INSTR names no tool or method (GOV.18). It states that environment means are derived from it and from STND.DFLT and are recorded under STND.DFLT.22.
+
+## Decision
+
+- **Outcomes live in governance.** STND.HARN.21 holds a table of outcomes, each with a key, a source provision, and a response (Refuse or Refer). The protected locations stay in STND.INSTR.3.
+- **Adapters live in code.** An adapter renders those tables into one environment's configuration. An amendment of either table therefore reaches the configuration without a change of code. An outcome or a row the adapter does not know shows up as a gap in the coverage report, never as a silent pass.
+- **The Claude Code adapter has three layers:**
+  - the sandbox, enforced by the operating system, confines shell writes and network;
+  - a pre-action guard that reads each tool call;
+  - text permission rules as a second line.
+
+  Managed settings make the managed rules and hooks the only ones that apply.
+- **Routine actions run without a prompt.** Shell commands inside the sandbox and the file and read tools are allowed, so an unattended agent is not stopped by routine work. An allow rule is no authorization (STND.DFLT.16).
+- **In an unattended session, Refer becomes deny.** The guard refuses what it would refer, with a reason that tells the agent to halt the line of work and refer it (PRIME.14). Nobody is there to answer a prompt.
+- **Coverage is reported honestly.** The draft entry of STND.DFLT.22 names only outcomes enforced in full, so a provision whose outcome is enforced in part still binds the agent.
+- **The checkpoint mechanism is recorded.** Claude Code's checkpoints cover only edits by its file tools in the main session. Its documentation states that changes made by shell commands are not tracked. The draft entry records exactly that coverage for the fifth exempt class of STND.DFLT.15.
+
+## Alternatives weighed
+
+| Alternative | Reason rejected |
+| --- | --- |
+| Write Claude Code rules into STND.INSTR or STND.DFLT | Names a tool in governance, against the custodian's direction and GOV.18 |
+| Text permission rules alone | A rule matches the command as written, not its effect; the vendor documentation says so |
+| A guard that refers everything it cannot parse | Stops unattended work on harmless commands; the sandbox already bounds what an unparsed command can reach |
+| Claim full coverage where the guard parses commands | A program that deletes by itself is not seen; claiming more would make an agent rely on what the record does not settle (GUARD.2) |
+
+## Adjustments made by review 0003
+
+| Rule as decided above | Adjustment | Reason |
+| --- | --- | --- |
+| The sandbox confines shell writes | The sandbox also denies writes to every location of the enforcing configuration (`denyWrite`), including `<work>/.claude` and `<work>/.mcp.json` | The work is writable, and a program run by the shell could rewrite the project settings, which can widen the sandbox or run a command outside it |
+| Coverage is reported honestly | No outcome is reported full: enforcing-configuration is partial | The file tools run outside the sandbox as the agent's account; only path checks before the call keep them off the user and project settings, and a symbolic link changed in between defeats those |
+| The guard does not refer everything it cannot parse | The guard refers an item it cannot resolve (a variable, a substitution, an unknown directory), a computed program name, a shell fed by a pipe, and a command over 100 000 characters; a program it does not know still passes, after a search of its arguments for a command it knows | Such an item cannot be listed before the action (STND.DFLT.24), and the sandbox does not protect the work's records or version control, which lie inside the writable work |
+| The hook runs the guard | The hook command ends in `\|\| exit 2` | Any exit other than 0 and 2 is a non-blocking error, so a guard that cannot start would let the call proceed |
+| `environment` takes the agent's home with a default | `--home` is required, and the adapter registry, `--adapter`, and `--install-root` are removed | The default was the running account's home, wrong when the owner generates the files; the options had no consumer (SIMPL.5) |
+
+## Adjustments made for proportioned assurance (unit 0004)
+
+| Rule as decided above | Adjustment | Reason |
+| --- | --- | --- |
+| The hook command ends in `\|\| exit 2`; the sandbox must start | Only for assured work (`--assured`, CSQ0 or CSQ1). For other work, a guard that cannot run prints a notice to the human owner (`systemMessage`) and to the agent (`additionalContext`) and lets the call proceed, and Claude Code runs without the sandbox and says so | The custodian judged that fail-closed mechanisms at every class cause friction that invites circumvention; a visible degradation meets PRIME.4, and STND.DFLT 1.2 keeps every provision in force while the configuration is not operative |
+| A guard fault denies the call | A call the guard cannot read is still denied at every class, since it is untrusted input (DSGN.2); a fault of the guard or its policy follows the class | Malformed input is the agent's or an attacker's, not the environment's |
+
+## Adjustments made by review 0005
+
+| Rule as adjusted for unit 0004 | Adjustment | Reason |
+| --- | --- | --- |
+| Only a call that raises `ValueError` is denied at every class; any other fault follows the class | Once the policy is read, every fault is denied at every class; only a guard that cannot run, or cannot read its policy, follows the class | A command nested too deep to parse raised `RecursionError`, which work that is not assured let through, so a call could choose to go unguarded |
+| The notice sits in hand-written single quotes | `shlex.quote` | The quoting held only while the notice had no single quote |
+| STND.DFLT 1.2 keeps every provision in force while the configuration is not operative | For work that is not assured, a configuration displaces no provision (STND.DFLT.22 as review 0005 revises it) | A lost configuration shows nothing, and a guard or sandbox that fails open lets an action through first, so "shown failing by nothing" left provisions displaced with nothing enforcing them |
+
+## Adjustments made by review 0006
+
+| Rule as decided above | Adjustment | Reason |
+| --- | --- | --- |
+| STND.HARN.21 holds the table of outcomes | STND.HARN 0.6 numbers it STND.HARN.24; the table keeps its name `environment-outcomes`. Configuration failure stays STND.HARN.29 | Retrieval provisions come first in the draft (review 0006) |

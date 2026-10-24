@@ -1,0 +1,33 @@
+id,kind,level,title,status,path,sha256,bytes
+STND.DFLT,standard,LVL2,Defaults,adopted,_doc.md,d4e12cd908b9606dfbac2d7e116875dd874905b7316e43d11f5bc075dbc02931,12410
+STND.DFLT.1,provision,LVL2,Scope of application,adopted,1.md,1223e9131fe3c2ef2095b53e45c0358c5f7e5b7fbec5619069a9998e0d03a19c,396
+STND.DFLT.2,provision,LVL2,Records directory,adopted,2.md,6286562c859c952511db33322655a147bc303d69b7a0dfea008e0b7e8366a927,481
+STND.DFLT.3,provision,LVL2,Records format,adopted,3.md,185bda89908d5fbc8b1da7e587247ee7bd445ab74063c61643fa698663cf271b,413
+STND.DFLT.4,provision,LVL2,Records retention,adopted,4.md,7cebf139a954d1571eb2320dbe3ce00acd61b3f265818c496d7b368d93f70c30,547
+STND.DFLT.5,provision,LVL2,Work ledger,adopted,5.md,c25fc2e2795c7b03847979b073891c340589e0811ba9347e8f4b7032543d8f62,581
+STND.DFLT.6,provision,LVL2,Workspace directory,adopted,6.md,d5469bcb7cd6a7a15209145142d6a2bea2fc6b60f46591ba35d38251831253c3,394
+STND.DFLT.7,provision,LVL2,Criteria before work,adopted,7.md,2d1461e1b2da3aff295e498f955c0d80048b5da577c389a7f7a901398f112e22,416
+STND.DFLT.8,provision,LVL2,Contents of records,adopted,8.md,cee52145d3102733f8e9231edc6978a92b0af6a5eb34a34f0784d1a57607292c,714
+STND.DFLT.9,provision,LVL2,Stopping bound,adopted,9.md,ff03e5850497126c7f5ea8134715c8d4659971789bc3af6ad5d6ff4c01569bb3,482
+STND.DFLT.10,provision,LVL2,Defect schedule,adopted,10.md,d1499707bcc9979e89fd4f41d8cd5fc702d4c3d10c05eb5f3e476424db46aabe,453
+STND.DFLT.11,provision,LVL2,Dependency review,adopted,11.md,7ccc7d13a0254f471c02a95f3f150cc73b2fb3139d7f1eb7e42edec8206ae740,455
+STND.DFLT.12,provision,LVL2,Governance failure report,adopted,12.md,3860219d8a6ce61343559dc91aad45f769958594658c3654a84a06331f55e509,521
+STND.DFLT.13,provision,LVL2,Classification location,adopted,13.md,d61b4404dc41f577707e9e61f6516ae3ec2501064ce2d9576c486267da68cabb,407
+STND.DFLT.14,provision,LVL2,Bulk size,adopted,14.md,c3fd9bb89c12fdab1018afcebd39481809733c2f4d7a33130ea1ab1ee869d93d,365
+STND.DFLT.15,provision,LVL2,Register exemptions,adopted,15.md,3d11ef38c3a4474e66343004dd28b32575403e8ea0f3e920891c2febe4545dac,978
+STND.DFLT.16,provision,LVL2,Authorization record,adopted,16.md,9fde3a7263306df0a88a2b6eee0a994230b9699a866845160d7ca4c8648e8cb2,473
+STND.DFLT.17,provision,LVL2,Authorization reliance,adopted,17.md,aad7cd2a57d7cd8d6252281670402f2b6f1a781edea202ce8aae42d87efcf08d,749
+STND.DFLT.18,provision,LVL2,Threat-model table,adopted,18.md,a25687f79b8738b69f4a54f1eda824c2d030e28bec29c6ede142b058a15f41ec,1082
+STND.DFLT.19,provision,LVL2,Unlisted asset,adopted,19.md,1b70d41e35ce6f6d62d3c997c6cb026124967d2e2ec747d9248b9166ebe7cbd8,494
+STND.DFLT.20,provision,LVL2,Referral statement,adopted,20.md,7f9b9979526e2955957a3c6bd6ae55ba47f06ad3d5efb7eda570ea7dd7f5c64a,596
+STND.DFLT.21,provision,LVL2,Agent-instructions source,adopted,21.md,6920db75fa950643ee0580257bb04c46698eaecb8c91545b08db1c23fb18e282,440
+STND.DFLT.22,provision,LVL2,Environment configuration,adopted,22.md,b2429b156ffcd4052e6758daff683f713be56ad76a68200f21b0049920b99e6e,665
+STND.DFLT.23,provision,LVL2,Accepted entries,adopted,23.md,e3baf8b3e1a607227b0d087f9be23d1a36db7c1450c783d010bcff91fa338061,740
+STND.DFLT.24,provision,LVL2,Scope enumeration,adopted,24.md,a463b5939e9fa89d33bfa69a3279c289e395f4795aea4aa9f22ba747a1bdf11b,471
+STND.DFLT.25,provision,LVL2,Bounds of reach,adopted,25.md,d11912a0f7436260f579251001ac0b4f79f586d74735cf06f2c3839354623f27,427
+STND.DFLT.26,provision,LVL2,Operating-cost discipline,adopted,26.md,2c78d7c5522f7a573937f32bcb526d6a8c41f248c1eb18f6671c403bedbbb51b,532
+STND.DFLT.27,provision,LVL2,Access descriptors,adopted,27.md,39319128b24714633ce29c140c8056f6755ff4532775bc77e2d6b16a1dc25ddf,942
+STND.DFLT.28,provision,LVL2,Workbench directory,adopted,28.md,4dc5504417e459d54f45c1313e00051e386d89c58c4b03d4c2546bb5ab62f3cc,600
+STND.DFLT.29,provision,LVL2,Secret store directory,adopted,29.md,71f31f0861af07f6577acfc8ce7618ea8601888b234a8c07d021756b8958f74c,668
+STND.DFLT.30,provision,LVL2,Secret store confirmation,adopted,30.md,ef973370a9bdd89e35e0fe2e80efd6c48a9074cffeae1f885abaf4bb27bb993a,871
+STND.DFLT.31,provision,LVL2,Secret store exclusions,adopted,31.md,b4f2b651dc4a091a26c4c05466bc5eb4eb68c56772976247d7d94f2ff9fc2de4,731

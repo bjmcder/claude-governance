@@ -1,0 +1,9 @@
+id,kind,level,title,status,path,sha256,bytes
+MEAS,profile,LVL1,Measurement and instrumentation,adopted,_doc.md,9aba5b62c8e47a8fc31b05b13727f442bf12a7deea66c997c7c4a09f35231952,8454
+MEAS.1,provision,LVL1,Measurement selector,adopted,1.md,ef7d5016fd099f2a27a4c24f73d8661b71abbf16da4698e4fb4d7c2eb859946c,473
+MEAS.2,provision,LVL1,Measurement shared matters,adopted,2.md,e17af296c6313988871cfafd8628ec28904094c48539a374378f2ff9ca55d4dd,752
+MEAS.3,provision,LVL1,Raw observations,adopted,3.md,924d745b1248389946e37de8f61c150fab64493254337a16f9840340ba51a75d,684
+MEAS.4,provision,LVL1,Acquisition record,adopted,4.md,20c6aba315b4125dfd790d21b399eb2a6c2086ec7ea1af81bb639765f96ac048,631
+MEAS.5,provision,LVL1,Calibration validity,adopted,5.md,29e01e63aff1cf0232929ed7547b8c53b6f6583f184afa6fc99eac78ea9ba7f0,558
+MEAS.6,provision,LVL1,Measurement uncertainty,adopted,6.md,8ee6e52d613b7b143d7604f1fd8d6c1608e8d514377765c9324beb1733d5d3ac,804
+MEAS.7,provision,LVL1,Selection of observations,adopted,7.md,002a5b7a03e99f5954df87e47d1ea03ddb385c588758acad9a435fd60dd1c5d8,689

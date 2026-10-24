@@ -1,0 +1,7 @@
+id,kind,level,title,status,path,sha256,bytes
+STND.PROJ,standard,LVL2,Project constitution template,adopted,_doc.md,c2e1fa7c485c53417ca020593b9a52a76fd83d0495499d82bb43b187e3bbce6b,8588
+STND.PROJ.1,provision,LVL2,Constitution sections,adopted,1.md,f8b7bdbc0f5ab64dc54c3439dccfd4f007ae372c01b0d5005c92285b983dd444,5016
+STND.PROJ.2,provision,LVL2,Sections adopted by citation,adopted,2.md,dd7eb27bbe5516320717c00eaea9e45617cdf01604e8a317781878af74642fe2,426
+STND.PROJ.3,provision,LVL2,Proposed standing authorizations,adopted,3.md,d5ab909f429dd7fe3117944534c8852db843e35aa356ce6cf89507843da2fe0f,2250
+STND.PROJ.4,provision,LVL2,Constitution files,adopted,4.md,d9286c2f9df1d5040598371f27a3bddb61f4154807d6265378b6d9de14f4deea,575
+STND.PROJ.5,provision,LVL2,Proposed cost discipline,adopted,5.md,f188906510059d791134b6929fdd0cb10417e13ac8df320f5595cfcc118d34bb,734

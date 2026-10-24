@@ -1,0 +1,37 @@
+id,kind,level,title,status,path,sha256,bytes
+STND.JL,standard,LVL2,Julia standard,adopted,_doc.md,78650d0f9f474b2c5dd8f5d699ff3666605aded2457566a0ef390a105fc54899,26080
+STND.JL.1,provision,LVL2,Reference Julia version,adopted,1.md,1c6e06d883f4b4119623e6790db369e00ca1f39bf0a8bfa3485a260b2e5afdec,753
+STND.JL.2,provision,LVL2,Julia compatibility bounds,adopted,2.md,93e7cac6b566594fbdde3534f7b37fce247ddf15b456711479e1bf00624f4d48,681
+STND.JL.3,provision,LVL2,Checked Julia versions,adopted,3.md,5d595e9c3181ce219346bfd263d154e1b38ffa47e7356c4ce3c3c0ade8fa37cb,901
+STND.JL.4,provision,LVL2,Committed manifests,adopted,4.md,02534e7b3b3fd7ad989bb13082741ec796dd3ce0a73731afd7753f745590ab0d,617
+STND.JL.5,provision,LVL2,Recorded run settings,adopted,5.md,4d3083457a8d7ae6bc065095bd243b987174144026f96c51a9f52bf24cfd0134,655
+STND.JL.6,provision,LVL2,Julia naming conventions,adopted,6.md,446f25c3c218b24591957a3979f9f233821cea8d8fa9c9b891577f464f3703a9,1118
+STND.JL.7,provision,LVL2,Mutation marked in names,adopted,7.md,eddcdaf06df4b4f7043990e7ab6ccf48968ff9f4f83bed49acb81ee88045042e,518
+STND.JL.8,provision,LVL2,Declared public interface,adopted,8.md,20bd2ad4b8c76b55af81f23f8e084aa1ea3d712f7ee46891f81e044f1ffadd5e,492
+STND.JL.9,provision,LVL2,Explicit imports,adopted,9.md,14dac935cc5ba0e623e72b9109b7be821a52ca4ae9f3aec250b8ec72bdee550b,878
+STND.JL.10,provision,LVL2,Methods on owned names,adopted,10.md,caa46406862b8c65259bceb6093f3a891b41a186336b2ab1e3245fbe35adb0a6,477
+STND.JL.11,provision,LVL2,Type-stable numerical kernels,adopted,11.md,1585945b7bddc7d0fdc748ed1a91b92c7e0299bf7475377ea7c0bab50c2e3050,519
+STND.JL.12,provision,LVL2,Concrete types for inference,adopted,12.md,eec3e2e48ad7fccead61a4b823c2e8630599d21266b9d9f70459c8b3a7e311ca,783
+STND.JL.13,provision,LVL2,Untrusted indices and assertions,adopted,13.md,df8666496a01920e7392750e4fd98bc9ae9efdcfdd08ef1c7e66091c0e78ff00,695
+STND.JL.14,provision,LVL2,Resource exhaustion in catch blocks,adopted,14.md,faa919084fe981dec1a30a36222250d02e5f56404a6cc443620fce7621501cc3,442
+STND.JL.15,provision,LVL2,Julia responses to listed failures,adopted,15.md,fba565c47449b681e0dd86c11dbd99cad94055b931f90df8d414f3027ad4211b,704
+STND.JL.16,provision,LVL2,Unhandled exceptions rethrown,adopted,16.md,049e89ad29ec985791b0f04d9d07fb4a0b759818ab12cc6a246732055983a98c,606
+STND.JL.17,provision,LVL2,Checked integer arithmetic,adopted,17.md,e99b147d4bfdf92b0db4710bdadaa70a12a55c300b9e7a6e391c9d6263353ebb,494
+STND.JL.18,provision,LVL2,Assumed conditions stated,adopted,18.md,cd456686b026a756aabf93da215467c20ce315259fcaf8fd1aa32d5a2f2eb2eb,530
+STND.JL.19,provision,LVL2,Subnormal flushing scope,adopted,19.md,344b5acb0f970b7019104ab706fc7d0b896ed7861dbef5f51521b27a68229418,480
+STND.JL.20,provision,LVL2,Scoped BigFloat settings,adopted,20.md,bfe5cfb3315c0f3cfcc6dd257e037eaea59740cb628cc328c9b363d8497d066a,462
+STND.JL.21,provision,LVL2,Stated comparison tolerances,adopted,21.md,debedaf4955f88220375f39bee9e13dfda1b936b757e7bc1f6de086e3aef1488,1002
+STND.JL.22,provision,LVL2,Generators through the interface,adopted,22.md,b7e6eb58769e04f5c8bf0383583e8d8dc665db95b9068e0ee1d371c510f40ecb,712
+STND.JL.23,provision,LVL2,Generators seeded at entry points,adopted,23.md,7135cffd575b5b2cd6bed5aeaa04d4296c04ea52758d5ae559f9bf486d117520,641
+STND.JL.24,provision,LVL2,Parallel random streams,adopted,24.md,d8b57b4a94364168dac72ad50140bbf5d864fa55d846781c22493bd3dd3253c0,593
+STND.JL.25,provision,LVL2,Stable draws in references,adopted,25.md,626bf82ca94e20f215d2fa7e4f0df20efd7c24fed17124f8609cacd27d2ea54e,864
+STND.JL.26,provision,LVL2,Values unstable across versions,adopted,26.md,b668f030f9580847343a1d27b7a62eaba79d2c2acad3718c056584a5902caa73,540
+STND.JL.27,provision,LVL2,Shared state between tasks,adopted,27.md,23fc8a0c6e400c574552797016b5fa1f9c0cde48465162601a9e1f588d3e856e,530
+STND.JL.28,provision,LVL2,Docstring placement,adopted,28.md,daa7bce4d599c7579a5aab29a0813fa0eb7593460b9d580ea940c0731702044a,743
+STND.JL.29,provision,LVL2,Docstring opening lines,adopted,29.md,69cc0e8e5cc431dc20fe4483ca5a31b150cd638f87533d908c52daea24373a17,566
+STND.JL.30,provision,LVL2,Docstring sections,adopted,30.md,e8045dd1e025d7bd1ed140dac6218a19baafa9ce8e008899daf2f8e8d27ea6a5,1584
+STND.JL.31,provision,LVL2,Julia doctest examples,adopted,31.md,ac14fe592dd6d69bbeeca3b9067dee002e82b911514df547169b5dd45f6a0e08,713
+STND.JL.32,provision,LVL2,Docstring coverage checks,adopted,32.md,3e36f11a4d0d6ef16c0d5a05d118edab877991ac325aebc6d5ef2a34f0aa1ce7,583
+STND.JL.33,provision,LVL2,Package hygiene checks,adopted,33.md,741d8318f8c26077e1e17db6aca3472758f69fdfe2a8fe19bcd5abafa6427ec7,675
+STND.JL.34,provision,LVL2,Julia test run settings,adopted,34.md,0bbeb9753629a3e2b74184d1757f73ee938fea48ca2ec48200d9e305aa5ed150,652
+STND.JL.35,provision,LVL2,Deprecations fail test runs,adopted,35.md,e9ac4573766a1b319525255ea3941134869a7377f9b14877767b715352f5c9ae,518

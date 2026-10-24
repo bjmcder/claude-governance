@@ -1,0 +1,8 @@
+id,kind,level,title,status,path,sha256,bytes
+HW.EMBED,sub-profile,LVL1,Embedded controllers,adopted,_doc.md,c90b93df1688c0051c6daaa3676e5810bef03767f03e5bbe216bf0f7a83fe0ce,9180
+HW.EMBED.1,provision,LVL1,Embedded controller selector,adopted,1.md,9568454fc69521cd3e0199404b0e47aaf4559532daa18aa807ff22d541f62aaf,521
+HW.EMBED.2,provision,LVL1,Embedded controller shared matters,adopted,2.md,b96df195d3c1b45026f4fc363ba493603fdd4b2853398b380cda9d5ebb780be9,669
+HW.EMBED.3,provision,LVL1,Bounded controller memory,adopted,3.md,a869aec3ddeb3a2c18385d89016c20f9ba2cc7411a34fbb6eee301b6debf2c19,905
+HW.EMBED.4,provision,LVL1,Outputs at reset and halt,adopted,4.md,358ccc45d3811d9aedaacceca13e27f766a64f34e9da1cc45271e41bfdeb9f27,767
+HW.EMBED.5,provision,LVL1,Image on the target,adopted,5.md,645193ed78c46aeb55194d736adb461981521e9ac1f700c22d3176a6ff27b941,606
+HW.EMBED.6,provision,LVL1,Resets and stalls in results,adopted,6.md,6ef54dff22b49515ae1b0194375cc1f4a187af1c75841df0d4df0e8e5a4ebeac,921

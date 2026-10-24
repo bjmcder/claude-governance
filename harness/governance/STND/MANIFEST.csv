@@ -1,0 +1,22 @@
+id,kind,level,title,status,path,sha256,bytes
+STND,standards,LVL2,Standards,planned,_doc.md,edfec58474885afb70deeaca3ab2bde3478805ba6e5ca37d5bb95139ecffdbb6,212
+STND.ANNEX,standard,LVL2,Hardware type annex,adopted,ANNEX/,0d09d3d4aa21bcbe5de8565f63da0b49ea0faa94cc522721a171a4f49cf46565,34662
+STND.CLASS,standard,LVL2,Consequence-class criteria,adopted,CLASS/,ceb64012ae1eb4e7925c30eb86affeaf4c7c788a5f3e89337bc138f3ccb34acf,17877
+STND.CODE,standard,LVL2,Coding standard,adopted,CODE/,4462aa4503b9df857441a8c87bdb1b705e489b49a522ac2a6834c222431a10a5,12477
+STND.CREW,standard,LVL2,Agent roles standard,adopted,CREW/,72a58a1a3628079d0512723e69bb524fd691a1be53d0e685481f6313b2fa2b00,39494
+STND.CXX,standard,LVL2,C++ standard,adopted,CXX/,2317e567decbd81d5a3fb113a7e58fab1a8ac5bdb7ed22ec6b7032ebfcda75e5,53031
+STND.DEPS,standard,LVL2,Dependency policy,adopted,DEPS/,8fed8233aa0a4ddfd224fed73fa635d479f4c85bb1aa6dbd0540cc717de2bf08,13015
+STND.DFLT,standard,LVL2,Defaults,adopted,DFLT/,a45b5b00e4c05d76715576566af435a6e844917e2c2ea4bce553f588961aa1c7,30494
+STND.DOCS,standard,LVL2,Documentation standard,adopted,DOCS/,7dbc2a31eb2a45aaa4bc6deb99d21421b7f508a1e13bafc9fcc75b5ba75774c7,30177
+STND.DRAFT,standard,LVL2,Drafting standard,adopted,DRAFT/,42fe1e8dde8c0336715e75f22d00f0757417527ae1bf79eca4c2b5501b12f48a,37873
+STND.HARN,standard,LVL2,Harness specification,adopted,HARN/,6f8323779c37c702b035b5d26d7c3fbd9fb2d3c2ce1a4b67265a2e6d209e65d5,20601
+STND.IDENT,standard,LVL2,Identifier scheme and mnemonic register,adopted,IDENT/,5406cccfe50c9ce4c5edf4e4548cd73e22a9b6b2af94c13ca4d82866f8b1ba3d,21387
+STND.INSTR,standard,LVL2,Agent instructions,adopted,INSTR/,a071027c0454b76ddcb6b880ece28325ada2241376f48191c367e0bc612d7cdf,9625
+STND.JL,standard,LVL2,Julia standard,adopted,JL/,b385b9ccf554b6b6f651b8d594bbd6bed4c88d4fc44b0fc7d58f0d1822bca7b8,49801
+STND.KNOW,standard,LVL2,Knowledge base and tags,adopted,KNOW/,cf2d42974dad8271ee834b4703d0662c7a5af03c3bb3246da7176dc75e483a5c,17232
+STND.MPI,standard,LVL2,Message Passing Interface standard,adopted,MPI/,31b4267bca1a8a839d46a3e805ce2e091eee79354ad08996261406017a8a6741,42872
+STND.PROJ,standard,LVL2,Project constitution template,adopted,PROJ/,69991938a647148d18b257af8ecaa2284d9e0415f342bb09d9d0ce1e8c750dd0,17589
+STND.PY,standard,LVL2,Python standard,adopted,PY/,a4ca9d232f1dd38c52a84d181b2c50cf64de89dfaed55b203f265ea075c2cb0f,40216
+STND.THRT,standard,LVL2,Threat-model template,adopted,THRT/,d067d6c5f1cb2fcd8b555517a584e41d2893441a91df885b36821213437e0973,12734
+STND.VVUQ,standard,LVL2,"Verification, validation, and uncertainty quantification methods",adopted,VVUQ/,60b20b3551a483dbf4ca47608ba4e83548002c33798e103244915ec377836ae0,96684
+STND.WPROC,standard,LVL2,Work process standard,adopted,WPROC/,408b8b8914b29891f17c57f9619d95ed4a5af37281828e62dcb51a022b46d26a,21091

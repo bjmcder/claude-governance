@@ -1,0 +1,6 @@
+id,kind,level,title,status,path,sha256,bytes
+HW.FPGA,sub-profile,LVL1,Field-programmable gate arrays,adopted,_doc.md,25f355be200dbe7e36188ea43b8889fce85063ab778119d7fe6ab0cfedb74ad1,5822
+HW.FPGA.1,provision,LVL1,Programmable logic execution selector,adopted,1.md,6b8f4bfd177d831a3f8d8e2afa2d1f9250c63cebd7e330060ea41dfe0c19d985,528
+HW.FPGA.2,provision,LVL1,Programmable logic execution shared matters,adopted,2.md,03ba633e35e3ac5bda5e5f6612c5264764213551e6f530a338c8f81d1c77f2e5,639
+HW.FPGA.3,provision,LVL1,Configuration in each result,adopted,3.md,92101c46b45039a47037d13b5d311c7f2685255cabcf4bc4d31a4b64d04bec48,768
+HW.FPGA.4,provision,LVL1,Configured-device evidence,adopted,4.md,2c1a83a2719e3b7a68ad6deca47806a005645fa4b8e951d7deab602f3331a8d8,752

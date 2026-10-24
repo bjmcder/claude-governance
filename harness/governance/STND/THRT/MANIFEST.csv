@@ -1,0 +1,11 @@
+id,kind,level,title,status,path,sha256,bytes
+STND.THRT,standard,LVL2,Threat-model template,adopted,_doc.md,a94af78d98128a4d7e2579c260bf5d88c8c7158db22c983373b508e146e46f1e,6224
+STND.THRT.1,provision,LVL2,Threat-model table form,adopted,1.md,5caf22ba4e4e8e15e93368616ae51fa81467c0ae60afa1648b5e076fd6e9bdcc,584
+STND.THRT.2,provision,LVL2,Rows carried from defaults,adopted,2.md,4d72b7cb4bba86e4a2e58f268113e53c6440b673e50a17bdad7e3b4b300e3e47,845
+STND.THRT.3,provision,LVL2,Protected data list,adopted,3.md,7a2cdec1d693542e10451c373c57d506912817aab6effedd39c17ed06c99b563,675
+STND.THRT.4,provision,LVL2,Secret-report channel,adopted,4.md,18f19f95dc3e30191994287b834f9dddf9392defd88fed07953d2dbfd223efff,546
+STND.THRT.5,provision,LVL2,Alteration detection for records,adopted,5.md,8ea408a985bcaea3b72947da6b76e8e5d6da0b58e4d9379a9506668d3a7dec38,432
+STND.THRT.6,provision,LVL2,Exposure events,adopted,6.md,4236394ddae3ba4a88b523154430c5ac245e2e9a111e8146af0d56ee051402cb,1250
+STND.THRT.7,provision,LVL2,Sensitive threat-model part,adopted,7.md,957ae4aef701f2756e94582697623665f033d5bfda2f1bc9d03693230e947045,808
+STND.THRT.8,provision,LVL2,Irreplaceable data copies,adopted,8.md,b16f250cffe4eceddf363646847dc751b3a31a83f753c0946231c1df1132a817,466
+STND.THRT.9,provision,LVL2,Default secure practices,adopted,9.md,a9031ebbc7d846f65afaaa2a5effa3f3abf56890d02727087f9e7252afef122c,904

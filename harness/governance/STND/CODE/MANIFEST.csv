@@ -1,0 +1,15 @@
+id,kind,level,title,status,path,sha256,bytes
+STND.CODE,standard,LVL2,Coding standard,adopted,_doc.md,703e106684fa8b95ca7caa8e3d4729f8a22df56d96c8bb3cbd5cf345a110e320,5834
+STND.CODE.1,provision,LVL2,Mechanical cycle check,adopted,1.md,6f0d23339a1ba66cb37a5d1f2b240a41d68c1cce72c200623e31a305d97984c9,411
+STND.CODE.2,provision,LVL2,Inputs through interfaces,adopted,2.md,40dccdc405a5f703a9b275930b07fe9465e12c55c7c2bd7983d0b34a001606b9,532
+STND.CODE.3,provision,LVL2,Contracts at declarations,adopted,3.md,19267f546fed0f99693e175851c5a2660b3e9c2062c0cdebf488b4f17a1f7590,547
+STND.CODE.4,provision,LVL2,Static checks per change,adopted,4.md,671bf896e4515d3a1c5da1c1119376552619d0c9fe3158a29f4ef9417bcc7143,707
+STND.CODE.5,provision,LVL2,Mechanical source layout,adopted,5.md,7cb0993efb730a1bf99f0c2404ad5d2fb9a2423a96319cca9b53248b3c10d8ee,523
+STND.CODE.6,provision,LVL2,Unremovable input checks,adopted,6.md,f534f7030c37bb1d33b7a7d4bf490ab880f7cd6004976a817f4f9c10f176953b,428
+STND.CODE.7,provision,LVL2,Discarded failures,adopted,7.md,f4d746b78c93d4e23b2de065bd2ff8a12c398807f8c41b0cc2dfb0d5966a6bd1,356
+STND.CODE.8,provision,LVL2,Regression test per fix,adopted,8.md,38afc3c14c9844cfda5b26dbc52ff79470ebea52bb3d5568bdd424d2a1a2cf4a,428
+STND.CODE.9,provision,LVL2,Repeatable test verdicts,adopted,9.md,4bf4b865dd0d6c5315ac9dc5eaf7de6e355cf5247fa78493769fa6825d076288,553
+STND.CODE.10,provision,LVL2,Named domain constants,adopted,10.md,51de1c4fb7cbfde35e248d106c7abc278018fcd16c63cef27b202a8293603b6a,551
+STND.CODE.11,provision,LVL2,Disabled code in comments,adopted,11.md,05c2d25456299c17800e69cc305974636882ec1bc92200e36dce655f5a7fdbcf,369
+STND.CODE.12,provision,LVL2,Reasoned discards,adopted,12.md,f770d37d0a8c039be2d2f6639b80cb7767433d3cf3565945ab7e678c2a608f74,482
+STND.CODE.13,provision,LVL2,Statements grouped by step,adopted,13.md,bd0d6adf73eeee929719fdedf26d4e9c5d0aa998ee934738f8132c6d8c616936,756
