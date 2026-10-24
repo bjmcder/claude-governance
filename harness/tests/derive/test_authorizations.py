@@ -28,8 +28,9 @@ from govharness.core.corpus import Corpus, corpus_hash, read_corpus, read_tree
 from govharness.derive.environment import claude_code
 from govharness.derive.environment.authorizations import (
     Reading,
+    ledger_shape,
     read_authorizations,
-    register_recorded,
+    register_trace,
 )
 from govharness.derive.environment.inputs import Inputs, RemoteWrite
 from govharness.ledger.chain import Signer, append, read_ledger
@@ -66,6 +67,21 @@ FIELDS = {
     "spending_envelope": "",
     "remote_writes": [ENTRY],
 }
+
+
+def no_anchor() -> mock._patch:
+    """Return a patch under which the command reads no signer anchor.
+
+    The command reads the owner's signer configuration under ``/etc``;
+    a test that expects no anchor must not depend on that file.
+
+    Returns
+    -------
+    mock._patch
+        A patch of ``read_config`` in the command, usable as a
+        decorator or a context.
+    """
+    return mock.patch("govharness.cli.environment.read_config", SignerConfig)
 
 
 def write_authorization(root: Path, **fields: object) -> None:
@@ -671,6 +687,7 @@ class Configuration(unittest.TestCase):
                 self.assertNotIn(path, denied())
                 self.assertNotIn(path, denied(post))
 
+    @no_anchor()
     def test_command_option(self) -> None:
         """Behavior: ``--authorization`` opens the writes of an
         authorization in force, and one that is not in force exits 1
@@ -800,6 +817,7 @@ class Unsigned(unittest.TestCase):
                 self.assertEqual(len(found.writes), 1)
                 self.assertEqual(len(found.summary), 1)
 
+    @no_anchor()
     def test_command_refuses_and_accepts(self) -> None:
         """Behavior: ``environment --authorization`` with no signer
         register exits 1 with the reason and writes nothing; with
@@ -858,20 +876,139 @@ class AfterReview(unittest.TestCase):
     the command's verification of signatures.
     """
 
-    def test_register_recorded(self) -> None:
-        """Behavior: the ledger shows a register where an entry carries a
-        signature or pins a scope at or under SIGNR, and not otherwise.
+    def test_register_trace(self) -> None:
+        """Behavior: a register is shown by the anchor of the signer
+        configuration, an entry that carries a signature, or one that
+        pins a scope at or under SIGNR, and not otherwise.
 
-        Reference: review of unit 0010, M1.
+        Reference: review of unit 0010, M1; its verification, M1
+        residual (a rewritten ledger hides the register, the anchor
+        does not).
         """
         plain = {"scope": ["WORK/AUTH"], "signature": ""}
-        self.assertFalse(register_recorded([plain, {"scope": None}]))
-        self.assertTrue(register_recorded([plain, {"signature": "x"}]))
+        self.assertIsNone(register_trace([plain, {"scope": None}], False))
+        self.assertIn(
+            "signed entry", register_trace([plain, {"signature": "x"}], False)
+        )
         for scope in (["SIGNR"], ["MNEM", "SIGNR/keys"]):
             with self.subTest(scope=scope):
-                self.assertTrue(register_recorded([{"scope": scope}]))
-        self.assertFalse(register_recorded([{"scope": ["SIGNRX"]}]))
+                self.assertIn(
+                    "scope holds SIGNR",
+                    register_trace([{"scope": scope}], False),
+                )
+        self.assertIsNone(register_trace([{"scope": ["SIGNRX"]}], False))
+        self.assertIn("anchor key", register_trace([plain], True))
+        self.assertIn("anchor key", register_trace([], True))
 
+    def test_malformed_ledger_is_total(self) -> None:
+        """Behavior: an entry that is no object, a scope that is a number,
+        a boolean, or a list holding a non-path, and a signature that is
+        no text each make the ledger unreadable for a register, which
+        counts as a trace (fail closed), and the reading of the
+        authorizations stops with the reason rather than an exception.
+
+        Reference: verification of unit 0010, N1; PRIME.4.
+        """
+        for bad in (
+            5,
+            {"scope": 5},
+            {"scope": True},
+            {"scope": 1.5},
+            {"scope": "SIGNR"},
+            {"scope": ["SIGNR", 3]},
+            {"signature": 7},
+        ):
+            with self.subTest(bad=bad):
+                ledger = [{"scope": ["WORK/AUTH"]}, bad]
+                self.assertIn("entry 2", ledger_shape(ledger))
+                self.assertIn(
+                    "cannot be read", register_trace(ledger, False)
+                )
+        self.assertIsNone(ledger_shape([{"scope": None}, {}]))
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_authorization(root)
+            record(root)
+            with (root / "ledger.jsonl").open("a", encoding="utf-8") as f:
+                f.write('{"seq": 2, "scope": 5}\n')
+            with self.assertRaisesRegex(ValueError, "cannot be read"):
+                full_reading(root, accept_unsigned=True)
+
+    @no_anchor()
+    def test_command_malformed_ledger(self) -> None:
+        """Behavior: the command on a ledger whose last entry has a scope
+        that is a number exits 1 with the reason, with and without
+        --accept-unsigned and with a signer register present, and
+        writes nothing.
+
+        Reference: verification of unit 0010, N1: 4712619 ended with a
+        traceback where eceabea exited 1 with a reason.
+        """
+        for case in ("plain", "accepted", "register"):
+            with self.subTest(case=case), corpus_copy() as root:
+                write_authorization(root)
+                record(root)
+                if case == "register":
+                    register = root / "SIGNR"
+                    register.mkdir()
+                    (register / "_doc.md").write_text(
+                        '---\nid: "SIGNR"\n---\n\nNo signers.\n',
+                        encoding="utf-8",
+                    )
+                with (root / "ledger.jsonl").open("a", encoding="utf-8") as f:
+                    f.write('{"seq": 999, "scope": 5}\n')
+                out = root.parent / "out"
+                args = [
+                    "environment", str(root), "--work", str(root),
+                    "--home", str(root), "--authorization", IDENT,
+                    "--role", ROLE, "--write", str(out),
+                ]
+                if case == "accepted":
+                    args.append("--accept-unsigned")
+                err = io.StringIO()
+                with contextlib.redirect_stderr(err):
+                    code = main(args)
+                self.assertEqual(code, 1)
+                self.assertFalse(out.exists())
+                self.assertIn("is no list of paths", err.getvalue())
+
+    def test_command_anchor_without_register(self) -> None:
+        """Behavior: where the signer configuration names an anchor key
+        and the corpus holds no register, the command refuses an
+        unsigned authorization with that reason, with --accept-unsigned
+        too, even where the ledger shows no register.
+
+        Reference: verification of unit 0010, M1 residual: the agent is
+        able to rewrite the ledger from the founding entry on, but not
+        the configuration under /etc.
+        """
+        anchored = SignerConfig("0" * 40, shutil.which("gpg") or "gpg")
+        with corpus_copy() as root:
+            write_authorization(root)
+            record(root)
+            out = root.parent / "out"
+            err = io.StringIO()
+            with (
+                mock.patch(
+                    "govharness.cli.environment.read_config",
+                    return_value=anchored,
+                ),
+                contextlib.redirect_stderr(err),
+            ):
+                code = main(
+                    [
+                        "environment", str(root), "--work", str(root),
+                        "--home", str(root), "--authorization", IDENT,
+                        "--role", ROLE, "--accept-unsigned",
+                        "--write", str(out),
+                    ]
+                )
+        self.assertEqual(code, 1)
+        self.assertFalse(out.exists())
+        self.assertIn("anchor key", err.getvalue())
+        self.assertIn("--accept-unsigned has no effect", err.getvalue())
+
+    @no_anchor()
     def test_removed_register_refuses(self) -> None:
         """Behavior: where the corpus holds no signer register but its
         ledger shows one (a signed entry, or a transaction pinning
@@ -915,6 +1052,7 @@ class AfterReview(unittest.TestCase):
                 self.assertFalse(out.exists())
                 self.assertIn("no longer holds", err.getvalue())
                 self.assertIn("signature", err.getvalue())
+                self.assertIn("has no effect", err.getvalue())
 
     def test_unsigned_reliance_is_recorded(self) -> None:
         """Behavior: an authorization relied on unsigned is named in the
@@ -944,6 +1082,7 @@ class AfterReview(unittest.TestCase):
                         bool(unsigned),
                     )
 
+    @no_anchor()
     def test_command_records_unsigned_reliance(self) -> None:
         """Behavior: the command with --accept-unsigned writes the
         authorization's name into coverage.md and entry-draft.json.

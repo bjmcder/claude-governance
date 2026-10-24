@@ -38,9 +38,13 @@ then says that each was accepted so; the coverage report and the
 draft entry name them too. Where a signature is required, that
 statement has no effect (security verification of unit 0008, M-c;
 unit 0010). A signature stays required where the ledger records a
-signer register that the corpus no longer holds, so that removing the
-register does not reduce the check to the owner's statement (review of
-unit 0010, M1).
+signer register that the corpus no longer holds, or the signer
+configuration names the anchor key that founds one, so that removing
+the register does not reduce the check to the owner's statement (review
+and verification of unit 0010). The ledger is read for that before its
+chain is checked, so the reading takes any shape of entry: a ledger
+whose shape it cannot read counts as recording a register (fail
+closed), and the derivation stops with the reason.
 """
 
 from __future__ import annotations
@@ -85,37 +89,88 @@ BRANCH_RE = re.compile(r"[A-Za-z0-9_][A-Za-z0-9._-]*(?:/[A-Za-z0-9._-]+)*")
 # The owner's statement that authorizations are relied on unsigned, as
 # the command line spells it.
 ACCEPT_UNSIGNED = "--accept-unsigned"
-# The reason given where the ledger shows a register the corpus lacks.
+# What follows the trace of a register that the corpus lacks.
 REGISTER_REMOVED = (
-    "the ledger records a signer register (a signed entry, or a "
-    f"transaction whose scope holds {REGISTER_ID}) that the corpus no "
-    "longer holds, so a signature is still required and none verifies; "
-    f"restore {REGISTER_ID} from the history of the corpus"
+    "so a signature is still required, none verifies, and "
+    f"{ACCEPT_UNSIGNED} has no effect; found or restore {REGISTER_ID}"
 )
 
 
-def register_recorded(ledger: list[dict[str, Any]]) -> bool:
-    """Return whether the ledger shows that a signer register existed.
+def ledger_shape(ledger: list[Any]) -> str | None:
+    """Return how the ledger's shape keeps it from being read, or None.
 
     Parameters
     ----------
-    ledger : list[dict[str, Any]]
-        The ledger of the corpus, in order.
+    ledger : list[Any]
+        The ledger of the corpus, in order, as parsed.
 
     Returns
     -------
-    bool
-        Whether an entry carries a signature, which only a register
-        verifies, or pins a scope at or under the register.
+    str | None
+        The first entry that is no object, whose scope is neither absent
+        nor a list of paths, or whose signature is no text; None where
+        every entry has a shape that the readings of this module and the
+        ledger check take.
     """
-    return any(
-        e.get("signature")
-        or any(
-            isinstance(s, str) and PurePosixPath(s).parts[:1] == (REGISTER_ID,)
-            for s in (e.get("scope") or [])
+    for position, entry in enumerate(ledger, start=1):
+        if not isinstance(entry, dict):
+            return f"ledger entry {position} is no object"
+        scope = entry.get("scope")
+        if scope is not None and (
+            not isinstance(scope, list)
+            or not all(isinstance(s, str) for s in scope)
+        ):
+            return f"the scope of ledger entry {position} is no list of paths"
+        if not isinstance(entry.get("signature", ""), str):
+            return f"the signature of ledger entry {position} is no text"
+    return None
+
+
+def register_trace(ledger: list[Any], anchored: bool) -> str | None:
+    """Return what shows that a signer register exists, or None.
+
+    The caller asks this only where the corpus holds no register, so a
+    trace means that one was removed or is yet to be founded.
+
+    Parameters
+    ----------
+    ledger : list[Any]
+        The ledger of the corpus, in order, as parsed; any shape.
+    anchored : bool
+        Whether the signer configuration, which the agent is unable to
+        alter, names the anchor key that founds a register.
+
+    Returns
+    -------
+    str | None
+        The reason, ending before ``REGISTER_REMOVED``: the anchor, a
+        ledger whose shape cannot be read (fail closed), a signed entry,
+        which only a register verifies, or an entry that pins a scope at
+        or under the register; None where nothing shows one.
+    """
+    if anchored:
+        return (
+            "the signer configuration names the anchor key that founds a "
+            f"signer register, but the corpus holds no {REGISTER_ID}"
         )
+    shape = ledger_shape(ledger)
+    if shape:
+        return f"the ledger cannot be read for a signer register: {shape}"
+    if any(e.get("signature") for e in ledger):
+        return (
+            "the ledger records a signer register (a signed entry) that "
+            "the corpus no longer holds"
+        )
+    if any(
+        PurePosixPath(s).parts[:1] == (REGISTER_ID,)
         for e in ledger
-    )
+        for s in e.get("scope") or []
+    ):
+        return (
+            "the ledger records a signer register (a transaction whose "
+            f"scope holds {REGISTER_ID}) that the corpus no longer holds"
+        )
+    return None
 
 
 def timestamp(value: Any) -> datetime:
@@ -513,12 +568,15 @@ def read_authorizations(
     Raises
     ------
     ValueError
-        If an authorization is not in force, or none is required to be
-        signed and the owner did not accept them unsigned, with every
-        reason.
+        If the ledger's shape cannot be read, an authorization is not in
+        force, or none is required to be signed and the owner did not
+        accept them unsigned, with every reason.
     """
     if now.utcoffset() is None:
         raise ValueError("the time of the derivation has no UTC offset")
+    shape = ledger_shape(ledger)
+    if shape:
+        raise ValueError(f"the ledger cannot be read: {shape}")
     writes: list[RemoteWrite] = []
     referred: list[str] = []
     summary: list[str] = []

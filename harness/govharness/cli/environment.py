@@ -36,8 +36,9 @@ from govharness.derive.environment.authorizations import (
     ACCEPT_UNSIGNED,
     REGISTER_REMOVED,
     Reading,
+    ledger_shape,
     read_authorizations,
-    register_recorded,
+    register_trace,
 )
 from govharness.derive.environment.inputs import Inputs, RemoteWrite
 from govharness.ledger.chain import read_ledger
@@ -183,7 +184,8 @@ def authorized(args: argparse.Namespace, tree: Tree) -> Reading:
     ValueError
         If a named authorization is not in force at this moment, or no
         signature is required and ``--accept-unsigned`` is not given, or
-        the ledger records a signer register that the corpus lacks.
+        the ledger or the signer configuration shows a signer register
+        that the corpus lacks, or the ledger's shape cannot be read.
     """
     if not args.authorization:
         return Reading((), (), ())
@@ -192,15 +194,24 @@ def authorized(args: argparse.Namespace, tree: Tree) -> Reading:
     # register exists, since an unsigned entry is then the exception.
     # Elsewhere an agent could have appended the authorize, so the owner
     # must accept the authorizations unsigned (unit 0010). A register
-    # that the ledger records and the corpus lacks was removed, so the
-    # signature stays required and nothing verifies.
+    # that the ledger or the signer configuration shows and the corpus
+    # lacks was removed, or is yet to be founded, so the signature stays
+    # required and nothing verifies. The trace is read before the chain
+    # is checked and takes any shape of ledger; a ledger it cannot read
+    # counts as a trace (fail closed).
+    config = read_config()
     present = any(p.parts[:1] == (REGISTER_ID,) for p in tree.files)
-    removed = not present and register_recorded(ledger)
-    signed = args.assured or present or removed
+    trace = (
+        None
+        if present
+        else register_trace(ledger, config.anchor is not None)
+    )
+    signed = args.assured or present or trace is not None
     verified = (
         signed
-        and not removed
-        and not ledger_problems(tree, ledger, read_config())
+        and trace is None
+        and ledger_shape(ledger) is None
+        and not ledger_problems(tree, ledger, config)
     )
     horizon = (
         None
@@ -221,8 +232,10 @@ def authorized(args: argparse.Namespace, tree: Tree) -> Reading:
             args.accept_unsigned,
         )
     except ValueError as error:
-        if removed:
-            raise ValueError(f"{REGISTER_REMOVED} | {error}") from error
+        if trace:
+            raise ValueError(
+                f"{trace}, {REGISTER_REMOVED} | {error}"
+            ) from error
         raise
 
 

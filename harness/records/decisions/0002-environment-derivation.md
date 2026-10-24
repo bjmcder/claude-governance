@@ -97,3 +97,10 @@ The human owner wants agents to run unattended, without approving routine action
 | --- | --- | --- |
 | A signature is required where a signer register exists | Also where the ledger records one that the corpus no longer holds: an entry carries a signature, or a transaction's scope holds `SIGNR`. The derivation is then refused with that reason, and `--accept-unsigned` has no effect | Review of unit 0010, M1: deleting a founded register made the check fall to the option, which every derivation in a corpus without a register already passes |
 | The acceptance of an unsigned authorization is printed in the summary | The coverage report (the gap of remote-write) and the draft entry's rationale also name each authorization relied on unsigned | Review of unit 0010, M2: stdout leaves no trace, and the draft entry, once appended, is the ledger's record of the configuration |
+
+## Adjustments made by the verification of unit 0010
+
+| Rule as adjusted above | Adjustment | Reason |
+| --- | --- | --- |
+| The ledger shows a removed register | So does the signer configuration under `/etc`, where it names an anchor key and the corpus holds no `SIGNR` | Verification of unit 0010, M1 residual: an agent is able to rewrite the ledger from the founding entry on with the chain recomputed, but not the configuration that the agent is unable to alter |
+| The ledger is read for a register before its chain is checked | That reading takes any shape of entry: an entry that is no object, a scope that is no list of paths, or a signature that is no text counts as a record of a register (fail closed), and the derivation stops with the reason; `read_authorizations` and the command's signature check refuse such a ledger before reading it further | Verification of unit 0010, N1: a scope that is a number ended the command with a traceback |
