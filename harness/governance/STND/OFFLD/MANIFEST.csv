@@ -1,0 +1,33 @@
+id,kind,level,title,status,path,sha256,bytes
+STND.OFFLD,standard,LVL2,Accelerator offload standard,adopted,_doc.md,0da0120cf4898d0aea5c28d9f02988ed0ea53af8b5a6d4ccf2668b980e8a4167,21325
+STND.OFFLD.1,provision,LVL2,Fallback policy stated,adopted,1.md,81c63f4687aad00e027658f3cd94ad587f399c0a4b06d8024aa1a473aae672eb,417
+STND.OFFLD.2,provision,LVL2,Placement confirmed,adopted,2.md,2e23f052e5a2de3d6a84dc1114b8106f0d6feb72d306e76690dcb0983ccf881c,627
+STND.OFFLD.3,provision,LVL2,Fallback paths exercised,adopted,3.md,eebb5e188c80637ec526b7d31b639508015396094d34b8b866a50433afd4fc14,464
+STND.OFFLD.4,provision,LVL2,Submission order relied upon,adopted,4.md,c7bb871c2e4bf945fb1a4367841dddfcd42e580054f9aa24684f0fc46f564c54,673
+STND.OFFLD.5,provision,LVL2,Host storage under transfer,adopted,5.md,d68ec87e843875eec198223728e63db218e054aa2b25dbd73786e0c4bc052e83,474
+STND.OFFLD.6,provision,LVL2,Errors attributed to submissions,adopted,6.md,13c300e2b6d7cbd6122d8c17340cd85c091fe618c27db4acd3695fcb4062e720,597
+STND.OFFLD.7,provision,LVL2,Unusable contexts,adopted,7.md,10b92c0791dc88d672337ded2c0ea4f0fbe431d4d2eae64ac06463b31c4ac503,750
+STND.OFFLD.8,provision,LVL2,Failures detected in device code,adopted,8.md,796a43fb537838fa9c57aba8596421ed9acfec8af99e83d76626b9fd0c183b20,727
+STND.OFFLD.9,provision,LVL2,Authoritative copies,adopted,9.md,fc71934f59a34bb7ebb996b9683e2c2a2c8cd3de295550a5467a8b10c964085e,598
+STND.OFFLD.10,provision,LVL2,Accelerator allocations released once,adopted,10.md,e89303e3e8ae0303e0ae04154a2645b69360b1c873efb55a69502b2d93e43711,586
+STND.OFFLD.11,provision,LVL2,Addresses across memory spaces,adopted,11.md,6e9d2bc0a24665603b31d38f6076f76df59f9b5968408f0900ef29e198f9c7f1,736
+STND.OFFLD.12,provision,LVL2,Memory shared with the host,adopted,12.md,24b99872856516235b151aba7f5d43fddcfe6b66885dfdf0a84bd1ef0389f084,746
+STND.OFFLD.13,provision,LVL2,Memory scope of synchronization,adopted,13.md,d66fbd713fdd7f3c7fb0d8de790adf83a415c886a02379d75a7aae628085e9ac,646
+STND.OFFLD.14,provision,LVL2,Floating-point state across the boundary,adopted,14.md,2cd2469b26f5470a1462882dfb51d880219aa154136c4c35ed072f47e9e5edd4,416
+STND.OFFLD.15,provision,LVL2,Barriers reached by whole groups,adopted,15.md,61071524a5469aecdc504612fa81a632e07a7ccaa378b2ad71d79ab68e3791c6,527
+STND.OFFLD.16,provision,LVL2,No lockstep assumed,adopted,16.md,9b00cadb2c9d31d78ee567ede7b1a44ac147623c9b6e165200ef989466984536,513
+STND.OFFLD.17,provision,LVL2,Group participants and width,adopted,17.md,e18e14179940d4d8aa6385faacfe4180a397ec00ef21b39b77a6f6465ed3f9b7,750
+STND.OFFLD.18,provision,LVL2,Concurrent groups guaranteed,adopted,18.md,453ab1eb3e78415e407536a29de15b67189c6f50e1eb95fde761b968b06078f6,550
+STND.OFFLD.19,provision,LVL2,Problem size and index width,adopted,19.md,2da58043c14c89490bedae96ef39a54740d56ae08e9df9df7d5c984b926c4f4c,660
+STND.OFFLD.20,provision,LVL2,Bounded submission duration,adopted,20.md,cf4b62a5745f7f8bbb143acfc8d4733a613767d650ee0195709f57adf7cc9764,483
+STND.OFFLD.21,provision,LVL2,Accelerator memory checked first,adopted,21.md,ec71caa54a03427b3ce1198e498e2f410ec101aa65e29530606ee39e44298a69,516
+STND.OFFLD.22,provision,LVL2,Oversubscribed accelerator memory reported,adopted,22.md,a88f2e965f9505c65d47782930948072795e28933733533d594ef5d8ac4a6b58,549
+STND.OFFLD.23,provision,LVL2,Accelerators shared and selected,adopted,23.md,b7f5abeb2214ed8d77b7e7345f8ff9a2d3df4c5c04597058e8c22d73828f21ea,681
+STND.OFFLD.24,provision,LVL2,Device code in each build,adopted,24.md,4589b1b794667fb1e3bb78a33c442a2d54a08e9109f91f8b365ccf91e9a2f1d8,497
+STND.OFFLD.25,provision,LVL2,Offload run record,adopted,25.md,e0ce0facf80936a83fb0d3502a3173f5832afc94e99374c22f59aa1d1888791b,746
+STND.OFFLD.26,provision,LVL2,Asynchronous runs under test,adopted,26.md,5bbf0dd865caa69bb7c672b5ed46517e93e8be79455bc3b30e0860f2d7d48002,497
+STND.OFFLD.27,provision,LVL2,Problem sizes under test,adopted,27.md,362ebea8ef4bc956305aa775ed8a1534da801719cec49350f1e851e5241293a8,628
+STND.OFFLD.28,provision,LVL2,Injected failures under test,adopted,28.md,1e0138fcadd90636178691440ecbd5c7554e71489f494581decd82ff7c2c459f,570
+STND.OFFLD.29,provision,LVL2,Arithmetic settings under test,adopted,29.md,e6b9046c84cca2b2f047bb78307f33d884ae9ad6367105576dea4e4a6259fc31,534
+STND.OFFLD.30,provision,LVL2,Checks of device code,adopted,30.md,878bd3e14181abf94047099eece0bb839ba33c30769c4bc0f894ddffc622cc7e,602
+STND.OFFLD.31,provision,LVL2,Timing of offloaded work,adopted,31.md,1b5bd5fbd3e3e6b757fa6f378dcbc2cb2232168b066de92721039dd1cefac6f1,557

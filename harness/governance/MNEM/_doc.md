@@ -67,6 +67,7 @@ The mnemonic register of GOV.37, in the form that STND.IDENT.19 gives.
 | MPI | STND | Message Passing Interface standard | none | The established name of the interface | active |
 | CONC | STND | Concurrency standard | none | Reads as concurrency | active |
 | OMP | STND | OpenMP standard | none | The prefix that OpenMP gives its own routines and environment variables | active |
+| OFFLD | STND | Accelerator offload standard | none | Reads as offload; offload has no established acronym | active |
 | FIELD | TAG | Facet: domain, a physical or application area | none | none | active |
 | PROB | TAG | Facet: problem type | none | none | active |
 | METH | TAG | Facet: method | none | none | active |

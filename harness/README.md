@@ -98,13 +98,13 @@ harness/
 
 ## Current state
 
-As of ledger entry 114 (2026-10-24). `show governance ID` prints the current text and revision of any document.
+As of ledger entry 116 (2026-10-24). `show governance ID` prints the current text and revision of any document.
 
 | Level | Contents | Status |
 | --- | --- | --- |
 | LVL0 | 186 provisions in 11 parts, 155 Lexicon terms, the constitution record | Ratified, revision 1.6; pinned by ledger entry 1, amended by entries 2 to 7, 17, 23, 30, and 46 (entry 31 annotates 30) |
 | LVL1 | 7 profiles and 8 sub-profiles, each divided into numbered provisions | Adopted |
-| LVL2 | 22 standards, each divided into numbered provisions | Adopted |
+| LVL2 | 23 standards, each divided into numbered provisions | Adopted |
 | Knowledge and tags | `KNOW/` and the seven tag facets of `TAG/` | Planned |
 | LVL3 | Template with project constitution, register, and one example each of authorization, waiver, ruling, axiom, hazard, and safe range | Template |
 
@@ -139,8 +139,9 @@ As of ledger entry 114 (2026-10-24). `show governance ID` prints the current tex
 | STND.MPI | 1.0 | 25 | Message Passing Interface standard |
 | STND.CONC | 1.0 | 29 | Concurrency standard |
 | STND.OMP | 1.0 | 33 | OpenMP standard |
+| STND.OFFLD | 1.0 | 31 | Accelerator offload standard |
 
-The ledger holds 114 transactions: 38 `adopt`, 60 `amend`, 7 `register`, 3 `review`, 3 `rule`, and 3 `annotate`. The mnemonic register `governance/MNEM/_doc.md` (STND.IDENT.19) holds every mnemonic in use; a new mnemonic, including that of a project or of a kind of LVL3 instrument, is registered by the custodians (STND.IDENT.23).
+The ledger holds 116 transactions: 39 `adopt`, 60 `amend`, 8 `register`, 3 `review`, 3 `rule`, and 3 `annotate`. The mnemonic register `governance/MNEM/_doc.md` (STND.IDENT.19) holds every mnemonic in use; a new mnemonic, including that of a project or of a kind of LVL3 instrument, is registered by the custodians (STND.IDENT.23).
 
 ## Commands
 
