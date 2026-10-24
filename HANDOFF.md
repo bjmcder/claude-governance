@@ -1,6 +1,6 @@
 # Governance distribution at ledger entry 109 — handoff for local work
 
-This is the working governance corpus as of 2026-10-24: the snapshot of repository commit `e2b3563` plus ledger entries 46 to 109, all ratified by the custodian and applied with the harness's own commands. `verify` passes. Entries 46 to 109 are committed to a local git repository rooted at this directory; history before the snapshot of `e2b3563` did not carry over.
+This is the working governance corpus as of 2026-10-24: the snapshot of repository commit `e2b3563` plus ledger entries 46 to 110, all ratified by the custodian and applied with the harness's own commands. Entry 110 (HW 1.1.1) was applied in the local repository; its review records are in `review-records/ledger110/`. `verify` passes. Entries 46 to 109 are committed to a local git repository rooted at this directory; history before the snapshot of `e2b3563` did not carry over.
 
 ## Contents
 
@@ -23,11 +23,11 @@ python -B -m govharness check --out-dir /tmp/r governance
 python -B -m unittest discover -s tests -t .     # all 129 pass
 ```
 
-Last ledger entry: seq 109, `2026-10-24T08:38:00+00:00`, hash prefix `bcac6332a0872122`.
+Last ledger entry: seq 110, `2026-10-24T11:32:26+00:00`, hash prefix `02e186d1c4e6e5af` (HW 1.1.1).
 
 ## Repository
 
-The repository is local. Its first commit is the handoff snapshot (`e2b3563` plus entries 46 to 109) with `docs/COMMIT_MSG.txt` as its message; later commits update the harness tests and README to the current corpus. `SHA256SUMS` lists the files as delivered. Harness code for STND.HARN.26 to .28 (unit 0006) is in `govharness/`.
+The repository is local. Its first commit is the handoff snapshot (`e2b3563` plus entries 46 to 109) with `docs/COMMIT_MSG.txt` as its message; later commits update the harness tests and README to the current corpus, add unit 0007 (the secret store in the derived environment), and apply HW 1.1.1. `SHA256SUMS` lists the files as delivered. Harness code for STND.HARN.26 to .28 (unit 0006) is in `govharness/`.
 
 ## How the work has been run (the custodian's standing process)
 
@@ -47,7 +47,5 @@ The repository is local. Its first commit is the handoff snapshot (`e2b3563` plu
 
 ## Open items
 
-- **STND.HARN.18:** map the optional secret store per file and authorization; the remote-write row remains under the transition of entry 53.
-- **Corpus README:** the LVL1 row of `governance/README.md` omits `HDES/` (with `FPGA/` and `ASIC/`); it lies inside the corpus, so correct it by a transaction, not an edit alone.
-- **HW:** at its next revision, add an informative Note that for a multi-process run the execution path of HW.8 is the whole run (ruled with STND.MPI.6).
+- **STND.HARN.18:** the remote-write row remains under the transition of entry 53; letting a write that an authorization names by destination and kind proceed without referral needs an authorization format that STND.PROJ does not yet fix. (The secret store is mapped per file and authorization by unit 0007; confirm on installation that the narrower `allowRead` wins over the store's `denyRead` pattern.)
 - **Next standards, in the custodian's order:** OpenMP (after 6.1 is published), CUDA / accelerator offload (agnostic form), then BUILD (CMake, Automake, Makefiles), C, Rust, Fortran (classic and modern), Verilog/SystemVerilog, and Lean4. Each follows the determinism and agnostic directions above.

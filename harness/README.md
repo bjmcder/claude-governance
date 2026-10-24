@@ -97,7 +97,7 @@ harness/
 
 ## Current state
 
-As of ledger entry 109 (2026-10-24). `show governance ID` prints the current text and revision of any document.
+As of ledger entry 110 (2026-10-24). `show governance ID` prints the current text and revision of any document.
 
 | Level | Contents | Status |
 | --- | --- | --- |
@@ -111,7 +111,7 @@ As of ledger entry 109 (2026-10-24). `show governance ID` prints the current tex
 | --- | --- | --- | --- |
 | AGENT | 1.1 | 47 | Agent practice |
 | NUMER | 1.2 | 29 | Numerical computation |
-| HW | 1.1 | 22 | Execution hardware; sub-profiles CPU (5), GPU (4), QPU (8), EMBED (6), FPGA (4), ASIC (4) |
+| HW | 1.1.1 | 22 | Execution hardware; sub-profiles CPU (5), GPU (4), QPU (8), EMBED (6), FPGA (4), ASIC (4) |
 | HDES | 1.0.1 | 15 | Hardware design; sub-profiles FPGA (5), ASIC (12) |
 | CPS | 1.0 | 9 | Cyber-physical and actuation |
 | MEAS | 1.0 | 7 | Measurement and instrumentation |
@@ -137,7 +137,7 @@ As of ledger entry 109 (2026-10-24). `show governance ID` prints the current tex
 | STND.ANNEX | 1.0 | 10 | Hardware type annex |
 | STND.MPI | 1.0 | 25 | Message Passing Interface standard |
 
-The ledger holds 109 transactions: 36 `adopt`, 59 `amend`, 5 `register`, 3 `review`, 3 `rule`, and 3 `annotate`. The mnemonic register `governance/MNEM/_doc.md` (STND.IDENT.19) holds every mnemonic in use; a new mnemonic, including that of a project or of a kind of LVL3 instrument, is registered by the custodians (STND.IDENT.23).
+The ledger holds 110 transactions: 36 `adopt`, 60 `amend`, 5 `register`, 3 `review`, 3 `rule`, and 3 `annotate`. The mnemonic register `governance/MNEM/_doc.md` (STND.IDENT.19) holds every mnemonic in use; a new mnemonic, including that of a project or of a kind of LVL3 instrument, is registered by the custodians (STND.IDENT.23).
 
 ## Commands
 
@@ -288,7 +288,7 @@ A revision number is `major.minor` or `major.minor.editorial`, as in 1.0 or 1.0.
 - There is no agent context manifest (agent brief) or action-class index.
 - `find` and `context` match words, not meanings: "push" finds the items that say "push", not the definition of remote write, and a question in full sentences matches its common words; give the corpus's own terms.
 - The environment adapter for Claude Code enforces none of the ten outcomes of STND.HARN.18 in full and all ten in part, so its draft entry of STND.DFLT.22 settles no provision; `coverage.md` states each gap.
-- The remote-write outcome is met by referring every remote write. Letting a write that an authorization names by destination and kind proceed without referral needs an authorization format that STND.PROJ does not yet fix.
+- The remote-write outcome is met by referring every remote write, under the transition of ledger entry 53. Letting a write that an authorization names by destination and kind proceed without referral needs an authorization format that STND.PROJ does not yet fix.
 - No signer register is founded yet, so every `signature` field is blank.
 - Authority tiers are classified per sentence by wording. Cross-provision action classes (the same action named in two provisions) are not compared.
 - Imperative sentences are found by a verb list, not a parse (g.8, review).
