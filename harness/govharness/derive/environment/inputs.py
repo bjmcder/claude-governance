@@ -17,6 +17,8 @@ from dataclasses import dataclass
 SOFTWARE_LOCATIONS = ("/usr", "/lib", "/lib64", "/bin", "/sbin", "/opt")
 # Device files that every shell writes to; writing them changes nothing.
 NULL_DEVICES = ("/dev/null", "/dev/stdout", "/dev/stderr", "/dev/tty")
+# The directory of STND.DFLT.29, at the top of the work.
+STORE = "secrets"
 
 
 @dataclass(frozen=True)
@@ -44,6 +46,11 @@ class Inputs:
     assured : bool
         Whether the classification records the work as CSQ0 or CSQ1
         (STND.DFLT, term "Assured work").
+    secret_store : bool
+        Whether the human owner provides the store of STND.DFLT.29.
+    secrets : tuple[str, ...]
+        Names of the files of that store whose secrets an authorization
+        permits the agent to handle; naming one provides the store.
     """
 
     work: str
@@ -54,19 +61,24 @@ class Inputs:
     tools: tuple[str, ...] = ()
     unattended: bool = False
     assured: bool = False
+    secret_store: bool = False
+    secrets: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         """Reject an input the configuration would misread.
 
         A relative path would move with the caller; a domain in another
         case never matches the guard's lower-case host; a tool pattern
-        outside ``mcp__`` would allow a built-in tool unchecked.
+        outside ``mcp__`` would allow a built-in tool unchecked; a secret
+        name with a slash, or ``.`` or ``..``, would open a location
+        other than one file of the store.
 
         Raises
         ------
         ValueError
             If a path is not absolute, a domain is no lower-case domain
-            name, or a tool pattern names no tool of another server.
+            name, a tool pattern names no tool of another server, or a
+            secret name is no file name.
         """
         for path in (self.work, self.home, *self.open_paths):
             if not path.startswith("/"):
@@ -79,6 +91,34 @@ class Inputs:
         for tool in self.tools:
             if not tool.startswith("mcp__") or "(" in tool:
                 raise ValueError(f"{tool}: not a pattern of mcp__ tools")
+        for name in self.secrets:
+            if name in {"", ".", ".."} or "/" in name:
+                raise ValueError(f"{name!r}: not a file name of the store")
+
+    @property
+    def store(self) -> str | None:
+        """Return the directory of STND.DFLT.29, where one is provided.
+
+        Returns
+        -------
+        str | None
+            Its absolute path, or None without a store.
+        """
+        if self.secret_store or self.secrets:
+            return f"{self.work.rstrip('/')}/{STORE}"
+        return None
+
+    @property
+    def secret_paths(self) -> tuple[str, ...]:
+        """Return the files of the store opened to the agent.
+
+        Returns
+        -------
+        tuple[str, ...]
+            Absolute paths, one per named secret.
+        """
+        store = self.store
+        return tuple(f"{store}/{name}" for name in self.secrets)
 
     @property
     def writable(self) -> tuple[str, ...]:

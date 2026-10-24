@@ -137,6 +137,33 @@ COVERAGE_TABLE: dict[str, tuple[str, str]] = {
         "and the write is not seen.",
     ),
 }
+# What a provided secret store adds to the gap of an outcome.
+STORE_GAPS: dict[str, str] = {
+    "read-bounds": (
+        "While the sandbox runs, it keeps shell commands from reading the "
+        "entries of the secret store other than the opened files, by a "
+        "pattern for the entries and a narrower allowance for each opened "
+        "file; a program that the guard does not read, such as an "
+        "interpreter or an archiver, reaches the store only through the "
+        "sandbox. The guard checks the file tools and the shell paths it "
+        "reads where their links lead, and refers a Grep, or a copy of a "
+        "directory, that takes in the store while the store holds a file "
+        "not opened. It compares names as the file system spells them, so "
+        "on a file system that ignores case another spelling of a closed "
+        "file is not seen. A tool of another server reads the store "
+        "unseen."
+    ),
+    "write-bounds": (
+        "While the sandbox runs, it denies shell commands every write in "
+        "the secret store, so an opened secret is written by the file "
+        "tools, which the guard checks by path. A shell command therefore "
+        "neither changes the store's permissions nor removes a file of it, "
+        "so the agent refers the restoring of the permissions that "
+        "STND.DFLT.30 asks for, and the removal of a secret the work no "
+        "longer needs. The guard refuses a move or removal that takes in "
+        "the store while it holds a file not opened."
+    ),
+}
 # Text rules by outcome; each goes to "deny" or "ask" by the response.
 RULES: dict[str, tuple[str, ...]] = {
     "elevated-privilege": (
@@ -305,7 +332,9 @@ def edit_rule(location: str) -> str:
     return f"Edit(/{location}{suffix})"
 
 
-def assess(outcomes: list[Outcome], locations: Locations) -> list[Coverage]:
+def assess(
+    outcomes: list[Outcome], locations: Locations, inputs: Inputs
+) -> list[Coverage]:
     """Return the coverage of each outcome (STND.HARN.19).
 
     Parameters
@@ -314,6 +343,8 @@ def assess(outcomes: list[Outcome], locations: Locations) -> list[Coverage]:
         Outcomes of STND.HARN.18.
     locations : Locations
         The protected locations as mapped.
+    inputs : Inputs
+        The owner's statement of the environment.
 
     Returns
     -------
@@ -329,6 +360,8 @@ def assess(outcomes: list[Outcome], locations: Locations) -> list[Coverage]:
         if outcome.key == "protected-locations" and locations.unmapped:
             level = PARTIAL if locations.paths else NONE
             gap += " Rows not mapped: " + "; ".join(locations.unmapped) + "."
+        if inputs.store and outcome.key in STORE_GAPS:
+            gap += " " + STORE_GAPS[outcome.key]
         found.append(Coverage(outcome, level, gap))
     return found
 
@@ -363,6 +396,8 @@ def guard_policy(
         "domains": list(inputs.domains),
         "search": inputs.search,
         "tools": list(inputs.tools),
+        "store": inputs.store or "",
+        "secrets": list(inputs.secret_paths),
         "responses": {o.key: o.response for o in outcomes},
         "unattended": inputs.unattended,
     }
@@ -436,6 +471,19 @@ def settings(outcomes: list[Outcome], inputs: Inputs) -> dict[str, object]:
     allow += ["WebSearch"] if inputs.search else []
     allow += list(inputs.tools)
     command = hook_command(inputs.assured)
+    filesystem: dict[str, list[str]] = {
+        "allowWrite": [inputs.work, *inputs.open_paths],
+        # The work holds its own settings; a program run by the shell
+        # must not rewrite them.
+        "denyWrite": list(configuration_locations(inputs)),
+    }
+    if inputs.store:
+        # Read rules take wildcards and the narrower path wins; write
+        # rules take no wildcards on Linux, and the documentation does
+        # not say that a narrower path reopens one for writing.
+        filesystem["denyRead"] = [f"{inputs.store}/*", f"{inputs.store}/.*"]
+        filesystem["allowRead"] = list(inputs.secret_paths)
+        filesystem["denyWrite"].append(inputs.store)
     return {
         "allowManagedHooksOnly": True,
         "allowManagedPermissionRulesOnly": True,
@@ -463,12 +511,7 @@ def settings(outcomes: list[Outcome], inputs: Inputs) -> dict[str, object]:
             "failIfUnavailable": inputs.assured,
             "allowUnsandboxedCommands": False,
             "autoAllowBashIfSandboxed": True,
-            "filesystem": {
-                "allowWrite": [inputs.work, *inputs.open_paths],
-                # The work holds its own settings; a program run by the
-                # shell must not rewrite them.
-                "denyWrite": list(configuration_locations(inputs)),
-            },
+            "filesystem": filesystem,
             "network": {"allowedDomains": list(inputs.domains)},
         },
     }
@@ -678,7 +721,7 @@ def render(
     """
     table, outcomes = read_outcomes(corpus)
     locations = protected_locations(read_protected(corpus), inputs)
-    coverage = assess(outcomes, locations)
+    coverage = assess(outcomes, locations, inputs)
     installed = {
         SETTINGS: json.dumps(settings(outcomes, inputs), indent=2) + "\n",
         POLICY: json.dumps(

@@ -46,6 +46,8 @@ POLICY = {
     "domains": ["pypi.org"],
     "search": False,
     "tools": ["mcp__memory__*"],
+    "store": "",
+    "secrets": [],
     "responses": RESPONSES,
     "unattended": False,
 }
@@ -520,6 +522,319 @@ class RemoteAndSelective(unittest.TestCase):
         ):
             with self.subTest(command=command):
                 self.assertIn("selective-destruction", shell(command))
+
+
+STORE = f"{WORK}/secrets"
+STORE_POLICY = {**POLICY, "store": STORE, "secrets": [f"{STORE}/token"]}
+
+
+def store_work(tmp: str) -> tuple[str, dict]:
+    """Make a work with a store in a temporary directory.
+
+    Parameters
+    ----------
+    tmp : str
+        The temporary directory.
+
+    Returns
+    -------
+    tuple[str, dict]
+        The work, whose store holds ``token`` (opened) and ``key``, and
+        the policy in JSON form.
+    """
+    work = str(Path(tmp).resolve())
+    store = f"{work}/secrets"
+    Path(store).mkdir()
+    for name in ("token", "key"):
+        Path(f"{store}/{name}").write_text("x", encoding="utf-8")
+    policy = {
+        **POLICY,
+        "work": work,
+        "writable": [work, "/dev/null"],
+        "store": store,
+        "secrets": [f"{store}/token"],
+    }
+    return work, policy
+
+
+def in_work(work: str, policy: dict, tool: str, data: dict) -> set:
+    """Return the outcome keys one call reaches from a given work.
+
+    Parameters
+    ----------
+    work : str
+        Directory the call runs in.
+    policy : dict
+        Policy in JSON form.
+    tool : str
+        Tool name.
+    data : dict
+        Tool input.
+
+    Returns
+    -------
+    set
+        Keys of the outcomes reached.
+    """
+    event = {"tool_name": tool, "tool_input": data, "cwd": work}
+    found = guard.check_call(event, guard.read_policy(policy))
+    return {key for key, _ in found.reached}
+
+
+class SecretStore(unittest.TestCase):
+    """STND.DFLT.29: a file of the store is in bounds only once opened."""
+
+    STORE = STORE
+
+    def store_outcomes(self, tool: str, data: dict) -> set:
+        """Return the outcome keys one call reaches with a store.
+
+        Parameters
+        ----------
+        tool : str
+            Tool name.
+        data : dict
+            Tool input.
+
+        Returns
+        -------
+        set
+            Keys of the outcomes reached.
+        """
+        return outcomes_of(tool, data, STORE_POLICY)
+
+    def test_closed_file(self) -> None:
+        """Behavior: reading or writing a file of the store that is not
+        opened reaches read-bounds or write-bounds, by the file tools and
+        by the shell.
+
+        Reference: the term Working bounds of STND.DFLT; the file
+        ``secrets/key`` is not opened by the policy.
+        """
+        key = f"{self.STORE}/key"
+        self.assertEqual(
+            self.store_outcomes("Read", {"file_path": key}), {"read-bounds"}
+        )
+        self.assertEqual(
+            self.store_outcomes("Write", {"file_path": key}), {"write-bounds"}
+        )
+        for command, outcome in (
+            ("cat secrets/key", "read-bounds"),
+            ("echo x > secrets/key", "write-bounds"),
+            ("echo x >> secrets/key", "write-bounds"),
+            ("cp notes.txt secrets/key", "write-bounds"),
+        ):
+            with self.subTest(command=command):
+                found = self.store_outcomes("Bash", {"command": command})
+                self.assertIn(outcome, found)
+
+    def test_opened_file_and_directory(self) -> None:
+        """Behavior: the opened file, and the directory itself, are in
+        bounds.
+
+        Reference: ``secrets/token`` is opened by the policy; the names
+        of the store hold no secret (STND.DFLT.29), and STND.DFLT.30 has
+        the agent confirm the directory's permissions.
+        """
+        token = f"{self.STORE}/token"
+        for tool in ("Read", "Write", "Edit"):
+            with self.subTest(tool=tool):
+                found = self.store_outcomes(tool, {"file_path": token})
+                self.assertEqual(found, set())
+        for command in (
+            "cat secrets/token",
+            "ls -la secrets",
+            "stat secrets",
+        ):
+            with self.subTest(command=command):
+                found = self.store_outcomes("Bash", {"command": command})
+                self.assertEqual(found, set())
+
+    def test_link_into_store(self) -> None:
+        """Behavior: a symbolic link that leads to a closed file of the
+        store reaches read-bounds.
+
+        Reference: paths resolve through links as the guard resolves
+        them elsewhere; the link sits in a temporary work.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            work = str(Path(tmp).resolve())
+            store = f"{work}/secrets"
+            Path(store).mkdir()
+            Path(f"{store}/key").write_text("x", encoding="utf-8")
+            Path(f"{work}/alias").symlink_to(f"{store}/key")
+            policy = {
+                **POLICY,
+                "work": work,
+                "writable": [work, "/dev/null"],
+                "store": store,
+                "secrets": [],
+            }
+            found = outcomes_of("Read", {"file_path": f"{work}/alias"}, policy)
+        self.assertEqual(found, {"read-bounds"})
+
+    def test_search_over_the_store(self) -> None:
+        """Behavior: Grep over a directory that holds the store reaches
+        read-bounds while the store holds a closed file, and passes when
+        it holds only opened files or does not exist; Glob passes.
+
+        Reference: STND.DFLT.31; a store in a temporary work holding
+        ``token`` (opened) and, in the first case, ``key``.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            work = str(Path(tmp).resolve())
+            store = f"{work}/secrets"
+            policy = {
+                **POLICY,
+                "work": work,
+                "writable": [work, "/dev/null"],
+                "store": store,
+                "secrets": [f"{store}/token"],
+            }
+            grep = {"pattern": "x", "path": work}
+            glob = {"pattern": "**/*", "path": work}
+            self.assertEqual(outcomes_of("Grep", grep, policy), set())
+            Path(store).mkdir()
+            Path(f"{store}/token").write_text("x", encoding="utf-8")
+            self.assertEqual(outcomes_of("Grep", grep, policy), set())
+            Path(f"{store}/key").write_text("x", encoding="utf-8")
+            self.assertEqual(
+                outcomes_of("Grep", grep, policy), {"read-bounds"}
+            )
+            inside = {"pattern": "x", "path": store}
+            self.assertEqual(
+                outcomes_of("Grep", inside, policy), {"read-bounds"}
+            )
+            elsewhere = {"pattern": "x", "path": f"{work}/src"}
+            self.assertEqual(outcomes_of("Grep", elsewhere, policy), set())
+            self.assertEqual(outcomes_of("Glob", glob, policy), set())
+
+    def test_store_is_a_link(self) -> None:
+        """Behavior: where the store is a symbolic link, its closed files
+        are reached where the link leads.
+
+        Reference: unit 0007 criterion 2; review 0007 found the store
+        compared as spelled.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            work, policy = store_work(tmp)
+            Path(f"{work}/secrets").rename(f"{work}/other")
+            Path(f"{work}/secrets").symlink_to(f"{work}/other")
+            closed = {"file_path": f"{work}/secrets/key"}
+            opened = {"file_path": f"{work}/secrets/token"}
+            grep = {"pattern": "x", "path": f"{work}/secrets"}
+            self.assertEqual(
+                in_work(work, policy, "Read", closed), {"read-bounds"}
+            )
+            self.assertEqual(in_work(work, policy, "Read", opened), set())
+            self.assertEqual(
+                in_work(work, policy, "Grep", grep), {"read-bounds"}
+            )
+            direct = {"file_path": f"{work}/other/key"}
+            self.assertEqual(
+                in_work(work, policy, "Read", direct), {"read-bounds"}
+            )
+
+    def test_directory_operands(self) -> None:
+        """Behavior: a copy, move, or removal that takes in the store
+        while it holds a closed file reaches read-bounds or write-bounds;
+        a change of the store's permissions passes.
+
+        Reference: unit 0007 criterion 2; review 0007 found that
+        ``cp -r`` and ``mv`` of the directory passed. STND.DFLT.30 has
+        the agent restore the directory's permissions.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            work, policy = store_work(tmp)
+            for command, outcome in (
+                ("cp -r secrets other", "read-bounds"),
+                ("cp -r . ../copy", "read-bounds"),
+                ("mv secrets other", "write-bounds"),
+                ("mv secrets/* other", "write-bounds"),
+                ("rm -r secrets", "write-bounds"),
+            ):
+                with self.subTest(command=command):
+                    found = in_work(work, policy, "Bash", {"command": command})
+                    self.assertIn(outcome, found)
+            chmod = {"command": "chmod 700 secrets"}
+            self.assertEqual(in_work(work, policy, "Bash", chmod), set())
+
+    def test_unlistable_store(self) -> None:
+        """Behavior: a store that exists but cannot be listed counts as
+        holding a closed file.
+
+        Reference: review 0007; a store that is a file, and one whose
+        listing is refused, are both unknown, so the search is referred.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            work, policy = store_work(tmp)
+            grep = {"pattern": "x", "path": work}
+            with mock.patch.object(
+                guard.os, "listdir", side_effect=PermissionError
+            ):
+                found = in_work(work, policy, "Grep", grep)
+            self.assertEqual(found, {"read-bounds"})
+        with tempfile.TemporaryDirectory() as tmp:
+            work = str(Path(tmp).resolve())
+            Path(f"{work}/secrets").write_text("x", encoding="utf-8")
+            policy = {
+                **POLICY,
+                "work": work,
+                "writable": [work, "/dev/null"],
+                "store": f"{work}/secrets",
+                "secrets": [],
+            }
+            grep = {"pattern": "x", "path": work}
+            self.assertEqual(
+                in_work(work, policy, "Grep", grep), {"read-bounds"}
+            )
+
+    def test_search_inside_and_hidden(self) -> None:
+        """Behavior: Grep on a directory under the store, with a glob or
+        not, reaches read-bounds; a hidden closed file counts.
+
+        Reference: unit 0007 criterion 3; STND.DFLT.31.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            work, policy = store_work(tmp)
+            Path(f"{work}/secrets/sub").mkdir()
+            sub = {"pattern": "x", "path": f"{work}/secrets/sub"}
+            self.assertEqual(
+                in_work(work, policy, "Grep", sub), {"read-bounds"}
+            )
+            Path(f"{work}/secrets/key").unlink()
+            Path(f"{work}/secrets/sub").rmdir()
+            top = {"pattern": "x", "path": work, "glob": "*.py"}
+            self.assertEqual(in_work(work, policy, "Grep", top), set())
+            Path(f"{work}/secrets/.key").write_text("x", encoding="utf-8")
+            self.assertEqual(
+                in_work(work, policy, "Grep", top), {"read-bounds"}
+            )
+
+    def test_no_store(self) -> None:
+        """Behavior: without a store, a directory named secrets is part
+        of the work.
+
+        Reference: STND.DFLT.29 applies only where the human owner
+        provides a store.
+        """
+        key = {"file_path": f"{WORK}/secrets/key"}
+        self.assertEqual(outcomes_of("Read", key), set())
+        self.assertEqual(outcomes_of("Write", key), set())
+
+    def test_policy_needs_the_fields(self) -> None:
+        """Behavior: a policy without the store fields is refused.
+
+        Reference: the guard reads a policy rendered with it; a stale
+        policy must not open the store by its silence.
+        """
+        for name in ("store", "secrets"):
+            with self.subTest(name=name):
+                stale = {k: v for k, v in POLICY.items() if k != name}
+                with self.assertRaises(KeyError):
+                    guard.read_policy(stale)
+        with self.assertRaises(ValueError):
+            guard.read_policy({**POLICY, "store": None})
 
 
 class Decisions(unittest.TestCase):

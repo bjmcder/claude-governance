@@ -245,6 +245,151 @@ class Derivation(unittest.TestCase):
             Inputs(work="work", home="/home/agent")
 
 
+class SecretStore(unittest.TestCase):
+    """The store of STND.DFLT.29 maps per file and authorization."""
+
+    STORE = "/srv/work/secrets"
+    WITH_STORE = Inputs(
+        work="/srv/work", home="/home/agent", secrets=("token",)
+    )
+
+    def filesystem(self, inputs: Inputs) -> dict:
+        """Return the sandbox's file system settings for some inputs.
+
+        Parameters
+        ----------
+        inputs : Inputs
+            The owner's statement of the environment.
+
+        Returns
+        -------
+        dict
+            The ``sandbox.filesystem`` object of the managed settings.
+        """
+        files = rendered(live_corpus(), inputs)
+        settings = json.loads(files[claude_code.SETTINGS])
+        return settings["sandbox"]["filesystem"]
+
+    def test_names_refused(self) -> None:
+        """Behavior: a secret name that is no file name of the store is
+        refused.
+
+        Reference: unit 0007 criterion 1; each name opens one file.
+        """
+        for name in ("", ".", "..", "a/b", "../key"):
+            with self.subTest(name=name):
+                with self.assertRaises(ValueError):
+                    Inputs(work="/w", home="/h", secrets=(name,))
+
+    def test_no_store_leaves_settings(self) -> None:
+        """Behavior: without a store the sandbox has no read rules and
+        the policy names no store.
+
+        Reference: unit 0007 criterion 1.
+        """
+        self.assertEqual(
+            set(self.filesystem(INPUTS)), {"allowWrite", "denyWrite"}
+        )
+        self.assertNotIn(self.STORE, self.filesystem(INPUTS)["denyWrite"])
+        policy = json.loads(rendered(live_corpus())[claude_code.POLICY])
+        self.assertEqual((policy["store"], policy["secrets"]), ("", []))
+
+    def test_store_in_sandbox_and_policy(self) -> None:
+        """Behavior: with a store, the sandbox denies reads of its
+        entries, allows the opened file, and denies every write in it;
+        the policy names the store and the opened file; no permission
+        rule names the store.
+
+        Reference: unit 0007 criteria 2 and 4, and the documented rule
+        that the narrower read path wins.
+        """
+        fs = self.filesystem(self.WITH_STORE)
+        self.assertEqual(
+            fs["denyRead"], [f"{self.STORE}/*", f"{self.STORE}/.*"]
+        )
+        self.assertEqual(fs["allowRead"], [f"{self.STORE}/token"])
+        self.assertIn(self.STORE, fs["denyWrite"])
+        self.assertEqual(fs["allowWrite"], ["/srv/work"])
+        files = rendered(live_corpus(), self.WITH_STORE)
+        policy = json.loads(files[claude_code.POLICY])
+        self.assertEqual(policy["store"], self.STORE)
+        self.assertEqual(policy["secrets"], [f"{self.STORE}/token"])
+        rules = json.loads(files[claude_code.SETTINGS])["permissions"]
+        for kind in ("allow", "ask", "deny"):
+            with self.subTest(kind=kind):
+                self.assertFalse([r for r in rules[kind] if "secrets" in r])
+
+    def test_store_without_names(self) -> None:
+        """Behavior: ``secret_store`` alone closes every file of the
+        store.
+
+        Reference: unit 0007 criterion 1; no file is opened.
+        """
+        inputs = Inputs(work="/srv/work", home="/h", secret_store=True)
+        fs = self.filesystem(inputs)
+        self.assertEqual(
+            fs["denyRead"], [f"{self.STORE}/*", f"{self.STORE}/.*"]
+        )
+        self.assertEqual(fs["allowRead"], [])
+        self.assertIn(self.STORE, fs["denyWrite"])
+
+    def test_coverage_names_the_gaps(self) -> None:
+        """Behavior: with a store, the rows of read-bounds and
+        write-bounds state the store's gaps, and no row is full.
+
+        Reference: unit 0007 criterion 5; STND.HARN.19.
+        """
+        files = rendered(live_corpus(), self.WITH_STORE)
+        report = files[claude_code.COVERAGE]
+        rows = {
+            line.split("|")[1].strip(): line
+            for line in report.splitlines()
+            if line.startswith("| ") and "---" not in line
+        }
+        for key in ("read-bounds", "write-bounds"):
+            with self.subTest(key=key):
+                self.assertIn("While the sandbox runs", rows[key])
+        self.assertIn("ignores case", rows["read-bounds"])
+        self.assertIn("STND.DFLT.30", rows["write-bounds"])
+        self.assertNotIn("| full |", report)
+        plain = rendered(live_corpus())[claude_code.COVERAGE]
+        self.assertNotIn("secret store", plain)
+
+    def test_command_options(self) -> None:
+        """Behavior: ``--secret`` reaches the settings, and a name with
+        a slash exits 1 with a message.
+
+        Reference: unit 0007 criterion 1.
+        """
+        with corpus_copy() as root:
+            out = root.parent / "out"
+            base = ["environment", str(root), "--work", str(root)]
+            base += ["--home", str(root), "--write", str(out)]
+            with contextlib.redirect_stdout(io.StringIO()):
+                code = main([*base, "--secret", "token"])
+            settings = json.loads((out / claude_code.SETTINGS).read_text())
+            with contextlib.redirect_stdout(io.StringIO()):
+                alone = main([*base, "--secret-store"])
+            closed = json.loads((out / claude_code.SETTINGS).read_text())
+            err = io.StringIO()
+            with contextlib.redirect_stderr(err):
+                bad = main([*base, "--secret", "a/b"])
+                empty = main([*base, "--secret", ""])
+        self.assertEqual((alone, empty), (0, 1))
+        self.assertEqual(closed["sandbox"]["filesystem"]["allowRead"], [])
+        self.assertIn(
+            f"{root.resolve()}/secrets",
+            closed["sandbox"]["filesystem"]["denyWrite"],
+        )
+        self.assertEqual(code, 0)
+        self.assertEqual(
+            settings["sandbox"]["filesystem"]["allowRead"],
+            [f"{root.resolve()}/secrets/token"],
+        )
+        self.assertEqual(bad, 1)
+        self.assertIn("not a file name of the store", err.getvalue())
+
+
 class Command(unittest.TestCase):
     """The ``environment`` command reports a governance fault plainly."""
 

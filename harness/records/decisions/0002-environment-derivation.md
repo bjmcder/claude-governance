@@ -60,3 +60,10 @@ The human owner wants agents to run unattended, without approving routine action
 | Rule as decided above | Adjustment | Reason |
 | --- | --- | --- |
 | STND.HARN.21 holds the table of outcomes | STND.HARN 0.6 numbers it STND.HARN.24; the table keeps its name `environment-outcomes`. Configuration failure stays STND.HARN.29 | Retrieval provisions come first in the draft (review 0006) |
+
+## Adjustments made by unit 0007
+
+| Rule as decided above | Adjustment | Reason |
+| --- | --- | --- |
+| The work is writable and readable as a whole | Where the human owner provides the store of STND.DFLT.29 (`--secret-store`), each file under `<work>/secrets` lies outside the working bounds except those an authorization opens (`--secret NAME`). The guard checks the file tools, the shell paths it reads, Grep, and copies, moves, and removals that take in the store, at the real paths of the store and the opened files. The sandbox denies shell reads of the store's entries, allows each opened file by the narrower read path, and denies every shell write in the store | The term Working bounds of STND.DFLT admits a file of the store only to an agent authorized for its secret, and the Notes of STND.DFLT have the harness map it. No permission rule is used, because a deny or ask rule over the store would override an allow rule for an opened file; the documentation does not state that a narrower path reopens one for writing. The denial of shell writes also keeps a shell command from changing the store's permissions or removing a file of it; the agent refers those, as STND.DFLT.30 has it refer what it is unable to restore, rather than letting a program the guard does not read rename or overwrite a closed secret |
+| A guard fault denies the call once the policy is read | A store that exists but cannot be listed counts as holding a closed file | Fail closed (review 0007 of unit 0007) |

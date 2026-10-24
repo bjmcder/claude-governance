@@ -178,6 +178,7 @@ POLICY_LISTS = (
     "ledgers",
     "domains",
     "tools",
+    "secrets",
 )
 
 
@@ -207,6 +208,10 @@ class Policy:
         Whether web search is a retrieval scope of the agent.
     tools : tuple[str, ...]
         Patterns of the tools of other servers the agent may call.
+    store : str
+        Directory of STND.DFLT.29, or empty where the work keeps none.
+    secrets : tuple[str, ...]
+        Files of the store that the agent may read and write.
     responses : dict[str, str]
         Decision by outcome key, ``deny`` or ``ask``.
     unattended : bool
@@ -223,6 +228,8 @@ class Policy:
     domains: tuple[str, ...]
     search: bool
     tools: tuple[str, ...]
+    store: str
+    secrets: tuple[str, ...]
     responses: dict[str, str]
     unattended: bool
 
@@ -301,9 +308,11 @@ def read_policy(data: dict[str, Any]) -> Policy:
     KeyError
         If a field is missing.
     ValueError
-        If a list field is not a list of strings, or a response is
-        neither Refuse nor Refer.
+        If a list field is not a list of strings, the store is no
+        string, or a response is neither Refuse nor Refer.
     """
+    if not isinstance(data["store"], str):
+        raise ValueError("policy field store is no string")
     for name in POLICY_LISTS:
         values = data[name]
         if not isinstance(values, list) or not all(
@@ -326,6 +335,8 @@ def read_policy(data: dict[str, Any]) -> Policy:
         domains=tuple(data["domains"]),
         search=bool(data["search"]),
         tools=tuple(data["tools"]),
+        store=str(data["store"]),
+        secrets=tuple(data["secrets"]),
         responses=responses,
         unattended=bool(data["unattended"]),
     )
@@ -385,6 +396,67 @@ def within(path: str, roots: tuple[str, ...]) -> bool:
         path == root or path.startswith(root.rstrip("/") + "/")
         for root in roots
     )
+
+
+def secret_file(path: str, policy: Policy) -> bool:
+    """Return whether a path is a file of the store not opened to the agent.
+
+    Parameters
+    ----------
+    path : str
+        Absolute, normalized path, with its links resolved.
+    policy : Policy
+        The policy.
+
+    Returns
+    -------
+    bool
+        Whether the path lies under the store and is no opened file; the
+        directory itself, whose names hold no secret, is not one
+        (STND.DFLT.29). The store and the opened files are compared
+        where their links lead, as the path is.
+    """
+    if not policy.store:
+        return False
+    store = real_path(policy.store)
+    opened = tuple(real_path(s) for s in policy.secrets)
+    return (
+        within(path, (store,))
+        and path != store
+        and not within(path, opened)
+    )
+
+
+def holds_secrets(path: str, policy: Policy) -> bool:
+    """Return whether an action on a directory would reach a closed secret.
+
+    Parameters
+    ----------
+    path : str
+        Absolute, normalized directory that a search, copy, move, or
+        removal takes whole, with its links resolved.
+    policy : Policy
+        The policy.
+
+    Returns
+    -------
+    bool
+        Whether the directory is the store or holds it, and the store
+        holds an entry that is no opened file (STND.DFLT.31). A store
+        that exists but cannot be listed counts as holding one.
+    """
+    if not policy.store:
+        return False
+    store = real_path(policy.store)
+    if not within(store, (path,)):
+        return False
+    try:
+        names = os.listdir(store)
+    except FileNotFoundError:
+        return False
+    except OSError:
+        return True
+    return any(secret_file(real_path(f"{store}/{n}"), policy) for n in names)
 
 
 def protected_target(path: str, policy: Policy) -> str | None:
@@ -1005,6 +1077,9 @@ def check_removal(
                     "protected-locations", f"takes {location} out of use"
                 )
             check_written(path, scan.policy, found)
+            if holds_secrets(real_path(path), scan.policy):
+                reason = f"moves or removes the store: {path}"
+                found.add("write-bounds", reason)
 
 
 def check_pattern(pattern: str, scan: Scan, directories: bool) -> None:
@@ -1038,6 +1113,8 @@ def check_pattern(pattern: str, scan: Scan, directories: bool) -> None:
     ):
         found.add("record-entries", f"pattern {pattern} selects a ledger")
     check_written(base, policy, found)
+    if holds_secrets(real_path(base), policy):
+        found.add("write-bounds", f"pattern {pattern} selects the store")
 
 
 def check_written(path: str, policy: Policy, found: Findings) -> None:
@@ -1061,6 +1138,8 @@ def check_written(path: str, policy: Policy, found: Findings) -> None:
     # The write lands where the links lead.
     if not within(real, policy.writable):
         found.add("write-bounds", f"writes {real}")
+    elif secret_file(real, policy):
+        found.add("write-bounds", f"writes secret store file {real}")
 
 
 def check_read(path: str, policy: Policy, found: Findings) -> None:
@@ -1078,6 +1157,8 @@ def check_read(path: str, policy: Policy, found: Findings) -> None:
     real = real_path(path)
     if not within(real, policy.readable + policy.writable):
         found.add("read-bounds", f"reads {real}")
+    elif secret_file(real, policy):
+        found.add("read-bounds", f"reads secret store file {real}")
 
 
 def check_writes(targets: list[str], scan: Scan, append: bool) -> None:
@@ -1109,6 +1190,10 @@ def check_writes(targets: list[str], scan: Scan, append: bool) -> None:
                 scan.found.add("enforcing-configuration", f"changes {path}")
             if not within(real, scan.policy.writable):
                 scan.found.add("write-bounds", f"writes {real}")
+            elif secret_file(real, scan.policy):
+                scan.found.add(
+                    "write-bounds", f"writes secret store file {real}"
+                )
 
 
 def check_reads(targets: list[str], scan: Scan) -> None:
@@ -1125,6 +1210,23 @@ def check_reads(targets: list[str], scan: Scan) -> None:
     for target in targets:
         for path in resolve(target, scan) or []:
             check_read(path, scan.policy, scan.found)
+
+
+def check_copied(sources: list[str], scan: Scan) -> None:
+    """Check the sources of a copy for a directory that holds the store.
+
+    Parameters
+    ----------
+    sources : list[str]
+        Operands as the line gives them; a computed one is left to the
+        sandbox, as for other reads.
+    scan : Scan
+        The reading so far.
+    """
+    for source in sources:
+        for path in resolve(source, scan) or []:
+            if holds_secrets(real_path(path), scan.policy):
+                scan.found.add("read-bounds", f"copies the store: {path}")
 
 
 def check_git(words: list[str], scan: Scan) -> None:
@@ -1452,6 +1554,7 @@ def check_simple(words: list[str], piped: bool, scan: Scan) -> None:
         check_writes([destination] if destination else [], scan, False)
         if name == "cp":
             check_reads(sources, scan)
+            check_copied(sources, scan)
     elif name in CREATORS:
         check_writes(args, scan, append=False)
     elif name in {"sed", "perl"} and (
@@ -1726,6 +1829,9 @@ def check_call(event: dict[str, Any], policy: Policy) -> Findings:
             if isinstance(pattern, str) and has_glob(pattern):
                 path = pattern_base(tool_path(pattern, path))
             check_read(path, policy, found)
+            if tool == "Grep" and holds_secrets(real_path(path), policy):
+                reason = f"searches the secret store from {path}"
+                found.add("read-bounds", reason)
     elif tool in {"WebFetch", "WebSearch"}:
         check_web(tool, data, policy, found)
     elif tool.startswith("mcp__") and not any(

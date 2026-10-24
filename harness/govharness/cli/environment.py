@@ -48,6 +48,18 @@ def add_environment(sub: argparse._SubParsersAction) -> None:
     command.add_argument("--search", action="store_true")
     command.add_argument("--unattended", action="store_true")
     command.add_argument(
+        "--secret-store",
+        action="store_true",
+        help="the human owner provides the store of STND.DFLT.29",
+    )
+    command.add_argument(
+        "--secret",
+        action="append",
+        default=[],
+        metavar="NAME",
+        help="a file of the store the agent is authorized to handle",
+    )
+    command.add_argument(
         "--assured",
         action="store_true",
         help="the classification records the work as CSQ0 or CSQ1",
@@ -81,6 +93,8 @@ def inputs_of(args: argparse.Namespace) -> Inputs:
         tools=tuple(args.tool),
         unattended=args.unattended,
         assured=args.assured,
+        secret_store=args.secret_store,
+        secrets=tuple(args.secret),
     )
 
 
