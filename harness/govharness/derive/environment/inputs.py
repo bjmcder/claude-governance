@@ -87,6 +87,10 @@ class Inputs:
     referred : tuple[str, ...]
         One line per authorization the owner named whose writes stay
         referred, such as one per action, with the reason.
+    unsigned : tuple[str, ...]
+        Identifiers of the authorizations relied on unsigned, which the
+        owner accepted with ``--accept-unsigned`` where no signer
+        register exists (unit 0010).
     """
 
     work: str
@@ -101,6 +105,7 @@ class Inputs:
     secrets: tuple[str, ...] = ()
     remote_writes: tuple[RemoteWrite, ...] = ()
     referred: tuple[str, ...] = ()
+    unsigned: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         """Reject an input the configuration would misread.

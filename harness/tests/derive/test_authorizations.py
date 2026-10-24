@@ -16,10 +16,12 @@ from __future__ import annotations
 import contextlib
 import io
 import json
+import shutil
 import tempfile
 import unittest
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from unittest import mock
 
 from govharness.cli.main import main
 from govharness.core.corpus import Corpus, corpus_hash, read_corpus, read_tree
@@ -27,10 +29,14 @@ from govharness.derive.environment import claude_code
 from govharness.derive.environment.authorizations import (
     Reading,
     read_authorizations,
+    register_recorded,
 )
 from govharness.derive.environment.inputs import Inputs, RemoteWrite
-from govharness.ledger.chain import append, read_ledger
+from govharness.ledger.chain import Signer, append, read_ledger
+from govharness.ledger.gpg import SignerConfig
 from govharness.ledger.transactions import parse_ledger
+from govharness.workflows.signers import add_signer, found_register
+from tests.gpgkeys import keyring, make_key
 from tests.support import corpus_copy, live_entries
 
 NOW = datetime(2026, 10, 24, 12, 0, tzinfo=timezone.utc)
@@ -81,7 +87,12 @@ def write_authorization(root: Path, **fields: object) -> None:
     )
 
 
-def record(root: Path, kind: str = "authorize", **fields: object) -> None:
+def record(
+    root: Path,
+    kind: str = "authorize",
+    signer: Signer | None = None,
+    **fields: object,
+) -> None:
     """Append the transaction that pins the authorization.
 
     Parameters
@@ -90,6 +101,8 @@ def record(root: Path, kind: str = "authorize", **fields: object) -> None:
         Corpus root.
     kind : str
         Transaction type.
+    signer : Signer | None
+        Key and keyring that sign the transaction, or None.
     **fields : object
         Fields that replace those of the human owner's transaction.
     """
@@ -107,7 +120,7 @@ def record(root: Path, kind: str = "authorize", **fields: object) -> None:
     entry.update(fields)
     scope = list(entry["scope"])
     entry["corpus_hash"] = corpus_hash(root, scope) if scope else None
-    append(root, entry)
+    append(root, entry, signer=signer)
 
 
 def reading(
@@ -838,6 +851,197 @@ class Unsigned(unittest.TestCase):
         self.assertFalse(strict_written)
         self.assertIn("signature", assured.getvalue())
         self.assertIn("has no effect", assured.getvalue())
+
+
+class AfterReview(unittest.TestCase):
+    """Review of unit 0010: a removed register, the installed trace, and
+    the command's verification of signatures.
+    """
+
+    def test_register_recorded(self) -> None:
+        """Behavior: the ledger shows a register where an entry carries a
+        signature or pins a scope at or under SIGNR, and not otherwise.
+
+        Reference: review of unit 0010, M1.
+        """
+        plain = {"scope": ["WORK/AUTH"], "signature": ""}
+        self.assertFalse(register_recorded([plain, {"scope": None}]))
+        self.assertTrue(register_recorded([plain, {"signature": "x"}]))
+        for scope in (["SIGNR"], ["MNEM", "SIGNR/keys"]):
+            with self.subTest(scope=scope):
+                self.assertTrue(register_recorded([{"scope": scope}]))
+        self.assertFalse(register_recorded([{"scope": ["SIGNRX"]}]))
+
+    def test_removed_register_refuses(self) -> None:
+        """Behavior: where the corpus holds no signer register but its
+        ledger shows one (a signed entry, or a transaction pinning
+        SIGNR), the command exits 1 with the reason even with
+        --accept-unsigned, and writes nothing.
+
+        Reference: review of unit 0010, M1: removing a founded register
+        must not reduce the check to the owner's statement.
+        """
+        for case in ("signed entry", "register scope"):
+            with self.subTest(case=case), corpus_copy() as root:
+                if case == "register scope":
+                    register = root / "SIGNR"
+                    register.mkdir()
+                    (register / "_doc.md").write_text(
+                        '---\nid: "SIGNR"\n---\n\nNo signers.\n',
+                        encoding="utf-8",
+                    )
+                    record(
+                        root, "register", actor="The Custodian",
+                        targets=["SIGNR"], scope=["SIGNR"],
+                    )
+                    shutil.rmtree(register)
+                    write_authorization(root)
+                    record(root)
+                else:
+                    write_authorization(root)
+                    record(root, signature="-----BEGIN PGP SIGNATURE-----")
+                out = root.parent / "out"
+                err = io.StringIO()
+                with contextlib.redirect_stderr(err):
+                    code = main(
+                        [
+                            "environment", str(root), "--work", str(root),
+                            "--home", str(root), "--authorization", IDENT,
+                            "--role", ROLE, "--accept-unsigned",
+                            "--write", str(out),
+                        ]
+                    )
+                self.assertEqual(code, 1)
+                self.assertFalse(out.exists())
+                self.assertIn("no longer holds", err.getvalue())
+                self.assertIn("signature", err.getvalue())
+
+    def test_unsigned_reliance_is_recorded(self) -> None:
+        """Behavior: an authorization relied on unsigned is named in the
+        coverage report and in the draft entry's rationale; without one,
+        neither names it.
+
+        Reference: review of unit 0010, M2; STND.HARN.19, STND.HARN.20.
+        """
+        corpus = read_corpus_live()
+        write = RemoteWrite(IDENT, "commit", REPO, ("main",), "2027-01-01")
+        for unsigned in ((IDENT,), ()):
+            with self.subTest(unsigned=unsigned):
+                inputs = Inputs(
+                    work="/srv/work", home="/home/agent",
+                    remote_writes=(write,), unsigned=unsigned,
+                )
+                files = claude_code.render(corpus, inputs, "# guard\n")
+                coverage = files[claude_code.COVERAGE]
+                entry = json.loads(files[claude_code.ENTRY])
+                for shown in (coverage, entry["rationale"]):
+                    self.assertEqual(
+                        "Relied on unsigned" in shown, bool(unsigned)
+                    )
+                    self.assertEqual(
+                        f"--accept-unsigned where no signer register "
+                        f"exists: {IDENT}" in shown,
+                        bool(unsigned),
+                    )
+
+    def test_command_records_unsigned_reliance(self) -> None:
+        """Behavior: the command with --accept-unsigned writes the
+        authorization's name into coverage.md and entry-draft.json.
+
+        Reference: review of unit 0010, M2.
+        """
+        with corpus_copy() as root:
+            write_authorization(root)
+            record(root)
+            out = root.parent / "out"
+            with contextlib.redirect_stdout(io.StringIO()):
+                code = main(
+                    [
+                        "environment", str(root), "--work", str(root),
+                        "--home", str(root), "--authorization", IDENT,
+                        "--role", ROLE, "--accept-unsigned",
+                        "--write", str(out),
+                    ]
+                )
+            coverage = (out / claude_code.COVERAGE).read_text()
+            entry = json.loads((out / claude_code.ENTRY).read_text())
+        self.assertEqual(code, 0)
+        self.assertIn(f"exists: {IDENT}", coverage)
+        self.assertIn(f"exists: {IDENT}", entry["rationale"])
+
+    def test_command_verifies_signatures(self) -> None:
+        """Behavior: with a founded signer register, the command relies on
+        an authorize that the human owner's key signed, and names no
+        unsigned reliance; a later authorize signed by another key is
+        refused, with --accept-unsigned too.
+
+        Reference: STND.HARN.29, row Signature; STND.HARN.11; review of
+        unit 0010, L2 (the command must verify, not assume, signatures).
+        """
+        with keyring() as home, corpus_copy() as root:
+            owner, owner_key = make_key(home, "Owner")
+            intruder, _ = make_key(home, "Intruder")
+            config = SignerConfig(owner, shutil.which("gpg") or "/usr/bin/gpg")
+            mnem = root / "MNEM" / "_doc.md"
+            if "| SIGNR |" not in mnem.read_text():
+                mnem.write_text(
+                    mnem.read_text().rstrip("\n")
+                    + "\n| SIGNR | none | Signer register | none | none "
+                    "| active |\n",
+                    "utf-8",
+                )
+            register = found_register(root, "2026-10-10")
+            add_signer(register, "governance", "The Custodian", "O", owner_key)
+            add_signer(
+                register, "governance", "The Human Owner", "O", owner_key
+            )
+            for scope in ("MNEM", "SIGNR"):
+                record(
+                    root, "register", signer=(owner, home),
+                    actor="The Custodian", targets=[scope], scope=[scope],
+                )
+            write_authorization(root)
+            record(root, signer=(owner, home))
+            out = root.parent / "out"
+            args = [
+                "environment", str(root), "--work", str(root),
+                "--home", str(root), "--authorization", IDENT,
+                "--role", ROLE,
+            ]
+            shown = io.StringIO()
+            with (
+                mock.patch(
+                    "govharness.cli.environment.read_config",
+                    return_value=config,
+                ),
+                contextlib.redirect_stdout(shown),
+            ):
+                good = main([*args, "--write", str(out)])
+            coverage = (out / claude_code.COVERAGE).read_text()
+            record(root, signer=(intruder, home))
+            err = io.StringIO()
+            with (
+                mock.patch(
+                    "govharness.cli.environment.read_config",
+                    return_value=config,
+                ),
+                contextlib.redirect_stderr(err),
+            ):
+                forged = main(
+                    [
+                        *args, "--accept-unsigned",
+                        "--write", str(root.parent / "forged"),
+                    ]
+                )
+        self.assertEqual(good, 0)
+        self.assertIn(
+            f"authorization: {IDENT}: pinned by seq", shown.getvalue()
+        )
+        self.assertNotIn("accepted unsigned", shown.getvalue())
+        self.assertNotIn("Relied on unsigned", coverage)
+        self.assertEqual(forged, 1)
+        self.assertIn("signature", err.getvalue())
+        self.assertIn("has no effect", err.getvalue())
 
 
 def read_corpus_live() -> Corpus:

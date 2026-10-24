@@ -34,8 +34,10 @@ from govharness.core.corpus import (
 from govharness.derive.environment import claude_code
 from govharness.derive.environment.authorizations import (
     ACCEPT_UNSIGNED,
+    REGISTER_REMOVED,
     Reading,
     read_authorizations,
+    register_recorded,
 )
 from govharness.derive.environment.inputs import Inputs, RemoteWrite
 from govharness.ledger.chain import read_ledger
@@ -122,6 +124,7 @@ def inputs_of(
     args: argparse.Namespace,
     remote_writes: tuple[RemoteWrite, ...] = (),
     referred: tuple[str, ...] = (),
+    unsigned: tuple[str, ...] = (),
 ) -> Inputs:
     """Build the owner's statement of the environment from arguments.
 
@@ -133,6 +136,8 @@ def inputs_of(
         Remote writes that the named authorizations open.
     referred : tuple[str, ...]
         Authorizations named whose writes stay referred.
+    unsigned : tuple[str, ...]
+        Authorizations relied on unsigned under ``--accept-unsigned``.
 
     Returns
     -------
@@ -153,6 +158,7 @@ def inputs_of(
         secrets=tuple(args.secret),
         remote_writes=remote_writes,
         referred=referred,
+        unsigned=unsigned,
     )
 
 
@@ -176,7 +182,8 @@ def authorized(args: argparse.Namespace, tree: Tree) -> Reading:
     ------
     ValueError
         If a named authorization is not in force at this moment, or no
-        signature is required and ``--accept-unsigned`` is not given.
+        signature is required and ``--accept-unsigned`` is not given, or
+        the ledger records a signer register that the corpus lacks.
     """
     if not args.authorization:
         return Reading((), (), ())
@@ -184,28 +191,39 @@ def authorized(args: argparse.Namespace, tree: Tree) -> Reading:
     # A signature is required for assured work, and wherever a signer
     # register exists, since an unsigned entry is then the exception.
     # Elsewhere an agent could have appended the authorize, so the owner
-    # must accept the authorizations unsigned (unit 0010).
-    signed = args.assured or any(
-        p.parts[:1] == (REGISTER_ID,) for p in tree.files
+    # must accept the authorizations unsigned (unit 0010). A register
+    # that the ledger records and the corpus lacks was removed, so the
+    # signature stays required and nothing verifies.
+    present = any(p.parts[:1] == (REGISTER_ID,) for p in tree.files)
+    removed = not present and register_recorded(ledger)
+    signed = args.assured or present or removed
+    verified = (
+        signed
+        and not removed
+        and not ledger_problems(tree, ledger, read_config())
     )
-    verified = signed and not ledger_problems(tree, ledger, read_config())
     horizon = (
         None
         if args.expiry_horizon is None
         else timedelta(days=args.expiry_horizon)
     )
-    return read_authorizations(
-        Corpus(load_entries(tree)),
-        tree,
-        ledger,
-        tuple(args.authorization),
-        datetime.now(timezone.utc),
-        args.role,
-        signed,
-        verified,
-        horizon,
-        args.accept_unsigned,
-    )
+    try:
+        return read_authorizations(
+            Corpus(load_entries(tree)),
+            tree,
+            ledger,
+            tuple(args.authorization),
+            datetime.now(timezone.utc),
+            args.role,
+            signed,
+            verified,
+            horizon,
+            args.accept_unsigned,
+        )
+    except ValueError as error:
+        if removed:
+            raise ValueError(f"{REGISTER_REMOVED} | {error}") from error
+        raise
 
 
 def run_environment(args: argparse.Namespace) -> int:
@@ -227,7 +245,9 @@ def run_environment(args: argparse.Namespace) -> int:
         reading = authorized(args, tree)
         files = claude_code.render(
             Corpus(load_entries(tree)),
-            inputs_of(args, reading.writes, reading.referred),
+            inputs_of(
+                args, reading.writes, reading.referred, reading.unsigned
+            ),
             read_text(GUARD_SOURCE),
         )
     except (LookupError, ValueError) as error:

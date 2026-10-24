@@ -34,9 +34,13 @@ human owner, rather than an agent that appended an ``authorize`` to the
 ledger and recomputed its chain, recorded the grant: appends are
 permitted writes. The derivation is therefore refused unless the owner
 states that it accepts the authorizations unsigned, and the summary
-then says that each was accepted so. Where a signature is required,
-that statement has no effect (security verification of unit 0008,
-M-c; unit 0010).
+then says that each was accepted so; the coverage report and the
+draft entry name them too. Where a signature is required, that
+statement has no effect (security verification of unit 0008, M-c;
+unit 0010). A signature stays required where the ledger records a
+signer register that the corpus no longer holds, so that removing the
+register does not reduce the check to the owner's statement (review of
+unit 0010, M1).
 """
 
 from __future__ import annotations
@@ -49,6 +53,7 @@ from typing import Any
 
 from govharness.core.corpus import Corpus, Tree, scope_hash
 from govharness.derive.environment.inputs import RemoteWrite
+from govharness.ledger.register import REGISTER_ID
 from govharness.ledger.transactions import chain_problems
 
 GRANTOR = "The Human Owner"
@@ -80,6 +85,37 @@ BRANCH_RE = re.compile(r"[A-Za-z0-9_][A-Za-z0-9._-]*(?:/[A-Za-z0-9._-]+)*")
 # The owner's statement that authorizations are relied on unsigned, as
 # the command line spells it.
 ACCEPT_UNSIGNED = "--accept-unsigned"
+# The reason given where the ledger shows a register the corpus lacks.
+REGISTER_REMOVED = (
+    "the ledger records a signer register (a signed entry, or a "
+    f"transaction whose scope holds {REGISTER_ID}) that the corpus no "
+    "longer holds, so a signature is still required and none verifies; "
+    f"restore {REGISTER_ID} from the history of the corpus"
+)
+
+
+def register_recorded(ledger: list[dict[str, Any]]) -> bool:
+    """Return whether the ledger shows that a signer register existed.
+
+    Parameters
+    ----------
+    ledger : list[dict[str, Any]]
+        The ledger of the corpus, in order.
+
+    Returns
+    -------
+    bool
+        Whether an entry carries a signature, which only a register
+        verifies, or pins a scope at or under the register.
+    """
+    return any(
+        e.get("signature")
+        or any(
+            isinstance(s, str) and PurePosixPath(s).parts[:1] == (REGISTER_ID,)
+            for s in (e.get("scope") or [])
+        )
+        for e in ledger
+    )
 
 
 def timestamp(value: Any) -> datetime:
@@ -307,7 +343,7 @@ def record_problems(
             "verifies (STND.HARN.11)"
             + (
                 f", and {ACCEPT_UNSIGNED} has no effect where the work is "
-                "assured or a signer register exists"
+                "assured or a signer register exists or existed"
                 if accept_unsigned
                 else ""
             )
@@ -415,11 +451,15 @@ class Reading:
         One line per authorization read, with the transaction that pins
         it, for the owner to compare with what was granted, and one
         more for each that was accepted unsigned.
+    unsigned : tuple[str, ...]
+        Identifiers of the authorizations relied on unsigned, for the
+        coverage report and the draft entry.
     """
 
     writes: tuple[RemoteWrite, ...]
     referred: tuple[str, ...]
     summary: tuple[str, ...]
+    unsigned: tuple[str, ...] = ()
 
 
 def read_authorizations(
@@ -482,6 +522,7 @@ def read_authorizations(
     writes: list[RemoteWrite] = []
     referred: list[str] = []
     summary: list[str] = []
+    unsigned: list[str] = []
     errors: list[str] = []
     for ident in dict.fromkeys(idents):
         meta, rel, recorded, problems = read_one(
@@ -507,6 +548,7 @@ def read_authorizations(
             )
         )
         if not signed:
+            unsigned.append(ident)
             summary.append(
                 f"{ident}: accepted unsigned ({ACCEPT_UNSIGNED}): no signer "
                 "register exists, so only the owner's reading of the line "
@@ -556,4 +598,6 @@ def read_authorizations(
         )
     if errors:
         raise ValueError(" | ".join(errors))
-    return Reading(tuple(writes), tuple(referred), tuple(summary))
+    return Reading(
+        tuple(writes), tuple(referred), tuple(summary), tuple(unsigned)
+    )

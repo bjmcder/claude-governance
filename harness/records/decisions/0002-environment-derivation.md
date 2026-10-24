@@ -90,3 +90,10 @@ The human owner wants agents to run unattended, without approving routine action
 | Rule as adjusted above | Adjustment | Reason |
 | --- | --- | --- |
 | A signature is required wherever a signer register exists | Unchanged there and for assured work, where `--accept-unsigned` has no effect and the reason says so. Where the work is not assured and no signer register exists, `environment --authorization` exits 1 with the reason unless the owner passes `--accept-unsigned`; with it, the summary prints for each authorization a line that it was accepted unsigned. The code is stricter than the row Signature of STND.HARN.29, failing closed, since a refused derivation leaves the write referred, which STND.HARN.18 allows | Security verification of unit 0008, M-c: without a register an agent is able to append an unsigned `authorize` naming the human owner and recompute the chain, and appends are permitted writes, so the summary was the only control and nothing asked the owner to read it |
+
+## Adjustments made by the review of unit 0010
+
+| Rule as adjusted above | Adjustment | Reason |
+| --- | --- | --- |
+| A signature is required where a signer register exists | Also where the ledger records one that the corpus no longer holds: an entry carries a signature, or a transaction's scope holds `SIGNR`. The derivation is then refused with that reason, and `--accept-unsigned` has no effect | Review of unit 0010, M1: deleting a founded register made the check fall to the option, which every derivation in a corpus without a register already passes |
+| The acceptance of an unsigned authorization is printed in the summary | The coverage report (the gap of remote-write) and the draft entry's rationale also name each authorization relied on unsigned | Review of unit 0010, M2: stdout leaves no trace, and the draft entry, once appended, is the ledger's record of the configuration |
