@@ -29,7 +29,7 @@ LANGUAGES = [("apply_mnem_c", "apply_c"), ("apply_mnem_rust", "apply_rust"),
              ("apply_mnem_fortran", "apply_fortran"), ("apply_mnem_hdl", "apply_hdl"),
              ("apply_mnem_lean", "apply_lean")]
 CLOSING = ["apply_conc_1_0_1"]
-HARNESS = []  # apply_proj_1_2, apply_harn_1_2 join here once unit 0008 is merged
+HARNESS = ["apply_proj_1_2", "apply_harn_1_2"]
 
 OFFLD_ROW = ("| OFFLD | STND | Accelerator offload standard | none | Reads as offload; offload has no "
              "established acronym | active |")
