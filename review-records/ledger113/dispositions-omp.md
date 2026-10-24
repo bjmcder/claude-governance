@@ -112,3 +112,14 @@ Cold verification of draft 0.3: verify-omp-0.3.md. Numbering is unchanged.
 | `fork` guidance from the Examples | Accepted: "The Examples of the specification warn". |
 | STND.OMP.1 "published or in public draft" not in the Notes | Accepted. |
 | STND.OMP.16 S1 "other than a test run" a second condition | Accepted: "each run of that code that produces a reported result", a restriction of the subject and no second condition. |
+
+# Dispositions: STND.OMP 0.4 to 0.5
+
+Delta verification of draft 0.4: verify-omp-0.4.md. Numbering is unchanged. Reading copy for ratification: omp-1.0-ratification.md.
+
+| Finding | Disposition |
+| --- | --- |
+| N1: STND.OMP.16 S1 "that produces a reported result" still reaches a test run | Accepted: "each run of that code outside its tests SHOULD have cancellation enabled", a restriction of the subject, so S2's run with cancellation disabled is outside S1. |
+| N2: "among them the master construct" attached to the destroy clause | Accepted: the removals and their examples come first; the undeprecation follows as its own clause, cited to r1. |
+| N3: STND.CONC.24 paraphrase drops its alternative | Accepted: "or at each number that it admits, whichever set is smaller". |
+| N4: "The Examples ... warn ... and points" | Accepted: "point". |
