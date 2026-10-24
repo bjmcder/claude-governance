@@ -47,3 +47,49 @@ Draft 0.2 has 33 provisions, renumbered. Six are new: 12, 16, 22, 24, 27, and 33
 ## Pairs of 0.2
 
 The command pairs gives 477 pairs for 0.2 (pairs-OMP-0.2.md). 144 of them are new, from STND.OMP.12, STND.OMP.16, STND.OMP.22, STND.OMP.27, and STND.OMP.33; the rest map to pairs of 0.1 reviewed in review-pairs-omp.md. The new pairs, and the provisions of 0.1 whose text changed, go to a delta pair review (review-pairs-omp-0.2.md).
+
+# Dispositions: STND.OMP 0.2 to 0.3
+
+Cold verification of draft 0.2: verify-omp-0.2.md. Numbering is unchanged from 0.2.
+
+| Finding | Disposition |
+| --- | --- |
+| D1: STND.OMP.28 S2 "that requirement" has no antecedent; "the same requires directive" imprecise | Accepted: S1 "by a requires directive with the same clauses"; S2 "Where no device that a run uses meets the requires directive of a component that relies on shared memory". |
+| D2: STND.OMP.16 S1 against S2 | Accepted: "each run of that code, other than a test run with cancellation disabled, SHOULD have cancellation enabled". |
+| D3: class paragraph | Accepted. Rewritten: the second sentence of STND.OMP.11 is listed apart from its first; the first and third sentences of STND.OMP.16 are protocol rules and its second is a test under VV.1; the tests of STND.OMP.4, 16, 31, and 33 are said to rest on no row because none compares with an oracle produced without the implementation it judges, the host reference of STND.OMP.31 being the reference path of HW.15; every provision is placed, and the onset of each bundle is stated. |
+| D4: Notes claims not in r1 to r4 | Accepted. The `copyin` fact is marked unverified; the barrier clause and the sentence on properties without a clause are deleted; the false if clause under mandatory offload is marked an inference from r3; "final public draft" becomes "the latest technical report toward 6.1, its second preview"; the full-text claim is deleted. |
+| D5: RATIONALE claims a review of 0.2 that is not recorded | The delta pair review (review-pairs-omp-0.2.md) was running at the time of the verification; the rationale is checked against its result before ratification. STND.OMP.24 produced no listed pairs and is in the delta review's hand checks. |
+| S1: narration and restatement of STND.VVUQ.82 | Accepted: the sentence now says that STND.VVUQ.82 governs the variation; the repetition in the schedule paragraph and the method sentence are deleted. |
+| S2: obligations in the indicative | Accepted: the requirements of the specification are stated as such (barriers and worksharing, atomic access, depend items, requires in every unit, signal handlers); the sentences on the team size, the paired release routine, and the scope of atomics are recast as facts. |
+| S3: the high-assurance subset as a means of meeting STND.CONC.28 and STND.OMP.2 | Accepted: cut; the Notes say that the literature proposes the subset as the basis of certification (r4). |
+| S4: STND.OMP.27 S1 allows only an update construct | Accepted: "by an update construct, or by a map with an always modifier". |
+| S5: the Notes read HW.3 as covering a change during the run | Accepted: the reading is removed, and STND.OMP.3 records each internal control variable at the start of the run and after each change that the code makes to it. |
+| Pair obs 4 partly: STND.OMP.21 and cancellation | Accepted: the Notes say that a cancellation transfers control to the end of the canceled region, which STND.OMP.21 admits (marked unverified). |
+| Hand notes not in the dispositions (CONC.16 implicit tasks, CONC.10) | Wording notes of the 0.1 pair review; no change, because STND.CONC.16 and STND.CONC.10 apply to every concurrent task and an OpenMP thread or task is one. |
+| Optional: STND.OMP.24 S1 rejects the initial device | Accepted: "the default device, the host device, or one that the code has checked". |
+| Optional: "run-time schedule" in STND.OMP.33 | Accepted: "each schedule and each binding of threads to places that the runs of the work set through internal control variables". |
+| Optional: STND.OMP.8 overlap | Kept, as in 0.2. |
+
+## Delta pair review of 0.2
+
+Review: review-pairs-omp-0.2.md (144 new pairs, STND.OMP.24 and the changed provisions by hand). No listed pair conflicts and no matter is unowned. Its findings are answered in 0.3 as follows.
+
+| Finding | Disposition |
+| --- | --- |
+| Conflict within the standard: STND.OMP.12 S1 against STND.OMP.22 for a location that a signal handler shares | Accepted. STND.OMP.12 gains a third sentence: code does not access a location that a signal handler accesses by an atomic construct, so S1 does not reach such a location. The Notes leave it to the atomics of the base language (STND.CXX.23 for C++) and say that the interoperation of the two kinds of atomics is not established. |
+| Obs 2: STND.OMP.16 S1 against S2; S2 does not say what the disabled run shows | S1 resolved in 0.3 (cold verification D2). S2 now says that the disabled run shows that the code does not pass over the disabled state silently. |
+| Obs 3: "answers a failure" too narrow | Accepted: "relies on a cancel construct" in both sentences; the Notes name STND.CONC.10 and STND.CONC.12. The cancellation point in long-running tasks stays with STND.CONC.13. |
+| Obs 4: run record omits cancellation, the run-time schedule, and the default device | Accepted: added to STND.OMP.3. |
+| Obs 5: STND.OMP.33 vacuous for fixed schedules; bindings a test machine lacks; libraries | Kept: a loop with a fixed schedule adds no run, which is intended, and the settings are those that the runs of the work set. STND.CONC.27 has a verification state what it does not cover. |
+| Obs 6: STND.OMP.24 exempts the default device; null check; "exactly once" without "after the last use" | Accepted: the default device is no longer exempt, only the host device; "exactly once, after its last use"; the Notes cite STND.CODE.7, PRIME.4, and HW.8 for the null check. The partial overlap of S2 with DSGN.14 is kept for the paired routine, which is OpenMP content. |
+| Obs 7: STND.OMP.28 cites HW.4 but no longer states anything of the hardware contract | Accepted: HW.4 dropped from the provision; the Notes cite it. "With the same clauses" was already in 0.3. |
+| Obs 8: STND.OMP.21 and the cancel construct | Answered in the Notes in 0.3 (marked unverified). |
+| Obs 9: STND.OMP.7 S3 broader than the Notes | Accepted: "a task scheduling point of that task at which another task is able to run on its thread". |
+| Obs 10: STND.OMP.1, drafts of a revision | Accepted: "no later revision of the specification, published or in public draft". |
+| Obs 11 | Resolved with the conflict above. |
+| Obs 12: under mandatory offload, a false if clause asks no report in the first alternative | Accepted: the Notes say so and name HW.19, HW.9, and the host-path test of S2. |
+| Obs 13: STND.OMP.26 S3, release copies back only under from or tofrom | Accepted: "the release of the last mapping of that data under a map type that copies it back". |
+| Obs 14, 15 | No action, as for 0.1. |
+| GOV.31: STND.OMP.12 S1 in part restates STND.CONC.3 | Kept: the OpenMP content is that the protection of an atomically accessed location is the atomic construct and not a critical construct or a lock, which the Notes give. |
+
+The pairs of 0.3 (pairs-OMP-0.3.md) are the same 477 as those of 0.2.
