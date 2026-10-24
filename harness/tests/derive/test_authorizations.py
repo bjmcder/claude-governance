@@ -6,7 +6,9 @@ derived configuration relies on one), and GUARD.11 (an irrevocable
 remote write only per action). Each test writes an authorization file
 and a ledger into a temporary corpus root, so no test reads or writes
 the live corpus. Agreement is exact: the writes returned, or the reason
-an authorization is not in force, are the ones stated.
+an authorization is not in force, are the ones stated. Unit 0010 adds
+the refusal of unsigned authorizations where no signer register exists
+and the work is not assured, unless the owner accepts them unsigned.
 """
 
 from __future__ import annotations
@@ -22,7 +24,10 @@ from pathlib import Path
 from govharness.cli.main import main
 from govharness.core.corpus import Corpus, corpus_hash, read_corpus, read_tree
 from govharness.derive.environment import claude_code
-from govharness.derive.environment.authorizations import read_authorizations
+from govharness.derive.environment.authorizations import (
+    Reading,
+    read_authorizations,
+)
 from govharness.derive.environment.inputs import Inputs, RemoteWrite
 from govharness.ledger.chain import append, read_ledger
 from govharness.ledger.transactions import parse_ledger
@@ -111,8 +116,14 @@ def reading(
     verified: bool = False,
     role: str = ROLE,
     horizon: timedelta | None = None,
+    accept_unsigned: bool = True,
 ) -> tuple[tuple[RemoteWrite, ...], tuple[str, ...]]:
     """Read the authorization of a root at ``NOW``.
+
+    The tests of the rows of STND.HARN.29 accept an unsigned
+    authorization by default, as the owner does with
+    ``--accept-unsigned``, so that each tests its row alone; the class
+    ``Unsigned`` tests the refusal without it.
 
     Parameters
     ----------
@@ -126,24 +137,63 @@ def reading(
         The role the configuration is derived for.
     horizon : timedelta | None
         The owner's bound on the time to expiry.
+    accept_unsigned : bool
+        Whether the owner accepts the authorization unsigned.
 
     Returns
     -------
     tuple[tuple[RemoteWrite, ...], tuple[str, ...]]
         The writes opened and the lines still referred.
     """
-    found = read_authorizations(
+    found = full_reading(
+        root, assured, verified, role, horizon, accept_unsigned
+    )
+    return found.writes, found.referred
+
+
+def full_reading(
+    root: Path,
+    signed: bool = False,
+    verified: bool = False,
+    role: str = ROLE,
+    horizon: timedelta | None = None,
+    accept_unsigned: bool = False,
+) -> Reading:
+    """Read the authorization of a root at ``NOW``, with its summary.
+
+    Parameters
+    ----------
+    root : Path
+        Corpus root.
+    signed : bool
+        Whether a verified signature is required, as for assured work
+        or a corpus with a signer register.
+    verified : bool
+        Whether the ledger's signatures verify.
+    role : str
+        The role the configuration is derived for.
+    horizon : timedelta | None
+        The owner's bound on the time to expiry.
+    accept_unsigned : bool
+        Whether the owner accepts the authorization unsigned.
+
+    Returns
+    -------
+    Reading
+        The writes opened, the lines still referred, and the summary.
+    """
+    return read_authorizations(
         read_corpus(root),
         read_tree(root),
         read_ledger(root),
         (IDENT,),
         NOW,
         role,
-        assured,
+        signed,
         verified,
         horizon,
+        accept_unsigned,
     )
-    return found.writes, found.referred
 
 
 class InForce(unittest.TestCase):
@@ -622,7 +672,7 @@ class Configuration(unittest.TestCase):
             args = [
                 "environment", str(root), "--work", str(root),
                 "--home", str(root), "--authorization", IDENT,
-                "--role", ROLE,
+                "--role", ROLE, "--accept-unsigned",
             ]
             shown = io.StringIO()
             with contextlib.redirect_stdout(shown):
@@ -647,8 +697,147 @@ class Configuration(unittest.TestCase):
         self.assertIn(f"authorization: {IDENT}: pinned by seq", shown.getvalue())
         self.assertEqual(signed, 1)
         self.assertIn("signature", unsigned.getvalue())
+        self.assertIn("--accept-unsigned has no effect", unsigned.getvalue())
         self.assertEqual(bad, 1)
         self.assertIn("not in force", err.getvalue())
+
+
+class Unsigned(unittest.TestCase):
+    """Unit 0010: an unsigned authorization is relied on only by consent.
+
+    Without a signer register, an agent that appends an ``authorize``
+    naming the human owner to the ledger and recomputes its chain makes
+    a record that the row Record of STND.HARN.29 accepts (security
+    verification of unit 0008, M-c).
+    """
+
+    def setUp(self) -> None:
+        """Make a corpus root with the authorization recorded unsigned."""
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+        write_authorization(self.root)
+        record(self.root)
+
+    def test_refused_without_register(self) -> None:
+        """Behavior: with no signer register and work not assured, the
+        derivation is refused with the reason unless the owner accepts
+        the authorization unsigned; a reason of the provision is
+        reported beside it.
+
+        Reference: unit 0010; PRIME.4, a failure is loud; PRIME.7, an
+        agent does not open its own writes.
+        """
+        with self.assertRaisesRegex(
+            ValueError, "no signer register exists.*--accept-unsigned"
+        ):
+            full_reading(self.root)
+        write_authorization(self.root, status="draft")
+        record(self.root)
+        with self.assertRaises(ValueError) as caught:
+            full_reading(self.root)
+        self.assertIn("status 'draft'", str(caught.exception))
+        self.assertIn("no signer register exists", str(caught.exception))
+
+    def test_accepted_with_the_option(self) -> None:
+        """Behavior: with the owner's acceptance, the authorization opens
+        its write and the summary says that it was accepted unsigned.
+
+        Reference: unit 0010; STND.HARN.29, row Signature.
+        """
+        found = full_reading(self.root, accept_unsigned=True)
+        self.assertEqual(len(found.writes), 1)
+        self.assertEqual(len(found.summary), 2)
+        self.assertIn(f"{IDENT}: pinned by seq", found.summary[0])
+        self.assertTrue(
+            found.summary[1].startswith(f"{IDENT}: accepted unsigned")
+        )
+
+    def test_signature_required_regardless(self) -> None:
+        """Behavior: where a signature is required, for a signer register
+        or assured work, the option does not admit an unsigned or
+        unverified transaction, and the reason says it has no effect; a
+        verified one is relied on without the line on acceptance.
+
+        Reference: STND.HARN.29, row Signature; STND.HARN.11.
+        """
+        for verified in (False, True):
+            with (
+                self.subTest(verified=verified),
+                self.assertRaisesRegex(ValueError, "has no effect"),
+            ):
+                full_reading(
+                    self.root,
+                    signed=True,
+                    verified=verified,
+                    accept_unsigned=True,
+                )
+        signed = self.root / "signed"
+        signed.mkdir()
+        write_authorization(signed)
+        record(signed, signature="-----BEGIN PGP SIGNATURE-----")
+        for accept in (False, True):
+            with self.subTest(accept=accept):
+                found = full_reading(
+                    signed,
+                    signed=True,
+                    verified=True,
+                    accept_unsigned=accept,
+                )
+                self.assertEqual(len(found.writes), 1)
+                self.assertEqual(len(found.summary), 1)
+
+    def test_command_refuses_and_accepts(self) -> None:
+        """Behavior: ``environment --authorization`` with no signer
+        register exits 1 with the reason and writes nothing; with
+        ``--accept-unsigned`` it writes the configuration and prints
+        that the authorization was accepted unsigned; with
+        ``--assured`` the option has no effect and it exits 1.
+
+        Reference: unit 0010; STND.HARN.29, row Signature; PRIME.4.
+        """
+        with corpus_copy() as root:
+            write_authorization(root)
+            record(root)
+            out = root.parent / "out"
+            strict_out = root.parent / "strict"
+            args = [
+                "environment", str(root), "--work", str(root),
+                "--home", str(root), "--authorization", IDENT,
+                "--role", ROLE,
+            ]
+            refused = io.StringIO()
+            with contextlib.redirect_stderr(refused):
+                code = main([*args, "--write", str(out)])
+            written = out.exists()
+            shown = io.StringIO()
+            with contextlib.redirect_stdout(shown):
+                accepted = main(
+                    [*args, "--accept-unsigned", "--write", str(out)]
+                )
+            policy = json.loads((out / claude_code.POLICY).read_text())
+            assured = io.StringIO()
+            with contextlib.redirect_stderr(assured):
+                strict = main(
+                    [
+                        *args, "--accept-unsigned", "--assured",
+                        "--write", str(strict_out),
+                    ]
+                )
+            strict_written = strict_out.exists()
+        self.assertEqual(code, 1)
+        self.assertFalse(written)
+        self.assertIn("no signer register exists", refused.getvalue())
+        self.assertIn("--accept-unsigned", refused.getvalue())
+        self.assertEqual(accepted, 0)
+        self.assertEqual(len(policy["remote_writes"]), 1)
+        self.assertIn(
+            f"authorization: {IDENT}: accepted unsigned", shown.getvalue()
+        )
+        self.assertEqual(strict, 1)
+        self.assertFalse(strict_written)
+        self.assertIn("signature", assured.getvalue())
+        self.assertIn("has no effect", assured.getvalue())
 
 
 def read_corpus_live() -> Corpus:

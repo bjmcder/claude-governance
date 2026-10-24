@@ -27,6 +27,16 @@ one authorization, so none of its entries is relied on and the
 derivation stops. One per action stays referred, because a
 configuration cannot tell the one action it covers from a repetition;
 the owner's answer to the referral confirms it.
+
+Where the work is not assured and the corpus holds no signer register,
+STND.HARN.29 asks for no signature, but nothing then shows that the
+human owner, rather than an agent that appended an ``authorize`` to the
+ledger and recomputed its chain, recorded the grant: appends are
+permitted writes. The derivation is therefore refused unless the owner
+states that it accepts the authorizations unsigned, and the summary
+then says that each was accepted so. Where a signature is required,
+that statement has no effect (security verification of unit 0008,
+M-c; unit 0010).
 """
 
 from __future__ import annotations
@@ -67,6 +77,9 @@ REPOSITORY_RE = re.compile(
 # A tracker address, as ``gh --repo HOST/OWNER/REPO`` names it.
 TRACKER_RE = re.compile(rf"https://{DOMAIN}/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+")
 BRANCH_RE = re.compile(r"[A-Za-z0-9_][A-Za-z0-9._-]*(?:/[A-Za-z0-9._-]+)*")
+# The owner's statement that authorizations are relied on unsigned, as
+# the command line spells it.
+ACCEPT_UNSIGNED = "--accept-unsigned"
 
 
 def timestamp(value: Any) -> datetime:
@@ -217,6 +230,7 @@ def record_problems(
     recorded: date | None,
     signed: bool,
     verified: bool,
+    accept_unsigned: bool = False,
 ) -> tuple[list[str], Any]:
     """Return how the ledger fails to record an authorization in force.
 
@@ -238,6 +252,10 @@ def record_problems(
     verified : bool
         Whether every signature of the ledger verifies against the
         signer register, as the caller checked it.
+    accept_unsigned : bool
+        Whether the owner stated that it accepts an unsigned
+        transaction; it has no effect where ``signed`` holds, and is
+        named in the reason only so that the owner learns as much.
 
     Returns
     -------
@@ -287,6 +305,12 @@ def record_problems(
         problems.append(
             "its transaction carries no signature that the signer register "
             "verifies (STND.HARN.11)"
+            + (
+                f", and {ACCEPT_UNSIGNED} has no effect where the work is "
+                "assured or a signer register exists"
+                if accept_unsigned
+                else ""
+            )
         )
     return problems, latest.get("seq")
 
@@ -389,7 +413,8 @@ class Reading:
         One line per authorization, or kind, whose writes stay referred.
     summary : tuple[str, ...]
         One line per authorization read, with the transaction that pins
-        it, for the owner to compare with what was granted.
+        it, for the owner to compare with what was granted, and one
+        more for each that was accepted unsigned.
     """
 
     writes: tuple[RemoteWrite, ...]
@@ -407,6 +432,7 @@ def read_authorizations(
     signed: bool,
     verified: bool,
     horizon: timedelta | None = None,
+    accept_unsigned: bool = False,
 ) -> Reading:
     """Return the remote writes that the named authorizations open.
 
@@ -433,6 +459,11 @@ def read_authorizations(
         Whether every signature of the ledger verifies.
     horizon : timedelta | None
         The longest time to an expiry that the owner accepts.
+    accept_unsigned : bool
+        Whether the owner accepts the authorizations unsigned where no
+        signature is required (``signed`` false). Without it, the
+        derivation is refused there; where ``signed`` holds, it has no
+        effect.
 
     Returns
     -------
@@ -442,7 +473,9 @@ def read_authorizations(
     Raises
     ------
     ValueError
-        If an authorization is not in force, with every reason.
+        If an authorization is not in force, or none is required to be
+        signed and the owner did not accept them unsigned, with every
+        reason.
     """
     if now.utcoffset() is None:
         raise ValueError("the time of the derivation has no UTC offset")
@@ -455,7 +488,8 @@ def read_authorizations(
             corpus, ident, now, role, horizon
         )
         found, seq = record_problems(
-            ident, rel, tree, ledger, recorded, signed, verified
+            ident, rel, tree, ledger, recorded, signed, verified,
+            accept_unsigned,
         )
         problems += found
         if problems:
@@ -472,6 +506,12 @@ def read_authorizations(
                 for i in meta["remote_writes"]
             )
         )
+        if not signed:
+            summary.append(
+                f"{ident}: accepted unsigned ({ACCEPT_UNSIGNED}): no signer "
+                "register exists, so only the owner's reading of the line "
+                f"above shows that the human owner recorded seq {seq}"
+            )
         if not meta["standing"]:
             referred.append(
                 f"{ident}: per action, so each write it covers is referred "
@@ -504,6 +544,16 @@ def read_authorizations(
                         str(expires),
                     )
                 )
+    if idents and not signed and not accept_unsigned:
+        errors.append(
+            "no signer register exists and the work is not assured, so "
+            "nothing shows that the human owner, and not an agent that "
+            "appended to the ledger, recorded "
+            + ", ".join(dict.fromkeys(idents))
+            + "; found a signer register (sign found), or pass "
+            f"{ACCEPT_UNSIGNED} to rely on each unsigned, and compare the "
+            "summary it prints with what was granted before installing"
+        )
     if errors:
         raise ValueError(" | ".join(errors))
     return Reading(tuple(writes), tuple(referred), tuple(summary))

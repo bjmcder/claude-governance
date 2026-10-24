@@ -8,7 +8,10 @@ is missing, differs, or is alterable by the running account
 (STND.HARN.21). Each ``--authorization ID`` names an authorization of
 the corpus whose remote writes the guard lets proceed without referral
 while it is in force (STND.HARN.29); one that is not in force is an
-error.
+error. Where no signature is required, because the work is not assured
+and no signer register exists, the derivation is refused unless the
+owner passes ``--accept-unsigned``, and the summary then says that each
+authorization was accepted unsigned.
 """
 
 from __future__ import annotations
@@ -30,6 +33,7 @@ from govharness.core.corpus import (
 )
 from govharness.derive.environment import claude_code
 from govharness.derive.environment.authorizations import (
+    ACCEPT_UNSIGNED,
     Reading,
     read_authorizations,
 )
@@ -94,6 +98,14 @@ def add_environment(sub: argparse._SubParsersAction) -> None:
         type=int,
         metavar="DAYS",
         help="refuse an authorization that expires later, or never",
+    )
+    command.add_argument(
+        ACCEPT_UNSIGNED,
+        action="store_true",
+        help=(
+            "rely on unsigned authorizations where no signer register "
+            "exists; no effect where a signature is required"
+        ),
     )
     command.add_argument(
         "--assured",
@@ -163,13 +175,16 @@ def authorized(args: argparse.Namespace, tree: Tree) -> Reading:
     Raises
     ------
     ValueError
-        If a named authorization is not in force at this moment.
+        If a named authorization is not in force at this moment, or no
+        signature is required and ``--accept-unsigned`` is not given.
     """
     if not args.authorization:
         return Reading((), (), ())
     ledger = read_ledger(args.root)
     # A signature is required for assured work, and wherever a signer
     # register exists, since an unsigned entry is then the exception.
+    # Elsewhere an agent could have appended the authorize, so the owner
+    # must accept the authorizations unsigned (unit 0010).
     signed = args.assured or any(
         p.parts[:1] == (REGISTER_ID,) for p in tree.files
     )
@@ -189,6 +204,7 @@ def authorized(args: argparse.Namespace, tree: Tree) -> Reading:
         signed,
         verified,
         horizon,
+        args.accept_unsigned,
     )
 
 
