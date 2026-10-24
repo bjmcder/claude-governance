@@ -242,8 +242,11 @@ class InForce(unittest.TestCase):
         other = "https://git.example.org/team/other.git"
         cases = (
             [ENTRY, {**ENTRY, "kinds": ["publish"], "branches": []}],
+            [{**ENTRY, "kinds": ["publish"], "branches": []}, ENTRY],
             [ENTRY, {**ENTRY, "destination": other, "provisioned": False}],
+            [{**ENTRY, "destination": other, "provisioned": False}, ENTRY],
             [{**ENTRY, "kinds": ["commit", "transmit"]}],
+            [{**ENTRY, "kinds": ["transmit", "commit"]}],
         )
         for entries in cases:
             with self.subTest(entries=entries):
@@ -277,6 +280,8 @@ class InForce(unittest.TestCase):
             {**ENTRY, "extra": 1},
             {**ENTRY, "kinds": ["push"]},
             {**ENTRY, "kinds": ["commit", "commit"]},
+            {**ENTRY, "kinds": [["commit"]]},
+            {**ENTRY, "kinds": [{"commit": 1}]},
             {**ENTRY, "destination": "https://user:pw@git.example.org/x"},
             {**ENTRY, "destination": "https://git.example.org/a/../b"},
             {**ENTRY, "destination": "https://git.example.org/x?y=1"},
@@ -307,12 +312,35 @@ class InForce(unittest.TestCase):
         Reference: STND.HARN.29, row Form: the record does not state one
         authorization, so none of it is relied on (fail closed).
         """
+        bad = {**ENTRY, "kinds": ["push"]}
+        for entries in ([ENTRY, bad], [bad, ENTRY], [ENTRY, bad, ENTRY]):
+            with self.subTest(entries=entries):
+                root = self.root / str(len(list(self.root.iterdir())))
+                root.mkdir()
+                write_authorization(root, remote_writes=entries)
+                record(root)
+                with self.assertRaisesRegex(ValueError, "not in force"):
+                    reading(root)
+
+    def test_mixed_entry_branches_by_kind(self) -> None:
+        """Behavior: an entry of kinds commit and post opens a commit with
+        its branches and a post with none.
+
+        Reference: STND.PROJ.7: branches qualify a commit only.
+        """
         write_authorization(
-            self.root, remote_writes=[ENTRY, {**ENTRY, "kinds": ["push"]}]
+            self.root, remote_writes=[{**ENTRY, "kinds": ["commit", "post"]}]
         )
         record(self.root)
-        with self.assertRaisesRegex(ValueError, "not in force"):
-            reading(self.root)
+        writes, referred = reading(self.root)
+        self.assertEqual(
+            writes,
+            (
+                RemoteWrite(IDENT, "commit", REPO, ("main",), FIELDS["expires"]),
+                RemoteWrite(IDENT, "post", REPO, (), FIELDS["expires"]),
+            ),
+        )
+        self.assertEqual(referred, ())
 
     def test_record_in_the_ledger(self) -> None:
         """Behavior: an authorization that no transaction pins, whose

@@ -135,8 +135,8 @@ def entry_problems(entry: Any) -> list[str]:
     if (
         not isinstance(kinds, list)
         or not kinds
+        or not all(isinstance(k, str) and k in KINDS for k in kinds)
         or len(set(kinds)) != len(kinds)
-        or not all(k in KINDS for k in kinds)
     ):
         problems.append(f"{destination}: kinds are not distinct of {KINDS}")
         kinds = []
