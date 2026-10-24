@@ -1,0 +1,35 @@
+id,kind,level,title,status,path,sha256,bytes
+STND.OMP,standard,LVL2,OpenMP standard,adopted,_doc.md,ce6441a6aeb3618e454663e96eaea51ae853375c93db6f530dff49b5156c2248,23473
+STND.OMP.1,provision,LVL2,OpenMP facilities used,adopted,1.md,411b13cb2dd998e20c22c96307069296e1ee4f724d829c07616a37d963965a3f,708
+STND.OMP.2,provision,LVL2,Implemented features only,adopted,2.md,07f4571576b5142bd47dbee16a3d0127c6401d5d1239736044aee4bb06418b89,621
+STND.OMP.3,provision,LVL2,OpenMP run record,adopted,3.md,573724cef4a6268bd3c733c0d38330189ce7363d1f1347435538189f12009719,948
+STND.OMP.4,provision,LVL2,Correctness with OpenMP disabled,adopted,4.md,ea2689991ad1ee4e9a8e8de683480375dfe20606e6b8b67a7f29b9bd9d1184f1,636
+STND.OMP.5,provision,LVL2,Explicit data-sharing attributes,adopted,5.md,6ef970f38849440f75d92a72e46d59ccb4b7ad45db987f9a55b5aaaf8e3d0722,635
+STND.OMP.6,provision,LVL2,Private and last values,adopted,6.md,122b898d85ce4bd22ef2462ce65f457ef23c3372ccacf43a4af5a4e628769fdf,741
+STND.OMP.7,provision,LVL2,Threadprivate persistence,adopted,7.md,0556415af04662e9ba9eea80cd410478437247e1b1af1acce0d67d3b716be934,769
+STND.OMP.8,provision,LVL2,Shared locals and explicit tasks,adopted,8.md,cdfe727a31ceaec553fa78a3c658eba5d380d6b7b14c45955520129e0bb5914c,472
+STND.OMP.9,provision,LVL2,Uniform team constructs,adopted,9.md,6403982d8888545c91bd8f0371280656252b355142a90bdc37ca01f25675f411,536
+STND.OMP.10,provision,LVL2,Consumers of nowait regions,adopted,10.md,9dc4d7b77ba0660523d2f45aa3a7c86b243c98736d32ae2a4868e27a2e86cb12,670
+STND.OMP.11,provision,LVL2,Atomic memory order clauses,adopted,11.md,4257ac999740e3353e787b2f6d3ba059602b02557c058ec1a9f71af5553b7e97,626
+STND.OMP.12,provision,LVL2,Locations accessed atomically,adopted,12.md,de1d3ed3054fe0b3853b1b388b58290bd4a4de41a1627645e7cc90d4e87ca143,673
+STND.OMP.13,provision,LVL2,Critical names and lock scope,adopted,13.md,dd733b29db38fa41b3b07a15253f6076b95c6f2d2e7a769ba68fa86ea65cb4df,626
+STND.OMP.14,provision,LVL2,"Task dependences, waits, and events",adopted,14.md,8a81f68a87afac760e4ed4aaa914046cd508fc1c495d112635344c9a6f2d17c9,672
+STND.OMP.15,provision,LVL2,Bounded task creation,adopted,15.md,bfadc848932beb1366a4f75bb35dd5d3396983a823788187148450c254f76e6b,711
+STND.OMP.16,provision,LVL2,Cancellation enabled and tested,adopted,16.md,8b492d3918dfb42bd4093c4f7ba19eed0f4d7e13e2b322c73e7a1edd419d453d,770
+STND.OMP.17,provision,LVL2,Declared reduction properties,adopted,17.md,6b66c8a2aff337524763a4e1c9dbfa3e9eeb07f737eef052798af5dd2ff9f1d5,545
+STND.OMP.18,provision,LVL2,Reproducible iteration mapping,adopted,18.md,01e19a11b4aa815dda62f9008090dee0fc66de255b84a9b9ae418ab41ce989f6,622
+STND.OMP.19,provision,LVL2,Caller's control variables kept,adopted,19.md,53bca1d05e3128e58609e50c786940851c7180fc0e1c71f597b628b299a074e8,533
+STND.OMP.20,provision,LVL2,Team size as obtained,adopted,20.md,c096d25e668f4d5d19d2a3240ff916aec5925ebef1363df55f05e2c7e1da84c6,490
+STND.OMP.21,provision,LVL2,Structured block exits,adopted,21.md,59fc2be2969df075db5e52ee8da256d6f26152a322406be028ec0942ca347eaf,423
+STND.OMP.22,provision,LVL2,Signal handlers without OpenMP,adopted,22.md,491c216100df1f075a08bcc5ab2633a3f34b3557c4183601789c9b191d496a54,436
+STND.OMP.23,provision,LVL2,Device placement enforced,adopted,23.md,45290fca2cc327882cee1bff2f7961c91d0eb984aedafa6d9a8bfb5cac542fe2,627
+STND.OMP.24,provision,LVL2,Device numbers and allocations,adopted,24.md,e11fcdf69e26a08f5a582223b1c38d7f7ac3858a148e6ce4b8774e2f05071196,749
+STND.OMP.25,provision,LVL2,Structures and pointers on devices,adopted,25.md,c560a06e1f75f6858c0c2c54e7b6644c7cd44d7b4712908c4ecb7dbd05678767,710
+STND.OMP.26,provision,LVL2,Balanced and present mappings,adopted,26.md,d43e37d859a716fe74507b24a8ffbc50e5ec767f1a5dd46a54dfa14fa5737c44,828
+STND.OMP.27,provision,LVL2,Device copies of global variables,adopted,27.md,8d1f76c7a2c1647d0a60919e66ed9e3255acc48531a12bf0c2a261520ee4e23a,707
+STND.OMP.28,provision,LVL2,Shared memory reliance,adopted,28.md,ad964e4e9cf115095826f1df612bae7f4cd35163356e18384ac027fbc16e2aaa,733
+STND.OMP.29,provision,LVL2,Host and device atomics,adopted,29.md,76b32d3559a0c55ef73461e5e170e8d516e22f6e611f2a3695794f867446965e,455
+STND.OMP.30,provision,LVL2,Floating-point state on devices,adopted,30.md,4fd9bc2452b03b8c0f16d4487e9a9a09e03e2fcb2739e32ed461dd41c5f1e2de,426
+STND.OMP.31,provision,LVL2,Offload test runs,adopted,31.md,d3d7f4c9682067644d87afc780673a3ead026c2eb862362116c004cf50bd5ede,583
+STND.OMP.32,provision,LVL2,Mapping checks,adopted,32.md,7dc8a059195a29988e13d60a08ad63766c1c4ef524941c2c433a5fd5d39daf8d,513
+STND.OMP.33,provision,LVL2,Schedules and bindings tested,adopted,33.md,1f5c5022c63c4b66ae30f894248d7ede885fafd1f24a35fc7e3e18c76af61a0f,464

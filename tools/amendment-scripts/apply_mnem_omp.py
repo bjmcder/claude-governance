@@ -6,7 +6,7 @@ from pathlib import Path
 from govharness.workflows.amend import Change, record_transaction, replace_text
 
 DATE = "2026-10-24"
-AT = "2026-10-24T15:00:00+00:00"  # set to the time of application once ratified
+AT = "2026-10-24T14:22:53+00:00"
 ROW_AFTER = "| CONC | STND | Concurrency standard | none | Reads as concurrency | active |"
 ROW = ("| OMP | STND | OpenMP standard | none | The prefix that OpenMP gives its own routines and environment variables"
        " | active |")

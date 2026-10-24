@@ -16,6 +16,7 @@ STND.INSTR,standard,LVL2,Agent instructions,adopted,INSTR/,a071027c0454b76ddcb6b
 STND.JL,standard,LVL2,Julia standard,adopted,JL/,b385b9ccf554b6b6f651b8d594bbd6bed4c88d4fc44b0fc7d58f0d1822bca7b8,49801
 STND.KNOW,standard,LVL2,Knowledge base and tags,adopted,KNOW/,cf2d42974dad8271ee834b4703d0662c7a5af03c3bb3246da7176dc75e483a5c,17232
 STND.MPI,standard,LVL2,Message Passing Interface standard,adopted,MPI/,31b4267bca1a8a839d46a3e805ce2e091eee79354ad08996261406017a8a6741,42872
+STND.OMP,standard,LVL2,OpenMP standard,adopted,OMP/,2d760afd156c619723a2d4091ddcc5de212054eb198de9a2d6fb18807517e622,44131
 STND.PROJ,standard,LVL2,Project constitution template,adopted,PROJ/,69991938a647148d18b257af8ecaa2284d9e0415f342bb09d9d0ce1e8c750dd0,17589
 STND.PY,standard,LVL2,Python standard,adopted,PY/,a4ca9d232f1dd38c52a84d181b2c50cf64de89dfaed55b203f265ea075c2cb0f,40216
 STND.THRT,standard,LVL2,Threat-model template,adopted,THRT/,d067d6c5f1cb2fcd8b555517a584e41d2893441a91df885b36821213437e0973,12734
