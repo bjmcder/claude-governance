@@ -61,3 +61,9 @@ Each rule below refines the decision where implementing it showed the text to be
 | Rule as refined above | Adjustment | Reason |
 | --- | --- | --- |
 | Five layers, `core` to `cli` | `govharness.hooks` holds programs that the environment runs, such as `hooks/guard.py`; they are at layer 4, import nothing from the package, and may read their input, the environment, and their policy file and print their answer. The CLI reads the guard's source to install it and never imports it | A hook is installed outside the work, where the package is not; `tests/test_architecture.py` asserts that a hook stands alone |
+
+## Adjustment made by unit 0008
+
+| Rule as refined above | Adjustment | Reason |
+| --- | --- | --- |
+| Only the CLI reads the clock | `govharness.hooks` may read the clock too: the guard compares the expiry of each authorization in its policy with the time of the call. The derivation still takes the time from the CLI as a parameter | An expiry checked only when the configuration is derived would let an authorization outlast its duration until the owner derives again (STND.HARN.29) |

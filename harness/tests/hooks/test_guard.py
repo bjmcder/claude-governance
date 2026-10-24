@@ -48,6 +48,7 @@ POLICY = {
     "tools": ["mcp__memory__*"],
     "store": "",
     "secrets": [],
+    "remote_writes": [],
     "responses": RESPONSES,
     "unattended": False,
 }

@@ -164,6 +164,30 @@ STORE_GAPS: dict[str, str] = {
         "the store while it holds a file not opened."
     ),
 }
+# What authorizations of remote writes add to the gap of remote-write.
+AUTHORIZED_GAP = (
+    "A git push or a tracker post that a standing authorization in force "
+    "names by destination, kind, and branch proceeds without referral "
+    "(STND.HARN.29), and only as the sole command of its call, with no "
+    "assignment, no global option, and no option outside a short list; "
+    "the destination is compared as a whole address. A push reads its "
+    "destination from the remote's one address in the git configuration "
+    "that the guard reads (the repository's, the account's, and the "
+    "system's), and is referred while that configuration rewrites "
+    "addresses, sets a push address, includes another file, recurses "
+    "into submodules, pushes tags, or names a program for the transport, "
+    "or while the account's environment sets a variable of git; a "
+    "program that changes the configuration between the check and the "
+    "push, such as one started earlier, is not seen. Expiry is checked "
+    "at every call; a revocation takes effect once the configuration is "
+    "derived again and installed. The text rule that refers every push "
+    "is dropped, so the guard alone refers an unauthorized one."
+)
+# Text rules that an authorization of a kind makes the guard's alone,
+# since a permission rule outranks a hook's answer.
+AUTHORIZED_RULES: dict[str, tuple[str, ...]] = {
+    "commit": ("Bash(git push *)",),
+}
 # Text rules by outcome; each goes to "deny" or "ask" by the response.
 RULES: dict[str, tuple[str, ...]] = {
     "elevated-privilege": (
@@ -362,8 +386,58 @@ def assess(
             gap += " Rows not mapped: " + "; ".join(locations.unmapped) + "."
         if inputs.store and outcome.key in STORE_GAPS:
             gap += " " + STORE_GAPS[outcome.key]
+        if outcome.key == "remote-write":
+            gap += authorization_gap(inputs)
         found.append(Coverage(outcome, level, gap))
     return found
+
+
+def authorization_gap(inputs: Inputs) -> str:
+    """Return what the authorizations add to the gap of remote-write.
+
+    Parameters
+    ----------
+    inputs : Inputs
+        The owner's statement of the environment.
+
+    Returns
+    -------
+    str
+        Empty without authorizations; otherwise the conditions of a
+        write passing, each authorization still referred, and each
+        destination whose host is no opened domain.
+    """
+    if not inputs.remote_writes and not inputs.referred:
+        return ""
+    gap = " " + AUTHORIZED_GAP if inputs.remote_writes else ""
+    for line in inputs.referred:
+        gap += f" Referred: {line}."
+    for write in inputs.remote_writes:
+        host = destination_host(write.destination)
+        if host not in inputs.domains:
+            gap += (
+                f" {write.authorization}: {host} is no opened domain, so "
+                "the sandbox may refuse the write (network-bounds)."
+            )
+    return gap
+
+
+def destination_host(destination: str) -> str:
+    """Return the host of a destination address.
+
+    Parameters
+    ----------
+    destination : str
+        An address that ``authorizations`` admitted.
+
+    Returns
+    -------
+    str
+        Its host, without user or port.
+    """
+    rest = destination.split("://", 1)[-1]
+    authority = rest.split("/", 1)[0].split(":", 1)[0]
+    return authority.rsplit("@", 1)[-1]
 
 
 def guard_policy(
@@ -398,6 +472,16 @@ def guard_policy(
         "tools": list(inputs.tools),
         "store": inputs.store or "",
         "secrets": list(inputs.secret_paths),
+        "remote_writes": [
+            {
+                "authorization": w.authorization,
+                "kind": w.kind,
+                "destination": w.destination,
+                "branches": list(w.branches),
+                "expires": w.expires,
+            }
+            for w in inputs.remote_writes
+        ],
         "responses": {o.key: o.response for o in outcomes},
         "unattended": inputs.unattended,
     }
@@ -462,8 +546,13 @@ def settings(outcomes: list[Outcome], inputs: Inputs) -> dict[str, object]:
     """
     deny: list[str] = []
     ask: list[str] = []
+    guarded = {
+        rule
+        for write in inputs.remote_writes
+        for rule in AUTHORIZED_RULES.get(write.kind, ())
+    }
     for outcome in outcomes:
-        rules = RULES.get(outcome.key, ())
+        rules = [r for r in RULES.get(outcome.key, ()) if r not in guarded]
         (deny if outcome.response == "Refuse" else ask).extend(rules)
     deny += [edit_rule(loc) for loc in configuration_locations(inputs)]
     allow = [*ALLOWED_TOOLS]
@@ -607,7 +696,18 @@ def coverage_report(
             f"Outcomes read from {table.holder} (status {table.status}). "
             f"Work: `{inputs.work}`. Unattended: "
             f"{'yes' if inputs.unattended else 'no'}. Assured work: "
-            f"{'yes' if inputs.assured else 'no'}.",
+            f"{'yes' if inputs.assured else 'no'}. Authorizations of "
+            "remote writes honored: "
+            + (
+                ", ".join(
+                    f"{w.authorization} ({w.kind} at {w.destination}"
+                    + (f", {', '.join(w.branches)}" if w.branches else "")
+                    + f", until {w.expires})"
+                    for w in inputs.remote_writes
+                )
+                or "none"
+            )
+            + ".",
             "",
             "| Key | Source | Response | Coverage | Gap |",
             "| --- | --- | --- | --- | --- |",
@@ -689,6 +789,18 @@ def install_notes(inputs: Inputs) -> str:
             )
             + " Append it with the type `configure` (STND.HARN.7).",
             "",
+            *(
+                [
+                    "The guard lets the remote writes of each authorization "
+                    "named here proceed until it expires. After revoking one, "
+                    "derive and install the configuration again, since the "
+                    "installed policy does not read the ledger "
+                    "(STND.HARN.29).",
+                    "",
+                ]
+                if inputs.remote_writes
+                else []
+            ),
         ]
     )
 

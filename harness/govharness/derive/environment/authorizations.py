@@ -1,0 +1,397 @@
+"""Read the authorizations of remote writes that a derivation honors.
+
+STND.HARN.18 refers each remote write that no authorization in force
+names by destination and kind of write. STND.PROJ.6 fixes the fields of
+an authorization file that covers a remote write, and STND.PROJ.7 the
+kinds of write. STND.HARN.29 states when a derived configuration may
+rely on one: the file is adopted, granted by the human owner, recorded
+no later and expiring later than the time of the write, pinned in its
+current content by a transaction of type ``authorize`` of the human
+owner that no later ``revoke`` names, signed for assured work, and
+standing, naming no kind or destination whose effect is irrevocable
+(GUARD.11).
+
+The owner names the authorizations an environment takes, as the owner
+names the opened secrets; this module checks each one and returns the
+remote writes the guard matches. An authorization that fails a test is
+an error, so that the derivation stops with the reason rather than
+deriving a configuration that silently refers what the owner expected
+to pass. One per action stays referred, because a configuration cannot
+tell the one action it covers from a repetition; the owner's answer to
+the referral confirms it.
+"""
+
+from __future__ import annotations
+
+import re
+from datetime import date, datetime
+from pathlib import PurePosixPath
+from typing import Any
+
+from govharness.core.corpus import Corpus, Tree, scope_hash
+from govharness.derive.environment.inputs import RemoteWrite
+from govharness.ledger.transactions import chain_problems
+
+GRANTOR = "The Human Owner"
+STATUS = "adopted"
+KIND = "auth"
+# The kinds of write of STND.PROJ.7; GUARD.11 names publication,
+# release, and transmission beyond the environment as irrevocable.
+KINDS = ("commit", "post", "publish", "transmit", "other")
+IRREVOCABLE = ("publish", "transmit")
+# The kinds whose destination the guard reads from the command.
+MATCHED = ("commit", "post")
+ENTRY_FIELDS = {"destination", "kinds", "branches", "provisioned"}
+DOMAIN = r"[a-z0-9-]+(?:\.[a-z0-9-]+)+"
+PATH = r"[A-Za-z0-9._~-]+(?:/[A-Za-z0-9._~-]+)*"
+# A repository address: https or ssh without credentials, or the short
+# form user@host:path. No query, fragment, or password is admitted, so
+# that no record holds a credential (AGENT.45).
+REPOSITORY_RE = re.compile(
+    rf"https://{DOMAIN}(?::[0-9]{{1,5}})?/{PATH}"
+    rf"|ssh://(?:[a-z0-9._-]+@)?{DOMAIN}(?::[0-9]{{1,5}})?/{PATH}"
+    rf"|[a-z0-9._-]+@{DOMAIN}:{PATH}"
+)
+# A tracker address, as ``gh --repo HOST/OWNER/REPO`` names it.
+TRACKER_RE = re.compile(rf"https://{DOMAIN}/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+")
+BRANCH_RE = re.compile(r"[A-Za-z0-9_][A-Za-z0-9._-]*(?:/[A-Za-z0-9._-]+)*")
+
+
+def timestamp(value: Any) -> datetime:
+    """Return a Timestamp of STND.HARN: ISO 8601 with its UTC offset.
+
+    Parameters
+    ----------
+    value : Any
+        The field value.
+
+    Returns
+    -------
+    datetime
+        The time, aware of its offset.
+
+    Raises
+    ------
+    ValueError
+        If the value is no string, no ISO 8601 time, or has no offset.
+    """
+    if not isinstance(value, str) or "T" not in value:
+        raise ValueError(f"{value!r} is no timestamp")
+    moment = datetime.fromisoformat(value)
+    if moment.utcoffset() is None:
+        raise ValueError(f"{value!r} has no UTC offset")
+    return moment
+
+
+def segments_safe(address: str) -> bool:
+    """Return whether no path segment of an address is ``.`` or ``..``.
+
+    Parameters
+    ----------
+    address : str
+        A destination address.
+
+    Returns
+    -------
+    bool
+        Whether the address names one location as written.
+    """
+    tail = address.split("://", 1)[-1]
+    return not any(part in {".", ".."} for part in re.split(r"[/:]", tail))
+
+
+def entry_problems(entry: Any, standing: bool) -> list[str]:
+    """Return how one entry of ``remote_writes`` breaks STND.PROJ.6.
+
+    Parameters
+    ----------
+    entry : Any
+        The entry as the front matter holds it.
+    standing : bool
+        Whether the authorization is standing.
+
+    Returns
+    -------
+    list[str]
+        One line per problem; empty when the entry is well formed and,
+        for a standing authorization, revocable (GUARD.11).
+    """
+    if not isinstance(entry, dict) or set(entry) != ENTRY_FIELDS:
+        return [f"an entry does not hold exactly {sorted(ENTRY_FIELDS)}"]
+    destination, kinds = entry["destination"], entry["kinds"]
+    branches, provisioned = entry["branches"], entry["provisioned"]
+    if not isinstance(destination, str) or not segments_safe(destination):
+        return ["a destination is no single address"]
+    problems: list[str] = []
+    if (
+        not isinstance(kinds, list)
+        or not kinds
+        or len(set(kinds)) != len(kinds)
+        or not all(k in KINDS for k in kinds)
+    ):
+        problems.append(f"{destination}: kinds are not distinct of {KINDS}")
+        kinds = []
+    if not isinstance(provisioned, bool):
+        problems.append(f"{destination}: provisioned is no boolean")
+    if not isinstance(branches, list) or not all(
+        isinstance(b, str)
+        and BRANCH_RE.fullmatch(b)
+        and ".." not in b
+        and not b.endswith(".lock")
+        for b in branches
+    ):
+        problems.append(f"{destination}: a branch is no branch name")
+        branches = []
+    if "commit" in kinds and not REPOSITORY_RE.fullmatch(destination):
+        problems.append(f"{destination}: no repository address")
+    if "commit" in kinds and not branches:
+        problems.append(f"{destination}: commit names no branch")
+    if "commit" not in kinds and branches:
+        problems.append(f"{destination}: branches without commit")
+    if "post" in kinds and not TRACKER_RE.fullmatch(destination):
+        problems.append(f"{destination}: no tracker address")
+    if standing and set(kinds) & set(IRREVOCABLE):
+        problems.append(
+            f"{destination}: a standing authorization covers an "
+            "irrevocable kind (GUARD.11)"
+        )
+    if standing and provisioned is not True:
+        problems.append(
+            f"{destination}: a standing authorization names a destination "
+            "not recorded as provisioned, a transmission beyond the "
+            "environment (GUARD.11)"
+        )
+    return problems
+
+
+def covers(scope: list[str], rel: PurePosixPath) -> bool:
+    """Return whether a transaction's scope pins a file.
+
+    Parameters
+    ----------
+    scope : list[str]
+        Scope paths of the transaction.
+    rel : PurePosixPath
+        The file, relative to the corpus root.
+
+    Returns
+    -------
+    bool
+        Whether a scope path is the file's directory or one above it.
+    """
+    return any(
+        rel.parts[: len(PurePosixPath(s).parts)] == PurePosixPath(s).parts
+        for s in scope
+    )
+
+
+def record_problems(
+    ident: str,
+    rel: PurePosixPath,
+    tree: Tree,
+    ledger: list[dict[str, Any]],
+    assured: bool,
+    verified: bool,
+) -> list[str]:
+    """Return how the ledger fails to record an authorization in force.
+
+    Parameters
+    ----------
+    ident : str
+        Identifier of the authorization.
+    rel : PurePosixPath
+        Its file, relative to the corpus root.
+    tree : Tree
+        Snapshot of the corpus.
+    ledger : list[dict[str, Any]]
+        The ledger of the corpus, in order.
+    assured : bool
+        Whether the work is assured (CSQ0 or CSQ1).
+    verified : bool
+        Whether every signature of the ledger verifies against the
+        signer register, as the caller checked it.
+
+    Returns
+    -------
+    list[str]
+        One line per problem; empty when the ledger's chain is intact,
+        the latest transaction that pins the file is the human owner's
+        ``authorize`` of it, pins its current content, and no later
+        ``revoke`` names it.
+    """
+    if chain_problems(ledger):
+        return ["the ledger's chain is broken (STND.HARN.8)"]
+    pinning = [
+        (i, e) for i, e in enumerate(ledger) if covers(e.get("scope") or [], rel)
+    ]
+    if not pinning:
+        return ["no transaction of the ledger pins it"]
+    index, latest = pinning[-1]
+    problems: list[str] = []
+    if (
+        latest.get("type") != "authorize"
+        or latest.get("actor") != GRANTOR
+        or ident not in (latest.get("targets") or [])
+    ):
+        problems.append(
+            f"the latest transaction that pins it, seq {latest.get('seq')}, "
+            f"is no authorize of it by {GRANTOR}"
+        )
+    if scope_hash(tree, list(latest.get("scope") or [])) != latest.get(
+        "corpus_hash"
+    ):
+        problems.append("its content changed after the ledger pinned it")
+    if any(
+        e.get("type") == "revoke" and ident in (e.get("targets") or [])
+        for e in ledger[index + 1 :]
+    ):
+        problems.append("a later transaction revokes it")
+    if assured and not (latest.get("signature") and verified):
+        problems.append(
+            "for assured work, its transaction carries no signature that "
+            "the signer register verifies (STND.HARN.11)"
+        )
+    return problems
+
+
+def read_one(
+    corpus: Corpus,
+    ident: str,
+    now: datetime,
+) -> tuple[dict[str, Any], PurePosixPath, list[str]]:
+    """Return an authorization's fields, its file, and its problems.
+
+    Parameters
+    ----------
+    corpus : Corpus
+        Indexed corpus.
+    ident : str
+        Identifier of the authorization.
+    now : datetime
+        Time of the derivation, aware of its offset.
+
+    Returns
+    -------
+    tuple[dict[str, Any], PurePosixPath, list[str]]
+        The front matter, the path relative to the root, and one line
+        per field that keeps it from being in force (STND.HARN.29).
+
+    Raises
+    ------
+    ValueError
+        If the corpus holds no authorization of that identifier.
+    """
+    entry = corpus.by_id.get(ident)
+    if entry is None or entry.meta.get("kind") != KIND:
+        raise ValueError(f"{ident}: no authorization of the corpus")
+    meta = entry.meta
+    problems: list[str] = []
+    if meta.get("status") != STATUS:
+        problems.append(f"status {meta.get('status')!r}, not {STATUS!r}")
+    if meta.get("grantor") != GRANTOR:
+        problems.append(f"grantor {meta.get('grantor')!r}, not {GRANTOR!r}")
+    try:
+        recorded = date.fromisoformat(str(meta.get("recorded")))
+        if recorded > now.date():
+            problems.append(f"recorded {recorded} is after the derivation")
+    except ValueError:
+        problems.append(f"recorded {meta.get('recorded')!r} is no date")
+    try:
+        if timestamp(meta.get("expires")) <= now:
+            problems.append(f"expired at {meta.get('expires')}")
+    except ValueError as error:
+        problems.append(f"expires: {error}")
+    standing = meta.get("standing")
+    if not isinstance(standing, bool):
+        problems.append("standing is no boolean")
+    writes = meta.get("remote_writes")
+    if not isinstance(writes, list) or not writes:
+        problems.append("remote_writes names no destination")
+    else:
+        for item in writes:
+            problems += entry_problems(item, standing is True)
+    path = entry.path
+    rel = PurePosixPath(path.as_posix())
+    return meta, rel, problems
+
+
+def read_authorizations(
+    corpus: Corpus,
+    tree: Tree,
+    ledger: list[dict[str, Any]],
+    idents: tuple[str, ...],
+    now: datetime,
+    assured: bool,
+    verified: bool,
+) -> tuple[tuple[RemoteWrite, ...], tuple[str, ...]]:
+    """Return the remote writes that the named authorizations open.
+
+    Parameters
+    ----------
+    corpus : Corpus
+        Indexed corpus holding the authorization files.
+    tree : Tree
+        Snapshot of the same corpus, for the content the ledger pins.
+    ledger : list[dict[str, Any]]
+        The ledger of the corpus, in order.
+    idents : tuple[str, ...]
+        Identifiers of the authorizations the owner names.
+    now : datetime
+        Time of the derivation, aware of its offset.
+    assured : bool
+        Whether the work is assured (CSQ0 or CSQ1).
+    verified : bool
+        Whether every signature of the ledger verifies.
+
+    Returns
+    -------
+    tuple[tuple[RemoteWrite, ...], tuple[str, ...]]
+        One remote write per destination and matched kind of each
+        standing authorization; and one line per authorization, or kind,
+        whose writes stay referred, with the reason.
+
+    Raises
+    ------
+    ValueError
+        If an authorization is not in force, with every reason.
+    """
+    if now.utcoffset() is None:
+        raise ValueError("the time of the derivation has no UTC offset")
+    writes: list[RemoteWrite] = []
+    referred: list[str] = []
+    errors: list[str] = []
+    for ident in dict.fromkeys(idents):
+        meta, rel, problems = read_one(corpus, ident, now)
+        problems += record_problems(
+            ident, rel, tree, ledger, assured, verified
+        )
+        if problems:
+            errors.append(f"{ident} is not in force: " + "; ".join(problems))
+            continue
+        if not meta["standing"]:
+            referred.append(
+                f"{ident}: per action, so each write it covers is referred "
+                "and the human owner's answer confirms it"
+            )
+            continue
+        for item in meta["remote_writes"]:
+            for kind in item["kinds"]:
+                if kind not in MATCHED:
+                    referred.append(
+                        f"{ident}: kind {kind} at {item['destination']} is "
+                        "not matched by this adapter, so it is referred"
+                    )
+                    continue
+                branches = item["branches"] if kind == "commit" else []
+                writes.append(
+                    RemoteWrite(
+                        ident,
+                        kind,
+                        item["destination"],
+                        tuple(branches),
+                        str(meta["expires"]),
+                    )
+                )
+    if errors:
+        raise ValueError(" | ".join(errors))
+    return tuple(writes), tuple(referred)
