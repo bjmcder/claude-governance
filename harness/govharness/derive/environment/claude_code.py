@@ -164,6 +164,44 @@ STORE_GAPS: dict[str, str] = {
         "the store while it holds a file not opened."
     ),
 }
+# What authorizations of remote writes add to the gap of remote-write.
+AUTHORIZED_GAP = (
+    "A git push or a tracker post that a standing authorization names "
+    "by destination, kind, and branches, compared as whole strings, gets "
+    "an allow from the guard (STND.HARN.29) only where the call is one "
+    "command of plain words, with no expansion, substitution, "
+    "redirection, here-document, or separator; git or gh is named "
+    "without a path; no assignment, global option, or option outside a "
+    "short list is given; a post carries literal text with no @ and no "
+    "file; and, for a push, the command runs inside the work, the first "
+    "repository found is the work's own and valid, the remote has one "
+    "address, the refspecs name local branches only, the repository "
+    "holds no hook, and the git configuration that the guard reads (the "
+    "repository's, the worktree's, the account's, and the system's) "
+    "rewrites no address and sets no push address, inclusion, alias, "
+    "credential helper, hooks path, transport program, proxy, pushing of "
+    "tags, or recursion into submodules, while the guard's environment "
+    "sets no variable of git or gh. The text rules that refer every push "
+    "and every such post stay, and a permission rule may outrank a "
+    "hook's allow; until an installation test shows that the allow "
+    "passes, an authorized write may still be referred, and, in an "
+    "unattended session, refused. While the sandbox runs, it denies "
+    "shell commands every write to the work's .git/config, "
+    ".git/config.worktree, and .git/hooks, so a program started earlier "
+    "is unable to change them between the check and the push, and git "
+    "config and git remote set-url fail in the sandbox. Not seen: a "
+    "program that changes the refs, the common configuration of a linked "
+    "worktree that lies in a location opened for writing, or the "
+    "account's ssh or gh configuration between the check and the write; "
+    "what "
+    "the remote does with the write, such as a redirection or a "
+    "deployment; and the content of a post, which the authorization's "
+    "destination alone bounds. The authorization is tested when the "
+    "configuration is derived; the guard tests its expiry at each "
+    "write, and a revocation takes effect once the configuration is "
+    "derived again and installed, which `environment --check` reports "
+    "until then."
+)
 # Text rules by outcome; each goes to "deny" or "ask" by the response.
 RULES: dict[str, tuple[str, ...]] = {
     "elevated-privilege": (
@@ -182,7 +220,12 @@ RULES: dict[str, tuple[str, ...]] = {
         "Bash(git commit --amend *)",
     ),
     "record-entries": (f"Edit(**/{LEDGER_FILE})",),
-    "remote-write": ("Bash(git push *)",),
+    "remote-write": (
+        "Bash(git push *)",
+        "Bash(gh issue create *)",
+        "Bash(gh issue comment *)",
+        "Bash(gh pr comment *)",
+    ),
     "selective-destruction": (
         "Bash(rm -r *)",
         "Bash(rm -rf *)",
@@ -362,8 +405,58 @@ def assess(
             gap += " Rows not mapped: " + "; ".join(locations.unmapped) + "."
         if inputs.store and outcome.key in STORE_GAPS:
             gap += " " + STORE_GAPS[outcome.key]
+        if outcome.key == "remote-write":
+            gap += authorization_gap(inputs)
         found.append(Coverage(outcome, level, gap))
     return found
+
+
+def authorization_gap(inputs: Inputs) -> str:
+    """Return what the authorizations add to the gap of remote-write.
+
+    Parameters
+    ----------
+    inputs : Inputs
+        The owner's statement of the environment.
+
+    Returns
+    -------
+    str
+        Empty without authorizations; otherwise the conditions of a
+        write passing, each authorization still referred, and each
+        destination whose host is no opened domain.
+    """
+    if not inputs.remote_writes and not inputs.referred:
+        return ""
+    gap = " " + AUTHORIZED_GAP if inputs.remote_writes else ""
+    for line in inputs.referred:
+        gap += f" Referred: {line}."
+    for write in inputs.remote_writes:
+        host = destination_host(write.destination)
+        if host not in inputs.domains:
+            gap += (
+                f" {write.authorization}: {host} is no opened domain, so "
+                "the sandbox may refuse the write (network-bounds)."
+            )
+    return gap
+
+
+def destination_host(destination: str) -> str:
+    """Return the host of a destination address.
+
+    Parameters
+    ----------
+    destination : str
+        An address that ``authorizations`` admitted.
+
+    Returns
+    -------
+    str
+        Its host, without user or port.
+    """
+    rest = destination.split("://", 1)[-1]
+    authority = rest.split("/", 1)[0].split(":", 1)[0]
+    return authority.rsplit("@", 1)[-1]
 
 
 def guard_policy(
@@ -398,6 +491,17 @@ def guard_policy(
         "tools": list(inputs.tools),
         "store": inputs.store or "",
         "secrets": list(inputs.secret_paths),
+        "remote_writes": [
+            {
+                "authorization": w.authorization,
+                "kind": w.kind,
+                "destination": w.destination,
+                "branches": list(w.branches),
+                # Null for one that lapses only when revoked.
+                "expires": w.expires or None,
+            }
+            for w in inputs.remote_writes
+        ],
         "responses": {o.key: o.response for o in outcomes},
         "unattended": inputs.unattended,
     }
@@ -445,6 +549,26 @@ def hook_command(assured: bool) -> str:
     return f"{run} || printf '%s\\n' {shlex.quote(UNGUARDED)}"
 
 
+def git_metadata(inputs: Inputs) -> tuple[str, ...]:
+    """Return the git files of the work that a push reads and the guard checks.
+
+    Parameters
+    ----------
+    inputs : Inputs
+        The owner's statement of the environment.
+
+    Returns
+    -------
+    tuple[str, ...]
+        The repository's and the worktree's configuration and its hooks
+        directory, under ``<work>/.git``. A ``core.hooksPath`` needs no
+        entry: the guard refers every push while one is set, and the
+        sandbox keeps shell commands from setting one in these files.
+    """
+    git = f"{inputs.work.rstrip('/')}/.git"
+    return (f"{git}/config", f"{git}/config.worktree", f"{git}/hooks")
+
+
 def settings(outcomes: list[Outcome], inputs: Inputs) -> dict[str, object]:
     """Return the managed settings.
 
@@ -484,6 +608,10 @@ def settings(outcomes: list[Outcome], inputs: Inputs) -> dict[str, object]:
         filesystem["denyRead"] = [f"{inputs.store}/*", f"{inputs.store}/.*"]
         filesystem["allowRead"] = list(inputs.secret_paths)
         filesystem["denyWrite"].append(inputs.store)
+    if any(w.kind == "commit" for w in inputs.remote_writes):
+        # The guard reads these at the call; a program started earlier
+        # must not swap them before the push (security review M-a).
+        filesystem["denyWrite"] += list(git_metadata(inputs))
     return {
         "allowManagedHooksOnly": True,
         "allowManagedPermissionRulesOnly": True,
@@ -607,7 +735,18 @@ def coverage_report(
             f"Outcomes read from {table.holder} (status {table.status}). "
             f"Work: `{inputs.work}`. Unattended: "
             f"{'yes' if inputs.unattended else 'no'}. Assured work: "
-            f"{'yes' if inputs.assured else 'no'}.",
+            f"{'yes' if inputs.assured else 'no'}. Authorizations of "
+            "remote writes honored: "
+            + (
+                ", ".join(
+                    f"{w.authorization} ({w.kind} at {w.destination}"
+                    + (f", {', '.join(w.branches)}" if w.branches else "")
+                    + f", until {w.expires or 'revoked'})"
+                    for w in inputs.remote_writes
+                )
+                or "none"
+            )
+            + ".",
             "",
             "| Key | Source | Response | Coverage | Gap |",
             "| --- | --- | --- | --- | --- |",
@@ -689,6 +828,18 @@ def install_notes(inputs: Inputs) -> str:
             )
             + " Append it with the type `configure` (STND.HARN.7).",
             "",
+            *(
+                [
+                    "The guard lets the remote writes of each authorization "
+                    "named here proceed until it expires. After revoking one, "
+                    "derive and install the configuration again, since the "
+                    "installed policy does not read the ledger "
+                    "(STND.HARN.29).",
+                    "",
+                ]
+                if inputs.remote_writes
+                else []
+            ),
         ]
     )
 

@@ -102,7 +102,9 @@ EFFECTS: dict[str, tuple[str, ...]] = {
     "temporary": (GPG, WORKFLOWS),
     "copy": (WORKFLOWS,),
     "print": (CLI, MAIN, HOOKS),
-    "clock": (CLI,),
+    # The guard compares the expiry of an authorization with the time
+    # of each call (STND.HARN.29, unit 0008).
+    "clock": (CLI, HOOKS),
     # A rehearsal runs the amendment script it is given.
     "execute": (REHEARSE,),
     # No module changes the interpreter's state, such as its recursion

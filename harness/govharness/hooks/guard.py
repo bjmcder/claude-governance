@@ -44,7 +44,9 @@ import os
 import re
 import shlex
 import sys
+import time
 from dataclasses import dataclass, field
+from datetime import datetime
 from pathlib import PurePosixPath
 from typing import Any
 
@@ -127,6 +129,8 @@ PUBLISHERS = {
     "yarn": {"publish"},
 }
 GH_WRITES = {
+    "alias": {"delete", "import", "set"},
+    "extension": {"exec", "install", "remove", "upgrade"},
     "gist": {"create", "delete", "edit"},
     "issue": {"close", "comment", "create", "delete", "edit", "reopen"},
     "pr": {"close", "comment", "create", "edit", "merge", "review"},
@@ -169,6 +173,67 @@ AUTHORITY_RE = re.compile(r"^[a-zA-Z][a-zA-Z0-9+.-]*://([^/\\?#]*)")
 HOST_RE = re.compile(r"^[a-z0-9.-]+$")
 EDIT_TOOLS = {"Edit", "MultiEdit", "NotebookEdit", "Write"}
 READ_TOOLS = {"Glob", "Grep", "LS", "Read"}
+# The kinds of write of STND.PROJ.7 whose destination the guard reads.
+GRANT_KINDS = {"commit", "post"}
+GRANT_FIELDS = {"authorization", "kind", "destination", "branches", "expires"}
+# Options of ``git push`` that change neither what is pushed nor where;
+# every other option leaves an authorized push referred.
+PUSH_OPTIONS = {
+    "--atomic",
+    "--no-progress",
+    "--porcelain",
+    "--progress",
+    "--quiet",
+    "--set-upstream",
+    "--verbose",
+    "-q",
+    "-u",
+    "-v",
+}
+# Git configuration that sends a push elsewhere, adds to what it
+# pushes, or runs a program for the transport: sections, then keys by
+# section and key, then keys of each remote.
+GIT_SECTIONS = {"alias", "credential", "include", "includeif", "url"}
+GIT_KEYS = {
+    ("core", "askpass"),
+    ("core", "fsmonitor"),
+    ("core", "gitproxy"),
+    ("core", "hookspath"),
+    ("core", "sshcommand"),
+    ("extensions", "refstorage"),
+    ("http", "proxy"),
+    ("push", "followtags"),
+    ("push", "recursesubmodules"),
+    ("submodule", "recurse"),
+}
+# Options of git subcommands that take the next word, so that a ``-n``
+# after one is its value, not a dry run.
+DRY_VALUED = {"--exclude", "--pathspec-from-file", "-e", "-o"}
+REMOTE_KEYS = {"mirror", "proxy", "pushurl", "receivepack", "vcs"}
+# The system's git configuration file.
+GIT_SYSTEM_CONFIG = "/etc/gitconfig"
+GIT_SECTION_RE = re.compile(
+    r'\[\s*([A-Za-z0-9.-]+)(?:\s+"((?:[^"\\\n]|\\.)*)")?\s*\]\s*(?:[#;].*)?'
+)
+GIT_KEY_RE = re.compile(r"([A-Za-z][A-Za-z0-9-]*)\s*(?:=\s*(.*))?")
+REMOTE_NAME_RE = re.compile(r"[A-Za-z0-9_][A-Za-z0-9._-]*")
+# A tracker post of ``gh``: the subcommands, and the options each takes
+# with a value; every other option leaves it referred.
+GH_POSTS = {
+    ("issue", "create"): {"--body", "--repo", "--title", "-R", "-b", "-t"},
+    ("issue", "comment"): {"--body", "--repo", "-R", "-b"},
+    ("pr", "comment"): {"--body", "--repo", "-R", "-b"},
+}
+# A call that carries an authorized write holds only these characters:
+# no expansion, substitution, redirection, here-document, pattern,
+# comment, or separator that the sole-command rule would have to read.
+PLAIN_RE = re.compile(r"[A-Za-z0-9 _./:@=,+'\"-]*")
+# Options of git before its subcommand that take the next word.
+GIT_VALUED = {"-C", "-c", "--config-env", "--git-dir", "--namespace",
+              "--super-prefix", "--work-tree"}
+GH_REPO_RE = re.compile(
+    r"([a-z0-9-]+(?:\.[a-z0-9-]+)+)/([A-Za-z0-9._-]+)/([A-Za-z0-9._-]+)"
+)
 POLICY_LISTS = (
     "writable",
     "readable",
@@ -180,6 +245,31 @@ POLICY_LISTS = (
     "tools",
     "secrets",
 )
+
+
+@dataclass(frozen=True)
+class Grant:
+    """One remote write that the environment lets proceed.
+
+    Parameters
+    ----------
+    authorization : str
+        Identifier of the authorization that names it.
+    kind : str
+        ``commit`` or ``post``.
+    destination : str
+        Address of the destination, compared as a whole.
+    branches : tuple[str, ...]
+        Branches a ``commit`` may update.
+    expires : float
+        Seconds since the epoch at which the authorization lapses.
+    """
+
+    authorization: str
+    kind: str
+    destination: str
+    branches: tuple[str, ...]
+    expires: float
 
 
 @dataclass(frozen=True)
@@ -212,6 +302,9 @@ class Policy:
         Directory of STND.DFLT.29, or empty where the work keeps none.
     secrets : tuple[str, ...]
         Files of the store that the agent may read and write.
+    grants : tuple[Grant, ...]
+        Remote writes that a standing authorization in force names by
+        destination and kind (STND.HARN.29).
     responses : dict[str, str]
         Decision by outcome key, ``deny`` or ``ask``.
     unattended : bool
@@ -230,6 +323,7 @@ class Policy:
     tools: tuple[str, ...]
     store: str
     secrets: tuple[str, ...]
+    grants: tuple[Grant, ...]
     responses: dict[str, str]
     unattended: bool
 
@@ -242,9 +336,13 @@ class Findings:
     ----------
     reached : list[tuple[str, str]]
         Pairs of outcome key and reason, in the order found.
+    permitted : list[tuple[str, str]]
+        Remote writes that an authorization names, by reason and the
+        authorization, kept only where the call is one plain command.
     """
 
     reached: list[tuple[str, str]] = field(default_factory=list)
+    permitted: list[tuple[str, str]] = field(default_factory=list)
 
     def add(self, outcome: str, reason: str) -> None:
         """Record that the call reaches an outcome, once per reason.
@@ -280,6 +378,15 @@ class Scan:
         guard therefore does not know.
     bodies : list[str]
         Bodies of the line's here-documents, by the index of their mark.
+    commands : int
+        Simple commands read in this pass, nested ones included.
+    bare : bool
+        Whether the simple command being read has no assignment or
+        reserved word before its program.
+    permitted : list[tuple[str, str]]
+        Remote writes an authorization names, by reason and the
+        authorization; each stands only while the line holds no other
+        command.
     """
 
     policy: Policy
@@ -288,6 +395,9 @@ class Scan:
     home: str
     assigned: set[str] = field(default_factory=set)
     bodies: list[str] = field(default_factory=list)
+    commands: int = 0
+    bare: bool = True
+    permitted: list[tuple[str, str]] = field(default_factory=list)
 
 
 def read_policy(data: dict[str, Any]) -> Policy:
@@ -309,10 +419,14 @@ def read_policy(data: dict[str, Any]) -> Policy:
         If a field is missing.
     ValueError
         If a list field is not a list of strings, the store is no
-        string, or a response is neither Refuse nor Refer.
+        string, ``remote_writes`` is no list, or a response is neither
+        Refuse nor Refer. A malformed entry of ``remote_writes`` is left
+        out, so that the write it would name is referred.
     """
     if not isinstance(data["store"], str):
         raise ValueError("policy field store is no string")
+    if not isinstance(data["remote_writes"], list):
+        raise ValueError("policy field remote_writes is no list")
     for name in POLICY_LISTS:
         values = data[name]
         if not isinstance(values, list) or not all(
@@ -337,9 +451,102 @@ def read_policy(data: dict[str, Any]) -> Policy:
         tools=tuple(data["tools"]),
         store=str(data["store"]),
         secrets=tuple(data["secrets"]),
+        grants=tuple(
+            g for g in map(read_grant, data["remote_writes"]) if g is not None
+        ),
         responses=responses,
         unattended=bool(data["unattended"]),
     )
+
+
+def read_grant(data: Any) -> Grant | None:
+    """Return one entry of the policy's ``remote_writes``, if well formed.
+
+    Parameters
+    ----------
+    data : Any
+        The entry as the policy holds it.
+
+    Returns
+    -------
+    Grant | None
+        The grant; None for an entry of another form, an unknown kind, a
+        ``commit`` without branches, or an expiry that is neither null
+        (until revoked) nor a time with a UTC offset, so that the write
+        it would name is referred.
+    """
+    if not isinstance(data, dict) or set(data) != GRANT_FIELDS:
+        return None
+    branches = data["branches"]
+    if (
+        data["kind"] not in GRANT_KINDS
+        or not isinstance(data["authorization"], str)
+        or not isinstance(data["destination"], str)
+        or not data["destination"]
+        or not isinstance(branches, list)
+        or not all(isinstance(b, str) and b for b in branches)
+        or (data["kind"] == "commit") != bool(branches)
+        or not (data["expires"] is None or isinstance(data["expires"], str))
+    ):
+        return None
+    if data["expires"] is None:
+        # Until revoked: the revocation reaches the policy when the
+        # configuration is derived again.
+        return Grant(
+            data["authorization"],
+            data["kind"],
+            data["destination"],
+            tuple(branches),
+            float("inf"),
+        )
+    try:
+        expires = datetime.fromisoformat(data["expires"])
+    except ValueError:
+        return None
+    if expires.utcoffset() is None:
+        return None
+    return Grant(
+        data["authorization"],
+        data["kind"],
+        data["destination"],
+        tuple(branches),
+        expires.timestamp(),
+    )
+
+
+def granted(
+    policy: Policy, kind: str, destination: str, branches: list[str]
+) -> str | None:
+    """Return the authorization that names a remote write, if one does.
+
+    Parameters
+    ----------
+    policy : Policy
+        The policy.
+    kind : str
+        ``commit`` or ``post``.
+    destination : str
+        The destination as the command names it.
+    branches : list[str]
+        Branches the write updates; empty for a post.
+
+    Returns
+    -------
+    str | None
+        The identifier of an authorization not yet expired whose kind
+        and destination equal the write's, as whole strings, and that
+        covers every branch; None otherwise.
+    """
+    now = time.time()
+    for grant in policy.grants:
+        if (
+            grant.kind == kind
+            and grant.destination == destination
+            and set(branches) <= set(grant.branches)
+            and now < grant.expires
+        ):
+            return grant.authorization
+    return None
 
 
 def normalize(path: str) -> str:
@@ -1133,6 +1340,10 @@ def check_written(path: str, policy: Policy, found: Findings) -> None:
     for name in {path, real}:
         if within(name, policy.configuration):
             found.add("enforcing-configuration", f"changes {name}")
+        if ".git" in PurePosixPath(name).parts:
+            # Only git itself writes its metadata: a direct write can
+            # move a ref, add a hook, or plant a configuration.
+            found.add("history-rewrite", f"writes version-control {name}")
         if PurePosixPath(name).name in policy.ledgers:
             found.add("record-entries", f"changes or removes ledger {name}")
     # The write lands where the links lead.
@@ -1188,6 +1399,9 @@ def check_writes(targets: list[str], scan: Scan, append: bool) -> None:
             real = real_path(path)
             if within(path, scan.policy.configuration):
                 scan.found.add("enforcing-configuration", f"changes {path}")
+            if any(".git" in PurePosixPath(n).parts for n in (path, real)):
+                # An appended line still adds a setting or a hook.
+                scan.found.add("history-rewrite", f"writes version-control {path}")
             if not within(real, scan.policy.writable):
                 scan.found.add("write-bounds", f"writes {real}")
             elif secret_file(real, scan.policy):
@@ -1229,6 +1443,40 @@ def check_copied(sources: list[str], scan: Scan) -> None:
                 scan.found.add("read-bounds", f"copies the store: {path}")
 
 
+def dry_run(sub: str, args: list[str]) -> bool:
+    """Return whether a git subcommand runs as a dry run, read strictly.
+
+    Parameters
+    ----------
+    sub : str
+        The subcommand, such as ``push`` or ``clean``.
+    args : list[str]
+        Its arguments.
+
+    Returns
+    -------
+    bool
+        Whether ``-n`` or ``--dry-run`` is an argument of its own, and,
+        so that no option's value is misread as the flag, every other
+        option is one that takes no value: for ``push``, one of
+        ``PUSH_OPTIONS``; for another subcommand, any option that is not
+        one of ``DRY_VALUED`` and holds no ``=``. Before ``--`` only.
+    """
+    words = args[: args.index("--")] if "--" in args else args
+    if not {"-n", "--dry-run"} & set(words):
+        return False
+    for word in words:
+        if not word.startswith("-") or word in {"-n", "--dry-run"}:
+            continue
+        if sub == "push" and word not in PUSH_OPTIONS:
+            return False
+        if "=" in word or word in DRY_VALUED or any(
+            word.startswith(v) and not v.startswith("--") for v in DRY_VALUED
+        ):
+            return False
+    return True
+
+
 def check_git(words: list[str], scan: Scan) -> None:
     """Check one git command.
 
@@ -1242,10 +1490,13 @@ def check_git(words: list[str], scan: Scan) -> None:
         ``core.pager`` runs one; ``-C`` adds a directory.
     """
     found = scan.found
+    bare = scan.bare
     rest = words[1:]
+    options: list[str] = []
     while rest and rest[0].startswith("-"):
         option = rest[0]
-        takes_value = option in {"-C", "-c", "--git-dir", "--work-tree"}
+        options.append(option)
+        takes_value = option in GIT_VALUED
         value = rest[1] if takes_value and len(rest) > 1 else ""
         rest = rest[2:] if takes_value else rest[1:]
         if option == "-c":
@@ -1258,7 +1509,7 @@ def check_git(words: list[str], scan: Scan) -> None:
     command = ["git", *args]
     flags = set(args)
     letters = short_flags(command)
-    dry = "n" in letters or long_flag(command, "--dry-run")
+    dry = dry_run(sub, args)
     if sub == "push" and not dry:
         forced = long_flag(
             command,
@@ -1271,7 +1522,11 @@ def check_git(words: list[str], scan: Scan) -> None:
         ) or any(a.startswith(("+", ":")) for a in operands(command))
         if forced or {"f", "d"} & letters:
             found.add("history-rewrite", "forced or deleting push")
-        found.add("remote-write", "git push")
+        grant, reason = push_grant(words[0], options, args, scan, bare)
+        if grant is None:
+            found.add("remote-write", reason)
+        else:
+            scan.permitted.append((reason, grant))
     elif sub in HISTORY_REWRITES | {"update-ref"}:
         found.add("history-rewrite", f"git {sub}")
     elif sub == "commit" and long_flag(command, "--amend"):
@@ -1364,16 +1619,18 @@ def check_find(words: list[str], scan: Scan) -> None:
         scan.found.add("selective-destruction", "find selects items to remove")
 
 
-def check_remote(words: list[str], found: Findings) -> None:
+def check_remote(words: list[str], scan: Scan) -> None:
     """Check one command for a write to a remote system.
 
     Parameters
     ----------
     words : list[str]
         Program name and its arguments.
-    found : Findings
-        Receives the outcomes reached.
+    scan : Scan
+        The reading so far; receives the outcomes reached.
     """
+    found = scan.found
+    bare = scan.bare
     name = PurePosixPath(words[0]).name
     args = words[1:]
     if name in REMOTE_COPIERS:
@@ -1398,11 +1655,588 @@ def check_remote(words: list[str], found: Findings) -> None:
         a.startswith(("--post", "--method", "--body")) for a in args
     ):
         found.add("remote-write", "wget sends data")
-    elif name == "gh" and len(args) >= 2:
-        if args[1] in GH_WRITES.get(args[0], set()) or args[0] == "api":
-            found.add("remote-write", f"gh {args[0]} {args[1]}")
+    elif name == "gh" and args and args[0].startswith("-") and args[1:]:
+        found.add("remote-write", "gh with an option before its command")
+    elif name == "gh" and len(args) >= 2 and args[0] in GH_WRITES:
+        if args[1].startswith("-"):
+            found.add("remote-write", f"gh {args[0]} with an option first")
+        elif args[1] in GH_WRITES[args[0]]:
+            grant, reason = post_grant(words[0], args, scan, bare)
+            if grant is None:
+                found.add("remote-write", reason)
+            else:
+                scan.permitted.append((reason, grant))
+    elif name == "gh" and len(args) >= 2 and args[0] == "api":
+        found.add("remote-write", f"gh {args[0]} {args[1]}")
     elif name in PUBLISHERS and set(args) & PUBLISHERS[name]:
         found.add("remote-write", f"{name} publishes")
+
+
+def git_value(raw: str) -> str:
+    """Return a value of a git configuration line as git reads it.
+
+    Parameters
+    ----------
+    raw : str
+        The text after ``=``, leading blanks removed.
+
+    Returns
+    -------
+    str
+        The value: quotes removed, escapes read, a comment outside
+        quotes dropped, and unquoted blanks at its end trimmed.
+
+    Raises
+    ------
+    ValueError
+        If the value continues on the next line, holds an unknown escape,
+        or leaves a quote open.
+    """
+    escapes = {"n": "\n", "t": "\t", "b": "\b", "\\": "\\", '"': '"'}
+    out: list[tuple[str, bool]] = []
+    quoted = False
+    index = 0
+    while index < len(raw):
+        char = raw[index]
+        if char == "\\":
+            following = raw[index + 1 : index + 2]
+            if following not in escapes:
+                raise ValueError("a continued line or an unknown escape")
+            out.append((escapes[following], True))
+            index += 2
+            continue
+        if char == '"':
+            quoted = not quoted
+        elif char in "#;" and not quoted:
+            break
+        else:
+            out.append((char, quoted))
+        index += 1
+    if quoted:
+        raise ValueError("an open quote")
+    while out and out[-1][0] in " \t" and not out[-1][1]:
+        out.pop()
+    return "".join(char for char, _ in out)
+
+
+def git_values(text: str) -> list[tuple[str, str, str, str]]:
+    """Return every value of a git configuration file.
+
+    Parameters
+    ----------
+    text : str
+        The file's text.
+
+    Returns
+    -------
+    list[tuple[str, str, str, str]]
+        Section and key in lower case, subsection as written (in lower
+        case for the old form ``[section.sub]``), and value; a key with
+        no ``=`` is true.
+
+    Raises
+    ------
+    ValueError
+        If a line is of a form this reading does not know, such as a key
+        on the line of its section, so that the push is referred.
+    """
+    found: list[tuple[str, str, str, str]] = []
+    section = subsection = ""
+    for raw in text.split("\n"):
+        line = raw.strip()
+        if not line or line[0] in "#;":
+            continue
+        heading = GIT_SECTION_RE.fullmatch(line)
+        if heading:
+            name, quoted = heading.group(1), heading.group(2)
+            if quoted is not None:
+                section = name.lower()
+                subsection = re.sub(r"\\(.)", r"\1", quoted)
+            else:
+                section, _, subsection = name.lower().partition(".")
+            continue
+        entry = GIT_KEY_RE.fullmatch(line)
+        if entry is None or not section:
+            raise ValueError(f"unreadable git configuration line {line!r}")
+        value = entry.group(2)
+        found.append(
+            (
+                section,
+                subsection,
+                entry.group(1).lower(),
+                "true" if value is None else git_value(value),
+            )
+        )
+    return found
+
+
+def read_small(path: str) -> str | None:
+    """Return a small file's text, or None where it does not exist.
+
+    Parameters
+    ----------
+    path : str
+        Absolute path.
+
+    Returns
+    -------
+    str | None
+        The text, up to a million characters; None for a missing file.
+
+    Raises
+    ------
+    OSError
+        If the file exists but cannot be read.
+    """
+    try:
+        with open(path, encoding="utf-8") as handle:
+            return handle.read(1_000_000)
+    except FileNotFoundError:
+        return None
+
+
+def work_repository(cwd: str, policy: Policy) -> tuple[str, str] | None:
+    """Return the git and common directories of the work's repository.
+
+    Parameters
+    ----------
+    cwd : str
+        Absolute directory the command runs in.
+    policy : Policy
+        The policy.
+
+    Returns
+    -------
+    tuple[str, str] | None
+        The git directory and the common directory, where the command
+        runs inside the work, by the paths its links lead to, the first
+        ``.git`` entry at or above it is the work's own, and that entry
+        is a valid git directory or the ``gitdir:`` file of a linked
+        worktree whose directories are valid. None otherwise, so that
+        the push is referred: a ``.git`` nearer the command, which git
+        may or may not take, is never read in place of the work's.
+
+    Raises
+    ------
+    OSError
+        If a ``.git`` file or ``commondir`` exists but cannot be read.
+    """
+    work = os.path.realpath(policy.work)
+    path = os.path.realpath(cwd)
+    if not within(path, (work,)):
+        return None
+    while path != work:
+        if os.path.lexists(f"{path}/.git"):
+            return None
+        path = str(PurePosixPath(path).parent)
+    dot = f"{work}/.git"
+    if os.path.isdir(dot) and not os.path.islink(dot):
+        gitdir = dot
+    elif os.path.isfile(dot) and not os.path.islink(dot):
+        text = read_small(dot) or ""
+        if not text.startswith("gitdir: "):
+            return None
+        target = text[len("gitdir: ") :].strip()
+        gitdir = os.path.realpath(
+            target if target.startswith("/") else f"{work}/{target}"
+        )
+    else:
+        return None
+    common = gitdir
+    text = read_small(f"{gitdir}/commondir")
+    if text is not None:
+        target = text.strip()
+        common = os.path.realpath(
+            target if target.startswith("/") else f"{gitdir}/{target}"
+        )
+    valid = (
+        os.path.isfile(f"{gitdir}/HEAD")
+        and os.path.isdir(f"{common}/objects")
+        and os.path.isdir(f"{common}/refs")
+    )
+    return (gitdir, common) if valid else None
+
+
+def git_configuration(
+    dirs: tuple[str, str], home: str
+) -> list[tuple[str, str, str, str]]:
+    """Return the values of every git configuration file a push reads.
+
+    Parameters
+    ----------
+    dirs : tuple[str, str]
+        The git directory and the common directory.
+    home : str
+        The account's home directory.
+
+    Returns
+    -------
+    list[tuple[str, str, str, str]]
+        Values of the repository's, the worktree's, the account's, and
+        the system's files, as ``git_values`` gives them.
+
+    Raises
+    ------
+    OSError
+        If a file exists but cannot be read.
+    ValueError
+        If a file holds a line this reading does not know.
+    """
+    gitdir, common = dirs
+    xdg = os.environ.get("XDG_CONFIG_HOME") or f"{home}/.config"
+    values: list[tuple[str, str, str, str]] = []
+    for path in (
+        f"{common}/config",
+        f"{gitdir}/config.worktree",
+        f"{home}/.gitconfig",
+        f"{xdg}/git/config",
+        GIT_SYSTEM_CONFIG,
+    ):
+        text = read_small(path)
+        if text is not None:
+            values += git_values(text)
+    return values
+
+
+def hooks_present(dirs: tuple[str, str]) -> bool:
+    """Return whether the repository holds a hook that git may run.
+
+    Parameters
+    ----------
+    dirs : tuple[str, str]
+        The git directory and the common directory.
+
+    Returns
+    -------
+    bool
+        Whether a ``hooks`` directory of either holds an entry other
+        than a ``.sample`` file; one that cannot be listed counts.
+    """
+    for folder in {f"{dirs[0]}/hooks", f"{dirs[1]}/hooks"}:
+        try:
+            names = os.listdir(folder)
+        except FileNotFoundError:
+            continue
+        except OSError:
+            return True
+        if any(not name.endswith(".sample") for name in names):
+            return True
+    return False
+
+
+def ref_exists(dirs: tuple[str, str], ref: str) -> bool:
+    """Return whether the repository holds a ref, loose or packed.
+
+    Parameters
+    ----------
+    dirs : tuple[str, str]
+        The git directory and the common directory.
+    ref : str
+        A full ref name, such as ``refs/heads/main``.
+
+    Returns
+    -------
+    bool
+        Whether it is a loose ref of either directory or a line of the
+        packed refs; packed refs that cannot be read count as holding it.
+    """
+    if any(os.path.lexists(f"{d}/{ref}") for d in dirs):
+        return True
+    try:
+        text = read_small(f"{dirs[1]}/packed-refs") or ""
+    except OSError:
+        return True
+    return any(line.endswith(f" {ref}") for line in text.split("\n"))
+
+
+def branch_source(dirs: tuple[str, str], name: str) -> bool:
+    """Return whether a short source name is a local branch alone.
+
+    Parameters
+    ----------
+    dirs : tuple[str, str]
+        The git directory and the common directory.
+    name : str
+        A short ref name.
+
+    Returns
+    -------
+    bool
+        Whether ``refs/heads/NAME`` exists and no other ref that git
+        tries for a short name does (``refs/NAME``, a tag, a remote, or a
+        remote's ``HEAD``), so that the push sends that branch.
+    """
+    others = (
+        f"refs/{name}",
+        f"refs/tags/{name}",
+        f"refs/remotes/{name}",
+        f"refs/remotes/{name}/HEAD",
+    )
+    return ref_exists(dirs, f"refs/heads/{name}") and not any(
+        ref_exists(dirs, ref) for ref in others
+    )
+
+
+def short_ref(name: str) -> bool:
+    """Return whether a name is a plain branch name.
+
+    Parameters
+    ----------
+    name : str
+        A name without ``refs/``.
+
+    Returns
+    -------
+    bool
+        Whether each part between slashes is of the plain form.
+    """
+    return bool(name) and all(
+        REMOTE_NAME_RE.fullmatch(part) and ".." not in part
+        for part in name.split("/")
+    )
+
+
+def push_branches(
+    refspecs: list[str], dirs: tuple[str, str]
+) -> tuple[list[str], str]:
+    """Return the branches a push's refspecs update, or why it is unclear.
+
+    Parameters
+    ----------
+    refspecs : list[str]
+        The refspecs, at least one.
+    dirs : tuple[str, str]
+        The git directory and the common directory.
+
+    Returns
+    -------
+    tuple[list[str], str]
+        The branch names and an empty reason; or no branch and the
+        reason. A refspec is read only in the forms ``NAME``,
+        ``SOURCE:NAME``, and ``SOURCE:refs/heads/NAME``, where a short
+        ``NAME`` is a local branch and no other local ref of that name,
+        and ``SOURCE`` is ``HEAD``, ``refs/heads/B``, or a short branch
+        name of the same kind.
+    """
+    branches: list[str] = []
+    for spec in refspecs:
+        source, colon, target = spec.partition(":")
+        if not colon:
+            if not short_ref(source) or not branch_source(dirs, source):
+                return [], f"refspec {spec} is no local branch alone"
+            branches.append(source)
+            continue
+        if source == "HEAD":
+            pass
+        elif source.startswith("refs/heads/"):
+            if not short_ref(source[len("refs/heads/") :]) or not ref_exists(
+                dirs, source
+            ):
+                return [], f"refspec {spec} has no local branch for source"
+        elif not short_ref(source) or not branch_source(dirs, source):
+            return [], f"refspec {spec} has no local branch for source"
+        if target.startswith("refs/heads/"):
+            branch = target[len("refs/heads/") :]
+        else:
+            branch = target
+            if not short_ref(branch) or any(
+                ref_exists(dirs, ref)
+                for ref in (f"refs/tags/{branch}", f"refs/{branch}")
+            ):
+                return [], f"refspec {spec} may name a ref other than a branch"
+        if not short_ref(branch):
+            return [], f"refspec {spec} names no branch"
+        branches.append(branch)
+    return branches, ""
+
+
+def push_grant(
+    program: str, options: list[str], args: list[str], scan: Scan, bare: bool
+) -> tuple[str | None, str]:
+    """Return the authorization a push matches exactly, if one does.
+
+    Parameters
+    ----------
+    program : str
+        The program word as the command gives it.
+    options : list[str]
+        Options of git before the subcommand.
+    args : list[str]
+        Arguments of ``push``.
+    scan : Scan
+        The reading so far.
+    bare : bool
+        Whether no assignment or reserved word precedes git.
+
+    Returns
+    -------
+    tuple[str | None, str]
+        The identifier of the authorization, or None; and the reason the
+        push gives, which states why it is referred where the policy
+        holds an authorization that might have covered it.
+    """
+    if not scan.policy.grants:
+        return None, "git push"
+
+    def refer(why: str) -> tuple[None, str]:
+        """Return the answer for a push left referred.
+
+        Parameters
+        ----------
+        why : str
+            Why it is referred.
+
+        Returns
+        -------
+        tuple[None, str]
+            No authorization, and the reason.
+        """
+        return None, f"git push, referred because {why}"
+
+    if program != "git":
+        return refer("the program is named by a path")
+    if options or not bare:
+        return refer("an option or assignment precedes it")
+    if any(k.startswith("GIT_") for k in os.environ):
+        return refer("the environment sets a variable of git")
+    if any(a.startswith("-") and a not in PUSH_OPTIONS for a in args):
+        return refer("it takes an option outside the short list")
+    named = [a for a in args if not a.startswith("-")]
+    if len(named) < 2:
+        return refer("it names no repository and refspec")
+    if len(set(scan.cwds)) != 1 or scan.cwds[0] is None:
+        return refer("its directory is not known")
+    try:
+        dirs = work_repository(scan.cwds[0], scan.policy)
+        if dirs is None:
+            return refer("the work's own repository is not the one found")
+        values = git_configuration(dirs, scan.home)
+        hooked = hooks_present(dirs)
+    except (OSError, ValueError) as error:
+        return refer(f"the git configuration is unreadable: {error}")
+    if hooked:
+        return refer("the repository holds a hook that git may run")
+    repository = named[0]
+    for section, sub, key, _ in values:
+        if (
+            section in GIT_SECTIONS
+            or (section, key) in GIT_KEYS
+            or (section == "remote" and sub == repository and key in REMOTE_KEYS)
+        ):
+            return refer(f"the git configuration sets {section}.{key}")
+    destination = repository
+    if REMOTE_NAME_RE.fullmatch(repository):
+        urls = [
+            v
+            for s, sub, k, v in values
+            if s == "remote" and sub == repository and k == "url"
+        ]
+        if len(urls) != 1:
+            return refer(f"remote {repository} has no single address")
+        destination = urls[0]
+    branches, why = push_branches(named[1:], dirs)
+    if why:
+        return refer(why)
+    grant = granted(scan.policy, "commit", destination, branches)
+    if grant is None:
+        return refer(
+            f"no authorization in force names {destination} and "
+            f"{', '.join(branches)}"
+        )
+    return grant, "git push"
+
+
+def post_grant(
+    program: str, args: list[str], scan: Scan, bare: bool
+) -> tuple[str | None, str]:
+    """Return the authorization a tracker post of ``gh`` matches, if any.
+
+    Parameters
+    ----------
+    program : str
+        The program word as the command gives it.
+    args : list[str]
+        Arguments of ``gh``, the subcommand first.
+    scan : Scan
+        The reading so far.
+    bare : bool
+        Whether no assignment or reserved word precedes gh.
+
+    Returns
+    -------
+    tuple[str | None, str]
+        The identifier of the authorization, or None; and the reason the
+        write gives. A post names its repository with ``--repo
+        HOST/OWNER/REPO``, the address ``https://HOST/OWNER/REPO``, and
+        carries its title and body as literal words without ``@``, so
+        that it sends no file and notifies no one it names.
+    """
+    reason = f"gh {args[0]} {args[1]}"
+    allowed = GH_POSTS.get((args[0], args[1]))
+    if not scan.policy.grants or allowed is None:
+        return None, reason
+
+    def refer(why: str) -> tuple[None, str]:
+        """Return the answer for a post left referred.
+
+        Parameters
+        ----------
+        why : str
+            Why it is referred.
+
+        Returns
+        -------
+        tuple[None, str]
+            No authorization, and the reason.
+        """
+        return None, f"{reason}, referred because {why}"
+
+    if program != "gh":
+        return refer("the program is named by a path")
+    if not bare:
+        return refer("an assignment or reserved word precedes it")
+    if any(k.startswith("GH_") for k in os.environ):
+        return refer("the environment sets a variable of gh")
+    repos: list[str] = []
+    positional: list[str] = []
+    rest = args[2:]
+    index = 0
+    while index < len(rest):
+        word = rest[index]
+        if not word.startswith("-"):
+            positional.append(word)
+            index += 1
+            continue
+        if word.startswith("--") and "=" in word:
+            name, value = word.split("=", 1)
+            index += 1
+        elif word.startswith("--") or len(word) == 2:
+            if index + 1 >= len(rest):
+                return refer(f"option {word} has no value")
+            name, value = word, rest[index + 1]
+            index += 2
+        else:
+            name, value = word[:2], word[2:]
+            index += 1
+        if name not in allowed:
+            return refer(f"it takes option {name}")
+        if name in {"-R", "--repo"}:
+            repos.append(value)
+        elif "@" in value or value.startswith("-"):
+            return refer("its text names someone or reads as an option")
+    if len(repos) != 1 or not GH_REPO_RE.fullmatch(repos[0]):
+        return refer("it names no single --repo HOST/OWNER/REPO")
+    if args[1] == "create" and positional:
+        return refer("it takes an operand")
+    if args[1] == "comment" and (
+        len(positional) != 1 or not re.fullmatch(r"[0-9]+", positional[0])
+    ):
+        return refer("it names no single number")
+    destination = f"https://{repos[0]}"
+    grant = granted(scan.policy, "post", destination, [])
+    if grant is None:
+        return refer(f"no authorization in force names {destination}")
+    return grant, reason
 
 
 def check_shell(
@@ -1496,6 +2330,7 @@ def check_simple(words: list[str], piped: bool, scan: Scan) -> None:
         The reading so far.
     """
     policy, found = scan.policy, scan.found
+    scan.commands += 1
     words, redirections = strip_redirections(words)
     given = None
     for operator, target in redirections:
@@ -1511,7 +2346,9 @@ def check_simple(words: list[str], piped: bool, scan: Scan) -> None:
             check_writes([target], scan, append=False)
         elif operator in APPEND_REDIRECTS:
             check_writes([target], scan, append=True)
-    words = program_words(words)
+    program = program_words(words)
+    scan.bare = len(program) == len(words)
+    words = program
     if not words:
         return
     name = PurePosixPath(words[0]).name
@@ -1583,11 +2420,11 @@ def check_simple(words: list[str], piped: bool, scan: Scan) -> None:
                 location = protected_target(path, policy)
                 if location:
                     found.add("protected-locations", f"empties {location}")
-        check_remote(words, found)
+        check_remote(words, scan)
     elif name in READERS:
         check_reads(args, scan)
     elif name in REMOTE_PROGRAMS:
-        check_remote(words, found)
+        check_remote(words, scan)
     elif name not in TEXT_PROGRAMS:
         check_launched(words, scan)
 
@@ -1661,6 +2498,8 @@ def check_command(command: str, cwd: list[str], scan: Scan) -> None:
     while True:
         known = len(scan.cwds)
         scan.bodies = []
+        scan.commands = 0
+        scan.permitted = []
         check_line(command, scan)
         if len(scan.cwds) == known:
             return
@@ -1813,6 +2652,17 @@ def check_call(event: dict[str, Any], policy: Policy) -> Findings:
         assigned = set(SET_VARIABLE_RE.findall(command))
         scan = Scan(policy, found, cwds, os.path.expanduser("~"), assigned)
         check_command(command, cwds, scan)
+        if scan.commands == 1 and PLAIN_RE.fullmatch(command):
+            found.permitted = list(scan.permitted)
+        else:
+            # Another command, or an expansion the shell performs, may
+            # change what the write reaches after the guard read it.
+            for reason, grant in scan.permitted:
+                found.add(
+                    "remote-write",
+                    f"{reason}, which {grant} covers only as one plain "
+                    "command, the call's only one",
+                )
     elif tool in EDIT_TOOLS:
         key = "notebook_path" if tool == "NotebookEdit" else "file_path"
         for base in cwds:
@@ -1880,9 +2730,25 @@ def decide(findings: Findings, policy: Policy) -> dict[str, Any] | None:
     Returns
     -------
     dict[str, Any] | None
-        The answer, or None when the call reaches no outcome. An outcome
-        the policy does not list is refused, so a gap fails closed.
+        The answer: ``allow`` for a call whose only effect the guard
+        reads is a remote write that an authorization names, so that a
+        permission rule that refers every such write is outranked where
+        the environment lets a hook do so, and refers it otherwise; None
+        when the call reaches no outcome. An outcome the policy does not
+        list is refused, so a gap fails closed.
     """
+    if not findings.reached and findings.permitted:
+        reason, grant = findings.permitted[0]
+        return {
+            "hookSpecificOutput": {
+                "hookEventName": "PreToolUse",
+                "permissionDecision": "allow",
+                "permissionDecisionReason": (
+                    f"Governance: {reason} is named by {grant} "
+                    "(STND.HARN.29)."
+                ),
+            }
+        }
     if not findings.reached:
         return None
     decisions = [

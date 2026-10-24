@@ -22,6 +22,35 @@ STORE = "secrets"
 
 
 @dataclass(frozen=True)
+class RemoteWrite:
+    """One remote write that a standing authorization in force names.
+
+    Parameters
+    ----------
+    authorization : str
+        Identifier of the authorization file (STND.PROJ.6).
+    kind : str
+        Kind of write of the table of STND.PROJ.7 that the guard matches,
+        ``commit`` or ``post``.
+    destination : str
+        The destination's address in full, compared as a whole.
+    branches : tuple[str, ...]
+        For ``commit``, the branches the authorization covers there;
+        empty for ``post``.
+    expires : str
+        Timestamp at which the authorization lapses, which the guard
+        compares with its clock at every call; empty for one that lapses
+        only when revoked.
+    """
+
+    authorization: str
+    kind: str
+    destination: str
+    branches: tuple[str, ...]
+    expires: str
+
+
+@dataclass(frozen=True)
 class Inputs:
     """The owner's statement of one environment.
 
@@ -51,6 +80,13 @@ class Inputs:
     secrets : tuple[str, ...]
         Names of the files of that store whose secrets an authorization
         permits the agent to handle; naming one provides the store.
+    remote_writes : tuple[RemoteWrite, ...]
+        Remote writes that a standing authorization in force names by
+        destination and kind, read by ``authorizations``; each other
+        remote write is referred.
+    referred : tuple[str, ...]
+        One line per authorization the owner named whose writes stay
+        referred, such as one per action, with the reason.
     """
 
     work: str
@@ -63,6 +99,8 @@ class Inputs:
     assured: bool = False
     secret_store: bool = False
     secrets: tuple[str, ...] = ()
+    remote_writes: tuple[RemoteWrite, ...] = ()
+    referred: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         """Reject an input the configuration would misread.
