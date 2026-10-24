@@ -1,0 +1,272 @@
+# Concurrency standard (STND.CONC) 1.0
+
+Adopted by The Custodian as revision 1.0 in ledger entry 112 (2026-10-24). This reading copy is composed from the per-provision files in STND/CONC/ of the governance harness; the harness files are the system of record.
+
+## Purpose and scope
+
+This standard holds the practice of concurrent execution that is the same in every language and every parallel programming model: threads, tasks, coroutines, asynchronous operations, event loops, pools of workers, and the processes of one run. It adds to DSGN, VV, REPRO, INTPR, RSRC, PRIME.4, HW, and NUMER only what concurrency makes necessary. It covers the failures of concurrent tasks (STND.CONC.1 and STND.CONC.2); shared state (STND.CONC.3, STND.CONC.4, STND.CONC.5, and STND.CONC.6); locks and waits (STND.CONC.7, STND.CONC.8, STND.CONC.9, STND.CONC.10, and STND.CONC.11); the lifecycle of tasks, cancellation, queues, pools, and event loops (STND.CONC.12, STND.CONC.13, STND.CONC.14, STND.CONC.15, and STND.CONC.16); state that applies to a whole process or node (STND.CONC.17, STND.CONC.18, and STND.CONC.19); blocking in constrained targets (STND.CONC.20); results that depend on the number of tasks (STND.CONC.21, STND.CONC.22, and STND.CONC.23); and verification (STND.CONC.24, STND.CONC.25, STND.CONC.26, STND.CONC.27, and STND.CONC.28).
+
+STND.CONC.1 and STND.CONC.2 instantiate PRIME.4, so they are binding and apply at every class. Every other provision is a default (GOV.19), which a project replaces by a recorded decision with an alternative that meets the same higher-level outcome (REPRO.7). The standard is language, platform, implementation, and tool agnostic: it names no language, library, runtime, checker, or platform (GOV.18). The standards for one parallel programming model or one language add the forms that their facilities need: STND.MPI holds the forms for message passing, and the planned standards for directive-based threading and for accelerator offload hold theirs once adopted. Workflows of many runs, retried tasks, checkpoints, and access to shared files and storage belong to a planned standard of their own; the memory of accelerators belongs to HW.GPU and to the standard for offload.
+
+## Normative and informative parts
+
+The body of a numbered provision, including a table it contains, is normative. Everything else is informative.
+
+## Terms
+
+This section fixes meaning and imposes no obligation, as the Lexicon does. Execution path and Constrained target have the meanings that HW gives them; Hardware thread has the meaning that HW.CPU gives it; Safety-related component has the meaning that STND.CLASS gives it.
+
+| Term | Definition |
+| --- | --- |
+| Concurrent task | A thread, task, coroutine, process, signal or interrupt handler, or other sequence of execution of the work that runs, or is able to run, while another of the same run has not completed. |
+| Parent | Of a concurrent task: the concurrent task, or the scope of code, that starts it, or to which the handle by which its end is awaited passes. |
+| Asynchronous operation | An operation whose start returns to the code that started it before the operation completes, and whose completion and failure that code observes later through a handle, a future, a request, an event, or a callback. Each concurrent task that the work starts is one. |
+| Shared mutable object | An object that more than one concurrent task accesses, at least one of them by a write. |
+| Protection | The means by which a protocol orders the conflicting accesses to a shared mutable object: a lock, atomic operations, the transfer of the object from one concurrent task to another by a message, confinement to one concurrent task, or immutability after publication. |
+| Data race | Two accesses to one memory location by different concurrent tasks, at least one of them a write, that no protection orders and that are not both atomic operations. |
+| Lock | A synchronization object that one concurrent task acquires and releases to exclude other concurrent tasks from a region of code or from an object; a mutual-exclusion object, a read-write lock, and a semaphore used for exclusion are locks. |
+| Suspension point | A point at which a coroutine or an asynchronous function yields control to the event loop or scheduler that runs it. |
+| Event loop | A concurrent task that runs, one at a time, the callbacks and coroutines that are ready, and waits for events between them. |
+| Pool | A set of concurrent tasks that runs work submitted to it. |
+
+## Notes
+
+The custodian's direction of 2026-10-24 sets the scope: one model-neutral home for the rules of concurrent execution, so that STND.MPI, the language standards, and the standards of other parallel programming models hold only the forms that their own facilities need. It keeps the standard agnostic of language, platform, implementation, and tool, and keeps the custodian's directions on determinism (STND.VVUQ.82 and STND.VVUQ.83): strict determinism is an option where it is feasible, not a requirement unless the acceptance criterion of the work or its consequence class demands it, and a declared variation within the agreement that the acceptance criterion fixed is no defect. A true race is a correctness defect. The sources are the project's research notes research/concurrency-notes/c1-corpus-gaps.md (the coverage of the corpus and its gaps), c2-model-neutral-practice.md (the published coding standards, memory models, and verification literature), and c4-model-landscape.md (the hazards that recur across models), with research/parallel-models.md for the gaps G1 to G4; a fact that those notes do not support is marked unverified.
+
+The standard adds the content of concurrency to provisions that already hold the outcome, and does not restate them (GOV.31). DSGN.15 asks that concurrent access to shared state follow a stated protocol whose invariants are verified, and HW.11 asks that the protocol be verified under the memory model of the hardware contract or of the language or library; STND.CONC.3 to STND.CONC.9 say what such a protocol states and what its code does. DSGN.14 gives each piece of mutable state one owner and a stated lifetime, which STND.CONC.5, STND.CONC.12, and STND.CONC.17 apply to tasks, objects reached by reference, and the state of runtimes. HW.12 has each execution path declare whether the scheduling of its concurrent work varies between runs on identical inputs; STND.CONC.21 adds the dependence on the number of tasks, which the Notes of STND.MPI observe that HW.12 and REPRO.3, written for identical recorded inputs, do not reach. HW.CPU.4 records the threads that a run uses and HW.CPU.5 reports oversubscription; STND.CONC.18 has the program set the sizes of its pools so that the excess does not arise. STND.VVUQ.2 gives the rule for reductions under bitwise identity and STND.VVUQ.62 the construction of random streams, which STND.CONC.22 and STND.CONC.23 apply across numbers of tasks. INTPR.7 detects stalled progress, which a bounded wait reports (STND.CONC.10).
+
+STND.CONC.1 and STND.CONC.2 close the gaps G1 and G2 of research/parallel-models.md outside MPI and accelerators. An asynchronous operation reports its failure only when its completion is observed, so an operation whose completion is never observed loses its failure, which is the silent continuation past an error that PRIME.4 forbids. Python's documentation states that the exception of a task that is never awaited surfaces only as a log line when the task is reclaimed (c2, section 5); the same holds of a detached thread whose failure ends only that thread. HW.GPU.3 holds this outcome for offloaded work, and the second sentence of STND.MPI.5 for nonblocking operations of MPI; STND.CONC.1 states it once for every asynchronous operation, each concurrent task included, and those two provisions remain its forms for their models. A run that ends with an operation still pending states it in its record under STND.CONC.12, a default, so that a lost failure is at least visible. A concurrent task that halts alone leaves the tasks that wait on it blocked, which is a silent hang: STND.CONC.2 has the failure reach the parent where the parent relies on the task's result, and the other tasks of the same result halt, or learn of the halt and respond as PRIME.4 requires, which is the reading of HW.8 that the Notes of HW give for a run of several processes and that STND.MPI.6 states for MPI.
+
+STND.CONC.1 and STND.CONC.2 instantiate PRIME.4 and bind at every class, CSQ4 included. Neither raises the floor (GOV.11), for these reasons. STND.CONC.1 asks that the failure of an asynchronous operation be observed before a result relies on the operation, which PRIME.4 already requires; it asks no run to wait for an operation whose result nothing relies on. STND.CONC.2 asks that a failure that PRIME.4 lists not end silently inside a task on whose result its parent relies, and that the tasks that depend on a halted task not wait on it forever, and leaves the failing task and each dependent task every response that PRIME.4 admits. A signal or interrupt handler whose result no parent relies on is outside its first sentence. Its cost is one handle by which the parent learns of the failure, and one notice or one call that ends the dependent tasks.
+
+Shared state follows the published coding standards and the memory models of the mainstream languages (c2, sections 1 and 2). A data race has an undefined outcome in some languages and an outcome that is weakly bounded in others; a program free of races behaves as if its tasks ran in an interleaving of their steps, so a protocol that is free of races is reasoned about by interleavings alone. One stated protection for each shared mutable object, beside the object, is the rule of the C, C++, and Java coding standards and of the C++ Core Guidelines (STND.CONC.3). The sequentially consistent ordering of atomic operations is the default of the languages that offer weaker orderings; one safety coding standard for C requires it for every synchronization, and a weaker ordering is the source of defects that tests rarely reveal, so it carries its reason (STND.CONC.4). A qualifier that marks an object as changed outside the program does not order accesses between tasks in the languages that define a memory model (unverified beyond the coding standards in c2, which forbid its use for synchronization), so STND.CONC.3 asks that a protection by synchronization use a facility that the memory model of the language or library, or the ordering model of the hardware contract that HW.11 admits, defines as ordering them; confinement and immutability need none. STND.CXX.23 is its form for C++. An object made reachable before its construction ends is seen in part by another task, and an object that a task uses by reference after its owner has released it is a use after its lifetime, the hazard of the lifetime of captured data that c4 finds across models (STND.CONC.5). Whether concurrent calls to an interface are safe is part of its contract, as STND.CXX.15 already asks of C++ (STND.CONC.6).
+
+The rules on locks and waits are those that every coding standard in the research note shares (c2, section 3). A deadlock among locks needs a cycle in the order in which tasks hold them; one stated order without a cycle, or a facility that acquires several locks together, removes it (STND.CONC.7). In one study of deadlocks, a fifth came from a task acquiring a lock that it already held. Code under a lock that calls code whose locking it does not know, waits for another event, or suspends, holds the lock across steps that it does not control, and a callback is such code (STND.CONC.8). A wait for a condition is able to return when the condition does not hold, so it tests the condition again (STND.CONC.9). A wait on another task without a bound turns a lost notification into a hang, and the bound or the cancellation of STND.CONC.10 turns it into a report; a blocking read of a file or a device is outside it. A construct whose tasks the runtime is free to run one after another, a parallel loop among them, deadlocks when one of its tasks waits for another that has not started, so the third sentence of STND.CONC.11 keeps such waits out (c4, hazard 6). STND.CONC.11 closes the gap G3 beyond MPI: DSGN.15 asks for invariants, which are properties of safety, and a protocol in which tasks wait on one another also needs completion, which STND.MPI.12 asks only of message protocols. Message passing does not give freedom from deadlock by construction; in one study of 171 defects of a language built around channels, message passing caused more blocking defects than shared memory did (c2, section 3).
+
+The lifecycle rules follow the practice that the research note calls structured concurrency: a task does not outlive the scope that starts it, so its failure has somewhere to go and its resources have an end (STND.CONC.12; c2, section 4). The languages that provide scoped tasks, task groups, or threads that join when their handle ends make this the default; detached work is the exception. Cancellation that does not reach the tasks a task started leaves them running after their result is no longer wanted, and code that swallows a cancellation keeps its caller from ending (STND.CONC.13). A queue without a bound lets work accumulate without limit behind a slow consumer, which the literature on backpressure warns against (c2, section 4), and tasks that wait on one another inside one bounded pool deadlock when each worker holds a task that waits for a task still queued (STND.CONC.14). Code that blocks an event loop, or computes on it without returning control, delays every task on it, and the objects of most event loops are not safe to call from other threads (STND.CONC.15). A runtime that moves a task between threads at a suspension or scheduling point changes the thread on which the task resumes, so state that the task keeps in storage local to its thread, or selects by the identity of its thread, is lost or shared (STND.CONC.16); STND.JL.27 states the same of Julia, and the directive-based threading standard has a form for its tasks.
+
+The rules on state that applies to a whole process or node close the gap G4 beyond MPI (c1, item 8; c3, section 6). A library that creates its own pool of threads, or resizes a pool of the process, multiplies the threads of a program that already runs its own, and a library that changes the handling of signals or another setting of a runtime that applies to the whole process changes the behavior of its caller (STND.CONC.17). Two components that each size their pool to the whole node run twice as many threads as the node holds, which HW.CPU.5 reports and STND.CONC.18 prevents by having one place, the program, set the sizes. A process that creates a child by copying itself while other threads run gives the child a copy of locks that those threads held and that nothing in the child releases; POSIX restricts the child of a process with several threads to calls that are safe in a signal handler until it starts a new program (unverified; the research notes did not retrieve the POSIX text), so a child is started by a facility that starts a new program in it, or by one that the documentation of each runtime in the process states as safe (STND.CONC.19).
+
+STND.CONC.20 states, for a constrained target with tasks that share a processor or a lock, what the bound of HW.20 counts: the time that a task waits for tasks of lower priority and for the locks that they hold. Without that time, a bound on execution time alone misses the inversion of priorities by which a task of lower priority holding a lock delays one of higher priority; the resets of the Mars Pathfinder lander in 1997 came from such an inversion (c2, section 3, from a search extract). A protocol that bounds blocking, the inheritance or the ceiling of priorities among them, is one means of meeting it, and a project chooses its own (GOV.18).
+
+STND.CONC.21 has each result that depends on the number of tasks, on the division of the computation among them, or on the order in which they combine values declared with the size of its dependence, as STND.MPI.18 does for processes; a dependence so declared that stays within the agreement that the acceptance criterion fixed is no defect (STND.VVUQ.82). STND.CONC.22 applies STND.VVUQ.2 across numbers of tasks, as STND.MPI.19 does across numbers of processes: partial results of parts of the computation that do not depend on the number of tasks, combined in a fixed order, or an order-independent combination, give the same bits at every number of tasks. STND.CONC.23 keys each random stream to a part of the computation, not to the task that computes it, so that the streams do not change with the number of tasks; STND.PY.17 and STND.JL.24 state the same for their languages, and STND.VVUQ.62 gives the construction of the streams.
+
+The verification rules combine methods because each has a blind spot (c2, section 6). Tests at three or more numbers of tasks, among them the smallest that a component admits, find the defects that appear only in serial or only in parallel, and a number that divides the work unevenly exercises the handling of remainders (STND.CONC.24, as STND.MPI.24 does for processes). A dynamic detector of data races based on the order of events reports only the races of the executions it observes, and is nearly free of false reports; its cost in one documented detector is five to fifteen times in time (STND.CONC.25). In one study of concurrency defects, nearly all appeared under some order between two tasks, and most under an order among at most four accesses, so varied schedules, by perturbed timing or by systematic or randomized exploration, find what a fixed schedule hides (STND.CONC.26). The record of a verification states what its method does not cover (STND.CONC.27), and a protocol of a safety-related component is proved or checked on a model of its design by exhaustive exploration, as the verification of such a component under the CSQ0 row of STND.CLASS.10 asks (STND.CONC.28), with the model ordering accesses as the memory or ordering model that HW.11 names, since a model that assumes a stronger ordering than the hardware gives proves nothing about it; one published account of model checking in industry found a defect whose shortest trace had 35 steps, after design reviews, code reviews, and tests had passed it (c2, section 6). STND.CXX.26 and STND.MPI.25 are the forms of STND.CONC.25 for C++ and for MPI.
+
+High-assurance practice adds restrictions that this standard leaves to the project as choices, because they constrain designs rather than state outcomes: a set of tasks fixed at the start of a run, communication only through protected objects, and a locking protocol with bounded blocking, as the restricted tasking profile of one language defines (c2, section 8). Such a profile is one means of meeting STND.CONC.7, STND.CONC.20, and STND.CONC.28.
+
+Under STND.CLASS.10, each default instantiates only DSGN, VV, REPRO, INTPR, RSRC, or a provision of HW or NUMER, and applies from CSQ3; work of CSQ4 may omit it. The part of a default that rests on a row of the table of STND.CLASS.10 applies from the class of that row: the reliance on the documentation of runtimes in STND.CONC.19 (DSGN.5), the run-time checks of STND.CONC.25 and the varied schedules of STND.CONC.26, which verify the invariants of a protocol (DSGN.15), and the stated limits of STND.CONC.27 (INTPR.10), from CSQ2; the report of a reached bound in the second sentence of STND.CONC.10 (INTPR.7), from CSQ1; and the proof or exhaustive check of STND.CONC.28 (VV.1), from CSQ0, where it applies only to safety-related components. STND.CONC.11, whose argument concerns completion rather than the invariants of DSGN.15, the protections, orderings, and lock rules of STND.CONC.3 to STND.CONC.9, and the lifecycle rules of STND.CONC.12 to STND.CONC.17 apply from CSQ3, as do STND.CONC.18, STND.CONC.20, and STND.CONC.21, whose onset follows DSGN.14, RSRC.1, and REPRO.3, on which they and the provisions of HW that they instantiate rest. No default raises the floor (GOV.11).
+
+## References
+
+| Identifier | Title |
+| --- | --- |
+| DSGN | Design |
+| GOV | Governance |
+| HW | Execution hardware |
+| HW.CPU | General-purpose processors |
+| HW.GPU | Accelerators |
+| INTPR | Interpretability |
+| NUMER | Numerical computation |
+| PRIME | Prime Directives |
+| REPRO | Reproducibility |
+| RSRC | Resources |
+| STND.CLASS | Consequence-class criteria |
+| STND.CXX | C++ standard |
+| STND.JL | Julia standard |
+| STND.MPI | Message Passing Interface standard |
+| STND.PY | Python standard |
+| STND.VVUQ | Verification, validation, and uncertainty quantification methods |
+| VV | Correctness |
+
+## Provisions
+
+### Failures
+
+#### STND.CONC.1 Asynchronous completion observed
+
+Binding. Instantiates PRIME.4.
+
+Before a result that depends on an asynchronous operation of the work is reported or relied upon, the completion of that operation SHALL be observed by a call or a callback that reports its failure, and that failure answered as PRIME.4 requires (PRIME.4).
+
+#### STND.CONC.2 Failures across concurrent tasks
+
+Binding. Instantiates PRIME.4, HW.8.
+
+Where the parent of a concurrent task relies on a result of that task, each failure of a kind that PRIME.4 lists that the task detects SHALL reach the parent (PRIME.4). Where a concurrent task halts on a failure of a kind that PRIME.4 lists or on a fault that HW.8 governs, each other concurrent task that waits on it, or that computes a part of a result that relies on it, SHALL halt, or receive notice of that halt and respond to it as PRIME.4 requires (PRIME.4, HW.8).
+
+### Shared state
+
+#### STND.CONC.3 Declared protection of shared objects
+
+Default. Instantiates DSGN.15, DSGN.14, HW.11.
+
+Each shared mutable object SHOULD have one stated protection, at its declaration or in a design record that its declaration cites (DSGN.15, DSGN.14). Each access to a shared mutable object SHOULD follow its stated protection (DSGN.15). Where the protection of a shared mutable object orders accesses by synchronization, that synchronization SHOULD be a facility that the memory model of its language or library, or the ordering model that the hardware contract of its execution path states, defines as ordering accesses between concurrent tasks (DSGN.15, HW.11).
+
+#### STND.CONC.4 Atomic ordering justified
+
+Default. Instantiates DSGN.15, REPRO.7.
+
+Each atomic operation that orders the accesses to other objects SHOULD use the sequentially consistent ordering of its language or library, or carry at that operation a statement of why the weaker ordering that it uses suffices for its protocol (DSGN.15, REPRO.7).
+
+#### STND.CONC.5 Publication and object lifetimes
+
+Default. Instantiates DSGN.15, DSGN.14.
+
+Each object SHOULD be fully initialized before a concurrent task other than the one that initializes it is able to reach it (DSGN.15). Each object that a concurrent task uses by reference SHOULD remain allocated until the last use of it by that task has completed (DSGN.14). Each lock or other synchronization object SHOULD be initialized before its first use, and destroyed only after each concurrent task that uses it has finished with it (DSGN.14).
+
+#### STND.CONC.6 Concurrent calls in contracts
+
+Default. Instantiates DSGN.1.
+
+The contract of each interface that another component uses SHOULD state whether concurrent calls to it are safe (DSGN.1). Where such calls are safe only under a condition, the contract SHOULD state that condition (DSGN.1).
+
+### Locks and waits
+
+#### STND.CONC.7 Acyclic lock order
+
+Default. Instantiates DSGN.15.
+
+Where code holds more than one lock at once, it SHOULD acquire them in an order that a design record of the work states and that forms no cycle, or through a facility that acquires them together without deadlock (DSGN.15). Where the facility of a lock does not define it as reentrant, code SHOULD NOT acquire that lock while it already holds it (DSGN.15).
+
+#### STND.CONC.8 Conduct while holding locks
+
+Default. Instantiates DSGN.15.
+
+While it holds a lock, code SHOULD call only code whose acquisition of locks it knows, and wait only to acquire another lock in the stated order (DSGN.15). While it holds a lock, code SHOULD NOT reach a suspension point (DSGN.15). Each lock SHOULD be released on every path out of the region that holds it, failures included, by the concurrent task that acquired it (DSGN.15).
+
+#### STND.CONC.9 Condition waits retested
+
+Default. Instantiates DSGN.15.
+
+Each wait for a condition that another concurrent task makes true SHOULD be followed by a test of that condition, and repeated until the test finds the condition true (DSGN.15). Each change that makes such a condition true SHOULD be followed by a notification that reaches each concurrent task whose wait depends on that condition (DSGN.15).
+
+#### STND.CONC.10 Bounded waits
+
+Default. Instantiates DSGN.1, INTPR.7.
+
+Each wait of a concurrent task for another concurrent task of the work, or for a condition that one makes true, that is able to last without bound SHOULD end at a stated bound, or on a cancellation by its parent (DSGN.1). Where such a wait reaches its bound, the concurrent task SHOULD report it to the operator (INTPR.7).
+
+#### STND.CONC.11 Stated completion argument
+
+Default. Instantiates DSGN.15, DSGN.1.
+
+Each protocol by which concurrent tasks of the work wait on one another SHOULD be stated, at its implementation or in a design record that its implementation cites, with an argument that each task completes for each input in the regime of use (DSGN.15, DSGN.1). Where that statement carries no such argument, each test that runs the protocol SHOULD run under the detection of deadlock of STND.CONC.25 (DSGN.15). Where a construct does not guarantee that its tasks run concurrently, a task of that construct SHOULD NOT wait for another task of the same construct (DSGN.15).
+
+### Lifecycle
+
+#### STND.CONC.12 Parent-owned tasks
+
+Default. Instantiates DSGN.14.
+
+Each concurrent task that the work starts SHOULD have a parent that waits for its end before the scope in which the parent started it ends (DSGN.14). Where that scope ends early on a failure or a cancellation, the parent SHOULD cancel each concurrent task that it started and wait for its end (DSGN.14). Where a run ends while an asynchronous operation that it started has not completed, the record of the run SHOULD state that operation (DSGN.14).
+
+#### STND.CONC.13 Cancellation propagation
+
+Default. Instantiates DSGN.1, DSGN.14.
+
+A cancellation of a concurrent task SHOULD reach each concurrent task of which it is the parent (DSGN.1). Code that receives a cancellation SHOULD release the resources that it holds and pass the cancellation on to its caller (DSGN.1, DSGN.14). Each concurrent task whose running time has no stated bound SHOULD observe cancellation at stated points of its work (DSGN.1).
+
+#### STND.CONC.14 Bounded queues and pools
+
+Default. Instantiates DSGN.1, RSRC.1, DSGN.15.
+
+Each queue between concurrent tasks, and each pool, SHOULD have a stated bound, and a stated behavior that loses no work silently for work that arrives beyond that bound (DSGN.1, RSRC.1). Concurrent tasks that wait on one another SHOULD NOT run in one bounded pool whose workers they are able to occupy all at once (DSGN.15).
+
+#### STND.CONC.15 Event loop conduct
+
+Default. Instantiates DSGN.1, DSGN.15.
+
+Code that runs on an event loop SHOULD return control to the loop within a bound that its component states (DSGN.1). A concurrent task other than the one that runs an event loop SHOULD reach an object of that loop only through a facility that the library of the loop provides for calls from other concurrent tasks (DSGN.15).
+
+#### STND.CONC.16 Task migration and thread identity
+
+Default. Instantiates DSGN.14.
+
+Across each point at which its runtime is able to move a concurrent task to another thread, the state on which the task relies SHOULD stay with the task and not with the thread that ran it (DSGN.14). Code SHOULD NOT select the state of a concurrent task by the identity of the thread that runs it (DSGN.14).
+
+### Process-wide state
+
+#### STND.CONC.17 Caller-owned pools
+
+Default. Instantiates DSGN.14, DSGN.9.
+
+A library SHOULD take each pool that it uses, or the number of concurrent tasks that it starts, from its caller through its interface, or state in its contract each pool that it creates and the setting by which its caller sizes that pool (DSGN.14, DSGN.9). Where its contract does not state otherwise, a library SHOULD leave unchanged each setting of a runtime that applies to the whole process, the handling of signals included (DSGN.14).
+
+#### STND.CONC.18 Pools composed on one node
+
+Default. Instantiates DSGN.14, HW.CPU.5.
+
+Where more than one component of a run starts its own pool on one node, the program SHOULD set the size of each pool so that the concurrent tasks that compute at once do not exceed the hardware threads that the processor affinity and processor-time quota of the run let it use (DSGN.14, HW.CPU.5).
+
+#### STND.CONC.19 Child processes of threaded programs
+
+Default. Instantiates DSGN.5.
+
+Where a process runs more than one thread, it SHOULD create each child process by a facility that starts a new program in the child, or by one that the documentation of each runtime in the process states as safe after its threads start (DSGN.5).
+
+### Real time
+
+#### STND.CONC.20 Worst-case blocking time
+
+Default. Instantiates HW.20, RSRC.1.
+
+Where concurrent tasks of a constrained target share a processor or a lock, each bound on worst-case execution time that HW.20 asks of one of those tasks SHOULD include the time that the task waits for tasks of lower priority and for the locks that they hold (HW.20, RSRC.1).
+
+### Results
+
+#### STND.CONC.21 Task-count dependence declared
+
+Default. Instantiates REPRO.3, HW.12.
+
+The declaration of run-to-run variation of each execution path that divides a computation among concurrent tasks SHOULD state each result that changes with the number of those tasks, with the division of the computation among them, or with the order in which they combine values, and the size of that change or that its size is not established (REPRO.3, HW.12).
+
+#### STND.CONC.22 Fixed-order combination across counts
+
+Default. Instantiates NUMER.11, REPRO.3, VV.3.
+
+Where bitwise identity across numbers of concurrent tasks is an acceptance criterion, each reduction across tasks that STND.VVUQ.2 covers SHOULD combine, in an order that the work fixes, partial results of parts of the computation defined independently of the number of tasks, or use an order-independent combination (NUMER.11, REPRO.3, VV.3). Where bitwise identity across numbers of concurrent tasks is an acceptance criterion, each comparison between runs at different numbers of tasks SHOULD judge identical bits (VV.3).
+
+#### STND.CONC.23 Random streams keyed to parts
+
+Default. Instantiates DSGN.17, REPRO.3.
+
+Where a computation divided among concurrent tasks draws random numbers, each stream SHOULD be keyed to a part of the computation defined independently of the number of tasks and of the task that computes the part, and constructed as STND.VVUQ.62 recommends (DSGN.17, REPRO.3).
+
+### Verification
+
+#### STND.CONC.24 Tests across task counts
+
+Default. Instantiates VV.1, REPRO.3, VV.3.
+
+The tests of each component that divides its work among concurrent tasks SHOULD run it at no fewer than three numbers of tasks that it admits, among them the smallest that it admits, or at each number that it admits, whichever set is smaller (VV.1, REPRO.3). Where the division of the work admits a number of tasks that divides it unevenly, one of those numbers SHOULD do so (VV.1). Where STND.CONC.22 does not govern a comparison of results between those runs, the comparison SHOULD judge agreement within a tolerance of the tier that STND.VVUQ.1 gives (VV.3, REPRO.3).
+
+#### STND.CONC.25 Run-time concurrency checks
+
+Default. Instantiates DSGN.3, DSGN.15.
+
+Where the means of the work include a check that detects data races at run time, the tests of each change to code of the work that runs concurrent tasks SHOULD run under that check and fail at its first detection (DSGN.3, DSGN.15). Where the means of the work detect an inversion of lock order or a deadlock at run time, those tests SHOULD also run under that detection (DSGN.3, DSGN.15).
+
+#### STND.CONC.26 Varied schedules in tests
+
+Default. Instantiates DSGN.15, VV.1.
+
+The tests of each protocol by which concurrent tasks share state or wait on one another SHOULD include runs under varied schedules, by perturbed timing or by a systematic or randomized exploration of interleavings, with the number of schedules run stated in the record of the tests (DSGN.15, VV.1).
+
+#### STND.CONC.27 Stated verification limits
+
+Default. Instantiates VV.1, INTPR.10.
+
+The record of each verification of a protocol of concurrent tasks SHOULD state its method and what that method does not cover: for a dynamic check, that it covers only the executions it observed; for an exploration, the schedules that it tried; for a model, the bounds and the abstraction of the model (VV.1, INTPR.10).
+
+#### STND.CONC.28 Checked design of critical protocols
+
+Default. Instantiates VV.1, DSGN.15.
+
+Each protocol by which the concurrent tasks of a safety-related component share state or wait on one another SHOULD have its safety and its completion properties proved, or checked by an exhaustive exploration of the states of a model of its design whose correspondence to the implementation is stated (VV.1, DSGN.15).
+
+## Revision History
+
+| Revision | Date | Change |
+| --- | --- | --- |
+| 1.0 | 2026-10-24 | Adopted. |
