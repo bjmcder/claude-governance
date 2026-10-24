@@ -53,7 +53,7 @@ RATIONALE = (
     " listed failure, and the choice of a form of check that every build keeps; STND.RUST.34 asks of a claim on which"
     " others rely only what PRIME.2 already requires, at the cost of one sentence; and STND.RUST.6 costs an agent one"
     " comment at each construct that it writes or changes, which no ruling covers, the ruling of 2026-10-23 on"
-    " STND.PY.4 having been made for STND.PY. The custodian decides on ratification these floor arguments (GOV.11),"
+    " STND.PY.4 having been made for STND.PY. On ratification the custodian decides the floor arguments (GOV.11)"
     " for STND.RUST.6, the second sentence of STND.RUST.13, the reach of the term Untrusted input in STND.RUST.15,"
     " and the reach of STND.RUST.34. Transition (GOV.42):"
     " none, because no project instrument cites a draft of it. Review of STND.HARN.28 by the command pairs and by"

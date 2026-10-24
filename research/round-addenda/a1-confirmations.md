@@ -60,3 +60,11 @@ Across versions: only the 2023 draft was searched. The 2018 draft (J3/18-007r1) 
 | S3 | Rust Reference, panic chapter | https://doc.rust-lang.org/reference/panic.html | Language reference | Fetch-tool extract |
 | S4 | WG14 N3220, working draft of ISO/IEC 9899:2024, 7.23 | https://www.open-std.org/jtc1/sc22/wg14/www/docs/n3220.pdf | Standard (open draft) | Full text, searched locally |
 | S5 | J3/24-007, WD 1539-1, 2023-12-18, 7.5.4.6, 8.4, 8.6.7 | https://j3-fortran.org/doc/year/24/24-007.pdf | Standard (open draft) | Full text, searched locally |
+
+## Further confirmation (final delta verification, 2026-10-24)
+
+The final delta verification (`review-records/round-2026-10-24/verify-final-delta.md`) retrieved the raw text of three sources with curl: 3 items, about 4.1 MB, no failed fetch. Its verbatim quotations close the method caveat above for facts 1 and 2, and widen fact 3:
+
+- std::panic::set_hook: "The panic hook is invoked when a thread panics, but before the panic runtime is invoked. As such, the hook will run with both the aborting and unwinding runtimes." This confirms fact 1 from the page text.
+- The Rust Reference, panic chapter: "Linking a no_std binary, dylib, cdylib, or staticlib will require specifying your own panic handler." and "There must be a single panic_handler function in the dependency graph". This confirms fact 2 from the page text.
+- WG14 N3220, 7.23.3 paragraph 12: "The byte output functions write characters to the stream as if by successive calls to the fputc function." 7.23.1 lists the byte output functions as "fgetc, fgets, fprintf, fputc, fputs, fread, fscanf, fwrite, getc, getchar, printf, putc, putchar, puts, scanf, ungetc, vfprintf, vfscanf, vprintf, and vscanf". 7.23.7.3: "If a write error occurs, the error indicator for the stream is set and fputc returns EOF." So a write error in fputs, puts, fwrite, or fprintf also sets the error indicator, through the as-if clause. The statement under fact 3 that these functions report failure by return value only is superseded. Earlier editions of C remain unverified.

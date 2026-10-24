@@ -42,3 +42,17 @@ No item was skipped as a change of obligation. Item 7 changes what a default ask
 - VVUQ.63's "at least as demanding as the use of the generator requires" is new wording with no pair or cold review of its own. Its instantiates are unchanged, so the pair list `amendments/STND.VVUQ-pairs-final.md` still applies.
 - Not in the task and not done: V-A's optional items on the CONC.30 Notes source and on MPI ranks; V-C optional 6 (the "ratified by the custodian" wording before ratification); and V-C's HARN.29 note on the harness's further limits.
 - decisions-for-the-custodian.md, reconciliation-queue.md, and the untracked decisions-final.md were not edited.
+
+## Lead's corrections after the delta verification
+
+The delta verification (verify-final-delta.md) found no defect. The lead made these changes:
+
+| Finding | Change |
+| --- | --- |
+| Should-fix 1: STDC.28 Notes too narrow | The Streams Notes say that fputs, puts, fwrite, and fprintf write as if by successive calls to fputc, so a write error in any of them sets the indicator (a1, 7.23.1 and 7.23.3, now with the verbatim text). The test of STND.STDC.28 receives both the call's own write error and a failure at the flush or close. STND.STDC.28 is unchanged. |
+| Should-fix 2: "ratified by the custodian" before ratification | Kept. Every rationale of the corpus is written so and applied only after ratification. The RUST and HARN clauses "the custodian decides on ratification" are replaced by the custodian's ruling when the round is applied. |
+| Should-fix 3: FTN.26 described as the case with no protocol | The CONC Notes call STND.FTN.26 the Fortran form of STND.CONC.30, and the stricter one, with no exception for an order that a synchronization of the images fixes. The rationale follows. |
+| Should-fix 4: BigCrush "most demanding" unsourced | The VVUQ Notes say only that the TestU01 library holds smaller batteries beside BigCrush, the battery that STND.VVUQ.63 named before. The rationale follows. |
+| Optional: RUST rationale grammar | "On ratification the custodian decides the floor arguments (GOV.11) for ...". |
+| Optional: GOV.41 as the class authority | Kept: every earlier amendment of the corpus cites GOV.41 in its history row and authority. |
+| Optional: "ends in a halt" in the RUST Notes; VVUQ.63 criterion from the record | Not changed. The RUST sentence goes on to cover a caught panic. Asking the record to state what the use requires would add a record that VVUQ.63 does not ask now. |

@@ -39,7 +39,7 @@ DOC = [
      "computation | 1 | Asserted |"),
     ("A random number generator that passes a test battery is not thereby proven sound.",
      "A random number generator that passes a test battery is not thereby proven sound. Batteries differ in power: "
-     "the BigCrush battery is the most demanding of those of the TestU01 library, which also holds smaller ones. A "
+     "the TestU01 library holds smaller batteries beside BigCrush, the one that STND.VVUQ.63 named before this revision. A "
      "record that names the battery applied, with its revision, lets the test be repeated as it ran."),
     ("The methods for learned surrogates here cover their numerical side; the ML profile owns learned models and "
      "leaves these methods to this standard. Methods for validation stay here; MEAS states outcomes for measured data "
@@ -53,7 +53,7 @@ DOC = [
 READING = ("STND.VVUQ.63 states the outcome that a test battery decides, a published battery of statistical tests of "
            "randomness at least as demanding as the use of the generator requires, named with its revision in the "
            "record of the work, in place of naming one battery; the Notes say that batteries differ in power, "
-           "give the battery that the provision named as the most demanding of its library, and cite ML.2 and MEAS.2 for the matters that ML and MEAS own; "
+           "name BigCrush, the battery that the provision named before, beside the smaller ones of its library, and cite ML.2 and MEAS.2 for the matters that ML and MEAS own; "
            "References lists ML and MEAS; and, as an editorial change, STND.VVUQ.2 and its row of the table of "
            "common quantities speak of a computation that continues from state saved by an earlier run, in place of "
            "a checkpoint and its restart")
