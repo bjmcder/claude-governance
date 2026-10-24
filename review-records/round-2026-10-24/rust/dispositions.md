@@ -68,3 +68,28 @@ Binding provisions are now 6, 13, 14, 15 and 33.
 | Section C, checks in the shipped build | Lead 4: 19 follows STND.JL.34, not STND.CXX.27. Safe Rust checks every index in every build, so CXX.27's gap (unchecked library preconditions in the shipped build) has no Rust counterpart. The checks a Rust setting removes are governed by 15 and 17 where untrusted input is concerned. |
 | Observations 3, 4, 7 | Each now has a sentence in the Notes: no safe state set by a destructor; overflow in a trusted command; crate features that select alternative paths or exclude one another. |
 | Observation 8 | Not taken. Hash order, random streams, tolerances, high-assurance code and register types are left to the reconciliation; the lead did not decide them. |
+
+# Dispositions: draft 0.2 to draft 0.3 (`verify-0.2.md`)
+
+Draft 0.3 is `draft-0.3.md`; its pair list is `pairs-0.3.md`, with 267 pairs.
+- Rehearsal: BUILD round, then Rust round, through `REPO/.scratch/rust/rehearse_with_build.py`. `verify` passes all eight checks.
+- Findings: 8 g.18 notices, on .1, .7, .11, .13, .22, .24, .25 and .30. The onset paragraph names the subject of each.
+- Rehearsed copy: `REPO/.scratch/rust/rehearsal-0.3/`. The 0.2 module is archived at `REPO/.scratch/rust/content_rust_v02.py`.
+
+## Renumbering (0.2 to 0.3)
+
+Draft 0.2's provision 16 is split in two: its first two sentences stay as 16 and its third becomes 17, "Reasoned unwrap in library code". Draft 0.2 provisions 17 to 33 move up by one, to 18 to 34. The draft now has 34 provisions; the binding ones are 6, 13, 14, 15 and 34.
+
+| Finding | Disposition |
+| --- | --- |
+| 1, Defect: .13 S2 | Accepted. It now reads "of each panic that answers a condition that PRIME.4 lists and that no other response of this provision answers". The Notes say a panic answered by a returned error or a visible degradation carries its diagnosis through that response. |
+| 2, .33 floor parity | Accepted. The CXX.29 parity clause and the PY.4 parity for .6 are removed from the Floor and Agents paragraphs. The reach of 34 and the cost of 6 go to the custodian in the report. |
+| 3, Observation 4 | Accepted. The Arithmetic paragraph now says that overflow in trusted arithmetic that computes a command is a defect under PRIME.4 and DSGN.2, and that CPS.5 does not detect a wrapped value inside its limit. |
+| 4, .15 S1 | Accepted, worded as proposed. |
+| 5, duties in the Notes | Accepted. The sentence on a check by the reviewer and the human owner is deleted. The seed sentence now reads "STND.CODE.9 covers the seed". |
+| 6, attributed ruling | Accepted as the lead allows. The Notes say only what the Notes of STND.JL and STND.PY record of the ruling of 2026-10-23. The Rust question goes to the custodian in the report. |
+| 7, "by inference" | Accepted. The unsupported clause is deleted along with its mark. |
+| 8, bundles | Accepted. .16 is split (new 16 and 17). .3 S2 is folded into S1, leaving two modals. .13 is kept as one rule, because its three sentences define what counts as a response, as PY.22's do. The bundle sentence now names the actual subject of each provision. |
+| 9, onset | Accepted. The DSGN.3 sentence now includes both sentences of the guards provision (now 23). The tests of 1, 8 and 29 "rest on no row and apply from CSQ3". |
+| Optional | The Xu study is now "186 reports". The Notes are cut from 4,101 to 3,480 words, mainly in Numerics, Concurrency and the BUILD list. .2 is kept as the Rust list inside STND.BUILD.11. |
+| Lead: rationales | `apply_rust.py` and `apply_mnem_rust.py` now carry full rationales in the form of `apply_offld.py` and `apply_conc.py`. TAIL, AT and ROW_AFTER are unchanged. |

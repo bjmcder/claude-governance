@@ -89,3 +89,22 @@ The draft goes from 40 provisions to 36.
 | 14: wording of the Notes | Accepted. (a) The STND.MPI.16 sentence is corrected. (b) Threadprivate is described as a directive. (c) The narration of what the note read is removed, and only marks remain. (d) The look-ahead sentence goes with FTN.4. |
 | 15: rows for the table; options and NUMER.5 | Accepted. Two rows are added: a change of the default-kind option, and a loop moved to threads or images (HW.CPU.3). The Notes on the legacy list say that NUMER.5 reads the precision from the options of 0.2 FTN.2. |
 | 16 to 21: observations | 20: the Notes say that an entry for incorporated code is able to cite the record of STND.DEPS.11. 21: the onset paragraph is rewritten item by item (lead 7, R8); 0.2 FTN.33 S2 and FTN.1 S1 are placed correctly. 16, 17, 18, and 19 are left to the reconciliation (R14, R15, R16, R22). |
+
+# Dispositions: STND.FTN 0.2 to 0.3
+
+The verification of draft 0.2 is verify-0.2.md. Numbering is unchanged from 0.2. The rehearsal applies the BUILD round first, as before. `verify` passes all eight checks, `findings.py 'STND\.FTN'` is empty, and pairs-0.3.md has the same 174 pairs as pairs-0.2.md. The reading copy is draft-0.3.md.
+
+| Finding | Disposition |
+| --- | --- |
+| N1: Notes attribute the finite-value hazard to the Notes of STND.CXX | Accepted. The clause is deleted; the Notes now say only that the hazard is unverified for Fortran compilers. |
+| N2: FTN.31 permits a check later than STND.CODE.6 | Accepted. The test is now "made ... at the entry of the untrusted input or at the first point after it at which that bound is known", and the Notes say the same. |
+| N3: reach of Untrusted input; floor argument | Accepted. The Term now reads "each procedure that a module of the work makes public, by an attribute, by a statement, or by default". The Notes state that a module entity is public unless the module makes it private. The Binding paragraph says that the argument for STND.FTN.31 depends on the custodian's decision on the reach for Fortran. |
+| N4: FTN.20 threadprivate rule unsourced; narration of f1 | Accepted. FTN.20 is restricted to data-sharing clauses other than shared, the threadprivate directive is dropped from the imported Terms, and the narration is deleted. The Notes mark how a threadprivate directive names a common block as unverified. |
+| N5: FTN.36 "reports its location" | Accepted, as "reports the point at which it halted". The wording "reports where it halted" would have added a second condition word ("where"). |
+| N6: FTN.16 S1 against FTN.36; FTN.17 S2; Notes remnants | Accepted. FTN.16 S1 now has the main program set at its start "whether it halts at" each exception, so no program is required to halt. FTN.17 S2 reaches only "each comparison that its code is designed to make on a NaN", and the Notes state the hazard of a quiet comparison. The indicative sentences and the narration of the research note ("the note does not quote", "review decides", "names the compilers") are recast or deleted. |
+| O1: FTN.2 S1 restates BUILD.11 in part | Kept, as the Fortran form that R13 keeps in each language standard. |
+| O2: FTN.12 S2 excepts submodules | Accepted. The exception now names a main program and a module only. |
+| O3: substrings beyond f1 | Accepted. Substrings are removed from FTN.31 and FTN.35. |
+| O4: a negative answer sent to FTN.29 | Accepted, as "respond to a negative answer by a response that STND.FTN.29 lists". |
+
+Rationales: apply_fortran.py now carries the full adoption RATIONALE in the form of apply_offld.py, and apply_mnem_fortran.py the register rationale. The TAIL, AT, and ROW_AFTER are unchanged.
