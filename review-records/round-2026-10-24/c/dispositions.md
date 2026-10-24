@@ -80,3 +80,33 @@ STDC.28 (errno alone) is folded into the STDC.2 table, and STDC.38 and .39 are m
 4. Whether the agent rule of CXX.3 applies to C as a binding rule (GOV.48). Recommended: keep STDC.3 a default until the custodian gives a direction on the edition of C.
 5. Mnemonic: STDC (recommended) or CC.
 6. Naming: whether the CXX.14 table applies to C.
+
+# Dispositions: STND.STDC 0.2 to 0.3
+
+Draft 0.3 answers the verification of draft 0.2 (`verify-0.2.md`) under the lead's message of 2026-10-24. Rehearsed with `.scratch/c-draft/rehearse_02.py` on a fresh copy of the live corpus (amendment round, BUILD round, C round; entries 117 to 125): verify passes all eight checks, with the g.18 warning of the live corpus only; `findings.py 'STND\.STDC'` returns nothing. Reading copy `draft-0.3.md` (7,488 words against 8,771), pair list `pairs-0.3.md` (349 pairs). The provisions keep their 0.2 numbers; STND.STDC.2 is the only binding provision.
+
+| Finding of verify-0.2 | Disposition |
+| --- | --- |
+| Defect 1, STDC.28 | Now a default on DSGN.1 (decision 3's fallback). Sentence 1: before a result written to a stream is reported or relied upon, the stream is flushed or closed, the result of that call tested, and a failure found answered as the C reading of STND.CXX.16 provides; this covers a stream never closed or only flushed. Sentence 2: where the writes are not tested one by one, the error indicator is tested after that flush or before that close, and a failure answered the same way. No sentence rests on the unverified stream facts, which the Notes keep marked. STDC.30 now excludes only "the flush or close of a stream that STND.STDC.28 governs", so no stream falls between them. |
+| Defect 2, STND.CODE.11 | The Notes say a block under a condition that is always false is disabled code in the sense of STND.CODE.11, which STND.STDC.25 does not count as a branch to compile. |
+| Should-fix 3, onsets | STDC.27 reaches only a number of elements that derives from untrusted input, so CSQ3 holds by the stated reading of DSGN.2. The STDC.37 clause on CSQ2 is deleted. The Notes give the second sentence of STDC.29 its onset (REPRO.7 and STND.CODE.4, CSQ3). |
+| Should-fix 4, REPRO.9 | Removed from STDC.1; no row serves it after the CXX.2 row was dropped. |
+| Should-fix 5, decision 2 | The Notes state the cost of the C reading of STND.CXX.17 as one attribute where the edition or the toolchain provides one, and otherwise a static check, and call the errno clause of the CXX.16 row text new to this standard; both are named as part of decision 2. |
+| Should-fix 6, STDC.12 | The operand test applies to "each left shift". |
+| Should-fix 7, STDC.30 | See Defect 1. |
+| Should-fix 8, STDC.16 | "a build that is named apart as STND.BUILD.13 provides and that builds that code without the option"; the Purpose says the same. |
+| Should-fix 9, facts not in c1 | The CXX.24 row drops "an assumption attribute" ("the unreachable marker of the edition in force, where it has one, and the builtins of a compiler"). STDC.35 and the Notes drop "maximal" and "of nonzero width" ("each sequence of adjacent bit-fields"). The Notes say no library function "is required to" set errno to zero, as c1 says. |
+| Optional 1, CXX.31 cell | "CSQ4, where a high-assurance coding standard is adopted". |
+| Optional 2, CODE.6 and an index | The Notes cite DSGN.2 and STND.STDC.21. |
+| Cold Should-fix 9, BUILD.11 and .12 in rows | Not put in the rows, where it does not read as a change of reading; the Notes name STND.BUILD.11 and STND.BUILD.12 as the general rules and the rows of STND.CXX.4 and STND.CXX.25 as holding the C items. |
+| Cold Should-fix 10, proportion | The Notes are cut from 4,811 to 3,477 words (28 percent); "offers" and "serves" are gone from them. |
+| Rationales | apply_c.py carries the full adoption rationale in the form of apply_offld.py and apply_conc.py, with the binding provision, its outcomes, and the floor argument, and the extension of the C++ rulings as decision 2; apply_mnem_c.py carries the register rationale. TAIL, AT, and ROW_AFTER unchanged. |
+
+## Decisions for the custodian (revised)
+
+1. Shared provisions in STND.CODE for the language-neutral provisions of STND.CXX that STND.STDC applies. Recommended for a later round.
+2. Whether the rulings that STND.CXX.16, .17, .18, and .29 raise no floor extend to their C reading, including the errno clause of the CXX.16 row (new text) and the cost of STND.CXX.17 where no attribute exists (a static check). Recommended: yes, on PRIME.4 and PRIME.2 alone.
+3. Whether STND.STDC.28 becomes binding on the last sentence of PRIME.4 once the stream facts are confirmed from the ISO text. Recommended: keep it a default in this round.
+4. Whether the agent rule of STND.CXX.3 applies to C as a binding rule. Recommended: keep STND.STDC.3 a default.
+5. Mnemonic: STDC (recommended) or CC.
+6. Whether the naming table of STND.CXX.14 applies to C.
