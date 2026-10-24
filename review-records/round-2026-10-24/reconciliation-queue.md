@@ -28,3 +28,34 @@ Cross-document items found while the drafts are reviewed. Each is closed at the 
 | R22 | Rulings the custodian made for C++ (newest edition, CXX.3 to agents, CXX.16 to .18, .29) are not extended to C, Fortran, or Rust without an argument of their own; extensions go to the custodian as decisions | STDC cold review; FTN cold review (no newest-revision rule) | STND.STDC, STND.FTN, STND.RUST | Reconciliation review |
 | R23 | Cross-language differences between adopted STND.PY and STND.JL themselves (logging as visible degradation: PY.22 S3 versus JL.15 S2; unchecked index from untrusted input binding in JL.13; checks in shipped builds CXX.27 versus JL.34) | RUST pair review, Section C | STND.CXX, PY, JL and the new language standards | Reconciliation review lists each; the custodian decides whether an amendment aligns the adopted ones (not in this round unless decided) |
 | R24 | Every rationale of the round ends with the corpus's fixed tail: "Text authored by an agent, Claude (Anthropic), at the custodian's direction (REPRO.5). Under the ruling of ledger entry 15, this decision is the QA.7 review." (entry 15 is a fixed past ruling; the brief's "cite no ledger entry number" meant entries of this round); some drafters changed or dropped it | lead | every script of the round | Lead normalizes the tail at the coalesce; reconciliation checks by script |
+
+## Closure at the coalesce
+
+The reconciliation reviews (reconciliation-alignment.md, reconciliation-floor.md, reconciliation-records.md) and the two fix passes (fixpass.md, fixpass-2.md) closed the queue as follows. Where this table and the planned closure above differ, this table holds. A "decision" is put to the custodian at ratification, with a recommendation.
+
+| # | Closure |
+| --- | --- |
+| R1 | Closed. STND.CONC 1.1, applied after every standard it cites, cites STND.OMP, STND.OFFLD, STND.WFLOW and the forms in the new standards; SV.5 to SV.7 named as the form of STND.CONC.3 (fixpass 15). |
+| R2 | Closed. The boundary rule stands in both Notes and in BUILD's Purpose; each overlap is resolved by a citation in one direction. |
+| R3 | Closed. CXX 1.1 states the relation in words; the editorial CXX 1.1.1, after BUILD 1.0.1, cites STND.BUILD.11 and .12 (fixpass 16). |
+| R4 | Closed. BUILD's Terms cover modules, code the compiler loads, and hand-written build scripts. |
+| R5 | Closed. CXX 1.1.1 imports Reporting build and relates CXX.27 to it; FTN and RUST import Checking build (fixpass-2 1). |
+| R6 | Decision: the remaining differences among sibling language standards (reconciliation-alignment.md, item 10). |
+| R7 | Closed in JL 1.1. |
+| R8 | Closed. Each class-onset paragraph was checked; the departures are listed as decisions. |
+| R9 | Closed. SV dropped its carve-out; the FTN and WFLOW Terms no longer narrow STND.CONC's term (fixpass 13, 14). |
+| R10 | Closed. Each tool demand is conditioned on the means of the work (fixpass 10; fixpass-2 7). |
+| R11 | Closed by script: every named document is in References (fixpass 2). |
+| R12 | Closed: "Lean toolchain"; restart state in the CONC Purpose; VVUQ.2 without checkpoint; Panic defined (fixpass 1, 15; fixpass-2 2, 8). |
+| R13 | Closed. The language forms cite BUILD for the general rule. |
+| R14 | Closed. New default STND.CONC.30 in STND.CONC 1.1 (minor), with STND.FTN.26 as its Fortran form (fixpass 17). |
+| R15 | Closed for Foreign interface, Panic and Language edition (fixpass-2 2, 3). Decision: one reach of Untrusted input. |
+| R16 | Closed for RUST.14 and the CXX.17 C reading (conditioned) and the NDEBUG case in C (fixpass-2 7, 9). Decision: counterparts of RUST.13 S2 in the adopted standards. |
+| R17 | Decision: keep the C reading this round. |
+| R18 | Decision: one naming rule. |
+| R19 | Closed. STND.VVUQ 1.4 (minor) states the outcome; the battery is an example in the Notes (fixpass 18). |
+| R20 | Closed in JL 1.1. |
+| R21 | Closed. STDC is rehearsed after CXX 1.1 and reads its amended text. |
+| R22 | Decision: no newest-edition rule for C, Fortran, Rust, or Lean; RUST's Notes give the reason (fixpass-2 5). |
+| R23 | Decision: no alignment of the adopted PY and JL this round. |
+| R24 | Closed. Every rationale ends with the fixed tail; checked by script at the final verification. |
