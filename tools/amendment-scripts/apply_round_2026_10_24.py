@@ -8,19 +8,19 @@ STND.SV, which cites the new row of NUMER.2; STND.BUILD 1.0 before STND.WFLOW, w
 STND.BUILD 1.0.1 after STND.WFLOW, citing it back, and STND.CXX 1.1.1 after it, citing STND.BUILD; STND.BUILD
 before the language standards that cite it; STND.VVUQ 1.4 with the amendments at the start; STND.CONC 1.1 after
 every standard it cites; STND.PROJ 1.2 and STND.HARN 1.2 last. The lead sets each
-transaction's time here, one minute apart from START, and chains the mnemonic rows in the order of adoption;
+transaction's time here, the time at which it is applied, and chains the mnemonic rows in the order of adoption;
 the individual scripts keep their placeholder times for their own rehearsals.
 """
 from __future__ import annotations
 
 import importlib
 import sys
-from datetime import datetime, timedelta
+import time
+from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-START = "2026-10-24T22:00:00+00:00"  # set to the time of application once ratified
 
 AMENDMENTS = ["apply_omp_1_0_1", "apply_cxx_1_1", "apply_py_1_0_1", "apply_jl_1_1", "apply_numer_1_3",
               "apply_vvuq_1_4"]
@@ -39,10 +39,15 @@ OFFLD_ROW = ("| OFFLD | STND | Accelerator offload standard | none | Reads as of
 
 
 def _times():
-    t = datetime.fromisoformat(START)
+    # The time of application, to the second; the next transaction waits for the next second.
+    last = None
     while True:
-        yield t.isoformat()
-        t += timedelta(minutes=1)
+        now = datetime.now(timezone.utc).replace(microsecond=0)
+        while last is not None and now <= last:
+            time.sleep(0.2)
+            now = datetime.now(timezone.utc).replace(microsecond=0)
+        last = now
+        yield now.isoformat()
 
 
 def apply(root: Path) -> None:

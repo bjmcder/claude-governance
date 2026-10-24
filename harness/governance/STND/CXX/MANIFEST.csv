@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.CXX,standard,LVL2,C++ standard,adopted,_doc.md,de122b50cc78ed5e05eb441f14148142373b460d02b8aa70d3e04e850ce48d2e,27498
+STND.CXX,standard,LVL2,C++ standard,adopted,_doc.md,44d56c884e1c7a045217dda87859beb9a2ea3f2c58fd6150049b870de0841d83,30894
 STND.CXX.1,provision,LVL2,Core Guidelines reference,adopted,1.md,3f97cee825752b722dc620931bf6c3a75e18111ebc1315f2010073d098e4d5ee,712
 STND.CXX.2,provision,LVL2,Language edition,adopted,2.md,03a4f9e34bc0ce7dfdda17b3fd21cd3bcf69a75489ee8d23bcd871381552fd7c,1117
 STND.CXX.3,provision,LVL2,Agent edition changes,adopted,3.md,69368b6a3002c4b58052a6282cc69ead726ede65f14cf15b0a2e3c326ec09253,964
@@ -14,7 +14,7 @@ STND.CXX.11,provision,LVL2,Constrained generic code,adopted,11.md,f44555fc2ce17f
 STND.CXX.12,provision,LVL2,Compile-time checking,adopted,12.md,f764ddb9aa28930139accd3c36b54b49b20c786a6b490b4b1a2a1c4ab302abc2,448
 STND.CXX.13,provision,LVL2,Documented metaprogramming facilities,adopted,13.md,d19220e9ebdaf08acd12cbb202a94b35431fa95cdf919cc77c9eebe1404ac368,818
 STND.CXX.14,provision,LVL2,Naming conventions,adopted,14.md,d51b29c6160eb4d5b2988eb5c9d3561cdbba864ca070db4cc51f4f13754e5bf4,1210
-STND.CXX.15,provision,LVL2,Declaration comments,adopted,15.md,01f1b546ea81e960ad659eb3cdbedbfb47d4bb3c123f42cd82a42a0056535b41,856
+STND.CXX.15,provision,LVL2,Declaration comments,adopted,15.md,6064683f7824ae85a81cbf0a603156084f5bba837556bb5d512e3261d69d4196,845
 STND.CXX.16,provision,LVL2,C++ responses to listed failures,adopted,16.md,00e32595d86be07c59d0e0001e3f10c942c2304d0ff8436bfe9d288b23e05a02,572
 STND.CXX.17,provision,LVL2,Failure results kept visible,adopted,17.md,4e5e53f9482c4d1e3f10f9389467c12110cadcd39250e76275f93e7626bd493c,483
 STND.CXX.18,provision,LVL2,Checks no option removes,adopted,18.md,4dc994c0479dfecf06cad00b68bf11b637f1ac1ddcf13da6b226299da911ddb4,754
@@ -22,7 +22,7 @@ STND.CXX.19,provision,LVL2,Failure channel,adopted,19.md,df8d04d4099425110c3b495
 STND.CXX.20,provision,LVL2,Foreign resource handles,adopted,20.md,303af888950516ef72c2f65528cbeabbb00e0ce0daf01ba21977e2f82e90c249,643
 STND.CXX.21,provision,LVL2,Status and release failures,adopted,21.md,b200abef75a55dca91d866ee34aefaecff5ea4fb932b5eeaf7c30647fbe4ce0b,911
 STND.CXX.22,provision,LVL2,C++ exceptions at foreign boundaries,adopted,22.md,c265990fc6a2e69db15c855888f7590cabf0f1ca4655607c179f2368664c4b16,775
-STND.CXX.23,provision,LVL2,Synchronization of shared state,adopted,23.md,8645736c275b03091935fc05adbaa22aaa629003238f041315db5dddd6076599,895
+STND.CXX.23,provision,LVL2,Synchronization of shared state,adopted,23.md,b134c5b13a128f3ece648170a49792a6f98e34654a81d80dfb5d508975b2cab2,603
 STND.CXX.24,provision,LVL2,Compiler assumptions,adopted,24.md,2c879f70003ea04c1c3242ed11f648e109888b5980b45390229e12431841a469,535
 STND.CXX.25,provision,LVL2,C++ static checks,adopted,25.md,20887e8d78584e003cd31e24607c71a5b33c9827de237419eabe065010588888,673
 STND.CXX.26,provision,LVL2,Run-time error detection,adopted,26.md,1686315a25975533fc5bab95f99a93afa989d70b05054571dc087ab648ae58d1,707

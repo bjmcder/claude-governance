@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.JL,standard,LVL2,Julia standard,adopted,_doc.md,78650d0f9f474b2c5dd8f5d699ff3666605aded2457566a0ef390a105fc54899,26080
+STND.JL,standard,LVL2,Julia standard,adopted,_doc.md,70f446ca2233cb9ee851138b68bcc6733fc7a9cff4e25ee54b7ee397b7130813,28581
 STND.JL.1,provision,LVL2,Reference Julia version,adopted,1.md,1c6e06d883f4b4119623e6790db369e00ca1f39bf0a8bfa3485a260b2e5afdec,753
 STND.JL.2,provision,LVL2,Julia compatibility bounds,adopted,2.md,93e7cac6b566594fbdde3534f7b37fce247ddf15b456711479e1bf00624f4d48,681
 STND.JL.3,provision,LVL2,Checked Julia versions,adopted,3.md,5d595e9c3181ce219346bfd263d154e1b38ffa47e7356c4ce3c3c0ade8fa37cb,901
@@ -26,7 +26,7 @@ STND.JL.23,provision,LVL2,Generators seeded at entry points,adopted,23.md,7135cf
 STND.JL.24,provision,LVL2,Parallel random streams,adopted,24.md,d8b57b4a94364168dac72ad50140bbf5d864fa55d846781c22493bd3dd3253c0,593
 STND.JL.25,provision,LVL2,Stable draws in references,adopted,25.md,626bf82ca94e20f215d2fa7e4f0df20efd7c24fed17124f8609cacd27d2ea54e,864
 STND.JL.26,provision,LVL2,Values unstable across versions,adopted,26.md,b668f030f9580847343a1d27b7a62eaba79d2c2acad3718c056584a5902caa73,540
-STND.JL.27,provision,LVL2,Shared state between tasks,adopted,27.md,23fc8a0c6e400c574552797016b5fa1f9c0cde48465162601a9e1f588d3e856e,530
+STND.JL.27,provision,LVL2,Shared state between tasks,adopted,27.md,33f2c84043d065dc24f85084d58041b6f7d47b898a914c1f5d70e2dece3a39b5,406
 STND.JL.28,provision,LVL2,Docstring placement,adopted,28.md,daa7bce4d599c7579a5aab29a0813fa0eb7593460b9d580ea940c0731702044a,743
 STND.JL.29,provision,LVL2,Docstring opening lines,adopted,29.md,69cc0e8e5cc431dc20fe4483ca5a31b150cd638f87533d908c52daea24373a17,566
 STND.JL.30,provision,LVL2,Docstring sections,adopted,30.md,e8045dd1e025d7bd1ed140dac6218a19baafa9ce8e008899daf2f8e8d27ea6a5,1584

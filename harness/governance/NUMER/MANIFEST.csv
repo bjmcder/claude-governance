@@ -1,7 +1,7 @@
 id,kind,level,title,status,path,sha256,bytes
-NUMER,profile,LVL1,Numerical computation,adopted,_doc.md,ba7319893e532781d325e56273cd5b15cc621aff66b379b51d509e419564d463,14804
+NUMER,profile,LVL1,Numerical computation,adopted,_doc.md,5711519b06c4286912660cd92dcae1bdbe13d9159476128b6ef9ff257cf5e129,16003
 NUMER.1,provision,LVL1,Numerical profile selector,adopted,1.md,bdb48233466530bca2ec523d403bd4b554211b898b560fe7b3ae63407d5925e6,477
-NUMER.2,provision,LVL1,Shared matters owned,adopted,2.md,580ba6ae771950029e43060e5d6016fe10e303100baf9aeb4b73e13bd3638ddf,1390
+NUMER.2,provision,LVL1,Shared matters owned,adopted,2.md,f87c103c7b76520f0f3858dd992d6febad09e44b888cd7fd4c96fc0e82346ed8,1488
 NUMER.3,provision,LVL1,Numerical specification,adopted,3.md,f76682451a23aefc85bcd95d6cb6709f4842d237f90cdaaaeaa951adad2157a5,439
 NUMER.4,provision,LVL1,Visible mathematics,adopted,4.md,86f218568497c655d8bea17d3377790037a97dfc6696fe36e86829c50b2b54d8,579
 NUMER.5,provision,LVL1,Required precision,adopted,5.md,11e71bec2842f444630b7406d8f754abafbb925d2cd8848f9fe8a95a42b08046,977

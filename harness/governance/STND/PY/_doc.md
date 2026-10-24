@@ -4,7 +4,7 @@ level: "LVL2"
 kind: "standard"
 title: "Python standard"
 status: "adopted"
-revision: "1.0"
+revision: "1.0.1"
 adopted: "2026-10-23"
 adopted_by: "The Custodian"
 instantiates: ["GOV.18", "GOV.19"]
@@ -59,7 +59,7 @@ Doctests. STND.DOCS.13 compares the shown result of an example within a stated t
 
 Versions. The project chooses the releases of Python and of its dependencies that it declares, under STND.DEPS.3 and STND.DEPS.4, and the repository configuration records them (STND.PY.13). A distributed package declares the oldest releases it supports so that its dependents know what they are able to combine with it, and its checks run on the oldest declared combination and on the newest combination that its declared ranges admit (STND.PY.14). A new Python release is able to precede the releases of dependencies that support it, which is why the newest combination is limited to releases consistent with one another. An application or an archived study that no other work imports pins its interpreter and packages as dependencies, and a qualified revision stays fixed under STND.DEPS.3. A change of the Python release on which the work runs is a change of the runtime of each execution path under HW.7 and of a pinned revision under STND.DEPS.5, and each run records the exact Python and library revisions (STND.DEPS.8); the lock file of the package installer is the exact record of those revisions (STND.DEPS.10). Running the checks of STND.PY.14 at release, and not at each change, is a deferral of verification under RSRC.12.
 
-Randomness. STND.CODE.2 already asks that the source of randomness arrive through the interface; STND.PY.15 gives its Python form, a generator object passed through a parameter named rng as SPEC 7 names it, and keeps library code off the global random states of its libraries and of the random module, which are hidden global state (DSGN.14). SPEC 7 also lets the rng parameter accept a seed or None; this standard keeps that conversion at the entry point (STND.PY.16), because an integer passed to two functions gives them identical streams and None draws entropy that nobody records. Streams for parallel parts derive from the root seed and the part index through spawning, jump-ahead, or counter-based keys (STND.PY.17, STND.VVUQ.62); a stream chosen by worker or process identity, or copied into forked processes, differs between runs. NUMER.24 governs the evidence that the streams are independent.
+Randomness. STND.CODE.2 already asks that the source of randomness arrive through the interface; STND.PY.15 gives its Python form, a generator object passed through a parameter named rng as SPEC 7 names it, and keeps library code off the global random states of its libraries and of the random module, which are hidden global state (DSGN.14). SPEC 7 also lets the rng parameter accept a seed or None; this standard keeps that conversion at the entry point (STND.PY.16), because an integer passed to two functions gives them identical streams and None draws entropy that nobody records. Streams for parallel parts derive from the root seed and the part index through spawning, jump-ahead, or counter-based keys (STND.PY.17, STND.VVUQ.62); a stream chosen by worker or process identity, or copied into forked processes, differs between runs. STND.PY.17 states for the work in Python the rule of STND.CONC.23, which keys each stream of a computation divided among concurrent tasks to a part defined independently of the number of tasks and of the task that computes it. STND.PY.17 reaches further: it governs each division of work into parts, parts run as separate runs included, which STND.CONC.23 does not reach; both apply from CSQ3. NUMER.24 governs the evidence that the streams are independent.
 
 Stable values. A generator library is able to keep the stream of a bit generator fixed for a seed while the sampling methods built on it change their output between releases, as the methods of NumPy's Generator have done. A test reference of exact drawn values therefore draws through a stable stream or holds stored data (STND.PY.18). A test whose verdict depends on a seeded stream states in advance how it is repeated after an upgrade of its generator library, because NUMER.26 forbids reseeding as the remedy for a failure without such a rule. The built-in hash of a str or bytes object varies between runs with the hash seed of the interpreter, and with it the iteration order of a set of strings (STND.PY.19).
 
@@ -69,7 +69,7 @@ Reporting. Library code writes diagnostics through a module logger and leaves th
 
 Idioms. Python evaluates a default value once, at definition, so a mutable default is state shared across calls (STND.PY.23); None is the usual default, with the object built in the body. The default text encoding of Python has depended on the platform, so a file opened without its encoding is able to read differently on different machines, and an error handler of "ignore" or "replace" substitutes characters silently (STND.PY.24). File system paths held as path objects of the pathlib module are clearer to read than strings joined by hand, and the linter's rules for them are a choice of configuration.
 
-Assertions. STND.PY.25, STND.PY.27, and STND.PY.30 are the Python forms of STND.CODE.6 and STND.CODE.7, each limited to the conditions that PRIME.4 lists. The interpreter removes assert statements under its optimizing mode, an execution setting, so an assertion that checks untrusted input lets invalid input through in that mode (STND.PY.25). An argument of the public interface is untrusted input unless the threat model records otherwise, so a shape check of an argument raises an exception in place of an assertion; that this reaches every function of the public interface at every class, as PRIME.4 does, is the custodian's ruling of 2026-10-23 (PRIN.10). A run-time check of an invariant or postcondition that the work relies on is written as a raise statement for the same reason (STND.PY.26).
+Assertions. STND.PY.25, STND.PY.27, and STND.PY.30 are the Python forms of STND.CODE.6 and STND.CODE.7, each limited to the conditions that PRIME.4 lists. The interpreter removes assert statements under its optimizing mode, an execution setting, so an assertion that checks untrusted input lets invalid input through in that mode (STND.PY.25). An argument of the public interface is untrusted input unless the threat model of GUARD.16 records otherwise, so a shape check of an argument raises an exception in place of an assertion; that this reaches every function of the public interface at every class, as PRIME.4 does, is the custodian's ruling of 2026-10-23 (PRIN.10). A run-time check of an invariant or postcondition that the work relies on is written as a raise statement for the same reason (STND.PY.26).
 
 Handlers. MemoryError and RecursionError derive from Exception, so a handler of Exception, of BaseException, or of every exception catches the resource exhaustion that PRIME.4 lists, and a suppression context with those classes discards it with no handler at all (STND.PY.27). A handler meets STND.PY.27 by raising the same exception, by raising another one from it, by halting, or by a visible fallback, a computation in smaller pieces with a warning among them. KeyboardInterrupt and SystemExit are the operator's stop and the program's exit, which PRIME.4 does not list, so STND.PY.28 raises them again as a default; a handler that stores an exception to raise it in another thread raises it again there.
 
@@ -89,6 +89,7 @@ Existing source conforms when a change next touches it, other than the strict ch
 | --- | --- |
 | DSGN | Design |
 | GOV | Governance |
+| GUARD | Safeguards |
 | HW | Execution hardware |
 | INTPR | Interpretability |
 | NUMER | Numerical computation |
@@ -99,6 +100,7 @@ Existing source conforms when a change next touches it, other than the strict ch
 | SIMPL | Simplicity |
 | STND.CLASS | Consequence-class criteria |
 | STND.CODE | Coding standard |
+| STND.CONC | Concurrency standard |
 | STND.DEPS | Dependency policy |
 | STND.DOCS | Documentation standard |
 | STND.DRAFT | Drafting standard |
@@ -112,3 +114,4 @@ Existing source conforms when a change next touches it, other than the strict ch
 | Revision | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-10-23 | Adopted. |
+| 1.0.1 | 2026-10-24 | Editorial amendment (GOV.41): the informative Notes cite STND.CONC.23 as the model-neutral rule that STND.PY.17 states for the work in Python, and state the wider scope of STND.PY.17, and cite GUARD.16 for the threat model that records a source of input as trusted; References lists STND.CONC and GUARD; no obligation changes. |

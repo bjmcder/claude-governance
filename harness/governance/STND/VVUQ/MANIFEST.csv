@@ -1,7 +1,7 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.VVUQ,standard,LVL2,"Verification, validation, and uncertainty quantification methods",adopted,_doc.md,9d2d30facdc3ec497b634c7f38c569d2df622cb2b858b848801a2681ae70f969,37680
+STND.VVUQ,standard,LVL2,"Verification, validation, and uncertainty quantification methods",adopted,_doc.md,7b903d1e6076a61c7dd5454a943eb3427b3f8f883da2efda6e47fe90b10bdc75,38887
 STND.VVUQ.1,provision,LVL2,Comparison tier choice,adopted,1.md,29bb2e7fd3fbcd4479bc50368c04d0dd40769be0099f091609f6d0ec5ed0a297,2614
-STND.VVUQ.2,provision,LVL2,Bitwise identity,adopted,2.md,a05e45fc70d1a73f35efc80b0b6371a4e602d0dde7db5328d0a0a3b265b4bd0e,656
+STND.VVUQ.2,provision,LVL2,Bitwise identity,adopted,2.md,da85a2ab234da5e116106d5c32fc83c6111f7716f57270517d5f96f3c2535991,716
 STND.VVUQ.3,provision,LVL2,Non-finite values,adopted,3.md,13ae55317abc54d37b2e58740804788e5114c6745c2331df8de78762ab1d60de,680
 STND.VVUQ.4,provision,LVL2,Bounds in last-place units,adopted,4.md,70dc85064c64c7987835f90a38796a861a2be3b1ece8460bda0a060f9d6228c7,985
 STND.VVUQ.5,provision,LVL2,Relative and absolute parts,adopted,5.md,70cfc1b8b0ce5adf55564120a6a43cb46669adebe6d24c0bee09f384866a25cb,756
@@ -62,7 +62,7 @@ STND.VVUQ.59,provision,LVL2,Markov chain precision,adopted,59.md,97d5e08cbe77268
 STND.VVUQ.60,provision,LVL2,Importance weights,adopted,60.md,a0bfd3ccd82f3ad74220f04e57dadec00946b7d36d5aff8daa3b3d44045ba902,488
 STND.VVUQ.61,provision,LVL2,Tally reliability,adopted,61.md,df97812c998f90443adb3558e13533aebc918b6ef1960318e464a4ac9dda228c,1426
 STND.VVUQ.62,provision,LVL2,Stream construction,adopted,62.md,cdc3bf365e70bc19dbd4944942ece3966d3ac76db274e0b3c0aaab40c6d2fd0c,661
-STND.VVUQ.63,provision,LVL2,Generator testing,adopted,63.md,6796b0ce1c1f49855b6a39b63d50f533eb8f2d3f73a5640700c26d034ea02903,498
+STND.VVUQ.63,provision,LVL2,Generator testing,adopted,63.md,c3d11f98a7d03190cdd120d1f5681e8c2fab3d1f4f8003410e73926780cb27bb,638
 STND.VVUQ.64,provision,LVL2,Fixed-seed and fresh-seed tests,adopted,64.md,4e9e3352c2e31c262a48484db9072557829b94fc8f393072db35ec4f606b2e37,607
 STND.VVUQ.65,provision,LVL2,Repetition rule,adopted,65.md,42c7d21a98da1588ed3d029094d39d56bb75832009e67845fd91eb48d63bd318,624
 STND.VVUQ.66,provision,LVL2,Computing derivatives,adopted,66.md,2dca9df6b837c40618a897ae861e94b1803cb933a8e2306c123adc49e8cf7b20,628

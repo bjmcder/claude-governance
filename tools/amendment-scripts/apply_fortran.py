@@ -36,7 +36,7 @@ RATIONALE = (
     " apart (STND.FTN.33 and STND.FTN.34); and run-time checks and, where the compiler and the host support"
     " halting, a run that halts at floating-point exceptions"
     " (STND.FTN.35 and STND.FTN.36). STND.FTN.29, STND.FTN.30, and STND.FTN.31 instantiate PRIME.4 and bind at every"
-    " class; none raises the floor (GOV.11), since each asks only a response that PRIME.4 requires or the check that"
+    " class; none raises the floor (GOV.11), as the custodian rules at ratification, since each asks only a response that PRIME.4 requires or the check that"
     " STND.CODE.6 makes unremovable, and the reach of the term Untrusted input for Fortran is the custodian's"
     " decision at this ratification. Transition (GOV.42): none, because no project instrument cites a draft of it;"
     " existing source enters the legacy list at the change that adopts the standard. Review of STND.HARN.28 by the"

@@ -29,7 +29,7 @@ harness/
 │   ├── HW/{CPU,GPU,QPU,EMBED,FPGA,ASIC}/  HDES/{FPGA,ASIC}/       LVL1
 │   ├── STND/{DRAFT,IDENT,CLASS,DFLT,INSTR,HARN,VVUQ,CODE,THRT,
 │   │        KNOW,DEPS,PROJ,WPROC,CREW,DOCS,CXX,PY,JL,ANNEX,MPI,
-│   │        CONC}/                                             LVL2
+│   │        CONC,OMP,OFFLD,BUILD,WFLOW,STDC,RUST,FTN,SV,LEAN}/ LVL2
 │   ├── MNEM/                 the mnemonic register
 │   ├── KNOW/  TAG/{FIELD,PROB,METH,HW,QTY,ACTV,COMP}/
 │   └── _PROJECT/NAME/        LVL3 project template
@@ -98,20 +98,20 @@ harness/
 
 ## Current state
 
-As of ledger entry 116 (2026-10-24). `show governance ID` prints the current text and revision of any document.
+As of ledger entry 141 (2026-10-24). `show governance ID` prints the current text and revision of any document.
 
 | Level | Contents | Status |
 | --- | --- | --- |
 | LVL0 | 186 provisions in 11 parts, 155 Lexicon terms, the constitution record | Ratified, revision 1.6; pinned by ledger entry 1, amended by entries 2 to 7, 17, 23, 30, and 46 (entry 31 annotates 30) |
 | LVL1 | 7 profiles and 8 sub-profiles, each divided into numbered provisions | Adopted |
-| LVL2 | 23 standards, each divided into numbered provisions | Adopted |
+| LVL2 | 30 standards, each divided into numbered provisions | Adopted |
 | Knowledge and tags | `KNOW/` and the seven tag facets of `TAG/` | Planned |
 | LVL3 | Template with project constitution, register, and one example each of authorization, waiver, ruling, axiom, hazard, and safe range | Template |
 
 | Document | Revision | Provisions | Title |
 | --- | --- | --- | --- |
 | AGENT | 1.1 | 47 | Agent practice |
-| NUMER | 1.2 | 29 | Numerical computation |
+| NUMER | 1.3 | 29 | Numerical computation |
 | HW | 1.1.1 | 22 | Execution hardware; sub-profiles CPU (5), GPU (4), QPU (8), EMBED (6), FPGA (4), ASIC (4) |
 | HDES | 1.0.1 | 15 | Hardware design; sub-profiles FPGA (5), ASIC (12) |
 | CPS | 1.0 | 9 | Cyber-physical and actuation |
@@ -122,26 +122,33 @@ As of ledger entry 116 (2026-10-24). `show governance ID` prints the current tex
 | STND.CLASS | 1.3 | 12 | Consequence-class criteria (identifiers 8, 9, and 11 to 16 withdrawn) |
 | STND.DFLT | 1.5 | 31 | Defaults |
 | STND.INSTR | 1.4 | 10 | Agent instructions |
-| STND.HARN | 1.1 | 28 | Harness specification |
-| STND.VVUQ | 1.3 | 83 | Verification, validation, and uncertainty quantification methods |
+| STND.HARN | 1.2 | 29 | Harness specification |
+| STND.VVUQ | 1.4 | 83 | Verification, validation, and uncertainty quantification methods |
 | STND.CODE | 1.1 | 13 | Coding standard |
 | STND.THRT | 1.0 | 9 | Threat-model template |
 | STND.KNOW | 1.0 | 14 | Knowledge base and tags |
 | STND.DEPS | 1.0 | 11 | Dependency policy |
-| STND.PROJ | 1.1 | 5 | Project constitution template |
+| STND.PROJ | 1.2 | 7 | Project constitution template |
 | STND.WPROC | 1.0 | 15 | Work process standard |
 | STND.CREW | 1.0 | 23 | Agent roles standard |
 | STND.DOCS | 1.0 | 14 | Documentation standard |
-| STND.CXX | 1.0 | 31 | C++ standard |
-| STND.PY | 1.0 | 31 | Python standard |
-| STND.JL | 1.0 | 35 | Julia standard |
+| STND.CXX | 1.1.1 | 31 | C++ standard |
+| STND.PY | 1.0.1 | 31 | Python standard |
+| STND.JL | 1.1 | 35 | Julia standard |
 | STND.ANNEX | 1.0 | 10 | Hardware type annex |
 | STND.MPI | 1.0 | 25 | Message Passing Interface standard |
-| STND.CONC | 1.0 | 29 | Concurrency standard |
-| STND.OMP | 1.0 | 33 | OpenMP standard |
+| STND.CONC | 1.1 | 30 | Concurrency standard |
+| STND.OMP | 1.0.1 | 33 | OpenMP standard |
 | STND.OFFLD | 1.0 | 31 | Accelerator offload standard |
+| STND.BUILD | 1.0.1 | 26 | Build standard |
+| STND.WFLOW | 1.0 | 40 | Workflow and long-run resilience standard |
+| STND.STDC | 1.0 | 38 | C standard |
+| STND.RUST | 1.0 | 34 | Rust standard |
+| STND.FTN | 1.0 | 36 | Fortran standard |
+| STND.SV | 1.0 | 27 | Verilog and SystemVerilog standard |
+| STND.LEAN | 1.0 | 31 | Lean standard |
 
-The ledger holds 116 transactions: 39 `adopt`, 60 `amend`, 8 `register`, 3 `review`, 3 `rule`, and 3 `annotate`. The mnemonic register `governance/MNEM/_doc.md` (STND.IDENT.19) holds every mnemonic in use; a new mnemonic, including that of a project or of a kind of LVL3 instrument, is registered by the custodians (STND.IDENT.23).
+The ledger holds 141 transactions: 46 `adopt`, 71 `amend`, 15 `register`, 3 `review`, 3 `rule`, and 3 `annotate`. The mnemonic register `governance/MNEM/_doc.md` (STND.IDENT.19) holds every mnemonic in use; a new mnemonic, including that of a project or of a kind of LVL3 instrument, is registered by the custodians (STND.IDENT.23).
 
 ## Commands
 
@@ -292,7 +299,7 @@ A revision number is `major.minor` or `major.minor.editorial`, as in 1.0 or 1.0.
 - There is no agent context manifest (agent brief) or action-class index.
 - `find` and `context` match words, not meanings: "push" finds the items that say "push", not the definition of remote write, and a question in full sentences matches its common words; give the corpus's own terms.
 - The environment adapter for Claude Code enforces none of the ten outcomes of STND.HARN.18 in full and all ten in part, so its draft entry of STND.DFLT.22 settles no provision; `coverage.md` states each gap.
-- Remote writes named by an authorization (unit 0008; STND.HARN.29, STND.PROJ.6, and STND.PROJ.7, drafted as STND.PROJ 1.2 and STND.HARN 1.2 for the custodian, not yet adopted). `--authorization ID` with `--role ROLE` opens the writes of a standing authorization in force that extends to that role, and `--expiry-horizon DAYS` sets the owner's bound on its expiry. The guard answers `allow` only for two kinds it reads, compared as whole strings: a `git push` of local branches to the remote's one configured address, or to that address given whole, from inside the work's own valid repository, and a `gh issue create`, `gh issue comment`, or `gh pr comment` with `--repo HOST/OWNER/REPO` and literal text; each only as one command of plain words, with no expansion, substitution, redirection, or here-document, and only while the git configuration, the repository's hooks, and the environment hold nothing the guard does not model. Every other remote write is referred as far as the guard recognizes the command; a program it does not read writes unseen, as before. The text rules that refer every push and every such post stay, so whether the guard's `allow` outranks them is for an installation test (unit 0008); until it passes, an authorized write may still be referred. A revocation takes effect once the configuration is derived again and installed; the guard checks the expiry at each call. Whether the sandbox's narrower `allowRead` for an opened secret wins over the store's `denyRead` pattern is not settled by the documentation either, and waits on the installation test of unit 0008.
+- Remote writes named by an authorization (unit 0008; STND.HARN.29, STND.PROJ.6, and STND.PROJ.7, adopted as STND.PROJ 1.2 and STND.HARN 1.2 in ledger entries 140 and 141; a QA.8 code review is owed before installation). `--authorization ID` with `--role ROLE` opens the writes of a standing authorization in force that extends to that role, and `--expiry-horizon DAYS` sets the owner's bound on its expiry. The guard answers `allow` only for two kinds it reads, compared as whole strings: a `git push` of local branches to the remote's one configured address, or to that address given whole, from inside the work's own valid repository, and a `gh issue create`, `gh issue comment`, or `gh pr comment` with `--repo HOST/OWNER/REPO` and literal text; each only as one command of plain words, with no expansion, substitution, redirection, or here-document, and only while the git configuration, the repository's hooks, and the environment hold nothing the guard does not model. Every other remote write is referred as far as the guard recognizes the command; a program it does not read writes unseen, as before. The text rules that refer every push and every such post stay, so whether the guard's `allow` outranks them is for an installation test (unit 0008); until it passes, an authorized write may still be referred. A `credential.helper`, or any other key of the `credential` section, in the git configuration makes every push referred, since the guard reads that section as one that may redirect a push; an owner who uses a credential helper gains nothing from a push authorization until the guard models it. A revocation takes effect once the configuration is derived again and installed; the guard checks the expiry at each call. Whether the sandbox's narrower `allowRead` for an opened secret wins over the store's `denyRead` pattern is not settled by the documentation either, and waits on the installation test of unit 0008.
 - No signer register is founded yet, so every `signature` field is blank.
 - Authority tiers are classified per sentence by wording. Cross-provision action classes (the same action named in two provisions) are not compared.
 - Imperative sentences are found by a verb list, not a parse (g.8, review).

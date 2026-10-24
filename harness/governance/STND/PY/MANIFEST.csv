@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.PY,standard,LVL2,Python standard,adopted,_doc.md,bc878867905c003a5f1053c02391299c8ebdf61ce28b9649c888c703cf402375,20975
+STND.PY,standard,LVL2,Python standard,adopted,_doc.md,f472e7c343e0a2dc6ec7e965234b2949fc046c031145dea21687470782ad7106,21795
 STND.PY.1,provision,LVL2,Style PEPs as baseline,adopted,1.md,c2703681936cf7a37b6e6be9b95ea147bbc1914fa5d2ae98fd99e3d4d71ba583,619
 STND.PY.2,provision,LVL2,Python linter coverage,adopted,2.md,f0772566194d76fa9682b2d765f7a82da74db39c3b37101af5a657a0c2ae901d,847
 STND.PY.3,provision,LVL2,Annotation coverage,adopted,3.md,2e8ed5d33b947752e6b9098bc20a5df66fad092204509d0b02a2928935902780,658

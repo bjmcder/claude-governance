@@ -1,0 +1,40 @@
+id,kind,level,title,status,path,sha256,bytes
+STND.STDC,standard,LVL2,C standard,adopted,_doc.md,511c78adea3ee0b1515b55241184ceb639751a12b980ed6225404f62ebffdc1c,30756
+STND.STDC.1,provision,LVL2,C++ defaults applied to C,adopted,1.md,06f5adb496b62826014610d21bf7467935c5966c973b0f662083de9cb4197d94,2326
+STND.STDC.2,provision,LVL2,Binding C++ provisions applied to C,adopted,2.md,671433dcc276cf138ebc0c93487cc72946979234b278eb6b4767cd0bc8642a49,1036
+STND.STDC.3,provision,LVL2,Lowered C editions recorded,adopted,3.md,2a127b7d31e562e1eea66d1d4c0fee4d1e18d9681c2a0477e169c0c6aedc38e5,612
+STND.STDC.4,provision,LVL2,Conditional features tested,adopted,4.md,285644dcd95c49ac855c07b6a1f3d745c29365a124950c5e91c944923bdf5040,523
+STND.STDC.5,provision,LVL2,Release on every path,adopted,5.md,6c628eb83edb8376f7d65c75c1d229db787c8a5c73a835a80b68b5e5b2742baa,798
+STND.STDC.6,provision,LVL2,Release functions named,adopted,6.md,f53c9e3dc39d2b58e43b2c6d043236bde123fecc2b0ce928dd6699ddebe92a90,537
+STND.STDC.7,provision,LVL2,Extents passed with pointers,adopted,7.md,f4d5ac01e0b133d72441ea645b54cedd6008f2306bbe887e39c53b1acdd19015,626
+STND.STDC.8,provision,LVL2,Accesses within their object,adopted,8.md,a81a4f8c413818b8ac370cb725d3d0604034a90cc086cdc3b1e2800fbcbb994a,702
+STND.STDC.9,provision,LVL2,Objects used within their lifetime,adopted,9.md,0dad65c51d290fe8c780d41d0a7f3f3a25662d1aa5e5a3501c117a10cbbc0b75,589
+STND.STDC.10,provision,LVL2,Initialization before reads,adopted,10.md,53bb7d54b8c7c3142fbc8ac78798ee3b3b99dc3350dc221487fdccec6efe3899,614
+STND.STDC.11,provision,LVL2,Signed overflow excluded,adopted,11.md,6f39ca6e40dbfb77c49e4e9c8f5f785062c664bdb2155687916624a59a94e008,662
+STND.STDC.12,provision,LVL2,Division and shift operands,adopted,12.md,080165fb3464a076423378a6c5abe81686e79d37f1a84bd6f344938658811dca,800
+STND.STDC.13,provision,LVL2,Guards free of undefined behavior,adopted,13.md,4a5a70528ed315ce7cba99cbd34ea57ca262f9658e449cdf2f00be563720cf1f,628
+STND.STDC.14,provision,LVL2,Access through compatible types,adopted,14.md,379e6b660818f3dfbefff7f9ba5dfd843a76fcc7d93874bafe613cc05bc5c7e2,687
+STND.STDC.15,provision,LVL2,Sequenced accesses to scalars,adopted,15.md,3a478dac913365133fd800dd7d938c884404eebd11be5549028efda159d88ad0,476
+STND.STDC.16,provision,LVL2,Settings that define undefined behavior,adopted,16.md,4e05c7e842e75a32cb7996fc0ec89cc584ed6c9ff57ef1722661c60169ef08f1,784
+STND.STDC.17,provision,LVL2,Value-changing conversions made explicit,adopted,17.md,b4a13885399210e430161fb659570f3a82e1524aecc6725d5e5d982b8567ca28,721
+STND.STDC.18,provision,LVL2,Types of sizes and counts,adopted,18.md,1e5eb11ff113063d287228a0ddbd3cdbb566ce5b1fc18a973efa03f8ec39cc8f,645
+STND.STDC.19,provision,LVL2,Bounded buffer writes,adopted,19.md,59b1af9eeac4430b7dd5bd22db063de94f08d03ba282b9a7d4cd0253c040e7fd,572
+STND.STDC.20,provision,LVL2,Truncation reported or intended,adopted,20.md,e4fef065fcb4cd62bac53544325eb6ea9c8a9fb57ed2daeb437d7d7caeeb676b,537
+STND.STDC.21,provision,LVL2,Lengths from untrusted input,adopted,21.md,5e5af5c15bcc6c1a8893f0bcefc6081bc971f020b70b070466bc6d981d74399c,644
+STND.STDC.22,provision,LVL2,Checked format strings,adopted,22.md,94d23388902f2f342296caabf2666bf84443add112265665600246f5ad66474a,738
+STND.STDC.23,provision,LVL2,Language facilities over macros,adopted,23.md,71da86890d4dd7bcc4ec6a2056c718dfdfc863a0cf2dc55bf9fefd4f104897e4,529
+STND.STDC.24,provision,LVL2,Function-like macro hygiene,adopted,24.md,8f44d68737d3a01b309ccecd0160f3d780e7bfd55c5946cd1ac26fbdd9d2b7f0,631
+STND.STDC.25,provision,LVL2,Conditional compilation under check,adopted,25.md,ffd0fd04ea763c8a2b132969cdf4857a25fcc9a1279f06200c0b02f607a37c02,553
+STND.STDC.26,provision,LVL2,Restrict-qualified pointers,adopted,26.md,0818ed54288a7b492040c35c280aa305189684445b63b1a27778e930bc802206,814
+STND.STDC.27,provision,LVL2,Bounded variable-length arrays,adopted,27.md,0e501865482b41ebb26c72e18ba8170aa1449ec45b7a55b6d6500df9dd8192af,562
+STND.STDC.28,provision,LVL2,Stream errors before reliance,adopted,28.md,229cce565f3dbea1d98ebd85dcbd093b09e21b314d692ce9d198515a257e08f0,768
+STND.STDC.29,provision,LVL2,Library failure results diagnosed,adopted,29.md,56d8011b97f3b74b89a0aee9664bef784dc6d838da8f5868271a049d649b65db,1009
+STND.STDC.30,provision,LVL2,Release failures tested,adopted,30.md,2e6fd9498c243e9aaec27dd97ccac9d9fd59f70c9c8ad8262f8b2df6eae3e9df,588
+STND.STDC.31,provision,LVL2,C failure channel,adopted,31.md,5815299001c3360d03ca387bcfd09fbb29f75db22f0a537100f5394f3451ffc4,600
+STND.STDC.32,provision,LVL2,Errno as a report of failure,adopted,32.md,bf73f17cacb69d3c3d32e9fc09ea75c6b29ee25a0af4b3d0541f0047ca1f2630,651
+STND.STDC.33,provision,LVL2,Signal handler calls,adopted,33.md,c5e6eeb47a8e0fd4f729a8796d0cf3fd3757f6d830f7efda0faf4a3af95f1282,516
+STND.STDC.34,provision,LVL2,Computational exception signals,adopted,34.md,085af6a204691a47a181b6d22889341f9035507c0a90a3cd9a8147ca6e2dddd8,491
+STND.STDC.35,provision,LVL2,Adjacent bit-fields shared,adopted,35.md,f5c088b5096f91f5a794284f7c8f74cc29131cb32d5b425575c0242001de7fa7,534
+STND.STDC.36,provision,LVL2,Data crossing to other languages,adopted,36.md,88ae2e0551d2fd2a3ce91e7b782fd8b2740ab3496414c243390064e9e2202d9d,627
+STND.STDC.37,provision,LVL2,C warnings and detected behavior,adopted,37.md,1d20aa58ba6cd3b59d191dc973072780ba3dce6f4071af42e0842d0421851d95,1170
+STND.STDC.38,provision,LVL2,Stated limits of analysis,adopted,38.md,7cdb487103191753e39c57a262f44d6a21b80271ac8cc746b2b97ab844d932f9,505

@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.CONC,standard,LVL2,Concurrency standard,adopted,_doc.md,425523806562d024e245c73178336bbf1bb79e10abfa73d52ae0015ec7ea7266,21835
+STND.CONC,standard,LVL2,Concurrency standard,adopted,_doc.md,661f6e7831130cf760d106efd2fef5eb8a5e3ec51269ae933f238740da7c8f33,27904
 STND.CONC.1,provision,LVL2,Asynchronous completion observed,adopted,1.md,0e20723eb47627a101e05b99b32d174e11760f36a1ed47df03cfbefa1ce3760b,553
 STND.CONC.2,provision,LVL2,Failures across concurrent tasks,adopted,2.md,0f8eb5947d7bfc230b15e51cc94181aa110019df545ef2df245e90524a1195d8,777
 STND.CONC.3,provision,LVL2,Declared protection of shared objects,adopted,3.md,83e43a8f3066882c05d232957bafffefb45b232519126b1598c74229ae4c8d23,888
@@ -29,3 +29,4 @@ STND.CONC.26,provision,LVL2,Varied schedules in tests,adopted,26.md,da81f70b8ace
 STND.CONC.27,provision,LVL2,Stated verification limits,adopted,27.md,c1e35190a837d070a01921a7c2c283cf3d0b6661470c8d9d7db4d0e504343bdb,624
 STND.CONC.28,provision,LVL2,Checked design of critical protocols,adopted,28.md,77fec3a3555437b248fc0e9cb3a80b3b61750c7ee4458e44edb612f9f1e39fc6,632
 STND.CONC.29,provision,LVL2,Pending operations recorded,adopted,29.md,7fbc47af7a65dfec63cc514bb01abcf6a922ae721d19bf44d142a5b8541ecf2c,436
+STND.CONC.30,provision,LVL2,Output order of concurrent tasks,adopted,30.md,2972b285dc892b082785d4c1336a07110b0672b9f989abc66fb31a184970cf66,555

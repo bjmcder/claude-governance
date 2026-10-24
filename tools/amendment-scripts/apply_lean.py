@@ -26,7 +26,7 @@ RATIONALE = (
     " an error raised in a monad whose caller receives it, by a halt with a diagnosis,"
     " by the designed safe state, or by visible degradation with a diagnosis, binding (STND.LEAN.25, PRIME.4). Both"
     " ask only what PRIME.2 and PRIME.4 already require, at the cost of their wording and one sentence of a report,"
-    " so neither raises the floor (GOV.11). The Lean toolchain, each checker, and"
+    " so neither raises the floor (GOV.11), as the custodian rules at ratification. The Lean toolchain, each checker, and"
     " each Lean package pinned and used unchanged, upgrades rebuilt from source with their checks repeated, and a"
     " relied-on theorem accepted again by a checker free of a published soundness defect, or the record stating that"
     " none was available (STND.LEAN.1 to"

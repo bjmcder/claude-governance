@@ -68,6 +68,13 @@ The mnemonic register of GOV.37, in the form that STND.IDENT.19 gives.
 | CONC | STND | Concurrency standard | none | Reads as concurrency | active |
 | OMP | STND | OpenMP standard | none | The prefix that OpenMP gives its own routines and environment variables | active |
 | OFFLD | STND | Accelerator offload standard | none | Reads as offload; offload has no established acronym | active |
+| BUILD | STND | Build standard | none | Reads as build, the subject of the standard, as CODE reads as code | active |
+| WFLOW | STND | Workflow and long-run resilience standard | none | Reads as workflow; avoids FLOW (fluid flow, normalizing flows), as WPROC does, and WF | active |
+| STDC | STND | C standard | none | The prefix that the ISO C standard gives its own predefined macros and pragmas; avoids C, one letter, and CC (Creative Commons, cubic centimeter) | active |
+| RUST | STND | Rust standard | none | Spelled out; Rust has no established acronym, and its file extension RS reads as Reed-Solomon codes and RS serial interfaces | active |
+| FTN | STND | Fortran standard | none | The conventional short form of the name Fortran; avoids FOR, a common word | active |
+| SV | STND | Verilog and SystemVerilog standard | none | SystemVerilog's file extension; the definition of SystemVerilog holds Verilog | active |
+| LEAN | STND | Lean standard | none | Reads as the language in covered work: the name of Lean and the extension of its source files; Lean has no established acronym | active |
 | FIELD | TAG | Facet: domain, a physical or application area | none | none | active |
 | PROB | TAG | Facet: problem type | none | none | active |
 | METH | TAG | Facet: method | none | none | active |
