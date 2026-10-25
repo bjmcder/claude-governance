@@ -12,7 +12,7 @@ Every agent of this round reads this brief first. Your task message names your r
 **Directions and rules.** The custodian's standing process and directions are in `REPO/CUSTODIAN.md`. They bind you: the agnostic and determinism directions, never raising the floor, no restatement, STND.DOCS style, and the security constraints. Then read the Common, Amendment agents, and Review agents sections of `REPO/tools/round-brief-2026-10-24.md`, which hold the drafting rules, the scripts, rehearsal, and the tests of review. Where they conflict, this brief and CUSTODIAN.md win. Note these points in particular:
 - No archive copies: git is the recovery path.
 - The harness is now fast, so a rehearsal takes seconds.
-- `tools/check_refs.py` checks References against bare document names. Run it from `REPO/harness` with `PYTHONPATH=. python3 -B ../tools/check_refs.py <root> [DOC ...]`.
+- `tools/check_refs.py` checks References against bare document names. Run it from `REPO/harness` with `PYTHONPATH=. python3 -B ../tools/check_refs.py <root> [DOC ...]`. Since unit 0013 it is a thin wrapper of the harness check g.25, which `verify` runs, so `verify` reports the same gaps.
 
 **Scratch and records.**
 - Scratch work goes in `REPO/.scratch/<package>/`.

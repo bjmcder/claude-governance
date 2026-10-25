@@ -8,7 +8,7 @@ The working governance corpus of the custodian, with the harness that verifies, 
 | `rendered/` | A reading copy of each document, composed from the corpus by `govharness.derive.reading_copy.compose` |
 | `research/` | Research notes behind the standards, cited from their Notes |
 | `review-records/` | The review record of each round: drafts, reviews, verifications, dispositions, and pair lists |
-| `tools/` | Briefs for drafting, review, and rounds; `findings.py`; `check_refs.py`; `lvl0.txt`; and `amendment-scripts/`, the content modules and apply scripts that produced the ledger entries |
+| `tools/` | Briefs for drafting, review, and rounds; `findings.py`; `check_refs.py` (a wrapper of the harness check g.25); `lvl0.txt`; and `amendment-scripts/`, the content modules and apply scripts that produced the ledger entries |
 | `docs/` | Documents carried over from the former online project |
 | `CUSTODIAN.md` | The custodian's standing process and directions |
 | `OPEN-ITEMS.md` | Work the custodian has directed, and items left open by ratified rounds |
