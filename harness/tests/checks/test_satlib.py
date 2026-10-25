@@ -2,10 +2,15 @@
 
 from __future__ import annotations
 
+import contextlib
 import itertools
 import random
+import signal
 import sys
+import threading
 import unittest
+from collections.abc import Iterator
+from types import FrameType
 
 from govharness.checks.logic.satlib import (
     FACT_PREFIXES,
@@ -22,6 +27,9 @@ SPLITS = 1500  # more case splits than that limit
 SEED = 9  # seed of the random formulas: unit 0009
 FORMULAS = 3000  # random formulas compared with brute force
 VARIABLES = ("p", "q", "r", "s", "t", "u")
+LARGE_FORMULAS = 500  # larger random formulas compared with the old search
+LARGE_SIZES = (2, 4, 8, 8, 5, 3, 2, 1, 1)  # weights of sizes 1 to 9
+LIMIT = 10.0  # seconds a solve may take before its test fails
 
 
 def holds(model: dict[str, bool], literals: list[Literal]) -> bool:
@@ -208,6 +216,133 @@ def random_clause_set(rng: random.Random) -> ClauseSet:
     return clause_set
 
 
+def large_clause_set(rng: random.Random) -> ClauseSet:
+    """Draw a larger clause set, past what brute force can try.
+
+    Parameters
+    ----------
+    rng : random.Random
+        Seeded generator.
+
+    Returns
+    -------
+    ClauseSet
+        30 to 60 clauses of 1 to 9 literals over 10 to 30 variables,
+        about one in seventeen a unit clause; each further literal repeats
+        an earlier literal of its clause with probability 0.3, and is
+        otherwise drawn with replacement, so complements also occur.
+        Each clause is a fact or an axiom at random.
+    """
+    clause_set = ClauseSet()
+    variables = [f"v{i}" for i in range(rng.randint(10, 30))]
+    for index in range(rng.randint(30, 60)):
+        size = rng.choices(range(1, 10), weights=LARGE_SIZES)
+        literals: list[Literal] = []
+        for _ in range(size[0]):
+            if literals and rng.random() < 0.3:
+                literals.append(rng.choice(literals))
+            else:
+                literals.append((rng.choice(variables), rng.random() < 0.5))
+        prefix = rng.choice(("fact:", "NEG[", "axiom:"))
+        clause_set.add(f"{prefix}{index}", *literals)
+    return clause_set
+
+
+def rescanning_core(clause_set: ClauseSet) -> list[str]:
+    """Return the core the built-in solver should give, by the old search.
+
+    Parameters
+    ----------
+    clause_set : ClauseSet
+        An unsatisfiable set.
+
+    Returns
+    -------
+    list[str]
+        The fact clauses left by the deletion order of ``solve_builtin``,
+        with every satisfiability decided by ``rescanning_model``.
+    """
+    axioms = [
+        c for n, c in clause_set.clauses if not n.startswith(FACT_PREFIXES)
+    ]
+    facts = [
+        nc for nc in clause_set.clauses if nc[0].startswith(FACT_PREFIXES)
+    ]
+    index = 0
+    while index < len(facts):
+        trial = facts[:index] + facts[index + 1 :]
+        if rescanning_model(axioms + [c for _, c in trial]) is None:
+            facts = trial
+        else:
+            index += 1
+    return [name for name, _ in facts]
+
+
+@contextlib.contextmanager
+def time_limit(seconds: float) -> Iterator[None]:
+    """Raise ``TimeoutError`` in the block once it has run too long.
+
+    A search that does not end then fails its test, where it would
+    otherwise hang the run. The guard uses ``SIGALRM``; where that
+    signal is unavailable, or off the main thread, the block runs
+    unguarded.
+
+    Parameters
+    ----------
+    seconds : float
+        Wall time allowed.
+
+    Yields
+    ------
+    None
+        Control, for the guarded block.
+    """
+    alarm = getattr(signal, "SIGALRM", None)
+    if (
+        alarm is None
+        or threading.current_thread() is not threading.main_thread()
+    ):
+        yield
+        return
+
+    def fire(signum: int, frame: FrameType | None) -> None:
+        """Raise the timeout.
+
+        Parameters
+        ----------
+        signum : int
+            The signal received.
+        frame : FrameType | None
+            The frame it interrupted.
+        """
+        raise TimeoutError(f"no result in {seconds} s")
+
+    previous = signal.signal(alarm, fire)
+    signal.setitimer(signal.ITIMER_REAL, seconds)
+    try:
+        yield
+    finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        signal.signal(alarm, previous)
+
+
+def solved(clause_set: ClauseSet) -> SolveResult:
+    """Solve with the built-in solver within ``LIMIT`` seconds.
+
+    Parameters
+    ----------
+    clause_set : ClauseSet
+        The clauses to solve.
+
+    Returns
+    -------
+    SolveResult
+        The result of ``solve_builtin``.
+    """
+    with time_limit(LIMIT):
+        return solve_builtin(clause_set)
+
+
 def check_result(
     case: unittest.TestCase, clause_set: ClauseSet, result: SolveResult
 ) -> None:
@@ -265,7 +400,7 @@ class BuiltinSolver(unittest.TestCase):
         before = sys.getrecursionlimit()
         sys.setrecursionlimit(DEFAULT_LIMIT)
         try:
-            result = solve_builtin(clauses)
+            result = solved(clauses)
             self.assertEqual(sys.getrecursionlimit(), DEFAULT_LIMIT)
         finally:
             sys.setrecursionlimit(before)
@@ -291,7 +426,7 @@ class BuiltinSolver(unittest.TestCase):
         clauses.add("fact:c", ("c", True))
         clauses.add("free", ("d", True), ("e", True))
         clauses.add("exclusive", ("a", False), ("b", False))
-        result = solve_builtin(clauses)
+        result = solved(clauses)
         self.assertFalse(result.satisfiable)
         self.assertEqual(result.core, ["fact:a", "fact:b"])
 
@@ -319,12 +454,48 @@ class AgreesWithBruteForce(unittest.TestCase):
         statuses = []
         for number in range(FORMULAS):
             clause_set = random_clause_set(rng)
+            result = solved(clause_set)  # a timeout ends the test
             with self.subTest(formula=number, clauses=clause_set.clauses):
-                result = solve_builtin(clause_set)
                 check_result(self, clause_set, result)
                 statuses.append(result.satisfiable)
         self.assertGreater(statuses.count(True), FORMULAS // 5)
         self.assertGreater(statuses.count(False), FORMULAS // 5)
+
+    def test_larger_random_formulas(self) -> None:
+        """Behavior: on 500 larger random clause sets, the status, the
+        model, and the core equal those of the rescanning search, and a
+        model satisfies every clause.
+
+        Reference: ``rescanning_model`` and ``rescanning_core``, the
+        search of units 0001 to 0008, seeded as above. These sets keep
+        clauses long enough that watches move, are kept, and are carried
+        past a conflict, which the small sets seldom need (review 0008,
+        M1): dropping a kept watch or the watches left unvisited at a
+        conflict fails this test.
+        """
+        rng = random.Random(SEED + 2)
+        statuses = []
+        for number in range(LARGE_FORMULAS):
+            clause_set = large_clause_set(rng)
+            clauses = [c for _, c in clause_set.clauses]
+            result = solved(clause_set)  # a timeout ends the test
+            with self.subTest(formula=number, clauses=clause_set.clauses):
+                reference = rescanning_model(clauses)
+                self.assertEqual(result.satisfiable, reference is not None)
+                statuses.append(result.satisfiable)
+                if reference is None:
+                    self.assertEqual(result.core, rescanning_core(clause_set))
+                    continue
+                self.assertTrue(all(holds(result.model, c) for c in clauses))
+                self.assertEqual(
+                    list(result.model.items()),
+                    [
+                        (v, reference.get(v, False))
+                        for v in clause_set.variables()
+                    ],
+                )
+        self.assertGreater(statuses.count(True), LARGE_FORMULAS // 5)
+        self.assertGreater(statuses.count(False), LARGE_FORMULAS // 5)
 
     def test_solve_and_entailment_use_the_same_search(self) -> None:
         """Behavior: without z3, ``solve`` and ``prove_entailed`` give
@@ -341,13 +512,14 @@ class AgreesWithBruteForce(unittest.TestCase):
                 (rng.choice(VARIABLES), rng.random() < 0.5)
                 for _ in range(rng.randint(1, 3))
             ]
-            with self.subTest(formula=number):
-                self.assertEqual(
-                    solve(base, use_z3=False), solve_builtin(base)
-                )
+            with time_limit(LIMIT):  # a timeout ends the test
+                solved_once = solve(base, use_z3=False)
+                built_in = solve_builtin(base)
                 entailed, result = prove_entailed(
                     base, "claim", claim, use_z3=False
                 )
+            with self.subTest(formula=number):
+                self.assertEqual(solved_once, built_in)
                 negated = [c for _, c in base.clauses] + [
                     [(v, not p) for v, p in claim]
                 ]
@@ -365,9 +537,10 @@ class AgreesWithBruteForce(unittest.TestCase):
         base.fact("fact:x0", "x0")
         for i in range(2000):
             base.implies(f"link{i}", f"x{i}", (f"x{i + 1}", True))
-        entailed, result = prove_entailed(
-            base, "end", [("x2000", True)], use_z3=False
-        )
+        with time_limit(LIMIT):
+            entailed, result = prove_entailed(
+                base, "end", [("x2000", True)], use_z3=False
+            )
         self.assertTrue(entailed)
         self.assertEqual(result.core, ["fact:x0", "NEG[end]"])
 
@@ -389,7 +562,7 @@ class EdgeCases(unittest.TestCase):
             The result, already checked by ``check_result``.
         """
         clause_set = ClauseSet(list(clauses))
-        result = solve_builtin(clause_set)
+        result = solved(clause_set)
         check_result(self, clause_set, result)
         return result
 

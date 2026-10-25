@@ -182,10 +182,9 @@ class _Search:
     solver this replaces: a repeated literal counts once per occurrence,
     so a clause whose one unassigned literal appears twice is not unit,
     and holds or fails only once another clause or a split assigns that
-    literal's variable. The watches need no
-    undoing on backtracking: a watch moves only to a literal that is not
-    false at that point, and unassigning variables makes no literal
-    false.
+    literal's variable. The watches need no undoing on backtracking: a
+    watch moves only to a literal that is not false at that point, and
+    unassigning variables makes no literal false.
 
     Parameters
     ----------
