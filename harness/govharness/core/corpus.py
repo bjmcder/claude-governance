@@ -9,6 +9,7 @@ disk. Files are decoded as UTF-8 with universal newlines, as
 
 from __future__ import annotations
 
+import unicodedata
 from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
 
@@ -127,13 +128,16 @@ def load_entries(tree: Tree) -> list[Entry]:
     Raises
     ------
     ValueError
-        If a file has malformed front matter.
+        If a file has malformed front matter; the message names it.
     """
     entries: list[Entry] = []
     for rel in tree.markdown():
         if in_template(rel) or rel.name == README_FILE:
             continue
-        meta, body = parse_entry(tree.text(rel))
+        try:
+            meta, body = parse_entry(tree.text(rel))
+        except ValueError as error:
+            raise ValueError(f"{rel.as_posix()}: {error}") from error
         entries.append(Entry(rel, meta, body))
     return entries
 
@@ -362,15 +366,28 @@ def scope_hash(tree: Tree, prefixes: list[str]) -> str:
         SHA-256 over the ``path:digest`` lines of the included files,
         scope by scope in sorted order and by path within a scope;
         manifests are not Markdown and are excluded.
+
+    Raises
+    ------
+    ValueError
+        If the name of an included file holds a control character. A
+        line feed in a name would make two sets of files hash alike, and
+        the encoding cannot change without staling every recorded pin,
+        so such a name is refused instead.
     """
     lines: list[str] = []
     for prefix in sorted(p for p in prefixes if inside_root(p)):
         parts = PurePosixPath(prefix).parts
-        lines += [
-            f"{rel.as_posix()}:{sha256_bytes(tree.files[rel])}"
-            for rel in tree.markdown()
-            if rel.parts[: len(parts)] == parts
-        ]
+        for rel in tree.markdown():
+            if rel.parts[: len(parts)] != parts:
+                continue
+            name = rel.as_posix()
+            if any(unicodedata.category(c) == "Cc" for c in name):
+                raise ValueError(
+                    f"{name!r}: a file name with a control character "
+                    "cannot be pinned"
+                )
+            lines.append(f"{name}:{sha256_bytes(tree.files[rel])}")
     return sha256_bytes("\n".join(lines).encode())
 
 

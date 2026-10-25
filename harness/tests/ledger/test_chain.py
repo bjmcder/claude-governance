@@ -9,15 +9,19 @@ from __future__ import annotations
 import contextlib
 import io
 import json
+import re
 import threading
 import unittest
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+from govharness.checks.ledger import ledger_problems
 from govharness.cli.main import main
+from govharness.core.corpus import read_tree
 from govharness.core.hashing import canonical_json, ledger_entry_hash
 from govharness.ledger.chain import append, read_ledger
+from govharness.ledger.gpg import SignerConfig
 from govharness.ledger.transactions import chain_problems
 from tests.support import corpus_copy
 
@@ -288,6 +292,67 @@ class ChainedAppend(unittest.TestCase):
         self.assertEqual(
             chain_problems(altered), ["ledger entry altered at seq 2"]
         )
+
+
+class ReadBack(unittest.TestCase):
+    """What ``append`` writes, every later read reads (unit 0016)."""
+
+    def test_line_separators_in_text(self) -> None:
+        """Behavior: a text field holding U+2028, U+2029, or U+0085 is
+        appended raw and read back whole; the next append and the
+        ledger check both pass.
+
+        Reference: QA.8 part B, H1: ``str.splitlines`` split the entry
+        at the character, and the next append and ``verify`` refused
+        the ledger for good.
+        """
+        for char in (" ", " ", "\u0085"):
+            with self.subTest(hex(ord(char))), corpus_copy() as root:
+                note = {**ANNOTATION, "rationale": f"a{char}b"}
+                written = append(root, dict(note))
+                self.assertIn(char, (root / "ledger.jsonl").read_text())
+                self.assertEqual(read_ledger(root)[-1], written)
+                append(root, dict(ANNOTATION))
+                self.assertEqual(
+                    ledger_problems(
+                        read_tree(root), read_ledger(root), SignerConfig()
+                    ),
+                    [],
+                )
+
+    def test_entry_that_does_not_read_back(self) -> None:
+        """Behavior: an entry whose line parses to something else is
+        refused, and nothing is written.
+
+        Reference: a field holding NaN, which JSON writes as ``NaN``
+        and reads back as a value unequal to itself.
+        """
+        with corpus_copy() as root:
+            before = (root / "ledger.jsonl").read_bytes()
+            with self.assertRaisesRegex(ValueError, "does not read back"):
+                append(root, {**ANNOTATION, "note": float("nan")})
+            self.assertEqual((root / "ledger.jsonl").read_bytes(), before)
+
+    def test_torn_last_line(self) -> None:
+        """Behavior: a last line cut short is refused, by the reader and
+        by ``append``, with the file and the line named, and nothing is
+        written.
+
+        Reference: the live ledger with its last line cut in half, as a
+        crash during an append leaves it (QA.8 part B, L2 and L5).
+        """
+        with corpus_copy() as root:
+            path = root / "ledger.jsonl"
+            text = path.read_text()
+            count = text.count("\n")
+            path.write_text(text[: len(text) - 100], encoding="utf-8")
+            before = path.read_bytes()
+            named = f"{path}: line {count}: "
+            with self.assertRaisesRegex(ValueError, re.escape(named)):
+                read_ledger(root)
+            with self.assertRaisesRegex(ValueError, re.escape(named)):
+                append(root, dict(ANNOTATION))
+            self.assertEqual(path.read_bytes(), before)
 
 
 if __name__ == "__main__":

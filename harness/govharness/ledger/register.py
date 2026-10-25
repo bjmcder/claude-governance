@@ -7,8 +7,10 @@ public key of each signer under a heading ``### <FPR>``. A ledger is
 ``governance``, the identifier of a work ledger, or ``all``. A key
 verifies an entry only for its ledger, its role label, and sequence
 numbers up to its last entry (``none`` while open). A row for the
-ledger ``all`` requires signatures from entry 1 and is closed by adding
-a closed row per ledger.
+ledger ``all`` requires signatures from entry 1. A signer row for
+``all`` stays open and is closed by adding a closed row per ledger: for
+a key and role label, the rows that name a ledger govern it in place of
+the ``all`` row (``governing_rows``).
 
 The edit functions here return new register text; writing it is the
 caller's effect.
@@ -144,6 +146,40 @@ def applies(row: dict[str, str], ledger: str) -> bool:
     return row.get("Ledger") in {ledger, ALL_LEDGERS}
 
 
+def governing_rows(
+    register: SignerRegister, fpr: str, role: str, ledger: str
+) -> list[dict[str, str]]:
+    """Return the signer rows that govern a key and role on a ledger.
+
+    Parameters
+    ----------
+    register : SignerRegister
+        The signer register.
+    fpr : str
+        Fingerprint of the key.
+    role : str
+        Role label the key signs as.
+    ledger : str
+        Ledger identifier.
+
+    Returns
+    -------
+    list[dict[str, str]]
+        The rows for that key and label that name the ledger, or, when
+        none does, those for ``all``: the narrowest rows, so that a row
+        closed for one ledger overrides an open ``all`` row there.
+    """
+    rows = [
+        row
+        for row in register.signers
+        if row.get("Fingerprint") == fpr
+        and row.get("Role label") == role
+        and applies(row, ledger)
+    ]
+    own = [row for row in rows if row.get("Ledger") == ledger]
+    return own or rows
+
+
 def active_signers(register: SignerRegister) -> list[str]:
     """Return the sorted fingerprints left open on the governance ledger.
 
@@ -155,12 +191,23 @@ def active_signers(register: SignerRegister) -> list[str]:
     Returns
     -------
     list[str]
-        Fingerprints whose last entry is ``none``.
+        Fingerprints that, for some role label, have an open row among
+        their ``governing_rows`` on the governance ledger.
     """
     return sorted(
-        row["Fingerprint"]
-        for row in register.signers
-        if row.get("Last entry") == "none" and applies(row, GOVERNANCE)
+        {
+            row["Fingerprint"]
+            for row in register.signers
+            if any(
+                r.get("Last entry") == "none"
+                for r in governing_rows(
+                    register,
+                    row["Fingerprint"],
+                    row["Role label"],
+                    GOVERNANCE,
+                )
+            )
+        }
     )
 
 

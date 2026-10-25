@@ -92,7 +92,7 @@ def _report_refused(store: SolveStore | None) -> None:
 
 
 def _refused(error: ValueError) -> int:
-    """Report a cache that cannot be used.
+    """Report a cache that cannot be used or a file that cannot be read.
 
     Parameters
     ----------
@@ -145,7 +145,9 @@ def run_verify(args: argparse.Namespace) -> int:
     -------
     int
         1 if any check failed, 2 if the cache cannot be used (inside
-        the corpus, or a relative ``GOVHARNESS_CACHE_DIR``), else 0.
+        the corpus, or a relative ``GOVHARNESS_CACHE_DIR``) or a file
+        cannot be read (front matter or a ledger line that does not
+        parse; the message names the file), else 0.
     """
     try:
         # Without the logic check nothing is solved, so no cache is opened.

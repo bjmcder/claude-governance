@@ -9,13 +9,18 @@ from __future__ import annotations
 import unittest
 from pathlib import Path
 
-from govharness.ledger.chain import read_ledger
+from govharness.core.corpus import tree_digests
+from govharness.ledger.chain import append, read_ledger
 from govharness.workflows.amend import (
     Change,
     raise_revision,
     record_transaction,
     replace_text,
 )
+from govharness.workflows.signers import require_signature
+from tests.gpgkeys import keyring
+from tests.ledger.test_chain import alter_reason, rewrite
+from tests.ledger.test_signatures import register_entry, signed_corpus
 from tests.support import corpus_copy, live_revision, next_editorial
 
 INSTR = "STND/INSTR/_doc.md"
@@ -146,6 +151,75 @@ class AmendmentPrimitives(unittest.TestCase):
             with self.assertRaises(ValueError):
                 record_transaction(root, change)
             self.assertEqual(text_of(root, "ledger.jsonl"), ledger)
+
+
+class RecordRefusals(unittest.TestCase):
+    """``record_transaction`` writes nothing it then refuses (unit 0016)."""
+
+    def assert_refused(self, root: Path, change: Change, reason: str) -> None:
+        """Assert that recording an amendment is refused, tree unchanged.
+
+        STND.INSTR is raised first, so that its manifests are stale and
+        a rebuild before the refusal would show.
+
+        Parameters
+        ----------
+        root : Path
+            Corpus copy.
+        change : Change
+            The transaction.
+        reason : str
+            Pattern the refusal must match.
+        """
+        raise_revision(root, "STND/INSTR", OLD, NEW, ROW)
+        before = tree_digests(root)
+        with self.assertRaisesRegex(ValueError, reason):
+            record_transaction(root, change)
+        self.assertEqual(tree_digests(root), before)
+
+    def test_refusals_of_the_ledger(self) -> None:
+        """Behavior: an unknown type, a broken chain, and an unreadable
+        ledger line are each refused before any file is written.
+
+        Reference: QA.8 part B, M2: three ``MANIFEST.csv`` files were
+        rewritten before ``append`` refused an unknown type.
+        """
+        bogus = Change(**{**EDITORIAL.__dict__, "kind": "bogus-type"})
+        cases = {
+            "unknown type": (lambda root: None, bogus, "unknown"),
+            "broken chain": (
+                lambda root: rewrite(root, alter_reason),
+                EDITORIAL,
+                "broken chain",
+            ),
+            "unreadable line": (
+                lambda root: (root / "ledger.jsonl").write_text(
+                    text_of(root, "ledger.jsonl") + "{\n", "utf-8"
+                ),
+                EDITORIAL,
+                "line",
+            ),
+        }
+        for name, (damage, change, reason) in cases.items():
+            with self.subTest(name), corpus_copy() as root:
+                damage(root)
+                self.assert_refused(root, change, reason)
+
+    def test_unsigned_entry_the_register_requires(self) -> None:
+        """Behavior: an entry the signer register requires to be signed
+        is refused, naming ``ledger append --sign``, and nothing is
+        written.
+
+        Reference: a register that requires ``The Custodian`` from the
+        next entry. QA.8 part B, M3: the entry went in and the corpus
+        never verified again.
+        """
+        with keyring() as home, corpus_copy() as root:
+            owner, _, register = signed_corpus(root, home)
+            seq = len(read_ledger(root)) + 2
+            require_signature(register, "governance", "The Custodian", seq)
+            append(root, register_entry(root, "SIGNR"), signer=(owner, home))
+            self.assert_refused(root, EDITORIAL, "ledger append --sign")
 
 
 if __name__ == "__main__":

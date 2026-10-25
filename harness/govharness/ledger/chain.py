@@ -12,12 +12,17 @@ in the field ``ledger``.
 
 An append first checks the whole existing chain (sequence numbers,
 ``prev`` links, and entry hashes) and refuses a broken one, so that a
-new entry never seals a damaged history. It writes one line, then
-flushes and syncs the file, so that a crash cannot leave the entry half
-written in the operating system's buffers. The protocol for concurrent
-appends (DSGN.15): each holds an exclusive ``flock`` on the ledger file
-from reading the chain to syncing its line, so two appends never take
-the same sequence number.
+new entry never seals a damaged history. It also refuses, before
+writing, an entry that would itself fail ``verify`` for good, since an
+entry is never edited: an unsigned entry that the signer register
+requires to be signed, a register transaction that records a register
+with problems, a scope that leaves an older pin over the same content
+stale, and a line that does not read back as the entry. It writes one
+line, then flushes and syncs the file, so that a crash cannot leave the
+entry half written in the operating system's buffers. The protocol for
+concurrent appends (DSGN.15): each holds an exclusive ``flock`` on the
+ledger file from reading the chain to syncing its line, so two appends
+never take the same sequence number.
 """
 
 from __future__ import annotations
@@ -27,22 +32,30 @@ import os
 from pathlib import Path
 from typing import Any
 
-from govharness.core.corpus import read_text
+from govharness.core.corpus import (
+    read_optional_text,
+    read_tree,
+    scope_hash,
+)
 from govharness.core.entry import DOC_FILE, LEDGER_FILE
 from govharness.core.hashing import canonical_json, ledger_entry_hash
 from govharness.ledger.gpg import sign_digest
 from govharness.ledger.register import (
     REGISTER_ID,
+    SignerRegister,
     active_signers,
     read_register,
 )
+from govharness.ledger.signatures import required_of
 from govharness.ledger.transactions import (
     GOVERNANCE,
     TYPES,
     Transaction,
     chain_problems,
+    covers,
     entry_digest,
     ledger_of,
+    live_pins,
     parse_ledger,
 )
 
@@ -66,8 +79,37 @@ def read_ledger_file(path: Path) -> list[Transaction]:
     ------
     FileNotFoundError
         If the file does not exist.
+    ValueError
+        If a line is not JSON; the message names the file and line.
     """
-    return parse_ledger(path.read_text(encoding="utf-8"))
+    return _parsed(path.read_text(encoding="utf-8"), path)
+
+
+def _parsed(text: str, path: Path) -> list[Transaction]:
+    """Parse a ledger file's text, naming the file in a refusal.
+
+    Parameters
+    ----------
+    text : str
+        Contents of the file.
+    path : Path
+        The file.
+
+    Returns
+    -------
+    list[Transaction]
+        Entries in order.
+
+    Raises
+    ------
+    ValueError
+        If a line is not JSON. A line cut short by a crash during an
+        append is one; the README says how to recover.
+    """
+    try:
+        return parse_ledger(text)
+    except ValueError as error:
+        raise ValueError(f"{path}: {error}") from error
 
 
 def read_ledger(root: Path, path: Path | None = None) -> list[Transaction]:
@@ -123,8 +165,10 @@ def append(
     Raises
     ------
     ValueError
-        If the transaction type is unknown, the ledger file holds
-        another ledger, or its chain is broken.
+        If the transaction type is unknown, a line of the file is not
+        JSON, the file holds another ledger, its chain is broken, or the
+        entry would fail ``verify`` for good (see the module); nothing
+        is written then.
     """
     if entry["type"] not in TYPES:
         raise ValueError(f"unknown transaction type: {entry['type']}")
@@ -135,13 +179,21 @@ def append(
         fcntl.flock(handle, fcntl.LOCK_EX)
         handle.seek(0)
         text = handle.read()
-        written = _chained(root, entry, parse_ledger(text), path, ledger)
+        written = _chained(
+            root, entry, _parsed(text, path), path, ledger, signer is None
+        )
         if signer is not None:
             written["signature"] = sign_digest(entry_digest(written), *signer)
         written["hash"] = ledger_entry_hash(written)
+        line = canonical_json(written)
+        if parse_ledger(line) != [written]:
+            raise ValueError(
+                f"the entry does not read back as written; nothing "
+                f"appended: {line[:200]}"
+            )
         # A last line without its newline would merge with the new one.
         separator = "\n" if text and not text.endswith("\n") else ""
-        handle.write(separator + canonical_json(written) + "\n")
+        handle.write(separator + line + "\n")
         handle.flush()
         os.fsync(handle.fileno())
     return written
@@ -153,6 +205,7 @@ def _chained(
     history: list[Transaction],
     path: Path,
     ledger: str,
+    unsigned: bool,
 ) -> Transaction:
     """Return an entry numbered and linked after an intact history.
 
@@ -168,6 +221,8 @@ def _chained(
         The ledger file, named in a refusal.
     ledger : str
         Identifier of the ledger.
+    unsigned : bool
+        Whether the entry goes in without a signature.
 
     Returns
     -------
@@ -178,7 +233,8 @@ def _chained(
     Raises
     ------
     ValueError
-        If the file holds another ledger or its chain is broken.
+        If the file holds another ledger, its chain is broken, or the
+        entry is refused by ``_refusals``.
     """
     if any(ledger_of(old) != ledger for old in history):
         raise ValueError(f"{path} holds entries of another ledger")
@@ -193,9 +249,103 @@ def _chained(
         **entry,
         "prev": history[-1]["hash"] if history else None,
     }
+    text = read_optional_text(root / REGISTER_ID / DOC_FILE)
+    register = None if text is None else read_register(text)
     if ledger != GOVERNANCE:
         chained["ledger"] = ledger
-    elif REGISTER_ID in (entry.get("scope") or []):
-        register = read_register(read_text(root / REGISTER_ID / DOC_FILE))
+    elif register is not None and REGISTER_ID in (entry.get("scope") or []):
         chained["signers"] = active_signers(register)
+    refused = _refusals(root, chained, history, ledger, register, unsigned)
+    if refused:
+        raise ValueError("; ".join(refused) + "; nothing appended")
     return chained
+
+
+def _refusals(
+    root: Path,
+    chained: Transaction,
+    history: list[Transaction],
+    ledger: str,
+    register: SignerRegister | None,
+    unsigned: bool,
+) -> list[str]:
+    """Return why an entry, once written, would fail ``verify`` for good.
+
+    Parameters
+    ----------
+    root : Path
+        Corpus root.
+    chained : Transaction
+        The entry, numbered and linked.
+    history : list[Transaction]
+        The entries already in the ledger file, an intact chain.
+    ledger : str
+        Identifier of the ledger.
+    register : SignerRegister | None
+        The signer register of the corpus, or ``None``.
+    unsigned : bool
+        Whether the entry goes in without a signature.
+
+    Returns
+    -------
+    list[str]
+        A reason for each: the register requires the entry's actor to
+        sign it; it records the register while the register has
+        problems; or it leaves stale an older pin that shares content
+        with its scope (``_left_stale``).
+    """
+    reasons: list[str] = []
+    scope = [s for s in chained.get("scope") or [] if isinstance(s, str)]
+    if register is not None and unsigned:
+        reasons += [
+            f"`{chained.get('actor')}` must sign entry {chained['seq']} "
+            f"(required from entry {start}): use ledger append --sign KEY"
+            for start in required_of(register, chained, ledger)
+        ]
+    if register is not None and register.problems and REGISTER_ID in scope:
+        reasons.append(
+            f"{REGISTER_ID} has problems: " + " ".join(register.problems)
+        )
+    if ledger == GOVERNANCE and scope:
+        reasons += _left_stale(root, [*history, chained], scope)
+    return reasons
+
+
+def _left_stale(
+    root: Path, entries: list[Transaction], scope: list[str]
+) -> list[str]:
+    """Return the older pins that a new scope shares and leaves stale.
+
+    A pin covers its whole scope with one hash. A later transaction
+    whose scope covers only part of it leaves the rest pinned by the
+    older entry (``transactions.live_pins``), whose hash then no longer
+    matches once the shared part changed.
+
+    Parameters
+    ----------
+    root : Path
+        Corpus root.
+    entries : list[Transaction]
+        The ledger with the new entry last.
+    scope : list[str]
+        The new entry's scope.
+
+    Returns
+    -------
+    list[str]
+        A reason for each live older entry that shares content with the
+        scope and whose pin does not match the corpus.
+    """
+    tree = read_tree(root)
+    reasons: list[str] = []
+    for old in live_pins(entries)[:-1]:
+        paths = [p for p in old.get("scope") or [] if isinstance(p, str)]
+        shared = any(
+            covers(a, b) or covers(b, a) for a in paths for b in scope
+        )
+        if shared and scope_hash(tree, paths) != old.get("corpus_hash"):
+            reasons.append(
+                f"entry {old.get('seq')} pins {', '.join(paths)} with one "
+                "hash, which this scope leaves stale: name all of them"
+            )
+    return reasons

@@ -213,10 +213,12 @@ def raise_revision(
 
 
 def record_transaction(root: Path, change: Change) -> Recorded:
-    """Rebuild the manifests, append the transaction, and verify.
+    """Append the transaction, rebuild the manifests, and verify.
 
     The entry is not signed; a signed entry goes through ``ledger
-    append --sign``.
+    append --sign``, and an entry the signer register requires to be
+    signed is refused. The manifests are not Markdown, so no pin covers
+    them, and they are written only after the ledger took the entry.
 
     Parameters
     ----------
@@ -234,16 +236,16 @@ def record_transaction(root: Path, change: Change) -> Recorded:
     Raises
     ------
     ValueError
-        If a scope names no directory, the ledger refuses the entry, or
-        the solve cache cannot be used (``usable_store``); the cache and
-        the scopes are checked before anything is written.
+        If a scope names no directory, the ledger refuses the entry
+        (``chain.append``: an unknown type, a broken or unreadable
+        ledger, an entry the register requires to be signed, and the
+        rest), or the solve cache cannot be used (``usable_store``).
+        Every refusal comes before anything is written.
     """
     missing = [s for s in change.scope if not is_directory(root, s)]
     if missing:
         raise ValueError(f"scope names no directory: {', '.join(missing)}")
     store = usable_store(root, True)
-    for rel, text in stale_manifests(read_tree(root)).items():
-        (root / rel).write_text(text, encoding="utf-8")
     scope = list(change.scope)
     entry = append(
         root,
@@ -260,4 +262,6 @@ def record_transaction(root: Path, change: Change) -> Recorded:
             "signature": "",
         },
     )
+    for rel, text in stale_manifests(read_tree(root)).items():
+        (root / rel).write_text(text, encoding="utf-8")
     return Recorded(entry, verify_corpus(root, cache=store or False))
