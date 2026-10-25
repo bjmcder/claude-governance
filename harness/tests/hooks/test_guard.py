@@ -1094,9 +1094,18 @@ class GitAliases(unittest.TestCase):
         variable, which may name a program git runs.
 
         Reference: QA.8 part A, H2; the reviewer ran the first against a
-        local bare repository and the forced update went through. Git
-        ignores an alias that has the name of one of its commands.
+        local bare repository and the forced update went through. The
+        command an alias stands for is read too (review of unit 0015,
+        N8), so a forced push or a rebase through one is refused.
         """
+        assert_reaches(
+            self,
+            "history-rewrite",
+            (
+                "git -c alias.p=push p --force origin main",
+                "git -c alias.q=rebase q -i HEAD~3",
+            ),
+        )
         self.assertIn(
             "selective-destruction",
             shell("git --config-env=core.pager=PAGER log"),
@@ -1487,6 +1496,7 @@ class StoreReads(unittest.TestCase):
                 "base64 secrets/key",
                 "dd if=secrets/key",
                 "find secrets -exec cat {} +",
+                "find secrets -exec python3 show.py {} +",
                 "tar cf x.tar secrets",
                 "rsync -a secrets/ /tmp/k",
                 "install -D secrets/key /tmp/k",
@@ -1548,11 +1558,21 @@ class GitDestructiveForms(unittest.TestCase):
                 "git restore --staged --worktree .",
             ),
         )
+        # Referred, not refused: see the review of unit 0015 in
+        # record 0015, and ``check_reset``.
+        assert_reaches(
+            self,
+            "selective-destruction",
+            (
+                "git reset --keep HEAD~5",
+                "git reset HEAD~1",
+                "git reset --soft HEAD^",
+            ),
+        )
         assert_reaches(
             self,
             "history-rewrite",
             (
-                "git reset --keep HEAD~5",
                 "git branch -m a b",
                 "git symbolic-ref HEAD refs/heads/x",
                 "git fast-import",
@@ -1569,6 +1589,8 @@ class GitDestructiveForms(unittest.TestCase):
             "git reset",
             "git reset HEAD file.txt",
             "git reset -- file.txt",
+            "git reset .",
+            "git reset src/",
             "git restore --staged file.txt",
             "git symbolic-ref HEAD",
         ):
@@ -1650,6 +1672,267 @@ class OrdinaryWork(unittest.TestCase):
         ):
             with self.subTest(command=command):
                 self.assertEqual(shell(command), set())
+
+
+
+class ReviewOfUnit0015(unittest.TestCase):
+    """The findings of the review of unit 0015 (N1 to N8)."""
+
+    def test_hash_after_an_escape(self) -> None:
+        """Behavior: a ``#`` after an escaped character starts no comment
+        in the guard's reading, and the line is referred as uncertain.
+
+        Reference: review of unit 0015, N1; bash prints ``a #x`` for
+        ``echo a\\ #x`` and runs the command after the ``;``.
+        """
+        for command in (
+            "echo a\\ #x; sudo id",
+            "echo \\;#x; sudo id",
+            "echo \\(#x; sudo id",
+            "echo \\ #x; sudo id",
+            "echo $x\\ #c; sudo id",
+            "echo a\\ #$(sudo id)",
+        ):
+            with self.subTest(command=command):
+                found = shell(command)
+                self.assertIn("elevated-privilege", found)
+                self.assertIn("selective-destruction", found)
+
+    def test_comment_in_backquotes(self) -> None:
+        """Behavior: a comment inside backquotes hides nothing after the
+        closing one, and the line is referred as uncertain.
+
+        Reference: review of unit 0015, N2; ``bash -c 'echo `echo A #
+        x`; echo B'`` prints A and B.
+        """
+        assert_reaches(
+            self,
+            "elevated-privilege",
+            ("echo `ls # x`; sudo id", "x=`ls # y`; sudo id"),
+        )
+        assert_reaches(
+            self,
+            "record-entries",
+            ("echo `echo a # x`; rm /srv/work/ledger.jsonl",),
+        )
+        self.assertEqual(shell("echo `date`"), set())
+        # Read correctly, the line is still referred as uncertain.
+        self.assertEqual(shell("echo `ls # x`"), {"selective-destruction"})
+        self.assertEqual(shell("echo $(ls # x\n)"), {"selective-destruction"})
+
+    def test_case_in_a_substitution(self) -> None:
+        """Behavior: ``case`` inside a command substitution, in a line,
+        in double quotes, or in a here-document, and a comment inside
+        one in a here-document, are referred.
+
+        Reference: review of unit 0015, N3; the first was a regression
+        from main, whose reading reached elevated-privilege.
+        """
+        assert_reaches(
+            self,
+            "selective-destruction",
+            (
+                "echo $(case x in x) sudo id;; esac)",
+                "echo $(case x in x|y) sudo id;; esac)",
+                "echo $(case x in *) sudo id;; esac)",
+                "echo $(case x in x) sudo id ;; esac)",
+                "echo $(case x in x) rm /srv/work/ledger.jsonl;; esac)",
+                'echo "$(case x in x) sudo id;; esac)"',
+                "cat <<EOF\n$(case x in x) sudo id;; esac)\nEOF",
+                "cat <<EOF\n$(echo hi # )\nsudo id)\nEOF",
+            ),
+        )
+
+    def test_second_reading(self) -> None:
+        """Behavior: a line whose second, simpler reading finds a known
+        program that the first did not read is referred.
+
+        Reference: review of unit 0015, design rule. The first reading
+        is made to lose the text after a ``#``, as a mistake in it
+        would, so that the second reading alone is held.
+        """
+        plain = guard.lift_heredocs
+
+        def lossy(
+            text: str, bodies: list, expanded: list, doubts: list
+        ) -> tuple[str, str]:
+            """Lift a line, then drop all of it after its first ``#``.
+
+            Parameters
+            ----------
+            text : str
+                A command line.
+            bodies : list
+                Receives each body.
+            expanded : list
+                Receives each expanded body's index.
+            doubts : list
+                Receives each doubt.
+
+            Returns
+            -------
+            tuple[str, str]
+                The shortened line, and the line with its comments.
+            """
+            _, kept = plain(text, bodies, expanded, doubts)
+            return kept.split("#")[0], kept
+
+        with mock.patch.object(guard, "lift_heredocs", lossy):
+            found = shell("echo ok # note\nsudo id")
+        self.assertEqual(found, {"selective-destruction"})
+        starts = guard.command_starts("echo a # b; rm x\nls; sudo id `cat`")
+        self.assertEqual(starts, ["echo", "ls", "sudo", "cat"])
+
+    def test_posix_brackets_and_links(self) -> None:
+        """Behavior: a POSIX bracket expression in a write target is
+        referred, and a pattern that matches a link to ``.git`` writes
+        version-control files.
+
+        Reference: review of unit 0015, N4; in a scratch directory bash
+        overwrote ``ledger.jsonl`` with each bracket form.
+        """
+        assert_reaches(
+            self,
+            "selective-destruction",
+            (
+                "echo x > ledger.[[:alpha:]]sonl",
+                "echo x > ledger.[[.j.]]sonl",
+                "echo x > ledger.[[=j=]]sonl",
+                "echo x > ledger.json[[:lower:]]",
+            ),
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            work = Path(tmp).resolve()
+            (work / ".git").mkdir()
+            (work / ".git" / "config").write_text("", encoding="utf-8")
+            (work / "g").symlink_to(work / ".git")
+            (work / "g2").symlink_to(work / "g")
+            policy = {**POLICY, "work": str(work), "writable": [str(work)]}
+            for command in ("echo x > g?/config", "echo x > g*/config"):
+                with self.subTest(command=command):
+                    found = in_work(
+                        str(work), policy, "Bash", {"command": command}
+                    )
+                    self.assertIn("history-rewrite", found)
+
+    def test_shell_fed_and_programs_run(self) -> None:
+        """Behavior: a shell fed by a process substitution, ``rg
+        --pre``, and git's output options are seen.
+
+        Reference: review of unit 0015, N5; the xargs form was a
+        regression from main.
+        """
+        assert_reaches(
+            self,
+            "selective-destruction",
+            (
+                "sh < <(echo sudo id)",
+                "bash <<< \"$(echo sudo id)\"",
+                "rg --pre 'sudo id' foo",
+                "rg --pre=sudo foo",
+                "echo x | xargs rg --pre sudo foo",
+                "echo --pre=sudo | xargs rg foo",
+            ),
+        )
+        assert_reaches(
+            self,
+            "record-entries",
+            (
+                "git log --output=ledger.jsonl",
+                "git diff --output=ledger.jsonl",
+                "git show -o ledger.jsonl",
+                "git bundle create ledger.jsonl HEAD",
+                "git merge-file ledger.jsonl a b",
+            ),
+        )
+        assert_reaches(
+            self,
+            "write-bounds",
+            (
+                "git format-patch -o /etc/x HEAD~1",
+                "git bugreport -o /etc/x",
+                "git fast-export --export-marks=/etc/x HEAD",
+                "git init --separate-git-dir=/etc/x",
+            ),
+        )
+        self.assertEqual(shell("git log -p --stat -5"), set())
+
+    def test_surviving_mutants(self) -> None:
+        """Behavior: a joined ``$(`` in an unquoted body, the replace
+        string of ``xargs -i`` and ``--replace``, and the lexical reading
+        of ``cd l/..`` are each held.
+
+        Reference: review of unit 0015, N6; each mutation survived.
+        """
+        self.assertIn(
+            "elevated-privilege", shell("cat <<EOF\n$\\\n(sudo id)\nEOF")
+        )
+        assert_reaches(
+            self,
+            "selective-destruction",
+            (
+                "echo hmod | xargs -iat cat u+s f",
+                "echo hmod | xargs --replace=at cat u+s f",
+            ),
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            work, deep = root / "work", root / "outside" / "deep"
+            (work / "records").mkdir(parents=True)
+            deep.mkdir(parents=True)
+            (work / "l").symlink_to(deep)
+            policy = {
+                **POLICY,
+                "work": str(work),
+                "writable": [str(work)],
+                "protected": [str(work), f"{work}/records"],
+            }
+            (work / "sub").mkdir()
+            # bash's cd reads ../l/.. lexically, from sub to the work, so
+            # this removes the work's records; the system's reading would
+            # lead outside.
+            data = {"command": "cd ../l/.. && rm -rf records"}
+            found = in_work(str(work / "sub"), policy, "Bash", data)
+        self.assertIn("protected-locations", found)
+
+    def test_store_reads(self) -> None:
+        """Behavior: computed reads while the store is closed, and the
+        reads of zip, xxd, openssl, and pattern files, reach read-bounds.
+
+        Reference: review of unit 0015, N7.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            work, policy = store_work(tmp)
+            for command in (
+                "find secrets | xargs cat",
+                "cat $(find secrets -type f)",
+                "zip -r /tmp/z secrets",
+                "xxd secrets/key",
+                "grep -f secrets/key f",
+                "sed -f secrets/key f",
+                "awk -f secrets/key",
+                "openssl enc -in secrets/key",
+            ):
+                with self.subTest(command=command):
+                    found = in_work(work, policy, "Bash", {"command": command})
+                    self.assertIn("read-bounds", found)
+            plain = {"command": "find src | xargs cat"}
+            policy_open = {**policy, "secrets": [f"{work}/secrets/token",
+                                                 f"{work}/secrets/key"]}
+            self.assertEqual(in_work(work, policy_open, "Bash", plain), set())
+
+    def test_alias_named_like_a_script(self) -> None:
+        """Behavior: an alias given in the call is read as the command
+        it stands for, even where its name is a command of git.
+
+        Reference: review of unit 0015, N8; where ``git-email`` is not
+        installed, git takes the alias ``send-email``.
+        """
+        found = shell(
+            "git -c alias.send-email=push send-email --force origin main"
+        )
+        self.assertIn("history-rewrite", found)
+        self.assertIn("selective-destruction", found)
 
 
 if __name__ == "__main__":

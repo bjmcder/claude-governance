@@ -86,8 +86,11 @@ COVERAGE_TABLE: dict[str, tuple[str, str]] = {
         "It reads a shell line as the shell does in its quotes, comments, "
         "joined lines, here-documents, substitutions, and compound "
         "commands, and resolves a .. after a symbolic link where the "
-        "system resolves it. What it cannot read "
-        "within its bound on paths and time is referred. The sandbox does "
+        "system resolves it. It refers a line where that reading is "
+        "uncertain, as for a comment or case inside a substitution, or "
+        "where a second, simpler reading finds a command the first did "
+        "not read, and what it cannot read within its bound on paths and "
+        "time. The sandbox does "
         "not protect the work, its records, or its version control, which "
         "lie inside the writable work. Not seen: a program that removes "
         "or moves a location by itself, including a script, code given "
@@ -99,19 +102,24 @@ COVERAGE_TABLE: dict[str, tuple[str, str]] = {
     "history-rewrite": (
         PARTIAL,
         "The guard reads git commands as written. It refers an alias "
-        "given in the call, a setting taken from a variable, a write of "
-        "git's configuration other than a few settings that run nothing, "
-        "and every subcommand that is not a command of git, which covers "
-        "an alias set earlier, an external command such as git lfs, and "
-        "a misspelling that git corrects. Not seen: git run by a script "
-        "or a hook, and a program that a configuration written by "
-        "another program has git run.",
+        "given in the call, and reads it as the command it stands for; a "
+        "setting taken from a variable; a write of git's configuration "
+        "other than a few settings that run nothing; and every subcommand "
+        "that is not a command of git, which covers most aliases set "
+        "earlier, an external command such as git lfs, and a misspelling "
+        "that git corrects. Not seen: git run by a script or a hook, a "
+        "program that a configuration written by another program has git "
+        "run, and an alias in the configuration named like one of git's "
+        "script commands, such as submodule, where that script is not "
+        "installed.",
     ),
     "record-entries": (
         PARTIAL,
         "Ledger files are protected from the file tools and from shell "
         "commands that name them, by name or by a pattern that may match "
-        "them; other records are not, and a program that rewrites a "
+        "them, or a pattern whose bracket expression the guard does not "
+        "read, which is referred; other records are not, and a program "
+        "that rewrites a "
         "ledger is not seen, including an archive extracted over one.",
     ),
     "elevated-privilege": (
@@ -125,8 +133,10 @@ COVERAGE_TABLE: dict[str, tuple[str, str]] = {
         "The sandbox confines shell commands. The guard also checks the "
         "destinations of the shell writers it models, among them "
         "redirections, copies and moves, rsync, tar, compressors, the "
-        "outputs of curl, wget, and sort, and the directories and files "
-        "that git init, clone, worktree, archive, and config write. The "
+        "outputs of curl, wget, sort, zip, unzip, and xxd, and the "
+        "directories and files that git init, clone, worktree, archive, "
+        "config, bundle, merge-file, and the output options of its diff, "
+        "log, show, and format-patch write. The "
         "guard confines the file tools by the path it checks before the "
         "call, so a symbolic link changed between the check and the "
         "write is not seen. Servers of other tools run outside the "
@@ -136,9 +146,9 @@ COVERAGE_TABLE: dict[str, tuple[str, str]] = {
         PARTIAL,
         "The guard refers reads by the file tools and by the shell "
         "programs it reads given a path: common readers, searches by "
-        "grep and rg, sed, awk, dd, the sources of a copy, rsync, or "
-        "archive, and the files that a command run by find takes; other "
-        "programs read unseen.",
+        "grep and rg, sed, awk, and their files of patterns, dd, xxd, "
+        "openssl, the sources of a copy, rsync, or archive, and the files "
+        "that a command run by find takes; other programs read unseen.",
     ),
     "network-bounds": (
         PARTIAL,
@@ -162,7 +172,8 @@ COVERAGE_TABLE: dict[str, tuple[str, str]] = {
         "Recursive, pattern, and computed removals by shell commands are "
         "referred, as are a command that xargs builds from its input "
         "unless its program only reads, a shell that runs a computed "
-        "script, and a call too large to read within the guard's bound; "
+        "script or reads commands from a substitution, rg --pre, and a "
+        "call too large to read within the guard's bound; "
         "a program that selects items by itself is not seen.",
     ),
     "enforcing-configuration": (
@@ -187,7 +198,9 @@ STORE_GAPS: dict[str, str] = {
         "sandbox. The guard checks the file tools and the shell paths it "
         "reads where their links lead, and refers a Grep, or a copy of a "
         "directory, that takes in the store while the store holds a file "
-        "not opened. It compares names as the file system spells them, so "
+        "not opened, and a read of a computed operand, as by xargs "
+        "or a substitution, while it holds one. It compares names as the "
+        "file system spells them, so "
         "on a file system that ignores case another spelling of a closed "
         "file is not seen. A tool of another server reads the store "
         "unseen."

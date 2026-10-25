@@ -17,41 +17,53 @@ to read is never silent (PRIME.4): for assured work, named by the flag
 the human owner and the agent are told that it went unguarded
 (STND.HARN.23).
 
-A shell command line is read as the shell reads it in these respects:
-quotes; comments, which start at a ``#`` that begins a word and end at
-the end of the line; a backslash before a newline, which joins the two
-lines; here-documents, whose body is data unless a shell reads it, and
-in whose body each command substitution is read where the delimiter is
-not quoted, since the shell runs it; command and process substitution;
-and compound commands. An operand is resolved without running anything,
+A shell command line is read in these respects, and where the reading
+is uncertain the line is referred, as the next paragraph says: quotes;
+comments, which start at a ``#`` that begins a word and end at the end
+of the line; a backslash before a newline, which joins the two lines;
+here-documents, whose body is data unless a shell reads it, and in
+whose body each command substitution is read where the delimiter is not
+quoted, since the shell runs it; command and process substitution; and
+compound commands. An operand is resolved without running anything,
 against every directory the line may run in, since a ``cd`` within the
 line adds one, and, where a ``..`` follows a symbolic link, also where
 the system resolves it. A pattern reaches the outcome of each protected
-name it may match. An operand that depends on a value the guard does
-not know, such as a variable, is computed: a removal or write of a
-computed item is referred, since its items cannot be listed
-(STND.DFLT.24). A program the guard does not know is searched for a
-command it knows, so that a launcher such as ``timeout`` or ``uv run``
-does not hide one.
+name it may match by name, and of each item it matches when the guard
+runs, where that item's links lead. An operand that depends on a value
+the guard does not know, such as a variable, is computed: a removal or
+write of a computed item is referred, since its items cannot be listed
+(STND.DFLT.24), and so is a read of one while the store holds a closed
+file. A program the guard does not know is searched for a command it
+knows, so that a launcher such as ``timeout`` or ``uv run`` does not
+hide one.
 
 Where the guard cannot read a construct soundly, it refers the call
-rather than let it proceed (QA.8, part A): an alias of git given in the
-call, a write of git's configuration other than a few settings that run
-nothing, and a subcommand that is not a command of git, which may be an
-alias set earlier; a command that ``xargs`` builds from its input,
+rather than let it proceed (QA.8, part A, and the review of unit 0015):
+a ``#`` next to an escaped character; a comment or ``case`` inside a
+command substitution; a line in which a second, simpler reading of
+where commands begin (``command_starts``) finds a program that the
+first did not read; a pattern with a POSIX bracket expression; an alias
+of git given in the call, which is also read as the command it stands
+for; a write of git's configuration other than a few settings that run
+nothing; a subcommand that is not a command of git, which covers most
+aliases set earlier; a command that ``xargs`` builds from its input,
 unless its program only reads; a shell or ``source`` that runs a
-computed script, such as a process substitution; a ``cd`` to a relative
-name in a line that sets ``CDPATH``; and a line whose reading needs
-more than ``MAX_PATHS`` paths or ``TIME_BUDGET`` seconds, so that the
-guard answers within the hook's timeout. Lines nested more than
-``MAX_DEPTH`` deep are denied as unreadable.
+computed script, or reads its commands from a substitution, as ``sh <
+<(...)`` does; ``rg --pre``; a ``cd`` to a relative name in a line that
+sets ``CDPATH``; and a line whose reading needs more than ``MAX_PATHS``
+paths or ``TIME_BUDGET`` seconds, so that the guard answers within the
+hook's timeout. Lines nested more than ``MAX_DEPTH`` deep are denied as
+unreadable.
 
 The guard sees only what a call names. A program that deletes, writes,
 or connects by itself, whether a script, code given inline to an
 interpreter, or an alias or function of the shell defined earlier, is
 not seen, nor what the members of an archive overwrite, a pattern of
-the shell's ``extglob`` option, or a symbolic link made in the same
-line or changed after the check; the coverage report of the adapter
+the shell's ``extglob`` option, a symbolic link made in the same line or
+changed after the check, or an alias in git's configuration that has
+the name of one of git's script commands (such as ``submodule`` or
+``mergetool``) where that script is not installed; the coverage report
+of the adapter
 states each such gap (STND.HARN.19). The file uses the standard library
 alone and imports nothing from the package, because it is installed
 outside the work, where the agent's account is unable to alter it.
@@ -60,6 +72,7 @@ outside the work, where the agent's account is unable to alter it.
 from __future__ import annotations
 
 import fnmatch
+import itertools
 import json
 import os
 import re
@@ -139,6 +152,9 @@ STDIN_NAMES = {"-", "/dev/fd/0", "/dev/stdin", "/proc/self/fd/0"}
 # The word that stands for the file a process substitution names: it
 # counts as computed, as its path is.
 PROCESS_FILE = "/dev/fd/$(...)"
+# A comment or a case in a command substitution, whose end the guard
+# does not find soundly (review of unit 0015, N3).
+UNCERTAIN_RE = re.compile(r"(?:^|[\s;&|(`])(?:#|case\s)")
 ELEVATORS = {"doas", "pkexec", "run0", "runuser", "su", "sudo"}
 REMOVERS = {"rm", "rmdir", "shred", "unlink"}
 # Removers that remove files only, so that no pattern of theirs empties
@@ -185,12 +201,15 @@ SEARCHERS = {"egrep", "fgrep", "grep", "rg"}
 # Programs whose arguments are text, never a command they run.
 TEXT_PROGRAMS = {"echo", "printf"} | SEARCHERS
 # Programs that ``xargs`` may give its input to as arguments: each only
-# reads files or prints text, so computed arguments change nothing.
+# reads files or prints text, so computed arguments write nothing. The
+# files they read may be the store's, which is referred while the
+# store holds a closed file (review of unit 0015, N7). rg is left out,
+# since an argument ``--pre`` makes it run a program (N5).
 XARGS_READERS = (
     READERS
     | TEXT_PROGRAMS
     | {"basename", "dirname", "readlink", "realpath"}
-) - {"less", "more"}
+) - {"less", "more", "rg"}
 # Compressors replace each operand by a compressed or decompressed
 # file, unless they write to standard output or keep it.
 COMPRESSORS = {
@@ -348,7 +367,7 @@ KNOWN = (
     | REMOTE_PROGRAMS
     | {"awk", "cd", "chgrp", "chmod", "chown", "dd", "eval", "find", "gawk"}
     | {"git", "mv", "perl", "pushd", "sed", "setcap", "sort", "tar", "tee"}
-    | {"uniq", "xargs"}
+    | {"openssl", "uniq", "unzip", "xargs", "xxd", "zip"}
 )
 HISTORY_REWRITES = {
     "fast-import",
@@ -389,6 +408,23 @@ GIT_COMMANDS = {
     "unpack-file", "unpack-objects", "update-index", "update-ref",
     "update-server-info", "var", "verify-commit", "verify-pack",
     "verify-tag", "version", "whatchanged", "worktree", "write-tree",
+}
+# Commands of git that take the output options of the diff family, or
+# write a file or directory by ``-o``.
+GIT_OUTPUT_COMMANDS = {
+    "archive",
+    "bugreport",
+    "diagnose",
+    "diff",
+    "diff-files",
+    "diff-index",
+    "diff-tree",
+    "format-patch",
+    "log",
+    "range-diff",
+    "show",
+    "stash",
+    "whatchanged",
 }
 # Commands of git that send to another system.
 GIT_SENDS = {"send-email", "send-pack"}
@@ -680,6 +716,11 @@ class Scan:
         Paths resolved so far, over every pass.
     depth : int
         Command lines open around the one being read.
+    expanded : set[int]
+        Indexes of the bodies whose delimiter is not quoted, which the
+        shell expands.
+    programs : set[str]
+        Every program word read so far, as the line gives it.
     deadline : float
         Time of ``time.monotonic`` past which the reading stops.
     """
@@ -695,6 +736,8 @@ class Scan:
     permitted: list[tuple[str, str]] = field(default_factory=list)
     paths: int = 0
     depth: int = 0
+    expanded: set[int] = field(default_factory=set)
+    programs: set[str] = field(default_factory=set)
     deadline: float = float("inf")
 
     def spend(self, count: int = 1) -> None:
@@ -1039,7 +1082,9 @@ def protected_target(path: str, policy: Policy) -> str | None:
     return None
 
 
-def lift_heredocs(text: str, bodies: list[str], expanded: list[int]) -> str:
+def lift_heredocs(
+    text: str, bodies: list[str], expanded: list[int], doubts: list[str]
+) -> tuple[str, str]:
     """Replace each here-document by a here-string that names its body.
 
     The lines after ``cmd <<EOF``, up to the line ``EOF``, are data for
@@ -1054,9 +1099,13 @@ def lift_heredocs(text: str, bodies: list[str], expanded: list[int]) -> str:
     The line is also made plain for the lexer, as the shell reads it
     (QA.8, H1). A comment, which starts at a ``#`` that begins a word
     and ends at the end of its line, is dropped, so that the lexer reads
-    a ``#`` elsewhere, as in ``a#b`` or ``$#``, as part of a word. A
-    backslash before a newline outside single quotes joins the two
-    lines, so ``sud\\`` and ``o`` on the next line read as ``sudo``.
+    a ``#`` elsewhere, as in ``a#b``, ``$#``, or ``a\\ #b``, as part of
+    a word. A backslash before a newline outside single quotes and
+    ``$'...'`` joins the two lines. Where this reading is uncertain, a
+    reason goes to ``doubts`` and the line is referred (review of unit
+    0015, N1 to N3): a ``#`` next to an escaped character, a comment
+    inside a command substitution, which in backquotes ends at the next
+    backquote, and ``case`` inside one, whose patterns end in ``)``.
 
     Parameters
     ----------
@@ -1067,16 +1116,21 @@ def lift_heredocs(text: str, bodies: list[str], expanded: list[int]) -> str:
     expanded : list[int]
         Receives the index of each body whose delimiter is not quoted,
         in which the shell runs each command substitution.
+    doubts : list[str]
+        Receives the reason for each place the reading is uncertain.
 
     Returns
     -------
-    str
-        The line without the bodies and the comments.
+    tuple[str, str]
+        The line without the bodies and the comments; and the line
+        without the bodies only, for a second reading of where commands
+        begin (``command_starts``).
     """
     out: list[str] = []
+    kept: list[str] = []
     pending: list[tuple[str, bool, int]] = []
-    # Open contexts: quotes ' " $', "{" for ${, "(" for a group in
-    # which a here-document may start, "#(" for arithmetic.
+    # Open contexts: quotes ' " $', "{" for ${, "(" for a group, "$("
+    # and "`" for a command substitution, "#(" for arithmetic.
     stack: list[str] = []
     index = 0
     # The last character kept, which tells whether a "#" begins a word.
@@ -1085,6 +1139,8 @@ def lift_heredocs(text: str, bodies: list[str], expanded: list[int]) -> str:
         char = text[index]
         context = stack[-1] if stack else ""
         step, piece = 1, None
+        boundary = not last or last in " \t\n;&|("
+        substituted = "$(" in stack or "`" in stack
         if context == "'":
             if char == "'":
                 stack.pop()
@@ -1093,12 +1149,16 @@ def lift_heredocs(text: str, bodies: list[str], expanded: list[int]) -> str:
             step, piece = 2, (None if context == "$'" else "")
         elif char == "\\":
             step = 2
+            if "#" in text[index + 1 : index + 3] and context != "$'":
+                doubts.append("a # next to an escaped character")
         elif context in {'"', "$'"}:
             if char == ("'" if context == "$'" else '"'):
                 stack.pop()
             elif context == '"' and text.startswith("$(", index):
-                stack.append("#(" if text.startswith("$((", index) else "(")
+                stack.append("#(" if text.startswith("$((", index) else "$(")
                 step = 2
+            elif context == '"' and char == "`":
+                stack.append("`")
             elif context == '"' and text.startswith("${", index):
                 stack.append("{")
         else:
@@ -1111,27 +1171,43 @@ def lift_heredocs(text: str, bodies: list[str], expanded: list[int]) -> str:
             elif text.startswith(("$((", "(("), index):
                 stack += ["#(", "#("]
                 step = 3 if char == "$" else 2
+            elif text.startswith("$(", index):
+                stack.append("$(")
+                step = 2
             elif text.startswith("$'", index):
                 stack.append("$'")
                 step = 2
             elif text.startswith("${", index):
                 stack.append("{")
                 step = 2
+            elif char == "`":
+                if context == "`":
+                    stack.pop()
+                else:
+                    stack.append("`")
             elif char in {"'", '"'}:
                 stack.append(char)
             elif char == "(":
                 stack.append("#(" if arithmetic else "(")
-            elif char == ")" and context in {"(", "#("}:
+            elif char == ")" and context in {"(", "$(", "#("}:
                 stack.pop()
             elif char == "}" and context == "{":
                 stack.pop()
-            elif (
-                char == "#"
-                and not arithmetic
-                and (not last or last in " \t\n;&|(")
-            ):
+            elif char == "#" and not arithmetic and boundary:
                 end = text.find("\n", index)
-                step, piece = (len(text) if end < 0 else end) - index, ""
+                end = len(text) if end < 0 else end
+                tick = text.find("`", index, end)
+                if "`" in stack and tick >= 0:
+                    end = tick
+                if substituted:
+                    doubts.append("a comment inside a command substitution")
+                step, piece = end - index, ""
+            elif (
+                substituted
+                and boundary
+                and re.match(r"case\s", text[index : index + 5])
+            ):
+                doubts.append("case inside a command substitution")
             elif match:
                 raw = match.group(2)
                 if not re.search(r"""['"\\]""", raw):
@@ -1142,16 +1218,128 @@ def lift_heredocs(text: str, bodies: list[str], expanded: list[int]) -> str:
                 step = match.end() - index
                 piece = f"<<< {MARK}{len(bodies) - 1}{MARK}"
             elif char == "\n" and pending:
+                start = len(out)
                 out.append(char)
                 index = read_bodies(text, index + 1, pending, bodies, out)
+                kept.extend(out[start:])
                 pending = []
                 last = out[-1][-1:] or "\n"
                 continue
-        piece = text[index : index + step] if piece is None else piece
+        original = text[index : index + step]
+        piece = original if piece is None else piece
         out.append(piece)
-        last = piece[-1:] or last
+        kept.append(piece or original)
+        if char == "`" and context != "'":
+            # An opening backquote begins a word; a closing one does not.
+            last = " " if stack and stack[-1] == "`" else "a"
+        elif char == "\\" and step == 2:
+            # An escaped character is part of a word, even a blank.
+            last = last if not piece else "a"
+        else:
+            last = piece[-1:] or last
         index += step
-    return "".join(out)
+    return "".join(out), "".join(kept)
+
+
+def command_starts(text: str) -> list[str]:
+    """Return the program word of each command, read a second, simpler way.
+
+    This reading knows only quotes, backslashes, comments, and where a
+    command begins: after ``;``, ``&``, ``|``, a newline, a parenthesis,
+    a backquote, ``$(``, and the reserved words and assignments in front
+    of a program. A comment ends at the newline, or in backquotes at the
+    next backquote. Where it finds a program the guard knows that the
+    first reading did not read, the line is referred (review of unit
+    0015, design rule).
+
+    Parameters
+    ----------
+    text : str
+        A command line, its here-document bodies lifted out and its
+        comments kept.
+
+    Returns
+    -------
+    list[str]
+        The first word of each command, its quotes and backslashes
+        removed.
+    """
+    starts: list[str] = []
+    stack: list[str] = []
+    current: list[str] | None = None
+    expect = True
+    inword = False
+    comment = False
+    index = 0
+    while index <= len(text):
+        char = text[index] if index < len(text) else "\n"
+        top = stack[-1] if stack else ""
+        ends = char in " \t\n;&|()`" and top in {"", "(", "`"}
+        if comment:
+            if char == "\n" or (char == "`" and "`" in stack):
+                comment = False
+            else:
+                index += 1
+                continue
+        if ends or (
+            top == '"' and (char == "`" or text.startswith("$(", index))
+        ):
+            if current is not None:
+                word = "".join(current)
+                current = None
+                if word in KEYWORDS or re.match(r"[A-Za-z_]\w*\+?=", word):
+                    expect = True
+                else:
+                    starts.append(word)
+            inword = False
+        if top == "'":
+            if char == "'":
+                stack.pop()
+            elif current is not None:
+                current.append(char)
+        elif char == "\\":
+            following = text[index + 1 : index + 2]
+            if following != "\n":
+                if current is None and expect and not inword:
+                    current, expect = [], False
+                if current is not None:
+                    current.append(following)
+                inword = True
+            index += 1
+        elif top == '"':
+            if char == '"':
+                stack.pop()
+            elif char == "`" or text.startswith("$(", index):
+                stack.append("`" if char == "`" else "(")
+                index += 0 if char == "`" else 1
+                expect = True
+            elif current is not None:
+                current.append(char)
+        elif char == "#" and not inword:
+            comment = True
+        elif char in " \t":
+            pass
+        elif char in "\n;&|()`":
+            if char == "(":
+                stack.append("(")
+            elif char == ")" and top == "(":
+                stack.pop()
+            elif char == "`":
+                if top == "`":
+                    stack.pop()
+                else:
+                    stack.append("`")
+            expect = True
+        else:
+            if current is None and expect and not inword:
+                current, expect = [], False
+            inword = True
+            if char in "'\"":
+                stack.append(char)
+            elif current is not None:
+                current.append(char)
+        index += 1
+    return starts
 
 
 def read_bodies(
@@ -1475,6 +1663,51 @@ def may_select(pattern: str, location: str) -> bool:
         if not matches(want[index], part):
             return False
     return len(have) >= len(want)
+
+
+def pattern_items(pattern: str, scan: Scan) -> list[str]:
+    """Return the items that exist now and that a pattern may match.
+
+    Parameters
+    ----------
+    pattern : str
+        Absolute, normalized pattern.
+    scan : Scan
+        The reading so far. A pattern with a POSIX bracket expression,
+        ``[:class:]``, ``[.x.]``, or ``[=x=]``, which ``matches`` does
+        not read, is referred (review of unit 0015, N4).
+
+    Returns
+    -------
+    list[str]
+        Each path, part by part as ``matches`` reads the pattern, that
+        names an item now; the caller checks each where its links lead,
+        so that ``g?/config``, where ``g`` is a link to ``.git``, is a
+        write of ``.git/config``.
+
+    Raises
+    ------
+    TooLarge
+        If the reading passes the bound on its work.
+    """
+    if re.search(r"\[[:.=]", pattern):
+        reason = f"pattern {pattern} holds a bracket expression not read"
+        scan.found.add("selective-destruction", reason)
+    found = ["/"]
+    for part in PurePosixPath(pattern).parts[1:]:
+        following: list[str] = []
+        for base in found:
+            names = [part]
+            if has_glob(part):
+                try:
+                    names = [n for n in os.listdir(base) if matches(n, part)]
+                except OSError:
+                    names = []
+            for name in sorted(names):
+                scan.spend()
+                following.append(f"{base.rstrip('/')}/{name}")
+        found = following
+    return [path for path in found if os.path.lexists(path)]
 
 
 def expand_braces(word: str) -> list[str] | None:
@@ -1880,6 +2113,38 @@ TAR_RUNS = {
     "-F",
 }
 TAR_COMPRESSORS = {"--use-compress-program", "-I"}
+# Options of xxd that take the next word.
+XXD_VALUED = {
+    "-c",
+    "-cols",
+    "-g",
+    "-groupsize",
+    "-l",
+    "-len",
+    "-n",
+    "-name",
+    "-o",
+    "-offset",
+    "-s",
+    "-seek",
+}
+
+
+def check_script_files(words: list[str], syntax: Syntax, scan: Scan) -> None:
+    """Check the files that ``-f`` or ``--file`` names, as reads (N7).
+
+    Parameters
+    ----------
+    words : list[str]
+        The program and its arguments.
+    syntax : Syntax
+        How the program reads them.
+    scan : Scan
+        The reading so far.
+    """
+    letters = syntax.scripts + syntax.valued
+    files = option_values(words, letters, {"--file", "-f"})
+    check_reads([value for _, value in files], scan)
 
 
 def script_files(words: list[str], syntax: Syntax) -> list[str]:
@@ -2044,6 +2309,11 @@ def check_pattern(pattern: str, scan: Scan, directories: bool) -> None:
     check_written(base, policy, found)
     if holds_secrets(real_path(base), policy):
         found.add("write-bounds", f"pattern {pattern} selects the store")
+    for item in pattern_items(pattern, scan):
+        location = protected_target(real_path(item), policy)
+        if location:
+            found.add("protected-locations", f"takes {location} out of use")
+        check_written(item, policy, found)
 
 
 def check_pattern_written(pattern: str, scan: Scan, append: bool) -> None:
@@ -2079,6 +2349,8 @@ def check_pattern_written(pattern: str, scan: Scan, append: bool) -> None:
         found.add("record-entries", f"pattern {pattern} may change a ledger")
     if holds_secrets(real_path(base), policy):
         found.add("write-bounds", f"pattern {pattern} may write the store")
+    for item in pattern_items(pattern, scan):
+        check_target(item, scan, append)
 
 
 def check_written(path: str, policy: Policy, found: Findings) -> None:
@@ -2152,22 +2424,35 @@ def check_writes(targets: list[str], scan: Scan, append: bool) -> None:
         for path in paths:
             if has_glob(path):
                 check_pattern_written(path, scan, append)
-                continue
-            if not append:
-                check_written(path, scan.policy, scan.found)
-                continue
-            real = real_path(path)
-            if within(path, scan.policy.configuration):
-                scan.found.add("enforcing-configuration", f"changes {path}")
-            if any(".git" in PurePosixPath(n).parts for n in (path, real)):
-                # An appended line still adds a setting or a hook.
-                scan.found.add("history-rewrite", f"writes version-control {path}")
-            if not within(real, scan.policy.writable):
-                scan.found.add("write-bounds", f"writes {real}")
-            elif secret_file(real, scan.policy):
-                scan.found.add(
-                    "write-bounds", f"writes secret store file {real}"
-                )
+            else:
+                check_target(path, scan, append)
+
+
+def check_target(path: str, scan: Scan, append: bool) -> None:
+    """Check one path that a command writes.
+
+    Parameters
+    ----------
+    path : str
+        Absolute, normalized path, no pattern.
+    scan : Scan
+        The reading so far.
+    append : bool
+        Whether the command only appends, which changes no ledger entry.
+    """
+    if not append:
+        check_written(path, scan.policy, scan.found)
+        return
+    real = real_path(path)
+    if within(path, scan.policy.configuration):
+        scan.found.add("enforcing-configuration", f"changes {path}")
+    if any(".git" in PurePosixPath(n).parts for n in (path, real)):
+        # An appended line still adds a setting or a hook.
+        scan.found.add("history-rewrite", f"writes version-control {path}")
+    if not within(real, scan.policy.writable):
+        scan.found.add("write-bounds", f"writes {real}")
+    elif secret_file(real, scan.policy):
+        scan.found.add("write-bounds", f"writes secret store file {real}")
 
 
 def check_reads(targets: list[str], scan: Scan) -> None:
@@ -2176,14 +2461,37 @@ def check_reads(targets: list[str], scan: Scan) -> None:
     Parameters
     ----------
     targets : list[str]
-        Operands as the line gives them; a computed one is left to the
-        sandbox, since a read changes nothing.
+        Operands as the line gives them. A computed one is left to the
+        sandbox, since a read changes nothing, except while the store
+        holds a closed file, which it may name, as in ``cat $(find
+        secrets)`` (review of unit 0015, N7).
     scan : Scan
         The reading so far.
     """
     for target in targets:
-        for path in resolve(target, scan) or []:
+        paths = resolve(target, scan)
+        if paths is None and store_closed(scan.policy):
+            reason = f"reads computed {target} while the store is closed"
+            scan.found.add("read-bounds", reason)
+        for path in paths or []:
             check_read(path, scan.policy, scan.found)
+
+
+def store_closed(policy: Policy) -> bool:
+    """Return whether the store holds a file not opened to the agent.
+
+    Parameters
+    ----------
+    policy : Policy
+        The policy.
+
+    Returns
+    -------
+    bool
+        Whether a store is provided and holds such a file.
+    """
+    store = policy.store
+    return bool(store) and holds_secrets(real_path(store), policy)
 
 
 def check_copied(sources: list[str], scan: Scan, verb: str = "copies") -> None:
@@ -2255,23 +2563,36 @@ def check_git(words: list[str], scan: Scan) -> None:
         since an alias that starts with ``!`` or a setting such as
         ``core.pager`` runs one; ``-C`` adds a directory. A setting that
         ``--config-env`` takes from a variable, and a subcommand outside
-        ``GIT_COMMANDS``, are referred: the guard does not read what git
-        runs for them (QA.8, H2). Git ignores an alias that has the name
-        of one of its commands, so every alias, whether ``-c`` gives it
-        or an earlier call set it, is such a subcommand.
+        ``GIT_COMMANDS``, which covers most aliases, are referred: the
+        guard does not read what git runs for them (QA.8, H2). An alias
+        that ``-c`` gives is referred too, and where the subcommand is
+        its name, the command it stands for is read in its place as
+        well, since git takes an alias where no command of that name is
+        installed (review of unit 0015, N8).
     """
     found = scan.found
     bare = scan.bare
     rest = words[1:]
     options: list[str] = []
+    # Each option with its value, and each alias by name, with its
+    # value and the place of its option.
+    pairs: list[list[str]] = []
+    aliases: dict[str, tuple[str, int]] = {}
     while rest and rest[0].startswith("-"):
         option = rest[0]
         options.append(option)
         takes_value = option in GIT_VALUED
         value = rest[1] if takes_value and len(rest) > 1 else ""
+        pairs.append(rest[:2] if takes_value else rest[:1])
         rest = rest[2:] if takes_value else rest[1:]
         if option == "-c":
-            check_line(value.partition("=")[2].lstrip("!"), scan, False)
+            key, _, setting = value.partition("=")
+            if key.lower().startswith("alias."):
+                alias = key[len("alias.") :]
+                aliases[alias.lower()] = (setting, len(pairs) - 1)
+                reason = f"git alias {alias} given in the call"
+                found.add("selective-destruction", reason)
+            check_line(setting.lstrip("!"), scan, False)
         elif option.partition("=")[0] == "--config-env":
             reason = "git setting taken from a variable"
             found.add("selective-destruction", reason)
@@ -2285,6 +2606,16 @@ def check_git(words: list[str], scan: Scan) -> None:
     letters = short_flags(command)
     named = operands(command)
     dry = dry_run(sub, args)
+    if sub.lower() in aliases and not aliases[sub.lower()][0].startswith("!"):
+        setting, place = aliases[sub.lower()]
+        try:
+            stands_for = shlex.split(setting)
+        except ValueError:
+            stands_for = []
+        kept = [w for i, pair in enumerate(pairs) if i != place for w in pair]
+        if stands_for:
+            check_git([words[0], *kept, *stands_for, *args], scan)
+    check_git_outputs(sub, command, scan)
     if sub not in GIT_COMMANDS | HISTORY_REWRITES:
         reason = f"git {sub} is no command the guard reads, such as an alias"
         found.add("selective-destruction", reason)
@@ -2367,13 +2698,50 @@ def check_git(words: list[str], scan: Scan) -> None:
     elif sub == "worktree" and named[:1] == ["add"]:
         # The path, and any branch or commit, which errs toward a check.
         check_writes(named[1:], scan, False)
-    elif sub == "archive":
-        outputs = option_values(command, "o", {"--output", "-o"})
-        check_writes([value for _, value in outputs], scan, False)
     elif sub == "submodule" and "foreach" in args:
         check_line(" ".join(args[args.index("foreach") + 1 :]), scan)
     elif sub == "bisect" and args[:1] == ["run"]:
         check_simple(args[1:], False, scan)
+
+
+def check_git_outputs(sub: str, command: list[str], scan: Scan) -> None:
+    """Check the files and directories that a git command writes (M5, N5).
+
+    Parameters
+    ----------
+    sub : str
+        The subcommand.
+    command : list[str]
+        ``git`` and the arguments of the subcommand.
+    scan : Scan
+        The reading so far. From git-diff(1), git-log(1), and the pages
+        of the commands named here: ``--output`` of the diff options,
+        which ``diff``, ``log``, ``show``, and the commands that take them
+        read; ``-o`` and ``--output-directory`` of ``format-patch``,
+        ``bugreport``, and ``diagnose``; ``-o`` and ``--output`` of
+        ``archive``; the file of ``bundle create``; the first file of
+        ``merge-file``, which it overwrites unless ``-p``; the file of
+        ``--export-marks``; and ``--separate-git-dir`` of ``init`` and
+        ``clone``. A ``-o`` of another of these is taken as an output
+        too, which errs toward a check.
+    """
+    named = operands(command)
+    letters = short_flags(command)
+    names: set[str] = set()
+    if sub in GIT_OUTPUT_COMMANDS:
+        names = {"--output", "--output-directory", "-o"}
+    elif sub in {"fast-export", "fast-import"}:
+        names = {"--export-marks"}
+    elif sub in {"clone", "init"}:
+        names = {"--separate-git-dir"}
+    outputs = [value for _, value in option_values(command, "o", names)]
+    if sub == "bundle" and named[:1] == ["create"]:
+        outputs += named[1:2]
+    if sub == "merge-file" and not (
+        "p" in letters or long_flag(command, "--stdout")
+    ):
+        outputs += named[:1]
+    check_writes(outputs, scan, False)
 
 
 def check_reset(command: list[str], scan: Scan) -> None:
@@ -2386,9 +2754,11 @@ def check_reset(command: list[str], scan: Scan) -> None:
     scan : Scan
         The reading so far. A first operand before ``--`` other than
         ``HEAD`` moves the branch to it where it names a commit (QA.8,
-        M6): it is a history rewrite where it reads as one, with ``~``,
-        ``^``, ``@``, or an object name, and otherwise referred, since a
-        plain name may be a path or a branch.
+        M6), and is referred. It is not refused as a history rewrite:
+        the commits it leaves stay in the reflog, as those of ``git
+        reset --hard HEAD~1`` did before unit 0015, which was referred,
+        and STND.HARN.18 does not settle whether moving a local branch
+        rewrites history. A plain name may also be a path.
     """
     found = scan.found
     words = command[1:]
@@ -2397,13 +2767,15 @@ def check_reset(command: list[str], scan: Scan) -> None:
     if long_flag(command, "--hard"):
         found.add("selective-destruction", "git reset --hard")
     target = named[0] if named else "HEAD"
-    if target in {"@", "HEAD"}:
+    path = target in {".", ".."} or target.startswith(("./", "../", ":/"))
+    if target in {"@", "HEAD"} or path or target.endswith("/"):
+        # HEAD, or a name only a path has: it unstages.
         return
     if re.search(r"[~^@]", target) or re.fullmatch(r"[0-9a-f]{7,64}", target):
-        found.add("history-rewrite", f"git reset moves the branch to {target}")
+        reason = f"git reset moves the branch to {target}"
     else:
         reason = f"git reset {target}, which may name a commit"
-        found.add("selective-destruction", reason)
+    found.add("selective-destruction", reason)
 
 
 def check_config(command: list[str], scan: Scan) -> None:
@@ -3199,7 +3571,11 @@ def post_grant(
 
 
 def check_shell(
-    words: list[str], piped: bool, given: str | None, scan: Scan
+    words: list[str],
+    piped: bool,
+    given: str | None,
+    scan: Scan,
+    unknown_input: bool = False,
 ) -> None:
     """Check a shell started by a command, or a file it sources.
 
@@ -3216,9 +3592,17 @@ def check_shell(
         from what feeds it, and a script whose name is computed, such as
         the file of a process substitution in ``bash <(...)``, is
         referred (QA.8, L2).
+    unknown_input : bool
+        Whether standard input is the output of a command or a value
+        the guard does not know; a shell that reads its commands from
+        it is referred, as ``sh < <(...)`` (review of unit 0015, N5).
     """
     letters = short_flags(words)
     args = operands(words)
+    reads_input = not args or args[0] in STDIN_NAMES or "s" in letters
+    if unknown_input and reads_input and "c" not in letters:
+        reason = "a shell runs commands that a substitution or variable gives"
+        scan.found.add("selective-destruction", reason)
     if "c" in letters and words[0] not in SOURCERS:
         # The command is the first operand that no option takes; each
         # is read, since a later one is only a positional parameter.
@@ -3312,14 +3696,22 @@ def check_simple(words: list[str], piped: bool, scan: Scan) -> None:
     words, redirections = strip_redirections(words)
     given = None
     fed = piped
+    # Whether standard input is the output of a command or a value the
+    # guard does not know, which a shell would run (review of unit 0015,
+    # N5): a redirection from a process substitution or a computed
+    # file, or a here-string or unquoted body that a substitution fills.
+    unknown_input = False
     for operator, target in redirections:
         if operator == "<<<":
             mark = MARK_RE.match(target)
             given = scan.bodies[int(mark.group(1))] if mark else target
             fed = True
+            expands = mark is None or int(mark.group(1)) in scan.expanded
+            unknown_input = expands and ("`" in given or "$(" in given)
             continue
         if operator in READ_REDIRECTS:
             fed = True
+            unknown_input = unknown_input or computed(target, scan)
             check_reads([target], scan)
         if operator == ">&" and (target.isdigit() or target == "-"):
             continue
@@ -3333,6 +3725,7 @@ def check_simple(words: list[str], piped: bool, scan: Scan) -> None:
     if not words:
         return
     name = PurePosixPath(words[0]).name
+    scan.programs.add(words[0])
     if computed(words[0], scan):
         found.add("selective-destruction", f"runs computed {words[0]}")
         return
@@ -3343,7 +3736,7 @@ def check_simple(words: list[str], piped: bool, scan: Scan) -> None:
         found.add("elevated-privilege", name)
         check_launched(words, scan)
     elif name in SHELLS or words[0] in SOURCERS:
-        check_shell(words, piped, given, scan)
+        check_shell(words, piped, given, scan, unknown_input)
     elif name == "eval":
         check_line(" ".join(words[1:]), scan)
     elif name in {"cd", "pushd"}:
@@ -3372,6 +3765,7 @@ def check_simple(words: list[str], piped: bool, scan: Scan) -> None:
         check_writes(args, scan, append=False)
     elif name in {"awk", "gawk", "sed"}:
         syntax = SED if name == "sed" else AWK
+        check_script_files(words, syntax, scan)
         files = script_files(words, syntax)
         if (name == "sed" and in_place) or (
             name != "sed" and any(w.endswith("inplace") for w in words[1:])
@@ -3418,6 +3812,8 @@ def check_simple(words: list[str], piped: bool, scan: Scan) -> None:
         check_writes(files[1:2], scan, False)
     elif name in COMPRESSORS:
         check_compressed(words, scan)
+    elif name in {"openssl", "unzip", "xxd", "zip"}:
+        check_archived(words, scan)
     elif name in READERS:
         check_reads(args, scan)
     elif name in REMOTE_PROGRAMS:
@@ -3514,6 +3910,10 @@ def check_xargs(words: list[str], scan: Scan) -> None:
     elif inner not in XARGS_READERS:
         reason = f"xargs computes the arguments of {inner}"
         scan.found.add("selective-destruction", reason)
+    elif store_closed(scan.policy):
+        # The files it reads are computed, and may be the store's (N7).
+        reason = f"xargs gives {inner} files it computes"
+        scan.found.add("read-bounds", reason)
     check_simple(command, False, scan)
 
 
@@ -3527,10 +3927,18 @@ def check_search(words: list[str], scan: Scan) -> None:
     scan : Scan
         The reading so far. Each file is a read; a recursive search, as
         rg's always is, reaches read-bounds where a directory it takes
-        holds the store, as the Grep tool does (STND.DFLT.31).
+        holds the store, as the Grep tool does (STND.DFLT.31). A file
+        of patterns is a read, and ``rg --pre``, which runs a program, is
+        referred.
     """
     rg = PurePosixPath(words[0]).name == "rg"
-    files = script_files(words, RG if rg else GREP)
+    syntax = RG if rg else GREP
+    if rg and any(w == "--pre" or w.startswith("--pre=") for w in words):
+        # rg runs the program of --pre on each file (review of unit
+        # 0015, N5).
+        scan.found.add("selective-destruction", "rg --pre runs a program")
+    check_script_files(words, syntax, scan)
+    files = script_files(words, syntax)
     recursive = rg or bool({"r", "R"} & short_flags(words)) or long_flag(
         words, "--recursive", "--dereference-recursive"
     )
@@ -3622,6 +4030,72 @@ def check_tar(words: list[str], scan: Scan) -> None:
         check_writes(directories or ["."], scan, False)
     else:
         check_reads(archives, scan)
+
+
+def check_archived(words: list[str], scan: Scan) -> None:
+    """Check zip, unzip, xxd, or openssl (review of unit 0015, N7).
+
+    Parameters
+    ----------
+    words : list[str]
+        The program and its arguments.
+    scan : Scan
+        The reading so far. zip writes its archive, its first operand,
+        and reads its members; unzip reads its archive and writes into
+        the directory of ``-d``; xxd and openssl as ``check_named_files``
+        reads them. Each may also run a program, as zip's
+        ``--unzip-command`` does, so its texts are read as a launcher's.
+    """
+    name = PurePosixPath(words[0]).name
+    args = operands(words)
+    if name == "zip":
+        check_writes(args[:1], scan, False)
+        check_reads(args[1:], scan)
+        check_copied(args[1:], scan)
+    elif name == "unzip":
+        check_reads(args[:1], scan)
+        outputs = [value for _, value in option_values(words, "d", {"-d"})]
+        check_writes(outputs or ["."], scan, False)
+    else:
+        check_named_files(words, scan)
+    check_launched(words, scan)
+
+
+def check_named_files(words: list[str], scan: Scan) -> None:
+    """Check the files of xxd or openssl, whose options are whole words.
+
+    Parameters
+    ----------
+    words : list[str]
+        The program and its arguments.
+    scan : Scan
+        The reading so far. xxd reads its first operand and writes its
+        second; openssl reads the file of ``-in``, ``-inkey``, ``-key``,
+        and ``-kfile``, and writes that of ``-out`` (review of unit
+        0015, N7).
+    """
+    reads: list[str] = []
+    writes: list[str] = []
+    if PurePosixPath(words[0]).name == "xxd":
+        files: list[str] = []
+        index = 1
+        while index < len(words):
+            word = words[index]
+            index += 1
+            if word in XXD_VALUED:
+                index += 1
+            elif word == "-" or not word.startswith("-"):
+                files.append(word)
+        reads, writes = files[:1], files[1:2]
+    else:
+        for word, value in itertools.pairwise(words[1:]):
+            if word in {"-in", "-inkey", "-key", "-kfile"}:
+                reads.append(value)
+            elif word == "-out":
+                writes.append(value)
+    check_reads(reads, scan)
+    check_copied(reads, scan)
+    check_writes(writes, scan, False)
 
 
 def check_compressed(words: list[str], scan: Scan) -> None:
@@ -3724,11 +4198,16 @@ def read_line(line: str, scan: Scan, strict: bool) -> None:
         Whether a line that does not tokenize is referred.
     """
     expanded: list[int] = []
-    line = lift_heredocs(line, scan.bodies, expanded)
+    doubts: list[str] = []
+    line, kept = lift_heredocs(line, scan.bodies, expanded, doubts)
     for slot in expanded:
         # The shell runs each substitution of a body whose delimiter is
-        # not quoted (QA.8, H3).
+        # not quoted (QA.8, H3). The span of one that holds a comment or
+        # a case is not found soundly by ``substitutions`` (N3).
+        scan.expanded.add(slot)
         for inner in substitutions(scan.bodies[slot].replace("\\\n", "")):
+            if UNCERTAIN_RE.search(inner):
+                doubts.append("a comment or case in a body's substitution")
             check_line(inner, scan, strict)
     if "`" in line or "$(" in line:
         for inner in substitutions(line):
@@ -3743,6 +4222,20 @@ def read_line(line: str, scan: Scan, strict: bool) -> None:
         return
     for words, piped in commands:
         check_simple(words, piped, scan)
+    if not strict:
+        return
+    # A second, simpler reading of where commands begin; a program it
+    # finds that the first reading did not read is a disagreement.
+    missed = [
+        word
+        for word in command_starts(kept)
+        if PurePosixPath(word).name in KNOWN and word not in scan.programs
+    ]
+    if missed:
+        doubts.append(f"a second reading finds the command {missed[0]}")
+    for doubt in doubts:
+        reason = f"line not read soundly: {doubt}"
+        scan.found.add("selective-destruction", reason)
 
 
 def check_command(command: str, cwd: list[str], scan: Scan) -> None:
@@ -3765,6 +4258,7 @@ def check_command(command: str, cwd: list[str], scan: Scan) -> None:
     while True:
         known = len(scan.cwds)
         scan.bodies = []
+        scan.expanded = set()
         scan.commands = 0
         scan.permitted = []
         check_line(command, scan)
