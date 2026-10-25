@@ -39,7 +39,8 @@ MEASURE_NEW = MEASURE_OLD + (
     "performance evaluation and leave offloaded work to it, so one record meets both standards. It reaches each "
     "measurement of the time of offloaded work, in a performance evaluation or not. The first sentences of "
     "STND.PERF.12 and STND.PERF.14, on the criterion of steady state and on the resolution and cost of a timer, reach "
-    "offloaded work as they reach all other code, and this standard adds nothing to them.")
+    "offloaded work in a performance evaluation, as they reach all other code, and this standard adds nothing to "
+    "them.")
 
 CLASS = ("STND.OFFLD.24, and STND.OFFLD.31 rest on no row and apply from CSQ3. No provision raises the floor (GOV.11).",
          "STND.OFFLD.24, and STND.OFFLD.31 rest on no row and apply from CSQ3. STND.PERF.12 and STND.PERF.14 also "

@@ -3,8 +3,8 @@ References gap that tools/check_refs.py reports.
 
 One transaction. STND.MPI predates STND.CONC, whose STND.CONC.30 reaches the processes of a parallel execution;
 the Notes name the forms that its two outcomes, an order that a protocol fixes and a declared variation, take for
-the output of processes and for parallel input and output. The class paragraph names GUARD in words without a
-References row; it is reworded so that it names no document without citing it. Run from harness/, so that
+the output of processes and for parallel input and output. The class paragraph names GUARD without a References row;
+it now cites it, as the Safeguards Article (GUARD), the form that package P5 uses. Run from harness/, so that
 govharness imports:
     python3 -B -m govharness rehearse governance ../tools/amendment-scripts/apply_mpi_1_0_1.py
 """
@@ -40,8 +40,8 @@ IO_NEW = IO_OLD + (
 
 FLOOR = ("No default instantiates a prime directive, GUARD, GOV, or a floor obligation, and no default raises the "
          "floor (GOV.11).",
-         "No default instantiates a prime directive, a provision of the Article of safeguards or of GOV, or a floor "
-         "obligation, so GOV.19 marks none of them binding, and no default raises the floor (GOV.11).")
+         "No default instantiates a prime directive, the Safeguards Article (GUARD), GOV, or a floor obligation, "
+         "and no default raises the floor (GOV.11).")
 
 READING = ("the Notes name the form of STND.CONC.30 for MPI: the processes of a parallel execution are concurrent "
            "tasks under STND.CONC; the order in which the lines of different processes reach the operator varies "
@@ -50,8 +50,8 @@ READING = ("the Notes name the form of STND.CONC.30 for MPI: the processes of a 
            "computes fix the order of the records of a file, while a noncollective write through the shared file "
            "pointer gives a variation that the record of the file declares; and STND.MPI.21, on conflicting "
            "accesses, and STND.CONC.30 do not conflict, one statement of the protocol of a file meeting both; the "
-           "class paragraph names the Article of safeguards in words and cites GOV.19 in place of a bare name that "
-           "had no References row; References lists STND.CONC")
+           "class paragraph cites GUARD, which it named without a References row; References lists GUARD and "
+           "STND.CONC")
 
 ROW = f"| 1.0.1 | {DATE} | Editorial amendment (GOV.41): {READING}; no obligation changes. |"
 

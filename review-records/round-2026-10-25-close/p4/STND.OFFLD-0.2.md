@@ -1,0 +1,285 @@
+# Accelerator offload standard (STND.OFFLD) 1.0.1
+
+Adopted by The Custodian as revision 1.0 in ledger entry 116 (2026-10-24); revised to 1.0.1 in entry 148 (2026-10-25). This reading copy is composed from the per-provision files in STND/OFFLD/ of the governance harness; the harness files are the system of record.
+
+## Purpose and scope
+
+This standard holds the practice of offloading work to accelerators that holds for every programming model, in every language in which the work offloads. It adds to HW, HW.GPU, STND.ANNEX, STND.CONC, STND.PERF, and STND.VVUQ only what offload makes necessary. It covers the placement of offloaded work and fallback from it (STND.OFFLD.1, STND.OFFLD.2, and STND.OFFLD.3); submission and completion (STND.OFFLD.4 to STND.OFFLD.8); memory and data between the host and accelerators (STND.OFFLD.9 to STND.OFFLD.14); execution on the accelerator (STND.OFFLD.15 to STND.OFFLD.20); accelerator memory and the sharing of accelerators (STND.OFFLD.21, STND.OFFLD.22, and STND.OFFLD.23); records of builds and runs (STND.OFFLD.24 and STND.OFFLD.25); and tests and measurement (STND.OFFLD.26 to STND.OFFLD.31).
+
+Every provision is a default (GOV.19), which a project replaces by a recorded decision with an alternative that meets the same higher-level outcome (REPRO.7). The completion of offloaded work before a result relies on it, and the handling of each error that its completion status reports, bind at every class through HW.GPU.3, STND.CONC.1, and PRIME.4, and this standard adds nothing to that floor. The standard is language, compiler, vendor, framework, implementation, and tool agnostic: its provisions name no programming model, runtime library, compiler, checker, or revision of a specification (GOV.18). The forms of these rules for one programming model belong to the standard of that model, as STND.OMP holds those for OpenMP.
+
+## Normative and informative parts
+
+The body of a numbered provision, including a table it contains, is normative. Everything else is informative.
+
+## Terms
+
+This section fixes meaning and imposes no obligation, as the Lexicon does. Accelerator, Capacity, Delivered arithmetic, Execution path, Hardware contract, Hardware model, Reference path, and Runtime library have the meanings that HW gives them. Offloaded work and Completion status have the meanings that HW.GPU gives them. Asynchronous operation, Concurrent task, Parent, Shared mutable object, and Data race have the meanings that STND.CONC gives them; each submission of offloaded work is an asynchronous operation, each thread of device code is a concurrent task, and the host code that makes a submission is the parent of the concurrent tasks that execute it.
+
+| Term | Definition |
+| --- | --- |
+| Device code | The code of a component that executes on an accelerator as offloaded work. |
+| Submission | One request by which host code gives offloaded work to a runtime library for execution on an accelerator, a transfer of data between the host and an accelerator included. |
+| Queue | A sequence of submissions that a runtime library executes in an order that it documents. |
+| Group | A set of threads of device code that the programming model lets synchronize with one another by a barrier and share memory local to the set. |
+| Context | The state that a runtime library holds for the use of one accelerator by a process, through which that process makes submissions and obtains their completion status. |
+| Memory scope | The set of concurrent tasks against which an atomic operation, a fence, or a barrier orders accesses to memory. |
+| Fallback policy | The statement, for the offloaded work of a component, of whether it is admitted to execute on the host or on another accelerator than the one for which it was submitted, and of the execution path on which it then executes. |
+
+## Notes
+
+The provisions rest on what has held across programming models of offload for more than a decade: submissions return before the work completes, and errors surface at a later call; a barrier is reached by every thread of its group or by none; no model promises that separate groups run concurrently; atomics and fences order accesses only within a scope; the size of the set of threads that execute together differs between hardware; and launches have limits (research/offload-notes/o1-execution-and-memory.md, "Timeless versus moving"). What still moves, the scheduling of threads within a group, the semantics of memory shared between host and accelerator, scoped memory models, launches whose groups run concurrently, and the models of progress between groups, is stated as an outcome to show rather than as a facility to use. The research notes are o1 to o4 of research/offload-notes/; most of their sources were read as extracts that a retrieval tool wrote, and their evidence leans toward the documentation of one vendor, which the notes say. A fact that they do not support is marked unverified.
+
+The standard adds offload content to provisions that already hold the outcome, and does not restate them (GOV.31). HW.GPU.3 has the completion status of offloaded work obtained, and each error it reports handled as HW.8 requires, before a result relies on the work; STND.CONC.1 holds the same for every asynchronous operation; and STND.CODE.7 forbids discarding a reported failure. The default accelerator contract of STND.ANNEX.6 gives the delivered arithmetic, the memory and ordering, the limits, the hardware faults, and the response to a detected fault of an accelerator path whose contract cites it. HW.5 and NUMER.16 and NUMER.17 govern reduced-precision modes, fused operations, approximate functions, and kernels chosen at run time; HW.12 the variation from the order of reductions and from choices at run time, and STND.VVUQ.82 a declared variation within the agreement of the acceptance criterion; HW.13 and HW.14 the layout, precision, ownership, ordering, and checks of what crosses between host and accelerator; HW.15 to HW.17 the verification of an accelerator path against the reference path; HW.19 and HW.9 the report and record of a fallback; HW.10 faults that the hardware does not detect; HW.GPU.4 the data moved, the submissions, the busy fraction, and the peak memory of runs that measure resource use; HW.22 claims of speed; and RSRC.1 to RSRC.4 budgets. STND.CONC.3 has accesses by host and device code to a shared mutable object protected, STND.CONC.5 the storage that a transfer uses kept allocated until the transfer completes, STND.CONC.11 no thread wait for another of a construct that does not guarantee that they run concurrently, STND.CONC.23 random streams keyed to the parts of the computation, and STND.CONC.25 to STND.CONC.27 the run-time checks and the stated limits of each verification. A rented accelerator is governed by PRIME.7, PRIME.8, and GUARD.11, as the Notes of HW.GPU say.
+
+A call that submits work returns when the work is queued, not when it is done, and an error in the work is often reported by a later call that synchronizes, and attributed to that call (o1, H2). Work within an in-order queue is ordered, and some programming models make a queue out of order by default, ordering its work only by its dependences; work in different queues is ordered only by an event or a dependence that the runtime library expresses; and some runtime libraries order a default queue implicitly with the others, by a setting that differs between compilation units (o1, H1) (STND.OFFLD.4). In one runtime library, an asynchronous transfer from host memory of the wrong kind silently becomes synchronous or is staged, which o1 leaves unverified for others; and host storage that a transfer reads changes what the accelerator receives if the host writes it before the transfer completes, by inference from o1's rule for a transfer in the other direction (o1, H1). STND.OFFLD.5 is the form for a transfer of the protection that STND.CONC.3 asks, since the host storage that a transfer reads is shared with an asynchronous operation. A mode that completes each submission before the next locates an error at the submission that caused it, and hides the defects of ordering and overlap that only asynchronous runs show, so a program tested only in that mode is untested in the mode in which it runs (o3, practice 6) (STND.OFFLD.6 and STND.OFFLD.26). Some errors, among them an invalid access, a device-side assertion, and a timeout, and by a secondary source the loss of the device, leave the context or the accelerator unusable, and later calls then return the same or another error; the sources disagree on whether a new context suffices, and the facts are marked unverified in o1 (STND.OFFLD.7). The three sentences of STND.OFFLD.7 are the consequences of one event and apply together. Under STND.OFFLD.7, a resubmission that the default contract of STND.ANNEX.6 admits after such an error does not use that context, and draws on inputs held on the host; whether another context suffices on a given runtime library is the point that o1 leaves unverified. The release of an allocation is not a submission, so STND.OFFLD.10 still has memory released on the path of such an error. Where device code has no means to halt the run, raise an exception, or write a log, which o4 infers to be common, a failure that it detects reaches the host only through storage that the host reads with the completion status (STND.OFFLD.8). That is how STND.CONC.2 reaches device code, whose threads are concurrent tasks with the submitting host code as their parent; the reach is intended.
+
+A copy of data in host memory and a copy in accelerator memory diverge from the first write to either, and a result computed from the copy that is not current is wrong without an error (STND.OFFLD.9). One statement serves STND.OFFLD.9 and the ownership that HW.13 asks of the boundary contract where the boundary contract holds or cites it. An allocation of accelerator memory that is not released on a path of failure is lost for the rest of the run, and a release before the last use of the memory is a use after release (STND.OFFLD.10). An address obtained on one side means nothing on the other unless the hardware contract states that the memory is shared, and a structure that crosses with addresses in it carries them unchanged (STND.OFFLD.11). Memory shared between host and accelerator is a convenience and not a guarantee of coherence: whether the host and the accelerator are able to access it at once, whether it is able to exceed the memory of the accelerator, and whether atomics order across the two depend on the hardware, the operating system, and the driver, and access outside what they support faults or gives a wrong result (o1, H4) (STND.OFFLD.12); STND.CONC.3 still asks for a protection where both sides access shared memory. An atomic operation at a scope that does not include the concurrent task with which it communicates does not order accesses with that task, and one runtime library documents such a pair as racing although both are atomic; and a barrier or a fence orders only the memory spaces that it names (o1, H4) (STND.OFFLD.13). Floating-point accumulation by atomics in an unspecified order is a declared variation under HW.12 and STND.ANNEX.6, and not a race (o2, practice 9). In one runtime library, device code has no dynamic rounding mode and offers the modes of rounding only per operation, and another programming model reports per device which modes are available (o2, table A), so device code is not shown to follow a floating-point environment that host code sets (STND.OFFLD.14).
+
+The programming models require that a barrier be reached by every thread of its group or by none, and a barrier inside control flow that differs between threads, or after a return that some threads take, hangs or gives undefined results (o1, H3) (STND.OFFLD.15). Code that assumed that the threads of a group execute in lockstep computed wrong results when a hardware generation began to schedule them independently (o1, H3) (STND.OFFLD.16). The operations among threads that one programming model gives take a mask of their participants for that reason, and the number of threads that execute together differs between vendors and between hardware models, so masks built for one width fail on another (o1, H3) (STND.OFFLD.17). Launch limits on the size of a group, the number of groups, and the resources of each thread differ between accelerators and are reported by the runtime library, as the limits row of STND.ANNEX.6 records. Where a programming model has no groups, STND.OFFLD.15 to STND.OFFLD.18 have no subject. These provisions remove none of STND.CONC: its bounded waits (STND.CONC.10), observed cancellation (STND.CONC.13), and tests at three or more numbers of tasks (STND.CONC.24) still apply to device code, and a programming model that gives device code no facility for one of them leaves a project a recorded decision under REPRO.7. A barrier between groups written by hand deadlocks where the groups exceed those that the accelerator holds at once; in one study it deadlocked at 256 groups on every accelerator tested, and at 128 on some, and a later study found that some accelerators do not support the model of progress that earlier work assumed (o1, H3, its sources S15 and S16) (STND.OFFLD.18, the offload form of STND.CONC.11). The last group of a launch whose size does not divide the problem runs threads with no item, and index arithmetic formed in a 32-bit type overflows on large problems (o1, H3; o2, table D) (STND.OFFLD.19). One operating system resets, by default, an accelerator whose offloaded work runs longer than a few seconds (o1, H2, from a secondary source) (STND.OFFLD.20).
+
+Device memory is a capacity in the sense of HW, and HW.8 has exhausting it halt or degrade visibly; checking before a submission that the memory needed is available turns a failure deep in a run into one at its start (STND.OFFLD.21). Where memory shared with the host exceeds the memory of the accelerator, the runtime library migrates it on demand, and the run is able to thrash (o1, H4) (STND.OFFLD.22, by analogy with HW.CPU.5). Migration changes the speed of a run and not its results, so HW.9 does not ask for it in the record of a result; HW.GPU.4 records its volume in the runs that measure resource use. HW applies HW.CPU.5 from CSQ3 by its own choice, and STND.OFFLD.22 follows the row of STND.CLASS.10 for INTPR.7, as STND.CONC.10 does. Several components, processes, or libraries that submit to one accelerator share its memory, and the components and libraries of one process that share a context share its queues and its error state (o1, practice 15) (STND.OFFLD.23). The first sentence of STND.OFFLD.23 asks a statement only, and the check of STND.OFFLD.21 is the nearest counterpart of the sizing that STND.CONC.18 asks of pools on one node.
+
+A build of device code holds compiled code for named hardware models and, optionally, code that the runtime library compiles when it is loaded; where neither matches the accelerator, the submission fails, or the code is compiled at load, which changes the first-run time and is able to change the delivered arithmetic between driver releases. In one vendor's runtime, a persisted cache of compiled code is kept for each account of the host and is of limited size (o3, build and deployment) (STND.OFFLD.24). The run record of STND.OFFLD.25 is a synthesis of the settings that the sources show to change behavior or results, and no published checklist of it was found (o3, practice 11); the Notes of HW.GPU already call a persisted cache of compiled or tuned kernels a setting under HW.3 and HW.7.
+
+The tests of STND.OFFLD.27 rest on how checkers and verifiers of device code define their errors, and no published guideline of tests for offload was found (o3, practice 4). In one study of defects in code for accelerators, defects of synchronization, among them data races and barriers reached by some threads only, were 27 of the 217 defects in the execution of device code in five projects, and the authors found that the usual tests caught most kinds of defect but not these (o1, H5) (STND.OFFLD.30). The checkers of device code each cover part of the problem: in one vendor's set, the checker of races covers only memory local to a group, and one of uninitialized reads only global memory by default, and a published static verifier excluded kernels with atomics; STND.CONC.27 has the record of each verification state what its method does not cover (o3, verification methods). A host timer around a submission measures the submission and not the work, and the first submission pays for initialization and compilation at load (o3, measurement pitfalls) (STND.OFFLD.31); the first access to memory that migrates on demand is likely to pay for migration as well, which o3 did not retrieve and is unverified; HW.22 governs the claims that rest on such measurements, and a measurement that leaves out data movement or dispatch does not by itself support a claim that HW.22 governs. STND.OFFLD.31 is the form for offloaded work of the second sentences of STND.PERF.12 and STND.PERF.14, which hold the costs of first use and the end of each timed asynchronous operation for every other measurement in a performance evaluation and leave offloaded work to it, so one record meets both standards. It reaches each measurement of the time of offloaded work, in a performance evaluation or not. The first sentences of STND.PERF.12 and STND.PERF.14, on the criterion of steady state and on the resolution and cost of a timer, reach offloaded work in a performance evaluation, as they reach all other code, and this standard adds nothing to them.
+
+Faults of accelerators are frequent at scale. In one training run on 16,000 accelerators over 54 days, faulty accelerators were the largest of the causes of 419 unexpected interruptions, and six were attributed to silent corruption of data; in one study of injected faults, a non-finite value was 1.01 percent of the outcomes, so in that study a check for non-finite values alone would have seen about one outcome in a hundred (o3, faults). HW.10 has a path whose hardware does not detect a fault check its results by a means able to detect it, or state the exposure, and STND.ANNEX.6 lists a changed bit and a wrong result from a processing unit among the faults that an accelerator does not detect; checksums, redundant execution, and periodic tests are the means that the sources describe.
+
+The rules for one programming model belong to its standard. STND.OMP holds the forms of these rules for OpenMP: STND.OMP.23 is the OpenMP form of STND.OFFLD.2, and its second sentence of STND.OFFLD.1 and STND.OFFLD.3; the first sentence of STND.OMP.24 of the second sentence of STND.OFFLD.23, and its second sentence of STND.OFFLD.10; STND.OMP.25 and STND.OMP.26 of STND.OFFLD.9, STND.OFFLD.10, and STND.OFFLD.11; the first sentence of STND.OMP.27 of STND.OFFLD.9; the second sentence of STND.OMP.28 of STND.OFFLD.12; STND.OMP.29 of STND.OFFLD.13; STND.OMP.30 of STND.OFFLD.14; STND.OMP.31 of STND.OFFLD.2 and STND.OFFLD.3; STND.OMP.32 of STND.OFFLD.30; and the last items of STND.OMP.3 of STND.OFFLD.25. The second sentence of STND.OMP.27, on static data on a device, and the first sentence of STND.OMP.28, on the requires directive, have no form here: the first is specific to OpenMP, and HW.4 holds the second for every model. Each provision of this standard that has an OpenMP form takes the class onset of that form, so that a citation moves no rule to another class.
+
+Under STND.CLASS.10, each provision instantiates only DSGN, SIMPL, REPRO, RSRC, INTPR, VV, or a provision of HW, and applies from CSQ3; work of CSQ4 may omit it. The part of a provision that rests on a row of the table of STND.CLASS.10 applies from the class of that row. STND.OFFLD.7, the first sentence of STND.OFFLD.12, STND.OFFLD.14, the second sentence of STND.OFFLD.17, and STND.OFFLD.20 rest on DSGN.5 and apply from CSQ2 (the three sentences of STND.OFFLD.7 together). STND.OFFLD.11 rests on DSGN.4 and HW.13 and applies from CSQ2. STND.OFFLD.5, STND.OFFLD.9, STND.OFFLD.10, and STND.OFFLD.13 instantiate HW.13 or HW.11, which the Notes of HW apply from CSQ2, and apply from CSQ2. The check of STND.OFFLD.30 verifies the invariants of a protocol (DSGN.15), and instantiates HW.14, and applies from CSQ2. STND.OFFLD.6 rests on INTPR.8 and STND.OFFLD.22 on INTPR.7, and both apply from CSQ1. The parts that instantiate HW.3, HW.5, HW.9, HW.19, or INTPR.9 and rest on no row apply from CSQ3, as the Notes of HW apply the provisions of HW among them: STND.OFFLD.2, STND.OFFLD.25, and STND.OFFLD.29. The tests of the second sentence of STND.OFFLD.12, of STND.OFFLD.3, and of STND.OFFLD.26 to STND.OFFLD.29 are tests under VV.1, and none of them compares with a reference oracle produced without the implementation that it judges, so they apply from CSQ3. The protocol rules of STND.OFFLD.4, STND.OFFLD.15, STND.OFFLD.16, the first sentence of STND.OFFLD.17, and STND.OFFLD.18 state what a protocol uses, and not how its invariants are verified, so they apply from CSQ3. STND.OFFLD.1, STND.OFFLD.8, STND.OFFLD.19, STND.OFFLD.21, STND.OFFLD.23, STND.OFFLD.24, and STND.OFFLD.31 rest on no row and apply from CSQ3. STND.PERF.12 and STND.PERF.14 also apply from CSQ3, so the citations of STND.OFFLD.31 move no rule to another class. No provision raises the floor (GOV.11).
+
+## References
+
+| Identifier | Title |
+| --- | --- |
+| DSGN | Design |
+| GOV | Governance |
+| GUARD | Safeguards |
+| HW | Execution hardware |
+| HW.CPU | General-purpose processors |
+| HW.GPU | Accelerators |
+| INTPR | Interpretability |
+| NUMER | Numerical computation |
+| PRIME | Prime Directives |
+| REPRO | Reproducibility |
+| RSRC | Resources |
+| SIMPL | Simplicity |
+| STND.ANNEX | Hardware type annex |
+| STND.CLASS | Consequence-class criteria |
+| STND.CODE | Coding standard |
+| STND.CONC | Concurrency standard |
+| STND.OMP | OpenMP standard |
+| STND.PERF | Performance evaluation standard |
+| STND.VVUQ | Verification, validation, and uncertainty quantification methods |
+| VV | Correctness |
+
+## Provisions
+
+### Placement and fallback
+
+#### STND.OFFLD.1 Fallback policy stated
+
+Default. Instantiates SIMPL.6, HW.19.
+
+The documentation of each component with offloaded work SHOULD state its fallback policy (SIMPL.6, HW.19).
+
+#### STND.OFFLD.2 Placement confirmed
+
+Default. Instantiates INTPR.9, HW.19, HW.9.
+
+Where a run relies on offloaded work executing on an accelerator, the run SHOULD confirm, from the completion status or from the work itself, the accelerator on which that work executed, or run under a setting of its runtime libraries that ends the run in the absence of that accelerator (INTPR.9, HW.19, HW.9).
+
+#### STND.OFFLD.3 Fallback paths exercised
+
+Default. Instantiates VV.1, VV.8.
+
+Each execution path to which the fallback policy of a component admits a fallback SHOULD be run by the tests of each change to that component (VV.1, VV.8).
+
+### Submission and completion
+
+#### STND.OFFLD.4 Submission order relied upon
+
+Default. Instantiates DSGN.15.
+
+Each component with offloaded work SHOULD state the order among its submissions on which it relies: the order within one queue, or a dependence between queues that a facility of its runtime libraries expresses (DSGN.15). Each dependence between submissions of different queues SHOULD be expressed by such a facility, and not by the timing of host code (DSGN.15).
+
+#### STND.OFFLD.5 Host storage under transfer
+
+Default. Instantiates DSGN.14, HW.13.
+
+Before host code observes the completion of an asynchronous transfer, host code SHOULD NOT write the host storage that the transfer reads (DSGN.14, HW.13).
+
+#### STND.OFFLD.6 Errors attributed to submissions
+
+Default. Instantiates INTPR.8.
+
+The work SHOULD admit a mode of running in which each submission completes, and its completion status is obtained, before the next submission begins (INTPR.8). The diagnosis of each error that a completion status reports SHOULD name the submissions that the status covers (INTPR.8).
+
+#### STND.OFFLD.7 Unusable contexts
+
+Default. Instantiates DSGN.5.
+
+Where the documentation of a runtime library states that an error leaves a context or an accelerator unusable, the execution path SHOULD make no later submission through that context (DSGN.5). Where such an error occurs, the execution path SHOULD NOT rely on a later result of a submission through that context (DSGN.5). After such an error, the execution path SHOULD NOT rely on the contents of the accelerator memory that the context holds (DSGN.5).
+
+#### STND.OFFLD.8 Failures detected in device code
+
+Default. Instantiates DSGN.1.
+
+Where the programming model gives device code no means of reporting a failure, device code SHOULD record each failure of a kind that PRIME.4 lists that it detects, in storage that the host reads with the completion status of that work (DSGN.1). Host code SHOULD read that record with the completion status, and handle a recorded failure as it handles an error that the completion status reports (DSGN.1).
+
+### Memory and data
+
+#### STND.OFFLD.9 Authoritative copies
+
+Default. Instantiates DSGN.14, HW.13.
+
+Where data has a copy in host memory and a copy in accelerator memory, the component SHOULD state, for each phase of its run, which copy is authoritative (DSGN.14, HW.13). Before code reads a copy that is not authoritative, a transfer from the authoritative copy SHOULD complete (DSGN.14, HW.13).
+
+#### STND.OFFLD.10 Accelerator allocations released once
+
+Default. Instantiates DSGN.14, HW.13.
+
+After the last offloaded work that uses an allocation of accelerator memory, or a registration of host memory for use by an accelerator, has completed, that allocation or registration SHOULD be released exactly once on every path, failures included (DSGN.14, HW.13).
+
+#### STND.OFFLD.11 Addresses across memory spaces
+
+Default. Instantiates DSGN.4, HW.13.
+
+Where the hardware contract does not state that an address is valid both on the host and on an accelerator, code SHOULD dereference that address only on the side on which it was obtained (DSGN.4, HW.13). Where data that crosses to an accelerator holds addresses, each address that device code follows SHOULD address storage on that accelerator, or storage that the hardware contract states as shared with it (DSGN.4, HW.13).
+
+#### STND.OFFLD.12 Memory shared with the host
+
+Default. Instantiates DSGN.5, HW.19, VV.1.
+
+Where an accelerator that a run uses does not provide the memory shared with the host on which a component of the run relies, the run SHOULD end with a report to the operator, or run a variant of the component that transfers its data (DSGN.5, HW.19). Where a component that relies on memory shared with the host admits an accelerator that does not provide it, the tests of that component SHOULD run on such an accelerator (VV.1).
+
+#### STND.OFFLD.13 Memory scope of synchronization
+
+Default. Instantiates DSGN.15, HW.11.
+
+Each atomic operation, fence, or barrier that orders accesses between concurrent tasks SHOULD carry a memory scope that includes each concurrent task against which it orders them (DSGN.15, HW.11). Code SHOULD rely on a barrier or a fence to order accesses only to the memory spaces that the barrier or fence orders (DSGN.15, HW.11).
+
+#### STND.OFFLD.14 Floating-point state across the boundary
+
+Default. Instantiates DSGN.5, HW.5.
+
+Device code SHOULD NOT rely on a floating-point environment that host code sets (DSGN.5, HW.5).
+
+### Execution on the accelerator
+
+#### STND.OFFLD.15 Barriers reached by whole groups
+
+Default. Instantiates DSGN.15.
+
+Each barrier of a group SHOULD be reached by every thread of that group or by none (DSGN.15). A thread of a group SHOULD NOT leave device code before a barrier that other threads of its group reach (DSGN.15).
+
+#### STND.OFFLD.16 No lockstep assumed
+
+Default. Instantiates DSGN.15.
+
+Device code SHOULD NOT rely on the threads of a group executing in lockstep (DSGN.15). Device code SHOULD NOT rely on the threads of a group converging after control flow that differs between them (DSGN.15).
+
+#### STND.OFFLD.17 Group participants and width
+
+Default. Instantiates DSGN.15, DSGN.5.
+
+Each operation among the threads of a group SHOULD name the threads that take part in it (DSGN.15). Where device code depends on the number of threads that execute together on the accelerator, it SHOULD take that number from the runtime library or the hardware at run time, request it of the runtime library, or confirm at run time that the number that its build fixes is that of the hardware model that executes it (DSGN.5).
+
+#### STND.OFFLD.18 Concurrent groups guaranteed
+
+Default. Instantiates DSGN.15.
+
+Where device code relies on the groups of one submission running concurrently, the submission SHOULD use a facility of its runtime library under which the submission either runs its groups concurrently or fails with an error (DSGN.15).
+
+#### STND.OFFLD.19 Problem size and index width
+
+Default. Instantiates DSGN.1.
+
+Where the threads of a submission outnumber the items of its work, device code SHOULD guard each access by the index of its item (DSGN.1). Index and size arithmetic in device code SHOULD use an integer type wide enough for the largest problem that the component admits, or check at submission that the problem fits the type that it uses (DSGN.1).
+
+#### STND.OFFLD.20 Bounded submission duration
+
+Default. Instantiates DSGN.5.
+
+Where the hardware contract states a limit on the duration of offloaded work, each submission SHOULD be sized to complete within that limit in the regime of use (DSGN.5).
+
+### Accelerator memory and sharing
+
+#### STND.OFFLD.21 Accelerator memory checked first
+
+Default. Instantiates RSRC.1.
+
+Before a run submits the work that a budget of accelerator memory covers, the run SHOULD check that the accelerator memory that the runtime library reports as available meets that budget (RSRC.1).
+
+#### STND.OFFLD.22 Oversubscribed accelerator memory reported
+
+Default. Instantiates INTPR.7.
+
+Where the runtime libraries of a run serve a use of accelerator memory beyond the memory that the accelerator holds by migration, the run SHOULD report that to the operator at its first occurrence in the run (INTPR.7).
+
+#### STND.OFFLD.23 Accelerators shared and selected
+
+Default. Instantiates DSGN.14, SIMPL.6.
+
+Where more than one component, process, or library of a run makes submissions to one accelerator, the run SHOULD state how they share its memory and its queues, and which of them owns the error state of each context (DSGN.14). Each accelerator that a run uses SHOULD be chosen by a stated rule from those that its runtime libraries report (SIMPL.6).
+
+### Records
+
+#### STND.OFFLD.24 Device code in each build
+
+Default. Instantiates REPRO.2.
+
+The record of each build of device code SHOULD state each hardware model of accelerator for which the build holds compiled code, and whether it holds code for a runtime library to compile at load (REPRO.2).
+
+#### STND.OFFLD.25 Offload run record
+
+Default. Instantiates HW.3, REPRO.2.
+
+Among the items that HW.3 asks of the record of each result, the record of each result that offloaded work computes SHOULD give each accelerator that the run used with its hardware model, the work that executed on each, whether device code was compiled at load, the state of each persisted cache of compiled or tuned code, and each setting of error correction, sharing of compute, power, and clocks of each accelerator that the run reads (HW.3, REPRO.2).
+
+### Tests and measurement
+
+#### STND.OFFLD.26 Asynchronous runs under test
+
+Default. Instantiates VV.1.
+
+The tests of offloaded work SHOULD run its submissions asynchronously, as the runs that they verify do, and not only in a mode in which each submission completes before the next begins (VV.1).
+
+#### STND.OFFLD.27 Problem sizes under test
+
+Default. Instantiates VV.1.
+
+The tests of device code SHOULD include a problem of size zero, one of size one, one whose size the size of its groups does not divide, and the largest problem in the regime of use that the accelerator of the test holds (VV.1). Where device code admits more than one size of group, its tests SHOULD run at more than one (VV.1).
+
+#### STND.OFFLD.28 Injected failures under test
+
+Default. Instantiates VV.1.
+
+The tests of each component with offloaded work SHOULD include a failed allocation of accelerator memory and an error that a completion status reports, and show the response that HW.8 requires or that the hardware contract of its execution path states (VV.1).
+
+#### STND.OFFLD.29 Arithmetic settings under test
+
+Default. Instantiates VV.1, HW.5.
+
+Where a component admits subnormal, non-finite, or near-overflow values, the tests of its device code SHOULD include such inputs, run under the settings of delivered arithmetic of the runs that they verify (VV.1, HW.5).
+
+#### STND.OFFLD.30 Checks of device code
+
+Default. Instantiates DSGN.15, HW.14.
+
+Where the means of the work include a check that detects at run time invalid accesses to memory, data missing from or stale on an accelerator, or barriers that at least one thread of a group does not reach, the tests of each change to device code SHOULD run under that check (DSGN.15, HW.14).
+
+#### STND.OFFLD.31 Timing of offloaded work
+
+Default. Instantiates RSRC.4.
+
+Each measurement of the time of offloaded work SHOULD end at an observed completion of that work (RSRC.4, STND.PERF.14). Each such measurement SHOULD state whether it includes the costs of a first submission, among them initialization and compilation at load (RSRC.4, STND.PERF.12).
+
+## Revision History
+
+| Revision | Date | Change |
+| --- | --- | --- |
+| 1.0 | 2026-10-24 | Adopted. |
+| 1.0.1 | 2026-10-25 | Editorial amendment (GOV.41): STND.OFFLD.31 cites STND.PERF.14 at its first sentence and STND.PERF.12 at its second, the provisions whose second sentences hold the same outcomes for every other measurement in a performance evaluation and leave offloaded work to it, and its text is otherwise unchanged; the Purpose names STND.PERF among the documents to which the standard adds; the Notes state that STND.OFFLD.31 is the offload form of those sentences, that it reaches measurements outside a performance evaluation, that the first sentences of STND.PERF.12 and STND.PERF.14 reach offloaded work unchanged, and that the citations move no rule to another class; References lists STND.PERF; no obligation changes. |
