@@ -26,7 +26,7 @@ Done when:
    - modes, floor, and class onsets;
    - records: rehearsal, findings, rationales, and that every queue item is closed.
    Its findings are fixed and verified.
-5. The whole round rehearses with `verify` passing, no finding of class defect, and `tools/check_refs.py` reporting 0 documents with missing rows across all of the corpus.
+5. The whole round rehearses with `verify` passing, no finding of class defect, and `tools/check_refs.py` reporting 0 documents with missing rows across the corpus. The check reads the documents that STND.DRAFT.34 asks to hold References, LVL1 to LVL3; it skips the Revision History and tables of example identifiers (P5's finding of 2026-10-25).
 6. The custodian ratifies through AskUserQuestion. Only then is the round applied, each entry with its real time. After that, `verify`, `references --check`, and `compose --check` pass, the reading copies are rebuilt, and the README and OPEN-ITEMS are updated.
 
 ## B. Harness units (each in a worktree, reviewed by another configuration, merged only when clean)
