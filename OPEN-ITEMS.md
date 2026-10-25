@@ -14,6 +14,14 @@ Work that the custodian has directed or that a ratified round left open. It repl
    The transition of ledger entry 53 for STND.HARN.18 ends when that reviewed harness is installed and its configure entry records it. Whether the entry-53 transition for STND.HARN.26 to .28 has ended is for the custodian to record.
 4. **M-b: expiry horizon.** Give `--expiry-horizon` a stated default bound. Later.
 
+## Corpus, in progress
+
+- **STND.TEST and STND.PERF.** Two new LVL2 standards, all defaults (custodian, 2026-10-24).
+  - STND.TEST covers the method of writing, running, and interpreting test suites. The tests run before a merge widen with the level of integration: a subfeature merging into a feature runs fewer tests than a merge into the main line, which runs the full suite. The obligation stays RSRC.11 and RSRC.12.
+  - STND.PERF covers the systematic evaluation of absolute, relative, and scaling performance, where a task calls for it or a work is declared performance-sensitive. It names no methods or tools.
+  - With them, STND.WPROC.9 and STND.CREW gain citations of STND.TEST.
+  - Research is in `research/test-notes/` and `research/perf-notes/`.
+
 ## Corpus, for later amendment rounds
 
 - **Shared rules for compiled languages (R17).** Move STND.CXX.16 to .18 and .28 to .31 to STND.CODE, and replace the C reading of STND.STDC by citations (a minor amendment of STND.CODE, STND.CXX, and STND.STDC).
