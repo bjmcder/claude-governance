@@ -15,7 +15,10 @@ authorization was accepted unsigned. ``--expiry-horizon`` bounds the
 time from the derivation to an authorization's expiry, 90 days unless
 the owner gives another number of days; under a bound, one that lapses
 only when revoked is refused, and ``--expiry-horizon none`` lifts the
-bound (unit 0012). The summary names the horizon in force.
+bound (unit 0012). The summary names the horizon in force. INSTALL.md
+prints the check with the corpus root and every option of the
+derivation, so that, run as printed, it renders the same files (unit
+0014).
 """
 
 from __future__ import annotations
@@ -56,6 +59,9 @@ from govharness.workflows.environment import installed_problems
 # The guard is installed as a file, so the command reads its source and
 # never imports it.
 GUARD_SOURCE = Path(__file__).resolve().parents[1] / "hooks" / "guard.py"
+# The directory that holds the package, from which ``python3 -m
+# govharness`` runs.
+HARNESS = Path(__file__).resolve().parents[2]
 
 
 def expiry_horizon(text: str) -> timedelta | None:
@@ -161,7 +167,8 @@ def add_environment(sub: argparse._SubParsersAction) -> None:
             "compare the installed files with a fresh rendering; give it "
             "the options of the derivation it checks, --expiry-horizon "
             "included, since the default horizon may refuse an "
-            "authorization that the derivation accepted"
+            "authorization that the derivation accepted; INSTALL.md "
+            "prints them"
         ),
     )
     command.set_defaults(run=lambda a, _: run_environment(a))
@@ -206,6 +213,71 @@ def inputs_of(
         remote_writes=remote_writes,
         referred=referred,
         unsigned=unsigned,
+    )
+
+
+def derivation_options(args: argparse.Namespace) -> tuple[str, ...]:
+    """Return every option of a derivation, as ``--check`` repeats it.
+
+    Parameters
+    ----------
+    args : argparse.Namespace
+        Parsed arguments of ``environment``.
+
+    Returns
+    -------
+    tuple[str, ...]
+        The options in the order of the parser, each repeated option in
+        the order given, and paths made absolute, as the configuration
+        names them; ``--write`` and ``--check`` are left out. The
+        horizon is named wherever an authorization is, or where it is
+        not the default, so that a later default does not change the
+        check (unit 0014).
+    """
+    words = ["--work", str(args.work.resolve())]
+    words += ["--home", str(args.home.resolve())]
+    for path in args.open:
+        words += ["--open", str(path.resolve())]
+    for domain in args.domain:
+        words += ["--domain", domain]
+    for tool in args.tool:
+        words += ["--tool", tool]
+    words += ["--search"] if args.search else []
+    words += ["--unattended"] if args.unattended else []
+    words += ["--secret-store"] if args.secret_store else []
+    for name in args.secret:
+        words += ["--secret", name]
+    for ident in args.authorization:
+        words += ["--authorization", ident]
+    words += ["--role", args.role] if args.role else []
+    horizon = args.expiry_horizon
+    if args.authorization or horizon != DEFAULT_HORIZON:
+        days = NO_HORIZON if horizon is None else str(horizon.days)
+        words += ["--expiry-horizon", days]
+    words += [ACCEPT_UNSIGNED] if args.accept_unsigned else []
+    words += ["--assured"] if args.assured else []
+    return tuple(words)
+
+
+def derivation_of(args: argparse.Namespace) -> claude_code.Derivation:
+    """Return how the command derives, for the steps of INSTALL.md.
+
+    Parameters
+    ----------
+    args : argparse.Namespace
+        Parsed arguments of ``environment``.
+
+    Returns
+    -------
+    claude_code.Derivation
+        The harness directory, the corpus root, the options, and the
+        output directory, each path absolute.
+    """
+    return claude_code.Derivation(
+        harness=str(HARNESS),
+        corpus=str(args.root.resolve()),
+        options=derivation_options(args),
+        out=str(args.write.resolve()) if args.write else "OUT",
     )
 
 
@@ -303,6 +375,7 @@ def run_environment(args: argparse.Namespace) -> int:
                 args, reading.writes, reading.referred, reading.unsigned
             ),
             read_text(GUARD_SOURCE),
+            derivation_of(args),
         )
     except (LookupError, ValueError) as error:
         print(f"environment: {error}", file=sys.stderr)

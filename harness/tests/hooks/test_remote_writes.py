@@ -32,6 +32,104 @@ LATER = "2999-01-01T00:00:00+00:00"
 EARLIER = "2000-01-01T00:00:00+00:00"
 ALLOW, ASK, DENY = "allow", "ask", "deny"
 SHA = "0" * 40
+# Every variable that git(1) of git 2.56.0 names in its section
+# Environment Variables, read from the installed manual page on
+# 2026-10-25. After them come those that git-config(1) adds, a few that
+# git reads without listing them there, and two names that only look
+# like one (``GIT_EDITOR_X``, ``GIT_``). Held as data so that the suite
+# needs no manual page (review of unit 0014, M2).
+GIT_VARIABLES = frozenset(
+    {
+        "GIT_ADVICE",
+        "GIT_ALLOW_PROTOCOL",
+        "GIT_ALTERNATE_OBJECT_DIRECTORIES",
+        "GIT_ASKPASS",
+        "GIT_ATTR_SOURCE",
+        "GIT_AUTHOR_DATE",
+        "GIT_AUTHOR_EMAIL",
+        "GIT_AUTHOR_NAME",
+        "GIT_CEILING_DIRECTORIES",
+        "GIT_COMMIT_GRAPH_PARANOIA",
+        "GIT_COMMITTER_DATE",
+        "GIT_COMMITTER_EMAIL",
+        "GIT_COMMITTER_NAME",
+        "GIT_COMMON_DIR",
+        "GIT_CONFIG_GLOBAL",
+        "GIT_CONFIG_NOSYSTEM",
+        "GIT_CONFIG_SYSTEM",
+        "GIT_DEFAULT_HASH",
+        "GIT_DEFAULT_REF_FORMAT",
+        "GIT_DIFF_OPTS",
+        "GIT_DIFF_PATH_COUNTER",
+        "GIT_DIFF_PATH_TOTAL",
+        "GIT_DIR",
+        "GIT_DISCOVERY_ACROSS_FILESYSTEM",
+        "GIT_EDITOR",
+        "GIT_EXEC_PATH",
+        "GIT_EXTERNAL_DIFF",
+        "GIT_EXTERNAL_DIFF_TRUST_EXIT_CODE",
+        "GIT_FLUSH",
+        "GIT_GLOB_PATHSPECS",
+        "GIT_ICASE_PATHSPECS",
+        "GIT_INDEX_FILE",
+        "GIT_INDEX_VERSION",
+        "GIT_LITERAL_PATHSPECS",
+        "GIT_MERGE_VERBOSITY",
+        "GIT_NAMESPACE",
+        "GIT_NOGLOB_PATHSPECS",
+        "GIT_NO_LAZY_FETCH",
+        "GIT_NO_REPLACE_OBJECTS",
+        "GIT_OBJECT_DIRECTORY",
+        "GIT_OPTIONAL_LOCKS",
+        "GIT_PAGER",
+        "GIT_PRINT_SHA1_ELLIPSIS",
+        "GIT_PROGRESS_DELAY",
+        "GIT_PROTOCOL",
+        "GIT_PROTOCOL_FROM_USER",
+        "GIT_REDIRECT_STDERR",
+        "GIT_REDIRECT_STDIN",
+        "GIT_REDIRECT_STDOUT",
+        "GIT_REFERENCE_BACKEND",
+        "GIT_REFLOG_ACTION",
+        "GIT_REF_PARANOIA",
+        "GIT_SEQUENCE_EDITOR",
+        "GIT_SSH",
+        "GIT_SSH_COMMAND",
+        "GIT_SSH_VARIANT",
+        "GIT_SSL_NO_VERIFY",
+        "GIT_TERMINAL_PROMPT",
+        "GIT_TRACE",
+        "GIT_TRACE2",
+        "GIT_TRACE2_EVENT",
+        "GIT_TRACE2_PERF",
+        "GIT_TRACE_CURL",
+        "GIT_TRACE_CURL_NO_DATA",
+        "GIT_TRACE_FSMONITOR",
+        "GIT_TRACE_PACK_ACCESS",
+        "GIT_TRACE_PACKET",
+        "GIT_TRACE_PACKFILE",
+        "GIT_TRACE_PERFORMANCE",
+        "GIT_TRACE_REDACT",
+        "GIT_TRACE_REFS",
+        "GIT_TRACE_SETUP",
+        "GIT_TRACE_SHALLOW",
+        "GIT_WORK_TREE",
+        "GIT_CONFIG",
+        "GIT_CONFIG_COUNT",
+        "GIT_CONFIG_KEY_0",
+        "GIT_CONFIG_VALUE_0",
+        "GIT_CONFIG_PARAMETERS",
+        "GIT_PROXY_COMMAND",
+        "GIT_TEMPLATE_DIR",
+        "GIT_PAGER_IN_USE",
+        "GIT_EDITOR_X",
+        "GIT_",
+    }
+)
+# The variables of git the guard admits beside a push (unit 0014).
+ADMITTED = frozenset(
+    {"GIT_EDITOR", "GIT_PAGER", "GIT_SEQUENCE_EDITOR", "GIT_TERMINAL_PROMPT"}
+)
 
 
 def grant(**fields: object) -> dict:
@@ -133,6 +231,27 @@ class Repository:
         for patch in reversed(self.patches):
             patch.stop()
         self.tmp.cleanup()
+
+    def reply(self, command: str) -> dict | None:
+        """Return the guard's whole reply to one shell command in the work.
+
+        Parameters
+        ----------
+        command : str
+            The command line.
+
+        Returns
+        -------
+        dict | None
+            The reply, with its reason, or None for no answer.
+        """
+        event = {
+            "tool_name": "Bash",
+            "tool_input": {"command": command},
+            "cwd": str(self.work),
+        }
+        policy = guard.read_policy(self.policy)
+        return guard.decide(guard.check_call(event, policy), policy)
 
     def answer(
         self, command: str, cwd: str | None = None, tool: str = "Bash"
@@ -437,14 +556,91 @@ class PushShape(RepositoryCase):
 
     def test_environment_variable_of_git(self) -> None:
         """Behavior: while the account's environment sets a variable of
-        git, an authorized push is referred.
+        git other than the four admitted, an authorized push is
+        referred, and the reason names the variable; one admitted beside
+        it does not lift the referral. Every variable that git(1) lists
+        is tried, set to a word and to the empty string.
 
-        Reference: such a variable can name another configuration file
-        or a program for the transport.
+        Reference: such a variable can name another repository, another
+        configuration file or more configuration, a program for the
+        transport, a proxy, or the programs git runs (git(1),
+        Environment Variables). Review of unit 0014, M2: a sample left
+        eight extra admissions unseen.
         """
-        with mock.patch.dict(os.environ, {"GIT_CONFIG_GLOBAL": "/x"}):
-            self.assert_answers(ASK, "git push origin main")
+        for name in GIT_VARIABLES - ADMITTED:
+            for value in ("x", ""):
+                with self.subTest(name=name, value=value):
+                    with mock.patch.dict(os.environ, {name: value}):
+                        self.assert_answers(ASK, "git push origin main")
+                    with mock.patch.dict(
+                        os.environ, {name: value, "GIT_EDITOR": "true"}
+                    ):
+                        reply = self.repo.reply("git push origin main")
+                    output = reply["hookSpecificOutput"]
+                    self.assertEqual(output["permissionDecision"], ASK)
+                    self.assertIn(
+                        f"the environment sets a variable of git, {name}",
+                        output["permissionDecisionReason"],
+                    )
 
+    def test_admitted_list_is_closed(self) -> None:
+        """Behavior: the guard admits exactly four variables of git, and
+        each of them is one that git(1) lists.
+
+        Reference: review of unit 0014, M2. A fifth name fails here
+        before any reasoning about it is recorded.
+        """
+        self.assertEqual(guard.GIT_ADMITTED, ADMITTED)
+        self.assertLessEqual(ADMITTED, GIT_VARIABLES)
+
+    def test_admitted_variables_of_git(self) -> None:
+        """Behavior: GIT_EDITOR, GIT_SEQUENCE_EDITOR, GIT_PAGER, and
+        GIT_TERMINAL_PROMPT set to ``0`` or ``false``, each alone and
+        all together, leave an authorized push allowed; a push the
+        policy does not name is still referred. GIT_TERMINAL_PROMPT with
+        any other value refers.
+
+        Reference: unit 0014. A push launches no editor, pages only
+        under ``--paginate`` or ``pager.push``, and GIT_TERMINAL_PROMPT
+        set false only stops a prompt (git(1), Environment Variables;
+        git-config(1), ``pager.<cmd>``). Claude Code sets
+        ``GIT_EDITOR=true`` in the agent's shell, so before this unit
+        every authorized push in a session whose hook inherits it was
+        referred. Review of unit 0014, L1: a true value was admitted.
+        """
+        values = {
+            "GIT_EDITOR": "true",
+            "GIT_SEQUENCE_EDITOR": "evil",
+            "GIT_PAGER": "evil",
+            "GIT_TERMINAL_PROMPT": "0",
+        }
+        cases = [
+            *({k: v} for k, v in values.items()),
+            {"GIT_TERMINAL_PROMPT": "false"},
+            values,
+        ]
+        for change in cases:
+            with (
+                self.subTest(change=change),
+                mock.patch.dict(os.environ, change),
+            ):
+                self.assert_answers(ALLOW, "git push origin main")
+                self.assert_answers(ASK, "git push origin other")
+        for value in ("1", "true", "yes", "", "FALSE", "no", "off", "00"):
+            with (
+                self.subTest(prompt=value),
+                mock.patch.dict(
+                    os.environ,
+                    {"GIT_TERMINAL_PROMPT": value, "GIT_EDITOR": "true"},
+                ),
+            ):
+                reply = self.repo.reply("git push origin main")
+                output = reply["hookSpecificOutput"]
+                self.assertEqual(output["permissionDecision"], ASK)
+                self.assertIn(
+                    "a variable of git, GIT_TERMINAL_PROMPT",
+                    output["permissionDecisionReason"],
+                )
 
 class RepositoryFound(RepositoryCase):
     """Only the work's own, valid repository is read (security H2)."""
@@ -516,10 +712,13 @@ class Redirection(unittest.TestCase):
     def test_repository_configuration(self) -> None:
         """Behavior: a repository configuration that rewrites addresses,
         sets a push address, gives two addresses, includes another file,
-        pushes tags or submodules, names a program that git runs, or is
-        not readable leaves an authorized push referred.
+        pushes tags or submodules, names a program that git runs,
+        defines a hook, signs or pages the push, sets a policy of
+        protocols or a variant of ssh, or is not readable leaves an
+        authorized push referred.
 
-        Reference: STND.HARN.29; security review M2.
+        Reference: STND.HARN.29; security review M2; review of unit
+        0014, M1 and L3.
         """
         for extra in (
             (
@@ -537,6 +736,21 @@ class Redirection(unittest.TestCase):
             "[push]\n\tfollowTags = true\n",
             "[push]\n\trecurseSubmodules = on-demand\n",
             "[submodule]\n\trecurse\n",
+            "[pager]\n\tpush = true\n",
+            "[Pager]\n\tPush = evil\n",
+            # Review of unit 0014, M1: a hook defined in the
+            # configuration runs in the push (probe: it touched a file).
+            '[hook "h"]\n\tevent = pre-push\n\tcommand = evil\n',
+            "[hook.h]\n\tcommand = evil\n",
+            "[hook]\n\tjobs = 2\n",
+            # L3: what the guard does not model refers.
+            "[push]\n\tgpgSign = if-asked\n",
+            "[gpg]\n\tprogram = evil\n",
+            "[gpg]\n\tformat = ssh\n",
+            '[gpg "ssh"]\n\tprogram = evil\n',
+            '[protocol "ext"]\n\tallow = always\n',
+            "[protocol]\n\tallow = always\n",
+            "[ssh]\n\tvariant = simple\n",
             "[core]\n\tsshCommand = evil\n",
             "[core]\n\thooksPath = hooks\n",
             "[core]\n\tfsmonitor = evil\n",
@@ -601,6 +815,43 @@ class Redirection(unittest.TestCase):
                     path.write_text(rewrite, encoding="utf-8")
                     self.assertEqual(repo.answer("git push origin main"), ASK)
                     path.unlink()
+        finally:
+            repo.close()
+
+    def test_hook_defined_in_configuration(self) -> None:
+        """Behavior: a pre-push hook defined by ``hook.<name>.event`` and
+        ``hook.<name>.command``, in the repository's, the account's, or
+        the system's configuration, with the hooks directory empty,
+        leaves an authorized push referred, and the reason names the
+        section.
+
+        Reference: review of unit 0014, M1: git 2.56 ran such a hook in
+        a push (its probe touched a file), and the guard answered allow;
+        git-config(1), ``hook.<friendly-name>.command``.
+        """
+        hook = '[hook "h"]\n\tevent = pre-push\n\tcommand = touch HOOKRAN\n'
+        repo = Repository(ORIGIN, [grant()])
+        try:
+            self.assertEqual(repo.answer("git push origin main"), ALLOW)
+            config = repo.git / "config"
+            for path in (
+                config,
+                repo.home / ".gitconfig",
+                repo.home / ".config" / "git" / "config",
+                repo.system,
+            ):
+                with self.subTest(path=path):
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    before = path.read_text() if path.exists() else ""
+                    path.write_text(before + hook, encoding="utf-8")
+                    reply = repo.reply("git push origin main")
+                    output = reply["hookSpecificOutput"]
+                    self.assertEqual(output["permissionDecision"], ASK)
+                    self.assertIn(
+                        "the git configuration sets hook.",
+                        output["permissionDecisionReason"],
+                    )
+                    path.write_text(before, encoding="utf-8")
         finally:
             repo.close()
 
@@ -732,6 +983,25 @@ class TrackerPost(RepositoryCase):
             f"gh issue comment 2² {repo} -b x",
             f"./gh issue comment 1 {repo} -b x",
         )
+
+    def test_environment_variable_of_gh(self) -> None:
+        """Behavior: while the account's environment sets any variable
+        of gh, an authorized post is referred; the admitted variables of
+        git do not reach a post.
+
+        Reference: such a variable can name another host or repository,
+        or a token or configuration (gh help environment); unit 0014
+        admits no variable of gh.
+        """
+        post = "gh issue comment 1 -R git.example.org/team/work -b x"
+        for name in ("GH_REPO", "GH_HOST", "GH_TOKEN", "GH_CONFIG_DIR"):
+            with (
+                self.subTest(name=name),
+                mock.patch.dict(os.environ, {name: "x"}),
+            ):
+                self.assert_answers(ASK, post)
+        with mock.patch.dict(os.environ, {"GIT_EDITOR": "true"}):
+            self.assert_answers(ALLOW, post)
 
     def test_gh_aliases_and_extensions(self) -> None:
         """Behavior: setting a gh alias or installing an extension is a

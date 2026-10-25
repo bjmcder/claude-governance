@@ -12,18 +12,29 @@ from __future__ import annotations
 import contextlib
 import io
 import json
+import shlex
+import shutil
 import subprocess
 import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
 
+from govharness.cli.environment import HARNESS
 from govharness.cli.main import main
 from govharness.core.corpus import Corpus
 from govharness.derive.environment import claude_code
 from govharness.derive.environment.inputs import Inputs
 from govharness.derive.environment.outcomes import read_outcomes
 from govharness.workflows.environment import installed_problems
+from tests.derive.test_authorizations import (
+    IDENT,
+    ROLE,
+    frozen_clock,
+    no_anchor,
+    record,
+    write_authorization,
+)
 from tests.support import corpus_copy, live_entries
 
 INPUTS = Inputs(work="/srv/work", home="/home/agent", domains=("pypi.org",))
@@ -431,6 +442,184 @@ class Command(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertIn(str(claude_code.SETTINGS), written)
         self.assertEqual(len(written), 6)
+
+
+def printed_check(notes: str) -> tuple[str, list[str]]:
+    """Return the directory and the command of INSTALL.md's check.
+
+    Parameters
+    ----------
+    notes : str
+        Text of INSTALL.md.
+
+    Returns
+    -------
+    tuple[str, list[str]]
+        The directory its ``cd`` names, and the words of the command
+        after ``python3 -B -m govharness``, as the shell splits them.
+    """
+    block = notes.split("## Check", 1)[1].split("```sh\n", 1)[1]
+    block = block.split("```", 1)[0].replace("\\\n", "")
+    cd, command = block.strip().split("\n")
+    words = shlex.split(command)
+    assert words[:4] == ["python3", "-B", "-m", "govharness"], words
+    return shlex.split(cd)[1], words[4:]
+
+
+def install(out: Path, root: Path) -> None:
+    """Copy the files under ``out/root`` beneath ``root``, as root would.
+
+    Parameters
+    ----------
+    out : Path
+        Output directory of a derivation.
+    root : Path
+        Directory standing for ``/``.
+    """
+    for path in (out / "root").rglob("*"):
+        if path.is_file():
+            target = root / path.relative_to(out / "root")
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(path, target)
+    for program in claude_code.PROGRAMS:
+        target = root / program.lstrip("/")
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text("", encoding="utf-8")
+
+
+class PrintedCheck(unittest.TestCase):
+    """Unit 0014: INSTALL.md's check, run as printed, checks clean."""
+
+    def check(self, notes: str, root: Path) -> tuple[int, str]:
+        """Run the printed check against files installed under ``root``.
+
+        The account's reach is simulated as empty, as in
+        ``InstalledCheck``, since the tests may run as root.
+
+        Parameters
+        ----------
+        notes : str
+            Text of INSTALL.md.
+        root : Path
+            Directory standing for ``/``.
+
+        Returns
+        -------
+        tuple[int, str]
+            Exit status and output.
+        """
+        directory, argv = printed_check(notes)
+        self.assertEqual(Path(directory), HARNESS)
+        self.assertEqual(argv[-1], "--check")
+        shown = io.StringIO()
+        with (
+            mock.patch(
+                "govharness.cli.environment.installed_problems",
+                lambda files, _, programs: installed_problems(
+                    files, root, programs
+                ),
+            ),
+            mock.patch("govharness.ledger.gpg.os.access", lambda p, _: False),
+            contextlib.redirect_stdout(shown),
+        ):
+            code = main(argv)
+        return code, shown.getvalue()
+
+    @frozen_clock()
+    @no_anchor()
+    def test_printed_check_passes(self) -> None:
+        """Behavior: for a derivation given every option that applies,
+        the check that INSTALL.md prints, run as given from the
+        directory it names, exits 0 with ``environment: PASS``; the
+        check with only ``--work`` and ``--home``, as INSTALL.md printed
+        it before, reports that the files differ.
+
+        Reference: installation-kit check of 2026-10-25, finding 1
+        (``review-records/round-2026-10-25-close/install-kit.md``).
+        Assured work requires a signature, so its derivation names no
+        authorization and is a case of its own. The authorization
+        expires beyond the default horizon, so that a check without the
+        derivation's horizon fails.
+        """
+        cases = {
+            "authorized": [
+                "--open", "OPEN", "--domain", "pypi.org",
+                "--domain", "api.github.com", "--tool", "mcp__docs__*",
+                "--search", "--unattended", "--secret-store",
+                "--secret", "token", "--secret", ".hidden",
+                "--authorization", IDENT, "--role", ROLE,
+                "--expiry-horizon", "200", "--accept-unsigned",
+            ],
+            "assured": ["--assured", "--secret-store",
+                        "--expiry-horizon", "none"],
+        }
+        for label, options in cases.items():
+            with self.subTest(case=label), corpus_copy() as corpus:
+                # 128 days after the clock: beyond the default horizon.
+                write_authorization(
+                    corpus, expires="2027-03-01T00:00:00+00:00"
+                )
+                record(corpus)
+                base = corpus.parent
+                (base / "open").mkdir()
+                options = [
+                    str(base / "open") if o == "OPEN" else o
+                    for o in options
+                ]
+                out, root = base / "out", base / "slash"
+                with contextlib.redirect_stdout(io.StringIO()):
+                    written = main([
+                        "environment", str(corpus), "--work", str(corpus),
+                        "--home", str(base), *options, "--write", str(out),
+                    ])
+                self.assertEqual(written, 0)
+                install(out, root)
+                notes = (out / claude_code.INSTALL).read_text()
+                code, shown = self.check(notes, root)
+                self.assertEqual((code, shown.splitlines()[-1]),
+                                 (0, "environment: PASS"), shown)
+                bare = (
+                    f"## Check\n```sh\ncd {HARNESS}\npython3 -B -m "
+                    f"govharness environment {corpus} --work {corpus} "
+                    f"--home {base} --check\n```\n"
+                )
+                code, shown = self.check(bare, root)
+                self.assertEqual(code, 1)
+                self.assertIn("differs from its generation", shown)
+
+    def test_notes_name_the_steps(self) -> None:
+        """Behavior: INSTALL.md names the programs the check tests, says
+        where to run the installation, and gives the command that
+        appends the draft entry to the corpus ledger, with its fields.
+
+        Reference: installation-kit check, findings 2 to 4.
+        """
+        with corpus_copy() as corpus:
+            out = corpus.parent / "out"
+            with contextlib.redirect_stdout(io.StringIO()):
+                main([
+                    "environment", str(corpus), "--work", str(corpus),
+                    "--home", str(corpus), "--write", str(out),
+                ])
+            notes = (out / claude_code.INSTALL).read_text()
+            draft = json.loads((out / claude_code.ENTRY).read_text())
+        for program in claude_code.PROGRAMS:
+            self.assertIn(f"`{program}`", notes)
+        self.assertIn("/usr/bin/socat", claude_code.PROGRAMS)
+        self.assertIn(shlex.join(["cd", str(out.resolve())]), notes)
+        self.assertIn(f"`{corpus.resolve()}/ledger.jsonl`", notes)
+        self.assertNotIn("work ledger", notes)
+        record = notes.split("## Record", 1)[1]
+        append = record.split("```sh\n", 1)[1].split("```", 1)[0]
+        words = shlex.split(append.replace("\\\n", ""))
+        start = words.index("python3")
+        self.assertEqual(
+            words[start + 4:start + 7],
+            ["ledger", "append", str(corpus.resolve())],
+        )
+        self.assertIn(draft["rationale"], words)
+        self.assertIn(",".join(draft["targets"]), words)
+        self.assertNotIn("--sign", words)
 
 
 class InstalledCheck(unittest.TestCase):
