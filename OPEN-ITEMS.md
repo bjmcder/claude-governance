@@ -4,15 +4,14 @@ Work that the custodian has directed or that a ratified round left open. It repl
 
 ## Harness, in the custodian's order
 
-1. **Faster logic check.** Each transaction runs a full `verify`, and about 20 s of its 22.6 s go to the pure-Python DPLL solver in `harness/govharness/checks/logic/satlib.py`. Its unit propagation rescans every clause. Faster propagation (watched literals, or an index from literals to clauses) is a harness unit of its own, with tests and a review (custodian, 2026-10-24: next, after the round of 2026-10-24).
-2. **STND.HARN.30, unsigned reliance (decision).** Unit 0010 (merged) refuses an unsigned authorization where no signer register exists unless the owner passes `--accept-unsigned`, and names it in the coverage report. The unit record proposes a new provision STND.HARN.30 so that the rule is in the corpus and not only in this harness. The custodian decides whether to adopt it, and how STND.DRAFT.42 reads on an owner's acceptance at derivation. Source: `harness/records/units/0010-unsigned-authorizations.md`.
-3. **QA.8 code review, then installation.** First, a code review of the harness by an agent of another configuration. Then install the derived configuration and run three installation tests, recording the results in unit 0008 (custodian, 2026-10-24: after the QA.8 review):
+1. **STND.HARN.30, unsigned reliance (decision).** Unit 0010 (merged) refuses an unsigned authorization where no signer register exists unless the owner passes `--accept-unsigned`, and names it in the coverage report. The unit record proposes a new provision STND.HARN.30 so that the rule is in the corpus and not only in this harness. The custodian decides whether to adopt it, and how STND.DRAFT.42 reads on an owner's acceptance at derivation. Source: `harness/records/units/0010-unsigned-authorizations.md`.
+2. **QA.8 code review, then installation.** First, a code review of the harness by an agent of another configuration. Then install the derived configuration and run three installation tests, recording the results in unit 0008 (custodian, 2026-10-24: after the QA.8 review):
    - the guard's `allow` for an authorized `git push` or `gh` post against the kept ask rules;
    - the secret store's narrower `allowRead` against its `denyRead` pattern (unit 0007);
    - a shell write to `.git/config` failing under the M-a `denyWrite`.
 
    The transition of ledger entry 53 for STND.HARN.18 ends when that reviewed harness is installed and its configure entry records it. Whether the entry-53 transition for STND.HARN.26 to .28 has ended is for the custodian to record.
-4. **M-b: expiry horizon.** Give `--expiry-horizon` a stated default bound. Later.
+3. **M-b: expiry horizon.** Give `--expiry-horizon` a stated default bound. Later.
 
 ## Corpus, in progress
 
