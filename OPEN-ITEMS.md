@@ -4,9 +4,8 @@ This file lists the work the custodian has directed, and the items a ratified ro
 
 ## Harness, in the custodian's order
 
-1. **Unit 0013, the References check.** The harness check of References (g.25) also reads bare document names, so that the table and the check agree. It reads the documents that STND.DRAFT.34 asks to hold References (LVL1 to LVL3), and it skips the Revision History and tables of example identifiers, as `tools/check_refs.py` does. It is a defect-class check, and `verify` passes on the live corpus (definition of done of 2026-10-25, item 8).
-2. **QA.8 code review of the whole harness**, after unit 0013, by an agent of another configuration. Every High and Medium finding is fixed and verified (item 9).
-3. **Installation, the custodian's own step.** The steps are in `tools/install-tests.md`:
+1. **QA.8 code review of the whole harness**, now that units 0009 to 0014 are merged, by an agent of another configuration. Every High and Medium finding is fixed and verified (item 9).
+2. **Installation, the custodian's own step.** The steps are in `tools/install-tests.md`:
    1. Install `socat`. The sandbox needs it, and `environment --check` reports it missing.
    2. Derive the configuration from the merged harness, and install it as root, as INSTALL.md states.
    3. Run the three installation tests, and record the results in unit 0008.
@@ -14,7 +13,10 @@ This file lists the work the custodian has directed, and the items a ratified ro
 
    Whether the transition of entry 53 for STND.HARN.26 to .28 has ended is also for the custodian to record.
 
-## Corpus, for a later round (custodian, 2026-10-25)
+## Corpus, for a later round
+
+The first two the custodian deferred on 2026-10-25; the third arose from unit 0013.
 
 - **Foreign interfaces in STND.CODE.** Add one STND.CODE provision on foreign interfaces, with one definition of Foreign interface (now defined in five standards) and one of Lock file (in STND.PY and STND.RUST). It replaces the callback, ownership, and lock-file rules that now stand alike in several language standards (GOV.31). This is decision 26 of `review-records/round-2026-10-25-close/decisions-final.md`.
 - **STND.OFFLD.31 and the first filling of caches and memory**, which STND.PERF.12 names. Consider it at STND.OFFLD's next minor amendment (decision 27).
+- **STND.DRAFT and g.25 (unit 0013).** An editorial amendment of STND.DRAFT's informative text on the harness, saying that g.25 also fails when the text names a document by its bare identifier without citing it. With it, the custodian decides whether the Terms should say that a document named in the text, or written alone in parentheses, is a cited document; g.25's defect class rests on the reading of STND.DRAFT.34 given in decision 22 (`harness/records/units/0013-references-bare-names.md`).
