@@ -230,7 +230,7 @@ RATIONALE = (
     "STND.CLASS.10 and applies from CSQ3; no other onset changes. Floor (GOV.11): no binding provision changes its "
     "obligation, and the floor argument for the reach of the term is the one that the ratification of 2026-10-24 "
     "accepted for STND.RUST.15, and for a function outside library code that the documentation or the "
-    "repository configuration names, the same argument in the Notes, which the custodian decides (R22). Transition (GOV.42): existing Rust source conforms when a change next touches it. "
+    "repository configuration names, the same argument in the Notes, which the custodian accepts at ratification (R22). Transition (GOV.42): existing Rust source conforms when a change next touches it. "
     "Review of STND.HARN.28 by the command pairs; record review-records/round-2026-10-25-close/p3/."
     " Text authored by an agent, Claude (Anthropic), at the custodian's direction (REPRO.5)."
     " Under the ruling of ledger entry 15, this decision is the QA.7 review.")

@@ -152,7 +152,9 @@ RATIONALE = (
     "of the ledger; it tests the same transaction as before. "
     + ("STND.HARN.30 follows the proposal of the record of unit 0010, with its first sentence recast so that no "
        "condition trails its clause (STND.DRAFT.16). " if OPTION == "a" else "")
-    + ("The floor arguments and the reading of STND.DRAFT.42 in the Notes are put to the custodian at ratification. "
+    + ("The custodian rules at ratification that the floor arguments of the Notes hold, and reads STND.DRAFT.42 so that "
+       "the human owner's acceptance at the derivation is part of the grant that GUARD.10 reserves to the human "
+       "owner, made once for each derivation, and no decision that LVL0 does not assign. "
        if OPTION == "a" else
        "The floor argument of the Notes is put to the custodian at ratification. STND.HARN.29 asks for no act of "
        "the human owner, so the amendment rests on no reading of STND.DRAFT.42; a harness that refuses an "
