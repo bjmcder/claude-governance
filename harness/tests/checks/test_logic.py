@@ -573,7 +573,8 @@ class HeldBehavior(unittest.TestCase):
     def test_table_rows_in_d1(self) -> None:
         """Behavior: d.1 reads the table rows of a provision, takes a
         quoted expression there as a mention, and leaves out a table
-        that the provision names in ``defines``.
+        that the provision names in ``defines`` and the tables of an
+        entry that is not a provision.
 
         Reference: STND.DRAFT, Normative and informative parts, and
         STND.DRAFT.3; QA.8 part C, M2.
@@ -588,6 +589,10 @@ class HeldBehavior(unittest.TestCase):
                 "PASS",
             ),
             "used": (_table_row("STND.PERF.1", "It may not run."), "FAIL"),
+            "outside a provision": (
+                _table_row("STND.PERF", "The code may not run."),
+                "PASS",
+            ),
         }
         for name, (mutation, want) in cases.items():
             with self.subTest(name):

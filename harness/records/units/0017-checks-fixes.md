@@ -130,4 +130,7 @@ Tests, per STND.TEST, from `harness/` with `TMPDIR` in scratch:
 
 ## Review
 
-Left to the reviewer.
+- The review of commit 0769aee (`review-records/harness/review-unit-0017.md`) accepted the unit: no High finding, two Medium (M-A, M-B), both test gaps, and Low findings. It merged the branch into main in a scratch worktree, cleanly, and the check tests, `test_architecture`, `test_conventions`, `cli.test_main`, and `verify governance` passed there.
+- M-A, fixed by the lead: the typographic apostrophe was held only for `n’t`. The case "typographic contraction of will" (`The tool’ll halt.`) and the test `test_person_word_inside_a_word` (`d'us` and `d’us`, an exact PASS, since the table of cases asserts only a lower bound) now kill the reviewer's two mutants, the suffix class and the person-word lookbehind narrowed to `'`; each was rerun and fails.
+- M-B, fixed by the lead: the case "outside a provision" of `test_table_rows_in_d1` (a table in the informative text of STND.PERF) kills the mutant that makes `table_rows_kept` true for every entry; rerun, it fails.
+- Low, fixed: the README check table has a row for `unpinned`. The other Lows (Example columns read by `table_cells`, a provision with a defined and an undefined table, U+2018, U+02BC and U+00B4, the remaining equivalent or message-only mutants, the drift of "entry 175") are not fixed in this unit, by the custodian's decision of 2026-10-25 to close the harness work at a bounded point.

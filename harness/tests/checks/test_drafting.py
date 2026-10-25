@@ -358,6 +358,10 @@ CASES: dict[str, tuple[Mutation, dict[str, str]]] = {
         _append("STND.DRAFT.2", "The tool doesn\u2019t halt."),
         {"g.21": "FAIL"},
     ),
+    "typographic contraction of will": (
+        _append("STND.DRAFT.2", "The tool\u2019ll halt."),
+        {"g.21": "FAIL"},
+    ),
     # ``core.text`` ends a sentence at a semicolon only before a capital,
     # so the second clause opens with one (QA.8 part C, L3).
     "two modals joined by a semicolon": (
@@ -491,6 +495,20 @@ class DraftingChecks(unittest.TestCase):
                         RANK[status],
                         f"{name}: {key} is {got.get(key)}, want {status}",
                     )
+
+    def test_person_word_inside_a_word(self) -> None:
+        """Behavior: a person word joined to a word by an apostrophe,
+        straight or typographic, is part of that word, and g.21 passes.
+
+        Reference: STND.DRAFT.32 and its table of person words; QA.8
+        part C, H2, and the review of unit 0017, M-A.
+        """
+        for mark in ("'", "\u2019"):
+            with self.subTest(mark=mark):
+                got = statuses(
+                    _append("STND.DRAFT.2", f"The table names d{mark}us.")
+                )
+                self.assertEqual(got.get("g.21", "PASS"), "PASS")
 
     def test_traceability_knows_every_registered_key(self) -> None:
         """Behavior: g.23 accepts a key of any registered check, whatever
