@@ -77,3 +77,16 @@ Cold verification of draft 0.2: verify-0.2.md. New in this step: draft-0.3.md, S
 | O3: partial oracle and NUMER.6 | Accepted in the Notes. |
 | O4: source of "the studies" | Accepted: "the studies of t1, H1". |
 | Coalesce: STND.PERF | Accepted: the Notes read "The evaluation of performance belongs to STND.PERF, whose STND.PERF.23 holds the regression guard on time"; References list STND.PERF. |
+
+# Dispositions: STND.TEST 0.3, lead's corrections
+
+Delta verification of draft 0.3: verify-0.3.md.
+
+| Finding | Disposition |
+| --- | --- |
+| D1: STND.TEST.10 s2 limits the run before a release, which STND.TEST.6 makes a full-suite run | Accepted: s2 opens "Other than a full-suite run under STND.TEST.6"; the Notes say the run before the advance of a main line is the full-suite run of STND.TEST.6, which no selection limits. |
+| S1: the rationale omits the pre-merge limit | Accepted: "and runs before a merge to the selection of STND.TEST.5, a full-suite run excepted". |
+| S2: the secret exclusion in STND.TEST.11 follows only the last item | Accepted: "the first assertion that failed with its message, and the output that the assertion judged, each kept without a secret". |
+| O1: STND.TEST.10 s3 has no antecedent | Accepted: "Where a run on a branch, other than a full-suite run under STND.TEST.6, holds tests that the first two sentences leave out". |
+| O2: STND.TEST.5 sets a tier against tests | Accepted: "beside the tests that STND.TEST.4 holds from every tier". |
+| O3: "the regression guard on time" against STND.PERF.23's "a quantity" | Accepted: "the regression guard on a performance quantity, time among them". |

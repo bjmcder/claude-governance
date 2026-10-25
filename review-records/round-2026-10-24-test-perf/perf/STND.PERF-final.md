@@ -1,0 +1,258 @@
+# Performance evaluation standard (STND.PERF) 1.0
+
+Adopted by The Custodian as revision 1.0 in ledger entry 143 (2026-10-25). This reading copy is composed from the per-provision files in STND/PERF/ of the governance harness; the harness files are the system of record.
+
+## Purpose and scope
+
+This standard holds the systematic evaluation of the performance of code: its time, memory, energy, and the other resources that it uses, and the events that its hardware counts. It applies where a task calls for such an evaluation or the code is performance-sensitive. It adds to RSRC, HW, STND.VVUQ, and STND.OFFLD only what an evaluation of performance makes necessary. It covers performance sensitivity and performance requirements (STND.PERF.1 and STND.PERF.2); the question that an evaluation answers, absolute, relative, or scaling (STND.PERF.3 to STND.PERF.7); the choice of method and its limits (STND.PERF.8, STND.PERF.9, and STND.PERF.10); the design of measurements (STND.PERF.11 to STND.PERF.16); summary and comparison (STND.PERF.17 to STND.PERF.21); the detection of regressions over a recorded history (STND.PERF.22, STND.PERF.23, and STND.PERF.24); and the cost of the evaluation itself (STND.PERF.25 and STND.PERF.26).
+
+Every provision is a default (GOV.19), which a project replaces by a recorded decision with an alternative that meets the same higher-level outcome (REPRO.7). The standard prescribes no method: it states what an evaluation shows and records, and leaves the choice of method to the evaluation, which states it with its reason. It is method, tool, platform, vendor, and implementation agnostic: its provisions name no profiler, counter interface, hardware event, statistical test, benchmark suite, product, or revision of a specification (GOV.18). The method of writing, running, and interpreting test suites belongs to the standard on test suites; a regression guard on a performance quantity belongs to this standard.
+
+## Normative and informative parts
+
+The body of a numbered provision, including a table it contains, is normative. Everything else is informative.
+
+## Terms
+
+This section fixes meaning and imposes no obligation, as the Lexicon does. Baseline, Budget, Component, Regression guard, and Resource have the meanings that the Lexicon gives them; the baseline of a scaling question is the Baseline of the Lexicon. Execution path and Constrained target have the meanings that HW gives them. Asynchronous operation and Concurrent task have the meanings that STND.CONC gives them. Offloaded work has the meaning that HW.GPU gives it.
+
+| Term | Definition |
+| --- | --- |
+| Performance evaluation | A measurement or analysis of the resource use of code, or of the events that its hardware counts while it runs, that answers a question about the performance of that code; STND.PERF.3 and STND.PERF.8 state what makes it systematic. |
+| Performance-sensitive | Of code, a component included: that the record of the code, or of a task that changes it, states a performance requirement for it, or states that its resource use is material to the purpose of the work, with the reason. |
+| Performance requirement | A budget of code, or a bound on the ratio of a quantity of its resource use to that of a comparison base at a stated problem size, that the record of the code states. |
+| Absolute question | A question of a performance evaluation that judges a measured quantity against a performance requirement or against a bound derived from the work that the code performs and the hardware that performs it. |
+| Relative question | A question of a performance evaluation that judges a measured quantity of code against the same quantity of a comparison base. |
+| Scaling question | A question of a performance evaluation that judges how a measured quantity changes with problem size, with the number of concurrent tasks or processes, or with the hardware. |
+| Comparison base | The earlier version, other configuration, or other method of code against which a relative question compares it. |
+| Performance sample | One measured value of a performance quantity, from one repetition at the lowest level at which the performance evaluation records its measurements. |
+| Practical threshold | The smallest change of a performance quantity that a performance evaluation treats as mattering to the claim that it judges. |
+| Performance history | The record of the performance quantities of code across its revisions, each point with the revision, the execution path and environment, and the measurement design under which it was measured. |
+| Benchmark | A program, with its inputs and problem sizes, whose runs a performance evaluation measures; REPRO.10 holds that it is versioned. |
+
+## Notes
+
+The research notes are research/perf-notes/p1-measurement-design.md and research/perf-notes/p2-questions-and-methods.md, cited below as p1 and p2 with their hazard tables. The provisions rest on what those notes find stable: a measurement is a sample, and variation arises at more than one level; the environment and the layout of a program bias a measurement apart from the code; timers, instruments, and sampling perturb or limit what they observe; a central statistic fits or misfits its unit; a fixed threshold misjudges a series whose noise is unequal and changing; and a compiler removes or folds work whose result is unused or constant (p1 and p2, "Timeless versus moving"). The figures quoted below describe hardware and software of 2007 to 2020 and show kinds of effect, not current magnitudes; the literature's figures, among them a timer cost under 5 percent of the interval, 30 runs, or a coefficient of variation of 0.02, are examples, and no provision adopts them. Where a source was read as an extract that a retrieval tool wrote, p1 and p2 say so, and they mark what they did not confirm.
+
+What the corpus already holds is cited and not restated (GOV.31). RSRC.1 holds budgets with their problem size, RSRC.2 measurement and tracking from the first run where a budget is unknown and no claim of adequacy without a budget or a tracked record, RSRC.3 time, memory, energy, and cost recorded with each run, RSRC.4 optimization only against a measured shortfall or adverse trend, RSRC.5 the asymptotic cost settled first, RSRC.8 the measured baseline at the smallest feasible scale, and RSRC.11 the smallest set of checks that establishes the evidence. HW.22 holds a claim, in a reported result or a release, that one execution path is faster than another, and its third sentence the comparator's rate as a fraction of its peak; STND.VVUQ.77 extends its conditions to a learned against a numerical method. HW.3 records the items of an execution path that affect a result, HW.CPU.4 and HW.GPU.4 the threads, placement, data movement, and peak memory of a run that measures its resource use, and HW.20 and HW.21 the budgets of a constrained target. STND.OFFLD.31 holds the completion and first-use costs of a measurement of offloaded work, and STND.CONC.1 the observation of each asynchronous completion. NUMER.17 verifies the results of an approximation adopted for speed; INTPR.9 has each reported output state its units and uncertainty basis; REPRO.10 makes a benchmark harness a versioned artifact. VV.7, VV.8, and STND.VVUQ.17 hold regression guards on results; none of them holds a guard on a performance quantity, which STND.PERF.23 adds.
+
+STND.PERF.1 adds to RSRC.2 and RSRC.4 that a claim about the performance of sensitive code rests on a systematic evaluation, in the sense of the Term, and not on one timing. Performance sensitivity is a statement in a record with its reason, a deadline, a bound on cost, a target of scale, or a resource shared with other work (p2, H6); it triggers the evaluation without choosing its method, and no provision asks the human owner for it (STND.DRAFT.42). STND.PERF.2 adds to RSRC.1 what a budget needs before it is checkable: the path, the conditions, the statistic, and the margin (p2, answer 20). A bound on a ratio becomes a limit on a resource at a stated size once its comparison base is measured, which is why the Term admits it as a requirement. For a constrained target, HW.20 holds the margin and conditions, and a deadline whose miss HW.20 governs needs a bound on worst-case execution time, which no statistic of samples gives.
+
+STND.PERF.3 reads the custodian's direction to evaluate the absolute, relative, and scaling behavior of code as asking that an evaluation consider all three questions and state why it leaves one out; requiring all three in every evaluation would block work where one of them has no meaning, a scaling question for code that runs at one size, for one. STND.PERF.3 also asks for the practical threshold with the claim, so that STND.PERF.13, STND.PERF.14, STND.PERF.19, and STND.PERF.26, which test against it, always have one. A bound from the work and the limiting resource, as in a roofline analysis, which bounds the attainable rate by the peak compute rate and by the rate of data movement times the operations per byte moved, shows the room left and which resource limits the code (p2, H1) (STND.PERF.4); the fraction of the bound is not a budget, so a claim of shortfall and an optimization still need the budget or tracked record of RSRC.2 and RSRC.4. The second sentence of STND.PERF.4 is the form for an absolute question of what the third sentence of HW.22 asks of the comparator of a claim across paths, and a ceiling measured by a controlled micro-benchmark is often nearer what code attains than a documented peak (p2, H1). A ratio without the absolute values of its comparison base hides a weak base: one survey found that 15 of 39 papers that reported a speedup gave no absolute performance of the base (p2, H2) (STND.PERF.19). STND.PERF.5 holds the comparison on one path, which HW.22 does not reach, and brings the conditions of HW.22 to a comparison across paths that no reported result or release states, a decision record or a task report among them. Strong scaling, with the total work fixed, and weak scaling, with the work per task fixed, answer different questions; the bound of Amdahl and the scaled speedup of Gustafson are models, each with an assumption (p2, H3) (STND.PERF.6).
+
+The number three in STND.PERF.7 rests on inference and is unverified: neither p1 nor p2 gives a count, and p2 asks only for sizes over a range wide enough to separate rates of growth (p2, answer 7). The analogy is STND.CONC.24, which tests correctness at three or more numbers of tasks, a different purpose. Three values are the fewest from which a change in the rate of growth shows at all. The view that a trend fitted to a handful of values says little far beyond them is p2's own synthesis (p2, "Not verified"). Memory per task and in total, and the volume of communication, scale as time does (p2, answer 11); how to measure memory and energy was not retrieved in p1, and the statements of these Notes on them extend p1 and p2 by inference.
+
+The method is the evaluation's choice (STND.PERF.8). Classes of method answer different questions: timing by the wall clock how long; a sampling profile where, statistically; a trace the order, waiting, and imbalance; counts of hardware events, cache misses and branch mispredictions among them, what the processor did; a memory profile how much and when; records of input, output, and communication what moved; a measurement of energy what it cost at a stated boundary; and a model what would happen at a scale not run (p2, H4). Peak memory means what the reporting interface defines: a resident peak, a largest allocation, or for one interface the largest terminated child process and not the sum of the tree. Where more events are requested than the hardware has counters, the counters are shared in time and each count is scaled from the fraction of the run in which it was counted; an event is attributed to an instruction executed after it; and in one study, events meant to be exact varied and overcounted under controlled conditions (p2, H4) (STND.PERF.9). That probes add work, and that a profile taken with them describes a different run, follows from the layout sensitivity of p1, and its size is unverified (p1, H3). In a published study, four profilers of one managed runtime disagreed on the hottest methods because each sampled only where the runtime could stop, and a profiler that sampled at random agreed with causal experiments (p1, H3, from a secondary source); a second method or an intervention is the test that STND.PERF.10 asks for, and RSRC.4 then aims the optimization at the bottleneck so confirmed. A top-down classification, which sorts the time of a processor by its dominant limit and descends only into the dominant branch, is one way to find a bottleneck (p2, H5, from a secondary source whose paper p2 did not read).
+
+Variation between invocations and builds is often larger than between iterations, and repeating only the cheapest level gives an interval too narrow (p1, H1) (STND.PERF.11). In one study of 2,000 iterations over 30 fresh executions of each benchmark, at most 43.5 percent of the pairs of runtime and benchmark reached a steady state consistently, and no runtime reached one for every benchmark (p1, H1) (STND.PERF.12). STND.OFFLD.31 is the form of the second sentence of STND.PERF.12 and of the second sentence of STND.PERF.14 for offloaded work, so both sentences leave offloaded work to it, and one record meets both standards; a later amendment of STND.OFFLD could have STND.OFFLD.31 cite them. For a claim that HW.22 governs, data movement is counted whatever a measurement states of first use. The size of an unused environment variable and the link order of object files changed run time by tens of percent, and once by almost 300 percent, and in another study running one benchmark raised later results about threefold until a reboot (p1, H1 and H2) (STND.PERF.13). Interleaving or randomizing the runs of the compared versions are the means that p1 gives for an order that favors neither side. Factors of this kind include clock frequency policy, thermal and power state, other load on shared resources, the placement of threads and memory, and the layout of code and data; a requested clock frequency is not the frequency at which the processor runs, and a single binary is one sample of the layout space (p1, answers 6 and 7). REPRO.2 still records every factor that affects results; STND.PERF.13 adds the status of each factor above the threshold. A fallback, a throttle, or another event of HW.9 during a sample changes what the sample measures, which makes it a matter for the exclusion criterion of STND.PERF.18 and for the record of STND.PERF.13. The resolution of a timer and the cost of reading it bound the smallest interval that an evaluation resolves, and timing more than one execution in one interval, the way out where no timer is fine enough, gives block means and loses the distribution of a single execution (p1, H3) (STND.PERF.14 and STND.PERF.15). Processes have no common clock, and a barrier does not guarantee a common start (p1, H3). A micro-benchmark measures nothing where the compiler deletes unused work, hoists invariant work out of the timed loop, or folds work on constants; checking the output of the timed work and the growth of its time with size are the checks that p1 reports, and a check of the output against the expected values that the benchmark itself states is not a reference oracle produced without the implementation (p1, H4) (STND.PERF.16).
+
+A central statistic that misfits its unit gives a figure that no run achieved: for times of 10, 100, and 40 seconds for one amount of work, the arithmetic mean of the rates is more than twice their harmonic mean; by inference, an average of ratios has no unit that a run measured, and whether the geometric mean of normalized results is sound is a debate that p1 leaves unresolved; and timing data often lack a normal distribution even at 30 to 40 samples (p1, H1 and H4) (STND.PERF.17). A different summary or a later question needs the raw samples, and an exclusion chosen after the result was seen selects the result; MEAS.7 holds the same for observations, and where MEAS binds, one record meets both (STND.PERF.18). Two intervals read by eye, or a verdict alone, do not compare two versions, and a large sample makes a trivial difference statistically detectable, which is why the practical threshold is fixed beforehand (p1, H4) (STND.PERF.19). A suite of comparisons raises false alarms unless their rate is controlled together; STND.VVUQ.35 uses the Holm step-down procedure for statistical acceptance criteria (STND.PERF.20). Rerunning a failed check of performance until it passes is selection, as NUMER.26 says of a stochastic comparison reseeded to pass; a failure from a cause outside the code that the record states, a failed node or other load among them, admits a rerun once that cause is removed (STND.PERF.21). STND.VVUQ.82 and STND.VVUQ.83 treat a declared variation of results within the agreement of their criterion as no defect; whether that reasoning reaches variation of time is open in p1, and this standard draws the analogy without adopting it.
+
+A fixed threshold on a series misses small changes or raises false alarms, because noise differs between benchmarks and over time; in one industrial series, detection of changepoints in the recorded history, with no assumption about the distribution beyond a finite mean and with a person reviewing the points found, found smaller regressions with far fewer false alarms (p1, H5) (STND.PERF.22 and STND.PERF.23). A change of machine, firmware, operating system, compiler, or library changes the experiment, and a step in the series that it causes reads, unmarked, as a regression of the code. While the history is too short to show its variation, a comparison with the system's own prior output has nothing to compare, so the third sentence of STND.PERF.23 checks against the requirement, which is a check and not a regression guard in the sense of the Lexicon; the three sentences of STND.PERF.23 apply together, and none applies apart from the others. Measuring the revisions between the last good point and the first bad one is one way to identify the revision that caused a regression (p1, answer 18) (STND.PERF.24). STND.PERF.24 differs from STND.VVUQ.17, which treats a failed guard as a defect unless the change stated beforehand that it alters the guarded result. A guard on time fails from noise as well as from the code, so a failure is possibly a false alarm, and a decision that accepts a new value rests on evidence that each requirement is still met and leaves the criterion of the guard in the record, as VV.3 asks of a changed criterion.
+
+An evaluation is itself an expenditure. A scaling study at large scale spends what PRIME.8 bounds, and STND.PERF.25 is RSRC.11 applied to an evaluation. Parallel work on a shared machine begins only after the assessment of AGENT.39, and AGENT.40 starts each unit as soon as the resources that the running units leave free are able to serve it; a resource that a measuring unit holds under STND.PERF.26 is not left free in that sense. Other resources that perturb a measurement, a shared cache or a shared link among them, are factors of STND.PERF.13.
+
+Two documents that bind other matters stay outside this standard. This standard does not read a timing of code as measured data under MEAS, a reading that p2 gives as its own. MEAS binds through its selector a project whose classification records that a result rests on data measured by instruments, sensors, or human observers, and the human owner adopts the classification (GOV.24); reading every timer as such an instrument would bring the calibration and uncertainty provisions of MEAS to every evaluation, and an analogy under GOV.29 serves a domain that no profile addresses, which RSRC and this standard address. STND.PERF.18 gives, for performance samples, the outcomes that MEAS.3 and MEAS.7 give for observations, and a project whose classification records the attribute applies MEAS as well. The stochastic-sample provisions of STND.VVUQ, STND.VVUQ.33 to STND.VVUQ.35, STND.VVUQ.44, STND.VVUQ.64, and STND.VVUQ.65, and NUMER.25 and NUMER.26 judge a stochastic result against a reference oracle, with numbers fixed for the acceptance of correctness, a false-rejection rate of 0.001 per suite and 59 runs for a one-sided limit. Performance samples are not results of that kind, so STND.PERF.19, STND.PERF.20, and STND.PERF.21 state outcomes, and those provisions are models for them and not citations.
+
+Under STND.CLASS.10, each provision instantiates only VV, REPRO, INTPR, SIMPL, RSRC, or AGENT.40, and applies from CSQ3; work of CSQ4 may omit it. The part of a provision that rests on a row of the table of STND.CLASS.10 applies from the class of that row. The second sentence of STND.PERF.7 documents a regime that the evaluation did not test, rests on INTPR.10, and applies from CSQ2. The checks of the second sentences of STND.PERF.11, STND.PERF.13, and STND.PERF.16 are evidence under VV.1 that compares with no reference oracle produced without the implementation that it judges, so they apply from CSQ3. STND.PERF.22 asks for the inputs of each point of the tracked record of RSRC.2, the revision, the path, and the design under REPRO.1, which rest on no row; it asks neither for provenance written with each output at production, the row of REPRO.4, nor for time, memory, and cost recorded with each run, the row of RSRC.3, which stay with their rows at CSQ2, so it applies from CSQ3. STND.PERF.26 instantiates AGENT.40, which AGENT proportions to class through RSRC.8, and applies from CSQ3. Every other provision and sentence rests on no row and applies from CSQ3. No provision binds, and none raises the floor (GOV.11): each is a default that asks only what RSRC, VV, REPRO, INTPR, SIMPL, or AGENT.40 already ask, at the cost of wording or one record, and the bound on spending of PRIME.8 already binds every evaluation.
+
+## References
+
+| Identifier | Title |
+| --- | --- |
+| AGENT | Agent practice |
+| GOV | Governance |
+| HW | Execution hardware |
+| HW.CPU | General-purpose processors |
+| HW.GPU | Accelerators |
+| INTPR | Interpretability |
+| MEAS | Measurement and instrumentation |
+| NUMER | Numerical computation |
+| PRIME | Prime Directives |
+| REPRO | Reproducibility |
+| RSRC | Resources |
+| SIMPL | Simplicity |
+| STND.CLASS | Consequence-class criteria |
+| STND.CONC | Concurrency standard |
+| STND.DRAFT | Drafting standard |
+| STND.OFFLD | Accelerator offload standard |
+| STND.VVUQ | Verification, validation, and uncertainty quantification methods |
+| VV | Correctness |
+
+## Provisions
+
+### Sensitivity and requirements
+
+#### STND.PERF.1 Evaluation of performance-sensitive code
+
+Default. Instantiates RSRC.2, RSRC.4.
+
+Where a task calls for an evaluation of the performance of code, or the code is performance-sensitive, each claim that the code meets a performance requirement, or that a change made it faster or slower, SHOULD rest on a performance evaluation (RSRC.2, RSRC.4).
+
+#### STND.PERF.2 Performance requirement content
+
+Default. Instantiates RSRC.1.
+
+Other than for a budget of a constrained target, which HW.20 holds, each performance requirement SHOULD state the execution path and the conditions of contention, power, and thermal state under which it holds, the statistic of the performance samples that it judges, and its margin (RSRC.1). Where a performance requirement bounds a ratio, it SHOULD name the comparison base of that ratio (RSRC.1).
+
+### Questions
+
+#### STND.PERF.3 Evaluation question stated
+
+Default. Instantiates VV.3, REPRO.7.
+
+Before its measurements, each performance evaluation SHOULD state the claim that it judges, its practical threshold, and which of the absolute question, the relative question, and the scaling question it answers (VV.3). The record of each performance evaluation SHOULD give the reason for each of those questions that it does not answer (REPRO.7).
+
+#### STND.PERF.4 Yardstick of an absolute question
+
+Default. Instantiates RSRC.1, RSRC.4, INTPR.9.
+
+Each absolute question SHOULD judge its result against a performance requirement, or against a bound derived from the work that the code performs and the rate of the resource of its execution path that limits that work (RSRC.1, RSRC.4). Where an absolute question judges against such a bound, its result SHOULD state the measured value as a fraction of the bound, and whether the bound rests on a documented or a measured value of the limiting resource (INTPR.9).
+
+#### STND.PERF.5 Conditions of a relative comparison
+
+Default. Instantiates RSRC.4, SIMPL.7, RSRC.6.
+
+Where a relative question compares code with its comparison base on one execution path, the compared runs SHOULD perform the same work at the same problem size, with results that are shown to meet the accuracy that the claim requires (RSRC.4, SIMPL.7). Where the comparison base of a relative question runs on another execution path, each statement of that comparison, in a reported result, a release, or another record, SHOULD meet the conditions that HW.22 states (RSRC.4, RSRC.6).
+
+#### STND.PERF.6 Scaling variable and baseline
+
+Default. Instantiates RSRC.8, INTPR.9.
+
+Each scaling question SHOULD state the variable over which it scales, and, for a number of concurrent tasks or processes, whether the total work or the work of each task or process is held fixed (RSRC.8). Each result of a scaling question SHOULD state the baseline against which it computes speedup or efficiency, with the absolute values of that baseline (RSRC.8, INTPR.9).
+
+#### STND.PERF.7 Range of a scaling claim
+
+Default. Instantiates RSRC.8, INTPR.10.
+
+Each scaling question SHOULD be answered from runs at no fewer than three values of its variable that span the range that its claim covers, or state why its variable admits fewer (RSRC.8). Where a scaling claim covers values beyond those measured, the claim SHOULD state that it rests on a model, with the range of values from which that model was fitted (INTPR.10).
+
+### Methods
+
+#### STND.PERF.8 Method and quantities recorded
+
+Default. Instantiates REPRO.7, RSRC.4, INTPR.9.
+
+Each performance evaluation SHOULD record its method and the quantities that it measures, chosen for its question and for each resource suspected of limiting the code, with the alternatives weighed (REPRO.7, RSRC.4). Each quantity that a performance evaluation reports SHOULD state its unit and the definition that its method gives it (INTPR.9).
+
+#### STND.PERF.9 Limits of the method
+
+Default. Instantiates INTPR.9, RSRC.4.
+
+The record of each performance evaluation SHOULD state the limits of its method that bear on its result: each quantity that the method estimates rather than counts, each part of the run that the method does not observe, and the work that the method adds to the run (INTPR.9). Each measurement of time on which a claim rests SHOULD come from runs without the work that the method adds, or state the overhead of that work as measured (RSRC.4).
+
+#### STND.PERF.10 Attribution confirmed before optimization
+
+Default. Instantiates RSRC.4.
+
+Before an optimization rests on the part of the code to which a method attributes time or another resource, that attribution SHOULD be confirmed by a second method, or by a change whose measured effect agrees with it (RSRC.4).
+
+### Measurement design
+
+#### STND.PERF.11 Levels of repetition
+
+Default. Instantiates INTPR.9, VV.1.
+
+Each performance evaluation SHOULD state the levels at which its measurements repeat, among them iterations within one run, runs of the program, builds, and machines, with the number of repetitions at each level (INTPR.9). Each performance evaluation SHOULD repeat its measurements at each level whose variation, as a pilot or its own performance samples show, is able to change its conclusion (VV.1).
+
+#### STND.PERF.12 Steady state and first use
+
+Default. Instantiates VV.3, RSRC.4.
+
+Where a performance evaluation excludes the start of each run as warm-up, it SHOULD judge steady state by a criterion recorded before its measurements, and report each run that does not reach that criterion (VV.3). Other than for offloaded work, which STND.OFFLD.31 holds, each measurement in a performance evaluation SHOULD state whether it includes the costs of first use, among them initialization, compilation at load, and the first filling of caches and memory (RSRC.4).
+
+#### STND.PERF.13 Environment and order of runs
+
+Default. Instantiates REPRO.2, VV.1.
+
+The record of each performance evaluation SHOULD state, for each factor of its environment able to change its measurements by more than its practical threshold, whether that factor was held fixed, varied, or only recorded, with its value or its levels, or that the evaluation is unable to read them (REPRO.2). Where a performance evaluation compares code with a comparison base, it SHOULD order their runs so that drift and carry-over between runs fall on neither side alone, or state that the order was fixed (VV.1).
+
+#### STND.PERF.14 Timer adequacy and completion
+
+Default. Instantiates INTPR.9, RSRC.4.
+
+Each measurement of time in a performance evaluation SHOULD use a timer whose resolution and cost of reading, measured or documented for the execution path, add to each timed interval an error smaller than the practical threshold of that evaluation, or state the error that they add (INTPR.9). Other than for offloaded work, which STND.OFFLD.31 holds, each measurement of the time of an asynchronous operation in a performance evaluation SHOULD end at an observed completion of that operation (RSRC.4).
+
+#### STND.PERF.15 Timed span and unit
+
+Default. Instantiates INTPR.9.
+
+Where a measurement of time spans concurrent tasks or processes, its record SHOULD state how it defines the start and the end and how it combines the times of the tasks or processes (INTPR.9). Where a measurement times more than one execution in one interval, its record SHOULD state the number of executions in each interval (INTPR.9).
+
+#### STND.PERF.16 Benchmark validity
+
+Default. Instantiates VV.3, VV.1.
+
+Each benchmark SHOULD state the use whose performance it measures, with its inputs and problem sizes chosen before its results are seen (VV.3). Each benchmark SHOULD show that its timed code performs the work that it claims to measure (VV.1).
+
+### Summary and comparison
+
+#### STND.PERF.17 Summary statistic and dispersion
+
+Default. Instantiates INTPR.9.
+
+Each summary of performance samples SHOULD state its central statistic with the reason for it from the unit of the quantity and the shape of the samples, the dispersion of the samples in the unit of the quantity, and the number of samples (INTPR.9).
+
+#### STND.PERF.18 Raw performance samples and exclusions
+
+Default. Instantiates REPRO.6, VV.3.
+
+The performance samples of each performance evaluation SHOULD be kept, as measured, with its summary (REPRO.6). Each exclusion of performance samples, runs, or benchmarks from a summary SHOULD follow a criterion recorded before the summary was seen, or be recorded as a decision under VV.3, with its criterion and the time at which that criterion was set (VV.3).
+
+#### STND.PERF.19 Differences against a practical threshold
+
+Default. Instantiates INTPR.9, VV.3.
+
+Each result of a relative question SHOULD state the absolute values of its comparison base, and the difference or the ratio between the compared code and its comparison base with its uncertainty and the basis of that uncertainty (INTPR.9). Each performance evaluation that judges a difference SHOULD judge it against the practical threshold that it stated before its measurements (VV.3).
+
+#### STND.PERF.20 False alarms across a suite
+
+Default. Instantiates VV.3.
+
+Where one decision rests on more than one comparison of performance, the record of that decision SHOULD state the probability of a false alarm across those comparisons together, and how that probability is controlled (VV.3).
+
+#### STND.PERF.21 Failed performance checks not rerun
+
+Default. Instantiates VV.3.
+
+Where no rule of repetition was recorded before a check of performance failed, that check SHOULD NOT be repeated as the remedy for its failure (VV.3). After the removal of a cause outside the code that the record of a failed check of performance states, the check MAY be repeated (VV.3).
+
+### Regression detection
+
+#### STND.PERF.22 Performance history kept
+
+Default. Instantiates RSRC.2, REPRO.1.
+
+Each point of the performance history of performance-sensitive code SHOULD record the revision measured, the record that HW.3 gives of its execution path, the other factors of its environment that STND.PERF.13 states, and its measurement design, so that a change of the execution path shows as a break in the series (RSRC.2, REPRO.1).
+
+#### STND.PERF.23 Regression guards on performance
+
+Default. Instantiates VV.8, RSRC.2, VV.3.
+
+Where a component has a performance requirement, the verification of each change able to affect a quantity that the requirement bounds SHOULD include a regression guard on that quantity (VV.8, RSRC.2). Where the performance history shows the variation of a quantity, each regression guard on that quantity SHOULD judge new measurements against that history by a criterion, recorded before the guard runs, that accounts for that variation (VV.3, RSRC.2). Where the performance history is too short to show that variation, the verification SHOULD check new measurements against the performance requirement in place of that guard, and state that (VV.3, RSRC.2).
+
+#### STND.PERF.24 Regressions attributed and resolved
+
+Default. Instantiates RSRC.4, REPRO.7, VV.3.
+
+Where the performance history shows a regression across more than one revision, the record of that regression SHOULD name the revision that caused it, identified by measurement, or state why it was not identified (RSRC.4). Where a regression guard on a performance quantity fails, the failure SHOULD be resolved by a change that restores the quantity, or by a recorded decision that accepts the new value, cites evidence that it meets each performance requirement that bounds the quantity, and keeps the criterion of the guard in the record (RSRC.4, REPRO.7, VV.3).
+
+### Cost of evaluation
+
+#### STND.PERF.25 Smallest evaluation first
+
+Default. Instantiates RSRC.11, RSRC.8.
+
+Each performance evaluation SHOULD begin with the smallest experiment able to answer its question at its practical threshold (RSRC.11). Each extension of the repetitions, problem sizes, or scale of a performance evaluation SHOULD rest on a result of an earlier experiment that left its question unanswered (RSRC.11, RSRC.8).
+
+#### STND.PERF.26 Resources held for measurement
+
+Default. Instantiates RSRC.8, AGENT.40, REPRO.2.
+
+Where a unit of work measures performance on a machine shared with other work, that unit SHOULD state, among the resources that it needs, each processor, memory, and accelerator whose use by other work is able to change its measurements by more than its practical threshold, and hold them for the duration of its measurements (RSRC.8, AGENT.40). Where the other work on that machine during the measurements is not known, the record of the performance evaluation SHOULD state that (REPRO.2).
+
+## Revision History
+
+| Revision | Date | Change |
+| --- | --- | --- |
+| 1.0 | 2026-10-25 | Adopted. |
