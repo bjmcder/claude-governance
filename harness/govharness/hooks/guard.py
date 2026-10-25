@@ -35,7 +35,13 @@ write of a computed item is referred, since its items cannot be listed
 (STND.DFLT.24), and so is a read of one while the store holds a closed
 file. A program the guard does not know is searched for a command it
 knows, so that a launcher such as ``timeout`` or ``uv run`` does not
-hide one.
+hide one; the command found is read with the launcher's standard input,
+so that ``echo ... | env sh`` is read as ``echo ... | sh``. A word
+``NAME=value`` of a simple command, other than an argument of a program
+that takes only text such as ``grep``, is read as an assignment: the
+value of a pager or editor variable (``RUN_VARIABLES``) as a command
+line, and that of any other variable of git as a text that may hold
+one. ``sponge``, ``ed``, and ``ex`` write the files they name.
 
 Where the guard cannot read a construct soundly, it refers the call
 rather than let it proceed (QA.8, part A, and the review of unit 0015):
@@ -44,13 +50,20 @@ command substitution; a line in which a second, simpler reading of
 where commands begin (``command_starts``) finds a program that the
 first did not read; a pattern with a POSIX bracket expression; an alias
 of git given in the call, which is also read as the command it stands
-for; a write of git's configuration other than a few settings that run
-nothing; a subcommand that is not a command of git, which covers most
-aliases set earlier; a command that ``xargs`` builds from its input,
-unless its program only reads; a shell or ``source`` that runs a
-computed script, or reads its commands from a substitution, as ``sh <
-<(...)`` does; ``rg --pre``; a ``cd`` to a relative name in a line that
-sets ``CDPATH``; and a line whose reading needs more than ``MAX_PATHS``
+for; a setting that ``-c`` gives, other than a few that run nothing
+(``plain_key``), whose value is read as well; a variable of git set in
+the call, other than its pager and editors and those that name no
+program (``GIT_PLAIN``: the author, the committer, and three more); an
+``ext::`` or ``fd::`` URL, and the program that ``--upload-pack``,
+``--receive-pack``, ``--exec``, or clone's ``-u`` names, whose command
+is read as well; a write of git's configuration other than a few
+settings that run nothing; a subcommand that is not a command of git,
+which covers most aliases set earlier; a command that ``xargs`` builds
+from its input, unless its program only reads; a shell or ``source``
+that runs a computed script, or reads its commands from a pipe or a
+substitution, as ``sh < <(...)`` does, also behind a launcher;
+``rg --pre``; a ``cd`` to a relative name in a line that sets
+``CDPATH``; and a line whose reading needs more than ``MAX_PATHS``
 paths or ``TIME_BUDGET`` seconds, so that the guard answers within the
 hook's timeout. Lines nested more than ``MAX_DEPTH`` deep are denied as
 unreadable.
@@ -368,6 +381,7 @@ KNOWN = (
     | {"awk", "cd", "chgrp", "chmod", "chown", "dd", "eval", "find", "gawk"}
     | {"git", "mv", "perl", "pushd", "sed", "setcap", "sort", "tar", "tee"}
     | {"openssl", "uniq", "unzip", "xargs", "xxd", "zip"}
+    | {"ed", "ex", "sponge"}
 )
 HISTORY_REWRITES = {
     "fast-import",
@@ -426,6 +440,39 @@ GIT_OUTPUT_COMMANDS = {
     "stash",
     "whatchanged",
 }
+# Variables whose value is a command line that git or another program
+# runs: it is read, not referred (second review of unit 0015).
+RUN_VARIABLES = {
+    "EDITOR",
+    "GIT_EDITOR",
+    "GIT_PAGER",
+    "GIT_SEQUENCE_EDITOR",
+    "PAGER",
+    "SSH_ASKPASS",
+    "VISUAL",
+}
+# Variables of git that name no program, transport, or configuration.
+GIT_PLAIN = {
+    "GIT_AUTHOR_DATE",
+    "GIT_AUTHOR_EMAIL",
+    "GIT_AUTHOR_NAME",
+    "GIT_COMMITTER_DATE",
+    "GIT_COMMITTER_EMAIL",
+    "GIT_COMMITTER_NAME",
+    "GIT_MERGE_AUTOEDIT",
+    "GIT_OPTIONAL_LOCKS",
+    "GIT_TERMINAL_PROMPT",
+}
+# Settings of ``git -c`` whose value is a command line, read as one.
+RUN_KEYS = {"core.editor", "core.pager", "sequence.editor"}
+# Settings of ``git -c`` that run nothing, by prefix.
+PLAIN_PREFIXES = (
+    "advice.",
+    "color.",
+    "core.quotepath",
+    "safe.directory",
+    "user.",
+)
 # Commands of git that send to another system.
 GIT_SENDS = {"send-email", "send-pack"}
 # Options of ``git config`` that change a setting, and the subcommands
@@ -2592,6 +2639,12 @@ def check_git(words: list[str], scan: Scan) -> None:
                 aliases[alias.lower()] = (setting, len(pairs) - 1)
                 reason = f"git alias {alias} given in the call"
                 found.add("selective-destruction", reason)
+            elif key.lower() in RUN_KEYS or key.lower().startswith("pager."):
+                # The value is a command line, read as one.
+                check_line(setting, scan)
+            elif not plain_key(key.lower()):
+                reason = f"git setting {key} given in the call"
+                found.add("selective-destruction", reason)
             check_line(setting.lstrip("!"), scan, False)
         elif option.partition("=")[0] == "--config-env":
             reason = "git setting taken from a variable"
@@ -2616,6 +2669,7 @@ def check_git(words: list[str], scan: Scan) -> None:
         if stands_for:
             check_git([words[0], *kept, *stands_for, *args], scan)
     check_git_outputs(sub, command, scan)
+    check_transport(sub, command, scan)
     if sub not in GIT_COMMANDS | HISTORY_REWRITES:
         reason = f"git {sub} is no command the guard reads, such as an alias"
         found.add("selective-destruction", reason)
@@ -2702,6 +2756,58 @@ def check_git(words: list[str], scan: Scan) -> None:
         check_line(" ".join(args[args.index("foreach") + 1 :]), scan)
     elif sub == "bisect" and args[:1] == ["run"]:
         check_simple(args[1:], False, scan)
+
+
+def plain_key(key: str) -> bool:
+    """Return whether a setting given by ``git -c`` runs nothing.
+
+    Parameters
+    ----------
+    key : str
+        The setting, in lower case.
+
+    Returns
+    -------
+    bool
+        Whether it is one of ``CONFIG_PLAIN`` or starts with one of
+        ``PLAIN_PREFIXES``; every other setting given in the call is
+        referred, since many name a program or a transport.
+    """
+    return key in CONFIG_PLAIN or key.startswith(PLAIN_PREFIXES)
+
+
+def check_transport(sub: str, command: list[str], scan: Scan) -> None:
+    """Check the transports and transport programs a git command names.
+
+    Parameters
+    ----------
+    sub : str
+        The subcommand.
+    command : list[str]
+        ``git`` and the arguments of the subcommand.
+    scan : Scan
+        The reading so far. A URL ``ext::`` runs the command it holds,
+        and ``fd::`` talks to a descriptor the guard cannot follow; each
+        is referred, and the command of ``ext::`` is read as well. So is
+        the program that ``--upload-pack``, ``--receive-pack``,
+        ``--exec``, or clone's ``-u`` names (second review of unit 0015).
+    """
+    for word in command[1:]:
+        url = word.partition("=")[2] if word.startswith("-") else word
+        if url.lower().startswith(("ext::", "fd::")):
+            reason = f"git transport {url.split('::')[0]}:: runs a program"
+            scan.found.add("selective-destruction", reason)
+            if url.lower().startswith("ext::"):
+                text = url[len("ext::") :].replace("% ", " ")
+                check_line(text, scan, strict=False)
+    names = {"--exec", "--receive-pack", "--upload-pack"}
+    if sub == "clone":
+        names.add("-u")
+    short = "u" if sub == "clone" else ""
+    for option, value in option_values(command, short, names):
+        reason = f"git {option} names the program of the transport"
+        scan.found.add("selective-destruction", reason)
+        check_line(value, scan, strict=False)
 
 
 def check_git_outputs(sub: str, command: list[str], scan: Scan) -> None:
@@ -3621,7 +3727,12 @@ def check_shell(
         )
 
 
-def check_launched(words: list[str], scan: Scan) -> None:
+def check_launched(
+    words: list[str],
+    scan: Scan,
+    piped: bool = False,
+    inputs: list[str] | None = None,
+) -> None:
     """Check a program the guard does not know for a command it runs.
 
     Parameters
@@ -3630,6 +3741,14 @@ def check_launched(words: list[str], scan: Scan) -> None:
         Program name and its arguments.
     scan : Scan
         The reading so far.
+    piped : bool
+        Whether a pipe feeds the program's standard input.
+    inputs : list[str] | None
+        The redirections of its standard input, as operator and target
+        words. A launcher such as ``env``, ``nice``, or ``timeout`` hands
+        its standard input to the program it runs, so that ``echo ... |
+        env sh`` runs what the pipe gives; the command found is read
+        with them (second review of unit 0015).
     """
     for index, word in enumerate(words[1:], start=1):
         if word.startswith("--chdir="):
@@ -3643,7 +3762,7 @@ def check_launched(words: list[str], scan: Scan) -> None:
             check_line(word, scan, strict=False)
     for index, word in enumerate(words[1:], start=1):
         if PurePosixPath(word).name in KNOWN:
-            check_simple(words[index:], False, scan)
+            check_simple([*words[index:], *(inputs or [])], piped, scan)
             return
 
 
@@ -3719,7 +3838,18 @@ def check_simple(words: list[str], piped: bool, scan: Scan) -> None:
             check_writes([target], scan, append=False)
         elif operator in APPEND_REDIRECTS:
             check_writes([target], scan, append=True)
+    inputs = [
+        word
+        for operator, target in redirections
+        if operator in READ_REDIRECTS | {"<<<", "<&"}
+        for word in (operator, target)
+    ]
     program = program_words(words)
+    # The arguments of a program that takes only text, such as grep,
+    # assign nothing; those of any other program may, as env's do.
+    texts = program and PurePosixPath(program[0]).name in TEXT_PROGRAMS
+    leading = words[: len(words) - len(program)]
+    check_assignments(leading if texts else words, scan)
     scan.bare = len(program) == len(words)
     words = program
     if not words:
@@ -3734,7 +3864,7 @@ def check_simple(words: list[str], piped: bool, scan: Scan) -> None:
     in_place = "i" in letters or long_flag(words, "--in-place")
     if name in ELEVATORS:
         found.add("elevated-privilege", name)
-        check_launched(words, scan)
+        check_launched(words, scan, piped, inputs)
     elif name in SHELLS or words[0] in SOURCERS:
         check_shell(words, piped, given, scan, unknown_input)
     elif name == "eval":
@@ -3821,8 +3951,46 @@ def check_simple(words: list[str], piped: bool, scan: Scan) -> None:
         if name in PUBLISHERS:
             # Many also launch a program, as ``uv run`` does.
             check_launched(words, scan)
+    elif name in {"ed", "ex", "sponge"}:
+        # Each writes the files it names (second review of unit 0015).
+        append = name == "sponge" and "a" in letters
+        check_writes(args, scan, append=append)
     elif name not in TEXT_PROGRAMS:
-        check_launched(words, scan)
+        check_launched(words, scan, piped, inputs)
+
+
+def check_assignments(words: list[str], scan: Scan) -> None:
+    """Check the variables a command sets that name a program to run.
+
+    Parameters
+    ----------
+    words : list[str]
+        Words of one simple command, so that an assignment before the
+        program, an argument of ``env``, and one of ``export`` all
+        count.
+    scan : Scan
+        The reading so far. The value of a variable that names a pager
+        or an editor (``RUN_VARIABLES``) is read as a command line. Any
+        other variable of git is referred unless it names only an author
+        or committer (``GIT_PLAIN``), since git runs a program that
+        ``GIT_SSH_COMMAND``, ``GIT_PROXY_COMMAND``, ``GIT_EXTERNAL_DIFF``,
+        or ``GIT_ASKPASS`` names, takes settings from
+        ``GIT_CONFIG_PARAMETERS``, and allows transports by
+        ``GIT_ALLOW_PROTOCOL`` (second review of unit 0015). Unit 0014
+        admits the pager and editors of git in the guard's own
+        environment; set in the call, their values are read instead.
+    """
+    for word in words:
+        match = re.match(r"([A-Za-z_][A-Za-z0-9_]*)=(.*)", word, re.DOTALL)
+        if match is None:
+            continue
+        name, value = match.groups()
+        if name in RUN_VARIABLES:
+            check_line(value, scan)
+        elif name.startswith("GIT_") and name not in GIT_PLAIN:
+            reason = f"git variable {name} set in the call"
+            scan.found.add("selective-destruction", reason)
+            check_line(value, scan, strict=False)
 
 
 def xargs_command(words: list[str]) -> tuple[list[str], str | None]:

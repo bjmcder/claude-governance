@@ -1935,5 +1935,203 @@ class ReviewOfUnit0015(unittest.TestCase):
         self.assertIn("selective-destruction", found)
 
 
+
+class LeftoverLows(unittest.TestCase):
+    """The Lows of the review of unit 0015 that main also left unread."""
+
+    def test_launcher_before_a_shell(self) -> None:
+        """Behavior: a shell behind a launcher reads the standard input
+        the launcher was given, so a pipe to it is referred and a
+        here-string or here-document to it is read.
+
+        Reference: second review of unit 0015; ``echo ... | env sh``
+        runs what the pipe gives.
+        """
+        launchers = (
+            "env", "nice", "command", "time", "timeout 5", "stdbuf -oL",
+            "nohup", "setsid", "chrt -o 0", "ionice -c3", "taskset 1",
+        )  # fmt: skip
+        assert_reaches(
+            self,
+            "selective-destruction",
+            tuple(f"echo sudo id | {launcher} sh" for launcher in launchers)
+            + ("env sh < <(echo sudo id)",),
+        )
+        assert_reaches(
+            self,
+            "elevated-privilege",
+            (
+                "env sh -c 'sudo id'",
+                "nice bash <<< 'sudo id'",
+                "env bash <<EOF\nsudo id\nEOF",
+            ),
+        )
+
+    def test_git_program_variables(self) -> None:
+        """Behavior: a variable of git set in the call is referred, and
+        its value read, unless it names only an author or committer; the
+        value of a pager or editor variable is read as a command line.
+
+        Reference: second review of unit 0015; git runs the program each
+        names. Unit 0014 admits GIT_EDITOR, GIT_SEQUENCE_EDITOR, and
+        GIT_PAGER in the guard's environment, since a push runs none.
+        """
+        for command in (
+            "GIT_SSH_COMMAND='sudo id' git fetch",
+            "GIT_PROXY_COMMAND='sudo id' git fetch",
+            "GIT_EXTERNAL_DIFF='sudo id' git diff",
+            "GIT_ASKPASS='sudo id' git fetch",
+            "env GIT_SSH_COMMAND='sudo id' git fetch",
+            "export GIT_SSH_COMMAND='sudo id'; git fetch",
+        ):
+            with self.subTest(command=command):
+                found = shell(command)
+                self.assertIn("selective-destruction", found)
+                self.assertIn("elevated-privilege", found)
+        self.assertEqual(
+            shell("GIT_EDITOR='sudo id' git commit"), {"elevated-privilege"}
+        )
+        found = shell("GIT_ALLOW_PROTOCOL=ext git fetch x")
+        self.assertIn("selective-destruction", found)
+
+    def test_text_arguments_assign_nothing(self) -> None:
+        """Behavior: the arguments of a program that takes only text,
+        such as grep, are not read as assignments; one in front of it
+        still is.
+
+        Reference: second review of unit 0015; decision 0002, a search
+        for a variable's name runs without a prompt.
+        """
+        for command in (
+            "grep -rn GIT_SSH_COMMAND= .",
+            "echo GIT_DIR=x",
+            "rg 'EDITOR=sudo id' src",
+        ):
+            with self.subTest(command=command):
+                self.assertEqual(shell(command), set())
+        found = shell("GIT_SSH_COMMAND='sudo id' grep x f")
+        self.assertIn("selective-destruction", found)
+        self.assertIn("elevated-privilege", found)
+        self.assertIn(
+            "selective-destruction", shell("make GIT_SSH_COMMAND=ssh")
+        )
+
+    def test_git_program_settings(self) -> None:
+        """Behavior: a setting given by ``git -c`` that may name a
+        program or a transport is referred, and its value read.
+
+        Reference: second review of unit 0015.
+        """
+        for command in (
+            "git -c core.sshCommand='sudo id' fetch",
+            "git -c core.fsmonitor='sudo id' status",
+            "git -c diff.external='sudo id' diff",
+        ):
+            with self.subTest(command=command):
+                found = shell(command)
+                self.assertIn("selective-destruction", found)
+                self.assertIn("elevated-privilege", found)
+        assert_reaches(
+            self,
+            "selective-destruction",
+            (
+                "git -c core.sshCommand=ssh fetch",
+                "git -c diff.x.textconv=cat diff",
+                "git -c protocol.allow=always fetch x",
+                "git -c protocol.ext.allow=always fetch x",
+            ),
+        )
+        self.assertEqual(
+            shell("git -c core.pager='sudo id' log"), {"elevated-privilege"}
+        )
+
+    def test_git_program_settings_read_strictly(self) -> None:
+        """Behavior: the value of a pager or editor setting is read as a
+        command line, so one that does not tokenize is referred, while a
+        plain setting with the same value reaches no outcome.
+
+        Reference: second review of unit 0015; git hands the value to
+        a shell.
+        """
+        assert_reaches(
+            self,
+            "selective-destruction",
+            (
+                "git -c core.pager='\"' log",
+                "git -c core.editor='\"' commit",
+                "git -c pager.log='\"' log",
+            ),
+        )
+        self.assertEqual(shell("git -c user.name='\"' log"), set())
+
+    def test_transports_that_run_programs(self) -> None:
+        """Behavior: an ``ext::`` or ``fd::`` URL, and a transport program
+        named by an option, are referred, and a command they hold read.
+
+        Reference: second review of unit 0015; ``git clone 'ext::sudo
+        id'`` runs ``sudo id``.
+        """
+        assert_reaches(
+            self,
+            "selective-destruction",
+            ("git push ext::x main", "git clone fd::3 x"),
+        )
+        for command in (
+            "git clone 'ext::sudo id'",
+            "git fetch 'ext::sh -c sudo% id'",
+            "git remote add evil 'ext::sudo id'",
+            "git clone --upload-pack='sudo id' x y",
+            "git clone -u 'sudo id' x y",
+            "git push --receive-pack='sudo id' origin main",
+            "git archive --exec='sudo id' --remote=x HEAD",
+        ):
+            with self.subTest(command=command):
+                found = shell(command)
+                self.assertIn("selective-destruction", found)
+                self.assertIn("elevated-privilege", found)
+
+    def test_writers_of_standard_input(self) -> None:
+        """Behavior: ``sponge`` and ``ed`` write the files they name;
+        ``sponge -a`` only appends, as ``>>`` does.
+
+        Reference: second review of unit 0015.
+        """
+        assert_reaches(
+            self,
+            "record-entries",
+            (
+                "echo x | sponge ledger.jsonl",
+                "printf '1d\\nw\\n' | ed ledger.jsonl",
+                "ex -s ledger.jsonl",
+            ),
+        )
+        self.assertIn("write-bounds", shell("echo x | sponge /etc/x"))
+        self.assertEqual(shell("echo x | sponge -a ledger.jsonl"), set())
+
+    def test_ordinary_forms_pass(self) -> None:
+        """Behavior: launchers, plain git settings and variables, and
+        sponge within the work reach no outcome.
+
+        Reference: decision 0002, routine work runs without a prompt.
+        """
+        for command in (
+            "GIT_PAGER=cat git log -3",
+            "GIT_AUTHOR_NAME=A git commit -m x",
+            "git -c user.name=A -c user.email=a@b.c commit -m x",
+            "git -c color.ui=false status",
+            "git -c core.pager=cat log -3",
+            "env FOO=1 python3 -m pytest",
+            "time make",
+            "nice -n 10 make -j4",
+            "timeout 60 python3 -m pytest",
+            "command -v sh",
+            "echo x | sponge out.txt",
+            "git clone https://git.example/x y",
+            "git fetch origin",
+        ):
+            with self.subTest(command=command):
+                self.assertEqual(shell(command), set())
+
+
 if __name__ == "__main__":
     unittest.main()
