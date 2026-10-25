@@ -1,8 +1,8 @@
-# Pairs for review of the changed and new provisions of STND.CODE (STND.HARN.28)
+# Pairs for review of the changed and new provisions of STND.CODE (STND.HARN.28), revision 0.2
 
-From `python3 -B -m govharness pairs <rehearsed copy> STND.CODE`, limited to the rows whose changed side is STND.CODE.6, STND.CODE.14, STND.CODE.15, STND.CODE.16, STND.CODE.17, STND.CODE.18, STND.CODE.19, STND.CODE.20. Withdrawn provisions have no rows.
+From `python3 -B -m govharness pairs <rehearsed copy> STND.CODE`, limited to the rows whose changed side is STND.CODE.6, STND.CODE.14, STND.CODE.15, STND.CODE.16, STND.CODE.17, STND.CODE.18, STND.CODE.19, STND.CODE.20, STND.CODE.21. Withdrawn provisions have no rows.
 
-90 pair(s).
+93 pair(s).
 
 | # | Changed side | Other provision | Bases |
 | --- | --- | --- | --- |
@@ -90,9 +90,12 @@ From `python3 -B -m govharness pairs <rehearsed copy> STND.CODE`, limited to the
 | 82 | STND.CODE.20 | NUMER.16 | REPRO.7 |
 | 83 | STND.CODE.20 | NUMER.3 | REPRO.7 |
 | 84 | STND.CODE.20 | NUMER.5 | REPRO.7 |
-| 85 | STND.CODE.6 | CPS.5 | DSGN.2 |
-| 86 | STND.CODE.6 | CPS.9 | DSGN.2 |
-| 87 | STND.CODE.6 | HDES.14 | PRIME.4 |
-| 88 | STND.CODE.6 | HW.8 | PRIME.4 |
-| 89 | STND.CODE.6 | HW.GPU.3 | PRIME.4 |
-| 90 | STND.CODE.6 | ML.6 | DSGN.2 |
+| 85 | STND.CODE.21 | CPS.5 | DSGN.2 |
+| 86 | STND.CODE.21 | CPS.9 | DSGN.2 |
+| 87 | STND.CODE.21 | ML.6 | DSGN.2 |
+| 88 | STND.CODE.6 | CPS.5 | DSGN.2 |
+| 89 | STND.CODE.6 | CPS.9 | DSGN.2 |
+| 90 | STND.CODE.6 | HDES.14 | PRIME.4 |
+| 91 | STND.CODE.6 | HW.8 | PRIME.4 |
+| 92 | STND.CODE.6 | HW.GPU.3 | PRIME.4 |
+| 93 | STND.CODE.6 | ML.6 | DSGN.2 |

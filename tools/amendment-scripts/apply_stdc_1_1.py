@@ -64,6 +64,17 @@ STDC30 = [
      "SHOULD be tested and answered as STND.CODE.14 and STND.STDC.2 provide (DSGN.1)."),
 ]
 
+STDC31 = [
+    ('refers_to: []', 'refers_to: ["STND.STDC.2"]'),
+    ("or by an object that its contract names as its result for failures (DSGN.1).",
+     "or by an object that its contract names as its result for failures, as STND.STDC.2 binds for a listed "
+     "condition (DSGN.1, STND.STDC.2)."),
+]
+
+NEW40 = P(40, "Finite-value options in C", "Provisions of STND.CXX", """
+The C reading of STND.CXX.18 SHALL apply to the C source of the work, keeping its modal (PRIME.4, STND.CXX.18).
+""", ["PRIME.4"], refs=["STND.CXX.18"], mode="binding")
+
 NEW39 = P(39, "C naming conventions", "Names", """
 Each name that the C source of the work declares SHOULD follow the naming convention that the repository configuration names (INTPR.1). A name that the notation documented under NUMER.4 fixes MAY keep the case and the form of its symbol, as STND.DOCS.12 permits (INTPR.4).
 """, ["INTPR.1", "INTPR.4"], refs=["NUMER.4", "STND.DOCS.12"])
@@ -76,7 +87,8 @@ DOC = [
      "define, in place of restating it (STND.STDC.1 and STND.STDC.2), records",
      "It applies to C source each default of STND.CXX whose outcome holds for C, in a C reading that its Terms "
      "define, in place of restating it (STND.STDC.1), states the C form of the responses to a failure that PRIME.4 "
-     "lists (STND.STDC.2), records"),
+     "lists (STND.STDC.2), applies the binding form of STND.CXX.18 to C in the same reading (STND.STDC.40), "
+     "records"),
     ("data that crosses to other languages (STND.STDC.36), and the checks of C code (STND.STDC.37 and STND.STDC.38). "
      "Through STND.STDC.1 and STND.STDC.2, the high-assurance provisions of STND.CXX apply to C: conformance to the "
      "high-assurance coding standard that a decision record of the work adopts, claims of conformance limited to "
@@ -90,15 +102,20 @@ DOC = [
      "an edition that the standard covers and the toolchain is validated for, and recorded deviations (STND.CODE.14, "
      "STND.CODE.15, STND.CODE.16, STND.CODE.17, STND.CODE.18, STND.CODE.19, and STND.CODE.20)."),
     ("STND.STDC.2 instantiates PRIME.4 and PRIME.2, and is binding at every class.",
-     "STND.STDC.2 instantiates PRIME.4 and is binding at every class."),
+     "STND.STDC.2 and STND.STDC.40 instantiate PRIME.4 and are binding at every class."),
     # Terms
     ("Repository configuration and Static check have the meanings that STND.CODE gives them.",
      "Repository configuration, Static check, Execution setting, Untrusted input, High-assurance code, and "
      "High-assurance coding standard have the meanings that STND.CODE gives them."),
     ("and with the change that the row of that provision in the table of STND.STDC.1 or STND.STDC.2 gives. |",
-     "and with the change that the row of that provision in the table of STND.STDC.1 gives. |"),
+     "and with the change, if any, that the row of that provision in the table of STND.STDC.1 gives. |"),
     ("\n| Untrusted input | Data that reaches the work from outside its own code, other than data from a source that "
      "the threat model of the project records as trusted. |", ""),
+    # Notes: sources
+    ("(cited as a1) for the facts on streams, and a fact that neither note supports is marked unverified.",
+     "(cited as a1) for the facts on streams and research/round-addenda/a2-language-facts.md (cited as a2) for the "
+     "assert macro and the options that assume finite values, and a fact that none of these notes supports is marked "
+     "unverified."),
     # Notes: the C reading
     ("STND.STDC.1 and STND.STDC.2 apply those provisions to C source in their C reading, so that each keeps one text "
      "and its mode, and this standard holds only what C adds (GOV.31).",
@@ -118,24 +135,27 @@ DOC = [
      "that reads \"for C\" in its C reading.", ""),
     # Notes: new paragraph on STND.CODE, before the provisions of STND.CXX that do not apply
     ("Provisions of STND.CXX that do not apply.",
-     "Provisions of STND.CODE for every language. STND.CODE.14 admits every response but an exception, which C does "
-     "not have, and STND.STDC.2 adds that a report through errno alone does not pass the condition to the caller. "
-     "STND.CODE.15 is met by the attribute that an edition provides for a result not to be discarded, or by a "
-     "compiler's equivalent (c1, Error reporting and ignored returns). Where NDEBUG is defined at the point at which "
-     "the header of the assert macro is included, the macro expands to no check (unverified in c1). An option of the "
-     "compiler that defines NDEBUG is an execution setting, which STND.CODE.6 reaches, and a line of the source that "
-     "defines it is a definition in the source, which the second sentence of STND.CODE.16 reaches; the two exclude "
-     "the assert macro as the form of a check of untrusted input, or of a check that CPS.5 or CPS.9 requires, as "
-     "STND.PY.25 and STND.JL.13 exclude the assertions of Python and Julia. An option that assumes finite values removes a test for non-finite values "
-     "(STND.CODE.16). C places no function in the public interface of the term Untrusted input by a construct of the "
-     "language, because external linkage also serves the calls between the translation units of one program, so the "
-     "documentation or the repository configuration names that interface, and a check of an argument of a function "
-     "that it names is a check of untrusted input under STND.CODE.6, STND.STDC.21, and STND.STDC.27. The two coding "
-     "standards for C in c1 are high-assurance coding standards in the sense of STND.CODE, and the published "
-     "coverage of one ends below the newest edition and of the other at an older one (c1, S28, S29, and S40), so "
-     "STND.CODE.19 fixes the edition of high-assurance code at a covered one unless a decision record admits a "
-     "feature of a later edition. Conformance reduces undefined behavior by a mechanical check and is not evidence "
-     "that a result is correct (VV.1).\n\n"
+     "Provisions of STND.CODE for every language. STND.CODE.14 admits every response but a C++ exception; a "
+     "nonlocal jump is a mechanism of C that carries a condition past its callers, and STND.STDC.31 governs it. "
+     "STND.STDC.2 adds that a report through errno alone does not pass the condition to the caller. STND.CODE.15 is "
+     "met by the attribute that an edition provides for a result not to be discarded, or by a compiler's equivalent "
+     "(c1, Error reporting and ignored returns). The assert macro is the C case of STND.CODE.6 and of the second "
+     "sentence of STND.CODE.16, whose Notes give the reasoning: NDEBUG, defined by an option of the compiler or by a "
+     "line of the source before the header of the macro is included, makes the macro an expression that does nothing, "
+     "and the macro is defined again at each inclusion of the header (a2, N3220 7.2). An option that assumes finite "
+     "values may remove a test for non-finite values (a2); STND.CODE.21 "
+     "recommends against it in every language, and STND.STDC.40 keeps for C the binding form that the table of "
+     "STND.STDC.2 applied to C in revision 1.0. C places no function in the public interface by a construct of the "
+     "language, because external linkage also serves the calls between the translation units of one program, so "
+     "the documentation or the repository configuration names the interface for outside use of the term Untrusted "
+     "input, and a check of an argument of a function that it names is a check of untrusted input under "
+     "STND.CODE.6, STND.STDC.21, and STND.STDC.27. Where such an argument is a pointer that carries no extent, the "
+     "check of STND.STDC.21 is possible only against an extent or a limit that the contract states, as STND.STDC.7 "
+     "and STND.STDC.27 provide. The two coding standards for C in c1 are high-assurance coding standards in the "
+     "sense of STND.CODE, and the published coverage of one ends below the newest edition and of the other at an "
+     "older one (c1, S28, S29, and S40), so STND.CODE.19 fixes the edition of high-assurance code at a covered one "
+     "unless a decision record admits a feature of a later edition. Conformance reduces undefined behavior by a "
+     "mechanical check and is not evidence that a result is correct (VV.1).\n\n"
      "Provisions of STND.CXX that do not apply."),
     # Notes: names
     ("The naming table of STND.CXX.14 is the custodian's convention for C++, and names in C follow STND.DOCS.12 and "
@@ -177,7 +197,9 @@ DOC = [
      "the next call that sets errno; the cost is the report of the condition in the return value or in an object "
      "that the contract names, which STND.CODE.14 already admits as the response. It asks for no work that PRIME.4 "
      "does not, so it raises no floor (GOV.11), the argument that the ratification of 2026-10-24 accepted for the "
-     "errno clause of STND.STDC 1.0. STND.STDC.2 binds at every class. The "
+     "errno clause of STND.STDC 1.0. STND.STDC.40 keeps for C the binding form of STND.CXX.18, which the same "
+     "ratification applied to C through the table of STND.STDC.2, at the cost of one choice of option for a unit that "
+     "holds a required check. Both bind at every class. The "
      "binding provisions of STND.CODE that reach C, STND.CODE.6, STND.CODE.7, STND.CODE.14, STND.CODE.15, "
      "STND.CODE.16, and STND.CODE.18, carry the floor arguments that the Notes of STND.CODE give for each language."),
 ]
@@ -186,18 +208,21 @@ READING = (
     "STND.STDC.1 no longer lists STND.CXX.28, STND.CXX.30, and STND.CXX.31, whose outcomes STND.CODE.17, "
     "STND.CODE.19, and STND.CODE.20 now hold for every language, and drops VV.1, which only those rows needed; "
     "STND.STDC.2, retitled C responses to listed failures and moved to the section Failures, replaces its table of "
-    "the C readings of STND.CXX.16, STND.CXX.17, STND.CXX.18, and STND.CXX.29, now STND.CODE.14, STND.CODE.15, "
-    "STND.CODE.16, and STND.CODE.18, by the one change that C needs, that a listed condition passed to the caller is "
-    "reported in the return value or in an object that the contract names and not through errno alone, and "
-    "instantiates PRIME.4 alone; STND.STDC.28 and STND.STDC.30 cite STND.CODE.14 and STND.STDC.2 in place of the C "
-    "reading of STND.CXX.16; new STND.STDC.39 (default, from CSQ3) leaves the convention of names to the repository "
-    "configuration and keeps the names that the notation of NUMER.4 fixes, the rule of decision 9 of 2026-10-24; "
-    "Terms import Untrusted input, Execution setting, High-assurance code, and High-assurance coding standard from "
-    "STND.CODE and delete this standard's own definition of Untrusted input, which gains the reach of the public "
-    "interface that the documentation or the repository configuration names; the Notes cite STND.CODE for the "
-    "shared rules, state that STND.CODE.6 and STND.CODE.16 exclude the assert macro as the form of a check of "
-    "untrusted input, whether NDEBUG is defined by an option or in the source, give the reason for the naming rule, "
-    "and restate the floor argument for STND.STDC.2")
+    "the C readings of STND.CXX.16, STND.CXX.17, STND.CXX.18, and STND.CXX.29 by the one change that C needs, that a "
+    "listed condition passed to the caller is reported in the return value or in an object that the contract names "
+    "and not through errno alone, and instantiates PRIME.4 alone; it keeps its identifier for the errno clause of its "
+    "own table, and no identifier is given to another provision; new STND.STDC.40 (binding, PRIME.4) keeps the C "
+    "reading of STND.CXX.18, the option that assumes finite values, which the table of STND.STDC.2 held; the C "
+    "readings of STND.CXX.16, STND.CXX.17, and STND.CXX.29 give way to STND.CODE.14, STND.CODE.15, and STND.CODE.18; "
+    "STND.STDC.28 and STND.STDC.30 cite STND.CODE.14 and STND.STDC.2 in place of the C reading of STND.CXX.16, and "
+    "STND.STDC.31 cites STND.STDC.2 for a listed condition; new STND.STDC.39 (default, from CSQ3) leaves the "
+    "convention of names to the repository configuration and keeps the names that the notation of NUMER.4 fixes, "
+    "the rule of decision 9 of 2026-10-24; Terms import Untrusted input, Execution setting, High-assurance code, and "
+    "High-assurance coding standard from STND.CODE and delete this standard's own definition of Untrusted input, "
+    "which gains the reach of the interface for outside use that the documentation or the repository configuration "
+    "names; the Notes cite STND.CODE for the shared rules and for the reasoning on the assert macro, give the C "
+    "facts, the nonlocal jump, the check of a pointer argument without an extent, and the reason for the naming "
+    "rule, and restate the floor argument for STND.STDC.2 and STND.STDC.40")
 
 ROW = f"| 1.1 | {DATE} | Minor amendment (GOV.41): {READING}. |"
 
@@ -206,16 +231,19 @@ RATIONALE = (
     "The change is minor because it removes obligations from this standard's text that STND.CODE now holds, alters "
     "the binding STND.STDC.2, adds a default, and alters the defined meaning of Untrusted input for C. The "
     "obligations of C source are those of STND.STDC 1.0 with three changes: the term Untrusted input reaches the "
-    "arguments of each function of the public interface that the documentation or the repository configuration "
-    "names; the second sentence of STND.CODE.16 reaches an assertion that a definition of NDEBUG in the source turns "
-    "off, the case that STND.CODE.6 did not reach; and STND.STDC.39 is new. The C reading of STND.CXX.17 held the "
-    "condition on the means of the work that STND.CODE.15 now states in its own words. Class onsets: STND.STDC.2 "
-    "binds at every class; STND.STDC.39 rests on no row of STND.CLASS.10 and applies from CSQ3; the onsets of the "
-    "rows that STND.STDC.1 keeps are unchanged. Floor (GOV.11): STND.STDC.2 asks only the report of a listed "
-    "condition that STND.CODE.14 already admits, in a form that keeps it from being lost, at the cost of its wording; "
-    "the floor arguments for the provisions of STND.CODE that reach C are in the Notes of STND.CODE. Transition "
+    "arguments of each function of the interface for outside use that the documentation or the repository "
+    "configuration names; the second sentence of STND.CODE.16 reaches an assertion that a definition of NDEBUG in "
+    "the source turns off, the case that STND.CODE.6 did not reach; and STND.STDC.39 is new. STND.STDC.40 states as a "
+    "provision of its own the row of STND.CXX.18 that the table of STND.STDC.2 held, so its obligation does not "
+    "change. The C reading of STND.CXX.17 held a condition on the means of the work that STND.CODE.15 states as a "
+    "form of declaration. Class onsets: STND.STDC.2 and STND.STDC.40 bind at every class; STND.STDC.39 rests on no "
+    "row of STND.CLASS.10 and applies from CSQ3; the onsets of the rows that STND.STDC.1 keeps are unchanged. Floor "
+    "(GOV.11): STND.STDC.2 asks only the report of a listed condition that STND.CODE.14 already admits, in a form that "
+    "keeps it from being lost, at the cost of its wording, and STND.STDC.40 one choice of option, the arguments that "
+    "the ratification of 2026-10-24 accepted for STND.STDC 1.0; the floor arguments for the provisions of STND.CODE "
+    "that reach C are in the Notes of STND.CODE, and the custodian decides their reach to C (R22). Transition "
     "(GOV.42): existing C source conforms when a change next touches it. Review of STND.HARN.28 by the command "
-    "pairs; record review-records/round-2026-10-25-close/p1/."
+    "pairs, a cold review, and their dispositions; record review-records/round-2026-10-25-close/p1/."
     " Text authored by an agent, Claude (Anthropic), at the custodian's direction (REPRO.5)."
     " Under the ruling of ledger entry 15, this decision is the QA.7 review.")
 
@@ -226,12 +254,16 @@ def apply(root: Path) -> None:
     replace_text(root, "STND/STDC/2.md", STDC2)
     replace_text(root, "STND/STDC/28.md", STDC28)
     replace_text(root, "STND/STDC/30.md", STDC30)
-    (root / "STND/STDC/39.md").write_text(B.provision_text("STND.STDC", NEW39, "adopted", DATE), encoding="utf-8")
-    res = B.derive_fields(root, ["STND.STDC.1", "STND.STDC.2", "STND.STDC.28", "STND.STDC.30", "STND.STDC.39"])
+    replace_text(root, "STND/STDC/31.md", STDC31)
+    for p in (NEW39, NEW40):
+        (root / f"STND/STDC/{p['n']}.md").write_text(B.provision_text("STND.STDC", p, "adopted", DATE),
+                                                      encoding="utf-8")
+    res = B.derive_fields(root, ["STND.STDC.1", "STND.STDC.2", "STND.STDC.28", "STND.STDC.30", "STND.STDC.31", "STND.STDC.39",
+                                 "STND.STDC.40"])
     for ident, r in res.items():
         if r.unresolved:
             raise ValueError(f"{ident}: {r}")
-    if res["STND.STDC.39"].forced or not res["STND.STDC.2"].forced:
+    if res["STND.STDC.39"].forced or not res["STND.STDC.2"].forced or not res["STND.STDC.40"].forced:
         raise ValueError("STND.STDC: a mode differs from the one this amendment states")
     replace_text(root, "STND/STDC/_doc.md", DOC)
     raise_revision(root, "STND/STDC", "1.0", "1.1", ROW)
