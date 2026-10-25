@@ -42,9 +42,8 @@ STDC2_OLD_BODY = (
     "| STND.CXX.18 | None |\n"
     "| STND.CXX.29 | None |\n")
 STDC2_NEW_BODY = (
-    "Where C code passes a condition that PRIME.4 lists to its caller in a result, as STND.CODE.14 admits, it SHALL "
-    "report that condition in its return value or in an object that its contract names for it, and not through "
-    "errno alone (PRIME.4, STND.CODE.14).\n")
+    "A report of a condition that PRIME.4 lists through errno alone SHALL NOT be taken as passing that condition to "
+    "the caller in a result under STND.CODE.14 (PRIME.4, STND.CODE.14).\n")
 STDC2 = [
     ('title: "Binding C++ provisions applied to C"', 'title: "C responses to listed failures"'),
     ('section: "Provisions of STND.CXX"', 'section: "Failures"'),
@@ -212,8 +211,8 @@ READING = (
     "STND.CODE.19, and STND.CODE.20 now hold for every language, and drops VV.1, which only those rows needed; "
     "STND.STDC.2, retitled C responses to listed failures and moved to the section Failures, replaces its table of "
     "the C readings of STND.CXX.16, STND.CXX.17, STND.CXX.18, and STND.CXX.29 by the one change that C needs, that a "
-    "listed condition passed to the caller is reported in the return value or in an object that the contract names "
-    "and not through errno alone, and instantiates PRIME.4 alone; it keeps its identifier for the errno clause of its "
+    "report of a listed condition through errno alone is not taken as passing it to the caller in a result under "
+    "STND.CODE.14, and instantiates PRIME.4 alone; it keeps its identifier for the errno clause of its "
     "own table, and no identifier is given to another provision; new STND.STDC.40 (binding, PRIME.4) states in C "
     "words the row of STND.CXX.18, the option that assumes finite values, which the table of STND.STDC.2 held; the C "
     "readings of STND.CXX.16, STND.CXX.17, and STND.CXX.29 give way to STND.CODE.14, STND.CODE.15, and STND.CODE.18; "

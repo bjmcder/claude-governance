@@ -36,3 +36,7 @@ These answer `review.md` in this folder. The revised scripts are `apply_offld_1_
 - `findings.py` on the whole corpus gives the same findings as the live corpus: no defect, and nothing on a changed provision.
 - `check_refs.py` reports 0 missing rows for the four documents.
 - The pair lists are unchanged (byte-identical).
+
+## Reconciliation review, S6
+
+The history row and the rationale of STND.HARN 1.3 did not mention that the row Signature now says "the transaction of the row Record" where it said "that transaction". Both now do. The rationale adds that the wording changed because the row's own conditions also speak of ledger entries, and that it tests the same transaction. After a fresh rehearsal of `apply_close_p4.py`, `verify` passes all eight checks, `findings.py` matches the live corpus, and `check_refs.py` reports 0 missing rows. The reading copy is `STND.HARN-0.3.md`.

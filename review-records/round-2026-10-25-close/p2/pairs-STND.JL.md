@@ -1,10 +1,10 @@
-# Pairs for review of the changed and new provisions of STND.JL (STND.HARN.28), revision 0.3
+# Pairs for review of the changed and new provisions of STND.JL (STND.HARN.28), revision 0.5
 
-From `python3 -B -m govharness pairs <rehearsed copy> STND.JL` on entry 147 plus apply_close_p2.py (P1 0.2 first), limited to the rows whose changed side is STND.JL.1, STND.JL.13, STND.JL.15, STND.JL.36, STND.JL.37, STND.JL.38, STND.JL.39, STND.JL.40, STND.JL.41.
+From `python3 -B -m govharness pairs <rehearsed copy> STND.JL` on entry 147 plus apply_close_p2.py (P1 0.3 first), limited to the rows whose changed side is STND.JL.1, STND.JL.3, STND.JL.13, STND.JL.15, STND.JL.36, STND.JL.37, STND.JL.38, STND.JL.39, STND.JL.40, STND.JL.41.
 
 No pair: STND.JL.38, STND.JL.40 (DSGN.14 alone, which no provision of a profile or sub-profile pairs with here).
 
-66 pair(s).
+74 pair(s).
 
 | # | Changed side | Other provision | Bases |
 | --- | --- | --- | --- |
@@ -28,49 +28,57 @@ No pair: STND.JL.38, STND.JL.40 (DSGN.14 alone, which no provision of a profile 
 | 18 | STND.JL.15 | HDES.14 | PRIME.4 |
 | 19 | STND.JL.15 | HW.8 | PRIME.4 |
 | 20 | STND.JL.15 | HW.GPU.3 | PRIME.4 |
-| 21 | STND.JL.36 | AGENT.22 | REPRO.7 |
-| 22 | STND.JL.36 | CPS.5 | DSGN.2 |
-| 23 | STND.JL.36 | CPS.9 | DSGN.2 |
-| 24 | STND.JL.36 | HW.22 | RSRC.4 |
-| 25 | STND.JL.36 | HW.CPU.4 | RSRC.4 |
-| 26 | STND.JL.36 | HW.GPU.4 | RSRC.4 |
-| 27 | STND.JL.36 | HW.QPU.8 | RSRC.4 |
-| 28 | STND.JL.36 | ML.6 | DSGN.2 |
-| 29 | STND.JL.36 | NUMER.16 | REPRO.7 |
-| 30 | STND.JL.36 | NUMER.17 | RSRC.4 |
-| 31 | STND.JL.36 | NUMER.3 | REPRO.7 |
-| 32 | STND.JL.36 | NUMER.5 | REPRO.7 |
-| 33 | STND.JL.37 | HDES.11 | DSGN.4 |
-| 34 | STND.JL.37 | HDES.ASIC.10 | DSGN.4 |
-| 35 | STND.JL.37 | HDES.FPGA.3 | DSGN.4 |
-| 36 | STND.JL.37 | HW.13 | DSGN.4 |
-| 37 | STND.JL.37 | HW.14 | DSGN.4 |
-| 38 | STND.JL.39 | CPS.3 | DSGN.5 |
-| 39 | STND.JL.39 | CPS.4 | DSGN.5 |
-| 40 | STND.JL.39 | CPS.8 | DSGN.5 |
-| 41 | STND.JL.39 | HDES.10 | DSGN.5 |
-| 42 | STND.JL.39 | HDES.12 | DSGN.5 |
-| 43 | STND.JL.39 | HDES.15 | DSGN.5 |
-| 44 | STND.JL.39 | HDES.4 | DSGN.5 |
-| 45 | STND.JL.39 | HDES.5 | DSGN.5 |
-| 46 | STND.JL.39 | HDES.7 | DSGN.5 |
-| 47 | STND.JL.39 | HDES.ASIC.3 | DSGN.5 |
-| 48 | STND.JL.39 | HDES.ASIC.4 | DSGN.5 |
-| 49 | STND.JL.39 | HDES.ASIC.5 | DSGN.5 |
-| 50 | STND.JL.39 | HDES.ASIC.7 | DSGN.5 |
-| 51 | STND.JL.39 | HDES.FPGA.3 | DSGN.5 |
-| 52 | STND.JL.39 | HDES.FPGA.5 | DSGN.5 |
-| 53 | STND.JL.39 | HW.13 | DSGN.5 |
-| 54 | STND.JL.39 | HW.18 | DSGN.5 |
-| 55 | STND.JL.39 | HW.4 | DSGN.5 |
-| 56 | STND.JL.39 | HW.5 | DSGN.5 |
-| 57 | STND.JL.39 | HW.6 | DSGN.5 |
-| 58 | STND.JL.39 | HW.7 | DSGN.5 |
-| 59 | STND.JL.39 | HW.CPU.3 | DSGN.5 |
-| 60 | STND.JL.39 | HW.EMBED.4 | DSGN.5 |
-| 61 | STND.JL.39 | NUMER.5 | DSGN.5 |
-| 62 | STND.JL.41 | HDES.11 | DSGN.4 |
-| 63 | STND.JL.41 | HDES.ASIC.10 | DSGN.4 |
-| 64 | STND.JL.41 | HDES.FPGA.3 | DSGN.4 |
-| 65 | STND.JL.41 | HW.13 | DSGN.4 |
-| 66 | STND.JL.41 | HW.14 | DSGN.4 |
+| 21 | STND.JL.3 | CPS.3 | VV.8 |
+| 22 | STND.JL.3 | HDES.3 | REPRO.9 |
+| 23 | STND.JL.3 | HDES.6 | VV.8 |
+| 24 | STND.JL.3 | HW.7 | VV.8 |
+| 25 | STND.JL.3 | HW.CPU.3 | VV.8 |
+| 26 | STND.JL.3 | HW.EMBED.5 | VV.8 |
+| 27 | STND.JL.3 | ML.3 | REPRO.9 |
+| 28 | STND.JL.3 | ML.7 | VV.8 |
+| 29 | STND.JL.36 | AGENT.22 | REPRO.7 |
+| 30 | STND.JL.36 | CPS.5 | DSGN.2 |
+| 31 | STND.JL.36 | CPS.9 | DSGN.2 |
+| 32 | STND.JL.36 | HW.22 | RSRC.4 |
+| 33 | STND.JL.36 | HW.CPU.4 | RSRC.4 |
+| 34 | STND.JL.36 | HW.GPU.4 | RSRC.4 |
+| 35 | STND.JL.36 | HW.QPU.8 | RSRC.4 |
+| 36 | STND.JL.36 | ML.6 | DSGN.2 |
+| 37 | STND.JL.36 | NUMER.16 | REPRO.7 |
+| 38 | STND.JL.36 | NUMER.17 | RSRC.4 |
+| 39 | STND.JL.36 | NUMER.3 | REPRO.7 |
+| 40 | STND.JL.36 | NUMER.5 | REPRO.7 |
+| 41 | STND.JL.37 | HDES.11 | DSGN.4 |
+| 42 | STND.JL.37 | HDES.ASIC.10 | DSGN.4 |
+| 43 | STND.JL.37 | HDES.FPGA.3 | DSGN.4 |
+| 44 | STND.JL.37 | HW.13 | DSGN.4 |
+| 45 | STND.JL.37 | HW.14 | DSGN.4 |
+| 46 | STND.JL.39 | CPS.3 | DSGN.5 |
+| 47 | STND.JL.39 | CPS.4 | DSGN.5 |
+| 48 | STND.JL.39 | CPS.8 | DSGN.5 |
+| 49 | STND.JL.39 | HDES.10 | DSGN.5 |
+| 50 | STND.JL.39 | HDES.12 | DSGN.5 |
+| 51 | STND.JL.39 | HDES.15 | DSGN.5 |
+| 52 | STND.JL.39 | HDES.4 | DSGN.5 |
+| 53 | STND.JL.39 | HDES.5 | DSGN.5 |
+| 54 | STND.JL.39 | HDES.7 | DSGN.5 |
+| 55 | STND.JL.39 | HDES.ASIC.3 | DSGN.5 |
+| 56 | STND.JL.39 | HDES.ASIC.4 | DSGN.5 |
+| 57 | STND.JL.39 | HDES.ASIC.5 | DSGN.5 |
+| 58 | STND.JL.39 | HDES.ASIC.7 | DSGN.5 |
+| 59 | STND.JL.39 | HDES.FPGA.3 | DSGN.5 |
+| 60 | STND.JL.39 | HDES.FPGA.5 | DSGN.5 |
+| 61 | STND.JL.39 | HW.13 | DSGN.5 |
+| 62 | STND.JL.39 | HW.18 | DSGN.5 |
+| 63 | STND.JL.39 | HW.4 | DSGN.5 |
+| 64 | STND.JL.39 | HW.5 | DSGN.5 |
+| 65 | STND.JL.39 | HW.6 | DSGN.5 |
+| 66 | STND.JL.39 | HW.7 | DSGN.5 |
+| 67 | STND.JL.39 | HW.CPU.3 | DSGN.5 |
+| 68 | STND.JL.39 | HW.EMBED.4 | DSGN.5 |
+| 69 | STND.JL.39 | NUMER.5 | DSGN.5 |
+| 70 | STND.JL.41 | HDES.11 | DSGN.4 |
+| 71 | STND.JL.41 | HDES.ASIC.10 | DSGN.4 |
+| 72 | STND.JL.41 | HDES.FPGA.3 | DSGN.4 |
+| 73 | STND.JL.41 | HW.13 | DSGN.4 |
+| 74 | STND.JL.41 | HW.14 | DSGN.4 |

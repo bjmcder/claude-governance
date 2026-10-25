@@ -1,6 +1,17 @@
-# P1 interface: what STND.CODE 1.2 holds for the P2 and P3 drafters (revision 0.3)
+# P1 interface: what STND.CODE 1.2 holds for the P2 and P3 drafters (revision 0.4)
 
-Status: revised after the cold review, the pair review, and the verification of 0.2 (2026-10-25); see `dispositions.md`. Source: `tools/amendment-scripts/apply_code_1_2.py`. Apply P1 first; `apply_close_p1.py` runs STND.CODE 1.2, STND.STDC 1.1, STND.CXX 1.2 in that order. The texts below are copied from the rehearsed copy.
+Status: revised after the cold review, the pair review, the verification of 0.2, and the reconciliation reviews (2026-10-25); see `dispositions.md`. Source: `tools/amendment-scripts/apply_code_1_2.py`. Apply P1 first; `apply_close_p1.py` runs STND.CODE 1.2, STND.STDC 1.1, STND.CXX 1.2 in that order. The texts below are copied from the rehearsed copy.
+
+## Changes from 0.3
+
+These follow the reconciliation reviews: alignment, floor, and records.
+
+| ID | Change | What a citer does |
+| --- | --- | --- |
+| **STND.CODE.16** sentence 2 | **Text change.** It now reads "Where a build holds the code that a check of STND.CODE.6 or of the first sentence of this provision guards, that check SHALL NOT be turned off in that build by a definition that the source of the work gives to conditional compilation". A check compiled out together with the code it guards is now outside it. The Notes now give its reach in Rust (nothing), Fortran (preprocessed source only), SystemVerilog (conditional compilation directives), and Lean (nothing). | P3: nothing cites sentence 2. Citations of "the first sentence of STND.CODE.16" stand. |
+| STND.CODE Notes | Several Notes changes. Responses now names STND.PY.32, STND.CXX.32, and STND.CXX.33. Finite values reads "STND.CXX.18 for C++ and STND.STDC.40 for C". The STND.CODE.19 Notes say that a non-blocking check on a newest release (STND.RUST.1, STND.JL.3) builds no delivered code. The onsets of STND.CODE.17, .19, and .20 are called departures from STND.CLASS.10 and are argued for the languages that no ruling covers. | None. |
+| STND.STDC.2 | Body reworded: "A report of a condition that PRIME.4 lists through errno alone SHALL NOT be taken as passing that condition to the caller in a result under STND.CODE.14". | None. |
+| STND.CXX | The Purpose lists STND.CXX.33. The Notes and rationale give one resolution: STND.CXX.27 is unchanged, and the Julia standard gains its counterpart (STND.JL.36, named in words). | None. |
 
 ## Changes from 0.2
 
@@ -66,7 +77,7 @@ Where the language, or a compiler or a static check among the means of the work,
 
 Binding. Instantiates PRIME.4, DSGN.2, CPS.5, CPS.9. Refers to STND.CODE.6. Section: Failures.
 
-Where CPS.5 or CPS.9 applies to the work, each check that it requires, with its response, SHALL NOT be removable by an execution setting (PRIME.4, DSGN.2, CPS.5, CPS.9). A check that STND.CODE.6 or the first sentence of this provision governs SHALL NOT be written in a form that a definition that the source of the work gives to conditional compilation turns off (PRIME.4, DSGN.2).
+Where CPS.5 or CPS.9 applies to the work, each check that it requires, with its response, SHALL NOT be removable by an execution setting (PRIME.4, DSGN.2, CPS.5, CPS.9). Where a build holds the code that a check of STND.CODE.6 or of the first sentence of this provision guards, that check SHALL NOT be turned off in that build by a definition that the source of the work gives to conditional compilation (PRIME.4, DSGN.2).
 
 ### STND.CODE.17 Adopted high-assurance coding standard
 

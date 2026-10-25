@@ -1,7 +1,7 @@
 """Rehearsable minor amendment: STND.FTN 1.1, importing Untrusted input from STND.CODE, citing the shared rules
 of STND.CODE 1.2 in place of the withdrawn rules of STND.CXX, and adding the naming rule (one transaction).
 
-New: STND.FTN.37. STND.FTN.18 stays a default, as ratified.
+Withdrawn: STND.FTN.18, whose outcome is the first sentence of STND.CODE.21 (GOV.31). New: STND.FTN.37.
 It applies after STND.CODE 1.2 and STND.CXX 1.2: apply_close_p3.py runs it after apply_close_p1.py. Run from
 harness/, so that govharness imports:
     python3 -B -m govharness rehearse <corpus holding P1> ../tools/amendment-scripts/apply_ftn_1_1.py
@@ -28,10 +28,14 @@ FTN29 = [
      "STND.CODE.14)."),
 ]
 
-FTN18 = [
-    ('refers_to: ["STND.CODE.6", "CPS.5", "CPS.9"]', 'refers_to: ["STND.CODE.6", "CPS.5", "CPS.9", "STND.CODE.21"]'),
-    ("lets the compiler assume that floating-point values are finite (DSGN.2).",
-     "lets the compiler assume that floating-point values are finite (DSGN.2, STND.CODE.21)."),
+WITHDRAWN = [18]
+
+FTN26 = [
+    ('refers_to: []', 'refers_to: ["STND.CONC.30"]'),
+    ("write to one file (REPRO.3). Code SHOULD NOT rely on the order of the records that different images write to "
+     "one file (REPRO.3).",
+     "write to one file (REPRO.3, STND.CONC.30). Other than an order that a protocol of the images fixes, code SHOULD "
+     "NOT rely on the order of the records that different images write to one file (REPRO.3, STND.CONC.30)."),
 ]
 
 FTN31 = [
@@ -48,7 +52,12 @@ Each name that the Fortran source of the work declares SHOULD follow the naming 
 
 # ------------------------------------------------------------------ the document
 
+FRONT = [("waivable: false\n---",
+          "waivable: false\nwithdrawn: [" + ", ".join(f'"STND.FTN.{n}"' for n in WITHDRAWN) + "]\n---")]
+
 DOC = [
+    ("kinds, literal constants, and floating-point exceptions (STND.FTN.13 to STND.FTN.18);",
+     "kinds, literal constants, and floating-point exceptions (STND.FTN.13 to STND.FTN.17);"),
     # Purpose
     ("legacy source and its modernization without a change of results (STND.FTN.33 and STND.FTN.34); and the checks "
      "of Fortran code at run time (STND.FTN.35 and STND.FTN.36).",
@@ -73,10 +82,10 @@ DOC = [
     # Notes: floating-point exceptions
     ("STND.FTN.18 is therefore a default, at the cost of one choice of option for a file that holds a required "
      "check, and no binding provision rests on the hazard; STND.CXX.18 binds the same sentence for C++.",
-     "STND.FTN.18 is therefore a default, at the cost of one choice of option for a file that holds a required "
-     "check, and no binding provision rests on the hazard; STND.CXX.18 binds the same sentence for C++. STND.FTN.18 "
-     "is the Fortran form of the first sentence of STND.CODE.21, stated for each source file, since an option of a "
-     "Fortran compiler applies to the files that it compiles; it adds no other outcome to STND.CODE.21."),
+     "The first sentence of STND.CODE.21 keeps code that holds such a check from an option that, by the "
+     "documentation of its compiler, lets the compiler assume finite values, as a default for every language, at the "
+     "cost of one choice of option for a file that holds a required check; no binding provision rests on the hazard "
+     "for Fortran, and STND.CXX.18 binds the same sentence for C++."),
     # Notes: failures
     ("which a subroutine makes in a status argument because it has no result (STND.FTN.29, in the form of "
      "STND.CXX.16, STND.PY.22, and STND.JL.15).",
@@ -116,21 +125,42 @@ DOC = [
      "subscript that such a procedure receives, the check that DSGN.2 already asks where untrusted input enters, in "
      "the form that no execution setting removes, at the cost of one test for each such subscript; an external "
      "procedure that nothing names for such use stays outside the reach."),
+    # Notes: input and output
+    ("output gathered from the parallel parts and written by one image in a fixed order is one remedy.",
+     "output gathered from the parallel parts and written by one image in a fixed order is one remedy. STND.FTN.26 "
+     "is the Fortran form of STND.CONC.30: the constraints of DO CONCURRENT forbid image control statements and "
+     "references to impure procedures, so no protocol of its iterations orders their records, while image control "
+     "statements are able to order the writes of images, which the second sentence of STND.FTN.26 admits."),
+    # Notes: checks in the builds that report results
+    ("keeps the verdict of a test the same on each run, as STND.CODE.9 asks.",
+     "keeps the verdict of a test the same on each run, as STND.CODE.9 asks. This standard has no counterpart of STND.CXX.27, or of the default "
+     "of STND.JL that keeps the checking of bounds in the configuration that reports results: Fortran defines no "
+     "checked mode of the language or of its intrinsic procedures, a check of subscripts against bounds is a "
+     "facility of a compiler that the Fortran standard does not require, so STND.FTN.31 keeps the check of each "
+     "untrusted subscript in the code, where no execution setting removes it, and STND.FTN.35 runs the checks that a "
+     "compiler provides in the tests."),
     # Notes: class onset
+    ("STND.FTN.15 and STND.FTN.18 check where untrusted input enters, or keep such a check, which DSGN.2 asks from "
+     "CSQ3, and rest on no row of the postconditions that STND.CLASS.10 starts at CSQ1.",
+     "STND.FTN.15 checks where untrusted input enters, which DSGN.2 asks from CSQ3, and rests on no row of the "
+     "postconditions that STND.CLASS.10 starts at CSQ1."),
     ("each default instantiates only DSGN, SIMPL, REPRO, VV, or a provision of NUMER or HW,",
      "each default instantiates only DSGN, SIMPL, REPRO, VV, INTPR, or a provision of NUMER or HW,"),
 ]
 
 READING = (
-    "Terms import Untrusted input from STND.CODE, delete this standard's own "
+    "STND.FTN.18 is withdrawn, its outcome being the first sentence of STND.CODE.21 for every language, and the "
+    "front matter lists it as withdrawn; Terms import Untrusted input from STND.CODE, delete this standard's own "
     "definition, and place each procedure that a module makes public and each procedure with the BIND attribute in "
     "the public interface that the term takes in, so that the reach ratified on 2026-10-24 stays; "
-    "STND.FTN.29, STND.FTN.31, and STND.FTN.18 cite STND.CODE.14, STND.CODE.6, and STND.CODE.21, of which they are "
-    "the Fortran forms, with their text otherwise unchanged, STND.FTN.18 staying a default; new STND.FTN.37 (default, from CSQ3) leaves the convention of names to the "
+    "STND.FTN.29 and STND.FTN.31 cite STND.CODE.14 and STND.CODE.6, of which they are the Fortran forms, with their "
+    "text otherwise unchanged; STND.FTN.26 cites STND.CONC.30, of which it is the Fortran form, and admits an order "
+    "of the records of images that a protocol of the images fixes; new STND.FTN.37 (default, from CSQ3) leaves the convention of names to the "
     "repository configuration and keeps the names that the notation of NUMER.4 fixes, the rule of decision 9 of "
     "2026-10-24; the Purpose cites STND.CODE for the rules of code that hold for every language and lists "
-    "STND.FTN.37; the Notes cite STND.CODE.14 in place of the withdrawn STND.CXX.16, call STND.FTN.18 the Fortran "
-    "form of STND.CODE.21, state the reach of the term on the "
+    "STND.FTN.37; the Notes cite STND.CODE.14 in place of the withdrawn STND.CXX.16 and STND.CODE.21 in place of "
+    "STND.FTN.18, give the reason that this standard has no counterpart of STND.CXX.27 and of the default of "
+    "STND.JL on bounds checking in the configuration that reports results, state the reach of the term on the "
     "ratification of 2026-10-24 with the floor argument for an external procedure that the documentation or the "
     "repository configuration names, give the reason for the naming rule, and add INTPR to the class onsets")
 
@@ -139,7 +169,11 @@ ROW = f"| 1.1 | {DATE} | Minor amendment (GOV.41): {READING}. |"
 RATIONALE = (
     f"Minor amendment of STND.FTN to revision 1.1, ratified by the custodian on {DATE}, on STND.CODE 1.2: "
     f"{READING}. The change is minor because it adds a default and alters the defined meaning of Untrusted input "
-    "for Fortran. STND.FTN.18 stays a default, as ratified on 2026-10-24, beneath the default STND.CODE.21. The term of STND.CODE reaches the values that each module-public procedure and each procedure "
+    "for Fortran; it also removes a default and widens another. STND.FTN.18 is withdrawn under GOV.31: it stated the "
+    "first sentence of STND.CODE.21, a default in the same mode, for a source file of Fortran, and named no Fortran "
+    "construct, so its obligation stays in force through STND.CODE.21; the withdrawn identifier is listed in the "
+    "field withdrawn and is never given to another provision (STND.IDENT.14). STND.FTN.26 admits, as STND.CONC.30 "
+    "does, an order of the records of images that a protocol of the images fixes. The term of STND.CODE reaches the values that each module-public procedure and each procedure "
     "with the BIND attribute receive, as the term of STND.FTN 1.0 did, and also each procedure that the "
     "documentation or the repository configuration names for use by code outside the work, the reach that STND.CODE 1.2 "
     "gives the term in every language; for an external procedure so named, the reach is "
@@ -157,17 +191,19 @@ RATIONALE = (
 
 def apply(root: Path) -> None:
     root = Path(root)
-    replace_text(root, "STND/FTN/18.md", FTN18)
+    for n in WITHDRAWN:
+        (root / f"STND/FTN/{n}.md").unlink()
+    replace_text(root, "STND/FTN/26.md", FTN26)
     replace_text(root, "STND/FTN/29.md", FTN29)
     replace_text(root, "STND/FTN/31.md", FTN31)
     (root / "STND/FTN/37.md").write_text(B.provision_text("STND.FTN", NEW37, "adopted", DATE), encoding="utf-8")
-    res = B.derive_fields(root, ["STND.FTN.18", "STND.FTN.29", "STND.FTN.31", "STND.FTN.37"])
+    res = B.derive_fields(root, ["STND.FTN.26", "STND.FTN.29", "STND.FTN.31", "STND.FTN.37"])
     for ident, r in res.items():
         if r.unresolved:
             raise ValueError(f"{ident}: {r}")
-    if res["STND.FTN.37"].forced or res["STND.FTN.18"].forced or not (res["STND.FTN.29"].forced and res["STND.FTN.31"].forced):
+    if res["STND.FTN.37"].forced or res["STND.FTN.26"].forced or not (res["STND.FTN.29"].forced and res["STND.FTN.31"].forced):
         raise ValueError("STND.FTN: a mode differs from the one this amendment states")
-    replace_text(root, "STND/FTN/_doc.md", DOC)
+    replace_text(root, "STND/FTN/_doc.md", FRONT + DOC)
     raise_revision(root, "STND/FTN", "1.0", "1.1", ROW)
     B.write_references(root, ["STND.FTN"])
     rec = record_transaction(root, Change(kind="amend", actor="The Custodian", role="custodians", at=AT,

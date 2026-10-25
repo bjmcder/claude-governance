@@ -28,6 +28,14 @@ JL1 = [
      "Other than for a version that STND.CODE.19 fixes, the reference version SHOULD be the latest stable minor "
      "version of Julia"),
 ]
+JL3 = [
+    ('refers_to: ["STND.JL.2"]', 'refers_to: ["STND.JL.2", "STND.CODE.19"]'),
+    ("At the interval that the repository configuration sets, a check that reports its failure without blocking a "
+     "change SHOULD run the tests on the newest stable release and on the newest prerelease of Julia (VV.8).",
+     "Other than for code whose version of Julia STND.CODE.19 fixes, a check that reports its failure without "
+     "blocking a change SHOULD run the tests, at the interval that the repository configuration sets, on the newest "
+     "stable release and on the newest prerelease of Julia (VV.8)."),
+]
 JL13 = [
     ("refers_to: []", 'refers_to: ["STND.CODE.6"]'),
     ("A check of untrusted input SHALL NOT be written with `@assert` (PRIME.4, DSGN.2).",
@@ -76,8 +84,8 @@ PURPOSE = [
 
 TERMS = [
     ("Repository configuration, Static check, and Execution setting have the meanings that STND.CODE gives them;",
-     "Repository configuration, Static check, Execution setting, and Untrusted input have the meanings that "
-     "STND.CODE gives them; each function that a package of the work declares by `export` or by `public` belongs to "
+     "Repository configuration, Static check, Execution setting, Untrusted input, High-assurance code, and "
+     "High-assurance coding standard have the meanings that STND.CODE gives them; each function that a package of the work declares by `export` or by `public` belongs to "
      "the public interface that the term Untrusted input of STND.CODE takes in, and an index "
      "that `eachindex`, `axes`, or `CartesianIndices` of the indexed array produces is valid by construction and is "
      "not untrusted input;"),
@@ -95,6 +103,11 @@ TERMS = [
 ]
 
 NOTES = [
+    # Sources: the research addendum a2
+    ("A fact marked unverified is one that the documentation consulted did not confirm.",
+     "A fact marked unverified is one that the documentation consulted did not confirm. The note "
+     "research/round-addenda/a2-language-facts.md (a2 below) confirms facts of these Notes from the manual of "
+     "Julia, and the keys S11 to S14 that the Notes cite after a2 are entries of its table of sources."),
     # Arithmetic: STND.CODE.21 for `@fastmath`
     ("`muladd` fuses where the hardware allows, so its result depends on the machine.",
      "`muladd` fuses where the hardware allows, so its result depends on the machine. STND.CODE.21 recommends "
@@ -105,7 +118,8 @@ NOTES = [
     ("A qualified revision stays, because no other revision is admissible without new evidence.",
      "A qualified revision stays, because no other revision is admissible without new evidence; STND.CODE.19 fixes, "
      "for high-assurance code, a version of Julia that its high-assurance coding standard covers and for which each "
-     "tool that runs that code holds the validation that the work requires; STND.JL.1 yields to it by its own text, "
+     "tool that runs that code holds the validation that the work requires; STND.JL.1 and the third sentence of "
+     "STND.JL.3 yield to it by their own text, "
      "and its third sentence keeps that version as a qualified revision."),
     # Failures: the reach of the term, STND.CODE.6, .14, .15, .16
     ("which also holds that the reach of the term Untrusted input to the arguments of each declared public function "
@@ -136,7 +150,8 @@ NOTES = [
      "same holds for each array type of a package is unverified. STND.JL.36 is therefore the Julia counterpart of STND.CXX.27, which asks "
      "each reporting build of C++ to enable the checks of its standard library: it asks the production "
      "configuration to leave bounds checking on, other than inside `@inbounds`, unless a measurement against a "
-     "stated budget and a decision record show its cost, and STND.JL.34 then tests that configuration as it is."),
+     "stated budget and a decision record show its cost, and STND.JL.34 then tests that configuration as it is. "
+     "STND.CXX.27 stays unchanged, and STND.JL.36 is its Julia counterpart."),
     # Foreign interfaces (sibling list), before the class paragraph
     ("Class onset. Under STND.CLASS.10, each default provision instantiates only DSGN,",
      "Foreign interfaces. STND.JL.37 to STND.JL.41 give the Julia forms of what STND.CXX.20 and STND.CXX.22, "
@@ -180,7 +195,7 @@ READING = (
     "STND.CODE takes in, and keep the index that `eachindex`, `axes`, or "
     "`CartesianIndices` produces as valid by construction; Terms define Foreign interface; STND.JL.13 cites "
     "STND.CODE.6, and STND.JL.15 STND.CODE.14, for the rule of which each is the Julia form, and neither changes "
-    "otherwise; STND.JL.1 yields to a version of Julia that STND.CODE.19 fixes; new STND.JL.36 (default, DSGN.2, RSRC.4, and REPRO.7) has the production configuration leave bounds "
+    "otherwise; STND.JL.1 and the third sentence of STND.JL.3 yield to a version of Julia that STND.CODE.19 fixes; Terms import High-assurance code and High-assurance coding standard; new STND.JL.36 (default, DSGN.2, RSRC.4, and REPRO.7) has the production configuration leave bounds "
     "checking on outside `@inbounds` unless a measurement and a decision record show its cost, the Julia "
     "counterpart of STND.CXX.27; new STND.JL.37 to STND.JL.41 (defaults, DSGN.4, DSGN.14, and DSGN.5) give the "
     "types and layouts, the lifetime of memory, the exceptions of callbacks, the ownership of resources, and the "
@@ -193,7 +208,7 @@ ROW = f"| 1.2 | {DATE} | Minor amendment (GOV.41): {READING}. |"
 RATIONALE = (
     f"Minor amendment of STND.JL to revision 1.2, ratified by the custodian on {DATE}, on STND.CODE 1.2 and the "
     f"list of differences among sibling language standards of the ratification of 2026-10-24: {READING}. The change "
-    "is minor because it adds six defaults and a clause to the default STND.JL.1. The import of Untrusted input "
+    "is minor because it adds six defaults and a clause to the defaults STND.JL.1 and STND.JL.3. The import of Untrusted input "
     "keeps the reach of the definition it replaces, the arguments of each declared function, and adds each function "
     "that the documentation or the repository configuration names for use outside the work, through STND.JL.13 as "
     "well; the custodian decides that widening with STND.CODE 1.2, and if it is declined, the documentation clause "
@@ -201,7 +216,7 @@ RATIONALE = (
     "STND.CODE.19, as STND.CXX.2 does, so that the latest stable version does not displace the version that a "
     "high-assurance coding standard and a validated toolchain fix. The citations in STND.JL.13 and STND.JL.15 change their references and not their outcome, and keep "
     "the language forms of the ruling of 2026-10-23. Sibling list: STND.JL.13 stays as ruled, and the Notes of "
-    "STND.PY give the reason why Python has no counterpart of its third sentence; STND.JL.36 is the counterpart of "
+    "STND.PY give the reason why Python has no counterpart of its third sentence; STND.CXX.27 stays unchanged, and STND.JL.36 is its counterpart, "
     "STND.CXX.27, because the option `--check-bounds=no` removes the bounds checks of a whole session where no "
     "location states a reason; logging as the only visible degradation stays as ruled, by decision 7 of that "
     "ratification; STND.JL.37 to STND.JL.41 are the counterparts of STND.CXX.20, STND.CXX.22, STND.RUST.24 to "
@@ -217,12 +232,13 @@ RATIONALE = (
 def apply(root: Path) -> None:
     root = Path(root)
     replace_text(root, "STND/JL/1.md", JL1)
+    replace_text(root, "STND/JL/3.md", JL3)
     replace_text(root, "STND/JL/13.md", JL13)
     replace_text(root, "STND/JL/15.md", JL15)
     for p in NEW:
         (root / f"STND/JL/{p['n']}.md").write_text(B.provision_text("STND.JL", p, "adopted", DATE), encoding="utf-8")
     replace_text(root, "STND/JL/_doc.md", PURPOSE + TERMS + NOTES)
-    ids = ["STND.JL.1", "STND.JL.13", "STND.JL.15"] + [f"STND.JL.{p['n']}" for p in NEW]
+    ids = ["STND.JL.1", "STND.JL.3", "STND.JL.13", "STND.JL.15"] + [f"STND.JL.{p['n']}" for p in NEW]
     res = B.derive_fields(root, ids)
     for ident, r in res.items():
         if r.unresolved:

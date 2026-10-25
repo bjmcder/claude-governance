@@ -1,6 +1,6 @@
-# Pairs for review of the changed and new provisions of STND.PY (STND.HARN.28), revision 0.3
+# Pairs for review of the changed and new provisions of STND.PY (STND.HARN.28), revision 0.5
 
-From `python3 -B -m govharness pairs <rehearsed copy> STND.PY` on entry 147 plus apply_close_p2.py (P1 0.2 first), limited to the rows whose changed side is STND.PY.14, STND.PY.22, STND.PY.25, STND.PY.32, STND.PY.33, STND.PY.34, STND.PY.35, STND.PY.36, STND.PY.37.
+From `python3 -B -m govharness pairs <rehearsed copy> STND.PY` on entry 147 plus apply_close_p2.py (P1 0.3 first), limited to the rows whose changed side is STND.PY.14, STND.PY.22, STND.PY.25, STND.PY.32, STND.PY.33, STND.PY.34, STND.PY.35, STND.PY.36, STND.PY.37.
 
 No pair: STND.PY.36 (DSGN.14 alone, which no provision of a profile or sub-profile pairs with here).
 

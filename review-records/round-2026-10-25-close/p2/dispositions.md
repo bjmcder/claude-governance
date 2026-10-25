@@ -56,3 +56,31 @@ Also fixed: two g.12 findings (a condition after the clause) and two g.16 defect
 ## Update to P1 0.3 (2026-10-25)
 
 STND.CODE.14 now names an argument that the caller passes to receive the condition. The PY Notes (Assertions) and the JL Notes (Failures) now give its whole clause: "in its result, in an argument that the caller passes to receive it, or by a mechanism of the language, an exception among them, that propagates the condition to the caller". The bodies of PY.22, PY.32 and JL.15 cite STND.CODE.14 by outcome and are unchanged. Rehearsal on P1 0.3: `verify` passes, no defect on PY or JL, check_refs shows 0 missing rows. Reading copies `STND.PY-0.4.md` and `STND.JL-0.4.md`. The pairs are unchanged, since no provision changed. The decisions are unchanged.
+
+## Reconciliation review (A, B, C), dispositions (2026-10-25)
+
+Rehearsal: entry 147 plus `apply_close_p2.py` (P1 0.3 first). `verify` passes, findings.py shows no defect on PY or JL, and check_refs shows 0 missing rows. Reading copies `STND.PY-0.5.md` and `STND.JL-0.5.md`. The pairs are regenerated: PY 62; JL 74, with the eight new pairs of STND.JL.3 (CPS.3, HDES.3, HDES.6, HW.7, HW.CPU.3, HW.EMBED.5, ML.3, ML.7). Each concerns a hardware design, a record, or a test of the delivered arithmetic. The clause only narrows a check that blocks no change, so each pair is compatible.
+
+| # | Item | Disposition |
+| --- | --- | --- |
+| A S3 | "a2" undefined | Fixed. The first paragraph of the PY and JL Notes names `research/round-addenda/a2-language-facts.md` (a2 below) and its source keys (PY S1 to S10, JL S11 to S14), in the form that STND.RUST uses for a1. |
+| A S3 | High-assurance terms | Fixed. PY and JL Terms import High-assurance code and High-assurance coding standard from STND.CODE. |
+| A S4, B 6 | PY.33 presupposes a lock file | Fixed. It now opens "Where the tools of the work write a lock file for an environment that produces reported results", and the Notes say that it asks for no lock file where the tools write none. |
+| A S4 | "as RUST.30 does" | Fixed. The Notes now state the difference: RUST.30 has no condition on reported results, and it adds builds from the locked revisions that fail on a mismatch. The ledger row and the rationale say so too. |
+| A S4 | Lock file defined twice | The PY term now has the wording of the term of STND.RUST, with "an environment" in place of "a set of crates built together", and the Notes give the reason. One shared definition, in STND.DEPS for example, is a later-round item for the lead to put to the custodian. |
+| B 7 | JL.3 sentence 3 | Fixed. It opens "Other than for code whose version of Julia STND.CODE.19 fixes", and refers_to gains STND.CODE.19; the Versions Notes say that JL.1 and JL.3 yield. RUST.1 sentence 3 belongs to P3. |
+| C S4, A | CXX.27 against JL.34: one resolution | Stated. CXX.27 stays unchanged, and JL.36 is added as its Julia counterpart, in the JL Notes (Checking), the ledger row, and the rationale. Decision 3 below is the one resolution; P1's "no change" refers to the text of CXX.27 alone. |
+| A S5 | Foreign-interface rules per language | Recorded as decision 10. |
+
+## Decisions for the custodian, as they now stand
+
+1. **Untrusted input from STND.CODE.** The reach of the ruling is kept. STND.CODE adds the documented functions, which also reach the ruled PY.25 and JL.13. *Recommend accepting.* Fallback: delete the documentation clause from the CODE term.
+2. **JL.13 sentence 3 against PY.25: no change.** *Recommend.*
+3. **Checks in shipped builds:** CXX.27 unchanged, and JL.36 added as its counterpart, a default from CSQ1. *Recommend.*
+4. **PY.32 binding (R22).** *Recommend.*
+5. **Logging as the only visible degradation: no change,** by decision 7 of 2026-10-24.
+6. **PY.33, a default,** conditioned on a lock file that the tools write. *Recommend.*
+7. **Foreign interfaces: defaults.** PY.34 to PY.37 and JL.37 to JL.41. *Recommend.*
+8. **The CODE citations, and the CODE.19 clauses** in PY.14, JL.1 and JL.3 sentence 3. *Recommend accepting.*
+9. **No JL counterpart of RUST.13 sentence 2.** *Recommend no change.*
+10. **Later round:** one STND.CODE provision for the language-neutral foreign-interface outcomes (callback exceptions, one owner, array layout), one definition of Foreign interface, now defined five times, and one definition of Lock file. *Recommend scheduling it.*

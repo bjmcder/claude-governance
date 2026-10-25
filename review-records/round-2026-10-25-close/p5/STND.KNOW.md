@@ -31,7 +31,7 @@ The workbench has the reach of one project (AGENT). A drawn entry therefore carr
 
 The kinds of STND.KNOW.2 follow the items that AGENT.26 and AGENT.27 ask agents to propose, and add the dependency set that the dependency policy leaves to the knowledge base: a set of external components that has served together across projects, with the regime in which it served. An entry of kind Result states whether its result is promoted and whether it is unverified, as AGENT.27 asks of the proposal (STND.KNOW.1). A knowledge entry for a tool describes the tool and states where it is kept; the tool is not itself an entry (custodians' interpretation of GOV.32, 2026-10-11).
 
-Which knowledge base serves a project is stated in its project constitution or, where none is designated, AGENT.30 holds proposed entries in the workbench. The space of the governance corpus for knowledge entries (KNOW), with one directory per domain (STND.IDENT.15), and its tag vocabulary (TAG), with one directory per facet, are the custodians' shared knowledge base and tags. A facet is registered as a mnemonic (STND.IDENT.19); a tag is added by a file in its facet's directory. The component facet (TAG.COMP) is local to a project.
+Which knowledge base serves a project is stated in its project constitution or, where none is designated, AGENT.30 holds proposed entries in the workbench. The space of the governance corpus for knowledge entries (KNOW), with one directory per domain (STND.IDENT.15), and the tag vocabulary of that corpus (TAG), with one directory per facet, are the custodians' shared knowledge base and tags. A facet is registered as a mnemonic (STND.IDENT.19); a tag is added by a file in its facet's directory. The component facet (TAG.COMP) is local to a project.
 
 ## References
 

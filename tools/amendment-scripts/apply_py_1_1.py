@@ -46,7 +46,7 @@ NEW = [
 Where the work replaces a hook that the interpreter calls for an exception that no handler catches, or for one that it is unable to raise, that hook SHALL deliver to the operator, or to the record of the run, a diagnosis of each such exception that answers a condition that PRIME.4 lists (PRIME.4, STND.CODE.14).
 """, ["PRIME.4"], refs=["STND.CODE.14"], mode="binding"),
     P(33, "Committed Python lock files", "Versions", """
-Where the work reports results, the lock file of each environment that produces them SHOULD be under version control with the source that it resolves (REPRO.1, REPRO.9). A distributed package whose own environment produces no reported result MAY keep its lock file out of version control (REPRO.9).
+Where the tools of the work write a lock file for an environment that produces reported results, that lock file SHOULD be under version control with the source that it resolves (REPRO.1, REPRO.9). A distributed package whose own environment produces no reported result MAY keep its lock file out of version control (REPRO.9).
 """, ["REPRO.1", "REPRO.9"]),
     P(34, "Python foreign function types", "Foreign interfaces", """
 Where a foreign interface does not check the calls of the work against the declaration of a foreign function in its own language, the Python source SHOULD declare the type of each argument and of the result of that function as that declaration gives them (DSGN.4). Each structure whose layout the Python source declares for a foreign interface SHOULD have its size and the offset of each of its fields compared with the foreign declaration by a test (DSGN.4).
@@ -84,28 +84,38 @@ PURPOSE = [
 
 TERMS = [
     ("Repository configuration and Static check have the meanings that STND.CODE gives them;",
-     "Repository configuration, Static check, Execution setting, and Untrusted input have the meanings that "
-     "STND.CODE gives them;"),
+     "Repository configuration, Static check, Execution setting, Untrusted input, High-assurance code, and "
+     "High-assurance coding standard have the meanings that STND.CODE gives them;"),
     ("each of them whose own name and enclosing names carry no leading underscore. |",
      "each of them whose own name and enclosing names carry no leading underscore. Each function and method of the "
      "public interface belongs to the public interface that the term Untrusted input of STND.CODE takes in. |"),
     ("| Untrusted input | Data that reaches the work from outside its own code, including the arguments of each "
      "function of the public interface, other than data from a source that the threat model of the project records "
      "as trusted. |",
-     "| Lock file | A file that records, for an environment of the work, the exact revision of each package that its "
-     "installer resolves from the declared dependencies and, where the source of a package gives one, its integrity "
-     "digest. |\n"
+     "| Lock file | The file that records, for an environment of the work, the exact revision of each package that "
+     "its installation resolves and, where the source of a package gives one, its integrity digest. |\n"
      "| Foreign interface | An interface through which Python code of the work calls, or is called by, code written "
      "in another language, a function of a compiled extension module, a function that the work loads from a shared "
      "library while it runs, and a Python callable that the work passes to such code among them. |"),
 ]
 
 NOTES = [
+    # Sources: the research addendum a2
+    ("Where a Note names a library function, it does so to show the hazard that a provision guards against.",
+     "Where a Note names a library function, it does so to show the hazard that a provision guards against. The "
+     "note research/round-addenda/a2-language-facts.md (a2 below) confirms facts of these Notes from the "
+     "documentation of Python, from PEP 751, and from the specification of the pylock.toml file, and the keys S1 "
+     "to S10 that the Notes cite after a2 are entries of its table of sources."),
     # Versions: the lock file (sibling list) and the edition of high-assurance code (STND.CODE.19)
     ("the lock file of the package installer is the exact record of those revisions (STND.DEPS.10).",
      "the lock file of the package installer is the exact record of those revisions (STND.DEPS.10). STND.PY.33 "
-     "keeps that lock file under version control wherever the work reports results, as STND.JL.4 does for a Julia "
-     "manifest and STND.RUST.30 for a Rust lock file, so that the revisions of a run are those of its source. A "
+     "keeps a lock file that the tools of the work write under version control wherever the work reports results, "
+     "as STND.JL.4 does for a Julia manifest, so that the revisions of a run are those of its source; it asks for "
+     "no lock file where the tools write none. STND.RUST.30 differs: it asks that each Rust lock file be under "
+     "version control without the condition on reported results, and that builds use the revisions that it "
+     "records and fail on a lock file that does not match the package metadata. The term Lock file has the wording "
+     "of the term of STND.RUST, with an environment in place of a set of crates built together, because a Python "
+     "installation resolves the packages of an environment. A "
      "distributed package whose own environment produces no reported result leaves its dependents to resolve their "
      "own environments, and its checks run on the combinations of STND.PY.14; that such a package commits no lock "
      "file is common practice (unverified). PEP 751, a standard of status Final, specifies a common format for lock "
@@ -214,13 +224,13 @@ NOTES = [
 READING = (
     "Terms import Untrusted input, and Execution setting, from STND.CODE and drop this standard's own definition of "
     "Untrusted input, and the term Public interface places its functions and methods in the public interface that "
-    "the term Untrusted input of STND.CODE takes in; Terms define Lock file and Foreign interface; STND.PY.22 cites "
+    "the term Untrusted input of STND.CODE takes in; Terms import High-assurance code and High-assurance coding standard from STND.CODE and define Lock file, in the wording of the term of STND.RUST, and Foreign interface; STND.PY.22 cites "
     "STND.CODE.14, and STND.PY.25 STND.CODE.6, for the rule of which each is the Python form, and neither changes "
     "otherwise; STND.PY.14 yields to a release of Python that STND.CODE.19 fixes; new STND.PY.32 (binding, PRIME.4) has a hook that the work "
     "installs for an exception that no handler catches, or that the interpreter is unable to raise, deliver the diagnosis of each listed condition, the Python "
     "counterpart of the second sentence of STND.RUST.13; new STND.PY.33 (default, REPRO.1 and REPRO.9) keeps the "
-    "lock file of each environment that produces reported results under version control, as STND.JL.4 and "
-    "STND.RUST.30 do; new STND.PY.34 to STND.PY.37 (defaults, DSGN.4, DSGN.5, and DSGN.14) give the types and "
+    "lock file that the tools of the work write for an environment that produces reported results under version "
+    "control, as STND.JL.4 does for a manifest, and the Notes state how STND.RUST.30 differs; new STND.PY.34 to STND.PY.37 (defaults, DSGN.4, DSGN.5, and DSGN.14) give the types and "
     "layouts, the exceptions of callbacks, the lifetime and ownership of memory, and the layout of arrays at foreign "
     "interfaces; the "
     "Purpose lists them; the Notes cite the provisions of STND.CODE of which this standard gives Python forms, "
@@ -243,7 +253,7 @@ RATIONALE = (
     "language forms of the ruling of 2026-10-23. Sibling list: the third sentence of STND.JL.13 has no Python "
     "counterpart, because the interpreter checks each index in every mode, and the Notes say so; logging as the only "
     "visible degradation stays as ruled, by decision 7 of that ratification; STND.PY.32 is the counterpart of the "
-    "second sentence of STND.RUST.13; STND.PY.33 is the counterpart of STND.JL.4 and STND.RUST.30; STND.PY.34 to "
+    "second sentence of STND.RUST.13; STND.PY.33 is the counterpart of STND.JL.4, conditioned on a lock file that the tools of the work write, and narrower than STND.RUST.30, as the Notes state; STND.PY.34 to "
     "STND.PY.37 are the counterparts of STND.CXX.20, STND.CXX.22, STND.RUST.24 to STND.RUST.27, STND.FTN.27, and "
     "STND.FTN.28. Class onsets: STND.PY.32 binds at every class; STND.PY.34, STND.PY.35, and STND.PY.37 from CSQ2; STND.PY.33 and "
     "STND.PY.36 from CSQ3; no other onset changes. Floor (GOV.11): STND.PY.32 reaches only a listed condition whose "

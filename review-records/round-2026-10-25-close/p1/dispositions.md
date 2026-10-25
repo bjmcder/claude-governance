@@ -90,3 +90,41 @@ The CXX checking paragraph is corrected. It describes P2's new default in words,
 
 12. **STND.CXX.33** as a default from CSQ1 (INTPR.8). Recommend yes. The alternative is an onset of CSQ3.
 13. **The status-argument clause of STND.CODE.14**, a widened permission. Its floor is wording only. Recommend yes.
+
+## Reconciliation reviews: dispositions for 0.4
+
+| Item | Disposition |
+| --- | --- |
+| B blocking 2 | **Fixed.** The CODE Notes (Finite values) read "STND.CXX.18 for C++ and STND.STDC.40 for C". |
+| Responses (A S1a, B 5) | **Fixed.** The Notes name STND.RUST.13, STND.PY.32, and STND.CXX.32 as the forms for a hook or handler, and STND.CXX.33 as the C++ default. The IDs are cited as the lead directed; PY.32 and CXX.32 come after entry 148, and their citations resolve once P2 and CXX 1.2 apply. |
+| CXX Purpose (A S2) | **Fixed.** It lists STND.CXX.33. |
+| CODE.16 s2 (B should-fix 1) | **Fixed.** Rewritten as "Where a build holds the code that a check ... guards, that check SHALL NOT be turned off in that build by a definition that the source of the work gives to conditional compilation". The Notes add the reach per language: Rust nothing (a build-configuration condition is an execution setting already reached), Fortran preprocessed source only (unverified that the standard has none), SystemVerilog conditional compilation directives, Lean nothing (unverified). The floor argument now holds per language. |
+| STDC.2 (B should-fix 2) | **Fixed** with B's wording: "A report of a condition that PRIME.4 lists through errno alone SHALL NOT be taken as passing that condition to the caller in a result under STND.CODE.14". |
+| HA onsets (B should-fix 4) | **Fixed.** The CODE Notes call the onsets of CODE.17, .19 (CSQ1, before the CSQ0 rows) and CODE.20 (CSQ4 where a standard is adopted) departures from STND.CLASS.10. They cite the ratifications for C++ (CXX.28, .30, .31) and C (STDC.1), and argue them for the other languages. |
+| CXX.27 against JL.34 (C S4, A) | **Fixed.** One resolution in the CXX Notes and rationale: STND.CXX.27 is unchanged, and the Julia standard gains its counterpart in the same round, named in words. P1 decision 9 now reads the same way. |
+| B should-fix 7 (edition yields) | **Fixed.** The CODE.19 Notes say that a non-blocking newest-release check, as in STND.RUST.1 and STND.JL.3, builds no delivered code and is outside STND.CODE.19. |
+| A S7 (STDC.40 restates CXX.18 by design) | **Recorded as a decision** (below). The BUILD Notes citation is P5's. |
+| B 3 (CUSTODIAN.md line on high assurance) | If decision 6 is ratified, that line needs amending after ratification. This is the lead's step. |
+
+### Rehearsal of 0.4
+
+- `apply_close_p1.py` on entry 147: all eight verify families PASS, with g.18 warnings only.
+- `findings.py`: no defect anywhere in the corpus.
+- `check_refs`: 0 missing rows for the three documents.
+- Instantiates are unchanged, so the pairs of 0.3 stand.
+- Reading copies `<ID>-0.4.md`; `delta-0.3-0.4.md`.
+
+### Decisions revised or added
+
+- **9 (revised).** For CXX.27 against JL.34: CXX.27 is unchanged, and STND.JL.36 is added as its Julia counterpart. Recommend yes.
+- **14.** STDC.40 restates CXX.18 in C words by design, so that a later change of CXX.18 does not change C silently. Recommend yes.
+
+## P3's withdrawals (`p3/for-p1.md`): dispositions for STND.CODE 0.5
+
+These are Notes and rationale changes only; no provision text changes. STND.CODE no longer names STND.FTN.18 or STND.RUST.14, so it holds whether the custodian keeps STND.RUST.14 or withdraws it.
+
+- **Ignored results.** The Notes now say the reading lowers the reach that STND.RUST 1.0 and the C reading of STND.STDC 1.0 gave the outcome, and that in Rust the must_use attribute is the form of the declaration.
+- **Finite values.** The Notes now say "STND.CODE.21 holds it as a default for Fortran, as for every other language without a binding form".
+- **Rationale.** It says "the ratified default for Fortran".
+
+Rehearsal: `apply_close_p1.py` passes all verify families. `findings.py` and `check_refs` are clean for the three documents. Reading copy `STND.CODE-0.5.md`; STND.CXX and STND.STDC are unchanged from 0.4.

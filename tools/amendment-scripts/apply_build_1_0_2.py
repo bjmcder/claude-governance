@@ -1,6 +1,6 @@
-"""Rehearsable editorial amendment: STND.BUILD 1.0.2, the Notes cite STND.CODE.21 beside STND.CXX.18.
+"""Rehearsable editorial amendment: STND.BUILD 1.0.2, the Notes cite STND.CODE.21 beside STND.CXX.18 and STND.STDC.40.
 
-One transaction. STND.CODE.21 and STND.CXX 1.2, which now cites it from STND.CXX.18, come from package P1, so this
+One transaction. STND.CODE.21, STND.STDC.40, and STND.CXX 1.2 come from package P1, so this
 applies after P1: apply_close_p5_build.py rehearses it that way. Run from harness/, so that govharness imports:
     python3 -B -m govharness rehearse governance ../tools/amendment-scripts/apply_close_p5_build.py
 """
@@ -19,25 +19,26 @@ EDITS = [
     ('STND/BUILD/_doc.md', [
         (('and STND.CXX.18 keeps a required check of a floating-point value from a unit compiled under an option '
           'that assumes finite values.'),
-         ('and STND.CODE.21 has code that holds a check of a floating-point value that STND.CODE.6 or STND.CODE.16 '
-          'governs not compiled under a setting that lets the compiler assume finite values, which STND.CXX.18 '
-          'binds for C++.')),
+         ('and STND.CODE.21 advises against compiling code that holds a check of a floating-point value that '
+          'STND.CODE.6 or STND.CODE.16 governs under a setting that lets the compiler assume finite values, which '
+          'STND.CXX.18 binds for C++ and STND.STDC.40 for C.')),
         (('which is why STND.CXX.18 keeps it from a unit that holds a required check of such a value;'),
          ('which is why STND.CODE.21 advises against it for code that holds a required check of such a value, '
-          'and STND.CXX.18 keeps it from such C++ code;')),
+          'and STND.CXX.18 and STND.STDC.40 keep it from such C++ and C code;')),
     ]),
 ]
 
 READING = ('the informative Notes cite STND.CODE.21, the rule for every language on settings that let the compiler '
            'assume finite floating-point values near a required check, and STND.CODE.16, beside STND.CXX.18, which '
-           'binds that rule for C++ and which they cited alone')
+           'binds that rule for C++ and which they cited alone, and STND.STDC.40, which binds it for C; References '
+           'lists STND.STDC')
 
 ROW = (f"| 1.0.2 | {DATE} | Editorial amendment (GOV.41): {READING}; no obligation, permission, or defined "
        "meaning changes. |")
 
 RATIONALE = (f"Editorial amendment of STND.BUILD, revision 1.0.2, ratified by the custodian on {DATE}: {READING}. "
              'The change is editorial under STND.IDENT.3 because the Notes cite the provisions that hold, for '
-             'every language, the rule they already describe for C++, with the same content, and the wording of every provision stays as it '
+             'every language and for C, the rule they already describe for C++, with the same content, and the wording of every provision stays as it '
              'was, so it alters no obligation, permission, or defined meaning. Transition (GOV.42): none, because '
              'no obligation changes. Review: record review-records/round-2026-10-25-close/p5/.'
              " Text authored by an agent, Claude (Anthropic), at the custodian's direction (REPRO.5)."

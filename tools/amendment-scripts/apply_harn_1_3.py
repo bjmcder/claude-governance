@@ -119,7 +119,8 @@ FLOOR_30 = FLOOR_29 + (
 
 READING_29 = ("STND.HARN.29, row Signature: a signature is also required where an entry of the ledger carries a "
               "signature, has a scope at or under the directory of the signer register, or has a form that keeps "
-              "those signs from being read, or where an anchor file exists")
+              "those signs from being read, or where an anchor file exists, and the row names the transaction it tests as "
+              "that of the row Record, where it said that transaction")
 READING_30 = ("new STND.HARN.30: where the row Signature requires no signature, a derived configuration relies under "
               "STND.HARN.29 only on an authorization that the human owner accepts unsigned at the derivation, and "
               "its coverage report names each one")
@@ -146,7 +147,9 @@ RATIONALE = (
     + " (STND.IDENT.3); the Notes on the expiry horizon alone would be editorial, and ride in this amendment. The "
     "row follows the code of unit 0010 as merged (derive/environment/authorizations.py, cli/environment.py): the "
     "signs in the ledger of a register that the corpus lacks, a ledger whose entries do not have the form those "
-    "signs are read from, and the anchor file, which a rewritten ledger does not hide. "
+    "signs are read from, and the anchor file, which a rewritten ledger does not hide. The row now names the "
+    "transaction that it tests as the transaction of the row Record, since its own conditions also speak of entries "
+    "of the ledger; it tests the same transaction as before. "
     + ("STND.HARN.30 follows the proposal of the record of unit 0010, with its first sentence recast so that no "
        "condition trails its clause (STND.DRAFT.16). " if OPTION == "a" else "")
     + "The floor arguments and the reading of STND.DRAFT.42 in the Notes are put to the custodian at ratification. "
