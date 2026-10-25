@@ -1,0 +1,28 @@
+id,kind,level,title,status,path,sha256,bytes
+STND.PERF,standard,LVL2,Performance evaluation standard,adopted,_doc.md,441436a59158fbfcbfeca7ffab88d4373dcc54961e361ceca5f970d66c43e9e3,22788
+STND.PERF.1,provision,LVL2,Evaluation of performance-sensitive code,adopted,1.md,a734f91a0647f77dcaa8f3184d46eeaedae8a1d4d5ede74acc74d256b3beaa08,595
+STND.PERF.2,provision,LVL2,Performance requirement content,adopted,2.md,fe81754f9add2c520d4339f82d73ffdd2545bd94db9809e73da280afca74ccc5,720
+STND.PERF.3,provision,LVL2,Evaluation question stated,adopted,3.md,d66b14e26d1cae09784f536d939606a8b60c595ce29dd7963b8b3e9fe0e73753,647
+STND.PERF.4,provision,LVL2,Yardstick of an absolute question,adopted,4.md,cdb00cc068a689a503037217e10b92b87946b14c6614bef0ac9ee06a49675515,782
+STND.PERF.5,provision,LVL2,Conditions of a relative comparison,adopted,5.md,a29bed497dedb60822a03bf992fd2242d4aa0252a8924ddcb89d6302513f707a,811
+STND.PERF.6,provision,LVL2,Scaling variable and baseline,adopted,6.md,138b0ad6c95f5d7577abaa2b5e4e9716168e7879082b68cfaa45ecaf7b16d11a,679
+STND.PERF.7,provision,LVL2,Range of a scaling claim,adopted,7.md,0f130f9a5dbf4a31f2d299c2da98856c9b89a2d9c256cc22ae75db95710e0236,667
+STND.PERF.8,provision,LVL2,Method and quantities recorded,adopted,8.md,73fd14e21f2d7a48be8491062e1cdd58a400aad3f5819aaf1abfb62d206f4579,660
+STND.PERF.9,provision,LVL2,Limits of the method,adopted,9.md,d06f32da4f004794d0325e1826247ca2a82f49a40b885e252b12cb038a2d7e07,735
+STND.PERF.10,provision,LVL2,Attribution confirmed before optimization,adopted,10.md,b5abb85f47ad643fdf6d8b863d6d151665d472d792a6244a92e9e752b506f6d1,531
+STND.PERF.11,provision,LVL2,Levels of repetition,adopted,11.md,43ab52c55190aa4cac263f1418401b75e8807d5b26c0efef2c73e7c083e50a4c,705
+STND.PERF.12,provision,LVL2,Steady state and first use,adopted,12.md,c7fa32637807075c33a61753297ee03315e1dc9fd32a7d8e72e61a7f151ca8f3,799
+STND.PERF.13,provision,LVL2,Environment and order of runs,adopted,13.md,57e6631fdd891622a8f117d7a60fddd36f7fe94b5a92e280a22bf29300de0339,830
+STND.PERF.14,provision,LVL2,Timer adequacy and completion,adopted,14.md,007789f5bd66b0b825d92ab3e95b882835c1988c35570d4be02454cae6c064b7,832
+STND.PERF.15,provision,LVL2,Timed span and unit,adopted,15.md,f489e09c674b3fca94bb5f00287cf2ce11d2e0a5b01b92212fab9d9829f2baf1,631
+STND.PERF.16,provision,LVL2,Benchmark validity,adopted,16.md,2510582adf57d902f84e1da241e12c60b9ea6c0dd174b8508f27dec58ba673e7,541
+STND.PERF.17,provision,LVL2,Summary statistic and dispersion,adopted,17.md,443b60b0bf33f0aebcaf31c4be272702b3966123641664d341723935608cca91,561
+STND.PERF.18,provision,LVL2,Raw performance samples and exclusions,adopted,18.md,4c071c7769312d8b5997e395e5aff70fe79f813374e22ffd9b4c8a8375397d73,688
+STND.PERF.19,provision,LVL2,Differences against a practical threshold,adopted,19.md,333bd791a6c7b21f6318c48522d5c92dfd6727260d7c21f9f7024aafe6784e37,716
+STND.PERF.20,provision,LVL2,False alarms across a suite,adopted,20.md,3f8d5256a25a3d9cf626a244e00affa88798acb8a68295d9e8a702b8ab4de70b,528
+STND.PERF.21,provision,LVL2,Failed performance checks not rerun,adopted,21.md,50ff416261ea099bca628a8ea1d4ad402af7ac18e92822706643e395b21cf4da,599
+STND.PERF.22,provision,LVL2,Performance history kept,adopted,22.md,191da735cac766fad53ba4756674690b0dc47912a92c4032b33cd63428c005c6,668
+STND.PERF.23,provision,LVL2,Regression guards on performance,adopted,23.md,e40feccc9c8031284b62fd3531cb7f8f0649ce5d83c0ba5c3418ccc35e1068d7,983
+STND.PERF.24,provision,LVL2,Regressions attributed and resolved,adopted,24.md,e962d8a414e51135300bc0945c926d8d100e0db28e850bdda30265626d1e6361,896
+STND.PERF.25,provision,LVL2,Smallest evaluation first,adopted,25.md,11cf4c4db1998eb34efe00f30ea302b2750745aaa30af39aaae8c510cb0cfc4d,635
+STND.PERF.26,provision,LVL2,Resources held for measurement,adopted,26.md,ead9fe15ef8ed3337f4cce6344f58aa18d7f95879618681de6dba11d7086b8fb,818

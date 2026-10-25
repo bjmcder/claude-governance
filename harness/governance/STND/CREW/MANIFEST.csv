@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.CREW,standard,LVL2,Agent roles standard,adopted,_doc.md,041f3d94fbe6200f8be61e62e9072ff006071ff7ad263d1c93f1bacf359fad73,21290
+STND.CREW,standard,LVL2,Agent roles standard,adopted,_doc.md,2facff8a27e1b590b6b199c4bc669e91b20552277b4d5c690d1ea706c7d81c33,21985
 STND.CREW.1,provision,LVL2,Lead agent delegation,adopted,1.md,6573e4c6806f1b127da93deac92b9d2044a3432837abecce6d7597540039e182,837
 STND.CREW.2,provision,LVL2,Queue of owner decisions,adopted,2.md,128a866a5abe502b63da50eb26241d4fae3a1356ee55f5770a05abb0b802e13d,964
 STND.CREW.3,provision,LVL2,Governance findings,adopted,3.md,8090f3cf90ebb8a6e0760674053aa37f43a2e4437df88ceed11b3c53cabeccd8,682
@@ -8,13 +8,13 @@ STND.CREW.5,provision,LVL2,Replanning after failure,adopted,5.md,dec2cdc00867b54
 STND.CREW.6,provision,LVL2,Plan content,adopted,6.md,b45483b6d9942e165091ecf8b22fca92c40fd9bff29b4269a4aee1729b6ab872,974
 STND.CREW.7,provision,LVL2,Grounded effort estimates,adopted,7.md,06d42b9a6f5af33e2e561bcb22b034decee2b70895d3eedfa0b14451020ad1a6,1035
 STND.CREW.8,provision,LVL2,Cost model upkeep,adopted,8.md,1b28e6312e63242c1abd70f5e5157cf52078c514837e3823a9043afd4644d6c3,921
-STND.CREW.9,provision,LVL2,Self-review before review,adopted,9.md,f8c5903ed39a292f63839b653806d6b24ebcd745546b119a7f0a37b39f2351de,451
+STND.CREW.9,provision,LVL2,Self-review before review,adopted,9.md,0d3aba56e5a43f9e9c3e0423defbf815b3535849dcf24625979c0cfac5984605,576
 STND.CREW.10,provision,LVL2,Out-of-scope findings,adopted,10.md,fa047380c51a2fa3f2ab4666a001c586a2eda87c239b2054484ad42e61acc2df,642
 STND.CREW.11,provision,LVL2,Integration of unit branches,adopted,11.md,657bd453d4141148ef25efb9d4eb32d4b035cf68b853ee455b20ad619cc8149c,572
 STND.CREW.12,provision,LVL2,Role and depth in briefs,adopted,12.md,3a343c4ade556b2799658c18c3ce47425b1a1bac5149cdc62c311be0473b6695,501
 STND.CREW.13,provision,LVL2,Delegation beyond depth two,adopted,13.md,7f211a44a3de5d9f193d30389b55fbec5f1f956edccc9226e31603a9f44b2010,710
 STND.CREW.14,provision,LVL2,Coalescence of delegated work,adopted,14.md,8e45befc16ff7517eb3a3109b663707648137ad36f196c76f990fa69124a5cd9,994
-STND.CREW.15,provision,LVL2,Context given to reviewers,adopted,15.md,554596f3f2c46a1e7c19791eb285123a59ee98aeef52dc5f81cd7201353ddd94,765
+STND.CREW.15,provision,LVL2,Context given to reviewers,adopted,15.md,9790f68b398f8016a2a5048b3f54154432d6a244be47bb600c4023aeda8a276e,868
 STND.CREW.16,provision,LVL2,Findings of review,adopted,16.md,1010cca45169a32e9c8c3736d6507b8219a10ef21804c1f76531d7ba2186cacf,723
 STND.CREW.17,provision,LVL2,Release audit,adopted,17.md,3a539fc1b0568e95556674a4dc89d028a845585fb7588c9704d63bd36908c949,1566
 STND.CREW.18,provision,LVL2,Audit independence,adopted,18.md,150b391a09f2a9d94c3d2faba55d089d4ce582a1ec1c24402c20c8e7366f115e,482

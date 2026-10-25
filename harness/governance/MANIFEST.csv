@@ -12,7 +12,7 @@ LEX,lexicon,LVL0,Lexicon,ratified,LEX/,6da577e1be59c323bde73f03c62458bf4ed3e4363
 LVL0,constitution,LVL0,Constitution for Computational and Cyber-Physical Systems,ratified,LVL0/,f6336fdbf8ff7d15a4a296808dbea093f60532c54a0d6dd99fee2ea7ca52fab7,10578
 MEAS,profile,LVL1,Measurement and instrumentation,adopted,MEAS/,455a51b0e1e6c28afe408b78d348628a3fc3ddcfba7d582df70bf9877619a88c,13045
 ML,profile,LVL1,Learned models,adopted,ML/,2fd9dafe1b4a4236793d2943e424d4682fd62476909dee6da17c0a7dc6ffa025,11944
-MNEM,register,,Mnemonic register,adopted,MNEM/,9c64115ca4c70c12d128911a32625139e13840db3a2da5320c11a8327abb7f43,7877
+MNEM,register,,Mnemonic register,adopted,MNEM/,28e258ba08cfbcda741e0c278d82f8aded2cb9e0bedf3c24f5b4ed2f7a9167b0,8152
 NUMER,profile,LVL1,Numerical computation,adopted,NUMER/,2f12c07d518064bea16a4540c1cdbeb756028c4b9b03541efdd71d417b41c69e,34112
 PRIME,part,LVL0,Prime Directives,ratified,PRIME/,bdaf30652a9556ac6acbb20c79688238f66df81c402fb3744f286c0828853256,11354
 PRIN,part,LVL0,Governing Principles,ratified,PRIN/,724ef524295084663d5d3ffefa54a0877b18bbffb7efc122b99df3a94c6035a9,6057
@@ -20,6 +20,6 @@ QA,article,LVL0,Process,ratified,QA/,41f0da9567751b48be70b33937a53fbe1552ac34ea8
 REPRO,article,LVL0,Reproducibility,ratified,REPRO/,1ccf6751a74df2f66f071281ace1f7efe0a697a6fd3b8cb97ae7c7f0d2d14cff,6427
 RSRC,article,LVL0,Resources,ratified,RSRC/,a3c38c61532f09f658f02c432765b91278d060d6609d5f4863535fccbfd595ec,5743
 SIMPL,article,LVL0,Simplicity,ratified,SIMPL/,b45087bd012080077c60359a128f60d9bea33070de5ea143ea95dc42459a665b,4604
-STND,standards,LVL2,Standards,planned,STND/,143d6448d3e30f912b9e42ab5d19736ff3a3ba45f9a1ff6c2b509ee5e75b41d7,1168999
+STND,standards,LVL2,Standards,planned,STND/,ecf256c6c42e34faf79bdc4b4ea987355b03c9ff50be98bd7534ee23fb6deb8e,1256227
 TAG,tag-vocabulary,,Tag vocabulary,planned,TAG/,7583a2ec9ee995ceedf75d7457bfb9dda4d29b200bfdd84ee2802e6b3bf7f8bf,1194
 VV,article,LVL0,Correctness,ratified,VV/,83e168a630992578af51ce52207539ac1496dde1b3c2a2676049755f19da1da6,4823

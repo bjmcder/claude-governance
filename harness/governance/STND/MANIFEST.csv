@@ -5,7 +5,7 @@ STND.BUILD,standard,LVL2,Build standard,adopted,BUILD/,951441e0a64b60b296ae5b40e
 STND.CLASS,standard,LVL2,Consequence-class criteria,adopted,CLASS/,ceb64012ae1eb4e7925c30eb86affeaf4c7c788a5f3e89337bc138f3ccb34acf,17877
 STND.CODE,standard,LVL2,Coding standard,adopted,CODE/,4462aa4503b9df857441a8c87bdb1b705e489b49a522ac2a6834c222431a10a5,12477
 STND.CONC,standard,LVL2,Concurrency standard,adopted,CONC/,87096a72c50fa7799ac5beb1625de989f141d6bde9d45b7d22107641b11906bc,47508
-STND.CREW,standard,LVL2,Agent roles standard,adopted,CREW/,72a58a1a3628079d0512723e69bb524fd691a1be53d0e685481f6313b2fa2b00,39494
+STND.CREW,standard,LVL2,Agent roles standard,adopted,CREW/,d443984f3de9c8670dd96179ecb6820bd43591919f5953615c9da50d54213331,40417
 STND.CXX,standard,LVL2,C++ standard,adopted,CXX/,4e4722242ae8e8e0a9d3cfd71dfeb6fbeed5f9d69d56aec08b6e4561a96cb412,56124
 STND.DEPS,standard,LVL2,Dependency policy,adopted,DEPS/,8fed8233aa0a4ddfd224fed73fa635d479f4c85bb1aa6dbd0540cc717de2bf08,13015
 STND.DFLT,standard,LVL2,Defaults,adopted,DFLT/,a45b5b00e4c05d76715576566af435a6e844917e2c2ea4bce553f588961aa1c7,30494
@@ -21,12 +21,14 @@ STND.LEAN,standard,LVL2,Lean standard,adopted,LEAN/,9c961e0e8e6b39c6820aa0591de0
 STND.MPI,standard,LVL2,Message Passing Interface standard,adopted,MPI/,31b4267bca1a8a839d46a3e805ce2e091eee79354ad08996261406017a8a6741,42872
 STND.OFFLD,standard,LVL2,Accelerator offload standard,adopted,OFFLD/,81d8af85e105ae563b889998504881587bcbd6314b16e46255894a36323cc671,39642
 STND.OMP,standard,LVL2,OpenMP standard,adopted,OMP/,4c79b584cb3db381692bae3b6422267e559ef2e69185f1bfc511bd15a436e72a,46126
+STND.PERF,standard,LVL2,Performance evaluation standard,adopted,PERF/,1e5a07d347660d460f3c5aa34647f17c16203667cac5db39aa9ac5a59e8758a1,41045
 STND.PROJ,standard,LVL2,Project constitution template,adopted,PROJ/,d13722a1d32337728f9bd9712f3a7e0b38401dc6699dfb8517492fe533323f46,24616
 STND.PY,standard,LVL2,Python standard,adopted,PY/,6cbc2fdfd1a1038618b98e0496d4de9b63ffafb3bc37cf97e8c0b26bbb3c99b0,41036
 STND.RUST,standard,LVL2,Rust standard,adopted,RUST/,af7c2ca73495c729eeae4e075900441e7c361359621c58d33c40daa2ce114795,57159
 STND.STDC,standard,LVL2,C standard,adopted,STDC/,8999ea23e71728976896bfe653080a99dd96467ad8cc540717dc2b7acdd1fb7c,57561
 STND.SV,standard,LVL2,Verilog and SystemVerilog standard,adopted,SV/,dd01cfece5cc85467f03b88d916723af93954cc7b58ff3074a44fb87e88937ab,53150
+STND.TEST,standard,LVL2,Testing methods standard,adopted,TEST/,11ac2e20de1be511225973ce07ac24d357c0f97a402b81be3782b750fcbbbc1c,43762
 STND.THRT,standard,LVL2,Threat-model template,adopted,THRT/,d067d6c5f1cb2fcd8b555517a584e41d2893441a91df885b36821213437e0973,12734
 STND.VVUQ,standard,LVL2,"Verification, validation, and uncertainty quantification methods",adopted,VVUQ/,5be4b6446f6724f59765433d58708a273efa5406d4be3d1f4d7efd75f51d2a5a,98091
 STND.WFLOW,standard,LVL2,Workflow and long-run resilience standard,adopted,WFLOW/,9aabc86708ef46f30f96d9743297811a1c869d4ac14f390a3ea5c4b5be562b10,63456
-STND.WPROC,standard,LVL2,Work process standard,adopted,WPROC/,408b8b8914b29891f17c57f9619d95ed4a5af37281828e62dcb51a022b46d26a,21091
+STND.WPROC,standard,LVL2,Work process standard,adopted,WPROC/,ac7212a04c3805ae878dc74e7778d9f033e36c36db53e1c609d9d5b9586fdc69,22589

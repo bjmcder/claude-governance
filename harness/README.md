@@ -29,7 +29,8 @@ harness/
 │   ├── HW/{CPU,GPU,QPU,EMBED,FPGA,ASIC}/  HDES/{FPGA,ASIC}/       LVL1
 │   ├── STND/{DRAFT,IDENT,CLASS,DFLT,INSTR,HARN,VVUQ,CODE,THRT,
 │   │        KNOW,DEPS,PROJ,WPROC,CREW,DOCS,CXX,PY,JL,ANNEX,MPI,
-│   │        CONC,OMP,OFFLD,BUILD,WFLOW,STDC,RUST,FTN,SV,LEAN}/ LVL2
+│   │        CONC,OMP,OFFLD,BUILD,WFLOW,STDC,RUST,FTN,SV,LEAN,
+│   │        PERF,TEST}/                                        LVL2
 │   ├── MNEM/                 the mnemonic register
 │   ├── KNOW/  TAG/{FIELD,PROB,METH,HW,QTY,ACTV,COMP}/
 │   └── _PROJECT/NAME/        LVL3 project template
@@ -98,13 +99,13 @@ harness/
 
 ## Current state
 
-As of ledger entry 141 (2026-10-24). `show governance ID` prints the current text and revision of any document.
+As of ledger entry 147 (2026-10-25). `show governance ID` prints the current text and revision of any document.
 
 | Level | Contents | Status |
 | --- | --- | --- |
 | LVL0 | 186 provisions in 11 parts, 155 Lexicon terms, the constitution record | Ratified, revision 1.6; pinned by ledger entry 1, amended by entries 2 to 7, 17, 23, 30, and 46 (entry 31 annotates 30) |
 | LVL1 | 7 profiles and 8 sub-profiles, each divided into numbered provisions | Adopted |
-| LVL2 | 30 standards, each divided into numbered provisions | Adopted |
+| LVL2 | 32 standards, each divided into numbered provisions | Adopted |
 | Knowledge and tags | `KNOW/` and the seven tag facets of `TAG/` | Planned |
 | LVL3 | Template with project constitution, register, and one example each of authorization, waiver, ruling, axiom, hazard, and safe range | Template |
 
@@ -129,8 +130,8 @@ As of ledger entry 141 (2026-10-24). `show governance ID` prints the current tex
 | STND.KNOW | 1.0 | 14 | Knowledge base and tags |
 | STND.DEPS | 1.0 | 11 | Dependency policy |
 | STND.PROJ | 1.2 | 7 | Project constitution template |
-| STND.WPROC | 1.0 | 15 | Work process standard |
-| STND.CREW | 1.0 | 23 | Agent roles standard |
+| STND.WPROC | 1.1 | 15 | Work process standard |
+| STND.CREW | 1.1 | 23 | Agent roles standard |
 | STND.DOCS | 1.0 | 14 | Documentation standard |
 | STND.CXX | 1.1.1 | 31 | C++ standard |
 | STND.PY | 1.0.1 | 31 | Python standard |
@@ -147,8 +148,10 @@ As of ledger entry 141 (2026-10-24). `show governance ID` prints the current tex
 | STND.FTN | 1.0 | 36 | Fortran standard |
 | STND.SV | 1.0 | 27 | Verilog and SystemVerilog standard |
 | STND.LEAN | 1.0 | 31 | Lean standard |
+| STND.PERF | 1.0 | 26 | Performance evaluation standard |
+| STND.TEST | 1.0 | 19 | Testing methods standard |
 
-The ledger holds 141 transactions: 46 `adopt`, 71 `amend`, 15 `register`, 3 `review`, 3 `rule`, and 3 `annotate`. The mnemonic register `governance/MNEM/_doc.md` (STND.IDENT.19) holds every mnemonic in use; a new mnemonic, including that of a project or of a kind of LVL3 instrument, is registered by the custodians (STND.IDENT.23).
+The ledger holds 147 transactions: 48 `adopt`, 73 `amend`, 17 `register`, 3 `review`, 3 `rule`, and 3 `annotate`. The mnemonic register `governance/MNEM/_doc.md` (STND.IDENT.19) holds every mnemonic in use; a new mnemonic, including that of a project or of a kind of LVL3 instrument, is registered by the custodians (STND.IDENT.23).
 
 ## Commands
 

@@ -309,6 +309,8 @@ The mnemonic register of GOV.37, in the form that STND.IDENT.19 gives.
 | FTN | STND | Fortran standard | none | The conventional short form of the name Fortran; avoids FOR, a common word | active |
 | SV | STND | Verilog and SystemVerilog standard | none | SystemVerilog's file extension; the definition of SystemVerilog holds Verilog | active |
 | LEAN | STND | Lean standard | none | Reads as the language in covered work: the name of Lean and the extension of its source files; Lean has no established acronym | active |
+| PERF | STND | Performance evaluation standard | none | The established short form of performance | active |
+| TEST | STND | Testing methods standard | none | Reads as test, the subject of the standard, as BUILD reads as build; testing has no established acronym | active |
 | FIELD | TAG | Facet: domain, a physical or application area | none | none | active |
 | PROB | TAG | Facet: problem type | none | none | active |
 | METH | TAG | Facet: method | none | none | active |

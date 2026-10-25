@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.WPROC,standard,LVL2,Work process standard,adopted,_doc.md,a69bef9c9173ae9bf4c5ac92a8e48ac7da94c415c58acffa7bc271638b73bd7b,11423
+STND.WPROC,standard,LVL2,Work process standard,adopted,_doc.md,f354789d8efce60041a5971d7254d60de09cbdd05a631c8d229736b81504fdca,12741
 STND.WPROC.1,provision,LVL2,Unit records in history,adopted,1.md,6c0dbdc072c933f1cd81d9ea6481823a370081008a9103c8f42e08aec041c0a7,736
 STND.WPROC.2,provision,LVL2,Attribution of commits,adopted,2.md,c16002c0858f3afa423e1f8bb1c91a64132f77a91a5af3e8a8a6cb1e465141ed,488
 STND.WPROC.3,provision,LVL2,Main and development lines,adopted,3.md,4a92ccf304d02f5c1ae538d5224e03b2c24ce12f3109c131f05893303cb80ace,388
@@ -8,7 +8,7 @@ STND.WPROC.5,provision,LVL2,Unit branches,adopted,5.md,abb1902915c8bf41bfd6b99f5
 STND.WPROC.6,provision,LVL2,Branches for fixes,adopted,6.md,11b4ddab4a8fe18ee7156e75d82155b03f0f8c93aa09fc35bfcfbcc180e45fd5,594
 STND.WPROC.7,provision,LVL2,Hierarchical integration,adopted,7.md,5505d862b4abd633e882345225b39124e10b6c3103d9f0255aa222177b9ab3ca,553
 STND.WPROC.8,provision,LVL2,Parent update before merge,adopted,8.md,306a11241b65a2cb8e3f05980df5cd9ccbab30da1c90127134b49cb1921603b4,703
-STND.WPROC.9,provision,LVL2,Checks before merge,adopted,9.md,6e0b01e1487476275f4fe90b9b39f214d1b6789be85763120ec318b0a41364ba,588
+STND.WPROC.9,provision,LVL2,Checks before merge,adopted,9.md,caef504851eb4a11a41cf8b4fba7d506720da893babed32aeff06c5ff55b71a3,768
 STND.WPROC.10,provision,LVL2,Recorded review at merge,adopted,10.md,1bfd22220f637572954f2979780aaeef79475c732d958ec4160a56b9781021f2,907
 STND.WPROC.11,provision,LVL2,Merges below the release,adopted,11.md,0ddfe6ab94b00df64321d0ecc1029266e8326b8c5e57eb1dbf172427885d1770,522
 STND.WPROC.12,provision,LVL2,Main-line changes,adopted,12.md,65b9461f8da04f3730d49941046ef91f7af632bd8cca14749f57f52e6f25abcb,1069

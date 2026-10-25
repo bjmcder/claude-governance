@@ -4,7 +4,7 @@ level: "LVL2"
 kind: "standard"
 title: "Work process standard"
 status: "adopted"
-revision: "1.0"
+revision: "1.1"
 adopted: "2026-10-21"
 adopted_by: "The Custodian"
 instantiates: ["GOV.19", "GOV.21"]
@@ -46,7 +46,7 @@ Records follow the work they concern (STND.WPROC.4). A unit's record, created on
 
 A fix branches from the most upstream branch that its defect affects: a defect in a released revision is fixed from the main line, released, and reaches the development line and each branch below it as each merges its parent into itself, while the development line continues on its other work meanwhile (AGENT.15); a defect found only in a unit's own change is fixed on that unit's branch (STND.WPROC.6).
 
-Before a branch is merged into its parent, the parent's current state is merged into it, which is where conflicts are resolved; a resolution is part of the change that the checks and the review then judge (STND.WPROC.8 to STND.WPROC.10). A conflict that the records of the two units do not decide goes to the lead agent, which refers it only where it needs a decision of the human owner. If the parent moves again before the merge by a change to its work rather than to the shared records, the update and checks are repeated, and the repeated review concerns what the new update changed, a conflict resolution above all. A check too costly for every merge, such as a long stochastic run or a synthesis, is deferred to the release under RSRC.12, recorded in the unit record, and run on the revision released. The review of each merge is recorded with its reviewer and configuration, at the agent rows of STND.CLASS.18: the CSQ2 row for work of CSQ2 and more severe classes, the CSQ3 row otherwise. The human reviews that the CSQ1 and CSQ0 rows add fall before the release, which QA.7 requires, and the release record carries them (STND.WPROC.14), so that no merge below the release waits on a human. Each finding is resolved and confirmed by the reviewer, or recorded in defect tracking with whether it blocks release, before the merge.
+Before a branch is merged into its parent, the parent's current state is merged into it, which is where conflicts are resolved; a resolution is part of the change that the checks and the review then judge (STND.WPROC.8 to STND.WPROC.10). A conflict that the records of the two units do not decide goes to the lead agent, which refers it only where it needs a decision of the human owner. If the parent moves again before the merge by a change to its work rather than to the shared records, the update and checks are repeated, and the repeated review concerns what the new update changed, a conflict resolution above all. A check too costly for every merge, such as a long stochastic run or a synthesis, is deferred to the release under RSRC.12, recorded in the unit record, and run on the revision released. STND.TEST.3 and STND.TEST.5 have a test of a tier that the selection of a merge does not draw on run at the first merge nearer the development line whose depth draws on its tier, and at the latest at the merge into the development line, a deferral under RSRC.12 like the one to the release; a test in quarantine under STND.TEST.13 is one on whose verdict no merge relies, and QA.6 still has an actor restore a check that its own change broke. STND.WPROC.9 has the unit record state each such test, or cite the record of the run under STND.TEST.9 that states it. STND.TEST holds the selection of the checks that a change is able to affect, and the full-suite run before a release. The review of each merge is recorded with its reviewer and configuration, at the agent rows of STND.CLASS.18: the CSQ2 row for work of CSQ2 and more severe classes, the CSQ3 row otherwise. The human reviews that the CSQ1 and CSQ0 rows add fall before the release, which QA.7 requires, and the release record carries them (STND.WPROC.14), so that no merge below the release waits on a human. Each finding is resolved and confirmed by the reviewer, or recorded in defect tracking with whether it blocks release, before the merge.
 
 An agent then merges into each parent other than a main line without a decision of the human owner (STND.WPROC.11). A project that wants per-merge approval at some class states it as a tighter project rule. Pushing a merge to a remote repository is a remote write that proceeds under a standing authorization of the kind STND.PROJ.3 proposes, where the human owner has granted one; otherwise only the push is referred.
 
@@ -75,6 +75,7 @@ Under STND.CLASS.10, each default provision instantiates only provisions of the 
 | STND.DFLT | Defaults |
 | STND.DRAFT | Drafting standard |
 | STND.PROJ | Project constitution template |
+| STND.TEST | Testing methods standard |
 | VV | Correctness |
 
 ## Revision History
@@ -82,3 +83,4 @@ Under STND.CLASS.10, each default provision instantiates only provisions of the 
 | Revision | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-10-21 | Adopted. |
+| 1.1 | 2026-10-25 | Minor amendment (GOV.41): STND.WPROC.9 excepts from the checks that pass before a merge a check deferred under RSRC.12 to a later merge or to the release, and a test in quarantine under STND.TEST.13, each recorded in the unit record or in a record of STND.TEST.9 that the unit record cites, where it excepted a check deferred to the release only; the Notes say how STND.TEST.5 defers the tests of a tier to a nearer merge, that QA.6 still applies to a check that the change broke, and that STND.TEST governs the selection and the full-suite run; References lists STND.TEST. |

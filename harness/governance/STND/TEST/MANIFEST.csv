@@ -1,0 +1,21 @@
+id,kind,level,title,status,path,sha256,bytes
+STND.TEST,standard,LVL2,Testing methods standard,adopted,_doc.md,9a39b86a37e0721a55fd7b10b241fe8089abb7c263eb46c60878d12659d1377f,27841
+STND.TEST.1,provision,LVL2,Tiers and levels of tests,adopted,1.md,149834c47094067d6e8c3a57364252bba9c2bf226a4d188b80a429f76429cb25,465
+STND.TEST.2,provision,LVL2,Derivable verdict inputs,adopted,2.md,0859bf1dfd5fcde069d3e8aa7d57e90cb7e8af3d8cf8a3b5480e4182c890f526,643
+STND.TEST.3,provision,LVL2,Selection of affected tests,adopted,3.md,307edcfacf912a17e44cca462675c2a6714a02990b3fc76c53a595bfa2e65f44,796
+STND.TEST.4,provision,LVL2,Inputs that widen a selection,adopted,4.md,90998014b4ded741ad823826b8822e441e8be594c9e03359bfb0a076a37e8c1a,2636
+STND.TEST.5,provision,LVL2,Selection by integration depth,adopted,5.md,01e16583bec58c34b219e04a6a04e6068d3ca9d42d7d5a618bfa3ce4642c1eaa,788
+STND.TEST.6,provision,LVL2,Full-suite runs,adopted,6.md,a276817cf55d53d9173809b2385b3a05072fe1279940aa0ba25ad2243531c0cc,663
+STND.TEST.7,provision,LVL2,Misses of a selection,adopted,7.md,ca8790aed090026c8a6821b7b201c2d34dcb97b3ab1a797fb218fe0e6e436c49,676
+STND.TEST.8,provision,LVL2,Reuse of test verdicts,adopted,8.md,1ed21fec8aa47350995e69d3556751389c11b8192ede3c626fdbc6dfcd19f2fd,668
+STND.TEST.9,provision,LVL2,Selection and verdict record,adopted,9.md,822143034efef68d9a11cdaeb63d4dcff6b13542db622a6a567bcccaab05f0c2,1489
+STND.TEST.10,provision,LVL2,Runs on a branch,adopted,10.md,162748399ac0166a8c1d13f6a25724cfb64526a21c1dc8675b65531280b813fe,1058
+STND.TEST.11,provision,LVL2,Failure evidence before a rerun,adopted,11.md,f3fa349027533dd8357024ba111bb5f9df0f3d5f5d84881f98915c9b8c330968,739
+STND.TEST.12,provision,LVL2,Pass after an unexplained failure,adopted,12.md,2ca0478da77cd7c06e880147981fe85e0f8463647f5cc995abb485901795796c,794
+STND.TEST.13,provision,LVL2,Flaky tests and quarantine,adopted,13.md,12e47e10914d14e18d3e2e826fd7f04773f10e8a448a3f7721e358ce839fc38b,730
+STND.TEST.14,provision,LVL2,Independence of tests,adopted,14.md,8115223cac7a1625e5c3fe9d51097270cbea63fcca1df3e9f0aa44a91aaedfc8,646
+STND.TEST.15,provision,LVL2,Partial oracles,adopted,15.md,f2dedb15dcd12a239fefa564503e695b7ba14e0d0db4e2608c31acb24fbb9074,627
+STND.TEST.16,provision,LVL2,Generated test inputs,adopted,16.md,41f39673f748b4056c571796ee027b366359de10211e030c3bbb7f0f99118bdc,532
+STND.TEST.17,provision,LVL2,Adequacy measures reported,adopted,17.md,6feef7f06cc36e959b97b73b02a0dfbe113772ff461cac642158276fe5d9ccd0,627
+STND.TEST.18,provision,LVL2,Acceptance tests traced,adopted,18.md,1ab3c8d299b35ccafcb737cef84e0fc381be1725f1befd4af74720f5b94d3b38,564
+STND.TEST.19,provision,LVL2,Tests changed with their code,adopted,19.md,b3605eafb6d343f5cef078c8a6dcea77c92e46fd41473d558b82bcef1c549a8a,780
