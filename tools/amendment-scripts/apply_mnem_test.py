@@ -5,8 +5,8 @@ from pathlib import Path
 
 from govharness.workflows.amend import Change, record_transaction, replace_text
 
-DATE = "2026-10-24"
-AT = "2026-10-24T20:00:00+00:00"
+DATE = "2026-10-25"
+AT = "2026-10-25T20:00:00+00:00"
 ROW_AFTER = ("| LEAN | STND | Lean standard | none | Reads as the language in covered work: the name of Lean and the extension"
              " of its source files; Lean has no established acronym | active |")
 ROW = ("| TEST | STND | Testing methods standard | none | Reads as test, the subject of the standard, as BUILD reads as"
