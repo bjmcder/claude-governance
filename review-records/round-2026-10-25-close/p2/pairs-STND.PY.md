@@ -1,10 +1,10 @@
-# Pairs for review of the changed and new provisions of STND.PY (STND.HARN.28), revision 0.2
+# Pairs for review of the changed and new provisions of STND.PY (STND.HARN.28), revision 0.3
 
-From `python3 -B -m govharness pairs <rehearsed copy> STND.PY` on entry 147 plus apply_close_p2.py (P1 0.2 first), limited to the rows whose changed side is STND.PY.14, STND.PY.22, STND.PY.25, STND.PY.32, STND.PY.33, STND.PY.34, STND.PY.35, STND.PY.36.
+From `python3 -B -m govharness pairs <rehearsed copy> STND.PY` on entry 147 plus apply_close_p2.py (P1 0.2 first), limited to the rows whose changed side is STND.PY.14, STND.PY.22, STND.PY.25, STND.PY.32, STND.PY.33, STND.PY.34, STND.PY.35, STND.PY.36, STND.PY.37.
 
 No pair: STND.PY.36 (DSGN.14 alone, which no provision of a profile or sub-profile pairs with here).
 
-57 pair(s).
+62 pair(s).
 
 | # | Changed side | Other provision | Bases |
 | --- | --- | --- | --- |
@@ -65,3 +65,8 @@ No pair: STND.PY.36 (DSGN.14 alone, which no provision of a profile or sub-profi
 | 55 | STND.PY.35 | HW.CPU.3 | DSGN.5 |
 | 56 | STND.PY.35 | HW.EMBED.4 | DSGN.5 |
 | 57 | STND.PY.35 | NUMER.5 | DSGN.5 |
+| 58 | STND.PY.37 | HDES.11 | DSGN.4 |
+| 59 | STND.PY.37 | HDES.ASIC.10 | DSGN.4 |
+| 60 | STND.PY.37 | HDES.FPGA.3 | DSGN.4 |
+| 61 | STND.PY.37 | HW.13 | DSGN.4 |
+| 62 | STND.PY.37 | HW.14 | DSGN.4 |

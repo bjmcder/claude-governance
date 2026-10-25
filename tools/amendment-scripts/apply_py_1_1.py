@@ -132,8 +132,8 @@ NOTES = [
     # Assertions: STND.CODE.6, .14, .15, .16, the reach of the term, and the index item of the sibling list
     ("Assertions. STND.PY.25, STND.PY.27, and STND.PY.30 are the Python forms of STND.CODE.6 and STND.CODE.7, each "
      "limited to the conditions that PRIME.4 lists.",
-     "Assertions. STND.PY.22 is the Python form of STND.CODE.14, whose pass of a condition to the caller a raised "
-     "exception makes in Python, and STND.PY.25, STND.PY.27, and STND.PY.30 are the "
+     "Assertions. STND.PY.22 is the Python form of STND.CODE.14, which admits the pass of a condition to the caller in its result, in an "
+     "argument that the caller passes to receive it, or by a mechanism of the language, an exception among them, that propagates the condition to the caller; in Python a raised exception is that mechanism, and a returned result the first form. STND.PY.25, STND.PY.27, and STND.PY.30 are the "
      "Python forms of STND.CODE.6 and STND.CODE.7, each limited to the conditions that PRIME.4 lists. STND.CODE.15 "
      "asks nothing of Python until a form of declaration under which an ignored result is diagnosed is among the "
      "means of the work, and STND.CODE.7 still forbids discarding a listed failure."),

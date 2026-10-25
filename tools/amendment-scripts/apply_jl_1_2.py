@@ -125,7 +125,8 @@ NOTES = [
      "sentence of STND.JL.13, because the Python interpreter checks each index in every mode, and its Notes say so."),
     ("STND.JL.15 lists the responses of PRIME.4 once, and STND.JL.14 refers to it.",
      "STND.JL.15 lists the responses of PRIME.4 once, in the Julia form of STND.CODE.14, and STND.JL.14 refers to "
-     "it; a thrown exception is the pass of a condition to the caller that STND.CODE.14 admits. STND.CODE.15 asks nothing of Julia until a form of declaration under which an ignored result is diagnosed "
+     "it. STND.CODE.14 admits the pass of a condition to the caller in its result, in an argume"
+     "nt that the caller passes to receive it, or by a mechanism of the language, an exception among them, that propagates the condition to the caller; in Julia a thrown exception is that mechanism, and a returned result the first form. STND.CODE.15 asks nothing of Julia until a form of declaration under which an ignored result is diagnosed "
      "is among the means of the work, and STND.CODE.7 still forbids discarding a listed failure."),
     # Checking: STND.JL.36 against STND.CXX.27 (sibling list)
     ("which is why STND.JL.34 states the setting.",

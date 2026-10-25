@@ -1,10 +1,10 @@
-# Pairs for review of the changed and new provisions of STND.JL (STND.HARN.28), revision 0.2
+# Pairs for review of the changed and new provisions of STND.JL (STND.HARN.28), revision 0.3
 
-From `python3 -B -m govharness pairs <rehearsed copy> STND.JL` on entry 147 plus apply_close_p2.py (P1 0.2 first), limited to the rows whose changed side is STND.JL.1, STND.JL.13, STND.JL.15, STND.JL.36, STND.JL.37, STND.JL.38, STND.JL.39.
+From `python3 -B -m govharness pairs <rehearsed copy> STND.JL` on entry 147 plus apply_close_p2.py (P1 0.2 first), limited to the rows whose changed side is STND.JL.1, STND.JL.13, STND.JL.15, STND.JL.36, STND.JL.37, STND.JL.38, STND.JL.39, STND.JL.40, STND.JL.41.
 
-No pair: STND.JL.38 (DSGN.14 alone, which no provision of a profile or sub-profile pairs with here).
+No pair: STND.JL.38, STND.JL.40 (DSGN.14 alone, which no provision of a profile or sub-profile pairs with here).
 
-61 pair(s).
+66 pair(s).
 
 | # | Changed side | Other provision | Bases |
 | --- | --- | --- | --- |
@@ -69,3 +69,8 @@ No pair: STND.JL.38 (DSGN.14 alone, which no provision of a profile or sub-profi
 | 59 | STND.JL.39 | HW.CPU.3 | DSGN.5 |
 | 60 | STND.JL.39 | HW.EMBED.4 | DSGN.5 |
 | 61 | STND.JL.39 | NUMER.5 | DSGN.5 |
+| 62 | STND.JL.41 | HDES.11 | DSGN.4 |
+| 63 | STND.JL.41 | HDES.ASIC.10 | DSGN.4 |
+| 64 | STND.JL.41 | HDES.FPGA.3 | DSGN.4 |
+| 65 | STND.JL.41 | HW.13 | DSGN.4 |
+| 66 | STND.JL.41 | HW.14 | DSGN.4 |
