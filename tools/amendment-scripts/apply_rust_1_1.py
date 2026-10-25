@@ -78,8 +78,9 @@ DOC = [
     # Notes: failures
     ("Failures. STND.RUST.13 lists the responses that PRIME.4 admits in Rust, and the other provisions refer to it.",
      "Failures. STND.RUST.13 lists the responses that PRIME.4 admits in Rust, and the other provisions refer to it; "
-     "its first sentence is the Rust form of STND.CODE.14, a panic being the mechanism of the language that passes "
-     "the condition to the caller, and its second and third add what Rust needs."),
+     "its first sentence is the Rust form of STND.CODE.14, whose pass of the condition to the caller in its result, "
+     "in an argument that the caller passes to receive it, or by a mechanism of the language that propagates it "
+     "takes in Rust the returned condition and the panic, and its second and third add what Rust needs."),
     ("STND.RUST.14 is the Rust form of STND.CXX.17, with its two means. STND.RUST.15 is the Rust form of "
      "STND.CODE.6, and of STND.CXX.18 for the checks of CPS.5 and CPS.9:",
      "STND.RUST.14 is kept as ratified. Rust provides a form of declaration under which a call that ignores a "

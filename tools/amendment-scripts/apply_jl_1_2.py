@@ -46,14 +46,20 @@ NEW = [
 The production configuration SHOULD leave bounds checking on for all code other than code inside `@inbounds` (DSGN.2). Where a measurement shows that bounds checking exceeds a stated budget, a decision record SHOULD state the measurement and the setting of the production configuration that turns bounds checking off (RSRC.4, REPRO.7).
 """, ["DSGN.2", "RSRC.4", "REPRO.7"]),
     P(37, "Julia foreign call types", "Foreign interfaces", """
-The type of each argument and of the result that a `ccall` or `@ccall` of the work states SHOULD have the size and the representation of the type that the foreign declaration of the function gives it (DSGN.4). Each struct whose layout the Julia source declares for a foreign interface SHOULD have its size and the offset of each of its fields compared with the foreign declaration by a test (DSGN.4). Each array that the work passes to foreign code by a pointer to its elements SHOULD have, at the call, the element type, the order of dimensions, and the strides that the foreign declaration states (DSGN.4).
+The type of each argument and of the result that a `ccall` or `@ccall` of the work states SHOULD have the size and the representation of the type that the foreign declaration of the function gives it (DSGN.4). Each struct whose layout the Julia source declares for a foreign interface SHOULD have its size and the offset of each of its fields compared with the foreign declaration by a test (DSGN.4).
 """, ["DSGN.4"]),
     P(38, "Julia memory across foreign calls", "Foreign interfaces", """
-Each pointer to memory that Julia manages, other than an argument that a `ccall` converts for the duration of that call, SHOULD be used only inside a `GC.@preserve` block that names each object that owns that memory (DSGN.14). Each Julia object that foreign code is able to use after the call that passed it to that code returns, a closure behind a pointer that `@cfunction` makes among them, SHOULD stay referenced by the work for as long as foreign code is able to use it (DSGN.14). Each resource that foreign code creates for the work SHOULD be released by the function that the contract of the interface names, through an object of the work that owns it (DSGN.14).
+Each pointer to memory that Julia manages, which the work takes by `pointer` or by another function that returns the address of such memory, SHOULD be used only inside a `GC.@preserve` block that names each object that owns that memory (DSGN.14). Each Julia object that foreign code is able to use after the call that passed it to that code returns, the object that `@cfunction` returns for a closure among them, SHOULD stay referenced by the work for as long as foreign code is able to use it (DSGN.14).
 """, ["DSGN.14"]),
     P(39, "Julia exceptions in foreign callbacks", "Foreign interfaces", """
-Each Julia function that foreign code invokes through a pointer that `@cfunction` makes SHOULD catch each exception thrown within it (DSGN.5). Where the foreign interface carries errors, an exception so caught SHOULD be converted to an error that the interface carries (DSGN.5). Where the foreign interface carries no error, an exception so caught SHOULD be stored in an object that code of the work checks after the foreign call returns, and answered there as STND.JL.15 requires (DSGN.5).
-""", ["DSGN.5"], refs=["STND.JL.15"]),
+Each Julia function that foreign code invokes through a pointer that `@cfunction` makes SHOULD catch each exception thrown within it (DSGN.5). Where the foreign interface carries errors, an exception so caught, other than an `InterruptException`, SHOULD be converted to an error that the interface carries (DSGN.5). Each other exception so caught SHOULD be stored in an object that code of the work checks after the foreign call returns, and answered there, an `InterruptException` by being thrown again, as STND.JL.16 asks in place of a throw within the callback, and each other exception as STND.JL.15 requires (DSGN.5).
+""", ["DSGN.5"], refs=["STND.JL.16", "STND.JL.15"]),
+    P(40, "Julia owners of foreign resources", "Foreign interfaces", """
+Each resource that foreign code creates for the work SHOULD have one owner that the contract of the interface states, and be released by the function that the contract names, through an object of the work that owns it (DSGN.14).
+""", ["DSGN.14"]),
+    P(41, "Julia arrays at foreign calls", "Foreign interfaces", """
+Each array that the work passes to foreign code by a pointer to its elements SHOULD have, at the call, the element type, the order of dimensions, and the strides that the documentation of the foreign function states, or those that a test of that call confirms (DSGN.4).
+""", ["DSGN.4"]),
 ]
 
 # ------------------------------------------------------------------ the document
@@ -61,7 +67,7 @@ Each Julia function that foreign code invokes through a pointer that `@cfunction
 PURPOSE = [
     ("and the checks that confirm them at each change (STND.JL.32 to STND.JL.35).",
      "the checks that confirm them at each change, and the bounds checks of the production configuration "
-     "(STND.JL.32 to STND.JL.36); and foreign interfaces (STND.JL.37, STND.JL.38, and STND.JL.39)."),
+     "(STND.JL.32 to STND.JL.36); and foreign interfaces (STND.JL.37 to STND.JL.41)."),
     ("STND.JL.13 gives STND.CODE.6, and STND.JL.14 and STND.JL.15 give STND.CODE.7, their forms in Julia's "
      "constructs;",
      "STND.JL.13 gives STND.CODE.6, STND.JL.15 gives STND.CODE.14, and STND.JL.14 and STND.JL.15 give STND.CODE.7, "
@@ -91,9 +97,10 @@ TERMS = [
 NOTES = [
     # Arithmetic: STND.CODE.21 for `@fastmath`
     ("`muladd` fuses where the hardware allows, so its result depends on the machine.",
-     "`muladd` fuses where the hardware allows, so its result depends on the machine. Because `@fastmath` assumes "
-     "finite values, STND.CODE.21 recommends against it in code that holds a check of a floating-point value that "
-     "STND.CODE.6 or STND.CODE.16 governs."),
+     "`muladd` fuses where the hardware allows, so its result depends on the machine. STND.CODE.21 recommends "
+     "against an annotation that, by its documentation, lets the compiler assume finite values in code that holds a "
+     "check of a floating-point value that STND.CODE.6 or STND.CODE.16 governs; whether the documentation of "
+     "`@fastmath` states that assumption is unverified."),
     # Versions: the edition of high-assurance code (STND.CODE.19)
     ("A qualified revision stays, because no other revision is admissible without new evidence.",
      "A qualified revision stays, because no other revision is admissible without new evidence; STND.CODE.19 fixes, "
@@ -105,9 +112,8 @@ NOTES = [
      "raises no floor.",
      "which also holds that the reach of the term Untrusted input to the arguments of each declared public function "
      "raises no floor. STND.CODE defines the term once, and the Terms above place each declared function in the "
-     "public interface that the term takes in, so the reach of the ruling stays; the functions that the "
-     "documentation or the repository configuration names for use outside the work belong to the interface for "
-     "outside use of that term as well, a widening that the Notes of STND.CODE put to the custodian. A module "
+     "public interface that the term takes in, so the reach of the ruling is kept; STND.CODE adds the functions "
+     "that the documentation or the repository configuration names for use outside the work. A module "
      "exports names and marks names as public, and the keyword `public` marks a name as part of the public API "
      "without exporting it, from Julia 1.11 (a2, S14); that an exported name is public is the reading of this "
      "standard. STND.CODE.6 states for every language the outcome of which STND.JL.13 gives the Julia forms, "
@@ -123,43 +129,48 @@ NOTES = [
      "is among the means of the work, and STND.CODE.7 still forbids discarding a listed failure."),
     # Checking: STND.JL.36 against STND.CXX.27 (sibling list)
     ("which is why STND.JL.34 states the setting.",
-     "which is why STND.JL.34 states the setting. Julia checks the bounds of each index in every session, other "
-     "than inside `@inbounds`, whose reason STND.JL.18 asks for at each location, and other than under the option "
-     "`--check-bounds=no`, which removes the checks of the whole session, those of its dependencies included, "
-     "where no location states a reason. STND.JL.36 is therefore the Julia counterpart of STND.CXX.27, which asks "
+     "which is why STND.JL.34 states the setting. Under the default setting of `--check-bounds`, Julia emits "
+     "bounds checks other than inside `@inbounds`, whose reason STND.JL.18 asks for at each location, and under "
+     "`--check-bounds=no` it emits none for the session (a2, S12), where no location states a reason; that the "
+     "same holds for each array type of a package is unverified. STND.JL.36 is therefore the Julia counterpart of STND.CXX.27, which asks "
      "each reporting build of C++ to enable the checks of its standard library: it asks the production "
      "configuration to leave bounds checking on, other than inside `@inbounds`, unless a measurement against a "
      "stated budget and a decision record show its cost, and STND.JL.34 then tests that configuration as it is."),
     # Foreign interfaces (sibling list), before the class paragraph
     ("Class onset. Under STND.CLASS.10, each default provision instantiates only DSGN,",
-     "Foreign interfaces. STND.JL.37, STND.JL.38, and STND.JL.39 give the Julia forms of what STND.CXX.20 and "
-     "STND.CXX.22, STND.RUST.24 to STND.RUST.27, and STND.FTN.27 and STND.FTN.28 state for their languages: types "
-     "that match the foreign declaration, memory with one owner and a stated lifetime, and exceptions kept from "
-     "crossing into foreign code (DSGN.4, DSGN.14, DSGN.5). No C header is used in a call of a C function, so the "
-     "Julia types and call signatures alone state what the header declares, and an inconsistency is able to work on one "
-     "system and fail or produce indeterminate results on another (a2, S13). Base names the C types by aliases: "
-     "`Cint` is `Int32` on every system, while `Clong` and `Cwchar_t` among others differ between systems (a2, "
-     "S13). A test compares the layout of a struct with the foreign declaration through `sizeof` and "
-     "`fieldoffset` (unverified). An "
-     "array is stored in column-major order, and a view of it is able to have a stride other than one (unverified "
-     "for each array type), which is why STND.JL.37 asks for the order and the strides at the call, as STND.FTN.28 "
-     "tests them for Fortran. `GC.@preserve` marks objects as in use during an expression, which unsafe code needs "
-     "where the expression uses memory that one of them owns, and without it the memory behind a pointer taken by "
-     "`pointer` is able to be collected before its use; the object that `@cfunction` returns for a closure is kept "
-     "alive by the work until all uses of it are done (a2, S11 and S13). A `ccall` keeps its own arguments alive "
-     "for the duration of the call (unverified). STND.JL.38 asks for both. STND.JL.18 already asks the reason for each function whose "
-     "name begins with `unsafe_`, `unsafe_wrap` and `unsafe_load` among them. A callback exposed through "
-     "`@cfunction` throws no error in the manual's practice, because an error returns control to the Julia runtime "
-     "unexpectedly and is able to leave the program in an undefined state (a2, S13), so STND.JL.39 catches it in "
-     "the callback and has it answered after the foreign call returns, as STND.JL.15 requires; an `InterruptException` so stored is thrown again there, as STND.JL.16 asks. "
-     "The rule is stated alike for C++, Rust, Python, and Julia (STND.CXX.22, STND.RUST.25, STND.PY.35, "
-     "STND.JL.39).\n\n"
+     "Foreign interfaces. STND.JL.37 to STND.JL.41 give the Julia forms of what STND.CXX.20 and STND.CXX.22, "
+     "STND.RUST.24 to STND.RUST.27, and STND.FTN.27 and STND.FTN.28 state for their languages: types and layouts "
+     "that match the foreign declaration, memory with a stated lifetime and resources with one owner, and "
+     "exceptions kept from crossing into foreign code (DSGN.4, DSGN.14, DSGN.5). No C header is used in a call of "
+     "a C function, so the Julia types and call signatures alone state what the header declares, and an "
+     "inconsistency is able to work on one system and fail or produce indeterminate results on another (a2, S13). "
+     "Base names the C types by aliases: `Cint` is `Int32` on every system, while `Clong` and `Cwchar_t` among "
+     "others differ between systems (a2, S13). A test compares the layout of a struct with the foreign declaration "
+     "through `sizeof` and `fieldoffset` (unverified); the two sentences of STND.JL.37 are applied apart where the "
+     "work declares no struct. A C declaration of a pointer to elements states no order of dimensions and no "
+     "strides, so STND.JL.41 takes them from the documentation of the foreign function or from a test, as "
+     "STND.FTN.28 tests a section with a stride other than one; that a view of an array is able to have a stride "
+     "other than one is unverified for each array type. `GC.@preserve` marks objects as in use during an "
+     "expression, which unsafe code needs where the expression uses memory that one of them owns, and without it "
+     "the memory behind a pointer taken by `pointer` is able to be collected before its use; the object that "
+     "`@cfunction` returns for a closure is kept alive by the work until all uses of it are done (a2, S11 and S13). "
+     "STND.JL.38 asks for both, and STND.JL.40 for one owner of each resource that foreign code creates, as "
+     "STND.RUST.27 does. STND.JL.18 already asks the reason for each function whose name begins with `unsafe_`, "
+     "`unsafe_wrap` and `unsafe_load` among them. A callback exposed through `@cfunction` throws no error in the "
+     "manual's practice, because an error returns control to the Julia runtime unexpectedly and is able to leave "
+     "the program in an undefined state (a2, S13), so STND.JL.39 catches each exception in the callback. Its three "
+     "sentences are one remedy and are not applied apart: an exception caught and neither converted nor stored is "
+     "discarded, which STND.CODE.7 forbids for a listed failure, and an `InterruptException` is thrown again after "
+     "the foreign call returns, the place where STND.JL.16 is met without a throw through foreign code. "
+     "STND.CXX.22, STND.RUST.25, STND.PY.35, and STND.JL.39 take the same steps for an exception or a panic in a "
+     "callback: catch it there, then convert it to the error of the interface or answer it after the foreign call "
+     "returns.\n\n"
      "Class onset. Under STND.CLASS.10, each default provision instantiates only DSGN,"),
     ("STND.JL.11 and STND.JL.33 ask for mechanical checks (DSGN.3) from CSQ3;",
      "STND.JL.36 instantiates the checking of DSGN.2 that STND.CLASS.10 applies from CSQ1, as STND.CXX.27 does, and "
-     "applies from CSQ1. STND.JL.37 and STND.JL.39 instantiate the schemas of DSGN.4 and the external contracts of "
-     "DSGN.5, which STND.CLASS.10 applies from CSQ2, and apply from CSQ2; STND.JL.38 rests on no row and applies "
-     "from CSQ3. STND.JL.11 and STND.JL.33 ask for mechanical checks (DSGN.3) from CSQ3;"),
+     "applies from CSQ1. STND.JL.37, STND.JL.39, and STND.JL.41 instantiate the schemas of DSGN.4 and the external "
+     "contracts of DSGN.5, which STND.CLASS.10 applies from CSQ2, and apply from CSQ2; STND.JL.38 and STND.JL.40 "
+     "rest on no row and apply from CSQ3. STND.JL.11 and STND.JL.33 ask for mechanical checks (DSGN.3) from CSQ3;"),
 ]
 
 READING = (
@@ -170,8 +181,9 @@ READING = (
     "STND.CODE.6, and STND.JL.15 STND.CODE.14, for the rule of which each is the Julia form, and neither changes "
     "otherwise; STND.JL.1 yields to a version of Julia that STND.CODE.19 fixes; new STND.JL.36 (default, DSGN.2, RSRC.4, and REPRO.7) has the production configuration leave bounds "
     "checking on outside `@inbounds` unless a measurement and a decision record show its cost, the Julia "
-    "counterpart of STND.CXX.27; new STND.JL.37, STND.JL.38, and STND.JL.39 (defaults, DSGN.4, DSGN.14, and DSGN.5) "
-    "give the types, the lifetime and ownership of memory, and the exceptions of callbacks at foreign interfaces; "
+    "counterpart of STND.CXX.27; new STND.JL.37 to STND.JL.41 (defaults, DSGN.4, DSGN.14, and DSGN.5) give the "
+    "types and layouts, the lifetime of memory, the exceptions of callbacks, the ownership of resources, and the "
+    "layout of arrays at foreign interfaces; "
     "the Purpose lists them; the Notes cite the provisions of STND.CODE of which this standard gives Julia forms, "
     "and state the facts and the onset of each new provision")
 
@@ -180,19 +192,20 @@ ROW = f"| 1.2 | {DATE} | Minor amendment (GOV.41): {READING}. |"
 RATIONALE = (
     f"Minor amendment of STND.JL to revision 1.2, ratified by the custodian on {DATE}, on STND.CODE 1.2 and the "
     f"list of differences among sibling language standards of the ratification of 2026-10-24: {READING}. The change "
-    "is minor because it adds four defaults and a clause to the default STND.JL.1. The import of Untrusted input "
+    "is minor because it adds six defaults and a clause to the default STND.JL.1. The import of Untrusted input "
     "keeps the reach of the definition it replaces, the arguments of each declared function, and adds each function "
-    "that the documentation or the repository configuration names for use outside the work, a widening that the "
-    "Notes of STND.CODE put to the custodian; the index valid by construction stays outside it. STND.JL.1 yields to "
+    "that the documentation or the repository configuration names for use outside the work, through STND.JL.13 as "
+    "well; the custodian decides that widening with STND.CODE 1.2, and if it is declined, the documentation clause "
+    "leaves the term of STND.CODE and this standard holds unchanged; the index valid by construction stays outside it. STND.JL.1 yields to "
     "STND.CODE.19, as STND.CXX.2 does, so that the latest stable version does not displace the version that a "
     "high-assurance coding standard and a validated toolchain fix. The citations in STND.JL.13 and STND.JL.15 change their references and not their outcome, and keep "
     "the language forms of the ruling of 2026-10-23. Sibling list: STND.JL.13 stays as ruled, and the Notes of "
     "STND.PY give the reason why Python has no counterpart of its third sentence; STND.JL.36 is the counterpart of "
     "STND.CXX.27, because the option `--check-bounds=no` removes the bounds checks of a whole session where no "
     "location states a reason; logging as the only visible degradation stays as ruled, by decision 7 of that "
-    "ratification; STND.JL.37 to STND.JL.39 are the counterparts of STND.CXX.20, STND.CXX.22, STND.RUST.24 to "
-    "STND.RUST.27, STND.FTN.27, and STND.FTN.28. Class onsets: STND.JL.36 from CSQ1, as STND.CXX.27; STND.JL.37 and "
-    "STND.JL.39 from CSQ2; STND.JL.38 from CSQ3; no other onset changes. No floor is raised (GOV.11). Transition "
+    "ratification; STND.JL.37 to STND.JL.41 are the counterparts of STND.CXX.20, STND.CXX.22, STND.RUST.24 to "
+    "STND.RUST.27, STND.FTN.27, and STND.FTN.28. Class onsets: STND.JL.36 from CSQ1, as STND.CXX.27; STND.JL.37, "
+    "STND.JL.39 and STND.JL.41 from CSQ2; STND.JL.38 and STND.JL.40 from CSQ3; no other onset changes. No floor is raised (GOV.11). Transition "
     "(GOV.42): existing work meets the new defaults when a change next touches the production configuration or the "
     "foreign interface concerned. Review of STND.HARN.28 by the command pairs; record "
     "review-records/round-2026-10-25-close/p2/."

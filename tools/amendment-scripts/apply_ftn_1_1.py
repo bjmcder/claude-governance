@@ -81,7 +81,9 @@ DOC = [
     ("which a subroutine makes in a status argument because it has no result (STND.FTN.29, in the form of "
      "STND.CXX.16, STND.PY.22, and STND.JL.15).",
      "which a subroutine makes in a status argument because it has no result (STND.FTN.29, the Fortran form of "
-     "STND.CODE.14)."),
+     "STND.CODE.14, whose pass of the condition to the caller in its result, in an argument that the caller passes "
+     "to receive it, or by a mechanism of the language that propagates it takes in Fortran the result of a function "
+     "and the status argument)."),
     ("The term Untrusted input takes the reach of the public interface that STND.PY and STND.JL give it: the values "
      "received by each procedure that a module makes public, an entity of a module being public unless the module "
      "makes it private, and by each procedure with the BIND attribute; it leaves out external procedures, which in "
@@ -105,7 +107,7 @@ DOC = [
     # Notes: floor
     ("STND.FTN.29 lists the responses that PRIME.4 admits, in the form of STND.CXX.16, STND.PY.22, and STND.JL.15.",
      "STND.FTN.29 lists the responses that PRIME.4 admits, in their Fortran form, and admits none that STND.CODE.14 "
-     "does not."),
+     "does not: a status argument is an argument that the caller passes to receive the condition."),
     ("the custodian's ruling of 2026-10-23 on that reach was made for STND.PY and STND.JL.",
      "the custodian's ruling of 2026-10-23 on that reach was made for STND.PY and STND.JL, and the ratification of "
      "2026-10-24 extended it to this standard on this argument. The same argument holds for an external procedure "

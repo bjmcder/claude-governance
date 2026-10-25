@@ -42,3 +42,7 @@ Results: `rehearse governance apply_close_p3.py` appends 7 entries (seq 148 to 1
 | O5 FTN.29 status argument against CODE.14 | P1's, routed by the lead. No P3 change. |
 
 Results after the fixes: `rehearse governance apply_close_p3.py` appends 7 entries (seq 148 to 154) and every check passes; `findings.py` reports no defect for the four documents (the eleven three-modal review notices carried from 1.0); `check_refs` reports 0 of 4 documents with missing rows. Reading copies `<ID>-0.3.md`; pair lists regenerated.
+
+## Update to P1 0.3 (STND.CODE.14 names an argument that the caller passes)
+
+Each Notes passage that describes STND.CODE.14 now gives its whole pass to the caller, "in its result, in an argument that the caller passes to receive it, or by a mechanism of the language that propagates it": RUST (the returned condition and the panic), FTN Failures (the result of a function and the status argument), FTN Floor (a status argument is such an argument, so STND.FTN.29 admits nothing beyond STND.CODE.14), and LEAN (the result type and the monad error). The Purpose ranges of RUST and FTN and the SV Purpose cite STND.CODE.14 by number only and need no change. No provision text changed. Results: 7 entries, every verify check passes, no defect in findings (11 carried three-modal notices), check_refs 0 of 4. Reading copies `<ID>-0.4.md`; pair lists regenerated, and pairs-changed.md stands, since no changed provision differs.

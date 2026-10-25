@@ -32,7 +32,9 @@ DOC = [
     ("STND.LEAN.25 states by their outcome the forms by which Lean code gives each response that PRIME.4 admits, as "
      "STND.CXX.16, STND.PY.22, and STND.JL.15 do in their languages:",
      "STND.LEAN.25 states by their outcome the forms by which Lean code gives each response that PRIME.4 admits, the "
-     "Lean form of STND.CODE.14, as STND.PY.22 and STND.JL.15 give the forms of their languages:"),
+     "Lean form of STND.CODE.14, whose pass of the condition to the caller in its result, in an argument that the "
+     "caller passes to receive it, or by a mechanism of the language that propagates it takes in Lean two forms, as "
+     "STND.PY.22 and STND.JL.15 give the forms of their languages:"),
     ("the custodian's ruling of 2026-10-23 on that argument was made for STND.JL.",
      "the custodian's ruling of 2026-10-23 on that argument was made for STND.JL, and the ratification of 2026-10-24 "
      "accepted it for STND.LEAN.25."),
