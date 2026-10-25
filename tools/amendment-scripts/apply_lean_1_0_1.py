@@ -1,5 +1,5 @@
-"""Rehearsable editorial amendment: STND.LEAN 1.0.1, citing STND.CODE.14 in place of the withdrawn STND.CXX.16 and
-aligning the words of STND.LEAN.27 with the naming rule of the other language standards (one transaction).
+"""Rehearsable editorial amendment: STND.LEAN 1.0.1, citing STND.CODE.14 in place of the withdrawn STND.CXX.16
+(one transaction).
 
 It applies after STND.CODE 1.2 and STND.CXX 1.2: apply_close_p3.py runs it after apply_close_p1.py. Run from
 harness/, so that govharness imports:
@@ -25,11 +25,6 @@ LEAN25 = [
      "diagnosis (PRIME.4, STND.CODE.14)."),
 ]
 
-LEAN27 = [
-    ("Each name of the Lean source of the work SHOULD follow",
-     "Each name that the Lean source of the work declares SHOULD follow"),
-]
-
 DOC = [
     ("and proofs that a machine generates are untrusted input, checked against a trusted statement.",
      "and proofs that a machine generates come from an untrusted author and are checked against a trusted "
@@ -44,9 +39,7 @@ DOC = [
 ]
 
 READING = (
-    "STND.LEAN.25 cites STND.CODE.14, of which it is the Lean form, with its text otherwise unchanged; the first "
-    "sentence of STND.LEAN.27 reads \"Each name that the Lean source of the work declares\", the words of the naming "
-    "rule in the other language standards; the Notes cite STND.CODE.14 in place of the withdrawn STND.CXX.16, record "
+    "STND.LEAN.25 cites STND.CODE.14, of which it is the Lean form, with its text otherwise unchanged; the Notes cite STND.CODE.14 in place of the withdrawn STND.CXX.16, record "
     "that the ratification of 2026-10-24 accepted the floor argument for STND.LEAN.25, and say that proofs that a "
     "machine generates come from an untrusted author, the term of this standard, in place of calling them "
     "untrusted input, a term of STND.CODE that this standard does not use")
@@ -57,9 +50,8 @@ RATIONALE = (
     f"Editorial amendment of STND.LEAN to revision 1.0.1, ratified by the custodian on {DATE}, on STND.CODE 1.2 and "
     f"STND.CXX 1.2: {READING}. The change is editorial because it alters no obligation, permission, or defined "
     "meaning. The citation in STND.LEAN.25 names the provision of STND.CODE that already binds Lean code and leaves "
-    "the responses of STND.LEAN.25 as ratified. STND.LEAN.27 reaches the same names as before: the work gives a "
-    "convention of names effect only through the names that its source declares, and a name that the source only "
-    "uses is declared, and named, elsewhere. The Notes change their citations and not their reasons. Class onsets "
+    "the responses of STND.LEAN.25 as ratified. STND.LEAN.27, already in the form of the naming rule of decision 9 of "
+    "2026-10-24, is unchanged. The Notes change their citations and not their reasons. Class onsets "
     "unchanged. No floor is raised (GOV.11). Transition (GOV.42): none, because no obligation of the work changes. "
     "Review of STND.HARN.28 by the command pairs; record review-records/round-2026-10-25-close/p3/."
     " Text authored by an agent, Claude (Anthropic), at the custodian's direction (REPRO.5)."
@@ -69,12 +61,11 @@ RATIONALE = (
 def apply(root: Path) -> None:
     root = Path(root)
     replace_text(root, "STND/LEAN/25.md", LEAN25)
-    replace_text(root, "STND/LEAN/27.md", LEAN27)
-    res = B.derive_fields(root, ["STND.LEAN.25", "STND.LEAN.27"])
+    res = B.derive_fields(root, ["STND.LEAN.25"])
     for ident, r in res.items():
         if r.unresolved:
             raise ValueError(f"{ident}: {r}")
-    if not res["STND.LEAN.25"].forced or res["STND.LEAN.27"].forced:
+    if not res["STND.LEAN.25"].forced:
         raise ValueError("STND.LEAN: a mode differs from the one this amendment states")
     replace_text(root, "STND/LEAN/_doc.md", DOC)
     raise_revision(root, "STND/LEAN", "1.0", "1.0.1", ROW)

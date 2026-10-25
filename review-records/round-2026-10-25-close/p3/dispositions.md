@@ -18,3 +18,27 @@ Source of the items: `p1/code-interface.md` 0.2 ("Changes from 0.1"), `p1/for-p2
 | 12 | STND.CODE range in the Purposes | RUST and FTN cite "STND.CODE.14 to STND.CODE.21". |
 
 Results: `rehearse governance apply_close_p3.py` appends 7 entries (seq 148 to 154) and every check passes; `findings.py` reports no defect for the four documents (only the eleven three-modal review notices carried from 1.0); `check_refs` reports 0 documents with missing rows for them.
+
+## Decisions for the custodian
+
+1. **Fortran reach to documented external procedures.** Under the STND.CODE 1.2 term, an external procedure that the documentation or the repository configuration names for use by code outside the work is in the interface for outside use; the reach is new. The FTN floor paragraph argues it: STND.FTN.31 asks only the form of a check that DSGN.2 and STND.CODE.6 already ask, at one test per untrusted subscript, and an external procedure that nothing names stays out. Recommend: accept, as one decision with P1's on the term.
+2. **Rust reach outside library code.** The same widening for a function outside library code that the documentation or the repository configuration names, an exported foreign function among them; RUST.15 asks only the form of a check. Recommend: accept, with decision 1.
+3. **STND.FTN.18 beneath STND.CODE.21.** Both are defaults, and FTN.18 restates the first sentence of CODE.21 for each source file; it now cites CODE.21 and adds no other outcome. Kept on the lead's direction. Recommend: keep now, and retire FTN.18 at the next amendment of STND.FTN (GOV.31).
+4. **STND.RUST.14 kept.** Rust provides a form of declaration, so STND.CODE.15 applies to Rust on its own terms and RUST.14 states its Rust form, as ratified on 2026-10-24 with its floor argument. Recommend: keep, with the citation.
+5. **Naming rule in RUST, FTN, and SV.** RUST.35, FTN.37, and SV.28 take the STND.LEAN.27 form in the words of STND.STDC.39, with the NUMER.4 allowance, and add no table. Rust's case convention is checkable (a2 fact 5), so decision 9 would admit a Rust table; none is fixed because the lints warn by default and STND.BUILD.12 asks that a change fail on a warning, so a configuration that names the convention gets it checked at no added cost, while that the Rust project publishes the convention is unverified. Fortran and Verilog have no convention that the research retrieved. Recommend: adopt as drafted.
+6. **Class of STND.LEAN 1.0.1.** After review item S1, the amendment is a citation in LEAN.25 and Notes edits only, with LEAN.27 unchanged, so it alters no obligation, permission, or defined meaning. Recommend: editorial.
+
+## Review (review.md, cold and STND.HARN.28 pair review)
+
+| Item | Disposition |
+| --- | --- |
+| S1 LEAN.27 as editorial | Fixed by option (a): the LEAN.27 text edit is reverted, with its clauses in the history row and the rationale; the rationale says LEAN.27, already in the form of decision 9, is unchanged. LEAN.27 drops out of pairs-changed.md. The SV rationale now says "in the words of STND.STDC.39", since LEAN.27 keeps its own words. |
+| S2 Rationale overclaims a ruling | Fixed in the RUST and FTN rationales: "the reach that STND.CODE 1.2 gives the term in every language". The clauses that call the library-crate and module-public placement ratified stay, since decision 4 ratified that reach. |
+| S3 RUST.14 "wider" | Fixed: the RUST Notes say RUST.14 is kept as ratified, that Rust provides a form of declaration so STND.CODE.15 applies to Rust code on its own terms, and that RUST.14 states its Rust form. |
+| O1 FTN.18 restates CODE.21 | Taken: the FTN Notes add that FTN.18 adds no other outcome to STND.CODE.21; decision 3 recommends retiring it later. |
+| O2 RUST naming reason | Taken: the Notes say STND.BUILD.12 asks that a change fail on each warning, so the configuration names the convention at no added cost and a fixed table would add nothing. |
+| O3 Negative about the research | Taken in FTN and SV: "The research note retrieved no convention of names that ... fixes, and that none exists is unverified". |
+| O4 SV Purpose "in every build" | Taken: "are not removable by an execution setting through STND.CODE.16". |
+| O5 FTN.29 status argument against CODE.14 | P1's, routed by the lead. No P3 change. |
+
+Results after the fixes: `rehearse governance apply_close_p3.py` appends 7 entries (seq 148 to 154) and every check passes; `findings.py` reports no defect for the four documents (the eleven three-modal review notices carried from 1.0); `check_refs` reports 0 of 4 documents with missing rows. Reading copies `<ID>-0.3.md`; pair lists regenerated.

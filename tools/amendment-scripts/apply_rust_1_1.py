@@ -82,10 +82,9 @@ DOC = [
      "the condition to the caller, and its second and third add what Rust needs."),
     ("STND.RUST.14 is the Rust form of STND.CXX.17, with its two means. STND.RUST.15 is the Rust form of "
      "STND.CODE.6, and of STND.CXX.18 for the checks of CPS.5 and CPS.9:",
-     "STND.RUST.14 is the Rust form of STND.CODE.15, kept as ratified with its wider condition: it applies where any "
-     "compiler or static check among the means of the work diagnoses an ignored returned value, and STND.CODE.15 "
-     "where a form of declaration exists, which the language provides, so that for Rust code the two ask one "
-     "outcome. STND.RUST.15 is the Rust form of "
+     "STND.RUST.14 is kept as ratified. Rust provides a form of declaration under which a call that ignores a "
+     "result is diagnosed, so STND.CODE.15 applies to Rust code on its own terms, and STND.RUST.14 states its Rust "
+     "form. STND.RUST.15 is the Rust form of "
      "STND.CODE.6, and of the first sentence of STND.CODE.16 for the checks of CPS.5 and CPS.9:"),
     ("The term Untrusted input reaches the arguments of each function of the public interface of a crate of library "
      "code, as the terms of STND.PY and STND.JL reach the arguments of their public interfaces. The Notes of STND.JL "
@@ -108,7 +107,9 @@ DOC = [
      "static items covers constants, and that the Rust project publishes a convention of names is unverified. "
      "STND.RUST.35 leaves the convention to the repository configuration, as STND.STDC.39 and STND.LEAN.27 do. A "
      "configuration that names the convention of those lints has them among the static checks of STND.CODE.4, which "
-     "report each departure from it, and STND.BUILD.12 fails a change on each of their warnings. STND.RUST.35 "
+     "report each departure from it, and STND.BUILD.12 asks that a change fail on each of their warnings, so the "
+     "configuration names that convention at no added cost and a table fixed by this standard would add nothing. "
+     "STND.RUST.35 "
      "keeps the names that the notation of NUMER.4 fixes, as STND.DOCS.12 permits, a lint that reports such a name "
      "being suppressed at its location with its reason under STND.CODE.4, and adds no table.\n\n"
      "Numerics. NaN bit patterns that are not portable"),
@@ -154,8 +155,8 @@ RATIONALE = (
     f"{READING}. The change is minor because it alters the defined meaning of Untrusted input for Rust and adds a "
     "default. The term of STND.CODE reaches the arguments of each function of the public interface of a crate of "
     "library code, as the term of STND.RUST 1.0 did, and also each function that the documentation or the "
-    "repository configuration names for use by code outside the work, the one reach that the ratification of "
-    "2026-10-24 gave the term in every language; for a function outside library code so named, the reach is new, "
+    "repository configuration names for use by code outside the work, the reach that STND.CODE 1.2 gives the term "
+    "in every language; for a function outside library code so named, the reach is new, "
     "and the Notes argue that it raises no floor. The binding STND.RUST.13, STND.RUST.14, STND.RUST.15, and "
     "STND.RUST.34 keep their obligations: the first three gain a citation of the provision of STND.CODE of which "
     "they are the Rust forms, and STND.RUST.34 is unchanged. Class onsets: STND.RUST.35 rests on no row of "

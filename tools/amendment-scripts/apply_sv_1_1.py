@@ -25,7 +25,8 @@ DOC = [
     # Purpose: the floor
     ("bind at every class through STND.CONC.1 and STND.CONC.2; this standard adds nothing to that floor.",
      "bind at every class through STND.CONC.1 and STND.CONC.2, as the responses to a failure that PRIME.4 lists bind "
-     "through STND.CODE.14 and the checks that CPS.5 or CPS.9 requires stay in every build through STND.CODE.16; "
+     "through STND.CODE.14 and the checks that CPS.5 or CPS.9 requires are not removable by an execution setting "
+     "through STND.CODE.16; "
      "this standard adds nothing to that floor."),
     # Terms
     ("Repository configuration, Static check, and Execution setting have the meanings that STND.CODE gives them,",
@@ -44,8 +45,8 @@ DOC = [
      "names (STND.SV.28)."),
     # Notes: names, before the paragraph on matters without provisions
     ("The research note retrieved no primary text on the coding of state machines,",
-     "Names. The research note holds no convention of names that the language definition fixes and a tool checks, "
-     "so STND.SV.28 leaves the convention to the repository configuration, as STND.STDC.39 and STND.LEAN.27 do, "
+     "Names. The research note retrieved no convention of names that the language definition fixes, and that none "
+     "exists is unverified, so STND.SV.28 leaves the convention to the repository configuration, as STND.STDC.39 and STND.LEAN.27 do, "
      "keeps the names that the notation of NUMER.4 fixes, as STND.DOCS.12 permits, and adds no table.\n\n"
      "The research note retrieved no primary text on the coding of state machines,"),
     # Notes: class onset
@@ -68,7 +69,7 @@ RATIONALE = (
     f"Minor amendment of STND.SV to revision 1.1, ratified by the custodian on {DATE}: {READING}. The change is "
     "minor because it adds a default; the citations of STND.CODE add no obligation, since STND.CODE applies to "
     "hardware descriptions by its own scope. STND.SV.28 states for hardware descriptions and their verification the rule "
-    "that STND.STDC.39 and STND.LEAN.27 state for C and Lean, in the same words. Class onsets: STND.SV.28 rests on "
+    "that STND.STDC.39 and STND.LEAN.27 state for C and Lean, in the words of STND.STDC.39. Class onsets: STND.SV.28 rests on "
     "no row of STND.CLASS.10 and applies from CSQ3; no other onset changes. Floor (GOV.11): STND.SV.28 is a "
     "default and instantiates only INTPR, so no floor is raised; no provision of this standard binds. Transition "
     "(GOV.42): existing source conforms when a change next touches it. Review of STND.HARN.28 by the command pairs; "

@@ -1,11 +1,11 @@
-# Pairs of the changed and new provisions of package P3 (STND.HARN.28), revision 0.2
+# Pairs of the changed and new provisions of package P3 (STND.HARN.28), revision 0.3
 
 From `python3 -B -m govharness pairs` on the rehearsed corpus (entry 147 plus apply_close_p3.py, which applies apply_close_p1.py 0.2 first). The full list for each document is in pairs-<ID>.md beside this file.
 
 - STND.RUST 1.1: STND.RUST.13, STND.RUST.14, and STND.RUST.15 (citation of STND.CODE added, text otherwise unchanged); new STND.RUST.35.
 - STND.FTN 1.1: STND.FTN.18, STND.FTN.29, and STND.FTN.31 (citation of STND.CODE.21, .14, and .6 added, text otherwise unchanged); new STND.FTN.37.
 - STND.SV 1.1: new STND.SV.28.
-- STND.LEAN 1.0.1: STND.LEAN.25 (citation of STND.CODE.14 added) and STND.LEAN.27 ("Each name that the Lean source of the work declares").
+- STND.LEAN 1.0.1: STND.LEAN.25 (citation of STND.CODE.14 added). STND.LEAN.27 is unchanged since review item S1.
 
 | # | Changed side | Other provision | Bases |
 | --- | --- | --- | --- |
@@ -39,6 +39,5 @@ From `python3 -B -m govharness pairs` on the rehearsed corpus (entry 147 plus ap
 | 758 | STND.LEAN.25 | HDES.14 | PRIME.4 |
 | 759 | STND.LEAN.25 | HW.8 | PRIME.4 |
 | 760 | STND.LEAN.25 | HW.GPU.3 | PRIME.4 |
-| 768 | STND.LEAN.27 | NUMER.4 | INTPR.1 |
 
 Changed or new provisions with no pair: none.

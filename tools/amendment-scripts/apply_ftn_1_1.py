@@ -76,7 +76,7 @@ DOC = [
      "STND.FTN.18 is therefore a default, at the cost of one choice of option for a file that holds a required "
      "check, and no binding provision rests on the hazard; STND.CXX.18 binds the same sentence for C++. STND.FTN.18 "
      "is the Fortran form of the first sentence of STND.CODE.21, stated for each source file, since an option of a "
-     "Fortran compiler applies to the files that it compiles."),
+     "Fortran compiler applies to the files that it compiles; it adds no other outcome to STND.CODE.21."),
     # Notes: failures
     ("which a subroutine makes in a status argument because it has no result (STND.FTN.29, in the form of "
      "STND.CXX.16, STND.PY.22, and STND.JL.15).",
@@ -98,8 +98,8 @@ DOC = [
      "code are the internal structure of a program."),
     # Notes: names, before the binding provisions
     ("Binding provisions. STND.FTN.29, STND.FTN.30, and STND.FTN.31 instantiate PRIME.4",
-     "Names. The research note holds no convention of names that the Fortran standard fixes and a tool checks, so "
-     "STND.FTN.37 leaves the convention to the repository configuration, as STND.STDC.39 and STND.LEAN.27 do, keeps "
+     "Names. The research note retrieved no convention of names that the Fortran standard fixes, and that none "
+     "exists is unverified, so STND.FTN.37 leaves the convention to the repository configuration, as STND.STDC.39 and STND.LEAN.27 do, keeps "
      "the names that the notation of NUMER.4 fixes, as STND.DOCS.12 permits, and adds no table.\n\n"
      "Binding provisions. STND.FTN.29, STND.FTN.30, and STND.FTN.31 instantiate PRIME.4"),
     # Notes: floor
@@ -139,8 +139,8 @@ RATIONALE = (
     f"{READING}. The change is minor because it adds a default and alters the defined meaning of Untrusted input "
     "for Fortran. STND.FTN.18 stays a default, as ratified on 2026-10-24, beneath the default STND.CODE.21. The term of STND.CODE reaches the values that each module-public procedure and each procedure "
     "with the BIND attribute receive, as the term of STND.FTN 1.0 did, and also each procedure that the "
-    "documentation or the repository configuration names for use by code outside the work, the one reach that the "
-    "ratification of 2026-10-24 gave the term in every language; for an external procedure so named, the reach is "
+    "documentation or the repository configuration names for use by code outside the work, the reach that STND.CODE 1.2 "
+    "gives the term in every language; for an external procedure so named, the reach is "
     "new, and the Notes argue that it raises no floor. The binding STND.FTN.29, STND.FTN.30, and "
     "STND.FTN.31 keep their obligations: STND.FTN.29 and STND.FTN.31 gain a citation of the provision of STND.CODE "
     "of which they are the Fortran forms, and STND.FTN.30 is unchanged. Class onsets: STND.FTN.37 rests on no row "
