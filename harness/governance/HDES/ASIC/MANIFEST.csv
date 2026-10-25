@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-HDES.ASIC,sub-profile,LVL1,Integrated circuit design,adopted,_doc.md,2ab06b19d08712ecf3fa603b0b53a9ee2052544183675aaa719461b2ecbddaa5,13355
+HDES.ASIC,sub-profile,LVL1,Integrated circuit design,adopted,_doc.md,9d6ea235c0412828f681d8105b7d88b8f4cf2e4ff6de4e1998b7fdd4e4ff7b7c,13779
 HDES.ASIC.1,provision,LVL1,Integrated circuit design selector,adopted,1.md,420ef39e9246ee31fb80cd5bddbcbad7a182828472d0d90506b6f213e93c9b1a,526
 HDES.ASIC.2,provision,LVL1,Integrated circuit design shared matters,adopted,2.md,2d6166113f2dd87a7148228576b39b42410edf974be7b0809eb994506b6681e3,890
 HDES.ASIC.3,provision,LVL1,Sign-off checks,adopted,3.md,b28a250ea6afab4d9265bd15194d551b7805dfeca78e1402d3b1acb800c15446,791

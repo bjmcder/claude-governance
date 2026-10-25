@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.HARN,standard,LVL2,Harness specification,adopted,_doc.md,d08cc49ffe73d5cb4dbda2096c198cbf92857f2cc1deb55e04272c2c7ec0b718,8855
+STND.HARN,standard,LVL2,Harness specification,adopted,_doc.md,3870db456e97a162444232404ef4c9269013277a1a97c704d05f70f8b5ae7446,13258
 STND.HARN.1,provision,LVL2,Item retrieval,adopted,1.md,9c3a39db5315f53754f7dc9433294014167ee065c81bafcbb9e5d32867c12e4f,482
 STND.HARN.2,provision,LVL2,Topic retrieval,adopted,2.md,602c57f26fddc5ba4eb8ee578fec73231cd7d821d423615acbd09970d8858614,394
 STND.HARN.3,provision,LVL2,Whole text,adopted,3.md,40fad67aefb278537805eae5668ed53403041a7bba6191545f251ef2dada61fa,365
@@ -28,4 +28,5 @@ STND.HARN.25,provision,LVL2,Rehearsal isolation,adopted,25.md,1f29a2ec11f6217577
 STND.HARN.26,provision,LVL2,Selector attribute check,adopted,26.md,20ba9a28b1691b76ec407fe3cf8ec6f6eb161fb585bfc08c4b0479d50e2df580,514
 STND.HARN.27,provision,LVL2,Shared-matter ownership check,adopted,27.md,2edfb4dd59d8298d56490ea0ae166c08a30d1efb9edd9a5825b022b8c2892481,666
 STND.HARN.28,provision,LVL2,Conflict candidates,adopted,28.md,d286c41681ae0e4bc674a8e04d9325454c1b6fc4bf9148dbf1568499e485c861,1200
-STND.HARN.29,provision,LVL2,Authorizations a configuration honors,adopted,29.md,794bbf2b0bffc1039d8790be8d94518759c253e3330d268d63fa15f985caf401,2081
+STND.HARN.29,provision,LVL2,Authorizations a configuration honors,adopted,29.md,49ad8f00783ee159a7027bf501e6b6dfb1a8ea4b04e8c94cb13fc8efcf9bbbcb,2346
+STND.HARN.30,provision,LVL2,Unsigned reliance accepted,adopted,30.md,6217bfab4562eead3641c6255cd60f0ae94478318126b638ea6732c6a2f571ea,761

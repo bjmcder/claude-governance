@@ -1,6 +1,6 @@
-# Identifier scheme and mnemonic register (STND.IDENT) 1.3.2
+# Identifier scheme and mnemonic register (STND.IDENT) 1.3.3
 
-Adopted by The Custodian as revision 1.0 in ledger entry 10 (2026-10-09); revised to 1.1 in entry 18 (2026-10-09), 1.2 in entry 25 (2026-10-10), 1.3 in entry 27 (2026-10-10), 1.3.1 in entry 35 (2026-10-10), and 1.3.2 in entry 45 (2026-10-10). This reading copy is composed from the per-provision files in STND/IDENT/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 10 (2026-10-09); revised to 1.1 in entry 18 (2026-10-09), 1.2 in entry 25 (2026-10-10), 1.3 in entry 27 (2026-10-10), 1.3.1 in entry 35 (2026-10-10), 1.3.2 in entry 45 (2026-10-10), and 1.3.3 in entry 157 (2026-10-25). This reading copy is composed from the per-provision files in STND/IDENT/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -48,7 +48,7 @@ A major change is large and fundamental: it alters a prime directive or a govern
 
 ## Representation in the harness
 
-Each provision is one file, `STND/IDENT/<n>.md`, with the fields the drafting standard fixes. The provision that holds the table of revision classes names it `revision-classes` in the field `defines`, and the harness reads the table by that name and by its column headings. A document of kind constitution, profile, sub-profile, or standard carries the field `revision`; a project instrument does not. The mnemonic register is the file `MNEM/_doc.md`.
+Each provision is one file, `STND/IDENT/<n>.md`, with the fields the drafting standard fixes. The provision that holds the table of revision classes names it `revision-classes` in the field `defines`, and the harness reads the table by that name and by its column headings. A document of kind constitution, profile, sub-profile, or standard carries the field `revision`; a project instrument does not. The mnemonic register (MNEM) is the file `MNEM/_doc.md`.
 
 ## Checks
 
@@ -61,6 +61,7 @@ The harness reports the revision checks (family v) with `python -m govharness ch
 | GOV | Governance |
 | LEX | Lexicon |
 | LVL0 | Constitution for Computational and Cyber-Physical Systems |
+| MNEM | Mnemonic register |
 | QA | Process |
 | REPRO | Reproducibility |
 | STND.CLASS | Consequence-class criteria |
@@ -238,3 +239,4 @@ The custodians SHALL register each mnemonic, including the mnemonic of each proj
 | 1.3 | 2026-10-10 | Minor amendment (GOV.41): the section Identifiers gains STND.IDENT.15 to STND.IDENT.23, which fix the forms of identifiers, locators, slugs, and mnemonics, the choice of mnemonics, the mnemonic register MNEM, its transactions and permanent rows, the use of mnemonics and grades, and the custodians' authority to register mnemonics; Terms gains Number, Grade, Parent, Letter distance, and Retired item. |
 | 1.3.1 | 2026-10-10 | Editorial amendment (GOV.41): the section References lists the documents this standard cites, as STND.DRAFT.34 requires; no obligation changes. |
 | 1.3.2 | 2026-10-10 | Editorial amendment (GOV.41): the Checks section names the commands of the harness package instead of the retired scripts; no obligation changes. |
+| 1.3.3 | 2026-10-25 | Editorial amendment (GOV.41): the informative section Representation in the harness cites the mnemonic register MNEM, which STND.IDENT.19 and STND.IDENT.20 name, and References lists MNEM; no obligation, permission, or defined meaning changes. |

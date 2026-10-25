@@ -28,7 +28,7 @@ This file records how the custodian has the governance corpus worked on, and the
   - Timeless practice over current practice.
 - **Offload.** The offload standard stays agnostic and timeless, with no annexes for particular frameworks (2026-10-24).
 - **Determinism (STND.VVUQ.82, .83).** Strict determinism is an option where feasible. It is not a requirement unless the acceptance criterion or the consequence class demands it. Known, declared variation within the agreed tolerance is not a defect, and agents do not churn over it. A true race condition is a correctness defect.
-- **High-assurance C++.** Any coding standard a decision record adopts. The edition follows the toolchain's validation status; elsewhere, the newest edition the compiler supports. This ruling is for C++ only; it was not extended to C, Fortran, Rust, or Lean (2026-10-24).
+- **High-assurance code.** Any coding standard a decision record adopts. The edition follows the toolchain's validation status (2026-10-24, for C++). Since the closing round of 2026-10-25, STND.CODE.17 to .20 hold these rules for high-assurance code in every language, as defaults from CSQ1, and STND.CODE.18 binds every claim of conformance. Outside high-assurance code, the newest-edition rule remains a C++ rule (STND.CXX.2); it was not extended to C, Fortran, Rust, or Lean.
 - **No restatement (GOV.31).** Cite the provision that holds an outcome, and add only what the document makes necessary.
 - **Documentation (STND.DOCS).**
   - Written for human readers only, with no agent notes, governance, or process records in work documentation.

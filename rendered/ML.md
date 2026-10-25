@@ -1,6 +1,6 @@
-# Learned models (ML) 1.0
+# Learned models (ML) 1.0.1
 
-Adopted by The Custodian as revision 1.0 in ledger entry 81 (2026-10-19). This reading copy is composed from the per-provision files in ML/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 81 (2026-10-19); revised to 1.0.1 in entry 161 (2026-10-25). This reading copy is composed from the per-provision files in ML/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -23,7 +23,7 @@ This section fixes meaning and imposes no obligation, as the Lexicon does.
 
 ## Selector
 
-ML.1 states the selector: the attribute Learned model use, defined here. The domain items are learned models, their records, their error estimates, and their inputs, and each provision names one of them as its subject (STND.DRAFT.37). A calibration, a regression on a stated model, and an inversion are not learned models: MEAS and NUMER govern them. The models through which agents do the work are governed by AGENT and GUARD, not by this profile. A learned model used as a numerical surrogate is numerical work as well, which NUMER binds where the classification records the attribute Numerical.
+ML.1 states the selector: the attribute Learned model use, defined here. The domain items are learned models, their records, their error estimates, and their inputs, and each provision names one of them as its subject (STND.DRAFT.37). A calibration, a regression on a stated model, and an inversion are not learned models: MEAS and NUMER govern them. The models through which agents do the work are governed by the agent practice profile (AGENT) and the Safeguards Article (GUARD), not by this profile. A learned model used as a numerical surrogate is numerical work as well, which NUMER binds where the classification records the attribute Numerical.
 
 ## Where the rest lives
 
@@ -56,9 +56,11 @@ Every provision other than the selector and the shared-matters provision instant
 
 | Identifier | Title |
 | --- | --- |
+| AGENT | Agent practice |
 | CPS | Cyber-physical and actuation |
 | DSGN | Design |
 | GOV | Governance |
+| GUARD | Safeguards |
 | HW | Execution hardware |
 | INTPR | Interpretability |
 | MEAS | Measurement and instrumentation |
@@ -138,3 +140,4 @@ Each learned model whose parameters change, by refitting, by fine-tuning, or by 
 | Revision | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-10-19 | Adopted. |
+| 1.0.1 | 2026-10-25 | Editorial amendment (GOV.41): the informative Selector text cites AGENT and GUARD, which it names as governing the models through which agents do the work, and References lists AGENT and GUARD; no obligation, permission, or defined meaning changes. |

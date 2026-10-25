@@ -1,6 +1,6 @@
-# Defaults (STND.DFLT) 1.5
+# Defaults (STND.DFLT) 1.5.1
 
-Adopted by The Custodian as revision 1.0 in ledger entry 33 (2026-10-10); revised to 1.0.1 in entry 37 (2026-10-10), 1.0.2 in entry 39 (2026-10-10), 1.1 in entry 40 (2026-10-10), 1.2 in entry 42 (2026-10-10), 1.3 in entry 50 (2026-10-11), 1.4 in entry 56 (2026-10-11), and 1.5 in entry 90 (2026-10-20). This reading copy is composed from the per-provision files in STND/DFLT/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 33 (2026-10-10); revised to 1.0.1 in entry 37 (2026-10-10), 1.0.2 in entry 39 (2026-10-10), 1.1 in entry 40 (2026-10-10), 1.2 in entry 42 (2026-10-10), 1.3 in entry 50 (2026-10-11), 1.4 in entry 56 (2026-10-11), 1.5 in entry 90 (2026-10-20), and 1.5.1 in entry 159 (2026-10-25). This reading copy is composed from the per-provision files in STND/DFLT/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -46,7 +46,7 @@ This section fixes meaning and imposes no obligation, as the Lexicon does.
 
 ## Notes
 
-An unlisted destructive action is a bulk action and reserved (GUARD.6); listing removes only that status, and each item still needs an exempt class (GUARD.5). The fourth class rests on GUARD.7 as LVL0 1.5 amended it. Command-level practice, such as shell guards and dry runs, belongs to STND.INSTR.
+An unlisted destructive action is a bulk action and reserved (GUARD.6); listing removes only that status, and each item still needs an exempt class (GUARD.5). The fourth class rests on GUARD.7 as LVL0 1.5 amended it. Command-level practice, such as shell guards and dry runs, belongs to STND.INSTR (STND.INSTR.4, STND.INSTR.5).
 
 No class is set by default (GOV.13); work without a project constitution is relied upon by no one beyond its author (GOV.20), so the rows of STND.CLASS.18 and STND.CLASS.19 have no occasion to act until the human owner records one.
 
@@ -76,6 +76,7 @@ Locations that hold secrets or credentials by convention include the key directo
 | STND.CLASS | Consequence-class criteria |
 | STND.DRAFT | Drafting standard |
 | STND.HARN | Harness specification |
+| STND.INSTR | Agent instructions |
 
 ## Provisions
 
@@ -319,3 +320,4 @@ The access descriptor of each record of AGENT.23 SHALL be one kind and one outco
 | 1.3 | 2026-10-11 | Minor amendment (GOV.41): new STND.DFLT.27 fixes the access descriptors of network access records (AGENT.23) as one of three kinds (search, retrieve, write) and one of three outcomes (ok, refused, failed). |
 | 1.4 | 2026-10-11 | Minor amendment (GOV.41): STND.DFLT.12 has the human owner report a governance failure, from a report an agent drafts, by the next compliance report instead of before the next unit of work; the default working bounds open to reading the account's files other than the secret store and each conventional or named location of secrets or credentials (STND.DRAFT.42); the Notes give examples of conventional locations. | |
 | 1.5 | 2026-10-20 | Minor amendment (GOV.41), conforming on the adoption of AGENT: new STND.DFLT.28 places the workbench in the directory "workbench" of the records directory, its tools in "tools"; new STND.DFLT.29 to STND.DFLT.31 place the store of non-credential secrets of AGENT.44, where the human owner provides one, in the temporary directory "secrets" at the top of the work, one secret per file, have an agent confirm before its first write in a session that version control excludes it and that no other unprivileged account reads it, restoring either condition where it fails, and keep it out of archives, backups, transfers, and unauthorized recursive or pattern-selected operations; the working bounds admit each file of the store only to an agent authorized to handle its secret; STND.DFLT.17 enters a grant without the secrets it contains; the term Temporary location admits working copies of items whose source lies outside the work. |
+| 1.5.1 | 2026-10-25 | Editorial amendment (GOV.41): the informative Notes cite STND.INSTR.4 and STND.INSTR.5, which hold the shell guards and dry runs that the Notes assign to STND.INSTR, and References lists STND.INSTR; no obligation, permission, or defined meaning changes. |

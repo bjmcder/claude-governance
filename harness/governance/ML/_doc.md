@@ -5,7 +5,7 @@ kind: "profile"
 title: "Learned models"
 status: "adopted"
 adopted: "2026-10-19"
-revision: "1.0"
+revision: "1.0.1"
 selector: "Binds when a learned model sits on a path that affects a result the work reports or relies on, or physical hardware (ML.1)."
 parent: null
 adopted_by: "The Custodian"
@@ -32,7 +32,7 @@ This section fixes meaning and imposes no obligation, as the Lexicon does.
 
 ## Selector
 
-ML.1 states the selector: the attribute Learned model use, defined here. The domain items are learned models, their records, their error estimates, and their inputs, and each provision names one of them as its subject (STND.DRAFT.37). A calibration, a regression on a stated model, and an inversion are not learned models: MEAS and NUMER govern them. The models through which agents do the work are governed by AGENT and GUARD, not by this profile. A learned model used as a numerical surrogate is numerical work as well, which NUMER binds where the classification records the attribute Numerical.
+ML.1 states the selector: the attribute Learned model use, defined here. The domain items are learned models, their records, their error estimates, and their inputs, and each provision names one of them as its subject (STND.DRAFT.37). A calibration, a regression on a stated model, and an inversion are not learned models: MEAS and NUMER govern them. The models through which agents do the work are governed by the agent practice profile (AGENT) and the Safeguards Article (GUARD), not by this profile. A learned model used as a numerical surrogate is numerical work as well, which NUMER binds where the classification records the attribute Numerical.
 
 ## Where the rest lives
 
@@ -65,9 +65,11 @@ Every provision other than the selector and the shared-matters provision instant
 
 | Identifier | Title |
 | --- | --- |
+| AGENT | Agent practice |
 | CPS | Cyber-physical and actuation |
 | DSGN | Design |
 | GOV | Governance |
+| GUARD | Safeguards |
 | HW | Execution hardware |
 | INTPR | Interpretability |
 | MEAS | Measurement and instrumentation |
@@ -84,3 +86,4 @@ Every provision other than the selector and the shared-matters provision instant
 | Revision | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-10-19 | Adopted. |
+| 1.0.1 | 2026-10-25 | Editorial amendment (GOV.41): the informative Selector text cites AGENT and GUARD, which it names as governing the models through which agents do the work, and References lists AGENT and GUARD; no obligation, permission, or defined meaning changes. |

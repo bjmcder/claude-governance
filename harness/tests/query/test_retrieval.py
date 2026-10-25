@@ -24,7 +24,7 @@ CORPUS = Corpus(live_entries())
 GRAPH = build_graph(CORPUS)
 
 
-def found(query: str, in_force: bool = False) -> list[str]:
+def found(query: str, in_force: bool = False, limit: int = 10) -> list[str]:
     """Return the nodes ``find`` returns for a query.
 
     Parameters
@@ -33,13 +33,15 @@ def found(query: str, in_force: bool = False) -> list[str]:
         Words.
     in_force : bool
         Whether to keep only adopted and ratified nodes.
+    limit : int
+        The most nodes to return.
 
     Returns
     -------
     list[str]
         Identifiers and locators, best first.
     """
-    return [m.node for m in find(CORPUS, GRAPH, query, 10, in_force)]
+    return [m.node for m in find(CORPUS, GRAPH, query, limit, in_force)]
 
 
 def cited_by_dflt(item: str) -> list[str]:
@@ -164,10 +166,13 @@ class Find(unittest.TestCase):
         """Behavior: "delete files" finds STND.INSTR.3, which says
         "deleted" and "files", and not GUARD.12, which says "delegated".
 
-        Reference: the text of STND.INSTR.3 and GUARD.12.
+        Reference: the text of STND.INSTR.3 and GUARD.12. Every match is
+        read, since more provisions now say both words and the rank of
+        STND.INSTR.3 among them is not what this test fixes.
         """
-        self.assertIn("STND.INSTR.3", found("delete files"))
-        self.assertNotIn("GUARD.12", found("delete files"))
+        every = found("delete files", limit=10_000)
+        self.assertIn("STND.INSTR.3", every)
+        self.assertNotIn("GUARD.12", every)
 
     def test_most_words_when_none_holds_all(self) -> None:
         """Behavior: where no item holds every word, the items holding

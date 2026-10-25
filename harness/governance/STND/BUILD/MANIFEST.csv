@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.BUILD,standard,LVL2,Build standard,adopted,_doc.md,fe275381724279cfacfd1c29934e46ece38229be4d31fc5116a52f28409a507d,31134
+STND.BUILD,standard,LVL2,Build standard,adopted,_doc.md,bdb0078031aae2974f4dd8c791a9eeeac8ca97fdc407b3d760fc030c450b119a,31793
 STND.BUILD.1,provision,LVL2,Declared inputs of build steps,adopted,1.md,a21727c26b72954dcd4eeaf382e62165abc959f6928a008c0830ee8eec7bd35d,512
 STND.BUILD.2,provision,LVL2,Inputs derived from the source,adopted,2.md,636099f9261525d614354d9f526ae5a0712f979143e705406977dc2994fc5423,571
 STND.BUILD.3,provision,LVL2,Schedule-independent build outputs,adopted,3.md,4e6105f632f1fc506d25885219ecc71b374e73266f7bbdeb75041a484193155e,681

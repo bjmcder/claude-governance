@@ -5,7 +5,7 @@ kind: "sub-profile"
 title: "General-purpose processors"
 status: "adopted"
 adopted: "2026-10-18"
-revision: "1.0"
+revision: "1.0.1"
 selector: "Binds when a component of the work executes, or is admitted to execute, on a general-purpose processor (HW.CPU.1)."
 parent: "HW"
 adopted_by: "The Custodian"
@@ -59,7 +59,7 @@ Concurrent work that asks for more computing threads than it may use, often by n
 
 HW.CPU addresses one matter that HW owns, the hardware contract of an execution path (HW.CPU.2), through HW.CPU.3, which cites HW.5 and HW.7.
 
-Each provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, DSGN, SIMPL, or RSRC. Each such provision inherits their rank and waivability (GOV.17) and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, HW.CPU.3 to HW.CPU.5 apply from CSQ3. HW.CPU.4 adds a few quantities to the record that RSRC.2 and RSRC.4 already ask for at CSQ3, only in the runs that keep it. HW.CPU.5 tightens above CSQ1, from which STND.CLASS.10 applies INTPR.7, at the cost of one message. No provision raises the floor (GOV.11).
+Each provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, DSGN, or RSRC. Each such provision inherits their rank and waivability (GOV.17) and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, HW.CPU.3 to HW.CPU.5 apply from CSQ3. HW.CPU.4 adds a few quantities to the record that RSRC.2 and RSRC.4 already ask for at CSQ3, only in the runs that keep it. HW.CPU.5 tightens above CSQ1, from which STND.CLASS.10 applies INTPR.7, at the cost of one message. No provision raises the floor (GOV.11).
 
 ## References
 
@@ -83,3 +83,4 @@ Each provision other than the selector and the shared-matters provision instanti
 | Revision | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-10-18 | Adopted. |
+| 1.0.1 | 2026-10-25 | Editorial amendment (GOV.41): the informative Notes name only the Articles that the provisions other than the selector and the shared-matters provision instantiate, so that the Simplicity Article, which none of them instantiates, is no longer named; no obligation, permission, or defined meaning changes. |

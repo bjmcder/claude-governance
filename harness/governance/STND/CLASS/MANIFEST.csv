@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.CLASS,standard,LVL2,Consequence-class criteria,adopted,_doc.md,03dd0e4bd580c2bfe62d59ad6cfe8933971761e7760b5006865d96785b68a55c,6358
+STND.CLASS,standard,LVL2,Consequence-class criteria,adopted,_doc.md,2a7befed6a784a619efe2b5f53f94164ecad9575dd31163d253f454857d233ea,6722
 STND.CLASS.1,provision,LVL2,Class criteria,adopted,1.md,0455cb5d35643d5d3eb7963864b6e0d9a402f7cbb56ae97acaa6e23b60541eef,1996
 STND.CLASS.2,provision,LVL2,Doubtful test,adopted,2.md,764cf7547b9dd0b609dd3a8dab3f2169b770c3e7e46ac5411935d0ecdcf507d0,422
 STND.CLASS.3,provision,LVL2,Cost threshold,adopted,3.md,7d17e8abc74f3aa4d363a693433bad6714265bd51bcf99228adf84c4edbf15c5,455

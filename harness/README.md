@@ -101,7 +101,7 @@ harness/
 
 ## Current state
 
-As of ledger entry 147 (2026-10-25). `show governance ID` prints the current text and revision of any document.
+As of ledger entry 175 (2026-10-25). `show governance ID` prints the current text and revision of any document.
 
 | Level | Contents | Status |
 | --- | --- | --- |
@@ -115,45 +115,45 @@ As of ledger entry 147 (2026-10-25). `show governance ID` prints the current tex
 | --- | --- | --- | --- |
 | AGENT | 1.1 | 47 | Agent practice |
 | NUMER | 1.3 | 29 | Numerical computation |
-| HW | 1.1.1 | 22 | Execution hardware; sub-profiles CPU (5), GPU (4), QPU (8), EMBED (6), FPGA (4), ASIC (4) |
-| HDES | 1.0.1 | 15 | Hardware design; sub-profiles FPGA (5), ASIC (12) |
-| CPS | 1.0 | 9 | Cyber-physical and actuation |
+| HW | 1.1.2 | 22 | Execution hardware; sub-profiles CPU (5), GPU (4), QPU (8), EMBED (6), FPGA (4), ASIC (4) |
+| HDES | 1.0.2 | 15 | Hardware design; sub-profiles FPGA (5), ASIC (12) |
+| CPS | 1.0.1 | 9 | Cyber-physical and actuation |
 | MEAS | 1.0 | 7 | Measurement and instrumentation |
-| ML | 1.0 | 7 | Learned models |
+| ML | 1.0.1 | 7 | Learned models |
 | STND.DRAFT | 1.4 | 42 | Drafting standard |
-| STND.IDENT | 1.3.2 | 23 | Identifier scheme and mnemonic register |
-| STND.CLASS | 1.3 | 12 | Consequence-class criteria (identifiers 8, 9, and 11 to 16 withdrawn) |
-| STND.DFLT | 1.5 | 31 | Defaults |
+| STND.IDENT | 1.3.3 | 23 | Identifier scheme and mnemonic register |
+| STND.CLASS | 1.3.1 | 12 | Consequence-class criteria (identifiers 8, 9, and 11 to 16 withdrawn) |
+| STND.DFLT | 1.5.1 | 31 | Defaults |
 | STND.INSTR | 1.4 | 10 | Agent instructions |
-| STND.HARN | 1.2 | 29 | Harness specification |
+| STND.HARN | 1.3 | 30 | Harness specification |
 | STND.VVUQ | 1.4 | 83 | Verification, validation, and uncertainty quantification methods |
-| STND.CODE | 1.1 | 13 | Coding standard |
+| STND.CODE | 1.2 | 21 | Coding standard |
 | STND.THRT | 1.0 | 9 | Threat-model template |
-| STND.KNOW | 1.0 | 14 | Knowledge base and tags |
+| STND.KNOW | 1.0.1 | 14 | Knowledge base and tags |
 | STND.DEPS | 1.0 | 11 | Dependency policy |
 | STND.PROJ | 1.2 | 7 | Project constitution template |
 | STND.WPROC | 1.1 | 15 | Work process standard |
 | STND.CREW | 1.1 | 23 | Agent roles standard |
 | STND.DOCS | 1.0 | 14 | Documentation standard |
-| STND.CXX | 1.1.1 | 31 | C++ standard |
-| STND.PY | 1.0.1 | 31 | Python standard |
-| STND.JL | 1.1 | 35 | Julia standard |
+| STND.CXX | 1.2 | 27 | C++ standard |
+| STND.PY | 1.1 | 37 | Python standard |
+| STND.JL | 1.2 | 41 | Julia standard |
 | STND.ANNEX | 1.0 | 10 | Hardware type annex |
-| STND.MPI | 1.0 | 25 | Message Passing Interface standard |
+| STND.MPI | 1.0.1 | 25 | Message Passing Interface standard |
 | STND.CONC | 1.1 | 30 | Concurrency standard |
-| STND.OMP | 1.0.1 | 33 | OpenMP standard |
-| STND.OFFLD | 1.0 | 31 | Accelerator offload standard |
-| STND.BUILD | 1.0.1 | 26 | Build standard |
+| STND.OMP | 1.0.2 | 33 | OpenMP standard |
+| STND.OFFLD | 1.0.1 | 31 | Accelerator offload standard |
+| STND.BUILD | 1.0.2 | 26 | Build standard |
 | STND.WFLOW | 1.0 | 40 | Workflow and long-run resilience standard |
-| STND.STDC | 1.0 | 38 | C standard |
-| STND.RUST | 1.0 | 34 | Rust standard |
-| STND.FTN | 1.0 | 36 | Fortran standard |
-| STND.SV | 1.0 | 27 | Verilog and SystemVerilog standard |
-| STND.LEAN | 1.0 | 31 | Lean standard |
+| STND.STDC | 1.1 | 40 | C standard |
+| STND.RUST | 1.1 | 34 | Rust standard |
+| STND.FTN | 1.1 | 36 | Fortran standard |
+| STND.SV | 1.1 | 28 | Verilog and SystemVerilog standard |
+| STND.LEAN | 1.0.1 | 31 | Lean standard |
 | STND.PERF | 1.0 | 26 | Performance evaluation standard |
 | STND.TEST | 1.0 | 19 | Testing methods standard |
 
-The ledger holds 147 transactions: 48 `adopt`, 73 `amend`, 17 `register`, 3 `review`, 3 `rule`, and 3 `annotate`. The mnemonic register `governance/MNEM/_doc.md` (STND.IDENT.19) holds every mnemonic in use; a new mnemonic, including that of a project or of a kind of LVL3 instrument, is registered by the custodians (STND.IDENT.23).
+The ledger holds 175 transactions: 48 `adopt`, 101 `amend`, 17 `register`, 3 `review`, 3 `rule`, and 3 `annotate`. The mnemonic register `governance/MNEM/_doc.md` (STND.IDENT.19) holds every mnemonic in use; a new mnemonic, including that of a project or of a kind of LVL3 instrument, is registered by the custodians (STND.IDENT.23).
 
 ## Commands
 

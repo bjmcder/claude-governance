@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.IDENT,standard,LVL2,Identifier scheme and mnemonic register,adopted,_doc.md,c65420a2840d383c4597be7ffbab2ffdd6d7ff30f78465a1e79572f49913a3fb,7332
+STND.IDENT,standard,LVL2,Identifier scheme and mnemonic register,adopted,_doc.md,1302d7a780cf23e5684df4e1067c2108fddc6eb075fa755fd741089382f2a779,7637
 STND.IDENT.1,provision,LVL2,Revision number,adopted,1.md,af83e6845936f1e8472dc125d867d8b730ef04a1e3d6f9d9353d77ccf651aa40,679
 STND.IDENT.2,provision,LVL2,Zero editorial segment,adopted,2.md,23e655738dbe90fe787343af24d6608f2cc860bb69ff348b488f9915f76a3ba3,477
 STND.IDENT.3,provision,LVL2,Revision classes,adopted,3.md,3483c9109c48157eae85d83440b031839d2a1cd72a134abdb473dd7152711d68,1396

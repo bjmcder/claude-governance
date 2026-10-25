@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.KNOW,standard,LVL2,Knowledge base and tags,adopted,_doc.md,b214f1ba6e60aea2c38f297241c2b3cb0c8a53615e54238d65ea2eca30f61b39,7279
+STND.KNOW,standard,LVL2,Knowledge base and tags,adopted,_doc.md,606787e1947290f9c1c74dea1f7b1844a12bec62691e39364fa82d597e36a240,7726
 STND.KNOW.1,provision,LVL2,Knowledge entry content,adopted,1.md,b1f4ccdbb0e7a1a3f27952b4aa475dad8fe8906bd1ff96e8afe2c48f2a8eadc5,619
 STND.KNOW.2,provision,LVL2,Knowledge entry kinds,adopted,2.md,19e44fb869bfaac83c6225961ffa2f109dc15a6c61804825f1e1405d826b46ce,996
 STND.KNOW.3,provision,LVL2,Knowledge entry form,adopted,3.md,311ed371f91b8309f5bca2fb3dea4159fdd092c0628fcd9448eec1fa4af828f8,716

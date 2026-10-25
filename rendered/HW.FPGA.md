@@ -1,6 +1,6 @@
-# Field-programmable gate arrays (HW.FPGA) 1.0
+# Field-programmable gate arrays (HW.FPGA) 1.0.1
 
-Adopted by The Custodian as revision 1.0 in ledger entry 79 (2026-10-19). This reading copy is composed from the per-provision files in HW/FPGA/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 79 (2026-10-19); revised to 1.0.1 in entry 167 (2026-10-25). This reading copy is composed from the per-provision files in HW/FPGA/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -41,7 +41,7 @@ Programmable logic is the easier of the two realized hardware types to verify, b
 
 Analysis against the target maker's timing and power models rests on those models, and HDES.5 marks the properties that rest on it. Which properties a project confirms on a device, by what test, at which conditions, and with what margin are project matters (LVL3). Upsets of configuration memory are hardware faults of HW.4, with the response of HW.8 and the exposure of HW.10 where they go undetected; mitigation in the design is verified under HDES.15.
 
-A processor realized in programmable logic is programmable logic under HW, so HW.EMBED does not bind its firmware. Whether the project follows HW.EMBED for that firmware as guidance is a choice for its own instruments (LVL3).
+A processor realized in programmable logic is programmable logic under HW, so HW.EMBED does not bind its firmware (HW.EMBED.1). Whether the project follows HW.EMBED for that firmware as guidance is a choice for its own instruments (LVL3).
 
 HW.FPGA addresses two matters (HW.FPGA.2): the hardware contract of an execution path, which HW owns, through HW.FPGA.4, which cites HW.6; and the design record of a realized design, which HDES owns, through HW.FPGA.3, which cites HDES.3 and HDES.FPGA.4, and HW.FPGA.4, which cites HDES.5.
 
@@ -56,6 +56,7 @@ Every provision other than the selector and the shared-matters provision instant
 | HDES | Hardware design |
 | HDES.FPGA | Programmable logic design |
 | HW | Execution hardware |
+| HW.EMBED | Embedded controllers |
 | INTPR | Interpretability |
 | PRIME | Prime Directives |
 | REPRO | Reproducibility |
@@ -109,3 +110,4 @@ Where a reported result relies on a property of the hardware contract of an exec
 | Revision | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-10-19 | Adopted. |
+| 1.0.1 | 2026-10-25 | Editorial amendment (GOV.41): the informative Notes cite HW.EMBED.1, the selector of HW.EMBED, where they state that HW.EMBED does not bind the firmware of a processor realized in programmable logic, and References lists HW.EMBED; no obligation, permission, or defined meaning changes. |

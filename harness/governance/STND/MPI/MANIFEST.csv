@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.MPI,standard,LVL2,Message Passing Interface standard,adopted,_doc.md,af4260a2c638dd9042d0a868f6d067a2275b37b92ba6f6706bcf2f881d8d3576,23980
+STND.MPI,standard,LVL2,Message Passing Interface standard,adopted,_doc.md,0e7a54ec2f1adbbb8dcbaf02c8124e9125e4dcba60b47b43bf4e3babe35fe94a,26424
 STND.MPI.1,provision,LVL2,MPI facilities used,adopted,1.md,af7d554cf45f3ad27f499a1e0fb5726afc1623aaba6e70570cfa9daae3109bb1,638
 STND.MPI.2,provision,LVL2,MPI execution path record,adopted,2.md,b63bb2a5656588f8b0b6771ff67969042ea389fd4fb9fe7f35ee17c8f0bb8140,755
 STND.MPI.3,provision,LVL2,Thread support level,adopted,3.md,fda6b2069fc377c2a191b8f564ea2ac27ea64ba8cf8fac3e1a44438918943770,730

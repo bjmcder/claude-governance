@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-CPS,profile,LVL1,Cyber-physical and actuation,adopted,_doc.md,b38839531f356081e866a21f58cddb8f0a8c942bd42da1e7ffa71b254b6c9d07,7917
+CPS,profile,LVL1,Cyber-physical and actuation,adopted,_doc.md,4976f8506c004d2ed7cc4edab43da8e5c0604838e6bea770810fc8b4c46dd97a,8277
 CPS.1,provision,LVL1,Physical hardware control selector,adopted,1.md,fed4fbcc4f74dcd5635605b2c13637393334e5e1d4b8d230c3ab09ccbb2e549d,497
 CPS.2,provision,LVL1,Physical hardware control shared matters,adopted,2.md,2ceb36dff9acb237564a7cfa62eb2f07e894aaf9f4a6d116dabaccef7268d51a,892
 CPS.3,provision,LVL1,Hazard analysis coverage,adopted,3.md,b14727ba0990f9bc67baf7d331d4c1258a1dc28911092aae0b628a490f3dec22,755

@@ -5,7 +5,7 @@ kind: "sub-profile"
 title: "Quantum processors"
 status: "adopted"
 adopted: "2026-10-18"
-revision: "1.0"
+revision: "1.0.1"
 selector: "Binds when a component of the work executes, or is admitted to execute, on a quantum processor (HW.QPU.1)."
 parent: "HW"
 adopted_by: "The Custodian"
@@ -32,7 +32,7 @@ This section fixes meaning and imposes no obligation, as the Lexicon does.
 
 ## Selector
 
-HW.QPU.1 states the selector: the attribute Quantum processor execution, which HW defines and which HW.1 also gives (STND.DRAFT.36). Each provision names an execution path on a quantum processor as its subject (STND.DRAFT.38). The calls by which host code submits work to a quantum processor and retrieves its outcomes, and the processing of those outcomes by error mitigation, belong to the quantum processor's execution path, through its runtime libraries. An ideal or noisy simulation of a quantum computation is an execution path on the general-purpose processor or accelerator that runs it, and meets HW.CPU or HW.GPU, not this sub-profile.
+HW.QPU.1 states the selector: the attribute Quantum processor execution, which HW defines and which HW.1 also gives (STND.DRAFT.36). Each provision names an execution path on a quantum processor as its subject (STND.DRAFT.38). The calls by which host code submits work to a quantum processor and retrieves its outcomes, and the processing of those outcomes by error mitigation, belong to the quantum processor's execution path, through its runtime libraries. An ideal or noisy simulation of a quantum computation is an execution path on the general-purpose processor or accelerator that runs it, and meets HW.CPU or HW.GPU (HW.CPU.1, HW.GPU.1), not this sub-profile.
 
 ## Where the rest lives
 
@@ -70,7 +70,7 @@ Device noise often sets a floor below which more shots, mitigation, or recompila
 
 HW.QPU addresses four matters that NUMER owns (HW.QPU.2): the precision a result requires, through HW.QPU.6 and HW.QPU.8, which cite NUMER.5; the uncertainty of a computed result, through HW.QPU.4, which cites NUMER.13, HW.QPU.6, which cites NUMER.23, and HW.QPU.8, which cites NUMER.13; approximation disclosure, through HW.QPU.7, which cites NUMER.16; and the tolerance basis of a numerical comparison, through HW.QPU.6, which cites NUMER.25.
 
-Each provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, DSGN, SIMPL, or RSRC. Each such provision inherits their rank and waivability (GOV.17) and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, HW.QPU.3 to HW.QPU.8 apply from CSQ3. HW.QPU.5, HW.QPU.7, and HW.QPU.8 apply from CSQ3 although STND.CLASS.10 applies INTPR.10 from CSQ2, and so tighten above the floor (PRIME.15) at the cost of one statement in a record. No provision raises the floor (GOV.11).
+Each provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, or RSRC. Each such provision inherits their rank and waivability (GOV.17) and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, HW.QPU.3 to HW.QPU.8 apply from CSQ3. HW.QPU.5, HW.QPU.7, and HW.QPU.8 apply from CSQ3 although STND.CLASS.10 applies INTPR.10 from CSQ2, and so tighten above the floor (PRIME.15) at the cost of one statement in a record. No provision raises the floor (GOV.11).
 
 ## References
 
@@ -80,6 +80,8 @@ Each provision other than the selector and the shared-matters provision instanti
 | GOV | Governance |
 | GUARD | Safeguards |
 | HW | Execution hardware |
+| HW.CPU | General-purpose processors |
+| HW.GPU | Accelerators |
 | INTPR | Interpretability |
 | NUMER | Numerical computation |
 | PRIME | Prime Directives |
@@ -96,3 +98,4 @@ Each provision other than the selector and the shared-matters provision instanti
 | Revision | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-10-18 | Adopted. |
+| 1.0.1 | 2026-10-25 | Editorial amendment (GOV.41): the informative Selector text cites HW.CPU.1 and HW.GPU.1, the selectors of the sub-profiles that a simulation of a quantum computation meets, and References lists HW.CPU and HW.GPU; the Notes name only the Articles that the provisions other than the selector and the shared-matters provision instantiate, so that the Design and Simplicity Articles, which none of them instantiates, are no longer named; no obligation, permission, or defined meaning changes. |

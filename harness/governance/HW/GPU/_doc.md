@@ -5,7 +5,7 @@ kind: "sub-profile"
 title: "Accelerators"
 status: "adopted"
 adopted: "2026-10-18"
-revision: "1.0"
+revision: "1.0.1"
 selector: "Binds when a component of the work executes, or is admitted to execute, on an accelerator (HW.GPU.1)."
 parent: "HW"
 adopted_by: "The Custodian"
@@ -30,7 +30,7 @@ This section fixes meaning and imposes no obligation, as the Lexicon does.
 
 ## Selector
 
-HW.GPU.1 states the selector: the attribute Accelerator execution, which HW defines and which HW.1 also gives (STND.DRAFT.36). Each provision names an execution path on an accelerator as its subject (STND.DRAFT.38). The calls by which host code submits work to an accelerator and obtains its completion status and results belong to the accelerator's execution path, through its runtime libraries; the rest of the host code is a path on a general-purpose processor, joined to the accelerator's path by a boundary contract (HW.13), and meets HW.CPU, not this sub-profile.
+HW.GPU.1 states the selector: the attribute Accelerator execution, which HW defines and which HW.1 also gives (STND.DRAFT.36). Each provision names an execution path on an accelerator as its subject (STND.DRAFT.38). The calls by which host code submits work to an accelerator and obtains its completion status and results belong to the accelerator's execution path, through its runtime libraries; the rest of the host code is a path on a general-purpose processor, joined to the accelerator's path by a boundary contract (HW.13), and meets HW.CPU (HW.CPU.1), not this sub-profile.
 
 ## Where the rest lives
 
@@ -61,7 +61,7 @@ Submitting work to a rented accelerator is a remote write, and usually an expend
 
 HW.GPU addresses one matter that HW owns, the hardware contract of an execution path (HW.GPU.2), through HW.GPU.3, which cites HW.8.
 
-HW.GPU.3 instantiates PRIME.4 and binds at every class. Every other provision except the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, DSGN, SIMPL, or RSRC, inherits their rank and waivability (GOV.17), and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, HW.GPU.4 applies from CSQ3, through RSRC.2 and RSRC.4, and only in the runs that track or measure resource use under them. No provision raises the floor (GOV.11).
+HW.GPU.3 instantiates PRIME.4 and binds at every class. Every other provision except the selector and the shared-matters provision instantiates only RSRC, inherits its rank and waivability (GOV.17), and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, HW.GPU.4 applies from CSQ3, through RSRC.2 and RSRC.4, and only in the runs that track or measure resource use under them. No provision raises the floor (GOV.11).
 
 ## References
 
@@ -70,6 +70,7 @@ HW.GPU.3 instantiates PRIME.4 and binds at every class. Every other provision ex
 | GOV | Governance |
 | GUARD | Safeguards |
 | HW | Execution hardware |
+| HW.CPU | General-purpose processors |
 | NUMER | Numerical computation |
 | PRIME | Prime Directives |
 | RSRC | Resources |
@@ -83,3 +84,4 @@ HW.GPU.3 instantiates PRIME.4 and binds at every class. Every other provision ex
 | Revision | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-10-18 | Adopted. |
+| 1.0.1 | 2026-10-25 | Editorial amendment (GOV.41): the informative Selector text cites HW.CPU.1, the selector of the sub-profile that host code outside the accelerator's path meets, and References lists HW.CPU; the Notes name RSRC as the only Article that the provisions other than HW.GPU.3, the selector, and the shared-matters provision instantiate, in place of six Articles of which they instantiate RSRC alone; no obligation, permission, or defined meaning changes. |

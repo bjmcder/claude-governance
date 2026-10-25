@@ -5,7 +5,7 @@ kind: "profile"
 title: "Execution hardware"
 status: "adopted"
 adopted: "2026-10-17"
-revision: "1.1.1"
+revision: "1.1.2"
 selector: "Binds when a component of the work executes, or is admitted to execute, on a hardware type that HW.1 names (HW.1)."
 parent: null
 adopted_by: "The Custodian"
@@ -52,7 +52,7 @@ This section fixes meaning and imposes no obligation, as the Lexicon does.
 
 ## Selector
 
-HW.1 states the selector: one attribute per hardware type, each defined here. The domain items are execution paths, hardware contracts, boundary contracts, constrained targets, and claims comparing the performance of execution paths. Because each provision names as its subject an execution path, a contract, or a record or claim about one (STND.DRAFT.37, STND.DRAFT.38), a provision about an execution path on one hardware type imposes nothing on a component that has no path on that type. A component that executes only on general-purpose processors meets this profile and HW.CPU for its own path, and the boundary contracts it shares with components on other types; it meets no obligation specific to accelerators, quantum processors, or embedded controllers. Each attribute is also true where the classification records that a component whose behavior affects a result the work reports or relies on is admitted to execute on that type. Adding a hardware type otherwise revises the classification, which the human owner adopts (GOV.24, GOV.50); a classification that admits the hardware types the work plans to use lets an agent add a path on an admitted type without a further decision of the human owner, and costs nothing before the path exists. Hardware of a kind that no attribute names is governed by LVL0 and by the nearest of this profile and its sub-profiles applied by analogy, with the choice of analogue recorded (GOV.29). A processor realized in programmable logic is programmable logic. Analog and neuromorphic devices are accelerators where a host offloads work to them, and otherwise fall under GOV.29. Each sub-profile's selector restates its attribute from HW.1.
+HW.1 states the selector: one attribute per hardware type, each defined here, which the sub-profiles each give one of (HW.CPU.1, HW.GPU.1, HW.QPU.1, HW.EMBED.1, HW.FPGA.1, HW.ASIC.1, STND.DRAFT.36). The domain items are execution paths, hardware contracts, boundary contracts, constrained targets, and claims comparing the performance of execution paths. Because each provision names as its subject an execution path, a contract, or a record or claim about one (STND.DRAFT.37, STND.DRAFT.38), a provision about an execution path on one hardware type imposes nothing on a component that has no path on that type. A component that executes only on general-purpose processors meets this profile and HW.CPU for its own path, and the boundary contracts it shares with components on other types; it meets no obligation specific to accelerators, quantum processors, or embedded controllers. Each attribute is also true where the classification records that a component whose behavior affects a result the work reports or relies on is admitted to execute on that type. Adding a hardware type otherwise revises the classification, which the human owner adopts (GOV.24, GOV.50); a classification that admits the hardware types the work plans to use lets an agent add a path on an admitted type without a further decision of the human owner, and costs nothing before the path exists. Hardware of a kind that no attribute names is governed by LVL0 and by the nearest of this profile and its sub-profiles applied by analogy, with the choice of analogue recorded (GOV.29). A processor realized in programmable logic is programmable logic. Analog and neuromorphic devices are accelerators where a host offloads work to them, and otherwise fall under GOV.29. Each sub-profile's selector restates its attribute from HW.1.
 
 ## Where the rest lives
 
@@ -102,6 +102,12 @@ HW.8 states how PRIME.4 applies to detected, uncorrected hardware faults and to 
 | DSGN | Design |
 | GOV | Governance |
 | HDES | Hardware design |
+| HW.ASIC | Application-specific integrated circuits |
+| HW.CPU | General-purpose processors |
+| HW.EMBED | Embedded controllers |
+| HW.FPGA | Field-programmable gate arrays |
+| HW.GPU | Accelerators |
+| HW.QPU | Quantum processors |
 | INTPR | Interpretability |
 | NUMER | Numerical computation |
 | PRIME | Prime Directives |
@@ -124,3 +130,4 @@ HW.8 states how PRIME.4 applies to detected, uncorrected hardware faults and to 
 | 1.0.2 | 2026-10-19 | Editorial amendment (GOV.41): the informative Notes describe the sub-profiles and CPS as adopted, citing CPS.3, CPS.4, and CPS.8; no obligation changes. |
 | 1.1 | 2026-10-19 | Minor amendment (GOV.41): HW.20 asks for a bound on worst-case execution time only for a deadline whose miss the hazard analysis of PRIME.13 identifies as hazardous, and accepts a bound or detection of each miss, stated in the record, for every other deadline that changes a command or a result; the Notes state the same. |
 | 1.1.1 | 2026-10-24 | Editorial amendment (GOV.41): the informative Notes state that, for a run of several processes that compute one result together, HW.8 is read as asking the whole run to halt, degrade visibly, or transition to a designed safe state, citing STND.MPI.6, and References lists STND.MPI; no obligation changes. |
+| 1.1.2 | 2026-10-25 | Editorial amendment (GOV.41): the informative Selector text cites the selectors of the six sub-profiles that the Purpose names, each of which gives one attribute of HW.1 (STND.DRAFT.36), and References lists HW.ASIC, HW.CPU, HW.EMBED, HW.FPGA, HW.GPU, and HW.QPU; no obligation, permission, or defined meaning changes. |

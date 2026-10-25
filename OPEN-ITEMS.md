@@ -1,30 +1,20 @@
 # Open items
 
-Work that the custodian has directed or that a ratified round left open. It replaces the open items of the former HANDOFF.md (see git history). Close an item by doing it and removing its line; the record of the work stays in git and in `review-records/`.
+This file lists the work the custodian has directed, and the items a ratified round left open. It replaces the open items of the former HANDOFF.md (see git history). To close an item, do it and remove its line. The record of the work stays in git and in `review-records/`.
 
 ## Harness, in the custodian's order
 
-1. **STND.HARN.30, unsigned reliance (decision).** Unit 0010 (merged) refuses an unsigned authorization where no signer register exists unless the owner passes `--accept-unsigned`, and names it in the coverage report. The unit record proposes a new provision STND.HARN.30 so that the rule is in the corpus and not only in this harness. The custodian decides whether to adopt it, and how STND.DRAFT.42 reads on an owner's acceptance at derivation. Source: `harness/records/units/0010-unsigned-authorizations.md`.
-2. **QA.8 code review, then installation.** First, a code review of the harness by an agent of another configuration. Then install the derived configuration and run three installation tests, recording the results in unit 0008 (custodian, 2026-10-24: after the QA.8 review):
-   - the guard's `allow` for an authorized `git push` or `gh` post against the kept ask rules;
-   - the secret store's narrower `allowRead` against its `denyRead` pattern (unit 0007);
-   - a shell write to `.git/config` failing under the M-a `denyWrite`.
+1. **Unit 0013, the References check.** The harness check of References (g.25) also reads bare document names, so that the table and the check agree. It reads the documents that STND.DRAFT.34 asks to hold References (LVL1 to LVL3), and it skips the Revision History and tables of example identifiers, as `tools/check_refs.py` does. It is a defect-class check, and `verify` passes on the live corpus (definition of done of 2026-10-25, item 8).
+2. **QA.8 code review of the whole harness**, after unit 0013, by an agent of another configuration. Every High and Medium finding is fixed and verified (item 9).
+3. **Installation, the custodian's own step.** The steps are in `tools/install-tests.md`:
+   1. Install `socat`. The sandbox needs it, and `environment --check` reports it missing.
+   2. Derive the configuration from the merged harness, and install it as root, as INSTALL.md states.
+   3. Run the three installation tests, and record the results in unit 0008.
+   4. Append the configure entry that ends the transition of ledger entry 53 for STND.HARN.18.
 
-   The transition of ledger entry 53 for STND.HARN.18 ends when that reviewed harness is installed and its configure entry records it. Whether the entry-53 transition for STND.HARN.26 to .28 has ended is for the custodian to record.
+   Whether the transition of entry 53 for STND.HARN.26 to .28 has ended is also for the custodian to record.
 
-## Corpus, for later amendment rounds
+## Corpus, for a later round (custodian, 2026-10-25)
 
-- **Shared rules for compiled languages (R17).** Move STND.CXX.16 to .18 and .28 to .31 to STND.CODE, and replace the C reading of STND.STDC by citations (a minor amendment of STND.CODE, STND.CXX, and STND.STDC).
-- **One definition of Untrusted input** in STND.CODE, with one reach for every language.
-- **One naming rule (R18).** A language standard fixes names only where the language's own convention is checkable; otherwise the repository configuration governs (the STND.LEAN.27 form).
-- **Differences among sibling language standards (R6, R16, R23):**
-  - an unchecked index from untrusted input, binding in STND.JL.13;
-  - checks in shipped builds (STND.CXX.27 against STND.JL.34);
-  - counterparts of STND.RUST.13 sentence 2 (panic hook or handler) in STND.CXX and STND.PY;
-  - logging as the only visible degradation (STND.PY.22 against STND.JL.15);
-  - a committed lock-file default for STND.PY;
-  - foreign interfaces in STND.PY and STND.JL;
-  - the `#define NDEBUG` case in C source, which STND.CODE.6 does not reach.
-- **STND.OFFLD.31 cites STND.PERF.12 and .14**, which generalize it to all code (a minor amendment of STND.OFFLD; decision 7 of the round of 2026-10-25).
-- **Order of output in STND.MPI and STND.OMP.** Neither names its form of STND.CONC.30 yet.
-- **References in older documents.** The script check of the round of 2026-10-24 (`tools/check_refs.py`, run from `harness/` with `PYTHONPATH=.`; not yet part of the harness) finds 22 places where a document is named without a References row, all in text that predates the round. Extending the harness check g.25 to bare document names would keep the table and the check in agreement.
+- **Foreign interfaces in STND.CODE.** Add one STND.CODE provision on foreign interfaces, with one definition of Foreign interface (now defined in five standards) and one of Lock file (in STND.PY and STND.RUST). It replaces the callback, ownership, and lock-file rules that now stand alike in several language standards (GOV.31). This is decision 26 of `review-records/round-2026-10-25-close/decisions-final.md`.
+- **STND.OFFLD.31 and the first filling of caches and memory**, which STND.PERF.12 names. Consider it at STND.OFFLD's next minor amendment (decision 27).

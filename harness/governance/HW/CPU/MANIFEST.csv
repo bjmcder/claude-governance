@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-HW.CPU,sub-profile,LVL1,General-purpose processors,adopted,_doc.md,b0bce3ca808f612a083371f315f51d67e7a13cfdab57de93e8fdfcecc63a4bd8,7119
+HW.CPU,sub-profile,LVL1,General-purpose processors,adopted,_doc.md,ef5fccc2b91cdff2d32edce62f931fd07f0059915b3a09adc0c1c826ebdccba1,7444
 HW.CPU.1,provision,LVL1,General-purpose processor selector,adopted,1.md,fd80422ff706c2ad82ba0ea95051bb8c3516e0000fcf604c363e2c4db7ec1d03,531
 HW.CPU.2,provision,LVL1,General-purpose processor shared matters,adopted,2.md,1c08901af670d883824f9d232da515b7655fa989c381c94df76b7ddfb20a0f85,551
 HW.CPU.3,provision,LVL1,Floating-point control state,adopted,3.md,322c2a46aca1f2b924b6e6b67d4112707596a8429fa58ead4375f05cd22f7e4f,1093

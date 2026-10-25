@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-HW.QPU,sub-profile,LVL1,Quantum processors,adopted,_doc.md,6a8fddfeee3ce0c252442e6e592eb7cbeff593f63751a59fcf85d64165d6a0e8,11948
+HW.QPU,sub-profile,LVL1,Quantum processors,adopted,_doc.md,3ee5cc824f956d1b7c5536870ac9814d4ac9b188a491d6d639ca4026027f16a5,12538
 HW.QPU.1,provision,LVL1,Quantum processor selector,adopted,1.md,88869b6706dac5f38a9636d9e11c714ed08d685c134161e443fbd50c177f8818,515
 HW.QPU.2,provision,LVL1,Quantum processor shared matters,adopted,2.md,928369268a7734fd654de9f30242e952b9c91c831169773a9e991c8b25b04f25,770
 HW.QPU.3,provision,LVL1,Quantum execution record,adopted,3.md,f920ef7c75bea85c9bb678817f1753fe2cf8f1c560c477329c3a8e2abc44cc8c,806

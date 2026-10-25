@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.SV,standard,LVL2,Verilog and SystemVerilog standard,adopted,_doc.md,2e7590728a628272e6be8ff349afd8872e6cfbd142155d68740f15898ee2c24f,33254
+STND.SV,standard,LVL2,Verilog and SystemVerilog standard,adopted,_doc.md,86110db7cad09b28745552628ec24ac03de7a506b661e9268162ebb13082a002,34805
 STND.SV.1,provision,LVL2,Language edition stated,adopted,1.md,2a24632b91254adf9ba47e7a111087983c878d4584badc3c629ce4911bc45d7d,681
 STND.SV.2,provision,LVL2,Construct subset stated,adopted,2.md,f78f6697841c58082f2c6e859afd02b8476aaa1a0e73bd364a0a66306cda0373,743
 STND.SV.3,provision,LVL2,Simulation settings stated,adopted,3.md,02621ea0ddac747a388b683437d86726409adee771bac87baf2eac7294d80c26,747
@@ -27,3 +27,4 @@ STND.SV.24,provision,LVL2,Static check classes,adopted,24.md,a0fd81507d11950e322
 STND.SV.25,provision,LVL2,Netlist simulated after equivalence,adopted,25.md,c0e996cb3f585643fe85024fa5f881116b37c6f3d10b76870f02ab8e84668230,657
 STND.SV.26,provision,LVL2,Second simulator for reliance,adopted,26.md,d5173c4ad41ffa35727decb5b3a1fe884a4ad224975a874abfaef605247ae942,788
 STND.SV.27,provision,LVL2,Simulator comparisons and seeds,adopted,27.md,19fbb7732f7460f27c8513d7e5c011828e4e0f61a5af3b01fb93948d80ac5b86,442
+STND.SV.28,provision,LVL2,Verilog and SystemVerilog naming conventions,adopted,28.md,ab69bfa0f9b49f13836f1193bb57cb20613784ea057ecd9659769ce227b87012,644

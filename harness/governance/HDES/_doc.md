@@ -5,7 +5,7 @@ kind: "profile"
 title: "Hardware design"
 status: "adopted"
 adopted: "2026-10-18"
-revision: "1.0.1"
+revision: "1.0.2"
 selector: "Binds when the work produces, or is admitted to produce, a hardware description to be realized as a configuration of programmable logic or as an integrated circuit (HDES.1)."
 parent: null
 adopted_by: "The Custodian"
@@ -41,7 +41,7 @@ This section fixes meaning and imposes no obligation, as the Lexicon does.
 
 ## Selector
 
-HDES.1 states the selector: one attribute per kind of realization, each defined here, which the sub-profiles HDES.FPGA and HDES.ASIC each give one of (STND.DRAFT.36). The domain items are designs and their realizations, and each provision names one of them, or a part, representation, record, or verification of one, or a warning of a transformation step that produces one, as its subject (STND.DRAFT.37). The design of board-level electronics is outside this profile and is governed by LVL0 and the nearest profile applied by analogy, with the choice of analogue recorded (GOV.29); fabrication, packaging, and a fabrication process enter as external components (REPRO.9). Where the classification of work that designs hardware also records the attribute Numerical, NUMER binds it as well.
+HDES.1 states the selector: one attribute per kind of realization, each defined here, which the sub-profiles HDES.FPGA and HDES.ASIC each give one of (HDES.FPGA.1, HDES.ASIC.1, STND.DRAFT.36). The domain items are designs and their realizations, and each provision names one of them, or a part, representation, record, or verification of one, or a warning of a transformation step that produces one, as its subject (STND.DRAFT.37). The design of board-level electronics is outside this profile and is governed by LVL0 and the nearest profile applied by analogy, with the choice of analogue recorded (GOV.29); fabrication, packaging, and a fabrication process enter as external components (REPRO.9). Where the classification of work that designs hardware also records the attribute Numerical, NUMER binds it as well.
 
 ## Where the rest lives
 
@@ -73,13 +73,13 @@ A simulation can pass while the transformed logic differs, through a sensitivity
 
 A path that no constraint covers is never analyzed, and a wrong exception hides a failing path, so HDES.10 asks for rules that name their paths and for each exception to be checked against the description; an exception on a crossing between clock domains is checked by the evidence of HDES.11. Paths from port to port are among the paths analyzed. Where the timing models of a target do not cover a condition, the analysis says so rather than claiming it. A signal that crosses between clocks, or an external input sampled without synchronization, fails rarely and irreproducibly. HDES.11 asks for a stated synchronization, or a protocol that holds a quasi-static input stable while it is sampled, and an analysis of the netlist, because a transformation can retime, merge, or pack a synchronizer while equivalence still holds. The output of a comparator or other analog block sampled by a clock is an asynchronous input of this kind. A register whose power-on value nobody set behaves one way in a simulator that zeroes it and another in hardware; HDES.12 verifies from every state, by proof, or from a recorded number of random states.
 
-A transformation can merge triplicated registers or strip a safe encoding while equivalence passes, so HDES.15 verifies each stated mitigation that the design's logic implements on the netlist, by fault injection or proof; mitigation inside a fixed block of the target, a memory's error correction for instance, rests on the target's documentation under HW.6. HDES owns the design record as a shared matter, which HW.FPGA and HW.ASIC address (HW.FPGA.2, HW.ASIC.2). A processor realized in programmable logic is programmable logic under HW, so its firmware is not bound by HW.EMBED; HW.FPGA leaves its treatment to the project's own instruments (LVL3).
+A transformation can merge triplicated registers or strip a safe encoding while equivalence passes, so HDES.15 verifies each stated mitigation that the design's logic implements on the netlist, by fault injection or proof; mitigation inside a fixed block of the target, a memory's error correction for instance, rests on the target's documentation under HW.6. HDES owns the design record as a shared matter, which HW.FPGA and HW.ASIC address (HW.FPGA.2, HW.ASIC.2). A processor realized in programmable logic is programmable logic under HW, so its firmware is not bound by HW.EMBED (HW.EMBED.1); HW.FPGA leaves its treatment to the project's own instruments (LVL3).
 
 Arithmetic in hardware is usually fixed point. HDES.7 has the record state the delivered arithmetic that HW.5 asks, and verifies at two levels: the description bit for bit against a model of that arithmetic, and that model within a precision that the record derives from the required precision of the results it feeds, by a tolerance fixed before the comparison. The stated arithmetic rounds the real-valued computation, which is numerical error under NUMER.5, and may also approximate it, as a truncated multiplier or a table in place of a function does; each such approximation is a retained performance approximation, listed under NUMER.16 and verified as NUMER.17 asks, at each reported numerical result it affects. Where the outputs of the design are themselves reported numerical results, the comparison of HDES.7 is that verification; where they feed a later computation, NUMER.17 applies at the result that computation reports. A converter between analog values and a number format is verified against its contract under HDES.6, not bit for bit.
 
 Saturation and wrap-around other than the function an operation is specified to compute are silent clamping, which PRIME.4 forbids at every class; HDES.14 makes each occurrence visible, typically by a flag per operation or group that holds until it is read, at the cost of a register. A counter that the specification states as modular, a limiter, and the rail saturation that forms an analog characteristic compute their specified function and fall outside HDES.14; saturation at a limit of a number format falls within it even where the specification states it. For a path executing on the design, a set flag is a reached limit of its hardware under HW.9.
 
-Submitting a design for fabrication releases it, and the decision to release is the human owner's (QA.10, GOV.50); HDES.ASIC gives the owner the record on which to decide. Every submission is a remote write whose effect is irrevocable, which an agent performs only under a per-action authorization (PRIME.7, GUARD.11); one that invokes a payment is a reserved action that only the human owner executes (PRIME.6); and one that consumes capacity already paid for proceeds only on an estimate that the human owner authorizes (PRIME.8). Loading a configuration into a device that commands, configures, or powers physical hardware needs the authorization of PRIME.7 and the owner-adopted hazard analysis and verified safe state of PRIME.13, and a load that the hazard analysis marks as hazardous or irreversible is reserved (PRIME.6).
+Submitting a design for fabrication releases it, and the decision to release is the human owner's (QA.10, GOV.50); HDES.ASIC gives the owner the record on which to decide (HDES.ASIC.12). Every submission is a remote write whose effect is irrevocable, which an agent performs only under a per-action authorization (PRIME.7, GUARD.11); one that invokes a payment is a reserved action that only the human owner executes (PRIME.6); and one that consumes capacity already paid for proceeds only on an estimate that the human owner authorizes (PRIME.8). Loading a configuration into a device that commands, configures, or powers physical hardware needs the authorization of PRIME.7 and the owner-adopted hazard analysis and verified safe state of PRIME.13, and a load that the hazard analysis marks as hazardous or irreversible is reserved (PRIME.6).
 
 HDES owns one shared matter, the design record of a realized design, and addresses four that other profiles own (HDES.2): the hardware contract of an execution path, through HDES.5, which cites HW.4, HW.5, and HW.6, and HDES.7, which cites HW.5; the boundary contract between execution paths, through HDES.5, which cites HW.13; and the precision a result requires and the tolerance basis of a numerical comparison, through HDES.7, which cites NUMER.5 and NUMER.11.
 
@@ -92,8 +92,11 @@ HDES.14 states how PRIME.4 applies to saturation and overflow, and binds at ever
 | DSGN | Design |
 | GOV | Governance |
 | GUARD | Safeguards |
+| HDES.ASIC | Integrated circuit design |
+| HDES.FPGA | Programmable logic design |
 | HW | Execution hardware |
 | HW.ASIC | Application-specific integrated circuits |
+| HW.EMBED | Embedded controllers |
 | HW.FPGA | Field-programmable gate arrays |
 | INTPR | Interpretability |
 | NUMER | Numerical computation |
@@ -113,3 +116,4 @@ HDES.14 states how PRIME.4 applies to saturation and overflow, and binds at ever
 | --- | --- | --- |
 | 1.0 | 2026-10-18 | Adopted. |
 | 1.0.1 | 2026-10-19 | Editorial amendment (GOV.41): the informative text describes HW.FPGA and HW.ASIC as adopted, citing HW.FPGA.2, HW.FPGA.4, HW.ASIC.2, and HW.ASIC.4; no obligation changes. |
+| 1.0.2 | 2026-10-25 | Editorial amendment (GOV.41): the informative text cites HDES.FPGA.1 and HDES.ASIC.1, the selectors of its sub-profiles, HW.EMBED.1, the selector of HW.EMBED, and HDES.ASIC.12, the fabrication readiness record on which the human owner decides a submission, and References lists HDES.ASIC, HDES.FPGA, and HW.EMBED; no obligation, permission, or defined meaning changes. |

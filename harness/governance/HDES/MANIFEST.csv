@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-HDES,profile,LVL1,Hardware design,adopted,_doc.md,afcfb274f7fc417d91d97c4956374d0b1ba603a442f25716d5790f6cd6906862,16482
+HDES,profile,LVL1,Hardware design,adopted,_doc.md,7cc7b273c367767243434cb7961b61a5a8c1ef196e140991b8f991290b66f447,17050
 HDES.1,provision,LVL1,Hardware design selector,adopted,1.md,d22fe2c831d32576b3b522d138f25be3f4f95844371d7ea8641b473ad8d53b9b,526
 HDES.2,provision,LVL1,Hardware design shared matters,adopted,2.md,9a6e431e9f9e4a107af0c039c292c67cd8253b461b49d0a60588cc5c87bf34aa,900
 HDES.3,provision,LVL1,Design record,adopted,3.md,69519f30e3276a8b025066d537ad9a9446e36e0e0a9e5b234239f27d15bd7ce1,803
@@ -15,5 +15,5 @@ HDES.12,provision,LVL1,Defined initial state,adopted,12.md,5ea99042c80da9954dcf4
 HDES.13,provision,LVL1,Resource and power margins,adopted,13.md,63727a035c8f37c2d7e5db24c727b139e82e011821be9a286fa070ed9051d078,480
 HDES.14,provision,LVL1,Visible saturation and overflow,adopted,14.md,dda3342a0d4a5b86dd4545ae8febbda7ab50b05a727b3ce675ddad1a93234610,676
 HDES.15,provision,LVL1,Fault mitigation,adopted,15.md,fc36460758a3b28704e7d22e4a98e6aca1eaffee882ccb00844b1a36eb6b0e9e,640
-HDES.ASIC,sub-profile,LVL1,Integrated circuit design,adopted,ASIC/,a37c82970c155ee9dba0f198054336c2edaf05779f837dcd488ad6764a9f8813,23731
+HDES.ASIC,sub-profile,LVL1,Integrated circuit design,adopted,ASIC/,f8f243b9419144f4c7bef07c87b1175349d88ad1c9342cbe0e818a0c446d9d85,24155
 HDES.FPGA,sub-profile,LVL1,Programmable logic design,adopted,FPGA/,744b3c588236ef52d5dc3abf89faff18dfb5166a675a77dd0399fb84f1e61b9a,10159

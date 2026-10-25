@@ -1,6 +1,6 @@
-# Integrated circuit design (HDES.ASIC) 1.0.1
+# Integrated circuit design (HDES.ASIC) 1.0.2
 
-Adopted by The Custodian as revision 1.0 in ledger entry 74 (2026-10-18); revised to 1.0.1 in entry 87 (2026-10-19). This reading copy is composed from the per-provision files in HDES/ASIC/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 74 (2026-10-18); revised to 1.0.1 in entry 87 (2026-10-19) and 1.0.2 in entry 169 (2026-10-25). This reading copy is composed from the per-provision files in HDES/ASIC/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -29,7 +29,7 @@ This section fixes meaning and imposes no obligation, as the Lexicon does.
 
 ## Selector
 
-HDES.ASIC.1 states the selector: the attribute Integrated circuit design, which HDES defines and which HDES.1 also gives (STND.DRAFT.36). Each provision names a design, its layout, or its blocks, or a record or verification of one, as its subject (STND.DRAFT.37). The application of manufacturing test to fabricated devices, their characterization, and every other validation after fabrication are outside this sub-profile and are governed by HW and its sub-profile HW.ASIC, and by MEAS where it binds.
+HDES.ASIC.1 states the selector: the attribute Integrated circuit design, which HDES defines and which HDES.1 also gives (STND.DRAFT.36). Each provision names a design, its layout, or its blocks, or a record or verification of one, as its subject (STND.DRAFT.37). The application of manufacturing test to fabricated devices, their characterization, and every other validation after fabrication are outside this sub-profile and are governed by HW and its sub-profile HW.ASIC (HW.6, HW.ASIC.4), and by MEAS where it binds (MEAS.1).
 
 ## Where the rest lives
 
@@ -70,7 +70,9 @@ Every provision other than the selector and the shared-matters provision instant
 | GUARD | Safeguards |
 | HDES | Hardware design |
 | HW | Execution hardware |
+| HW.ASIC | Application-specific integrated circuits |
 | INTPR | Interpretability |
+| MEAS | Measurement and instrumentation |
 | NUMER | Numerical computation |
 | PRIME | Prime Directives |
 | QA | Process |
@@ -183,3 +185,4 @@ Before a design is submitted for fabrication, its design record under HDES.3 SHA
 | --- | --- | --- |
 | 1.0 | 2026-10-18 | Adopted. |
 | 1.0.1 | 2026-10-19 | Editorial amendment (GOV.41): the informative Selector text describes HW.ASIC and MEAS as adopted; no obligation changes. |
+| 1.0.2 | 2026-10-25 | Editorial amendment (GOV.41): the informative Selector text cites HW.6 and HW.ASIC.4, which govern the evidence obtained from fabricated devices, and MEAS.1, the selector of MEAS, and References lists HW.ASIC and MEAS; no obligation, permission, or defined meaning changes. |

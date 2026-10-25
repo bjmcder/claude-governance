@@ -1,8 +1,8 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.JL,standard,LVL2,Julia standard,adopted,_doc.md,70f446ca2233cb9ee851138b68bcc6733fc7a9cff4e25ee54b7ee397b7130813,28581
-STND.JL.1,provision,LVL2,Reference Julia version,adopted,1.md,1c6e06d883f4b4119623e6790db369e00ca1f39bf0a8bfa3485a260b2e5afdec,753
+STND.JL,standard,LVL2,Julia standard,adopted,_doc.md,68ac2c49aadb46adfbeeee72190ae68c0dc42813e1ad06c6b3df1d0c62e29888,36985
+STND.JL.1,provision,LVL2,Reference Julia version,adopted,1.md,7cb9092b698c6a12c71a8230be8ad91f127180e4f74db49d1eb3b55f7c48ce0b,819
 STND.JL.2,provision,LVL2,Julia compatibility bounds,adopted,2.md,93e7cac6b566594fbdde3534f7b37fce247ddf15b456711479e1bf00624f4d48,681
-STND.JL.3,provision,LVL2,Checked Julia versions,adopted,3.md,5d595e9c3181ce219346bfd263d154e1b38ffa47e7356c4ce3c3c0ade8fa37cb,901
+STND.JL.3,provision,LVL2,Checked Julia versions,adopted,3.md,9e71459bc9b932d14212d81a2f3e3cf93b3c400e70ebd018e7546169a7915209,981
 STND.JL.4,provision,LVL2,Committed manifests,adopted,4.md,02534e7b3b3fd7ad989bb13082741ec796dd3ce0a73731afd7753f745590ab0d,617
 STND.JL.5,provision,LVL2,Recorded run settings,adopted,5.md,4d3083457a8d7ae6bc065095bd243b987174144026f96c51a9f52bf24cfd0134,655
 STND.JL.6,provision,LVL2,Julia naming conventions,adopted,6.md,446f25c3c218b24591957a3979f9f233821cea8d8fa9c9b891577f464f3703a9,1118
@@ -12,9 +12,9 @@ STND.JL.9,provision,LVL2,Explicit imports,adopted,9.md,14dac935cc5ba0e623e72b910
 STND.JL.10,provision,LVL2,Methods on owned names,adopted,10.md,caa46406862b8c65259bceb6093f3a891b41a186336b2ab1e3245fbe35adb0a6,477
 STND.JL.11,provision,LVL2,Type-stable numerical kernels,adopted,11.md,1585945b7bddc7d0fdc748ed1a91b92c7e0299bf7475377ea7c0bab50c2e3050,519
 STND.JL.12,provision,LVL2,Concrete types for inference,adopted,12.md,eec3e2e48ad7fccead61a4b823c2e8630599d21266b9d9f70459c8b3a7e311ca,783
-STND.JL.13,provision,LVL2,Untrusted indices and assertions,adopted,13.md,df8666496a01920e7392750e4fd98bc9ae9efdcfdd08ef1c7e66091c0e78ff00,695
+STND.JL.13,provision,LVL2,Untrusted indices and assertions,adopted,13.md,f704b9912c97d84e643393229c64b64900cd52038b8eb724819456d654825d08,721
 STND.JL.14,provision,LVL2,Resource exhaustion in catch blocks,adopted,14.md,faa919084fe981dec1a30a36222250d02e5f56404a6cc443620fce7621501cc3,442
-STND.JL.15,provision,LVL2,Julia responses to listed failures,adopted,15.md,fba565c47449b681e0dd86c11dbd99cad94055b931f90df8d414f3027ad4211b,704
+STND.JL.15,provision,LVL2,Julia responses to listed failures,adopted,15.md,9f02dc84d37883e732992caf858226febe7d9843b9d300882d37e5827c5a269b,734
 STND.JL.16,provision,LVL2,Unhandled exceptions rethrown,adopted,16.md,049e89ad29ec985791b0f04d9d07fb4a0b759818ab12cc6a246732055983a98c,606
 STND.JL.17,provision,LVL2,Checked integer arithmetic,adopted,17.md,e99b147d4bfdf92b0db4710bdadaa70a12a55c300b9e7a6e391c9d6263353ebb,494
 STND.JL.18,provision,LVL2,Assumed conditions stated,adopted,18.md,cd456686b026a756aabf93da215467c20ce315259fcaf8fd1aa32d5a2f2eb2eb,530
@@ -35,3 +35,9 @@ STND.JL.32,provision,LVL2,Docstring coverage checks,adopted,32.md,3e36f11a4d0d6e
 STND.JL.33,provision,LVL2,Package hygiene checks,adopted,33.md,741d8318f8c26077e1e17db6aca3472758f69fdfe2a8fe19bcd5abafa6427ec7,675
 STND.JL.34,provision,LVL2,Julia test run settings,adopted,34.md,0bbeb9753629a3e2b74184d1757f73ee938fea48ca2ec48200d9e305aa5ed150,652
 STND.JL.35,provision,LVL2,Deprecations fail test runs,adopted,35.md,e9ac4573766a1b319525255ea3941134869a7377f9b14877767b715352f5c9ae,518
+STND.JL.36,provision,LVL2,Bounds checks in production,adopted,36.md,86db0bfe5beaf63424cc276b626871cbf280b0dd6c0e3a8022b64458053883f8,646
+STND.JL.37,provision,LVL2,Julia foreign call types,adopted,37.md,10387515f404fbd3e32d4ea7cdc05b5713fcbf3c0f3bb9cc31e47b4127fd7bc4,697
+STND.JL.38,provision,LVL2,Julia memory across foreign calls,adopted,38.md,d5abbec121a5eca9adb94d009cfc297ab3196592470e82696b9e17b567f53a5f,811
+STND.JL.39,provision,LVL2,Julia exceptions in foreign callbacks,adopted,39.md,a4cc7459bfae78078073b9521191a5f6afd9f8ee93423a14868cbc8642cac896,958
+STND.JL.40,provision,LVL2,Julia owners of foreign resources,adopted,40.md,6c5981be05dff61e855fed032ea3d6fc6a827dec7e926b83a2d398a0ee8c30ab,535
+STND.JL.41,provision,LVL2,Julia arrays at foreign calls,adopted,41.md,4d64238f207486d08da57ba7c3c16d3be20c868b43e6116d6df86f18b5f1c261,571

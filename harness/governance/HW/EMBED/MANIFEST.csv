@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-HW.EMBED,sub-profile,LVL1,Embedded controllers,adopted,_doc.md,c90b93df1688c0051c6daaa3676e5810bef03767f03e5bbe216bf0f7a83fe0ce,9180
+HW.EMBED,sub-profile,LVL1,Embedded controllers,adopted,_doc.md,4647fe4aa847e3eca51a893a5c662abb0315d59b6cb8483d030992fbf0f1e220,9503
 HW.EMBED.1,provision,LVL1,Embedded controller selector,adopted,1.md,9568454fc69521cd3e0199404b0e47aaf4559532daa18aa807ff22d541f62aaf,521
 HW.EMBED.2,provision,LVL1,Embedded controller shared matters,adopted,2.md,b96df195d3c1b45026f4fc363ba493603fdd4b2853398b380cda9d5ebb780be9,669
 HW.EMBED.3,provision,LVL1,Bounded controller memory,adopted,3.md,a869aec3ddeb3a2c18385d89016c20f9ba2cc7411a34fbb6eee301b6debf2c19,905

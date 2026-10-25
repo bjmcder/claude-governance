@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.DFLT,standard,LVL2,Defaults,adopted,_doc.md,d4e12cd908b9606dfbac2d7e116875dd874905b7316e43d11f5bc075dbc02931,12410
+STND.DFLT,standard,LVL2,Defaults,adopted,_doc.md,7b00f6f09220ac7bf98a05cb0938ac8cdc44b67f87b61269a6a5bb67102bfef1,12756
 STND.DFLT.1,provision,LVL2,Scope of application,adopted,1.md,1223e9131fe3c2ef2095b53e45c0358c5f7e5b7fbec5619069a9998e0d03a19c,396
 STND.DFLT.2,provision,LVL2,Records directory,adopted,2.md,6286562c859c952511db33322655a147bc303d69b7a0dfea008e0b7e8366a927,481
 STND.DFLT.3,provision,LVL2,Records format,adopted,3.md,185bda89908d5fbc8b1da7e587247ee7bd445ab74063c61643fa698663cf271b,413

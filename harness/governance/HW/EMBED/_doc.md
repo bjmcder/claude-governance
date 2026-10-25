@@ -5,7 +5,7 @@ kind: "sub-profile"
 title: "Embedded controllers"
 status: "adopted"
 adopted: "2026-10-18"
-revision: "1.0.1"
+revision: "1.0.2"
 selector: "Binds when a component of the work executes, or is admitted to execute, on an embedded controller (HW.EMBED.1)."
 parent: "HW"
 adopted_by: "The Custodian"
@@ -61,7 +61,7 @@ Each provision has a route that costs the target at most one reported identity a
 
 HW.EMBED addresses two matters that HW owns (HW.EMBED.2): the hardware contract of an execution path, through HW.EMBED.3, which cites HW.8, HW.EMBED.4, which cites HW.4 and HW.8, and HW.EMBED.6, which cites HW.9; and the budgets of a constrained target, through HW.EMBED.3 and HW.EMBED.6, which cite HW.20.
 
-Each provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, DSGN, SIMPL, or RSRC. Each such provision inherits their rank and waivability (GOV.17) and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, HW.EMBED.3 to HW.EMBED.6 apply from CSQ3; HW.EMBED.6 instantiates INTPR.10, which STND.CLASS.10 applies from CSQ2, and so tightens above the floor at the cost of one statement in a record. HW.EMBED.4 applies from CSQ3 although HW.4 applies from CSQ2, and so tightens above the floor (PRIME.15) for outputs that drive physical hardware. At every class, PRIME.13 holds for outputs that drive physical hardware. No provision raises the floor (GOV.11).
+Each provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, DSGN, or RSRC. Each such provision inherits their rank and waivability (GOV.17) and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, HW.EMBED.3 to HW.EMBED.6 apply from CSQ3; HW.EMBED.6 instantiates INTPR.10, which STND.CLASS.10 applies from CSQ2, and so tightens above the floor at the cost of one statement in a record. HW.EMBED.4 applies from CSQ3 although HW.4 applies from CSQ2, and so tightens above the floor (PRIME.15) for outputs that drive physical hardware. At every class, PRIME.13 holds for outputs that drive physical hardware. No provision raises the floor (GOV.11).
 
 ## References
 
@@ -85,3 +85,4 @@ Each provision other than the selector and the shared-matters provision instanti
 | --- | --- | --- |
 | 1.0 | 2026-10-18 | Adopted. |
 | 1.0.1 | 2026-10-19 | Editorial amendment (GOV.41): the informative Notes describe CPS as adopted, citing CPS.4; no obligation changes. |
+| 1.0.2 | 2026-10-25 | Editorial amendment (GOV.41): the informative Notes name only the Articles that the provisions other than the selector and the shared-matters provision instantiate, so that the Simplicity Article, which none of them instantiates, is no longer named; no obligation, permission, or defined meaning changes. |

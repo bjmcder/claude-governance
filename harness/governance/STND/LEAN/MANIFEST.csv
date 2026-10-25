@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.LEAN,standard,LVL2,Lean standard,adopted,_doc.md,2d1579644a656b4225d4c547cfda420e12671dc6aee4f8187e07e07ed6c0e0f2,30116
+STND.LEAN,standard,LVL2,Lean standard,adopted,_doc.md,677b0863533963bb5d8121251e4e92d9fcdb505be3ad88dcdde2ab083725501a,30940
 STND.LEAN.1,provision,LVL2,Pinned Lean toolchain,adopted,1.md,ffeef6199f6c7de3437b8411dbdd69b5167b49b0afc8b1665b3b37579b64c422,666
 STND.LEAN.2,provision,LVL2,Upgrades rebuilt from source,adopted,2.md,1860ba41c1d0a4ce8eb64bb79a282a2391ec0536eb69739b65a680c9f783414c,677
 STND.LEAN.3,provision,LVL2,Checker soundness defects,adopted,3.md,10f0e045b6354737f66e816beca3ca04525776029689b52c1d8d153a45a55b2f,611
@@ -24,7 +24,7 @@ STND.LEAN.21,provision,LVL2,Proofs from untrusted authors,adopted,21.md,d5ae1d9e
 STND.LEAN.22,provision,LVL2,Proof review by checks,adopted,22.md,385658737226bc0d024ac828271b759b8adc694c68f18292a16afa979b96d188,899
 STND.LEAN.23,provision,LVL2,Floating-point model stated,adopted,23.md,1fc32e7b254ba5bf1dc6a6b932d576f64b7d7e098285e2a7a8cb935217cc7d98,924
 STND.LEAN.24,provision,LVL2,Values substituted without failure,adopted,24.md,72a9406b9bd030a5e5e172a3a29ba4a929c1b73dc88388d413ea68ab8efd5a28,880
-STND.LEAN.25,provision,LVL2,Lean responses to listed failures,adopted,25.md,8fad5e3b65cc355a80f6da20bb75cd17ea616ff88ae1f67aa5b78923d5e19cb9,642
+STND.LEAN.25,provision,LVL2,Lean responses to listed failures,adopted,25.md,0f54759f7b03d8aca841931d7d5c83c1f1388de51f53d4dc6a232b36e27e12fe,672
 STND.LEAN.26,provision,LVL2,Unsafe and replaced code explained,adopted,26.md,7cfaf848c5a92935ca8d5ed01751806e01b604c36dd3468da48134168f39811b,518
 STND.LEAN.27,provision,LVL2,Lean naming conventions,adopted,27.md,54678cb4a7ad91f5a0e5c73fae259ad7c54dd80c21482dcc5095ae59a87abe17,589
 STND.LEAN.28,provision,LVL2,Raised elaboration limits,adopted,28.md,940e5b9929145689d3389b0642af1cb16b9cda6f19bcb4f77aeb8fcf67ed1b5e,509

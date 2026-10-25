@@ -1,6 +1,6 @@
-# Consequence-class criteria (STND.CLASS) 1.3
+# Consequence-class criteria (STND.CLASS) 1.3.1
 
-Adopted by The Custodian as revision 1.0 in ledger entry 14 (2026-10-09); revised to 1.1 in entry 16 (2026-10-09), 1.1.1 in entry 21 (2026-10-10), 1.2 in entry 22 (2026-10-10), 1.2.1 in entry 24 (2026-10-10), 1.2.2 in entry 36 (2026-10-10), and 1.3 in entry 58 (2026-10-11). This reading copy is composed from the per-provision files in STND/CLASS/ of the governance harness; the harness files are the system of record. Withdrawn identifiers, never reused: STND.CLASS.8, STND.CLASS.9, STND.CLASS.11, STND.CLASS.12, STND.CLASS.13, STND.CLASS.14, STND.CLASS.15, and STND.CLASS.16.
+Adopted by The Custodian as revision 1.0 in ledger entry 14 (2026-10-09); revised to 1.1 in entry 16 (2026-10-09), 1.1.1 in entry 21 (2026-10-10), 1.2 in entry 22 (2026-10-10), 1.2.1 in entry 24 (2026-10-10), 1.2.2 in entry 36 (2026-10-10), 1.3 in entry 58 (2026-10-11), and 1.3.1 in entry 158 (2026-10-25). This reading copy is composed from the per-provision files in STND/CLASS/ of the governance harness; the harness files are the system of record. Withdrawn identifiers, never reused: STND.CLASS.8, STND.CLASS.9, STND.CLASS.11, STND.CLASS.12, STND.CLASS.13, STND.CLASS.14, STND.CLASS.15, and STND.CLASS.16.
 
 ## Purpose and scope
 
@@ -34,7 +34,7 @@ The consequence test and the reliance test are independent, and the more severe 
 | A file-format converter checked when the analysis it feeds is verified | CSQ3 | That verification detects an error. |
 | A notebook that explores a new numerical method | CSQ4 | Nothing relies on it before promotion. |
 
-Work of CSQ3 meets the seven proportioned Articles as LVL0 writes them. The table of STND.CLASS.10 lists what waits for a more severe class and what a more severe class adds. Work of CSQ4 meets only the floor, which includes the mechanisms of GOV.21, because GOV belongs to the floor. The five classes resemble the software levels A to E of DO-178C and the graded approach of nuclear quality assurance; no obligation follows from the resemblance.
+Work of CSQ3 meets the seven proportioned Articles as LVL0 writes them. The table of STND.CLASS.10 lists what waits for a more severe class and what a more severe class adds. The table holds no part of Simplicity (SIMPL). Work of CSQ4 meets only the floor, which includes the mechanisms of GOV.21, because GOV belongs to the floor. The five classes resemble the software levels A to E of DO-178C and the graded approach of nuclear quality assurance; no obligation follows from the resemblance.
 
 Revision 0.2 withdrew identifiers 8, 9, and 11 to 16, which are not reused (GOV.37). Each provision is one file, `STND/CLASS/<n>.md`, and each table is named in the field `defines`. The lineage and drafting checks read every provision, but no check yet tests a project's classification against this standard, so each provision is checked by a reader for its content. Promotion (QA.11) governs every report of a result at every class, as Normative Language requires; work of CSQ4 needs no review until it is promoted or released, because it leaves CSQ4 when another actor relies on it.
 
@@ -50,6 +50,7 @@ Revision 0.2 withdrew identifiers 8, 9, and 11 to 16, which are not reused (GOV.
 | QA | Process |
 | REPRO | Reproducibility |
 | RSRC | Resources |
+| SIMPL | Simplicity |
 | STND.DRAFT | Drafting standard |
 | VV | Correctness |
 
@@ -200,3 +201,4 @@ A project SHALL be audited at the interval, and by the auditor, of the row of it
 | 1.2.1 | 2026-10-10 | Editorial amendment (GOV.41): the front-matter field `withdrawn` lists the identifiers that revision 0.2 withdrew, so that a check is able to keep them from reuse (GOV.37); no obligation changes. |
 | 1.2.2 | 2026-10-10 | Editorial amendment (GOV.41): the section References lists the documents this standard cites, as STND.DRAFT.34 requires; no obligation changes. |
 | 1.3 | 2026-10-11 | Minor amendment (GOV.41): at CSQ1, STND.CLASS.18 has a human review the changes that affect a contract or a reported result before each promotion or release, rather than each change as it is made; each change still has the review of every less severe row. |
+| 1.3.1 | 2026-10-25 | Editorial amendment (GOV.41): the informative section Reading the standard states that the table of STND.CLASS.10 holds no part of Simplicity, citing SIMPL, which STND.CLASS.10 names, and References lists SIMPL; no obligation, permission, or defined meaning changes. |

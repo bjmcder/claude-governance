@@ -1,6 +1,6 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.RUST,standard,LVL2,Rust standard,adopted,_doc.md,6a30ee99afd3ba1f6d22a48f6e8baca0b4f1c3a124670e4b46bbc2ec150bb795,31923
-STND.RUST.1,provision,LVL2,Declared edition and toolchain,adopted,1.md,0644c6021c0cbda1b689f31867fdca543e5bff12f083bdefe2bfaba4ae9d8a67,955
+STND.RUST,standard,LVL2,Rust standard,adopted,_doc.md,1489e6e375037476ec4b075e7c0608c2678d7c674d40ccf5dba19430349d5bbe,35770
+STND.RUST.1,provision,LVL2,Declared edition and toolchain,adopted,1.md,418fd52a15ef499ad7098464f1a2a1a9557b5d77b0a569f1e199efd41b744d4f,1067
 STND.RUST.2,provision,LVL2,Rust build settings stated,adopted,2.md,a1249b1b55ae6e2a39f0d5578e77f4fb06a81ca3dd32dc0a7950bdf97c1590ba,756
 STND.RUST.3,provision,LVL2,Soundness arguments and conditions,adopted,3.md,4b75c7a3f82412c773f6221a50e567b3cb60b893edac431dee0c5f11387db58c,808
 STND.RUST.4,provision,LVL2,Sound modules,adopted,4.md,7d16e7bed9cc89de3ce4e0864f4c350250dd400e24272dc2e665002f312189af,618
@@ -12,9 +12,8 @@ STND.RUST.9,provision,LVL2,Panic safety of unsafe code,adopted,9.md,278dca7ab455
 STND.RUST.10,provision,LVL2,Panics caught at boundaries,adopted,10.md,8f8b9f24f87ad05f4992b93c984e1cc1d21588c14e74aa5a627a1b3182085a44,630
 STND.RUST.11,provision,LVL2,Destructors without panics,adopted,11.md,dc2264678594be30cc02710ac50dedff61aaa51a9fc3dc2b76d48213c67af328,835
 STND.RUST.12,provision,LVL2,Locks after a panic,adopted,12.md,94f574001631ace4eefdcd22efc7e3d333157d8abd931079c62ffc5a7af1e6e7,625
-STND.RUST.13,provision,LVL2,Rust responses to listed failures,adopted,13.md,4f2767c4baad5069f46a866a96af3364ea9e8d469498a46350c15119479c1ba5,968
-STND.RUST.14,provision,LVL2,Unignorable failure results,adopted,14.md,15088110039ef0f171938319e0d827bd46a48a562ad7b9d413aeb1158f320f15,610
-STND.RUST.15,provision,LVL2,Untrusted input and execution settings,adopted,15.md,75a96d7f639dfcaca4df5d6f162bd8ca49c9c88e1b19bc090283dd8a1beb3a46,888
+STND.RUST.13,provision,LVL2,Rust responses to listed failures,adopted,13.md,743be2d58d2b54b7917b50edc3d0905d19ca15596a85b83ea621fc8b18323b08,998
+STND.RUST.15,provision,LVL2,Untrusted input and execution settings,adopted,15.md,1c1ee7a92c04eb7ae6ebe7389abe76b3c6b896510db752256e82cd38caebcc3f,944
 STND.RUST.16,provision,LVL2,Failures in library code,adopted,16.md,ed03857e6731ed35c6be5768333274491e74974e7957b942e1afcdc9f2baa2a7,723
 STND.RUST.17,provision,LVL2,Reasoned unwrap in library code,adopted,17.md,689acd63790da732ac22bf0155ef3ab4108d6c33b192038bd1a6dab4974323b9,541
 STND.RUST.18,provision,LVL2,Explicit integer arithmetic,adopted,18.md,ae199086ac5bcaa5cced646ce4bb00f6c3a9e90381af9ac5880e5950e137b651,672
@@ -34,3 +33,4 @@ STND.RUST.31,provision,LVL2,Rust static checks,adopted,31.md,be9cfc375f5fbd528c2
 STND.RUST.32,provision,LVL2,Undefined behavior detected in tests,adopted,32.md,df4c6f714cdc11d675952fcb41d2010777f7491871a2ce6dae225dea1d6b65ef,776
 STND.RUST.33,provision,LVL2,Stated limits of unsafe checks,adopted,33.md,f2f30a052942c2397c8e684a2a63f94644317cc3a65ebb4e7913b90836d97fa5,602
 STND.RUST.34,provision,LVL2,Claims of soundness,adopted,34.md,f1b369f1685131fa448cb9cac1deede303c4a558d1e36217efe387d10c21adb5,690
+STND.RUST.35,provision,LVL2,Rust naming conventions,adopted,35.md,4b930896381606efda28847dd5ad8a29187b9748e958457dc9f118bccb7f251f,597
