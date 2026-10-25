@@ -3,9 +3,11 @@
 The logic checks encode the corpus's structural claims as clauses
 (disjunctions of literals) and prove claims by refutation. The built-in
 DPLL solver (Davis-Putnam-Logemann-Loveland: unit propagation plus case
-splitting) needs no installation. ``z3`` is used only when it is already
-importable and the caller has not asked for the built-in solver; both
-give the same verdicts.
+splitting) needs no installation; its unit propagation watches two
+literals of each clause, so that it visits only the clauses an
+assignment can make unit or false (unit 0009). ``z3`` is used only when
+it is already importable and the caller has not asked for the built-in
+solver; both give the same verdicts.
 """
 
 from __future__ import annotations
@@ -137,102 +139,249 @@ class SolveResult:
     backend: str = ""
 
 
-def _satisfied(clause: list[Literal], assignment: dict[str, bool]) -> bool:
-    """Return True when some literal of a clause is already true.
+def _encode(clauses: list[list[Literal]]) -> tuple[list[str], list[list[int]]]:
+    """Number the variables and code each literal as an integer.
 
-    Parameters
-    ----------
-    clause : list[Literal]
-        Literals of the clause.
-    assignment : dict[str, bool]
-        Values assigned so far.
-
-    Returns
-    -------
-    bool
-        Whether the assignment satisfies the clause.
-    """
-    return any(assignment.get(v) == p for v, p in clause if v in assignment)
-
-
-def _propagate(
-    clauses: list[list[Literal]], assignment: dict[str, bool]
-) -> bool:
-    """Apply unit propagation to an assignment in place.
+    Variables are numbered in order of first appearance, and the literal
+    ``(variable, polarity)`` is coded as ``2 * number + polarity``, so
+    that ``code ^ 1`` is its negation and ``code >> 1`` its variable.
 
     Parameters
     ----------
     clauses : list[list[Literal]]
-        Clauses to satisfy.
-    assignment : dict[str, bool]
-        Values assigned so far; extended in place.
+        Clauses to code.
 
     Returns
     -------
-    bool
-        False on a conflict, else True.
+    tuple[list[str], list[list[int]]]
+        The variable names by number, and the coded clauses, each with
+        its literals in the given order, duplicates included.
     """
-    changed = True
-    while changed:
-        changed = False
-        for clause in clauses:
-            if _satisfied(clause, assignment):
+    numbers: dict[str, int] = {}
+    coded = []
+    for clause in clauses:
+        codes = []
+        for variable, polarity in clause:
+            number = numbers.setdefault(variable, len(numbers))
+            codes.append(2 * number + int(polarity))
+        coded.append(codes)
+    return list(numbers), coded
+
+
+class _Search:
+    """State of one DPLL search, with two watched literals per clause.
+
+    ``value`` holds -1 for an unassigned variable, else 0 or 1, and
+    ``trail`` lists the literals made true, in the order they were made
+    true. Each clause of two or more literals keeps a working copy whose
+    first two positions are watched: unit propagation visits a clause
+    only when one of its watched literals becomes false, so it never
+    rescans the whole clause set. A clause is unit when it is not
+    satisfied and exactly one of its literal occurrences is unassigned,
+    and in conflict when every occurrence is false, as in the rescanning
+    solver this replaces: a repeated literal counts once per occurrence,
+    so a clause whose one unassigned literal appears twice is not unit,
+    and holds or fails only once another clause or a split assigns that
+    literal's variable. The watches need no undoing on backtracking: a
+    watch moves only to a literal that is not false at that point, and
+    unassigning variables makes no literal false.
+
+    Parameters
+    ----------
+    clauses : list[list[int]]
+        Coded clauses to satisfy (see ``_encode``); not modified.
+    count : int
+        Number of variables; every code is below ``2 * count``.
+    """
+
+    def __init__(self, clauses: list[list[int]], count: int) -> None:
+        """Start with every variable unassigned and two watches a clause.
+
+        Parameters
+        ----------
+        clauses : list[list[int]]
+            Coded clauses to satisfy.
+        count : int
+            Number of variables.
+        """
+        self.clauses = clauses
+        self.value = [-1] * count
+        self.trail: list[int] = []
+        self.head = 0
+        watches: list[list[list[int]]] = [[] for _ in range(2 * count)]
+        for codes in clauses:
+            if len(codes) > 1:
+                working = codes[:]
+                watches[working[0]].append(working)
+                watches[working[1]].append(working)
+        self.watches = watches
+
+    def assign(self, code: int) -> None:
+        """Make a literal true and queue it for propagation.
+
+        Parameters
+        ----------
+        code : int
+            Literal of an unassigned variable.
+        """
+        self.value[code >> 1] = code & 1
+        self.trail.append(code)
+
+    def roots(self) -> bool:
+        """Assign the literal of every one-literal clause.
+
+        Returns
+        -------
+        bool
+            False when the clauses hold an empty clause or two
+            one-literal clauses that contradict, else True.
+        """
+        value = self.value
+        for codes in self.clauses:
+            if len(codes) > 1:
                 continue
-            free = [(v, p) for v, p in clause if v not in assignment]
-            if not free:
+            if not codes:
                 return False
-            if len(free) == 1:
-                assignment[free[0][0]] = free[0][1]
-                changed = True
-    return True
+            code = codes[0]
+            if value[code >> 1] == -1:
+                self.assign(code)
+            elif value[code >> 1] != code & 1:
+                return False
+        return True
+
+    def propagate(self) -> bool:
+        """Apply unit propagation to every literal queued on the trail.
+
+        Returns
+        -------
+        bool
+            False on a conflict, else True.
+        """
+        value, trail, watches = self.value, self.trail, self.watches
+        while self.head < len(trail):
+            false = trail[self.head] ^ 1
+            self.head += 1
+            listed = watches[false]
+            kept: list[list[int]] = []
+            for position, working in enumerate(listed):
+                if working[0] == false:
+                    working[0], working[1] = working[1], false
+                other = working[0]
+                if value[other >> 1] == other & 1:
+                    kept.append(working)
+                    continue
+                for index in range(2, len(working)):
+                    candidate = working[index]
+                    if value[candidate >> 1] != (candidate & 1) ^ 1:
+                        working[1], working[index] = candidate, false
+                        watches[candidate].append(working)
+                        break
+                else:
+                    kept.append(working)
+                    if value[other >> 1] != -1:
+                        kept.extend(listed[position + 1 :])
+                        watches[false] = kept
+                        return False
+                    self.assign(other)
+            watches[false] = kept
+        return True
+
+    def undo(self, mark: int) -> None:
+        """Unassign every literal made true after a point of the trail.
+
+        Parameters
+        ----------
+        mark : int
+            Length of the trail to return to.
+        """
+        for code in self.trail[mark:]:
+            self.value[code >> 1] = -1
+        del self.trail[mark:]
+        self.head = mark
+
+    def first_open(self, start: int) -> int:
+        """Return the position of the first clause not yet satisfied.
+
+        Parameters
+        ----------
+        start : int
+            Position from which to look; every clause before it is
+            satisfied.
+
+        Returns
+        -------
+        int
+            Position of the first clause, in the given order, that no
+            assigned literal satisfies; the number of clauses when every
+            clause is satisfied.
+        """
+        clauses, value = self.clauses, self.value
+        while start < len(clauses):
+            if not any(value[c >> 1] == c & 1 for c in clauses[start]):
+                return start
+            start += 1
+        return start
 
 
-def _dpll(
-    clauses: list[list[Literal]], assignment: dict[str, bool]
-) -> dict[str, bool] | None:
-    """Return a model extending an assignment, or None.
+def _dpll(clauses: list[list[int]], count: int) -> list[int] | None:
+    """Return the values of a model of coded clauses, or None.
 
     The search is depth first: after unit propagation it splits on the
-    first unassigned variable of the first open clause and tries
-    ``False`` before ``True``. An explicit stack of pending branches
-    replaces recursion, so the depth of the search is bounded by memory,
-    not by the interpreter's recursion limit, which is left alone.
+    first unassigned variable of the first open clause, in the order the
+    clauses and their literals are given, and tries ``False`` before
+    ``True``; a conflict returns to the latest split whose ``True``
+    branch is untried. Unit propagation reaches the same assignment, or
+    a conflict, in whatever order it visits the clauses, so the search
+    makes the same splits, and finds the same model, as the solver that
+    rescanned every clause on each pass (unit 0009). An explicit stack
+    of splits replaces recursion, so the depth of the search is bounded
+    by memory, not by the interpreter's recursion limit, which is left
+    alone.
 
     Parameters
     ----------
-    clauses : list[list[Literal]]
-        Clauses to satisfy.
-    assignment : dict[str, bool]
-        Values assigned so far; not modified.
+    clauses : list[list[int]]
+        Coded clauses to satisfy (see ``_encode``).
+    count : int
+        Number of variables.
 
     Returns
     -------
-    dict[str, bool] | None
-        The first satisfying assignment found, or ``None`` when none
-        exists.
+    list[int] | None
+        The value of each variable, by number, in the first model
+        found: 1 for true, 0 for false, -1 for a variable the model
+        leaves unassigned. ``None`` when no model exists.
     """
-    pending = [(clauses, assignment)]
-    while pending:
-        branch_clauses, branch = pending.pop()
-        branch = dict(branch)
-        if not _propagate(branch_clauses, branch):
-            continue
-        open_clauses = [
-            c for c in branch_clauses if not _satisfied(c, branch)
-        ]
-        if not open_clauses:
-            return branch
+    search = _Search(clauses, count)
+    if not (search.roots() and search.propagate()):
+        return None
+    splits: list[tuple[int, int, int]] = []  # trail mark, variable, open
+    start = 0
+    while True:
+        start = search.first_open(start)
+        if start == len(clauses):
+            return search.value
         variable = next(
-            v for clause in open_clauses for v, _ in clause if v not in branch
+            c >> 1 for c in clauses[start] if search.value[c >> 1] < 0
         )
-        # Pushed in reverse, so that False is tried first.
-        pending.append((open_clauses, {**branch, variable: True}))
-        pending.append((open_clauses, {**branch, variable: False}))
-    return None
+        splits.append((len(search.trail), variable, start))
+        search.assign(2 * variable)
+        while not search.propagate():
+            while splits and splits[-1][1] < 0:
+                splits.pop()
+            if not splits:
+                return None
+            mark, variable, start = splits.pop()
+            splits.append((mark, -1, start))
+            search.undo(mark)
+            search.assign(2 * variable + 1)
 
 
 def solve_builtin(clause_set: ClauseSet) -> SolveResult:
     """Solve with DPLL; shrink an unsatisfiable set to a core of facts.
+
+    The clauses are coded once (``_encode``); each search of the core
+    minimisation takes a subset of the coded clauses, in their order.
 
     Parameters
     ----------
@@ -245,18 +394,21 @@ def solve_builtin(clause_set: ClauseSet) -> SolveResult:
         A model, or a core of fact clauses. Axiom clauses are kept fixed
         during core minimisation and are not listed.
     """
-    model = _dpll([c for _, c in clause_set.clauses], {})
-    if model is not None:
-        full = {v: model.get(v, False) for v in clause_set.variables()}
+    names, coded = _encode([c for _, c in clause_set.clauses])
+    values = _dpll(coded, len(names))
+    if values is not None:
+        full = {n: v == 1 for n, v in zip(names, values, strict=True)}
         return SolveResult(True, full, [], "builtin-dpll")
-    axioms = [
-        c for c in clause_set.clauses if not c[0].startswith(FACT_PREFIXES)
+    named = [
+        (name, codes)
+        for (name, _), codes in zip(clause_set.clauses, coded, strict=True)
     ]
-    facts = [c for c in clause_set.clauses if c[0].startswith(FACT_PREFIXES)]
+    axioms = [c for n, c in named if not n.startswith(FACT_PREFIXES)]
+    facts = [(n, c) for n, c in named if n.startswith(FACT_PREFIXES)]
     index = 0
     while index < len(facts):
         trial = facts[:index] + facts[index + 1 :]
-        if _dpll([c for _, c in axioms + trial], {}) is None:
+        if _dpll(axioms + [c for _, c in trial], len(names)) is None:
             facts = trial
         else:
             index += 1
