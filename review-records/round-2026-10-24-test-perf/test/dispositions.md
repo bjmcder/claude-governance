@@ -51,3 +51,29 @@ Reviews of draft 0.1: review-cold.md (cold review) and review-pairs.md (STND.HAR
 | --- | --- | --- |
 | STND.WPROC 1.1 | STND.WPROC.9: the exception covers a check deferred under RSRC.12 to a later merge or to the release, and a test in quarantine under STND.TEST.13, recorded in the unit record or in a record of STND.TEST.9 that the unit record cites; refers_to adds STND.TEST.13 and STND.TEST.9. Notes: the tier deferral of STND.TEST.5, quarantine and QA.6, and STND.TEST for selection and the full-suite run. | Minor (GOV.41): the text of a default changes, so what a project replaces changes; no obligation grows, since RSRC.12 already admits the deferral and STND.TEST.5 and STND.TEST.6 close it before the development line and the release. Onset stays CSQ3. |
 | STND.CREW 1.1 | STND.CREW.9: self-review runs the tests that STND.TEST.10 selects. STND.CREW.15: the review agent receives the record of STND.TEST.9 of each run on which the change relies. Notes updated to match. | Minor (GOV.41): two defaults change their text; the obligations they rest on (VV.8, RSRC.11, QA.7, QA.8) are unchanged. Onset stays CSQ3. |
+
+## 0.2 to 0.3
+
+Cold verification of draft 0.2: verify-0.2.md. New in this step: draft-0.3.md, STND.WPROC-0.3.md, STND.CREW-0.3.md, pairs-0.3.md, pairs-0.3-delta.md. The round script now applies apply_mnem_perf and apply_perf first, then the TEST row after the PERF row (apply_mnem_test.ROW_AFTER is set to apply_mnem_perf.ROW at run time), STND.TEST, STND.WPROC 1.1, and STND.CREW 1.1.
+
+| Finding | Disposition |
+| --- | --- |
+| X1: STND.DEPS absent from References | Accepted: the Notes cite STND.DEPS.6 for the integrity digest that a verdict key holds; References now list STND.DEPS. |
+| S1: skipped or disabled tests escape the full-suite run | Accepted, as the lead directs: the Term Full-suite run executes each test of the full suite, skipped, disabled, and quarantined tests included. The TEST.9 Verdicts row reports their verdicts apart, and the Notes say the skip or disablement still reaches the human owner through AGENT.47 and STND.WPROC.13. |
+| S2: nothing limits a pre-merge run to its selection | Accepted in STND.TEST.10, retitled "Runs on a branch": its second sentence has each run before the merge of a branch into its parent hold only the selection of STND.TEST.3, STND.TEST.4, and STND.TEST.5 for the change that the merge brings. Its three sentences are one rule, and the Notes say so (the g.18 notice stays). |
+| S3: TEST.5 does not carve out TEST.4 s2 | Accepted: TEST.5 s1 reads "other than the tests that STND.TEST.4 holds from every tier". |
+| S4: TEST.3 s1 catches a full-suite run | Accepted: "Where a run of tests is not a full-suite run". |
+| S5: TEST.11 against PRIME.10 | Accepted: "the output that the assertion judged, a secret excluded", with PRIME.10 in refers_to. |
+| S6: CREW.9 cites a provision that does not select | Accepted: "the tests that STND.TEST.3 and STND.TEST.4 select for the change", in the body, the Notes, and the rationale; refers_to is STND.TEST.3 and STND.TEST.4. |
+| S7: Notes fact | Accepted: "10 of 32 concurrency cases were non-determinism in the code under test". |
+| S8: onset sentence | Accepted: "the first sentence of STND.TEST.15" among those from CSQ3. |
+| S9: indicative obligations in the Notes | Accepted in all three: the TEST sentence on quarantine is cut and replaced by QA.6 and the reading of quarantine as a disabled check under AGENT.47; the WPROC Notes read "STND.TEST.3 and STND.TEST.5 have a test ... run at the first merge ..." and "STND.WPROC.9 has the unit record state ..."; the CREW Notes read "STND.CREW.15 has it receive the record". |
+| S10: CREW.15 list grammar | Accepted: the record of STND.TEST.9 follows the explanation of AGENT.2, ahead of the group that the work report states. |
+| S11: TEST.19 omits quarantine | Accepted: "places in quarantine" is added, and the Notes call quarantine a disabled check under AGENT.47. |
+| S12: rationales | Accepted: the WPROC rationale reads "loses the authority of STND.WPROC.11 to merge without a decision of the human owner"; both rationales justify the class by the test of STND.IDENT.3 (WPROC alters a permission; CREW alters two obligations of defaults), and the WPROC rationale drops "no obligation grows". |
+| TEST.2 onset | The Notes say that a statement of the repository configuration is a record a person reads and keeps, which identifies no affected dependent by itself, so it is no mechanism under the row of QA.14; a deriving tool is such a mechanism, which QA.14 asks from CSQ2. It stays a decision for the custodian. |
+| O1: reference path in Verdict input | Accepted. |
+| O2: TEST.8 s2 three conditions; trailing "where" in TEST.4 cells | The two cells are rewritten without "where". TEST.8 s2 keeps one condition with three alternatives, read as one condition, and findings flag nothing. |
+| O3: partial oracle and NUMER.6 | Accepted in the Notes. |
+| O4: source of "the studies" | Accepted: "the studies of t1, H1". |
+| Coalesce: STND.PERF | Accepted: the Notes read "The evaluation of performance belongs to STND.PERF, whose STND.PERF.23 holds the regression guard on time"; References list STND.PERF. |

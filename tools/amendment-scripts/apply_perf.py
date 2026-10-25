@@ -9,7 +9,7 @@ import build as B  # noqa: E402
 import content_perf as C  # noqa: E402
 from govharness.workflows.amend import Change, record_transaction  # noqa: E402
 
-AT = "2026-10-24T20:05:00+00:00"
+AT = "2026-10-25T19:55:00+00:00"
 TAIL = (" Text authored by an agent, Claude (Anthropic), at the custodian's direction (REPRO.5)."
         " Under the ruling of ledger entry 15, this decision is the QA.7 review.")
 RATIONALE = (

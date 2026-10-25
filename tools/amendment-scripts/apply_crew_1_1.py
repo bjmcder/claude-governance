@@ -15,49 +15,51 @@ from govharness.workflows.amend import Change, raise_revision, record_transactio
 DATE = "2026-10-25"
 AT = "2026-10-25T20:15:00+00:00"
 
-# STND.CREW.9: the self-review runs the tests that STND.TEST.10 selects.
+# STND.CREW.9: the self-review runs the tests that STND.TEST.3 and STND.TEST.4 select.
 CREW9 = [
-    ('refers_to: []', 'refers_to: ["STND.TEST.10"]'),
+    ('refers_to: []', 'refers_to: ["STND.TEST.3", "STND.TEST.4"]'),
     ("Before an implementing agent hands a change to review, it SHOULD examine the change against its acceptance "
      "criteria and fix each finding (QA.2, VV.8).",
      "Before an implementing agent hands a change to review, it SHOULD examine the change against its acceptance "
-     "criteria, run the tests that STND.TEST.10 selects for the change, and fix each finding (QA.2, VV.8, "
-     "STND.TEST.10)."),
+     "criteria, run the tests that STND.TEST.3 and STND.TEST.4 select for the change, and fix each finding (QA.2, "
+     "VV.8, STND.TEST.3, STND.TEST.4)."),
 ]
 
 # STND.CREW.15: the review agent also receives the run records on which the change relies.
 CREW15 = [
     ('refers_to: ["AGENT.2", "AGENT.47"]', 'refers_to: ["AGENT.2", "AGENT.47", "STND.TEST.9"]'),
-    ("and the ambiguous instructions acted on that the author's work report states under AGENT.47, and only the "
-     "other context needed to judge them (QA.7, QA.8).",
-     "and the ambiguous instructions acted on that the author's work report states under AGENT.47, the record of "
-     "STND.TEST.9 of each run of tests on which the change relies, and only the other context needed to judge them "
-     "(QA.7, QA.8, STND.TEST.9)."),
+    ("the explanation of AGENT.2, the departures,",
+     "the explanation of AGENT.2, the record of STND.TEST.9 of each run of tests on which the change relies, the "
+     "departures,"),
+    ("and only the other context needed to judge them (QA.7, QA.8).",
+     "and only the other context needed to judge them (QA.7, QA.8, STND.TEST.9)."),
 ]
 
 DOC = [
     ("and reviews its own change before handing it to review (STND.CREW.9); that self-review is not the review of "
      "QA.7.",
-     "and reviews its own change before handing it to review, running the tests that STND.TEST.10 selects for it "
+     "and reviews its own change before handing it to review, running the tests that STND.TEST.3 and STND.TEST.4 "
+     "select for it "
      "(STND.CREW.9); that self-review is not the review of QA.7."),
     ("so that it judges the change as a cold reader would (STND.CREW.15).",
-     "so that it judges the change as a cold reader would (STND.CREW.15). It also receives the record of each run "
+     "so that it judges the change as a cold reader would (STND.CREW.15). STND.CREW.15 has it receive the record of each run "
      "of tests on which the change relies, which shows what was selected, reused, omitted, and excluded, so that the "
      "review of STND.TEST.19 compares the change and its runs with what the work report states."),
 ]
 
-READING = ("STND.CREW.9 has the implementing agent run, in its self-review, the tests that STND.TEST.10 selects for "
-           "the change; STND.CREW.15 gives the review agent the record of STND.TEST.9 of each run of tests on which "
+READING = ("STND.CREW.9 has the implementing agent run, in its self-review, the tests that STND.TEST.3 and "
+           "STND.TEST.4 select for the change; STND.CREW.15 gives the review agent the record of STND.TEST.9 of each run of tests on which "
            "the change relies; the Notes say so; References lists STND.TEST")
 
 ROW = f"| 1.1 | {DATE} | Minor amendment (GOV.41): {READING}. |"
 
 RATIONALE = (
     f"Minor amendment of STND.CREW to revision 1.1, ratified by the custodian on {DATE}, on the adoption of "
-    f"STND.TEST: {READING}. The change is minor and not editorial because the text of two defaults changes, and "
-    "with it what a project replaces when it replaces them (REPRO.7). The self-review of STND.CREW.9 already "
-    "examines the change against its acceptance criteria under VV.8; the tests that STND.TEST.10 selects are the "
-    "smallest set that does so between merges (RSRC.11), so the citation adds a named run and no other obligation. "
+    f"STND.TEST: {READING}. The change is minor under the test of STND.IDENT.3 because it alters two obligations of "
+    "defaults: STND.CREW.9 adds a run to the self-review and STND.CREW.15 adds an item to what a review agent "
+    "receives; it alters no prime directive or governing principle, so it is not major. The self-review of STND.CREW.9 already "
+    "examines the change against its acceptance criteria under VV.8; the tests that STND.TEST.3 and STND.TEST.4 "
+    "select are the smallest set that does so (RSRC.11). "
     "STND.CREW.15 already gives the review agent the checks that the work report states as skipped or weakened; the "
     "run record adds what the runs show apart from the report, which the review of STND.TEST.19 uses to find a "
     "test removed or loosened by the change itself. Both still instantiate QA.2, VV.8, QA.7, and QA.8 as before, "

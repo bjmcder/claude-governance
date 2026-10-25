@@ -10,7 +10,7 @@ of the comparison base) moved into the first sentence of STND.PERF.19, and the f
 STND.PERF.22 was cut. Draft 0.3 answers the cold verification of 0.2; numbers and titles are unchanged."""
 from content3 import P, NORMATIVE, TERMS_LEAD
 
-DATE = "2026-10-24"
+DATE = "2026-10-25"
 
 PURPOSE = """This standard holds the systematic evaluation of the performance of code: its time, memory, energy, and the other resources that it uses, and the events that its hardware counts. It applies where a task calls for such an evaluation or the code is performance-sensitive. It adds to RSRC, HW, STND.VVUQ, and STND.OFFLD only what an evaluation of performance makes necessary. It covers performance sensitivity and performance requirements (STND.PERF.1 and STND.PERF.2); the question that an evaluation answers, absolute, relative, or scaling (STND.PERF.3 to STND.PERF.7); the choice of method and its limits (STND.PERF.8, STND.PERF.9, and STND.PERF.10); the design of measurements (STND.PERF.11 to STND.PERF.16); summary and comparison (STND.PERF.17 to STND.PERF.21); the detection of regressions over a recorded history (STND.PERF.22, STND.PERF.23, and STND.PERF.24); and the cost of the evaluation itself (STND.PERF.25 and STND.PERF.26).
 
