@@ -26,7 +26,7 @@ from govharness.core.tables import HISTORY_HEADING
 from govharness.derive.manifests import stale_manifests
 from govharness.ledger.chain import append
 from govharness.ledger.transactions import Transaction
-from govharness.workflows.verification import verify_corpus
+from govharness.workflows.verification import usable_store, verify_corpus
 
 
 @dataclass(frozen=True)
@@ -228,16 +228,20 @@ def record_transaction(root: Path, change: Change) -> Recorded:
     Returns
     -------
     Recorded
-        The entry as written and the verification after it.
+        The entry as written and the verification after it, which
+        reuses the solve cache the environment names (unit 0011).
 
     Raises
     ------
     ValueError
-        If a scope names no directory, or the ledger refuses the entry.
+        If a scope names no directory, the ledger refuses the entry, or
+        the solve cache cannot be used (``usable_store``); the cache and
+        the scopes are checked before anything is written.
     """
     missing = [s for s in change.scope if not is_directory(root, s)]
     if missing:
         raise ValueError(f"scope names no directory: {', '.join(missing)}")
+    store = usable_store(root, True)
     for rel, text in stale_manifests(read_tree(root)).items():
         (root / rel).write_text(text, encoding="utf-8")
     scope = list(change.scope)
@@ -256,4 +260,4 @@ def record_transaction(root: Path, change: Change) -> Recorded:
             "signature": "",
         },
     )
-    return Recorded(entry, verify_corpus(root))
+    return Recorded(entry, verify_corpus(root, cache=store or False))

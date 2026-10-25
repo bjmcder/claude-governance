@@ -19,6 +19,7 @@ from typing import Any
 
 Literal = tuple[str, bool]  # (variable name, polarity)
 FACT_PREFIXES = ("fact:", "NEG[")
+BUILTIN = "builtin-dpll"
 _Z3: Any = None
 if importlib.util.find_spec("z3") is not None:
     import z3 as _Z3  # type: ignore[import-not-found]
@@ -131,12 +132,17 @@ class SolveResult:
         Names of fact clauses that suffice for a contradiction when not.
     backend : str
         Solver that produced the result.
+    positions : list[int]
+        Position in the clause set of each clause of ``core``, in the
+        same order; two clauses may share a name, and a position names
+        one of them.
     """
 
     satisfiable: bool
     model: dict[str, bool] = field(default_factory=dict)
     core: list[str] = field(default_factory=list)
     backend: str = ""
+    positions: list[int] = field(default_factory=list)
 
 
 def _encode(clauses: list[list[Literal]]) -> tuple[list[str], list[list[int]]]:
@@ -382,6 +388,10 @@ def solve_builtin(clause_set: ClauseSet) -> SolveResult:
 
     The clauses are coded once (``_encode``); each search of the core
     minimisation takes a subset of the coded clauses, in their order.
+    The minimisation tries the fact clauses in order and drops each one
+    whose removal, from the facts kept so far and every fact after it,
+    leaves the clauses unsatisfiable (``confirms_core`` checks a core
+    against exactly this rule).
 
     Parameters
     ----------
@@ -398,21 +408,116 @@ def solve_builtin(clause_set: ClauseSet) -> SolveResult:
     values = _dpll(coded, len(names))
     if values is not None:
         full = {n: v == 1 for n, v in zip(names, values, strict=True)}
-        return SolveResult(True, full, [], "builtin-dpll")
-    named = [
-        (name, codes)
-        for (name, _), codes in zip(clause_set.clauses, coded, strict=True)
-    ]
-    axioms = [c for n, c in named if not n.startswith(FACT_PREFIXES)]
-    facts = [(n, c) for n, c in named if n.startswith(FACT_PREFIXES)]
+        return SolveResult(True, full, [], BUILTIN)
+    axioms, facts = _split(clause_set, coded)
     index = 0
     while index < len(facts):
         trial = facts[:index] + facts[index + 1 :]
-        if _dpll(axioms + [c for _, c in trial], len(names)) is None:
+        if _dpll(axioms + [coded[p] for p in trial], len(names)) is None:
             facts = trial
         else:
             index += 1
-    return SolveResult(False, {}, [name for name, _ in facts], "builtin-dpll")
+    core = [clause_set.clauses[p][0] for p in facts]
+    return SolveResult(False, {}, core, BUILTIN, facts)
+
+
+def _split(
+    clause_set: ClauseSet, coded: list[list[int]]
+) -> tuple[list[list[int]], list[int]]:
+    """Return the coded axiom clauses and the positions of the facts.
+
+    Parameters
+    ----------
+    clause_set : ClauseSet
+        The named clauses.
+    coded : list[list[int]]
+        The same clauses, coded (``_encode``).
+
+    Returns
+    -------
+    tuple[list[list[int]], list[int]]
+        The coded clauses whose names mark no fact, in order, and the
+        positions of the fact clauses, in order.
+    """
+    axioms: list[list[int]] = []
+    facts: list[int] = []
+    for position, (name, _) in enumerate(clause_set.clauses):
+        if name.startswith(FACT_PREFIXES):
+            facts.append(position)
+        else:
+            axioms.append(coded[position])
+    return axioms, facts
+
+
+def satisfies(clause_set: ClauseSet, model: dict[str, bool]) -> bool:
+    """Return whether a model assigns every variable and every clause holds.
+
+    Parameters
+    ----------
+    clause_set : ClauseSet
+        The clauses.
+    model : dict[str, bool]
+        A value for each variable.
+
+    Returns
+    -------
+    bool
+        True when the model's variables are those of the clause set, in
+        order of first appearance, as a solver reports them, and some
+        literal of each clause is true under it.
+    """
+    if list(model) != clause_set.variables():
+        return False
+    return all(
+        any(model[variable] == polarity for variable, polarity in literals)
+        for _, literals in clause_set.clauses
+    )
+
+
+def confirms_core(clause_set: ClauseSet, positions: list[int]) -> bool:
+    """Return whether fact clauses are the core ``solve_builtin`` finds.
+
+    The axioms with the clauses at ``positions`` must be unsatisfiable,
+    so the whole set is too: one search. The positions must also be, in
+    increasing order, the core that the minimisation of
+    ``solve_builtin`` finds, which takes one more search for each
+    position: the minimisation drops a fact exactly when the facts kept
+    before it and every fact after it, with the axioms, are
+    unsatisfiable. A dropped fact needs no search, since those clauses
+    include the core; a kept fact needs them satisfiable.
+
+    Parameters
+    ----------
+    clause_set : ClauseSet
+        The clauses.
+    positions : list[int]
+        Positions of fact clauses in the set.
+
+    Returns
+    -------
+    bool
+        True when the positions name fact clauses and are that core.
+    """
+    total = len(clause_set.clauses)
+    if any(not 0 <= p < total for p in positions):
+        return False
+    if len(set(positions)) != len(positions):
+        return False
+    if not all(
+        clause_set.clauses[p][0].startswith(FACT_PREFIXES) for p in positions
+    ):
+        return False
+    names, coded = _encode([c for _, c in clause_set.clauses])
+    axioms, facts = _split(clause_set, coded)
+    if positions != sorted(positions):
+        return False
+    if _dpll(axioms + [coded[p] for p in positions], len(names)) is not None:
+        return False
+    for number, kept in enumerate(positions):
+        trial = positions[:number] + [p for p in facts if p > kept]
+        if _dpll(axioms + [coded[p] for p in trial], len(names)) is None:
+            return False
+    return True
 
 
 def solve_z3(clause_set: ClauseSet) -> SolveResult:
@@ -436,7 +541,7 @@ def solve_z3(clause_set: ClauseSet) -> SolveResult:
         solver.assert_and_track(
             _Z3.Or(*terms), _Z3.Bool(f"__track_{index}__{name}")
         )
-    backend = f"z3 {_Z3.get_version_string()}"
+    backend = backend_name(True)
     if solver.check() == _Z3.sat:
         found = solver.model()
         values = {
@@ -444,10 +549,34 @@ def solve_z3(clause_set: ClauseSet) -> SolveResult:
             for name, atom in atoms.items()
         }
         return SolveResult(True, values, [], backend)
-    core = [str(b).split("__", 2)[2] for b in solver.unsat_core()]
+    tracked = [str(b).split("__", 2) for b in solver.unsat_core()]
+    kept = [
+        (int(index.removeprefix("track_")), name)
+        for _, index, name in tracked
+        if name.startswith(FACT_PREFIXES)
+    ]
     return SolveResult(
-        False, {}, [n for n in core if n.startswith(FACT_PREFIXES)], backend
+        False, {}, [n for _, n in kept], backend, [p for p, _ in kept]
     )
+
+
+def backend_name(use_z3: bool = True) -> str:
+    """Return the backend that ``solve`` reports for a setting.
+
+    Parameters
+    ----------
+    use_z3 : bool
+        Whether z3 may be used.
+
+    Returns
+    -------
+    str
+        ``z3`` and its version when z3 is allowed and importable, else
+        ``builtin-dpll``.
+    """
+    if use_z3 and _Z3 is not None:
+        return f"z3 {_Z3.get_version_string()}"
+    return BUILTIN
 
 
 def solve(clause_set: ClauseSet, use_z3: bool = True) -> SolveResult:
@@ -468,6 +597,31 @@ def solve(clause_set: ClauseSet, use_z3: bool = True) -> SolveResult:
     if use_z3 and _Z3 is not None:
         return solve_z3(clause_set)
     return solve_builtin(clause_set)
+
+
+def negation(
+    base: ClauseSet, claim_name: str, claim: list[Literal]
+) -> ClauseSet:
+    """Return a clause set with the negation of a claim added.
+
+    Parameters
+    ----------
+    base : ClauseSet
+        Facts and axioms; not modified.
+    claim_name : str
+        Label for the negated claim clause, ``NEG[claim_name]``.
+    claim : list[Literal]
+        Literals whose conjunction is the claim.
+
+    Returns
+    -------
+    ClauseSet
+        The base followed by one clause, the disjunction of the negated
+        literals.
+    """
+    negated = base.copy()
+    negated.add(f"NEG[{claim_name}]", *[(v, not p) for v, p in claim])
+    return negated
 
 
 def prove_entailed(
@@ -495,7 +649,5 @@ def prove_entailed(
         True when the negated claim is unsatisfiable, with the solver
         result (a core when entailed, a countermodel when not).
     """
-    negated = base.copy()
-    negated.add(f"NEG[{claim_name}]", *[(v, not p) for v, p in claim])
-    result = solve(negated, use_z3)
+    result = solve(negation(base, claim_name, claim), use_z3)
     return (not result.satisfiable), result

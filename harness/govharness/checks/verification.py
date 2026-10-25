@@ -79,6 +79,36 @@ class Verification:
         return not any(self.sections().values())
 
 
+def verify_structure(
+    tree: Tree,
+    ledger: list[Transaction],
+    signer_config: SignerConfig | None = None,
+) -> tuple[Corpus, Verification]:
+    """Run the structural checks on a corpus.
+
+    Parameters
+    ----------
+    tree : Tree
+        Snapshot of every file under the corpus root.
+    ledger : list[Transaction]
+        The corpus ledger, in order.
+    signer_config : SignerConfig | None
+        Signer anchor and ``gpg`` path; ``None`` means no anchor.
+
+    Returns
+    -------
+    tuple[Corpus, Verification]
+        The corpus the snapshot holds, for the logic checks, and the
+        results, with no logic results yet.
+    """
+    corpus = Corpus(load_entries(tree))
+    structure = run_checks(
+        STRUCTURE,
+        CheckContext(corpus, ledger, tree=tree, signer_config=signer_config),
+    )
+    return corpus, Verification(len(corpus.entries), structure)
+
+
 def verify_snapshot(
     tree: Tree,
     ledger: list[Transaction],
@@ -104,14 +134,9 @@ def verify_snapshot(
     Returns
     -------
     Verification
-        The results.
+        The results; every solve is made afresh.
     """
-    corpus = Corpus(load_entries(tree))
-    structure = run_checks(
-        STRUCTURE,
-        CheckContext(corpus, ledger, tree=tree, signer_config=signer_config),
-    )
-    found = Verification(len(corpus.entries), structure)
+    corpus, found = verify_structure(tree, ledger, signer_config)
     if logic:
         ctx = CheckContext(corpus, ledger, use_z3=use_z3)
         found.logic = run_checks(LOGIC, ctx)

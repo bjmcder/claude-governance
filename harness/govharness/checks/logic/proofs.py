@@ -5,6 +5,11 @@ encoded as propositional facts and axioms. Joint consistency is checked
 first (f.1); each claim is then proved by refuting its negation. A claim
 the corpus gives no material for (no ranked part, say) is not reported,
 and no claim is reported when the facts are inconsistent.
+
+The clause sets of a run, the base and one negation per claim, are
+built once; when the run has a solve cache, ``planned_keys`` names the
+key of each before the run, so that the caller can load the entries,
+and each solve reuses a checked entry (``solvecache``, unit 0011).
 """
 
 from __future__ import annotations
@@ -20,8 +25,13 @@ from govharness.checks.logic.satlib import (
     ClauseSet,
     Literal,
     SolveResult,
-    prove_entailed,
-    solve,
+    backend_name,
+    negation,
+)
+from govharness.checks.logic.solvecache import (
+    add_clauses,
+    key_start,
+    solve_cached,
 )
 from govharness.core.report import capped
 
@@ -269,6 +279,81 @@ def _build_base_of(ctx: CheckContext) -> ClauseSet:
     return build_base(facts_of(ctx), ctx.corpus.parts)
 
 
+def _negations_of(
+    ctx: CheckContext,
+) -> dict[str, tuple[Claim, ClauseSet]]:
+    """Build each claim of a run and the clause set of its negation.
+
+    Parameters
+    ----------
+    ctx : CheckContext
+        Context of the run.
+
+    Returns
+    -------
+    dict[str, tuple[Claim, ClauseSet]]
+        By the claim's title template, for each claim the corpus gives
+        material for: the claim, and the base with its negation, named
+        by the filled title.
+    """
+    facts, base = facts_of(ctx), base_of(ctx)
+    found: dict[str, tuple[Claim, ClauseSet]] = {}
+    for _, title, _, build in CLAIMS:
+        claim = build(facts, ctx.corpus.parts)
+        if claim is not None:
+            name = title.format(**claim.fields)
+            found[title] = (claim, negation(base, name, claim.literals))
+    return found
+
+
+def _keys_of(ctx: CheckContext) -> dict[str, str]:
+    """Return the cache key of each solve of a run.
+
+    The key of a negation extends a copy of the base's digest by its one
+    clause, so the base is serialized once.
+
+    Parameters
+    ----------
+    ctx : CheckContext
+        Context of the run.
+
+    Returns
+    -------
+    dict[str, str]
+        By claim title template, and ``""`` for the base; empty when the
+        run has no solve cache.
+    """
+    cache = ctx.solve_cache
+    if cache is None:
+        return {}
+    base = base_of(ctx)
+    digest = add_clauses(
+        key_start(cache.version, backend_name(ctx.use_z3)), base
+    )
+    keys = {"": digest.copy().hexdigest()}
+    for title, (_, negated) in ctx.shared(_negations_of).items():
+        extended = add_clauses(digest.copy(), negated, len(base.clauses))
+        keys[title] = extended.hexdigest()
+    return keys
+
+
+def planned_keys(ctx: CheckContext) -> list[str]:
+    """Return the cache keys of every solve a run may make.
+
+    Parameters
+    ----------
+    ctx : CheckContext
+        Context of a run with a solve cache, before the run.
+
+    Returns
+    -------
+    list[str]
+        The key of the base and of each claim's negation; a claim is
+        solved only when the base is satisfiable, so a key may go unused.
+    """
+    return list(ctx.shared(_keys_of).values())
+
+
 def consistency(ctx: CheckContext) -> SolveResult:
     """Return the satisfiability of a run's facts and axioms, once.
 
@@ -298,7 +383,8 @@ def _solve_base_of(ctx: CheckContext) -> SolveResult:
     SolveResult
         The outcome.
     """
-    return solve(base_of(ctx), ctx.use_z3)
+    key = ctx.shared(_keys_of).get("")
+    return solve_cached(base_of(ctx), ctx.use_z3, ctx.solve_cache, key)
 
 
 def solver_backend(ctx: CheckContext) -> str:
@@ -344,11 +430,7 @@ def consistent(ctx: CheckContext) -> Verdict:
     return Verdict("PASS" if outcome.satisfiable else "FAIL", details)
 
 
-def _prove(
-    ctx: CheckContext,
-    title: str,
-    build: Callable[[Facts, list[str]], Claim | None],
-) -> Verdict | None:
+def _prove(ctx: CheckContext, title: str) -> Verdict | None:
     """Prove one claim and judge it.
 
     Parameters
@@ -358,8 +440,6 @@ def _prove(
     title : str
         Title template of the claim; the filled title names the negated
         claim clause.
-    build : Callable[[Facts, list[str]], Claim | None]
-        Builds the claim from the facts and the parts.
 
     Returns
     -------
@@ -370,13 +450,13 @@ def _prove(
     """
     if not consistency(ctx).satisfiable:
         return None
-    claim = build(facts_of(ctx), ctx.corpus.parts)
-    if claim is None:
+    planned = ctx.shared(_negations_of).get(title)
+    if planned is None:
         return None
-    name = title.format(**claim.fields)
-    entailed, result = prove_entailed(
-        base_of(ctx), name, claim.literals, ctx.use_z3
-    )
+    claim, negated = planned
+    key = ctx.shared(_keys_of).get(title)
+    result = solve_cached(negated, ctx.use_z3, ctx.solve_cache, key)
+    entailed = not result.satisfiable
     want = claim.entailed
     status = "PASS" if entailed == want else ("FAIL" if want else "INFO")
     lines = [f"Claim: {len(claim.literals)} literal(s)."]
@@ -582,36 +662,41 @@ def reserved_claim(facts: Facts, parts: list[str]) -> Claim | None:
     return Claim([(f"agent_forbidden[{s['id']}]", True) for s in reserved])
 
 
-def _claim_check(
-    key: str,
-    title: str,
-    enforces: tuple[str, ...],
-    build: Callable[[Facts, list[str]], Claim | None],
-) -> Check:
-    """Return the check that proves one claim.
+def _claim_check(key: str, title: str, enforces: tuple[str, ...]) -> Check:
+    """Return the check that proves one claim of ``CLAIMS``.
 
     Parameters
     ----------
     key : str
         Check key.
     title : str
-        Title template of the claim.
+        Title template of the claim; ``_negations_of`` builds the claim
+        it names.
     enforces : tuple[str, ...]
         Provisions it enforces.
-    build : Callable[[Facts, list[str]], Claim | None]
-        Builds the claim.
 
     Returns
     -------
     Check
         The registered value.
     """
-    return Check(
-        key, FAMILY, title, enforces, lambda ctx: _prove(ctx, title, build)
-    )
+    return Check(key, FAMILY, title, enforces, lambda ctx: _prove(ctx, title))
 
 
-# The claims are listed in the order the report has always shown them.
+ClaimSpec = tuple[
+    str, str, tuple[str, ...], Callable[[Facts, list[str]], Claim | None]
+]
+# The claims are listed in the order the report has always shown them:
+# key, title template, provisions enforced, and the builder.
+CLAIMS: tuple[ClaimSpec, ...] = (
+    ("f.2", TOP_TITLE, ("GOV.5",), top_claim),
+    ("f.3", ASYMMETRY_TITLE, ("GOV.5",), asymmetry_claim),
+    ("f.4", UNRANKED_TITLE, ("GOV.5",), unranked_claim),
+    ("f.8", NOT_FORCED_TITLE, ("GOV.5", "GOV.6"), not_forced_claim),
+    ("f.5", WAIVER_TITLE, ("GOV.45",), waiver_claim),
+    ("f.6", STANDING_TITLE, ("PRIME.6",), standing_claim),
+    ("f.7", RESERVED_TITLE, ("PRIME.6",), reserved_claim),
+)
 CHECKS: tuple[Check, ...] = (
     Check(
         "f.1",
@@ -620,13 +705,5 @@ CHECKS: tuple[Check, ...] = (
         ("LVL0",),
         consistent,
     ),
-    _claim_check("f.2", TOP_TITLE, ("GOV.5",), top_claim),
-    _claim_check("f.3", ASYMMETRY_TITLE, ("GOV.5",), asymmetry_claim),
-    _claim_check("f.4", UNRANKED_TITLE, ("GOV.5",), unranked_claim),
-    _claim_check(
-        "f.8", NOT_FORCED_TITLE, ("GOV.5", "GOV.6"), not_forced_claim
-    ),
-    _claim_check("f.5", WAIVER_TITLE, ("GOV.45",), waiver_claim),
-    _claim_check("f.6", STANDING_TITLE, ("PRIME.6",), standing_claim),
-    _claim_check("f.7", RESERVED_TITLE, ("PRIME.6",), reserved_claim),
+    *(_claim_check(key, title, why) for key, title, why, _ in CLAIMS),
 )

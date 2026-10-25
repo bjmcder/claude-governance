@@ -61,7 +61,8 @@ harness/
 │   │   ├── ledger.py         chain, pins, and signatures
 │   │   ├── fields.py         template owner fields, entry status
 │   │   ├── logic/            checks 0 and a to f: facts, tiers, wording,
-│   │   │                     authority, language, proofs, satlib (DPLL, optional z3)
+│   │   │                     authority, language, proofs, satlib (DPLL, optional z3),
+│   │   │                     solvecache (keys and checks of reused solves)
 │   │   ├── lineage/          checks l.1 to l.5: derivation and family
 │   │   ├── drafting/         checks g.0 to g.25: tables, context, modals,
 │   │   │                     expressions, citations, roles, style, family
@@ -82,6 +83,7 @@ harness/
 │   │   │                     revision, record a transaction and verify
 │   │   ├── rehearse.py       run an amendment script on a fresh copy
 │   │   ├── verification.py   load a corpus root and verify it
+│   │   ├── solve_store.py    the solve cache on disk, outside the corpus
 │   │   ├── signers.py        found the signer register, add, close, require
 │   │   └── environment.py    check the installed environment files
 │   ├── cli/                  layer 4: main.py (parser), reports.py (verify,
@@ -161,6 +163,7 @@ Python 3.11+, standard library only. Run from this directory:
 python -B -m govharness verify governance            # every check; exit 1 on failure
 python -B -m govharness verify --no-logic governance # structural checks only
 python -B -m govharness check governance --out-dir <scratch>   # logic report
+python -B -m govharness verify --no-cache governance # solve every claim afresh
 python -B -m govharness manifests governance --check # list stale manifests
 python -B -m govharness manifests governance --write # regenerate manifests
 python -B -m govharness references governance --check          # References tables
@@ -182,8 +185,8 @@ python -B -m unittest discover -s tests -t .         # every test
 | `show ROOT ID [--expand]` | Print an item or section (`ID` is an identifier or a locator) with what governs it, what it cites, and what cites it; a document is shown as its lead text and the names of its sections and items |
 | `find ROOT WORD... [--limit N] [--in-force]` | List the items and sections holding the most of the words, best first, one line each; exit 1 when none holds any |
 | `context ROOT WORD... [--budget N] [--in-force]` | Print the best matches and the items they cite, each whole while the budget of characters lasts, and name the rest |
-| `verify [--no-logic] [--no-z3] ROOT` | Run the structural checks and the logic checks; print a summary; exit 1 on a failure |
-| `check ROOT [--out-dir DIR] [--no-z3]` | Run the logic checks, one line each; with `--out-dir`, write `logic_report.md`, `logic_facts.json`, and `drafting_punch_list.md` there |
+| `verify [--no-logic] [--no-z3] [--no-cache \| --cache-dir DIR] ROOT` | Run the structural checks and the logic checks; print a summary; exit 1 on a failure; reuse checked solver results from the solve cache unless `--no-cache` (below) |
+| `check ROOT [--out-dir DIR] [--no-z3] [--no-cache \| --cache-dir DIR]` | Run the logic checks, one line each; with `--out-dir`, write `logic_report.md`, `logic_facts.json`, and `drafting_punch_list.md` there; the solve cache as for `verify` |
 | `manifests ROOT (--check \| --write)` | List the stale manifests, or regenerate them |
 | `references ROOT (--check \| --write ID ...)` | Report each adopted document whose References table is wrong, or write the tables of the named documents (STND.DRAFT.34) |
 | `compose ROOT (--check \| --write)` | List the stale reading copies of STND.DFLT, STND.INSTR, STND.DRAFT, STND.IDENT (with the register MNEM), STND.CLASS, and STND.HARN, or write them into `rendered/` beside ROOT; each header names every revision and its ledger entry |
@@ -261,7 +264,9 @@ Facts are read from the provision text and front matter, never from a hand-kept 
 | m.1, m.2 | Profile combination (STND.HARN.26, STND.HARN.27): m.1 fails on an attribute of the selector table of a profile or sub-profile in force that the document its Defined by column names does not define in its Terms; m.2 fails on a shared matter with more than one owning profile, on a provision that a shared-matters table gives for another profile's matter and that cites no provision of that profile, and on a listed provision that does not exist |
 | f.1 to f.8 | The facts and axioms are jointly satisfiable, and each structural claim is proved by refuting its negation, or shown not to be forced |
 
-The built-in DPLL solver needs no installation. Its unit propagation watches two literals of each clause, so it visits only the clauses that an assignment can make unit or false, and it splits in a fixed order: the first unassigned variable of the first clause not yet satisfied, in the order the clauses are built, false before true. Propagation reaches the same assignment, or a conflict, in whatever order it visits the clauses, so the solver gives the same statuses, models, and cores as the solver it replaced, which rescanned every clause on each pass (unit 0009); `tests/checks/test_satlib.py` compares it with brute force and with that solver on 3000 seeded random formulas. With it, `verify` of the corpus takes about 3 s where it took about 11 s on the same machine (unit 0009). `z3` is used only if it is already importable; both give the same statuses. `tests/checks/test_logic.py` damages an in-memory copy of the corpus in 13 ways and asserts the named check fails, so a passing run means the checks can fail.
+The built-in DPLL solver needs no installation. Its unit propagation watches two literals of each clause, so it visits only the clauses that an assignment can make unit or false, and it splits in a fixed order: the first unassigned variable of the first clause not yet satisfied, in the order the clauses are built, false before true. Propagation reaches the same assignment, or a conflict, in whatever order it visits the clauses, so the solver gives the same statuses, models, and cores as the solver it replaced, which rescanned every clause on each pass (unit 0009); `tests/checks/test_satlib.py` compares it with brute force and with that solver on 3000 seeded random formulas. With it, `verify` of the corpus takes about 3 s where it took about 11 s on the same machine (unit 0009). `z3` is used only if it is already importable; both give the same statuses.
+
+The solve cache (unit 0011) keeps the result of each solve under a SHA-256 key of everything the result depends on: every clause in order, with its name and its literals in order (the claim enters as the clause of its negation), the backend and z3's version, and a digest of the source of `satlib.py`, `solvecache.py`, and `core/hashing.py`. A change of any of them is a new key and a full solve, so a transaction that leaves the authority-tier statements and LVL0's precedence and waivers as they were reuses every result, across rehearsal copies too. An entry holds the status, the backend, the model as bits, and the core as positions in the clause set, and no corpus text. It is reused only after a check against the clause set, so a planted or damaged entry can change no verdict: a model must satisfy every clause, and a core must be exactly the one the built-in solver's minimisation finds, which takes one search per core fact instead of one per fact. A core found by z3 is neither saved nor reused: it cannot be checked to be the one a fresh z3 run would list, and z3 finds it again quickly; a z3 model is reused after the same check as any model. An entry that fails, or a file that is no plain entry (a link, a pipe, too large), is named on the standard error and recomputed; the standard output is the same with a cold cache, a warm one, or none. The cache lies in `--cache-dir DIR`, else `$GOVHARNESS_CACHE_DIR`, else `govharness/solves` under `$XDG_CACHE_HOME` or `~/.cache`; `--no-cache` or `GOVHARNESS_NO_CACHE=1` (which also reaches `rehearse` and amendment scripts) turns it off. A directory inside the corpus, through `..` or a link too, and a relative `GOVHARNESS_CACHE_DIR` are refused, by `record_transaction` and `rehearse` before they write anything; a relative `--cache-dir` is taken from the working directory. `verify`, `check`, `rehearse`, and `record_transaction` use the cache; a library call of `verify_corpus` does not unless passed `cache=True`. Deleting it costs only time. With a warm cache, `verify` of the corpus takes about 2.0 s where it takes about 3.0 s without (unit 0011). `tests/checks/test_logic.py` damages an in-memory copy of the corpus in 13 ways and asserts the named check fails, so a passing run means the checks can fail.
 
 ### Provisions below LVL0
 

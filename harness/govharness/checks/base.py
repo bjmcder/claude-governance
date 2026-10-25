@@ -16,6 +16,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any, TypeVar
 
+from govharness.checks.logic.solvecache import SolveCache
 from govharness.core.corpus import Corpus, Tree
 from govharness.core.report import Report
 from govharness.ledger.gpg import SignerConfig
@@ -62,6 +63,9 @@ class CheckContext:
         means no anchor.
     use_z3 : bool
         Whether the proofs may use z3 when it is importable.
+    solve_cache : SolveCache | None
+        Solver results loaded before the run and made in it; ``None``
+        solves every time (unit 0011).
     report : Report
         Results reported so far in this run.
     known_keys : frozenset[str]
@@ -77,6 +81,7 @@ class CheckContext:
     tree: Tree | None = None
     signer_config: SignerConfig | None = None
     use_z3: bool = True
+    solve_cache: SolveCache | None = None
     report: Report = field(default_factory=Report)
     known_keys: frozenset[str] = frozenset()
     memo: dict[Callable[..., Any], Any] = field(default_factory=dict)
