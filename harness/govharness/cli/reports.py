@@ -5,25 +5,32 @@ logic checks; only a ``FAIL`` fails the run, and ``WARN`` results are
 printed. ``check`` runs the logic checks, prints one line per check,
 and with ``--out-dir`` writes ``logic_report.md``, ``logic_facts.json``,
 and ``drafting_punch_list.md`` there; nothing is written inside the
-corpus.
+corpus. Both reuse checked solver results from the solve cache unless
+given ``--no-cache`` (unit 0011); what they print is the same either
+way, and an entry the cache refused is named on the standard error.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 
 from govharness.checks.base import CheckContext
 from govharness.checks.drafting.family import all_findings, punch_list
 from govharness.checks.logic.facts import facts_of
 from govharness.checks.logic.proofs import solver_backend
-from govharness.checks.registry import LOGIC, run_checks
 from govharness.checks.verification import Verification
 from govharness.core.corpus import read_corpus
 from govharness.core.report import Report
 from govharness.ledger.chain import read_ledger
-from govharness.workflows.verification import verify_corpus
+from govharness.workflows.solve_store import SolveStore, open_store
+from govharness.workflows.verification import (
+    run_logic,
+    usable_store,
+    verify_corpus,
+)
 
 SHOWN_PER_CHECK = 20
 
@@ -44,6 +51,54 @@ def _logic_context(root: Path, use_z3: bool) -> CheckContext:
         A fresh context.
     """
     return CheckContext(read_corpus(root), read_ledger(root), use_z3=use_z3)
+
+
+def _store(args: argparse.Namespace) -> SolveStore | None:
+    """Return the solve cache that a command's options name.
+
+    Parameters
+    ----------
+    args : argparse.Namespace
+        ``no_cache`` and ``cache_dir``.
+
+    Returns
+    -------
+    SolveStore | None
+        The store, or ``None`` when the cache is off.
+    """
+    return open_store(not args.no_cache, args.cache_dir)
+
+
+def _report_refused(store: SolveStore | None) -> None:
+    """Name each cache entry a run refused, on the standard error.
+
+    Parameters
+    ----------
+    store : SolveStore | None
+        The store of the run.
+    """
+    for key, reason in sorted((store.rejected if store else {}).items()):
+        print(
+            f"solve cache: entry {key} refused ({reason}); recomputed",
+            file=sys.stderr,
+        )
+
+
+def _refused(error: ValueError) -> int:
+    """Report a cache that cannot be used.
+
+    Parameters
+    ----------
+    error : ValueError
+        The reason.
+
+    Returns
+    -------
+    int
+        2, a usage error.
+    """
+    print(f"refused: {error}", file=sys.stderr)
+    return 2
 
 
 def summary_lines(found: Verification) -> list[str]:
@@ -76,17 +131,27 @@ def run_verify(args: argparse.Namespace) -> int:
     Parameters
     ----------
     args : argparse.Namespace
-        ``root``, ``no_logic``, and ``no_z3``.
+        ``root``, ``no_logic``, ``no_z3``, ``no_cache``, and
+        ``cache_dir``.
 
     Returns
     -------
     int
-        1 if any check failed, else 0.
+        1 if any check failed, 2 if the cache lies inside the corpus,
+        else 0.
     """
-    found = verify_corpus(
-        args.root, logic=not args.no_logic, use_z3=not args.no_z3
-    )
+    store = _store(args)
+    try:
+        found = verify_corpus(
+            args.root,
+            logic=not args.no_logic,
+            use_z3=not args.no_z3,
+            cache=store or False,
+        )
+    except ValueError as error:
+        return _refused(error)
     print("\n".join(summary_lines(found)))
+    _report_refused(store)
     return 0 if found.passed() else 1
 
 
@@ -126,18 +191,25 @@ def run_check(args: argparse.Namespace) -> int:
     Parameters
     ----------
     args : argparse.Namespace
-        ``root``, ``out_dir``, and ``no_z3``.
+        ``root``, ``out_dir``, ``no_z3``, ``no_cache``, and
+        ``cache_dir``.
 
     Returns
     -------
     int
-        1 if any check failed, else 0.
+        1 if any check failed, 2 if the cache lies inside the corpus,
+        else 0.
     """
+    try:
+        store = usable_store(args.root, _store(args) or False)
+    except ValueError as error:
+        return _refused(error)
     ctx = _logic_context(args.root, not args.no_z3)
-    report = run_checks(LOGIC, ctx)
+    report = run_logic(ctx, store)
     for item in report.results:
         print(f"[{item.status:4}] {item.key:4} {item.title}")
     print(f"solver: {solver_backend(ctx)}")
     if args.out_dir is not None:
         _write_outputs(args.out_dir, args.root, ctx, report)
+    _report_refused(store)
     return 1 if report.failures() else 0

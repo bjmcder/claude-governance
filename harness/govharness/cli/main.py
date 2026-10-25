@@ -9,8 +9,10 @@ Commands::
                                           the governance on a topic
     pairs ROOT ID [--amends LVL0_ID ...]  provision pairs to review before a
                                           change (STND.HARN.28)
-    verify [--no-logic] [--no-z3] ROOT    every check; exit 1 on failure
-    check ROOT [--out-dir DIR] [--no-z3]  logic checks and their report
+    verify [--no-logic] [--no-z3] [--no-cache] [--cache-dir DIR] ROOT
+                                          every check; exit 1 on failure
+    check ROOT [--out-dir DIR] [--no-z3] [--no-cache] [--cache-dir DIR]
+                                          logic checks and their report
     manifests ROOT (--check | --write)    stale or regenerated manifests
     references ROOT (--check | --write ID ...)
                                           References tables (STND.DRAFT.34)
@@ -46,6 +48,26 @@ from govharness.ledger.transactions import GOVERNANCE
 Runner = Callable[[argparse.Namespace, argparse.ArgumentParser], int]
 
 
+def _add_cache(command: argparse.ArgumentParser) -> None:
+    """Add the options of the solve cache (unit 0011).
+
+    Parameters
+    ----------
+    command : argparse.ArgumentParser
+        Parser of ``verify`` or ``check``.
+    """
+    group = command.add_mutually_exclusive_group()
+    group.add_argument(
+        "--no-cache", action="store_true", help="solve every claim afresh"
+    )
+    group.add_argument(
+        "--cache-dir",
+        type=Path,
+        default=None,
+        help="directory of the solve cache, outside the corpus",
+    )
+
+
 def _add_verify(sub: argparse._SubParsersAction) -> None:
     """Add the ``verify`` and ``check`` commands.
 
@@ -58,11 +80,13 @@ def _add_verify(sub: argparse._SubParsersAction) -> None:
     verify.add_argument("root", type=corpus_root)
     verify.add_argument("--no-logic", action="store_true")
     verify.add_argument("--no-z3", action="store_true")
+    _add_cache(verify)
     verify.set_defaults(run=lambda a, _: run_verify(a))
     check = sub.add_parser("check", help="run the logic checks")
     check.add_argument("root", type=corpus_root)
     check.add_argument("--out-dir", type=Path, default=None)
     check.add_argument("--no-z3", action="store_true")
+    _add_cache(check)
     check.set_defaults(run=lambda a, _: run_check(a))
 
 

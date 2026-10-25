@@ -47,6 +47,7 @@ REGISTER = "govharness.ledger.register"
 SIGNATURES = "govharness.ledger.signatures"
 LEDGER_CHECK = "govharness.checks.ledger"
 REHEARSE = "govharness.workflows.rehearse"
+SOLVE_STORE = "govharness.workflows.solve_store"
 HOOKS = "govharness.hooks."
 # Each effect, the calls or names that perform it, and where it may
 # happen. A prefix ending in "." admits every module of a package.
@@ -90,15 +91,18 @@ MODULE_EFFECTS = {
 EFFECTS: dict[str, tuple[str, ...]] = {
     # Corpus files are read in core/corpus.py; the ledger file in
     # ledger/chain.py; the signer configuration in ledger/gpg.py; input
-    # files named on the command line in the cli.
-    "read": (CORPUS, CHAIN, GPG, CLI, HOOKS),
+    # files named on the command line in the cli; the entries of the
+    # solve cache, and the solver source that versions them, in
+    # workflows/solve_store.py (unit 0011).
+    "read": (CORPUS, CHAIN, GPG, CLI, HOOKS, SOLVE_STORE),
     # Ledger appends, gpg's throwaway keyring, workflows under the root
     # passed to them, and the files the cli writes.
     # A hook opens its policy file, and the scan counts open() as a
     # write.
     "write": (CHAIN, GPG, WORKFLOWS, CLI, HOOKS),
     "process": (GPG,),
-    "environment": (GPG, HOOKS),
+    # The solve cache reads the variables that name or disable it.
+    "environment": (GPG, HOOKS, SOLVE_STORE),
     "temporary": (GPG, WORKFLOWS),
     "copy": (WORKFLOWS,),
     "print": (CLI, MAIN, HOOKS),
@@ -118,6 +122,9 @@ EFFECTS: dict[str, tuple[str, ...]] = {
 # verifies ("gpg"), or reads the owner's signer configuration
 # ("config"); the keyring, process, and environment stay inside it.
 CONFIG_FUNCTIONS = {"read_config", "unalterable"}
+# workflows/solve_store.py encapsulates the solve cache in the same way:
+# a caller of its functions uses the cache ("cache"); the files and the
+# environment variables stay inside it (unit 0011).
 # Where each effect may happen, directly or through a call. The callers
 # of gpg are the register (key checks), the signature check, signed
 # appends, the ledger check of verify, and the layers above.
@@ -131,6 +138,7 @@ TRANSITIVE: dict[str, tuple[str, ...]] = {
     "execute": (*EFFECTS["execute"], CLI, MAIN),
     "gpg": (REGISTER, SIGNATURES, CHAIN, LEDGER_CHECK, *CALLERS),
     "config": (GPG, *CALLERS),
+    "cache": (SOLVE_STORE, *CALLERS),
 }
 
 
@@ -447,10 +455,15 @@ def seen_from(caller: str, callee: str, found: set[str]) -> set[str]:
     -------
     set[str]
         ``found``, except that a function of ``ledger/gpg.py`` called
-        from another module is ``config`` or ``gpg``.
+        from another module is ``config`` or ``gpg``, and one of
+        ``workflows/solve_store.py`` is ``cache``.
     """
     module, _, function = callee.partition(":")
-    if module != GPG or caller == GPG or not found:
+    if module == caller or not found:
+        return found
+    if module == SOLVE_STORE:
+        return {"cache"}
+    if module != GPG:
         return found
     return {"config"} if function in CONFIG_FUNCTIONS else {"gpg"}
 
@@ -685,11 +698,12 @@ class Architecture(unittest.TestCase):
 
     def test_scan_follows_calls(self) -> None:
         """Behavior: a function that calls a reading function of another
-        module reads; a call into ``ledger/gpg.py`` counts as gpg use.
+        module reads; a call into ``ledger/gpg.py`` counts as gpg use,
+        and one into ``workflows/solve_store.py`` as cache use.
 
         Reference: hand-written modules: ``c`` hashes through ``a``,
-        ``d`` verifies through ``ledger.gpg``, and ``r`` imports
-        relatively.
+        ``d`` verifies through ``ledger.gpg``, ``e`` opens the solve
+        cache and ``g`` calls ``e``, and ``r`` imports relatively.
         """
         parsed = {
             "a": ast.parse("def h(p):\n    return p.read_bytes()\n"),
@@ -703,9 +717,19 @@ class Architecture(unittest.TestCase):
                 f"from {GPG} import verify\ndef f():\n    verify()\n"
             ),
         }
+        parsed[SOLVE_STORE] = ast.parse(
+            "import os\ndef open_store():\n    return os.environ\n"
+        )
+        parsed["e"] = ast.parse(
+            f"from {SOLVE_STORE} import open_store\n"
+            "def f():\n    open_store()\n"
+        )
+        parsed["g"] = ast.parse("from e import f\ndef h():\n    f()\n")
         found = transitive_effects(parsed)
         self.assertEqual(found["c"], {"read"})
         self.assertEqual(found["d"], {"gpg"})
+        self.assertEqual(found["e"], {"cache"})
+        self.assertEqual(found["g"], {"cache"})
         relative = ast.parse("from ..cli import main\n")
         self.assertEqual(relative_imports(relative), [1])
 

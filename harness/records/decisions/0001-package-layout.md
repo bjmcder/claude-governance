@@ -67,3 +67,10 @@ Each rule below refines the decision where implementing it showed the text to be
 | Rule as refined above | Adjustment | Reason |
 | --- | --- | --- |
 | Only the CLI reads the clock | `govharness.hooks` may read the clock too: the guard compares the expiry of each authorization in its policy with the time of the call. The derivation still takes the time from the CLI as a parameter | An expiry checked only when the configuration is derived would let an authorization outlast its duration until the owner derives again (STND.HARN.29) |
+
+## Adjustment made by unit 0011
+
+| Rule as refined above | Adjustment | Reason |
+| --- | --- | --- |
+| Files are read in `core/corpus.py`, `ledger/chain.py`, `ledger/gpg.py`, and the CLI; the environment is read in `ledger/gpg.py` and the hooks | `workflows/solve_store.py` also reads and writes the solve cache, a directory outside the corpus; reads the source of `checks/logic/satlib.py` and `checks/logic/solvecache.py` to version its entries; and reads the variables `GOVHARNESS_CACHE_DIR`, `GOVHARNESS_NO_CACHE`, and `XDG_CACHE_HOME`. It encapsulates the cache as `ledger/gpg.py` encapsulates gpg: a call into it from another module counts as the effect `cache`, which the workflows, the CLI, and `__main__` may perform | Every amendment transaction verifies, and most of its time went to solves whose clause sets had not changed; the store is the one module that touches the cache's files and settings |
+| `checks` reads and writes no file | Unchanged: the checks never call the store. `checks/logic/proofs.planned_keys` names the keys of a run's solves before the run; the workflow loads those entries into `CheckContext.solve_cache` as data; the proofs reuse an entry only after `checks/logic/solvecache` checks it against the clause set; and the workflow saves the entries the run computed (`workflows/verification.run_logic`) | A store injected into the context would let the checks perform file effects through a value, which the architecture test does not follow (the limit review 0001 named); loading by planned keys keeps the checks on data |
