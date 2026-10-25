@@ -8,7 +8,10 @@ is missing, differs, or is alterable by the running account
 (STND.HARN.21). Each ``--authorization ID`` names an authorization of
 the corpus whose remote writes the guard lets proceed without referral
 while it is in force (STND.HARN.29); one that is not in force is an
-error.
+error. Where no signature is required, because the work is not assured
+and no signer register exists, the derivation is refused unless the
+owner passes ``--accept-unsigned``, and the summary then says that each
+authorization was accepted unsigned.
 """
 
 from __future__ import annotations
@@ -30,8 +33,12 @@ from govharness.core.corpus import (
 )
 from govharness.derive.environment import claude_code
 from govharness.derive.environment.authorizations import (
+    ACCEPT_UNSIGNED,
+    REGISTER_REMOVED,
     Reading,
+    ledger_shape,
     read_authorizations,
+    register_trace,
 )
 from govharness.derive.environment.inputs import Inputs, RemoteWrite
 from govharness.ledger.chain import read_ledger
@@ -96,6 +103,14 @@ def add_environment(sub: argparse._SubParsersAction) -> None:
         help="refuse an authorization that expires later, or never",
     )
     command.add_argument(
+        ACCEPT_UNSIGNED,
+        action="store_true",
+        help=(
+            "rely on unsigned authorizations where no signer register "
+            "exists; no effect where a signature is required"
+        ),
+    )
+    command.add_argument(
         "--assured",
         action="store_true",
         help="the classification records the work as CSQ0 or CSQ1",
@@ -110,6 +125,7 @@ def inputs_of(
     args: argparse.Namespace,
     remote_writes: tuple[RemoteWrite, ...] = (),
     referred: tuple[str, ...] = (),
+    unsigned: tuple[str, ...] = (),
 ) -> Inputs:
     """Build the owner's statement of the environment from arguments.
 
@@ -121,6 +137,8 @@ def inputs_of(
         Remote writes that the named authorizations open.
     referred : tuple[str, ...]
         Authorizations named whose writes stay referred.
+    unsigned : tuple[str, ...]
+        Authorizations relied on unsigned under ``--accept-unsigned``.
 
     Returns
     -------
@@ -141,6 +159,7 @@ def inputs_of(
         secrets=tuple(args.secret),
         remote_writes=remote_writes,
         referred=referred,
+        unsigned=unsigned,
     )
 
 
@@ -163,33 +182,61 @@ def authorized(args: argparse.Namespace, tree: Tree) -> Reading:
     Raises
     ------
     ValueError
-        If a named authorization is not in force at this moment.
+        If a named authorization is not in force at this moment, or no
+        signature is required and ``--accept-unsigned`` is not given, or
+        the ledger or the signer configuration shows a signer register
+        that the corpus lacks, or the ledger's shape cannot be read.
     """
     if not args.authorization:
         return Reading((), (), ())
     ledger = read_ledger(args.root)
     # A signature is required for assured work, and wherever a signer
     # register exists, since an unsigned entry is then the exception.
-    signed = args.assured or any(
-        p.parts[:1] == (REGISTER_ID,) for p in tree.files
+    # Elsewhere an agent could have appended the authorize, so the owner
+    # must accept the authorizations unsigned (unit 0010). A register
+    # that the ledger or the signer configuration shows and the corpus
+    # lacks was removed, or is yet to be founded, so the signature stays
+    # required and nothing verifies. The trace is read before the chain
+    # is checked and takes any shape of ledger; a ledger it cannot read
+    # counts as a trace (fail closed).
+    config = read_config()
+    present = any(p.parts[:1] == (REGISTER_ID,) for p in tree.files)
+    trace = (
+        None
+        if present
+        else register_trace(ledger, config.anchor is not None)
     )
-    verified = signed and not ledger_problems(tree, ledger, read_config())
+    signed = args.assured or present or trace is not None
+    verified = (
+        signed
+        and trace is None
+        and ledger_shape(ledger) is None
+        and not ledger_problems(tree, ledger, config)
+    )
     horizon = (
         None
         if args.expiry_horizon is None
         else timedelta(days=args.expiry_horizon)
     )
-    return read_authorizations(
-        Corpus(load_entries(tree)),
-        tree,
-        ledger,
-        tuple(args.authorization),
-        datetime.now(timezone.utc),
-        args.role,
-        signed,
-        verified,
-        horizon,
-    )
+    try:
+        return read_authorizations(
+            Corpus(load_entries(tree)),
+            tree,
+            ledger,
+            tuple(args.authorization),
+            datetime.now(timezone.utc),
+            args.role,
+            signed,
+            verified,
+            horizon,
+            args.accept_unsigned,
+        )
+    except ValueError as error:
+        if trace:
+            raise ValueError(
+                f"{trace}, {REGISTER_REMOVED} | {error}"
+            ) from error
+        raise
 
 
 def run_environment(args: argparse.Namespace) -> int:
@@ -211,7 +258,9 @@ def run_environment(args: argparse.Namespace) -> int:
         reading = authorized(args, tree)
         files = claude_code.render(
             Corpus(load_entries(tree)),
-            inputs_of(args, reading.writes, reading.referred),
+            inputs_of(
+                args, reading.writes, reading.referred, reading.unsigned
+            ),
             read_text(GUARD_SOURCE),
         )
     except (LookupError, ValueError) as error:

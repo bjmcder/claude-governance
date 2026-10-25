@@ -27,6 +27,24 @@ one authorization, so none of its entries is relied on and the
 derivation stops. One per action stays referred, because a
 configuration cannot tell the one action it covers from a repetition;
 the owner's answer to the referral confirms it.
+
+Where the work is not assured and the corpus holds no signer register,
+STND.HARN.29 asks for no signature, but nothing then shows that the
+human owner, rather than an agent that appended an ``authorize`` to the
+ledger and recomputed its chain, recorded the grant: appends are
+permitted writes. The derivation is therefore refused unless the owner
+states that it accepts the authorizations unsigned, and the summary
+then says that each was accepted so; the coverage report and the
+draft entry name them too. Where a signature is required, that
+statement has no effect (security verification of unit 0008, M-c;
+unit 0010). A signature stays required where the ledger records a
+signer register that the corpus no longer holds, or the signer
+configuration names the anchor key that founds one, so that removing
+the register does not reduce the check to the owner's statement (review
+and verification of unit 0010). The ledger is read for that before its
+chain is checked, so the reading takes any shape of entry: a ledger
+whose shape it cannot read counts as recording a register (fail
+closed), and the derivation stops with the reason.
 """
 
 from __future__ import annotations
@@ -39,6 +57,7 @@ from typing import Any
 
 from govharness.core.corpus import Corpus, Tree, scope_hash
 from govharness.derive.environment.inputs import RemoteWrite
+from govharness.ledger.register import REGISTER_ID
 from govharness.ledger.transactions import chain_problems
 
 GRANTOR = "The Human Owner"
@@ -67,6 +86,91 @@ REPOSITORY_RE = re.compile(
 # A tracker address, as ``gh --repo HOST/OWNER/REPO`` names it.
 TRACKER_RE = re.compile(rf"https://{DOMAIN}/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+")
 BRANCH_RE = re.compile(r"[A-Za-z0-9_][A-Za-z0-9._-]*(?:/[A-Za-z0-9._-]+)*")
+# The owner's statement that authorizations are relied on unsigned, as
+# the command line spells it.
+ACCEPT_UNSIGNED = "--accept-unsigned"
+# What follows the trace of a register that the corpus lacks.
+REGISTER_REMOVED = (
+    "so a signature is still required, none verifies, and "
+    f"{ACCEPT_UNSIGNED} has no effect; found or restore {REGISTER_ID}"
+)
+
+
+def ledger_shape(ledger: list[Any]) -> str | None:
+    """Return how the ledger's shape keeps it from being read, or None.
+
+    Parameters
+    ----------
+    ledger : list[Any]
+        The ledger of the corpus, in order, as parsed.
+
+    Returns
+    -------
+    str | None
+        The first entry that is no object, whose scope is neither absent
+        nor a list of paths, or whose signature is no text; None where
+        every entry has a shape that the readings of this module and the
+        ledger check take.
+    """
+    for position, entry in enumerate(ledger, start=1):
+        if not isinstance(entry, dict):
+            return f"ledger entry {position} is no object"
+        scope = entry.get("scope")
+        if scope is not None and (
+            not isinstance(scope, list)
+            or not all(isinstance(s, str) for s in scope)
+        ):
+            return f"the scope of ledger entry {position} is no list of paths"
+        if not isinstance(entry.get("signature", ""), str):
+            return f"the signature of ledger entry {position} is no text"
+    return None
+
+
+def register_trace(ledger: list[Any], anchored: bool) -> str | None:
+    """Return what shows that a signer register exists, or None.
+
+    The caller asks this only where the corpus holds no register, so a
+    trace means that one was removed or is yet to be founded.
+
+    Parameters
+    ----------
+    ledger : list[Any]
+        The ledger of the corpus, in order, as parsed; any shape.
+    anchored : bool
+        Whether the signer configuration, which the agent is unable to
+        alter, names the anchor key that founds a register.
+
+    Returns
+    -------
+    str | None
+        The reason, ending before ``REGISTER_REMOVED``: the anchor, a
+        ledger whose shape cannot be read (fail closed), a signed entry,
+        which only a register verifies, or an entry that pins a scope at
+        or under the register; None where nothing shows one.
+    """
+    if anchored:
+        return (
+            "the signer configuration names the anchor key that founds a "
+            f"signer register, but the corpus holds no {REGISTER_ID}"
+        )
+    shape = ledger_shape(ledger)
+    if shape:
+        return f"the ledger cannot be read for a signer register: {shape}"
+    if any(e.get("signature") for e in ledger):
+        return (
+            "the ledger records a signer register (a signed entry) that "
+            "the corpus no longer holds"
+        )
+    if any(
+        PurePosixPath(s).parts[:1] == (REGISTER_ID,)
+        for e in ledger
+        for s in e.get("scope") or []
+    ):
+        return (
+            "the ledger records a signer register (a transaction whose "
+            f"scope holds {REGISTER_ID}) that the corpus no longer holds"
+        )
+    return None
 
 
 def timestamp(value: Any) -> datetime:
@@ -217,6 +321,7 @@ def record_problems(
     recorded: date | None,
     signed: bool,
     verified: bool,
+    accept_unsigned: bool = False,
 ) -> tuple[list[str], Any]:
     """Return how the ledger fails to record an authorization in force.
 
@@ -238,6 +343,10 @@ def record_problems(
     verified : bool
         Whether every signature of the ledger verifies against the
         signer register, as the caller checked it.
+    accept_unsigned : bool
+        Whether the owner stated that it accepts an unsigned
+        transaction; it has no effect where ``signed`` holds, and is
+        named in the reason only so that the owner learns as much.
 
     Returns
     -------
@@ -287,6 +396,12 @@ def record_problems(
         problems.append(
             "its transaction carries no signature that the signer register "
             "verifies (STND.HARN.11)"
+            + (
+                f", and {ACCEPT_UNSIGNED} has no effect where the work is "
+                "assured or a signer register exists or existed"
+                if accept_unsigned
+                else ""
+            )
         )
     return problems, latest.get("seq")
 
@@ -389,12 +504,17 @@ class Reading:
         One line per authorization, or kind, whose writes stay referred.
     summary : tuple[str, ...]
         One line per authorization read, with the transaction that pins
-        it, for the owner to compare with what was granted.
+        it, for the owner to compare with what was granted, and one
+        more for each that was accepted unsigned.
+    unsigned : tuple[str, ...]
+        Identifiers of the authorizations relied on unsigned, for the
+        coverage report and the draft entry.
     """
 
     writes: tuple[RemoteWrite, ...]
     referred: tuple[str, ...]
     summary: tuple[str, ...]
+    unsigned: tuple[str, ...] = ()
 
 
 def read_authorizations(
@@ -407,6 +527,7 @@ def read_authorizations(
     signed: bool,
     verified: bool,
     horizon: timedelta | None = None,
+    accept_unsigned: bool = False,
 ) -> Reading:
     """Return the remote writes that the named authorizations open.
 
@@ -433,6 +554,11 @@ def read_authorizations(
         Whether every signature of the ledger verifies.
     horizon : timedelta | None
         The longest time to an expiry that the owner accepts.
+    accept_unsigned : bool
+        Whether the owner accepts the authorizations unsigned where no
+        signature is required (``signed`` false). Without it, the
+        derivation is refused there; where ``signed`` holds, it has no
+        effect.
 
     Returns
     -------
@@ -442,20 +568,27 @@ def read_authorizations(
     Raises
     ------
     ValueError
-        If an authorization is not in force, with every reason.
+        If the ledger's shape cannot be read, an authorization is not in
+        force, or none is required to be signed and the owner did not
+        accept them unsigned, with every reason.
     """
     if now.utcoffset() is None:
         raise ValueError("the time of the derivation has no UTC offset")
+    shape = ledger_shape(ledger)
+    if shape:
+        raise ValueError(f"the ledger cannot be read: {shape}")
     writes: list[RemoteWrite] = []
     referred: list[str] = []
     summary: list[str] = []
+    unsigned: list[str] = []
     errors: list[str] = []
     for ident in dict.fromkeys(idents):
         meta, rel, recorded, problems = read_one(
             corpus, ident, now, role, horizon
         )
         found, seq = record_problems(
-            ident, rel, tree, ledger, recorded, signed, verified
+            ident, rel, tree, ledger, recorded, signed, verified,
+            accept_unsigned,
         )
         problems += found
         if problems:
@@ -472,6 +605,13 @@ def read_authorizations(
                 for i in meta["remote_writes"]
             )
         )
+        if not signed:
+            unsigned.append(ident)
+            summary.append(
+                f"{ident}: accepted unsigned ({ACCEPT_UNSIGNED}): no signer "
+                "register exists, so only the owner's reading of the line "
+                f"above shows that the human owner recorded seq {seq}"
+            )
         if not meta["standing"]:
             referred.append(
                 f"{ident}: per action, so each write it covers is referred "
@@ -504,6 +644,18 @@ def read_authorizations(
                         str(expires),
                     )
                 )
+    if idents and not signed and not accept_unsigned:
+        errors.append(
+            "no signer register exists and the work is not assured, so "
+            "nothing shows that the human owner, and not an agent that "
+            "appended to the ledger, recorded "
+            + ", ".join(dict.fromkeys(idents))
+            + "; found a signer register (sign found), or pass "
+            f"{ACCEPT_UNSIGNED} to rely on each unsigned, and compare the "
+            "summary it prints with what was granted before installing"
+        )
     if errors:
         raise ValueError(" | ".join(errors))
-    return Reading(tuple(writes), tuple(referred), tuple(summary))
+    return Reading(
+        tuple(writes), tuple(referred), tuple(summary), tuple(unsigned)
+    )

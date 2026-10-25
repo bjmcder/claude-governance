@@ -431,6 +431,8 @@ def authorization_gap(inputs: Inputs) -> str:
     gap = " " + AUTHORIZED_GAP if inputs.remote_writes else ""
     for line in inputs.referred:
         gap += f" Referred: {line}."
+    if inputs.unsigned:
+        gap += " " + unsigned_note(inputs.unsigned)
     for write in inputs.remote_writes:
         host = destination_host(write.destination)
         if host not in inputs.domains:
@@ -439,6 +441,27 @@ def authorization_gap(inputs: Inputs) -> str:
                 "the sandbox may refuse the write (network-bounds)."
             )
     return gap
+
+
+def unsigned_note(unsigned: tuple[str, ...]) -> str:
+    """Return the sentence that names authorizations relied on unsigned.
+
+    Parameters
+    ----------
+    unsigned : tuple[str, ...]
+        Identifiers of the authorizations, not empty.
+
+    Returns
+    -------
+    str
+        One sentence for the coverage report and the draft entry.
+    """
+    return (
+        "Relied on unsigned, as the human owner accepted with "
+        "--accept-unsigned where no signer register exists: "
+        f"{', '.join(unsigned)}; nothing but that acceptance shows that "
+        "the human owner, and not an agent, recorded them (unit 0010)."
+    )
 
 
 def destination_host(destination: str) -> str:
@@ -662,7 +685,9 @@ def digest(text: str) -> str:
 
 
 def entry_draft(
-    coverage: list[Coverage], installed: dict[PurePosixPath, str]
+    coverage: list[Coverage],
+    installed: dict[PurePosixPath, str],
+    unsigned: tuple[str, ...] = (),
 ) -> dict[str, object]:
     """Return the draft entry of STND.DFLT.22 (STND.HARN.20).
 
@@ -672,6 +697,8 @@ def entry_draft(
         Coverage of each outcome.
     installed : dict[PurePosixPath, str]
         The files to install, by path under ``root/``.
+    unsigned : tuple[str, ...]
+        Authorizations relied on unsigned, which the rationale names.
 
     Returns
     -------
@@ -700,6 +727,7 @@ def entry_draft(
             "Checkpoint mechanism and the actions it covers "
             f"(STND.DFLT.15): {checkpoints}. Every other outcome stays "
             "with the agent, and the provision it comes from applies."
+            + (" " + unsigned_note(unsigned) if unsigned else "")
         ),
     }
 
@@ -884,6 +912,9 @@ def render(
     return {
         **installed,
         COVERAGE: coverage_report(table, coverage, inputs),
-        ENTRY: json.dumps(entry_draft(coverage, installed), indent=2) + "\n",
+        ENTRY: json.dumps(
+            entry_draft(coverage, installed, inputs.unsigned), indent=2
+        )
+        + "\n",
         INSTALL: install_notes(inputs),
     }

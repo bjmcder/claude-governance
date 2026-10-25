@@ -84,3 +84,23 @@ The human owner wants agents to run unattended, without approving routine action
 | A push passes as the sole command of its call | It passes only as one command of plain words (letters, digits, blanks, quotes, and `_./:@=,+-`), from inside the work, where the first `.git` found is the work's own and valid, no hook is present, and git, gh, and their options are read as the guard models them; `-n` is a dry run only as its own word beside options that take no value | Security review H1, H2, H3, M1, M2: an option's value read as `-n`, a nested `.git`, a here-document's substitution, and a program named `git` each let a write through |
 | Writes into the work are free | A write into a `.git` directory by a file tool, a redirection, or a copying or creating command reaches history-rewrite (Refuse) | Security review H2, M2: such a write plants a configuration, a hook, or a ref that a later push reads |
 | An authorization extends as the owner names it | `--role` names the role or agent the configuration is derived for; an authorization whose `delegable_to` does not name it is not in force; a signature is required wherever a signer register exists; `--expiry-horizon` bounds the expiry; an expiry of `until revoked` is accepted | Cold review, Defect 2 (GUARD.12) and Should-fix 6; security review M4 and M5 |
+
+## Adjustments made by unit 0010
+
+| Rule as adjusted above | Adjustment | Reason |
+| --- | --- | --- |
+| A signature is required wherever a signer register exists | Unchanged there and for assured work, where `--accept-unsigned` has no effect and the reason says so. Where the work is not assured and no signer register exists, `environment --authorization` exits 1 with the reason unless the owner passes `--accept-unsigned`; with it, the summary prints for each authorization a line that it was accepted unsigned. The code is stricter than the row Signature of STND.HARN.29, failing closed, since a refused derivation leaves the write referred, which STND.HARN.18 allows | Security verification of unit 0008, M-c: without a register an agent is able to append an unsigned `authorize` naming the human owner and recompute the chain, and appends are permitted writes, so the summary was the only control and nothing asked the owner to read it |
+
+## Adjustments made by the review of unit 0010
+
+| Rule as adjusted above | Adjustment | Reason |
+| --- | --- | --- |
+| A signature is required where a signer register exists | Also where the ledger records one that the corpus no longer holds: an entry carries a signature, or a transaction's scope holds `SIGNR`. The derivation is then refused with that reason, and `--accept-unsigned` has no effect | Review of unit 0010, M1: deleting a founded register made the check fall to the option, which every derivation in a corpus without a register already passes |
+| The acceptance of an unsigned authorization is printed in the summary | The coverage report (the gap of remote-write) and the draft entry's rationale also name each authorization relied on unsigned | Review of unit 0010, M2: stdout leaves no trace, and the draft entry, once appended, is the ledger's record of the configuration |
+
+## Adjustments made by the verification of unit 0010
+
+| Rule as adjusted above | Adjustment | Reason |
+| --- | --- | --- |
+| The ledger shows a removed register | So does the signer configuration under `/etc`, where it names an anchor key and the corpus holds no `SIGNR` | Verification of unit 0010, M1 residual: an agent is able to rewrite the ledger from the founding entry on with the chain recomputed, but not the configuration that the agent is unable to alter |
+| The ledger is read for a register before its chain is checked | That reading takes any shape of entry: an entry that is no object, a scope that is no list of paths, or a signature that is no text counts as a record of a register (fail closed), and the derivation stops with the reason; `read_authorizations` and the command's signature check refuse such a ledger before reading it further | Verification of unit 0010, N1: a scope that is a number ended the command with a traceback |
