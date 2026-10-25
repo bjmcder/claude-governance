@@ -148,7 +148,8 @@ def run_verify(args: argparse.Namespace) -> int:
         the corpus, or a relative ``GOVHARNESS_CACHE_DIR``), else 0.
     """
     try:
-        store = _store(args)
+        # Without the logic check nothing is solved, so no cache is opened.
+        store = None if args.no_logic else _store(args)
         found = verify_corpus(
             args.root,
             logic=not args.no_logic,

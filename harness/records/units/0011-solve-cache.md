@@ -105,3 +105,7 @@ This section supersedes the Record above where they differ: the z3 bullet of the
   - Tests: 240 tests in 202.1 s, all passing (`test_solvecache.py` 15, `test_solve_store.py` 15).
   - `verify governance`, median of 3: 3.00 s without the cache, 3.00 s cold, 1.91 s warm. Output identical in all nine runs (SHA-256 `330541e4...`).
   - Ruff 0.16.10 at 79 columns: no new finding on the changed files. `ruff format --check` passes on them.
+
+## Revision after verification
+
+The verification (`review-records/harness/verify-unit-0011.md`) found no High or Medium item. Its V1 is fixed: `verify --no-logic` opens no cache, since nothing is solved, so a relative `GOVHARNESS_CACHE_DIR` no longer refuses it. `test_relative_paths` checks both cases. V2 is not taken: `record_transaction` and `rehearse` take the cache from the environment only, and `GOVHARNESS_NO_CACHE` or `GOVHARNESS_CACHE_DIR` names or disables it. V3, real z3, other systems, and network filesystems, stays unchecked. V4, no `fsync` and no eviction, stays as the earlier revision states.

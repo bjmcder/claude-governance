@@ -371,8 +371,9 @@ class Location(unittest.TestCase):
 
     def test_relative_paths(self) -> None:
         """Behavior: a relative ``GOVHARNESS_CACHE_DIR`` is refused, by
-        ``open_store`` with ``ValueError`` and by ``verify`` with exit 2;
-        a relative ``--cache-dir`` is made absolute when the command
+        ``open_store`` with ``ValueError`` and by ``verify`` with exit 2,
+        and ignored by ``verify --no-logic``, which opens no cache; a
+        relative ``--cache-dir`` is made absolute when the command
         starts.
 
         Reference: the relative path ``cache`` from a scratch directory.
@@ -381,9 +382,12 @@ class Location(unittest.TestCase):
             with mock.patch.dict(os.environ, {ENV_DIRECTORY: "cache"}):
                 with self.assertRaises(ValueError):
                     open_store()
-                code, _, err = run(["verify", "--no-logic", str(ROOT)])
+                code, _, err = run(["verify", str(ROOT)])
                 self.assertEqual(code, 2)
                 self.assertIn("must be an absolute path", err)
+                code, _, err = run(["verify", "--no-logic", str(ROOT)])
+                self.assertEqual(code, 0)
+                self.assertNotIn("must be an absolute path", err)
             here = Path.cwd()
             try:
                 os.chdir(tmp)
