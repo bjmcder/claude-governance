@@ -103,9 +103,9 @@ DOC = [
     ("STND.STDC.1 and STND.STDC.2 apply those provisions to C source in their C reading, so that each keeps one text "
      "and its mode, and this standard holds only what C adds (GOV.31).",
      "STND.STDC.1 applies the defaults among those provisions to C source in their C reading, so that each keeps one "
-     "text and its mode, and this standard holds only what C adds (GOV.31). The rules that hold for every compiled "
-     "language, and for every other language, are in STND.CODE, which applies to C by its own scope, and STND.STDC.2 "
-     "gives the C form of one of them."),
+     "text and its mode, and this standard holds only what C adds (GOV.31). The rules that C shares with C++ and "
+     "with every other language, the responses to a listed failure and the high-assurance provisions among them, are "
+     "in STND.CODE, which applies to C by its own scope, and STND.STDC.2 gives the C form of one of them."),
     # Notes: provisions of STND.CXX that apply
     (" STND.CXX.16 keeps every response but a C++ exception, and its row adds that a report through errno alone is "
      "not a return of the condition. STND.CXX.17 is met by the attribute that an edition provides for a result not "
@@ -121,12 +121,12 @@ DOC = [
      "Provisions of STND.CODE for every language. STND.CODE.14 admits every response but an exception, which C does "
      "not have, and STND.STDC.2 adds that a report through errno alone does not pass the condition to the caller. "
      "STND.CODE.15 is met by the attribute that an edition provides for a result not to be discarded, or by a "
-     "compiler's equivalent (c1, Error reporting and ignored returns). The assert macro is removed where NDEBUG is "
-     "defined at the inclusion of its header (unverified in c1), whether an option of the compiler defines it, an "
-     "execution setting that STND.CODE.6 reaches, or a line of the source does, the case that the second sentence "
-     "of STND.CODE.16 reaches; STND.CODE.6 and STND.CODE.16 therefore exclude the assert macro as the form of a check "
-     "of untrusted input, or of a check that CPS.5 or CPS.9 requires, as STND.PY.25 and STND.JL.13 exclude the "
-     "assertions of Python and Julia. An option that assumes finite values removes a test for non-finite values "
+     "compiler's equivalent (c1, Error reporting and ignored returns). Where NDEBUG is defined at the point at which "
+     "the header of the assert macro is included, the macro expands to no check (unverified in c1). An option of the "
+     "compiler that defines NDEBUG is an execution setting, which STND.CODE.6 reaches, and a line of the source that "
+     "defines it is a definition in the source, which the second sentence of STND.CODE.16 reaches; the two exclude "
+     "the assert macro as the form of a check of untrusted input, or of a check that CPS.5 or CPS.9 requires, as "
+     "STND.PY.25 and STND.JL.13 exclude the assertions of Python and Julia. An option that assumes finite values removes a test for non-finite values "
      "(STND.CODE.16). C places no function in the public interface of the term Untrusted input by a construct of the "
      "language, because external linkage also serves the calls between the translation units of one program, so the "
      "documentation or the repository configuration names that interface, and a check of an argument of a function "
@@ -177,7 +177,7 @@ DOC = [
      "the next call that sets errno; the cost is the report of the condition in the return value or in an object "
      "that the contract names, which STND.CODE.14 already admits as the response. It asks for no work that PRIME.4 "
      "does not, so it raises no floor (GOV.11), the argument that the ratification of 2026-10-24 accepted for the "
-     "same clause in the table that STND.STDC.2 held until this revision. STND.STDC.2 binds at every class. The "
+     "errno clause of STND.STDC 1.0. STND.STDC.2 binds at every class. The "
      "binding provisions of STND.CODE that reach C, STND.CODE.6, STND.CODE.7, STND.CODE.14, STND.CODE.15, "
      "STND.CODE.16, and STND.CODE.18, carry the floor arguments that the Notes of STND.CODE give for each language."),
 ]

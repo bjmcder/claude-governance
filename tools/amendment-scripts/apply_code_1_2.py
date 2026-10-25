@@ -163,8 +163,9 @@ NOTES_NEW = [
     "still forbids discarding a listed failure. The cost is one declaration for each such function, without which a "
     "listed failure that a function returns passes silently where a caller ignores it; where no form exists, the "
     "cost is nothing, so the provision raises no floor (GOV.11). The custodian's ruling of 2026-10-23 on this "
-    "outcome was made for C++, and STND.STDC and STND.RUST, adopted on 2026-10-24, condition it on the means of the "
-    "work as this provision does.",
+    "outcome was made for C++; STND.STDC and STND.RUST, adopted on 2026-10-24, condition it on a compiler or static "
+    "check among the means of the work, and this provision conditions it on a form of declaration that the "
+    "language or those means provide.",
 
     "Required checks. The first sentence of STND.CODE.16 carries STND.CODE.6 to the checks that CPS.5 and CPS.9 "
     "require of work that commands hardware, where those provisions apply to the work at its class: a check that an "
@@ -235,7 +236,7 @@ NOTES_TESTS_NEW = ("a measured or calibrated constant is also versioned data und
 
 NOTES_CLASS = (
     "Under STND.CLASS.10, each default provision other than STND.CODE.17, STND.CODE.19, and STND.CODE.20 "
-    "instantiates only DSGN, SIMPL, INTPR, REPRO, VV, or QA, rests on no row of its table, and applies from CSQ3; "
+    "instantiates only DSGN, SIMPL, INTPR, REPRO, VV, or QA and applies from CSQ3; "
     "work of CSQ4 omits it. The onsets of STND.CODE.17, STND.CODE.19, and STND.CODE.20 are stated above. No default "
     "provision raises the floor (GOV.11). Hardware descriptions are code under this standard; HDES.6 governs what "
     "their verification shows.")

@@ -1,0 +1,71 @@
+# Pairs for review of the changed and new provisions of STND.CXX (STND.HARN.28)
+
+From `python3 -B -m govharness pairs <rehearsed copy> STND.CXX`, limited to the rows whose changed side is STND.CXX.2, STND.CXX.8, STND.CXX.21, STND.CXX.22, STND.CXX.32. Withdrawn provisions have no rows.
+
+63 pair(s).
+
+| # | Changed side | Other provision | Bases |
+| --- | --- | --- | --- |
+| 1 | STND.CXX.2 | HDES.3 | REPRO.9 |
+| 2 | STND.CXX.2 | ML.3 | REPRO.9 |
+| 3 | STND.CXX.2 | NUMER.4 | INTPR.1 |
+| 4 | STND.CXX.21 | CPS.3 | DSGN.5 |
+| 5 | STND.CXX.21 | CPS.4 | DSGN.5 |
+| 6 | STND.CXX.21 | CPS.8 | DSGN.5 |
+| 7 | STND.CXX.21 | HDES.10 | DSGN.5 |
+| 8 | STND.CXX.21 | HDES.12 | DSGN.5 |
+| 9 | STND.CXX.21 | HDES.15 | DSGN.5 |
+| 10 | STND.CXX.21 | HDES.4 | DSGN.5 |
+| 11 | STND.CXX.21 | HDES.5 | DSGN.5 |
+| 12 | STND.CXX.21 | HDES.7 | DSGN.5 |
+| 13 | STND.CXX.21 | HDES.ASIC.3 | DSGN.5 |
+| 14 | STND.CXX.21 | HDES.ASIC.4 | DSGN.5 |
+| 15 | STND.CXX.21 | HDES.ASIC.5 | DSGN.5 |
+| 16 | STND.CXX.21 | HDES.ASIC.7 | DSGN.5 |
+| 17 | STND.CXX.21 | HDES.FPGA.3 | DSGN.5 |
+| 18 | STND.CXX.21 | HDES.FPGA.5 | DSGN.5 |
+| 19 | STND.CXX.21 | HW.13 | DSGN.5 |
+| 20 | STND.CXX.21 | HW.18 | DSGN.5 |
+| 21 | STND.CXX.21 | HW.4 | DSGN.5 |
+| 22 | STND.CXX.21 | HW.5 | DSGN.5 |
+| 23 | STND.CXX.21 | HW.6 | DSGN.5 |
+| 24 | STND.CXX.21 | HW.7 | DSGN.5 |
+| 25 | STND.CXX.21 | HW.CPU.3 | DSGN.5 |
+| 26 | STND.CXX.21 | HW.EMBED.4 | DSGN.5 |
+| 27 | STND.CXX.21 | NUMER.5 | DSGN.5 |
+| 28 | STND.CXX.22 | CPS.3 | DSGN.5 |
+| 29 | STND.CXX.22 | CPS.4 | DSGN.5 |
+| 30 | STND.CXX.22 | CPS.8 | DSGN.5 |
+| 31 | STND.CXX.22 | HDES.10 | DSGN.5 |
+| 32 | STND.CXX.22 | HDES.12 | DSGN.5 |
+| 33 | STND.CXX.22 | HDES.15 | DSGN.5 |
+| 34 | STND.CXX.22 | HDES.4 | DSGN.5 |
+| 35 | STND.CXX.22 | HDES.5 | DSGN.5 |
+| 36 | STND.CXX.22 | HDES.7 | DSGN.5 |
+| 37 | STND.CXX.22 | HDES.ASIC.3 | DSGN.5 |
+| 38 | STND.CXX.22 | HDES.ASIC.4 | DSGN.5 |
+| 39 | STND.CXX.22 | HDES.ASIC.5 | DSGN.5 |
+| 40 | STND.CXX.22 | HDES.ASIC.7 | DSGN.5 |
+| 41 | STND.CXX.22 | HDES.FPGA.3 | DSGN.5 |
+| 42 | STND.CXX.22 | HDES.FPGA.5 | DSGN.5 |
+| 43 | STND.CXX.22 | HW.13 | DSGN.5 |
+| 44 | STND.CXX.22 | HW.18 | DSGN.5 |
+| 45 | STND.CXX.22 | HW.4 | DSGN.5 |
+| 46 | STND.CXX.22 | HW.5 | DSGN.5 |
+| 47 | STND.CXX.22 | HW.6 | DSGN.5 |
+| 48 | STND.CXX.22 | HW.7 | DSGN.5 |
+| 49 | STND.CXX.22 | HW.CPU.3 | DSGN.5 |
+| 50 | STND.CXX.22 | HW.EMBED.4 | DSGN.5 |
+| 51 | STND.CXX.22 | NUMER.5 | DSGN.5 |
+| 52 | STND.CXX.32 | HDES.14 | PRIME.4 |
+| 53 | STND.CXX.32 | HW.8 | PRIME.4 |
+| 54 | STND.CXX.32 | HW.GPU.3 | PRIME.4 |
+| 55 | STND.CXX.8 | AGENT.22 | REPRO.7 |
+| 56 | STND.CXX.8 | HW.22 | RSRC.4 |
+| 57 | STND.CXX.8 | HW.CPU.4 | RSRC.4 |
+| 58 | STND.CXX.8 | HW.GPU.4 | RSRC.4 |
+| 59 | STND.CXX.8 | HW.QPU.8 | RSRC.4 |
+| 60 | STND.CXX.8 | NUMER.16 | REPRO.7 |
+| 61 | STND.CXX.8 | NUMER.17 | RSRC.4 |
+| 62 | STND.CXX.8 | NUMER.3 | REPRO.7 |
+| 63 | STND.CXX.8 | NUMER.5 | REPRO.7 |
