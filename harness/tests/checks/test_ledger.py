@@ -15,12 +15,14 @@ from typing import Any
 
 from govharness.checks.ledger import ledger_problems
 from govharness.cli.main import main
-from govharness.core.corpus import corpus_hash, read_tree
+from govharness.core.corpus import corpus_hash, read_tree, tree_digests
 from govharness.core.hashing import ledger_entry_hash
 from govharness.ledger.chain import append, read_ledger
 from govharness.ledger.gpg import SignerConfig
-from govharness.ledger.transactions import live_pins
+from govharness.ledger.transactions import latest_pins
+from govharness.workflows.amend import Change, record_transaction
 from tests.ledger.test_chain import ANNOTATION, renumber, rewrite
+from tests.ledger.test_signatures import append_unchecked
 from tests.support import corpus_copy
 
 NO_ANCHOR = SignerConfig()
@@ -142,66 +144,136 @@ def pin(root: Path, scope: list[str]) -> dict[str, Any]:
 
 
 class Pins(unittest.TestCase):
-    """A pin holds per path until a later scope covers it (unit 0016)."""
+    """A pin holds until the next transaction of its scope (unit 0016)."""
+
+    def assert_refused(self, root: Path, scope: list[str], seq: int) -> None:
+        """Assert that recording a scope is refused, the tree unchanged.
+
+        Parameters
+        ----------
+        root : Path
+            Corpus copy, edited.
+        scope : list[str]
+            Scope of the transaction.
+        seq : int
+            Entry whose pin the refusal must name.
+        """
+        change = Change(
+            kind="annotate",
+            actor="The Custodian",
+            role="custodians",
+            at="2026-10-25T00:00:00+00:00",
+            authority=[],
+            targets=[],
+            scope=scope,
+            rationale="Test.",
+        )
+        before = tree_digests(root)
+        with self.assertRaisesRegex(
+            ValueError, f"entry {seq} pins the scope .*record the change"
+        ):
+            record_transaction(root, change)
+        self.assertEqual(tree_digests(root), before)
 
     def test_wider_scope_after_narrower(self) -> None:
-        """Behavior: a transaction whose scope covers an older one's
-        paths and more takes over their pin, so the corpus verifies.
+        """Behavior: a scope that covers an older pin of another scope
+        is refused before any write, naming that pin; the change is
+        recorded with the older scope, and the corpus verifies.
 
-        Reference: STND/DFLT edited, then pinned with STND/PY. QA.8
-        part B, M4: the pin was kept per scope tuple, so the older
-        transaction of STND/DFLT alone went stale.
+        Reference: STND/DFLT edited, then recorded with STND/PY, then
+        under STND. QA.8 part B, M4: the append went in, and the older
+        pin of STND/DFLT alone went stale, as STND.HARN.9 reads.
         """
         with corpus_copy() as root:
+            seq = max(
+                e["seq"]
+                for e in read_ledger(root)
+                if e.get("scope") == ["STND/DFLT"]
+            )
             edit(root, "STND/DFLT/1.md")
-            self.assertIn("STND/DFLT", "\n".join(problems(root)))
-            pin(root, ["STND/DFLT", "STND/PY"])
-            self.assertEqual(problems(root), [])
-            edit(root, "STND/DFLT/1.md")
-            pin(root, ["STND"])
+            self.assert_refused(root, ["STND/DFLT", "STND/PY"], seq)
+            self.assert_refused(root, ["STND"], seq)
+            pin(root, ["STND/DFLT"])
             self.assertEqual(problems(root), [])
 
     def test_narrower_scope_after_wider(self) -> None:
-        """Behavior: a scope that covers part of a live pin whose content
-        changed is refused, naming that entry, and nothing is written;
-        the whole of it is accepted.
+        """Behavior: a scope that covers part of an older pin of another
+        scope is refused before any write, naming that pin.
 
-        Reference: STND/DFLT and STND/PY pinned together, STND/DFLT
-        edited, then pinned alone; the converse case of M4.
+        Reference: STND/DFLT and STND/PY pinned together by a line
+        chained by hand, as before this unit an append could write it;
+        STND/DFLT edited, then recorded alone, the converse case of M4.
+        Its record with the wider scope is refused too, since the pins
+        of STND/DFLT and STND/PY alone share its content: two scopes
+        over the same files leave no transaction that records a change
+        of them, which is why ``append`` refuses a scope that shares
+        content with another at all.
         """
         with corpus_copy() as root:
-            both = pin(root, ["STND/DFLT", "STND/PY"])
-            edit(root, "STND/DFLT/1.md")
-            ledger = (root / "ledger.jsonl").read_bytes()
-            for scope in (["STND/DFLT"], ["STND/DFLT", "STND/CXX"]):
-                with self.subTest(scope):
-                    with self.assertRaisesRegex(
-                        ValueError, f"entry {both['seq']} pins STND/DFLT"
-                    ):
-                        pin(root, scope)
-                    self.assertEqual(
-                        (root / "ledger.jsonl").read_bytes(), ledger
-                    )
-            pin(root, ["STND/PY", "STND/DFLT"])
+            scope = ["STND/DFLT", "STND/PY"]
+            append_unchecked(
+                root,
+                {
+                    **ANNOTATION,
+                    "scope": scope,
+                    "corpus_hash": corpus_hash(root, scope),
+                },
+            )
+            wide = len(read_ledger(root))
             self.assertEqual(problems(root), [])
+            edit(root, "STND/DFLT/1.md")
+            self.assert_refused(root, ["STND/DFLT"], wide)
+            narrow = max(
+                e["seq"]
+                for e in read_ledger(root)
+                if e.get("scope") == ["STND/DFLT"]
+            )
+            self.assert_refused(root, scope, narrow)
 
-    def test_live_pins(self) -> None:
-        """Behavior: an entry stays live while any path of its scope is
-        not covered by a later scope, a parent directory included.
+    def test_letter_of_the_content_pin(self) -> None:
+        """Behavior: the latest pin of each scope is compared, even
+        where a later transaction of another scope covers its files.
 
-        Reference: hand-built entries over STND, STND/DFLT, and
-        STND/PY.
+        Reference: STND/DFLT edited, then pinned with STND/PY by a line
+        chained by hand. STND.HARN.9 fails "the latest governance-ledger
+        transaction with that scope", here the pin of STND/DFLT alone.
+        """
+        with corpus_copy() as root:
+            edit(root, "STND/DFLT/1.md")
+            scope = ["STND/DFLT", "STND/PY"]
+            append_unchecked(
+                root,
+                {
+                    **ANNOTATION,
+                    "scope": scope,
+                    "corpus_hash": corpus_hash(root, scope),
+                },
+            )
+            found = problems(root)
+            self.assertEqual(len(found), 1)
+            self.assertRegex(
+                found[0],
+                r"content changed outside the ledger since seq "
+                r"\d+: STND/DFLT$",
+            )
+
+    def test_latest_pins(self) -> None:
+        """Behavior: the latest entry of each scope, the paths in any
+        order, is kept, in ledger order.
+
+        Reference: hand-built entries over STND, STND/DFLT, STND/PY,
+        and STND/CXX.
         """
         entries = [
             {"seq": 1, "scope": ["STND/DFLT"]},
             {"seq": 2, "scope": ["STND/PY", "STND/CXX"]},
             {"seq": 3, "scope": []},
-            {"seq": 4, "scope": ["STND/PY"]},
+            {"seq": 4, "scope": ["STND/CXX", "STND/PY"]},
             {"seq": 5, "scope": ["STND"]},
             {"seq": 6, "scope": ["STND/DFLT"]},
         ]
-        self.assertEqual([e["seq"] for e in live_pins(entries)], [5, 6])
-        self.assertEqual([e["seq"] for e in live_pins(entries[:4])], [1, 2, 4])
+        self.assertEqual([e["seq"] for e in latest_pins(entries)], [4, 5, 6])
+        self.assertEqual([e["seq"] for e in latest_pins(entries[:3])], [1, 2])
 
     def test_scope_without_corpus_hash(self) -> None:
         """Behavior: an entry with a scope and no ``corpus_hash`` is a

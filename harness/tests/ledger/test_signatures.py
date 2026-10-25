@@ -29,6 +29,9 @@ from govharness.ledger.register import (
     SignerRegister,
     active_signers,
     read_register,
+    skeleton,
+    with_signer,
+    with_signer_closed,
 )
 from govharness.ledger.signatures import _valid_for, check_signatures
 from govharness.workflows.signers import (
@@ -458,22 +461,60 @@ class SignerRows(unittest.TestCase):
             self.valid(self.register(("governance", "none")), 6, "governance")
         )
 
-    def test_all_row_closed_per_ledger(self) -> None:
-        """Behavior: a row closed for one ledger overrides an open
-        ``all`` row there, and only there.
+    def test_open_all_row_accepts(self) -> None:
+        """Behavior: an open ``all`` row accepts the key on every
+        ledger, whatever row of one ledger is closed, as the term
+        Accepted signature of STND.HARN reads.
 
         Reference: rows ``all | none`` and ``governance | 5``, the
-        repro of QA.8 part B, M1, where the key stayed valid on the
-        governance ledger at entry 10 through the ``all`` row.
+        register of QA.8 part B, M1, written by hand; the helpers now
+        refuse to write it (``test_no_row_beside_an_all_row``).
         """
         register = self.register(("all", "none"), ("governance", "5"))
-        self.assertTrue(self.valid(register, 5, "governance"))
-        self.assertFalse(self.valid(register, 10, "governance"))
+        self.assertTrue(self.valid(register, 10, "governance"))
         self.assertTrue(self.valid(register, 10, "work-a"))
-        self.assertEqual(active_signers(register), [])
-        self.assertEqual(
-            active_signers(self.register(("all", "none"))), [self.KEY]
+        self.assertEqual(active_signers(register), [self.KEY])
+
+    def test_no_row_beside_an_all_row(self) -> None:
+        """Behavior: the register helpers refuse a row of one ledger, or
+        its closing, for a key and role label that an open ``all`` row
+        names, and an ``all`` row beside a row of one ledger, citing
+        STND.HARN.10; another role label, and a key registered per
+        ledger, are accepted and close.
+
+        Reference: a skeleton register with one key, and QA.8 part B,
+        M1, where such a closing row seemed to retire the key.
+        """
+        text = skeleton("2026-10-10")
+        everywhere = with_signer(
+            text, "all", "The Custodian", "O", "KEY", self.KEY
         )
+        with self.assertRaisesRegex(ValueError, "STND.HARN.10"):
+            with_signer(
+                everywhere, "governance", "The Custodian", "O", "KEY", self.KEY
+            )
+        with self.assertRaisesRegex(ValueError, "STND.HARN.10"):
+            with_signer_closed(everywhere, "all", self.KEY, 5)
+        other = with_signer(
+            everywhere, "governance", "The Human Owner", "O", "KEY", self.KEY
+        )
+        self.assertIn("| governance | The Human Owner |", other)
+        both = everywhere.replace(
+            "| all | The Custodian | O |",
+            "| governance | The Custodian | O | "
+            f"{self.KEY} | none |\n| all | The Custodian | O |",
+        )
+        with self.assertRaisesRegex(ValueError, "STND.HARN.10"):
+            with_signer_closed(both, "governance", self.KEY, 5)
+        per_ledger = with_signer(
+            text, "governance", "The Custodian", "O", "KEY", self.KEY
+        )
+        with self.assertRaisesRegex(ValueError, "STND.HARN.10"):
+            with_signer(
+                per_ledger, "all", "The Custodian", "O", "KEY", self.KEY
+            )
+        closed = with_signer_closed(per_ledger, "governance", self.KEY, 5)
+        self.assertIn(f"| {self.KEY} | 5 |", closed)
 
 
 class SignerConfigFile(unittest.TestCase):

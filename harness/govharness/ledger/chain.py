@@ -16,8 +16,8 @@ new entry never seals a damaged history. It also refuses, before
 writing, an entry that would itself fail ``verify`` for good, since an
 entry is never edited: an unsigned entry that the signer register
 requires to be signed, a register transaction that records a register
-with problems, a scope that leaves an older pin over the same content
-stale, and a line that does not read back as the entry. It writes one
+with problems, a scope that shares content with the pin of another
+scope, and a line that does not read back as the entry. It writes one
 line, then flushes and syncs the file, so that a crash cannot leave the
 entry half written in the operating system's buffers. The protocol for
 concurrent appends (DSGN.15): each holds an exclusive ``flock`` on the
@@ -32,11 +32,7 @@ import os
 from pathlib import Path
 from typing import Any
 
-from govharness.core.corpus import (
-    read_optional_text,
-    read_tree,
-    scope_hash,
-)
+from govharness.core.corpus import read_optional_text
 from govharness.core.entry import DOC_FILE, LEDGER_FILE
 from govharness.core.hashing import canonical_json, ledger_entry_hash
 from govharness.ledger.gpg import sign_digest
@@ -54,9 +50,10 @@ from govharness.ledger.transactions import (
     chain_problems,
     covers,
     entry_digest,
+    latest_pins,
     ledger_of,
-    live_pins,
     parse_ledger,
+    scope_key,
 )
 
 Signer = tuple[str, Path | None]
@@ -255,14 +252,13 @@ def _chained(
         chained["ledger"] = ledger
     elif register is not None and REGISTER_ID in (entry.get("scope") or []):
         chained["signers"] = active_signers(register)
-    refused = _refusals(root, chained, history, ledger, register, unsigned)
+    refused = _refusals(chained, history, ledger, register, unsigned)
     if refused:
         raise ValueError("; ".join(refused) + "; nothing appended")
     return chained
 
 
 def _refusals(
-    root: Path,
     chained: Transaction,
     history: list[Transaction],
     ledger: str,
@@ -273,8 +269,6 @@ def _refusals(
 
     Parameters
     ----------
-    root : Path
-        Corpus root.
     chained : Transaction
         The entry, numbered and linked.
     history : list[Transaction]
@@ -291,8 +285,8 @@ def _refusals(
     list[str]
         A reason for each: the register requires the entry's actor to
         sign it; it records the register while the register has
-        problems; or it leaves stale an older pin that shares content
-        with its scope (``_left_stale``).
+        problems; or its scope shares content with the pin of another
+        scope (``_shared_pins``).
     """
     reasons: list[str] = []
     scope = [s for s in chained.get("scope") or [] if isinstance(s, str)]
@@ -307,45 +301,47 @@ def _refusals(
             f"{REGISTER_ID} has problems: " + " ".join(register.problems)
         )
     if ledger == GOVERNANCE and scope:
-        reasons += _left_stale(root, [*history, chained], scope)
+        reasons += _shared_pins(history, chained)
     return reasons
 
 
-def _left_stale(
-    root: Path, entries: list[Transaction], scope: list[str]
+def _shared_pins(
+    history: list[Transaction], chained: Transaction
 ) -> list[str]:
-    """Return the older pins that a new scope shares and leaves stale.
+    """Return the pins of other scopes that share content with an entry's.
 
-    A pin covers its whole scope with one hash. A later transaction
-    whose scope covers only part of it leaves the rest pinned by the
-    older entry (``transactions.live_pins``), whose hash then no longer
-    matches once the shared part changed.
+    A pin holds until the next transaction of the same scope
+    (STND.HARN.9), so a transaction of another scope over the same
+    files leaves the older pin in force, and stale once that content
+    changes. Refusing only a change that stales one is not enough: two
+    scopes that share content, once both pinned, would make every later
+    change of it stale one of them, with no transaction left to record
+    it. So a scope may share content with no pin of another scope.
 
     Parameters
     ----------
-    root : Path
-        Corpus root.
-    entries : list[Transaction]
-        The ledger with the new entry last.
-    scope : list[str]
-        The new entry's scope.
+    history : list[Transaction]
+        The entries already in the ledger file.
+    chained : Transaction
+        The new entry, with a scope.
 
     Returns
     -------
     list[str]
-        A reason for each live older entry that shares content with the
-        scope and whose pin does not match the corpus.
+        A reason for each latest pin (``transactions.latest_pins``) of
+        another scope that names a path of the entry's scope, or a
+        directory above or below one.
     """
-    tree = read_tree(root)
+    scope = scope_key(chained)
     reasons: list[str] = []
-    for old in live_pins(entries)[:-1]:
-        paths = [p for p in old.get("scope") or [] if isinstance(p, str)]
-        shared = any(
+    for old in latest_pins(history):
+        paths = scope_key(old)
+        if paths != scope and any(
             covers(a, b) or covers(b, a) for a in paths for b in scope
-        )
-        if shared and scope_hash(tree, paths) != old.get("corpus_hash"):
+        ):
             reasons.append(
-                f"entry {old.get('seq')} pins {', '.join(paths)} with one "
-                "hash, which this scope leaves stale: name all of them"
+                f"entry {old.get('seq')} pins the scope {', '.join(paths)}, "
+                "which shares content with this one: record the change "
+                "with that scope"
             )
     return reasons

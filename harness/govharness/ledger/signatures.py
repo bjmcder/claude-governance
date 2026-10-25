@@ -29,7 +29,6 @@ from govharness.ledger.register import (
     SignerRegister,
     active_signers,
     applies,
-    governing_rows,
 )
 from govharness.ledger.transactions import (
     GOVERNANCE,
@@ -74,15 +73,20 @@ def _valid_for(
     Returns
     -------
     bool
-        Whether a governing row (``governing_rows``) grants that key
-        this ledger, actor, and entry.
+        Whether a row grants that key this ledger, actor, and entry:
+        a row of the ledger or ``all``, as the term Accepted signature
+        of STND.HARN reads, so an open ``all`` row accepts the key
+        whatever row of the ledger is closed.
     """
     return any(
-        row["Last entry"] == "none"
-        or int(entry.get("seq", 0)) <= int(row["Last entry"])
-        for row in governing_rows(
-            register, fpr, str(entry.get("actor")), ledger
+        row["Fingerprint"] == fpr
+        and applies(row, ledger)
+        and row["Role label"] == entry.get("actor")
+        and (
+            row["Last entry"] == "none"
+            or int(entry.get("seq", 0)) <= int(row["Last entry"])
         )
+        for row in register.signers
     )
 
 

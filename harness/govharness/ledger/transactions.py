@@ -267,14 +267,31 @@ def covers(outer: str, inner: str) -> bool:
     return PurePosixPath(inner).parts[: len(parts)] == parts
 
 
-def live_pins(entries: list[Transaction]) -> list[Transaction]:
-    """Return the transactions whose pins still hold, in order.
+def scope_key(entry: Transaction) -> tuple[str, ...]:
+    """Return the scope of an entry as the key of its pin.
 
-    A pin holds for each path of its scope until a later transaction's
-    scope names that path or a directory above it; the transaction
-    stays live while any path of its scope is held. So the latest
-    transaction that covers a file always pins it, whatever the other
-    paths of either scope.
+    Parameters
+    ----------
+    entry : Transaction
+        Ledger entry.
+
+    Returns
+    -------
+    tuple[str, ...]
+        Its scope paths, sorted; empty when it pins nothing.
+    """
+    return tuple(
+        sorted(s for s in entry.get("scope") or [] if isinstance(s, str))
+    )
+
+
+def latest_pins(entries: list[Transaction]) -> list[Transaction]:
+    """Return the latest transaction of each scope, in ledger order.
+
+    A pin holds until the next transaction of the same scope, the same
+    paths in any order (STND.HARN.9: "the latest governance-ledger
+    transaction with that scope"); a transaction of another scope does
+    not replace it, even where it covers the same files.
 
     Parameters
     ----------
@@ -284,13 +301,26 @@ def live_pins(entries: list[Transaction]) -> list[Transaction]:
     Returns
     -------
     list[Transaction]
-        The entries with a scope that some path of it keeps live.
+        For each scope that some entry pins, its last entry.
     """
-    later: list[str] = []
-    live: list[Transaction] = []
-    for entry in reversed(entries):
-        scope = [s for s in entry.get("scope") or [] if isinstance(s, str)]
-        if any(not any(covers(o, s) for o in later) for s in scope):
-            live.append(entry)
-        later += scope
-    return live[::-1]
+    latest: dict[tuple[str, ...], tuple[int, Transaction]] = {}
+    for position, entry in enumerate(entries):
+        if scope_key(entry):
+            latest[scope_key(entry)] = (position, entry)
+    return [entry for _, entry in sorted(latest.values(), key=_first)]
+
+
+def _first(pair: tuple[int, Transaction]) -> int:
+    """Return the position of a (position, entry) pair.
+
+    Parameters
+    ----------
+    pair : tuple[int, Transaction]
+        Position in the ledger and the entry.
+
+    Returns
+    -------
+    int
+        The position.
+    """
+    return pair[0]

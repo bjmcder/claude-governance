@@ -8,9 +8,12 @@ public key of each signer under a heading ``### <FPR>``. A ledger is
 verifies an entry only for its ledger, its role label, and sequence
 numbers up to its last entry (``none`` while open). A row for the
 ledger ``all`` requires signatures from entry 1. A signer row for
-``all`` stays open and is closed by adding a closed row per ledger: for
-a key and role label, the rows that name a ledger govern it in place of
-the ``all`` row (``governing_rows``).
+``all`` stays open (STND.HARN.10), and while it is open it accepts the
+key on every ledger, whatever row of one ledger names the same key and
+role label (the term Accepted signature of STND.HARN). Such a key
+cannot be closed, so ``with_signer`` and ``with_signer_closed`` refuse
+a row that would seem to close it; a key meant to be closable is
+registered per ledger.
 
 The edit functions here return new register text; writing it is the
 caller's effect.
@@ -146,40 +149,6 @@ def applies(row: dict[str, str], ledger: str) -> bool:
     return row.get("Ledger") in {ledger, ALL_LEDGERS}
 
 
-def governing_rows(
-    register: SignerRegister, fpr: str, role: str, ledger: str
-) -> list[dict[str, str]]:
-    """Return the signer rows that govern a key and role on a ledger.
-
-    Parameters
-    ----------
-    register : SignerRegister
-        The signer register.
-    fpr : str
-        Fingerprint of the key.
-    role : str
-        Role label the key signs as.
-    ledger : str
-        Ledger identifier.
-
-    Returns
-    -------
-    list[dict[str, str]]
-        The rows for that key and label that name the ledger, or, when
-        none does, those for ``all``: the narrowest rows, so that a row
-        closed for one ledger overrides an open ``all`` row there.
-    """
-    rows = [
-        row
-        for row in register.signers
-        if row.get("Fingerprint") == fpr
-        and row.get("Role label") == role
-        and applies(row, ledger)
-    ]
-    own = [row for row in rows if row.get("Ledger") == ledger]
-    return own or rows
-
-
 def active_signers(register: SignerRegister) -> list[str]:
     """Return the sorted fingerprints left open on the governance ledger.
 
@@ -191,23 +160,12 @@ def active_signers(register: SignerRegister) -> list[str]:
     Returns
     -------
     list[str]
-        Fingerprints that, for some role label, have an open row among
-        their ``governing_rows`` on the governance ledger.
+        Fingerprints whose last entry is ``none``.
     """
     return sorted(
-        {
-            row["Fingerprint"]
-            for row in register.signers
-            if any(
-                r.get("Last entry") == "none"
-                for r in governing_rows(
-                    register,
-                    row["Fingerprint"],
-                    row["Role label"],
-                    GOVERNANCE,
-                )
-            )
-        }
+        row["Fingerprint"]
+        for row in register.signers
+        if row.get("Last entry") == "none" and applies(row, GOVERNANCE)
     )
 
 
@@ -258,6 +216,51 @@ def skeleton(date: str) -> str:
     return SKELETON.format(date=date)
 
 
+def _refuse_beside_all_row(
+    text: str, ledger: str, fpr: str, roles: set[str]
+) -> None:
+    """Refuse a signer row that an ``all`` row of its key would override.
+
+    Parameters
+    ----------
+    text : str
+        Register text.
+    ledger : str
+        Ledger of the row to add or close.
+    fpr : str
+        Fingerprint of the key.
+    roles : set[str]
+        Role labels of the row.
+
+    Raises
+    ------
+    ValueError
+        If the row is for one ledger and an open ``all`` row names the
+        same key and a role label of the row, or the row is for ``all``
+        and a row of one ledger names them.
+    """
+    for row in read_table(text, SIGNER_HEADER):
+        if row.get("Fingerprint") != fpr or row.get("Role label") not in roles:
+            continue
+        if ledger == ALL_LEDGERS and row.get("Ledger") != ALL_LEDGERS:
+            raise ValueError(
+                f"{fpr} has a row for {row.get('Ledger')}; an `all` row for "
+                "it would stay open (STND.HARN.10) and accept it there "
+                "after that row is closed"
+            )
+        if (
+            ledger != ALL_LEDGERS
+            and row.get("Ledger") == ALL_LEDGERS
+            and row.get("Last entry") == "none"
+        ):
+            raise ValueError(
+                f"{fpr} signs as `{row.get('Role label')}` for all "
+                "ledgers, and STND.HARN.10 keeps an `all` row open, so a "
+                f"row for {ledger} cannot close it; register a key meant "
+                "to be closable per ledger"
+            )
+
+
 def with_signer(
     text: str, ledger: str, role: str, name: str, armored: str, fpr: str
 ) -> str:
@@ -283,7 +286,15 @@ def with_signer(
     -------
     str
         The new text.
+
+    Raises
+    ------
+    ValueError
+        If an open ``all`` row names the key and role label of a row
+        for one ledger, or a row for one ledger those of an ``all`` row
+        (``_refuse_beside_all_row``).
     """
+    _refuse_beside_all_row(text, ledger, fpr, {role})
     row = f"| {ledger} | {role} | {name} | {fpr} | none |"
     block = f"\n### {fpr}\n\n```\n{armored.strip()}\n```\n"
     return append_row(text, SIGNER_HEADER, row).rstrip("\n") + "\n" + block
@@ -313,8 +324,28 @@ def with_signer_closed(
     Raises
     ------
     ValueError
-        If no open row of that ledger names the key.
+        If no open row of that ledger names the key, the ledger is
+        ``all``, whose rows stay open (STND.HARN.10), or an open ``all``
+        row names the key and the role label of the row
+        (``_refuse_beside_all_row``).
     """
+    if ledger == ALL_LEDGERS:
+        raise ValueError(
+            "STND.HARN.10 keeps an `all` row open; a key meant to be "
+            "closable is registered per ledger"
+        )
+    _refuse_beside_all_row(
+        text,
+        ledger,
+        fingerprint,
+        {
+            row.get("Role label", "")
+            for row in read_table(text, SIGNER_HEADER)
+            if row.get("Ledger") == ledger
+            and row.get("Fingerprint") == fingerprint
+            and row.get("Last entry") == "none"
+        },
+    )
     cell = r"\|[^|\n]*"
     pattern = (
         rf"^(\| {re.escape(ledger)} {cell}{cell}"

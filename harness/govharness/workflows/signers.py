@@ -75,7 +75,8 @@ def add_signer(
     Raises
     ------
     ValueError
-        If the text holds no public key.
+        If the text holds no public key, or an ``all`` row of the key
+        conflicts with the row (``register.with_signer``).
     """
     fpr = key_fingerprint(armored.strip())
     if fpr is None:
@@ -95,8 +96,8 @@ def close_signer(
     path : Path
         Register file.
     ledger : str
-        Ledger of the row to close; an ``all`` row is closed by adding a
-        closed row for each ledger.
+        Ledger of the row to close; an ``all`` row stays open
+        (STND.HARN.10) and cannot be closed.
     fingerprint : str
         Fingerprint of the key.
     last_entry : int
@@ -105,7 +106,9 @@ def close_signer(
     Raises
     ------
     ValueError
-        If the fingerprint is malformed or names no open row.
+        If the fingerprint is malformed or names no open row, or the
+        row cannot be closed beside an ``all`` row
+        (``register.with_signer_closed``).
     """
     if not FINGERPRINT_RE.match(fingerprint):
         raise ValueError(f"malformed fingerprint {fingerprint!r}")

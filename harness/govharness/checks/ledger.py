@@ -3,8 +3,8 @@
 The hash chain is intact, each entry's sequence number is its position,
 and each transaction's pinned ``corpus_hash`` still matches its scope,
 so an edit made outside the ledger is reported (GOV.36). A pin holds
-for a path of its scope until a later transaction's scope covers that
-path (``transactions.live_pins``). Every signature verifies against the
+until the next transaction of the same scope (STND.HARN.9,
+``transactions.latest_pins``). Every signature verifies against the
 signer register ``SIGNR`` where one exists, every entry the register
 requires to be signed is signed, and every change to the register after
 its founding is signed.
@@ -34,7 +34,8 @@ from govharness.ledger.transactions import (
     Transaction,
     entry_problems,
     head_problems,
-    live_pins,
+    latest_pins,
+    scope_key,
 )
 
 FAMILY = "ledger"
@@ -98,7 +99,7 @@ def ledger_problems(
 
 
 def _stale_pins(tree: Tree, entries: list[Transaction]) -> list[str]:
-    """Return a line for each live pin the corpus no longer matches.
+    """Return a line for each latest pin the corpus no longer matches.
 
     Parameters
     ----------
@@ -110,13 +111,13 @@ def _stale_pins(tree: Tree, entries: list[Transaction]) -> list[str]:
     Returns
     -------
     list[str]
-        One line per live pin (``transactions.live_pins``) whose
-        ``corpus_hash`` differs from its scope's hash, or whose scope
-        holds a file name that cannot be hashed.
+        One line per latest pin of a scope (``transactions.latest_pins``)
+        whose ``corpus_hash`` differs from the scope's hash, or whose
+        scope holds a file name that cannot be hashed.
     """
     errors: list[str] = []
-    for entry in live_pins(entries):
-        scope = list(entry.get("scope") or [])
+    for entry in latest_pins(entries):
+        scope = list(scope_key(entry))
         pinned = entry.get("corpus_hash")
         try:
             changed = isinstance(pinned, str) and (
