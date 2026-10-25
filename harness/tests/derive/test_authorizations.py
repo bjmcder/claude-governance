@@ -23,18 +23,27 @@ import shutil
 import tempfile
 import unittest
 from datetime import datetime, timedelta, timezone, tzinfo
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from unittest import mock
 
 from govharness.cli.main import main
-from govharness.core.corpus import Corpus, corpus_hash, read_corpus, read_tree
+from govharness.core.corpus import (
+    Corpus,
+    Tree,
+    corpus_hash,
+    read_corpus,
+    read_tree,
+)
+from govharness.core.hashing import ledger_entry_hash
 from govharness.derive.environment import claude_code
 from govharness.derive.environment.authorizations import (
     DEFAULT_HORIZON,
+    GRANTOR,
     Reading,
     ledger_shape,
     parse_horizon,
     read_authorizations,
+    record_problems,
     register_trace,
 )
 from govharness.derive.environment.inputs import Inputs, RemoteWrite
@@ -1075,15 +1084,18 @@ class AfterReview(unittest.TestCase):
         for case in ("signed entry", "register scope"):
             with self.subTest(case=case), corpus_copy() as root:
                 if case == "register scope":
+                    # Recorded before the register exists, since append
+                    # refuses an unsigned register transaction beside
+                    # one (unit 0016, review M-A).
+                    record(
+                        root, "register", actor="The Custodian",
+                        targets=["SIGNR"], scope=["SIGNR"],
+                    )
                     register = root / "SIGNR"
                     register.mkdir()
                     (register / "_doc.md").write_text(
                         '---\nid: "SIGNR"\n---\n\nNo signers.\n',
                         encoding="utf-8",
-                    )
-                    record(
-                        root, "register", actor="The Custodian",
-                        targets=["SIGNR"], scope=["SIGNR"],
                     )
                     shutil.rmtree(register)
                     write_authorization(root)
@@ -1508,6 +1520,41 @@ def read_corpus_live() -> Corpus:
         A corpus that a test may change freely.
     """
     return Corpus(live_entries())
+
+
+class UnhashableScope(unittest.TestCase):
+    """A scope that cannot be hashed is a problem line (unit 0016)."""
+
+    def test_control_character_in_the_scope(self) -> None:
+        """Behavior: where the pinned scope of an authorization holds a
+        file name with a control character, the reading names it as a
+        problem of the record and raises nothing.
+
+        Reference: a hand-built snapshot whose scope WORK/AUTH holds
+        ``a\\nb.md`` beside the authorization. Review of unit 0016,
+        L-c: ``scope_hash`` now refuses such a name.
+        """
+        rel = PurePosixPath("WORK/AUTH/1.md")
+        tree = Tree(
+            (PurePosixPath("."), PurePosixPath("WORK"), rel.parent),
+            {rel: b"x", PurePosixPath("WORK/AUTH/a\nb.md"): b"y"},
+        )
+        entry = {
+            "seq": 1,
+            "at": "2026-10-20T10:00:00+00:00",
+            "type": "authorize",
+            "actor": GRANTOR,
+            "targets": [IDENT],
+            "scope": ["WORK/AUTH"],
+            "corpus_hash": "0" * 64,
+            "signature": "",
+            "prev": None,
+        }
+        entry["hash"] = ledger_entry_hash(entry)
+        found, _ = record_problems(
+            IDENT, rel, tree, [entry], None, False, False, True
+        )
+        self.assertIn("control character", "\n".join(found))
 
 
 if __name__ == "__main__":

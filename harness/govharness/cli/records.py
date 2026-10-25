@@ -177,6 +177,11 @@ def _check_signatures(
     register = read_register(text, config.gpg)
     corpus_entries = read_ledger(args.corpus)
     failures = [f"- {line}" for line in chain_problems(corpus_entries)]
+    if config.ignored is not None:
+        failures.append(
+            f"- the signer configuration {config.ignored} can be altered "
+            "by this account, so its anchor and head pin are ignored"
+        )
     failures += [
         f"- {line}" for line in head_problems(corpus_entries, config.head)
     ]

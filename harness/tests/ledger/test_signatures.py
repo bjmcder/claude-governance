@@ -396,6 +396,40 @@ class SignCheckCommand(unittest.TestCase):
         )
 
 
+class SignCheckWithoutLedger(unittest.TestCase):
+    """``sign check`` on a corpus with a register and no ledger file."""
+
+    def test_missing_ledger_is_a_failure_line(self) -> None:
+        """Behavior: ``sign check`` exits 1 with a failure line, not a
+        traceback, when the corpus holds a register and no ledger.
+
+        Reference: a copy with a skeleton SIGNR and ``ledger.jsonl``
+        removed. Review of unit 0016, M-B: reading the file with
+        ``read_ledger_file`` again, which raises ``FileNotFoundError``,
+        passed every test.
+        """
+        with corpus_copy() as root:
+            found_register(root, "2026-10-10")
+            (root / "ledger.jsonl").unlink()
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                code = main(
+                    [
+                        "sign",
+                        "check",
+                        str(root / "ledger.jsonl"),
+                        "--ledger-id",
+                        "governance",
+                        "--corpus",
+                        str(root),
+                    ]
+                )
+            self.assertEqual(code, 1)
+            self.assertEqual(
+                out.getvalue(), "- SIGNR is not founded by a transaction\n"
+            )
+
+
 class SignerRows(unittest.TestCase):
     """Which register rows let a key sign an entry (unit 0016)."""
 
@@ -522,16 +556,32 @@ class SignerConfigFile(unittest.TestCase):
 
     def test_alterable_file_is_ignored(self) -> None:
         """Behavior: a configuration the running user can write gives
-        no anchor and no head pin.
+        no anchor and no head pin, names the file as ignored, and the
+        ledger check reports it; a missing file is not reported.
 
         Reference: a file in a fresh temporary directory, which the
         user owns. QA.8 part B, M6: removing the ``unalterable`` gate
         passed every test, since every caller patches ``read_config``.
+        Review of unit 0016, L-b: the head pin was dropped without a
+        word.
         """
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "signer.json"
-            path.write_text(json.dumps(CONFIG_FIELDS), encoding="utf-8")
             self.assertEqual(read_config(path), SignerConfig())
+            path.write_text(json.dumps(CONFIG_FIELDS), encoding="utf-8")
+            config = read_config(path)
+            self.assertEqual(config, SignerConfig(ignored=str(path)))
+            found = ledger_problems(read_tree(ROOT), read_ledger(ROOT), config)
+            self.assertEqual(
+                found,
+                [
+                    (
+                        f"the signer configuration {path} can be altered "
+                        "by this account, so its anchor and head pin are "
+                        "ignored"
+                    )
+                ],
+            )
 
     def test_unalterable_file_is_read(self) -> None:
         """Behavior: from a file the user cannot alter, the anchor, the
@@ -575,6 +625,36 @@ class Refusals(unittest.TestCase):
                 append(root, note)
             self.assertEqual(tree_digests(root), before)
             append(root, note, signer=(owner, home))
+            self.assertEqual(
+                ledger_problems(
+                    read_tree(root),
+                    read_ledger(root),
+                    SignerConfig(owner, GPG),
+                ),
+                [],
+            )
+
+    def test_unsigned_register_change(self) -> None:
+        """Behavior: an unsigned transaction of the register is refused,
+        naming ``ledger append --sign``, and nothing is written; signed
+        by a listed key, it is appended and the ledger verifies.
+
+        Reference: review of unit 0016, M-A (``p/m3.py``): a second
+        signer added, then the register recorded unsigned; the entry
+        went in and failed "changes SIGNR without the signature of a
+        signer listed before the change" for good.
+        """
+        with keyring() as home, corpus_copy() as root:
+            owner, _, register = signed_corpus(root, home)
+            _, other_key = make_key(home, "Other")
+            add_signer(register, "governance", "The Steward", "S", other_key)
+            before = tree_digests(root)
+            with self.assertRaisesRegex(
+                ValueError, "SIGNR must be signed.*ledger append --sign"
+            ):
+                append(root, register_entry(root, "SIGNR"))
+            self.assertEqual(tree_digests(root), before)
+            append(root, register_entry(root, "SIGNR"), signer=(owner, home))
             self.assertEqual(
                 ledger_problems(
                     read_tree(root),

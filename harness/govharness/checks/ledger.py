@@ -70,6 +70,11 @@ def ledger_problems(
             "the ledger is missing or empty, but the corpus holds content "
             "for its transactions to pin"
         )
+    if config.ignored is not None:
+        errors.append(
+            f"the signer configuration {config.ignored} can be altered by "
+            "this account, so its anchor and head pin are ignored"
+        )
     errors += head_problems(entries, config.head)
     previous = None
     for position, entry in enumerate(entries, start=1):

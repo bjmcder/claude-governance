@@ -52,11 +52,17 @@ class SignerConfig:
         The head pin of the corpus ledger as the file gives it,
         ``{"seq": N, "hash": H}``, or ``None``; it is checked, malformed
         or not, by ``transactions.head_problems``.
+    ignored : str | None
+        A configuration file that exists but that the running user can
+        alter, so that its anchor and head pin were not read; the
+        ledger check reports it, since a head pin dropped without a word
+        would let a cut pass.
     """
 
     anchor: str | None = None
     gpg: str = DEFAULT_GPG
     head: object = None
+    ignored: str | None = None
 
 
 def unalterable(path: Path) -> bool:
@@ -94,11 +100,11 @@ def read_config(path: Path | None = None) -> SignerConfig:
         The anchor, the ``gpg`` path, and the head pin, taken only from
         a file, and a binary, that the running user is unable to alter;
         otherwise no anchor, so that the founding check fails, and no
-        head pin.
+        head pin, with ``ignored`` naming a file that exists.
     """
     path = path or CONFIG_PATH
     if not unalterable(path):
-        return SignerConfig()
+        return SignerConfig(ignored=str(path) if path.exists() else None)
     data = json.loads(path.read_text(encoding="utf-8"))
     gpg = str(data.get("gpg", DEFAULT_GPG))
     return SignerConfig(

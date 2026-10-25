@@ -443,10 +443,13 @@ def record_problems(
             f"the latest transaction that pins it, seq {latest.get('seq')}, "
             f"is no authorize of it by {GRANTOR}"
         )
-    if scope_hash(tree, list(latest.get("scope") or [])) != latest.get(
-        "corpus_hash"
-    ):
-        problems.append("its content changed after the ledger pinned it")
+    try:
+        pinned = scope_hash(tree, list(latest.get("scope") or []))
+    except ValueError as refusal:
+        problems.append(f"its scope cannot be hashed: {refusal}")
+    else:
+        if pinned != latest.get("corpus_hash"):
+            problems.append("its content changed after the ledger pinned it")
     try:
         if recorded and recorded > timestamp(latest.get("at")).date():
             problems.append("its date recorded is after its transaction")

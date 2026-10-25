@@ -230,6 +230,31 @@ class Pins(unittest.TestCase):
             )
             self.assert_refused(root, scope, narrow)
 
+    def test_scope_under_and_over_a_pin(self) -> None:
+        """Behavior: a scope strictly under a pin of another scope, and
+        one strictly over it, are each refused before any write, naming
+        that pin.
+
+        Reference: the live pin of HW and a new scope HW/CPU; then a
+        pin of HW/CPU chained by hand and a new scope HW. Review of unit
+        0016, M-B: testing one direction only let the other drop.
+        """
+        with corpus_copy() as root:
+            seq = max(
+                e["seq"] for e in read_ledger(root) if e.get("scope") == ["HW"]
+            )
+            self.assert_refused(root, ["HW/CPU"], seq)
+        with corpus_copy() as root:
+            append_unchecked(
+                root,
+                {
+                    **ANNOTATION,
+                    "scope": ["HW/CPU"],
+                    "corpus_hash": corpus_hash(root, ["HW/CPU"]),
+                },
+            )
+            self.assert_refused(root, ["HW"], len(read_ledger(root)))
+
     def test_letter_of_the_content_pin(self) -> None:
         """Behavior: the latest pin of each scope is compared, even
         where a later transaction of another scope covers its files.
@@ -309,13 +334,15 @@ class Pins(unittest.TestCase):
         Reference: QA.8 part B, M5: ``D/a.md:<digest of a>`` and
         ``D/b.md`` joined by a line feed in one file name hashed as the
         two files. The encoding is kept, so that every recorded pin
-        stays valid, and such a name is refused instead.
+        stays valid, and such a name is refused instead: a line feed,
+        and a tab, since the rule takes every control character.
         """
-        with corpus_copy() as root:
-            (root / "STND" / "DFLT" / "a\nb.md").write_text("x", "utf-8")
-            self.assertIn("control character", "\n".join(problems(root)))
-            with self.assertRaisesRegex(ValueError, "control character"):
-                corpus_hash(root, ["STND/DFLT"])
+        for name in ("a\nb.md", "a\tb.md"):
+            with self.subTest(repr(name)), corpus_copy() as root:
+                (root / "STND" / "DFLT" / name).write_text("x", "utf-8")
+                self.assertIn("control character", "\n".join(problems(root)))
+                with self.assertRaisesRegex(ValueError, "control character"):
+                    corpus_hash(root, ["STND/DFLT"])
 
 
 class TrustedConfiguration(unittest.TestCase):

@@ -15,9 +15,10 @@ An append first checks the whole existing chain (sequence numbers,
 new entry never seals a damaged history. It also refuses, before
 writing, an entry that would itself fail ``verify`` for good, since an
 entry is never edited: an unsigned entry that the signer register
-requires to be signed, a register transaction that records a register
-with problems, a scope that shares content with the pin of another
-scope, and a line that does not read back as the entry. It writes one
+requires to be signed, an unsigned register transaction, a register
+transaction that records a register with problems, a scope that shares
+content with the pin of another scope, and a line that does not read
+back as the entry. It writes one
 line, then flushes and syncs the file, so that a crash cannot leave the
 entry half written in the operating system's buffers. The protocol for
 concurrent appends (DSGN.15): each holds an exclusive ``flock`` on the
@@ -284,9 +285,11 @@ def _refusals(
     -------
     list[str]
         A reason for each: the register requires the entry's actor to
-        sign it; it records the register while the register has
-        problems; or its scope shares content with the pin of another
-        scope (``_shared_pins``).
+        sign it; it records the register unsigned, which the anchor key
+        must sign for the founding and a listed signer for every later
+        change (STND.HARN.13); it records the register while the
+        register has problems; or its scope shares content with the
+        pin of another scope (``_shared_pins``).
     """
     reasons: list[str] = []
     scope = [s for s in chained.get("scope") or [] if isinstance(s, str)]
@@ -296,6 +299,17 @@ def _refusals(
             f"(required from entry {start}): use ledger append --sign KEY"
             for start in required_of(register, chained, ledger)
         ]
+    if (
+        register is not None
+        and unsigned
+        and ledger == GOVERNANCE
+        and REGISTER_ID in scope
+    ):
+        reasons.append(
+            f"a transaction of {REGISTER_ID} must be signed, by the anchor "
+            "key for the founding and by a listed signer after it: use "
+            "ledger append --sign KEY"
+        )
     if register is not None and register.problems and REGISTER_ID in scope:
         reasons.append(
             f"{REGISTER_ID} has problems: " + " ".join(register.problems)
