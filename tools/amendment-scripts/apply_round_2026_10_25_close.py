@@ -3,11 +3,12 @@
 Run from harness/, so that govharness imports:
     python -B -m govharness rehearse governance ../tools/amendment-scripts/apply_round_2026_10_25_close.py
 
-The order matters: P1 (STND.CODE 1.2, STND.STDC 1.1, STND.CXX 1.2) before every amendment that cites the new
-provisions of STND.CODE; then P2 (STND.PY, STND.JL) and P3 (STND.RUST, STND.FTN, STND.SV, STND.LEAN) at once,
-so that no entry of the round leaves a document citing an identifier that STND.CXX 1.2 withdraws; then the
-editorial References amendments of P5 and STND.BUILD 1.0.2; then P4 (STND.OFFLD, STND.MPI, STND.OMP,
-STND.HARN). The lead sets each transaction's time here, the time at which it is applied; the package scripts
+The order matters: STND.CODE 1.2 and STND.STDC 1.1 first, since the later amendments cite the new provisions
+of STND.CODE; then P3 (STND.RUST, STND.FTN, STND.SV, STND.LEAN), which retargets its citations of the STND.CXX
+provisions that STND.CXX 1.2 withdraws, before STND.CXX 1.2 withdraws them; then STND.CXX 1.2 and P2 (STND.PY,
+STND.JL); then the editorial References amendments of P5 and STND.BUILD 1.0.2; then P4 (STND.OFFLD, STND.MPI,
+STND.OMP, STND.HARN). No state of the round leaves a document citing a withdrawn identifier. The amendments of
+a sub-profile take the scope of its family (HW, HDES), so that each state of the round verifies. The lead sets each transaction's time here, the time at which it is applied; the package scripts
 keep their placeholder times for their own rehearsals.
 """
 from __future__ import annotations
@@ -27,7 +28,8 @@ def _order() -> list[str]:
     p2 = [n for n in importlib.import_module("apply_close_p2").ORDER if n != "apply_close_p1"]
     p3 = [n for n in importlib.import_module("apply_close_p3").ORDER if n != "apply_close_p1"]
     p4 = importlib.import_module("apply_close_p4").SCRIPTS
-    return [*p1, *p2, *p3, *p5, "apply_build_1_0_2", *p4]
+    assert p1 == ["apply_code_1_2", "apply_stdc_1_1", "apply_cxx_1_2"], p1
+    return [*p1[:2], *p3, p1[2], *p2, *p5, "apply_build_1_0_2", *p4]
 
 
 def _times():

@@ -40,3 +40,10 @@ These answer `review.md` in this folder. The revised scripts are `apply_offld_1_
 ## Reconciliation review, S6
 
 The history row and the rationale of STND.HARN 1.3 did not mention that the row Signature now says "the transaction of the row Record" where it said "that transaction". Both now do. The rationale adds that the wording changed because the row's own conditions also speak of ledger entries, and that it tests the same transaction. After a fresh rehearsal of `apply_close_p4.py`, `verify` passes all eight checks, `findings.py` matches the live corpus, and `check_refs.py` reports 0 missing rows. The reading copy is `STND.HARN-0.3.md`.
+
+## Verification of the reconciliation fixes
+
+1. **The option c rationale.** Under `OPTION = "c"`, the rationale of `apply_harn_1_3.py` no longer cites a reading of STND.DRAFT.42. It says that the floor argument of the Notes goes to the custodian, that STND.HARN.29 asks for no act of the human owner and so the amendment rests on no reading of STND.DRAFT.42, and that a harness that refuses an unaccepted unsigned authorization is a stricter reading of STND.HARN.29. The text under option a is unchanged.
+2. **OFFLD Notes (reconciliation A, S10).** The Notes and the history row no longer say that the second sentences of STND.PERF.12 and STND.PERF.14 hold "the same outcomes". They name what those sentences hold, and state that STND.PERF.12 names the first filling of caches and memory among the costs of first use, which STND.OFFLD.31 does not. A record of offloaded work that states initialization and compilation at load meets STND.OFFLD.31. No obligation is added, which leaves decision 2 open.
+
+`apply_close_p4.py` was rehearsed with each option. In both, `verify` passes all eight checks, `findings.py` matches the live corpus, and `check_refs.py` reports 0 missing rows for the four documents. Under option c, the STND.HARN Notes do not cite STND.DRAFT.42. Reading copies (option a): `STND.OFFLD-0.3.md` and `STND.HARN-0.4.md`.

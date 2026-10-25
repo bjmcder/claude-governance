@@ -43,11 +43,13 @@ RUST14 = [
 
 RUST1 = [
     ("refers_to: []", 'refers_to: ["STND.CODE.19"]'),
-    ("SHOULD build and test the work with the newest stable release of the toolchain and with the newest revisions "
-     "of its dependencies that their declared ranges admit (VV.8).",
-     "SHOULD build and test the work, other than its high-assurance code whose edition and toolchain STND.CODE.19 "
-     "fixes, with the newest stable release of the toolchain and with the newest revisions of its dependencies that "
-     "their declared ranges admit (VV.8, STND.CODE.19)."),
+    ("At the interval that the repository configuration sets, a check that reports its failure without blocking a "
+     "change SHOULD build and test the work with the newest stable release of the toolchain and with the newest "
+     "revisions of its dependencies that their declared ranges admit (VV.8).",
+     "Other than for high-assurance code whose edition and toolchain STND.CODE.19 fixes, a check that reports its "
+     "failure without blocking a change SHOULD build and test the work, at the interval that the repository "
+     "configuration sets, with the newest stable release of the toolchain and with the newest revisions of its "
+     "dependencies that their declared ranges admit (VV.8, STND.CODE.19)."),
 ]
 
 RUST15 = [
@@ -115,10 +117,12 @@ DOC = [
      "model of the project records as trusted. |", ""),
     # Notes: builds
     ("so that the edition of one crate holds no other back.",
-     "so that the edition of one crate holds no other back. The third sentence of STND.RUST.1 leaves out the "
-     "high-assurance code whose edition and toolchain STND.CODE.19 fixes, as STND.PY.14 and STND.JL.1 yield to it, "
-     "so that a check at the newest stable release does not compile that code with a release that its decision "
-     "record has not validated."),
+     "so that the edition of one crate holds no other back. For Rust, the edition of STND.CODE.19 is the edition that "
+     "the package metadata of a crate states, and the validation that it asks of each tool falls on the release of "
+     "the toolchain that compiles the crate, so that STND.CODE.19 fixes both for high-assurance code. The third "
+     "sentence of STND.RUST.1 leaves that code out, so that a "
+     "check at the newest stable release does not compile it with a release that its decision record has not "
+     "validated."),
     # Notes: sources
     ("which confirms the facts on the panic hook and the panic handler from the documentation of the standard "
      "library and the Rust Reference.",
@@ -192,10 +196,12 @@ READING = (
         "forms, with their text otherwise unchanged;" if WITHDRAW_RUST14 else
         "STND.RUST.13, STND.RUST.14, and STND.RUST.15 cite STND.CODE.14, STND.CODE.15, STND.CODE.6, and STND.CODE.16, "
         "of which they are the Rust forms, with their text otherwise unchanged;") + " the third sentence of "
-    "STND.RUST.1 leaves out the high-assurance code whose edition and toolchain STND.CODE.19 fixes; new STND.RUST.35 (default, from CSQ3) leaves the convention of names to the repository "
+    "STND.RUST.1 opens with an exception for the high-assurance code whose edition and toolchain STND.CODE.19 "
+    "fixes, and the Notes say how the edition of STND.CODE.19 reads for Rust; new STND.RUST.35 (default, from CSQ3) leaves the convention of names to the repository "
     "configuration and keeps the names that the notation of NUMER.4 fixes, the rule of decision 9 of 2026-10-24; "
     "the Purpose cites STND.CODE for the rules of code that hold for every language and lists STND.RUST.35; the "
-    "Notes cite STND.CODE.14 and STND.CODE.15 in place of the withdrawn STND.CXX.16 and STND.CXX.17, and the "
+    "Notes cite STND.CODE.14 and STND.CODE.15 in place of STND.CXX.16 and STND.CXX.17, which STND.CXX 1.2 "
+    "withdraws, and the "
     "first sentence of STND.CODE.16 in place of STND.CXX.18 for the checks of CPS.5 and CPS.9, cite a2 for the "
     "lints that check the case of names, state the reach of the term on the ratification of 2026-10-24 with the floor argument for a "
     "function outside library code that the documentation or the repository configuration names, and give the reason for the naming "

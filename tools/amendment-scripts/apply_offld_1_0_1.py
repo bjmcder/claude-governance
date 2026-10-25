@@ -36,7 +36,10 @@ MEASURE_OLD = ("HW.22 governs the claims that rest on such measurements, and a m
 MEASURE_NEW = MEASURE_OLD + (
     " STND.OFFLD.31 is the form for offloaded work of the second sentences of STND.PERF.12 and STND.PERF.14, which "
     "hold the costs of first use and the end of each timed asynchronous operation for every other measurement in a "
-    "performance evaluation and leave offloaded work to it, so one record meets both standards. It reaches each "
+    "performance evaluation and leave offloaded work to it. The costs of first use that the two name differ: "
+    "STND.PERF.12 names the first filling of caches and memory among them, and STND.OFFLD.31 names initialization "
+    "and compilation at load only, so a record of offloaded work that states those two meets STND.OFFLD.31. It "
+    "reaches each "
     "measurement of the time of offloaded work, in a performance evaluation or not. The first sentences of "
     "STND.PERF.12 and STND.PERF.14, on the criterion of steady state and on the resolution and cost of a timer, reach "
     "offloaded work in a performance evaluation, as they reach all other code, and this standard adds nothing to "
@@ -48,10 +51,13 @@ CLASS = ("STND.OFFLD.24, and STND.OFFLD.31 rest on no row and apply from CSQ3. N
          "floor (GOV.11).")
 
 READING = ("STND.OFFLD.31 cites STND.PERF.14 at its first sentence and STND.PERF.12 at its second, the provisions "
-           "whose second sentences hold the same outcomes for every other measurement in a performance evaluation "
+           "whose second sentences hold the costs of first use and the end of each timed asynchronous operation for "
+           "every other measurement in a performance evaluation "
            "and leave offloaded work to it, and its text is otherwise unchanged; the Purpose names STND.PERF among "
            "the documents to which the standard adds; the Notes state that STND.OFFLD.31 is the offload form of "
-           "those sentences, that it reaches measurements outside a performance evaluation, that the first sentences "
+           "those sentences, that STND.PERF.12 names among the costs of first use the first filling of caches and "
+           "memory, which STND.OFFLD.31 does not, that it reaches measurements outside a performance evaluation, "
+           "that the first sentences "
            "of STND.PERF.12 and STND.PERF.14 reach offloaded work unchanged, and that the citations move no rule to "
            "another class; References lists STND.PERF")
 

@@ -158,7 +158,7 @@ READING = (
     "of the records of images that a protocol of the images fixes; new STND.FTN.37 (default, from CSQ3) leaves the convention of names to the "
     "repository configuration and keeps the names that the notation of NUMER.4 fixes, the rule of decision 9 of "
     "2026-10-24; the Purpose cites STND.CODE for the rules of code that hold for every language and lists "
-    "STND.FTN.37; the Notes cite STND.CODE.14 in place of the withdrawn STND.CXX.16 and STND.CODE.21 in place of "
+    "STND.FTN.37; the Notes cite STND.CODE.14 in place of STND.CXX.16, which STND.CXX 1.2 withdraws, and STND.CODE.21 in place of "
     "STND.FTN.18, give the reason that this standard has no counterpart of STND.CXX.27 and of the default of "
     "STND.JL on bounds checking in the configuration that reports results, state the reach of the term on the "
     "ratification of 2026-10-24 with the floor argument for an external procedure that the documentation or the "

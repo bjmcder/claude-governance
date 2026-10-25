@@ -152,8 +152,12 @@ RATIONALE = (
     "of the ledger; it tests the same transaction as before. "
     + ("STND.HARN.30 follows the proposal of the record of unit 0010, with its first sentence recast so that no "
        "condition trails its clause (STND.DRAFT.16). " if OPTION == "a" else "")
-    + "The floor arguments and the reading of STND.DRAFT.42 in the Notes are put to the custodian at ratification. "
-    "Transition (GOV.42): none, because the harness of this corpus implements the row"
+    + ("The floor arguments and the reading of STND.DRAFT.42 in the Notes are put to the custodian at ratification. "
+       if OPTION == "a" else
+       "The floor argument of the Notes is put to the custodian at ratification. STND.HARN.29 asks for no act of "
+       "the human owner, so the amendment rests on no reading of STND.DRAFT.42; a harness that refuses an "
+       "unsigned authorization that the human owner has not accepted stays a stricter reading of STND.HARN.29. ")
+    + "Transition (GOV.42): none, because the harness of this corpus implements the row"
     + (" and STND.HARN.30" if OPTION == "a" else "")
     + " since unit 0010, no derived configuration has been installed, and the transition of ledger entry 53 for "
     "STND.HARN.18 ends as revision 1.2 states. Review of STND.HARN.28 by the command pairs; records "

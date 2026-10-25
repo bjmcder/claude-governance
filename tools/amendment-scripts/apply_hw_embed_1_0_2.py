@@ -54,6 +54,6 @@ def apply(root: Path) -> None:
     raise_revision(root, "HW/EMBED", "1.0.1", "1.0.2", ROW)
     write_references(root, ["HW.EMBED"])
     rec = record_transaction(root, Change(kind="amend", actor="The Custodian", role="custodians", at=AT,
-                                          authority=["GOV.41"], targets=["HW.EMBED"], scope=["HW/EMBED"],
+                                          authority=["GOV.41"], targets=["HW.EMBED"], scope=["HW"],
                                           rationale=RATIONALE))
     print("seq", rec.entry["seq"], "HW.EMBED 1.0.2")

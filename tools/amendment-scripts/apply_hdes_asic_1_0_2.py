@@ -53,6 +53,6 @@ def apply(root: Path) -> None:
     raise_revision(root, "HDES/ASIC", "1.0.1", "1.0.2", ROW)
     write_references(root, ["HDES.ASIC"])
     rec = record_transaction(root, Change(kind="amend", actor="The Custodian", role="custodians", at=AT,
-                                          authority=["GOV.41"], targets=["HDES.ASIC"], scope=["HDES/ASIC"],
+                                          authority=["GOV.41"], targets=["HDES.ASIC"], scope=["HDES"],
                                           rationale=RATIONALE))
     print("seq", rec.entry["seq"], "HDES.ASIC 1.0.2")

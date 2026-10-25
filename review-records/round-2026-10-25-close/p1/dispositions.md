@@ -128,3 +128,32 @@ These are Notes and rationale changes only; no provision text changes. STND.CODE
 - **Rationale.** It says "the ratified default for Fortran".
 
 Rehearsal: `apply_close_p1.py` passes all verify families. `findings.py` and `check_refs` are clean for the three documents. Reading copy `STND.CODE-0.5.md`; STND.CXX and STND.STDC are unchanged from 0.4.
+
+## Verification of the reconciliation fixes (`verify-reconciliation.md`): dispositions for STND.CODE 0.6
+
+These are Notes changes only; no provision text changes.
+
+| Item | Disposition |
+| --- | --- |
+| B1 (blocking) | **Fixed.** The paragraph on the onsets of STND.CODE.17, .19, and .20 no longer cites the withdrawn STND.CXX.28, .30, and .31. It now says "the provisions on high-assurance code that STND.CXX 1.1 held and that STND.CODE.17, STND.CODE.19, and STND.CODE.20 now state". The withdrawn IDs remain only in the history row. |
+| S5 (RUST.14 kept or withdrawn) | **Fixed.** The Notes say the reading lowers the reach of the C reading of STND.STDC 1.0 for C, and that a language standard that states a wider form for its language keeps it. The sentence holds under either RUST.14 variant. |
+| S8 (indicative obligation) | **Fixed.** The Notes now say STND.CODE.17 "asks conformance of the safety-related components of CSQ0 and advises it elsewhere, because the CSQ0 rows of STND.CLASS.10 bear on those components". The onset paragraph says "asking their outcome of ... and advising it". A first rewording used SHALL and SHOULD; g.7 flagged it as a normative sentence outside a provision, and it was replaced. |
+| A S9 (hooks) | **Fixed.** The Responses paragraph states once that a language in which the work installs no replaceable hook or handler has no counterpart: Julia (the research notes hold no source on such a hook; unverified), and C, Fortran, Lean, and SystemVerilog. |
+| A S11 (the reach of the ruling) | **Kept.** The CODE Notes paragraph on Untrusted input already holds the reach of the 2026-10-23 ruling and its 2026-10-24 extension once. The language standards keep their own sentences, which are other drafters' text. |
+| S3 (CXX.18 sentence 1 in other words) | **Argued in the Notes.** For the custodian, see decision 15 below. |
+
+### Decision 15 for the custodian
+
+The first sentence of STND.CODE.16 reads "SHALL NOT be removable by an execution setting". The ruled sentence 1 of STND.CXX.18 read "SHALL run, with its response, in every build".
+
+- **Recommendation: keep the new wording.** Together with CPS.5 and CPS.9, which require the check, and with sentence 2, which forbids a source definition turning it off, the outcome equals the ruled one: the check runs with its response in every build and run.
+- The new wording also reaches an interpreted run that has no build, and it matches STND.CODE.6.
+- The CODE Notes now state this argument.
+- Alternative: restore "SHALL run, with its response, in every build and every run of the work".
+
+### Rehearsal
+
+- `apply_close_p1.py`: all verify families PASS, with g.18 warnings only.
+- `findings.py`: no defect anywhere in the corpus.
+- `check_refs`: 0 missing rows for the three documents.
+- Reading copy `STND.CODE-0.6.md`; STND.CXX and STND.STDC are unchanged from 0.4.

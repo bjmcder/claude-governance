@@ -1,4 +1,4 @@
-"""Rehearsable editorial amendment: STND.LEAN 1.0.1, citing STND.CODE.14 in place of the withdrawn STND.CXX.16
+"""Rehearsable editorial amendment: STND.LEAN 1.0.1, citing STND.CODE.14 in place of STND.CXX.16
 (one transaction).
 
 It applies after STND.CODE 1.2 and STND.CXX 1.2: apply_close_p3.py runs it after apply_close_p1.py. Run from
@@ -41,7 +41,7 @@ DOC = [
 ]
 
 READING = (
-    "STND.LEAN.25 cites STND.CODE.14, of which it is the Lean form, with its text otherwise unchanged; the Notes cite STND.CODE.14 in place of the withdrawn STND.CXX.16, record "
+    "STND.LEAN.25 cites STND.CODE.14, of which it is the Lean form, with its text otherwise unchanged; the Notes cite STND.CODE.14 in place of STND.CXX.16, which STND.CXX 1.2 withdraws, record "
     "that the ratification of 2026-10-24 accepted the floor argument for STND.LEAN.25, and say that proofs that a "
     "machine generates come from an untrusted author, the term of this standard, in place of calling them "
     "untrusted input, a term of STND.CODE that this standard does not use")
