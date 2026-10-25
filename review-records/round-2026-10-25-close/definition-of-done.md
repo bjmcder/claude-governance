@@ -38,7 +38,10 @@ Done when:
 
 ## C. Installation kit (the agent's part; the installation itself is the human owner's)
 
-11. A configuration is derived for this machine into a scratch directory with `environment ... --write`, and `INSTALL.md` is read and checked against it.
+11. A configuration is derived for this machine into a scratch directory with `environment ... --write`, and `INSTALL.md` is read and checked against it. The findings of that check (`install-kit.md`) are fixed by **unit 0014**, which is reviewed like the other units and merged before the QA.8 review:
+    - the printed `--check` reproduces the derivation;
+    - INSTALL.md says where to run each step, names the prerequisites, and gives the configure entry's command;
+    - the guard admits the git variables that cannot redirect a push, `GIT_EDITOR` among them.
 12. `tools/install-tests.md` gives the three installation tests as steps the human owner runs after installing, each with its command, its expected result, and how to record it in unit 0008. The tests are:
     - an authorized `git push` or `gh` post proceeds, while the ask rules are kept;
     - the secret store's narrower `allowRead` wins over its `denyRead`;
