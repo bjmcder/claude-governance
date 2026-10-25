@@ -20,8 +20,14 @@ from govharness.workflows.amend import Change, raise_revision, record_transactio
 DATE = "2026-10-25"
 AT = "2026-10-25T20:25:00+00:00"
 
-# ------------------------------------------------------------------ changed provisions: citations only
+# ------------------------------------------------------------------ changed provisions: citations and the clause of STND.CODE.19
 
+JL1 = [
+    ('refers_to: ["STND.DEPS.3"]', 'refers_to: ["STND.CODE.19", "STND.DEPS.3"]'),
+    ("The reference version SHOULD be the latest stable minor version of Julia",
+     "Other than for a version that STND.CODE.19 fixes, the reference version SHOULD be the latest stable minor "
+     "version of Julia"),
+]
 JL13 = [
     ("refers_to: []", 'refers_to: ["STND.CODE.6"]'),
     ("A check of untrusted input SHALL NOT be written with `@assert` (PRIME.4, DSGN.2).",
@@ -65,8 +71,8 @@ PURPOSE = [
 TERMS = [
     ("Repository configuration, Static check, and Execution setting have the meanings that STND.CODE gives them;",
      "Repository configuration, Static check, Execution setting, and Untrusted input have the meanings that "
-     "STND.CODE gives them; each function that a package of the work declares by `export` or by `public` is one "
-     "that this standard places in the public interface of the work under the term Untrusted input, and an index "
+     "STND.CODE gives them; each function that a package of the work declares by `export` or by `public` belongs to "
+     "the public interface that the term Untrusted input of STND.CODE takes in, and an index "
      "that `eachindex`, `axes`, or `CartesianIndices` of the indexed array produces is valid by construction and is "
      "not untrusted input;"),
     ("| Untrusted input | Data that reaches the work from outside its own code, including the arguments of each "
@@ -83,26 +89,37 @@ TERMS = [
 ]
 
 NOTES = [
+    # Arithmetic: STND.CODE.21 for `@fastmath`
+    ("`muladd` fuses where the hardware allows, so its result depends on the machine.",
+     "`muladd` fuses where the hardware allows, so its result depends on the machine. Because `@fastmath` assumes "
+     "finite values, STND.CODE.21 recommends against it in code that holds a check of a floating-point value that "
+     "STND.CODE.6 or STND.CODE.16 governs."),
     # Versions: the edition of high-assurance code (STND.CODE.19)
     ("A qualified revision stays, because no other revision is admissible without new evidence.",
      "A qualified revision stays, because no other revision is admissible without new evidence; STND.CODE.19 fixes, "
-     "for high-assurance code, a version of Julia that its high-assurance coding standard covers and for which its "
-     "toolchain is validated, and the third sentence of STND.JL.1 keeps that version as a qualified revision."),
+     "for high-assurance code, a version of Julia that its high-assurance coding standard covers and for which each "
+     "tool that runs that code holds the validation that the work requires; STND.JL.1 yields to it by its own text, "
+     "and its third sentence keeps that version as a qualified revision."),
     # Failures: the reach of the term, STND.CODE.6, .14, .15, .16
     ("which also holds that the reach of the term Untrusted input to the arguments of each declared public function "
      "raises no floor.",
      "which also holds that the reach of the term Untrusted input to the arguments of each declared public function "
      "raises no floor. STND.CODE defines the term once, and the Terms above place each declared function in the "
-     "public interface of the work that the definition names, so the reach stays the one of the ruling; the "
-     "functions that the documentation or the repository configuration names for use outside the work belong to it "
-     "as well. STND.CODE.6 states for every language the outcome of which STND.JL.13 gives the Julia forms, "
+     "public interface that the term takes in, so the reach of the ruling stays; the functions that the "
+     "documentation or the repository configuration names for use outside the work belong to the interface for "
+     "outside use of that term as well, a widening that the Notes of STND.CODE put to the custodian. A module "
+     "exports names and marks names as public, and the keyword `public` marks a name as part of the public API "
+     "without exporting it, from Julia 1.11 (a2, S14); that an exported name is public is the reading of this "
+     "standard. STND.CODE.6 states for every language the outcome of which STND.JL.13 gives the Julia forms, "
      "`@assert`, a `@boundscheck` block, and an index that `@inbounds` leaves unchecked. STND.CODE.16 keeps in every "
      "build each check that CPS.5 or CPS.9 requires where those apply, so a `@boundscheck` block, which "
-     "`--check-bounds=no` removes, does not hold such a check either. STND.PY has no counterpart of the third "
+     "`--check-bounds=no` removes, does not hold such a check either. The option emits bounds checks always "
+     "under `yes`, never under `no`, and under the default `auto` respects `@inbounds`, which is able to return "
+     "incorrect results, crash, or corrupt memory for an index out of bounds (a2, S11 and S12). STND.PY has no counterpart of the third "
      "sentence of STND.JL.13, because the Python interpreter checks each index in every mode, and its Notes say so."),
     ("STND.JL.15 lists the responses of PRIME.4 once, and STND.JL.14 refers to it.",
      "STND.JL.15 lists the responses of PRIME.4 once, in the Julia form of STND.CODE.14, and STND.JL.14 refers to "
-     "it. STND.CODE.15 asks nothing of Julia until a form of declaration under which an ignored result is diagnosed "
+     "it; a thrown exception is the pass of a condition to the caller that STND.CODE.14 admits. STND.CODE.15 asks nothing of Julia until a form of declaration under which an ignored result is diagnosed "
      "is among the means of the work, and STND.CODE.7 still forbids discarding a listed failure."),
     # Checking: STND.JL.36 against STND.CXX.27 (sibling list)
     ("which is why STND.JL.34 states the setting.",
@@ -118,21 +135,23 @@ NOTES = [
      "Foreign interfaces. STND.JL.37, STND.JL.38, and STND.JL.39 give the Julia forms of what STND.CXX.20 and "
      "STND.CXX.22, STND.RUST.24 to STND.RUST.27, and STND.FTN.27 and STND.FTN.28 state for their languages: types "
      "that match the foreign declaration, memory with one owner and a stated lifetime, and exceptions kept from "
-     "crossing into foreign code (DSGN.4, DSGN.14, DSGN.5). A `ccall` reads no C header: it converts each argument "
-     "to the type that the call states and reads the result as the stated type, so a type that differs in size from "
-     "the foreign declaration passes or returns a wrong value without an error (unverified). Base names the C types "
-     "by aliases, `Cint`, `Csize_t`, and `Cdouble` among them, whose sizes follow the platform (unverified), and "
-     "`sizeof` and `fieldoffset` give the layout of a struct that a test compares with the foreign declaration. An "
+     "crossing into foreign code (DSGN.4, DSGN.14, DSGN.5). No C header is used in a call of a C function, so the "
+     "Julia types and call signatures alone state what the header declares, and an inconsistency is able to work on one "
+     "system and fail or produce indeterminate results on another (a2, S13). Base names the C types by aliases: "
+     "`Cint` is `Int32` on every system, while `Clong` and `Cwchar_t` among others differ between systems (a2, "
+     "S13). A test compares the layout of a struct with the foreign declaration through `sizeof` and "
+     "`fieldoffset` (unverified). An "
      "array is stored in column-major order, and a view of it is able to have a stride other than one (unverified "
      "for each array type), which is why STND.JL.37 asks for the order and the strides at the call, as STND.FTN.28 "
-     "tests them for Fortran. A `ccall` keeps its arguments alive for the duration of the call, while a pointer "
-     "taken by `pointer` and used after the expression that took it is valid only while `GC.@preserve` roots its "
-     "owner, and a function pointer that `@cfunction` makes from a closure is valid only while the closure is "
-     "referenced (unverified); STND.JL.38 asks for both. STND.JL.18 already asks the reason for each function whose "
-     "name begins with `unsafe_`, `unsafe_wrap` and `unsafe_load` among them. A Julia exception thrown in a function "
-     "that foreign code invokes through `@cfunction` would unwind through frames of that code, which the code does "
-     "not expect (unverified), so STND.JL.39 catches it in the callback and has it answered after the foreign call "
-     "returns, as STND.JL.15 requires; an `InterruptException` so stored is thrown again there, as STND.JL.16 asks. "
+     "tests them for Fortran. `GC.@preserve` marks objects as in use during an expression, which unsafe code needs "
+     "where the expression uses memory that one of them owns, and without it the memory behind a pointer taken by "
+     "`pointer` is able to be collected before its use; the object that `@cfunction` returns for a closure is kept "
+     "alive by the work until all uses of it are done (a2, S11 and S13). A `ccall` keeps its own arguments alive "
+     "for the duration of the call (unverified). STND.JL.38 asks for both. STND.JL.18 already asks the reason for each function whose "
+     "name begins with `unsafe_`, `unsafe_wrap` and `unsafe_load` among them. A callback exposed through "
+     "`@cfunction` throws no error in the manual's practice, because an error returns control to the Julia runtime "
+     "unexpectedly and is able to leave the program in an undefined state (a2, S13), so STND.JL.39 catches it in "
+     "the callback and has it answered after the foreign call returns, as STND.JL.15 requires; an `InterruptException` so stored is thrown again there, as STND.JL.16 asks. "
      "The rule is stated alike for C++, Rust, Python, and Julia (STND.CXX.22, STND.RUST.25, STND.PY.35, "
      "STND.JL.39).\n\n"
      "Class onset. Under STND.CLASS.10, each default provision instantiates only DSGN,"),
@@ -145,11 +164,11 @@ NOTES = [
 
 READING = (
     "Terms import Untrusted input from STND.CODE and drop this standard's own definition, and place each function "
-    "that a package of the work declares by `export` or by `public` in the public interface of the work that the "
-    "definition of STND.CODE names, so the reach stays the same, and keep the index that `eachindex`, `axes`, or "
+    "that a package of the work declares by `export` or by `public` in the public interface that the term of "
+    "STND.CODE takes in, and keep the index that `eachindex`, `axes`, or "
     "`CartesianIndices` produces as valid by construction; Terms define Foreign interface; STND.JL.13 cites "
     "STND.CODE.6, and STND.JL.15 STND.CODE.14, for the rule of which each is the Julia form, and neither changes "
-    "otherwise; new STND.JL.36 (default, DSGN.2, RSRC.4, and REPRO.7) has the production configuration leave bounds "
+    "otherwise; STND.JL.1 yields to a version of Julia that STND.CODE.19 fixes; new STND.JL.36 (default, DSGN.2, RSRC.4, and REPRO.7) has the production configuration leave bounds "
     "checking on outside `@inbounds` unless a measurement and a decision record show its cost, the Julia "
     "counterpart of STND.CXX.27; new STND.JL.37, STND.JL.38, and STND.JL.39 (defaults, DSGN.4, DSGN.14, and DSGN.5) "
     "give the types, the lifetime and ownership of memory, and the exceptions of callbacks at foreign interfaces; "
@@ -161,11 +180,12 @@ ROW = f"| 1.2 | {DATE} | Minor amendment (GOV.41): {READING}. |"
 RATIONALE = (
     f"Minor amendment of STND.JL to revision 1.2, ratified by the custodian on {DATE}, on STND.CODE 1.2 and the "
     f"list of differences among sibling language standards of the ratification of 2026-10-24: {READING}. The change "
-    "is minor because it adds four defaults. The import of Untrusted input changes no obligation: the definition of "
-    "STND.CODE, with the declared names that the Terms place in the public interface, has the reach of the "
-    "definition it replaces, together with each function that the documentation or the repository configuration "
-    "names, the reach that the ratification of 2026-10-24 gave the term; the index valid by construction stays "
-    "outside it. The citations in STND.JL.13 and STND.JL.15 change their references and not their outcome, and keep "
+    "is minor because it adds four defaults and a clause to the default STND.JL.1. The import of Untrusted input "
+    "keeps the reach of the definition it replaces, the arguments of each declared function, and adds each function "
+    "that the documentation or the repository configuration names for use outside the work, a widening that the "
+    "Notes of STND.CODE put to the custodian; the index valid by construction stays outside it. STND.JL.1 yields to "
+    "STND.CODE.19, as STND.CXX.2 does, so that the latest stable version does not displace the version that a "
+    "high-assurance coding standard and a validated toolchain fix. The citations in STND.JL.13 and STND.JL.15 change their references and not their outcome, and keep "
     "the language forms of the ruling of 2026-10-23. Sibling list: STND.JL.13 stays as ruled, and the Notes of "
     "STND.PY give the reason why Python has no counterpart of its third sentence; STND.JL.36 is the counterpart of "
     "STND.CXX.27, because the option `--check-bounds=no` removes the bounds checks of a whole session where no "
@@ -182,12 +202,13 @@ RATIONALE = (
 
 def apply(root: Path) -> None:
     root = Path(root)
+    replace_text(root, "STND/JL/1.md", JL1)
     replace_text(root, "STND/JL/13.md", JL13)
     replace_text(root, "STND/JL/15.md", JL15)
     for p in NEW:
         (root / f"STND/JL/{p['n']}.md").write_text(B.provision_text("STND.JL", p, "adopted", DATE), encoding="utf-8")
     replace_text(root, "STND/JL/_doc.md", PURPOSE + TERMS + NOTES)
-    ids = ["STND.JL.13", "STND.JL.15"] + [f"STND.JL.{p['n']}" for p in NEW]
+    ids = ["STND.JL.1", "STND.JL.13", "STND.JL.15"] + [f"STND.JL.{p['n']}" for p in NEW]
     res = B.derive_fields(root, ids)
     for ident, r in res.items():
         if r.unresolved:

@@ -28,6 +28,12 @@ FTN29 = [
      "STND.CODE.14)."),
 ]
 
+FTN18 = [
+    ('refers_to: ["STND.CODE.6", "CPS.5", "CPS.9"]', 'refers_to: ["STND.CODE.6", "CPS.5", "CPS.9", "STND.CODE.21"]'),
+    ("lets the compiler assume that floating-point values are finite (DSGN.2).",
+     "lets the compiler assume that floating-point values are finite (DSGN.2, STND.CODE.21)."),
+]
+
 FTN31 = [
     ("refers_to: []", 'refers_to: ["STND.CODE.6"]'),
     ("at the entry of the untrusted input or at the first point after it at which that bound is known (PRIME.4, "
@@ -51,15 +57,15 @@ DOC = [
     ("STND.FTN.29, STND.FTN.30, and STND.FTN.31 instantiate PRIME.4, so they are binding and apply at every class.",
      "STND.FTN.29, STND.FTN.30, and STND.FTN.31 instantiate PRIME.4, so they are binding and apply at every class. "
      "The rules of code that hold for every language, the responses to a listed failure and the checks that no "
-     "execution setting removes among them, are in STND.CODE (STND.CODE.14 to STND.CODE.20), and this standard "
+     "execution setting removes among them, are in STND.CODE (STND.CODE.14 to STND.CODE.21), and this standard "
      "gives their Fortran forms."),
     # Terms
     ("Repository configuration, Static check, and Execution setting have the meanings that STND.CODE gives them.",
      "Repository configuration, Static check, Execution setting, and Untrusted input have the meanings that "
-     "STND.CODE gives them. For the term Untrusted input, a procedure is a function, the values that it receives "
-     "through its dummy arguments are its arguments, and each procedure that a module of the work makes public, by "
-     "an attribute, by a statement, or by default, and each procedure of the work with the BIND attribute, is in "
-     "the public interface of the work."),
+     "STND.CODE gives them. For the term Untrusted input, the values that a procedure receives through its dummy "
+     "arguments are its arguments, and each procedure that a module of the work makes public, by an attribute, by a "
+     "statement, or by default, and each procedure of the work with the BIND attribute, is in the public interface "
+     "that the term Untrusted input of STND.CODE takes in."),
     ("\n| Untrusted input | Data that reaches the work from outside its own code, including the values that each "
      "procedure that a module of the work makes public, by an attribute, by a statement, or by default, and each "
      "procedure of the work with the BIND attribute, receive through their dummy arguments, other than data from a "
@@ -68,9 +74,9 @@ DOC = [
     ("STND.FTN.18 is therefore a default, at the cost of one choice of option for a file that holds a required "
      "check, and no binding provision rests on the hazard; STND.CXX.18 binds the same sentence for C++.",
      "STND.FTN.18 is therefore a default, at the cost of one choice of option for a file that holds a required "
-     "check, and no binding provision of this standard rests on the hazard. STND.CODE.16 binds the same outcome in "
-     "every language, an option that by the documentation of its compiler lets the compiler assume finite values "
-     "kept from code that holds such a check, and STND.FTN.18 asks nothing beyond it."),
+     "check, and no binding provision rests on the hazard; STND.CXX.18 binds the same sentence for C++. STND.FTN.18 "
+     "is the Fortran form of the first sentence of STND.CODE.21, stated for each source file, since an option of a "
+     "Fortran compiler applies to the files that it compiles."),
     # Notes: failures
     ("which a subroutine makes in a status argument because it has no result (STND.FTN.29, in the form of "
      "STND.CXX.16, STND.PY.22, and STND.JL.15).",
@@ -82,14 +88,14 @@ DOC = [
      "legacy code are the internal structure of a program; the custodian's ruling of 2026-10-23 that this reach "
      "raises no floor was made for STND.PY and STND.JL.",
      "STND.CODE defines the term Untrusted input once for every language, and the Terms of this standard place in "
-     "the public interface of the work each procedure that a module makes public, an entity of a module being "
+     "the public interface that the term takes in each procedure that a module makes public, an entity of a module being "
      "public unless the module makes it private, and each procedure with the BIND attribute, as STND.PY and STND.JL "
      "place the functions of their public interfaces. The custodian's ruling of 2026-10-23 that this reach raises no "
      "floor was made for STND.PY and STND.JL, and the ratification of 2026-10-24 extended the reach to this "
-     "standard. The Terms place no external procedure in that interface, since in legacy code external procedures "
-     "are the internal structure of a program; the term of STND.CODE brings one in only where the documentation or "
-     "the repository configuration names it for use by code outside the work, which the paragraph on the floor "
-     "argues."),
+     "standard. An external procedure that the documentation or the repository configuration names for use by code "
+     "outside the work is in the interface for outside use of STND.CODE, and the paragraph on the floor argues that "
+     "reach; an external procedure that nothing names is not, which keeps out the external procedures that in legacy "
+     "code are the internal structure of a program."),
     # Notes: names, before the binding provisions
     ("Binding provisions. STND.FTN.29, STND.FTN.30, and STND.FTN.31 instantiate PRIME.4",
      "Names. The research note holds no convention of names that the Fortran standard fixes and a tool checks, so "
@@ -116,13 +122,13 @@ DOC = [
 READING = (
     "Terms import Untrusted input from STND.CODE, delete this standard's own "
     "definition, and place each procedure that a module makes public and each procedure with the BIND attribute in "
-    "the public interface of the work that the term names, so that the reach ratified on 2026-10-24 stays; "
-    "STND.FTN.29 and STND.FTN.31 cite STND.CODE.14 and STND.CODE.6, of which they are the Fortran forms, with their "
-    "text otherwise unchanged; new STND.FTN.37 (default, from CSQ3) leaves the convention of names to the "
+    "the public interface that the term takes in, so that the reach ratified on 2026-10-24 stays; "
+    "STND.FTN.29, STND.FTN.31, and STND.FTN.18 cite STND.CODE.14, STND.CODE.6, and STND.CODE.21, of which they are "
+    "the Fortran forms, with their text otherwise unchanged, STND.FTN.18 staying a default; new STND.FTN.37 (default, from CSQ3) leaves the convention of names to the "
     "repository configuration and keeps the names that the notation of NUMER.4 fixes, the rule of decision 9 of "
     "2026-10-24; the Purpose cites STND.CODE for the rules of code that hold for every language and lists "
-    "STND.FTN.37; the Notes cite STND.CODE.14 and STND.CODE.16 in place of the withdrawn STND.CXX.16 and "
-    "STND.CXX.18, state that STND.CODE.16 binds the outcome of STND.FTN.18, state the reach of the term on the "
+    "STND.FTN.37; the Notes cite STND.CODE.14 in place of the withdrawn STND.CXX.16, call STND.FTN.18 the Fortran "
+    "form of STND.CODE.21, state the reach of the term on the "
     "ratification of 2026-10-24 with the floor argument for an external procedure that the documentation or the "
     "repository configuration names, give the reason for the naming rule, and add INTPR to the class onsets")
 
@@ -131,7 +137,7 @@ ROW = f"| 1.1 | {DATE} | Minor amendment (GOV.41): {READING}. |"
 RATIONALE = (
     f"Minor amendment of STND.FTN to revision 1.1, ratified by the custodian on {DATE}, on STND.CODE 1.2: "
     f"{READING}. The change is minor because it adds a default and alters the defined meaning of Untrusted input "
-    "for Fortran. STND.FTN.18 stays a default, as ratified on 2026-10-24. The term of STND.CODE reaches the values that each module-public procedure and each procedure "
+    "for Fortran. STND.FTN.18 stays a default, as ratified on 2026-10-24, beneath the default STND.CODE.21. The term of STND.CODE reaches the values that each module-public procedure and each procedure "
     "with the BIND attribute receive, as the term of STND.FTN 1.0 did, and also each procedure that the "
     "documentation or the repository configuration names for use by code outside the work, the one reach that the "
     "ratification of 2026-10-24 gave the term in every language; for an external procedure so named, the reach is "
@@ -149,14 +155,15 @@ RATIONALE = (
 
 def apply(root: Path) -> None:
     root = Path(root)
+    replace_text(root, "STND/FTN/18.md", FTN18)
     replace_text(root, "STND/FTN/29.md", FTN29)
     replace_text(root, "STND/FTN/31.md", FTN31)
     (root / "STND/FTN/37.md").write_text(B.provision_text("STND.FTN", NEW37, "adopted", DATE), encoding="utf-8")
-    res = B.derive_fields(root, ["STND.FTN.29", "STND.FTN.31", "STND.FTN.37"])
+    res = B.derive_fields(root, ["STND.FTN.18", "STND.FTN.29", "STND.FTN.31", "STND.FTN.37"])
     for ident, r in res.items():
         if r.unresolved:
             raise ValueError(f"{ident}: {r}")
-    if res["STND.FTN.37"].forced or not (res["STND.FTN.29"].forced and res["STND.FTN.31"].forced):
+    if res["STND.FTN.37"].forced or res["STND.FTN.18"].forced or not (res["STND.FTN.29"].forced and res["STND.FTN.31"].forced):
         raise ValueError("STND.FTN: a mode differs from the one this amendment states")
     replace_text(root, "STND/FTN/_doc.md", DOC)
     raise_revision(root, "STND/FTN", "1.0", "1.1", ROW)

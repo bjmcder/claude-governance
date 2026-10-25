@@ -20,12 +20,18 @@ from govharness.workflows.amend import Change, raise_revision, record_transactio
 DATE = "2026-10-25"
 AT = "2026-10-25T20:20:00+00:00"
 
-# ------------------------------------------------------------------ changed provisions: citations only
+# ------------------------------------------------------------------ changed provisions: citations and the clause of STND.CODE.19
 
 PY22 = [
     ('refers_to: ["PRIME.13"]', 'refers_to: ["PRIME.13", "STND.CODE.14"]'),
     ("degrade visibly with a diagnosis, or return the condition in its result (PRIME.4).",
      "degrade visibly with a diagnosis, or return the condition in its result (PRIME.4, STND.CODE.14)."),
+]
+PY14 = [
+    ("refers_to: []", 'refers_to: ["STND.CODE.19"]'),
+    ("The checks of each release of a distributed package SHOULD run on the oldest declared release of Python",
+     "Other than for a release of Python that STND.CODE.19 fixes, the checks of each release of a distributed "
+     "package SHOULD run on the oldest declared release of Python"),
 ]
 PY25 = [
     ("refers_to: []", 'refers_to: ["STND.CODE.6"]'),
@@ -37,7 +43,7 @@ PY25 = [
 
 NEW = [
     P(32, "Hooks for uncaught exceptions", "Reporting", """
-Where the work replaces a hook that the interpreter calls for an exception that no handler catches, that hook SHALL deliver to the operator, or to the record of the run, a diagnosis of each such exception that answers a condition that PRIME.4 lists (PRIME.4, STND.CODE.14).
+Where the work replaces a hook that the interpreter calls for an exception that no handler catches, or for one that it is unable to raise, that hook SHALL deliver to the operator, or to the record of the run, a diagnosis of each such exception that answers a condition that PRIME.4 lists (PRIME.4, STND.CODE.14).
 """, ["PRIME.4"], refs=["STND.CODE.14"], mode="binding"),
     P(33, "Committed Python lock files", "Versions", """
 Where the work reports results, the lock file of each environment that produces them SHOULD be under version control with the source that it resolves (REPRO.1, REPRO.9). A distributed package whose own environment produces no reported result MAY keep its lock file out of version control (REPRO.9).
@@ -79,8 +85,7 @@ TERMS = [
      "STND.CODE gives them;"),
     ("each of them whose own name and enclosing names carry no leading underscore. |",
      "each of them whose own name and enclosing names carry no leading underscore. Each function and method of the "
-     "public interface is one that this standard places in the public interface of the work under the term "
-     "Untrusted input. |"),
+     "public interface belongs to the public interface that the term Untrusted input of STND.CODE takes in. |"),
     ("| Untrusted input | Data that reaches the work from outside its own code, including the arguments of each "
      "function of the public interface, other than data from a source that the threat model of the project records "
      "as trusted. |",
@@ -100,43 +105,52 @@ NOTES = [
      "manifest and STND.RUST.30 for a Rust lock file, so that the revisions of a run are those of its source. A "
      "distributed package whose own environment produces no reported result leaves its dependents to resolve their "
      "own environments, and its checks run on the combinations of STND.PY.14; that such a package commits no lock "
-     "file is common practice (unverified). PEP 751 specifies a common format for lock files, and which installers "
-     "read or write it is unverified; a format of a project tool's own is a lock file in the sense of the term where "
-     "it records each exact revision. STND.CODE.19 fixes, for high-assurance code, a release of Python that its "
-     "high-assurance coding standard covers and for which its toolchain is validated, and that release is a "
-     "qualified revision, which STND.DEPS.3 leaves fixed."),
+     "file is common practice (unverified). PEP 751, a standard of status Final, specifies a common format for lock "
+     "files, named pylock.toml (a2, S9 and S10); which installers read or write it is unverified, and a format of a "
+     "project tool's own is a lock file in the sense of the term where it records each exact revision. STND.CODE.19 "
+     "fixes, for high-assurance code, a release of Python that its high-assurance coding standard covers and for "
+     "which each tool that runs that code holds the validation that the work requires; that release is a qualified "
+     "revision, which STND.DEPS.3 leaves fixed, and STND.PY.14 yields to it by its own text."),
     # Reporting: the hook for an uncaught exception (sibling list)
     ("A warning of a category that the default filters hide, DeprecationWarning outside the main module, "
      "PendingDeprecationWarning, ImportWarning, and ResourceWarning among them, is silent and does not count.",
      "A warning of a category that the default filters hide, DeprecationWarning outside the main module, "
      "PendingDeprecationWarning, ImportWarning, and ResourceWarning among them, is silent and does not count. An "
-     "exception that no handler catches ends the main thread through the hook that the sys module holds for it, "
-     "and ends another thread through the hook that the threading module holds; the default hooks write the "
-     "traceback to the standard error stream (unverified). STND.PY.32 is the Python counterpart of the second "
+     "exception other than SystemExit that is raised and not caught reaches the hook that the sys module holds for "
+     "it, just before the program exits, and one that the run method of a thread raises reaches the hook that the "
+     "threading module holds; the default hooks print the traceback and the exception to the standard error stream "
+     "(a2, S1 and S2). STND.PY.32 is the Python counterpart of the second "
      "sentence of STND.RUST.13: it asks a hook that the work installs in their place, to write the exception to a "
      "log or to a report among them, to deliver the diagnosis of each listed condition that reaches it, and work "
-     "that keeps the default hooks meets it unchanged. The hook that reports an exception which the interpreter is "
-     "unable to raise, in a finalizer among them, is such a hook (unverified)."),
+     "that keeps the default hooks meets it unchanged. The hook of the sys module that the interpreter calls when an "
+     "exception has occurred and Python has no way to handle it, in a finalizer among them, is such a hook (a2, "
+     "S1)."),
     # Assertions: STND.CODE.6, .14, .15, .16, the reach of the term, and the index item of the sibling list
     ("Assertions. STND.PY.25, STND.PY.27, and STND.PY.30 are the Python forms of STND.CODE.6 and STND.CODE.7, each "
      "limited to the conditions that PRIME.4 lists.",
-     "Assertions. STND.PY.22 is the Python form of STND.CODE.14, and STND.PY.25, STND.PY.27, and STND.PY.30 are the "
+     "Assertions. STND.PY.22 is the Python form of STND.CODE.14, whose pass of a condition to the caller a raised "
+     "exception makes in Python, and STND.PY.25, STND.PY.27, and STND.PY.30 are the "
      "Python forms of STND.CODE.6 and STND.CODE.7, each limited to the conditions that PRIME.4 lists. STND.CODE.15 "
      "asks nothing of Python until a form of declaration under which an ignored result is diagnosed is among the "
      "means of the work, and STND.CODE.7 still forbids discarding a listed failure."),
     ("is the custodian's ruling of 2026-10-23 (PRIN.10). A run-time check of an invariant or postcondition that the "
      "work relies on is written as a raise statement for the same reason (STND.PY.26).",
      "is the custodian's ruling of 2026-10-23 (PRIN.10). STND.CODE defines the term once, and the term Public "
-     "interface places the functions and methods of that interface in the public interface of the work that the "
-     "definition names, so the reach stays the one of the ruling; the functions that the documentation or the "
-     "repository configuration names for use outside the work belong to it as well. A run-time check of an "
+     "interface places the functions and methods of that interface in the public interface that the term takes in, "
+     "so the reach of the ruling stays; the functions that the documentation or the repository configuration names "
+     "for use outside the work belong to the interface for outside use of that term as well, a widening that the "
+     "Notes of STND.CODE put to the custodian. The optimizing mode, set by an option of the command line or by an "
+     "environment variable, removes assert statements and the code that depends on the value of __debug__ (a2, "
+     "S3 and S5). A run-time check of an "
      "invariant or postcondition that the work relies on is written as a raise statement for the same reason "
      "(STND.PY.26), and STND.CODE.16 binds the same for each check that CPS.5 or CPS.9 requires where those apply. "
      "STND.JL.13 binds a check of each index that derives from untrusted input, because an annotation or an "
-     "execution setting of Julia removes the bounds checks of its indexing. The interpreter checks each index of a "
-     "built-in sequence in every mode and raises IndexError, a response that STND.PY.22 admits, and array "
-     "libraries check their indices in the same way (unverified for each library), so this standard has no "
-     "counterpart of that sentence. A negative index selects from the end of a sequence and raises nothing; where "
+     "execution setting of Julia removes the bounds checks of its indexing. A built-in sequence raises IndexError "
+     "for an index outside its range (a2, S6 and S7), a response that STND.PY.22 admits, and the optimizing mode "
+     "leaves that check in place, since it removes only assert statements and code that depends on __debug__; "
+     "whether each array library checks its indices in the same way is unverified. This standard therefore has no "
+     "counterpart of that sentence. A negative index from minus the length to minus one selects from the end of a "
+     "sequence and raises nothing, and a slice raises nothing whatever its bounds (a2, S6); where "
      "the contract of a function excludes it, only a check of the function under DSGN.2 rejects it. Code that a "
      "compiler translates from Python source is able to index without bounds checks, by default or by an option "
      "(unverified for each compiler); STND.PY.31 asks the reason for each such use, and STND.CODE.6 keeps an "
@@ -144,8 +158,8 @@ NOTES = [
     # Relaxed checks: the third sentence of STND.CODE.16
     ("remove a check or relax the arithmetic, so each carries its reason (STND.PY.31).",
      "remove a check or relax the arithmetic, so each carries its reason (STND.PY.31). Where code compiled under "
-     "such an option holds a check of a floating-point value that STND.CODE.6 governs, STND.CODE excludes an "
-     "option that lets the compiler assume finite values, whatever reason is stated."),
+     "such an option holds a check of a floating-point value that STND.CODE.6 governs, STND.CODE.21 recommends "
+     "against an option that lets the compiler assume finite values, beside the reason that STND.PY.31 asks."),
     # Foreign interfaces (sibling list), before the floor paragraph
     ("Floor. STND.PY.22 asks for the responses that PRIME.4 already requires,",
      "Foreign interfaces. STND.PY.34, STND.PY.35, and STND.PY.36 give the Python forms of what STND.CXX.20 and "
@@ -154,20 +168,22 @@ NOTES = [
      "and a stated lifetime (DSGN.4, DSGN.5, DSGN.14). A compiled extension module is built against the declarations "
      "of the foreign code, so its compiler checks the types of each call. A library that loads a shared library "
      "while the program runs reads no declaration, and converts each argument and the result by the types that the "
-     "Python source declares, or by defaults where it declares none (unverified for each library). The ctypes module "
-     "of the standard library reads the result of a function whose result type is not declared as a C int, which "
-     "truncates a pointer on a platform where a pointer is wider (unverified), which is why STND.PY.34 asks for each "
-     "type. A slice of an array is a view whose elements are not always adjacent in memory, and foreign code "
+     "Python source declares, or by defaults where it declares none. The ctypes module of the standard library "
+     "is unable to determine the signature of a foreign function, checks no number of arguments where none are "
+     "declared, and assumes that a function returns a C int unless its result type is declared; incorrect arguments "
+     "are able to corrupt memory or crash the interpreter (a2, S8). A pointer read as an int is truncated on a "
+     "platform where a pointer is wider (unverified), and these hazards are why STND.PY.34 asks for each type. A slice of an array is a view whose elements are not always adjacent in memory, and foreign code "
      "that reads a pointer to its first element as a contiguous block reads other elements (unverified for each "
      "array library); a conversion to a contiguous array of the declared element type before the call meets "
-     "STND.PY.34. An exception raised in a Python callback that foreign code invokes does not pass through the frames "
-     "of that code; the ctypes module reports it as unraisable and returns a default value to the foreign caller "
-     "(unverified), which then continues past the failure in silence unless the work stores the exception and "
-     "answers it after the foreign call returns (STND.PY.35, STND.PY.22). An interface that passes the exception on, "
-     "the C interface of an extension module among them, is outside STND.PY.35. The interpreter frees an object "
-     "when nothing references it, at once under the reference counting of CPython and at a time that the language "
-     "does not fix elsewhere (unverified), so a buffer or a callback that foreign code keeps after the call that "
-     "passed it is freed while still in use unless an object of the work keeps a reference (STND.PY.36). A with "
+     "STND.PY.34. Where a foreign interface does not pass a Python exception on to the code of the work, the foreign "
+     "caller of a Python callback does not see the failure; what each interface does with such an exception is "
+     "unverified, so STND.PY.35 states the outcome: the callback "
+     "catches the exception, and the work converts it to the error of the interface or answers it after the "
+     "foreign call returns (STND.PY.22). An interface that passes the exception on, the C interface of an "
+     "extension module among them, is outside STND.PY.35. The ctypes module keeps no reference to a callback "
+     "object, which the garbage collector is then able to free while C code still holds it, crashing the program "
+     "when the callback is made (a2, S8); whether a buffer passed to foreign code is kept alive is unverified for "
+     "each interface. STND.PY.36 asks the work to keep the reference. A with "
      "statement makes the release of a resource that foreign code allocates visible at the interface, and a finalizer "
      "runs at a time that the language does not fix (unverified). The rule that an exception or a panic is caught "
      "inside a callback and answered after the foreign call returns is now stated alike for C++, Rust, Python, and "
@@ -192,11 +208,11 @@ NOTES = [
 
 READING = (
     "Terms import Untrusted input, and Execution setting, from STND.CODE and drop this standard's own definition of "
-    "Untrusted input, and the term Public interface places its functions and methods in the public interface of "
-    "the work that the definition of STND.CODE names, so the reach stays the same; Terms define Lock file and "
-    "Foreign interface; STND.PY.22 cites STND.CODE.14, and STND.PY.25 STND.CODE.6, for the rule of which each is "
-    "the Python form, and neither changes otherwise; new STND.PY.32 (binding, PRIME.4) has a hook that the work "
-    "installs for an exception that no handler catches deliver the diagnosis of each listed condition, the Python "
+    "Untrusted input, and the term Public interface places its functions and methods in the public interface that "
+    "the term Untrusted input of STND.CODE takes in; Terms define Lock file and Foreign interface; STND.PY.22 cites "
+    "STND.CODE.14, and STND.PY.25 STND.CODE.6, for the rule of which each is the Python form, and neither changes "
+    "otherwise; STND.PY.14 yields to a release of Python that STND.CODE.19 fixes; new STND.PY.32 (binding, PRIME.4) has a hook that the work "
+    "installs for an exception that no handler catches, or that the interpreter is unable to raise, deliver the diagnosis of each listed condition, the Python "
     "counterpart of the second sentence of STND.RUST.13; new STND.PY.33 (default, REPRO.1 and REPRO.9) keeps the "
     "lock file of each environment that produces reported results under version control, as STND.JL.4 and "
     "STND.RUST.30 do; new STND.PY.34, STND.PY.35, and STND.PY.36 (defaults, DSGN.4, DSGN.5, and DSGN.14) give the "
@@ -210,11 +226,12 @@ ROW = f"| 1.1 | {DATE} | Minor amendment (GOV.41): {READING}. |"
 RATIONALE = (
     f"Minor amendment of STND.PY to revision 1.1, ratified by the custodian on {DATE}, on STND.CODE 1.2 and the "
     f"list of differences among sibling language standards of the ratification of 2026-10-24: {READING}. The change "
-    "is minor because it adds one binding provision and four defaults. The import of Untrusted input changes no "
-    "obligation: the definition of STND.CODE has the reach of the definition it replaces, the arguments of each "
-    "function of the public interface that this standard defines, together with each function that the "
-    "documentation or the repository configuration names, the reach that the ratification of 2026-10-24 gave the "
-    "term. The citations in STND.PY.22 and STND.PY.25 change their references and not their outcome, and keep the "
+    "is minor because it adds one binding provision and four defaults, and a clause to the default STND.PY.14. The "
+    "import of Untrusted input keeps the reach of the definition it replaces, the arguments of each function of the "
+    "public interface that this standard defines, and adds each function that the documentation or the repository "
+    "configuration names for use outside the work, a widening that the Notes of STND.CODE put to the custodian. "
+    "STND.PY.14 yields to STND.CODE.19, as STND.CXX.2 does, so that the newest releases it checks do not displace "
+    "the release that a high-assurance coding standard and a validated toolchain fix. The citations in STND.PY.22 and STND.PY.25 change their references and not their outcome, and keep the "
     "language forms of the ruling of 2026-10-23. Sibling list: the third sentence of STND.JL.13 has no Python "
     "counterpart, because the interpreter checks each index in every mode, and the Notes say so; logging as the only "
     "visible degradation stays as ruled, by decision 7 of that ratification; STND.PY.32 is the counterpart of the "
@@ -234,11 +251,12 @@ RATIONALE = (
 def apply(root: Path) -> None:
     root = Path(root)
     replace_text(root, "STND/PY/22.md", PY22)
+    replace_text(root, "STND/PY/14.md", PY14)
     replace_text(root, "STND/PY/25.md", PY25)
     for p in NEW:
         (root / f"STND/PY/{p['n']}.md").write_text(B.provision_text("STND.PY", p, "adopted", DATE), encoding="utf-8")
     replace_text(root, "STND/PY/_doc.md", PURPOSE + TERMS + NOTES)
-    ids = ["STND.PY.22", "STND.PY.25"] + [f"STND.PY.{p['n']}" for p in NEW]
+    ids = ["STND.PY.14", "STND.PY.22", "STND.PY.25"] + [f"STND.PY.{p['n']}" for p in NEW]
     res = B.derive_fields(root, ids)
     for ident, r in res.items():
         if r.unresolved:

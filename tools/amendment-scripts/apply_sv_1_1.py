@@ -22,6 +22,20 @@ Each name that the source files of a design and of its verification set declare 
 """, ["INTPR.1", "INTPR.4"], refs=["NUMER.4", "STND.DOCS.12"])
 
 DOC = [
+    # Purpose: the floor
+    ("bind at every class through STND.CONC.1 and STND.CONC.2; this standard adds nothing to that floor.",
+     "bind at every class through STND.CONC.1 and STND.CONC.2, as the responses to a failure that PRIME.4 lists bind "
+     "through STND.CODE.14 and the checks that CPS.5 or CPS.9 requires stay in every build through STND.CODE.16; "
+     "this standard adds nothing to that floor."),
+    # Terms
+    ("Repository configuration, Static check, and Execution setting have the meanings that STND.CODE gives them,",
+     "Repository configuration, Static check, Execution setting, and High-assurance code have the meanings that "
+     "STND.CODE gives them,"),
+    # Notes: what STND.CODE already holds
+    ("and statements grouped by step in each process (STND.CODE.13) already apply.",
+     "and statements grouped by step in each process (STND.CODE.13) already apply, and for high-assurance code the "
+     "coding standard, the claims of conformance, the edition with the validation of each tool that synthesizes or "
+     "simulates it, and the deviations (STND.CODE.17 to STND.CODE.20)."),
     # Purpose
     ("and the classes of finding that the static checks report, a second route for the check of the netlist and for "
      "the verdicts of simulation, and comparisons between simulators (STND.SV.24 to STND.SV.27).",
@@ -43,14 +57,17 @@ DOC = [
 READING = (
     "new STND.SV.28 (default, from CSQ3) leaves the convention of names in the source files of a design and of its "
     "verification set to the repository configuration and keeps the names that the notation of NUMER.4 fixes, the "
-    "rule of decision 9 of 2026-10-24; the Purpose lists it, and the Notes give the reason for the rule and its "
-    "class onset")
+    "rule of decision 9 of 2026-10-24; the Purpose lists it and names STND.CODE.14 and STND.CODE.16 among the "
+    "provisions that bind at every class; Terms import High-assurance code from STND.CODE; the Notes cite "
+    "STND.CODE.17 to STND.CODE.20 for high-assurance code and give the reason for the naming rule and its class "
+    "onset")
 
 ROW = f"| 1.1 | {DATE} | Minor amendment (GOV.41): {READING}. |"
 
 RATIONALE = (
     f"Minor amendment of STND.SV to revision 1.1, ratified by the custodian on {DATE}: {READING}. The change is "
-    "minor because it adds a default. STND.SV.28 states for hardware descriptions and their verification the rule "
+    "minor because it adds a default; the citations of STND.CODE add no obligation, since STND.CODE applies to "
+    "hardware descriptions by its own scope. STND.SV.28 states for hardware descriptions and their verification the rule "
     "that STND.STDC.39 and STND.LEAN.27 state for C and Lean, in the same words. Class onsets: STND.SV.28 rests on "
     "no row of STND.CLASS.10 and applies from CSQ3; no other onset changes. Floor (GOV.11): STND.SV.28 is a "
     "default and instantiates only INTPR, so no floor is raised; no provision of this standard binds. Transition "

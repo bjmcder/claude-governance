@@ -60,23 +60,32 @@ DOC = [
      "The rules of concurrency that hold for every model are in STND.CONC, the rules for dependencies in STND.DEPS, "
      "the rules of building in STND.BUILD, and the rules of code that hold for every language, the responses to a "
      "listed failure and the checks that no execution setting removes among them, in STND.CODE (STND.CODE.14 to "
-     "STND.CODE.20); this standard gives their Rust forms only where Rust sets a trap of its own."),
+     "STND.CODE.21); this standard gives their Rust forms only where Rust sets a trap of its own."),
     # Terms
     ("Repository configuration, Static check, and Execution setting have the meanings that STND.CODE gives them;",
      "Repository configuration, Static check, Execution setting, and Untrusted input have the meanings that "
      "STND.CODE gives them, and each function of the public interface of a crate of library code is in the public "
-     "interface of the work that the term Untrusted input names;"),
+     "interface that the term Untrusted input of STND.CODE takes in;"),
     ("\n| Untrusted input | Data that reaches the work from outside its own code, including the arguments of each "
      "function of the public interface of a crate of library code, other than data from a source that the threat "
      "model of the project records as trusted. |", ""),
+    # Notes: sources
+    ("which confirms the facts on the panic hook and the panic handler from the documentation of the standard "
+     "library and the Rust Reference.",
+     "which confirms the facts on the panic hook and the panic handler from the documentation of the standard "
+     "library and the Rust Reference, and the note research/round-addenda/a2-language-facts.md (a2 below), which "
+     "confirms the lints that check the case of names from the documentation of the compiler."),
     # Notes: failures
     ("Failures. STND.RUST.13 lists the responses that PRIME.4 admits in Rust, and the other provisions refer to it.",
      "Failures. STND.RUST.13 lists the responses that PRIME.4 admits in Rust, and the other provisions refer to it; "
-     "its first sentence is the Rust form of STND.CODE.14, and its second and third add what Rust needs."),
+     "its first sentence is the Rust form of STND.CODE.14, a panic being the mechanism of the language that passes "
+     "the condition to the caller, and its second and third add what Rust needs."),
     ("STND.RUST.14 is the Rust form of STND.CXX.17, with its two means. STND.RUST.15 is the Rust form of "
      "STND.CODE.6, and of STND.CXX.18 for the checks of CPS.5 and CPS.9:",
-     "STND.RUST.14 is the Rust form of STND.CODE.15: the language provides a form of declaration under which a call "
-     "that ignores a result is diagnosed, so the two ask one outcome of Rust code. STND.RUST.15 is the Rust form of "
+     "STND.RUST.14 is the Rust form of STND.CODE.15, kept as ratified with its wider condition: it applies where any "
+     "compiler or static check among the means of the work diagnoses an ignored returned value, and STND.CODE.15 "
+     "where a form of declaration exists, which the language provides, so that for Rust code the two ask one "
+     "outcome. STND.RUST.15 is the Rust form of "
      "STND.CODE.6, and of the first sentence of STND.CODE.16 for the checks of CPS.5 and CPS.9:"),
     ("The term Untrusted input reaches the arguments of each function of the public interface of a crate of library "
      "code, as the terms of STND.PY and STND.JL reach the arguments of their public interfaces. The Notes of STND.JL "
@@ -86,17 +95,20 @@ DOC = [
      "standards and not for this one; the reach of the term here rests on the argument for STND.RUST.15 in the "
      "paragraph on the floor.",
      "STND.CODE defines the term Untrusted input once for every language, and the Terms of this standard place each "
-     "function of the public interface of a crate of library code in the public interface of the work that the term "
-     "names, as STND.PY and STND.JL place the functions of their public interfaces. The custodian's ruling of "
+     "function of the public interface of a crate of library code in the public interface that the term takes in, "
+     "as STND.PY and STND.JL place the functions of their public interfaces. The custodian's ruling of "
      "2026-10-23 that this reach raises no floor was made for STND.PY and STND.JL, and the ratification of "
      "2026-10-24 extended the reach to this standard on the argument for STND.RUST.15 in the paragraph on the "
      "floor."),
     # Notes: names, before numerics
     ("Numerics. NaN bit patterns that are not portable",
-     "Names. The Rust project publishes a convention for the case of each kind of name, which the compiler checks by "
-     "lints that warn by default (as recalled; unverified in rs1). STND.RUST.35 leaves the convention to the "
-     "repository configuration, as STND.STDC.39 and STND.LEAN.27 do. A configuration that names that convention "
-     "has those lints among the static checks of STND.CODE.4, which report each departure from it. STND.RUST.35 "
+     "Names. The compiler checks the case of names by lints that warn by default: snake case for variables, "
+     "methods, functions, lifetime parameters, named fields, and modules; camel case for types, variants, traits, "
+     "and type parameters; and upper case for static items (a2, fact 5). The source does not say that the lint for "
+     "static items covers constants, and that the Rust project publishes a convention of names is unverified. "
+     "STND.RUST.35 leaves the convention to the repository configuration, as STND.STDC.39 and STND.LEAN.27 do. A "
+     "configuration that names the convention of those lints has them among the static checks of STND.CODE.4, which "
+     "report each departure from it, and STND.BUILD.12 fails a change on each of their warnings. STND.RUST.35 "
      "keeps the names that the notation of NUMER.4 fixes, as STND.DOCS.12 permits, a lint that reports such a name "
      "being suppressed at its location with its reason under STND.CODE.4, and adds no table.\n\n"
      "Numerics. NaN bit patterns that are not portable"),
@@ -123,14 +135,15 @@ DOC = [
 
 READING = (
     "Terms import Untrusted input from STND.CODE, delete this standard's own definition, and place each function of "
-    "the public interface of a crate of library code in the public interface of the work that the term names, so "
+    "the public interface of a crate of library code in the public interface that the term takes in, so "
     "that the reach ratified on 2026-10-24 stays; STND.RUST.13, STND.RUST.14, and STND.RUST.15 cite STND.CODE.14, "
     "STND.CODE.15, STND.CODE.6, and STND.CODE.16, of which they are the Rust forms, with their text otherwise "
     "unchanged; new STND.RUST.35 (default, from CSQ3) leaves the convention of names to the repository "
     "configuration and keeps the names that the notation of NUMER.4 fixes, the rule of decision 9 of 2026-10-24; "
     "the Purpose cites STND.CODE for the rules of code that hold for every language and lists STND.RUST.35; the "
-    "Notes cite STND.CODE.14, STND.CODE.15, and STND.CODE.16 in place of the withdrawn STND.CXX.17 and "
-    "STND.CXX.18, state the reach of the term on the ratification of 2026-10-24 with the floor argument for a "
+    "Notes cite STND.CODE.14 and STND.CODE.15 in place of the withdrawn STND.CXX.16 and STND.CXX.17, and the "
+    "first sentence of STND.CODE.16 in place of STND.CXX.18 for the checks of CPS.5 and CPS.9, cite a2 for the "
+    "lints that check the case of names, state the reach of the term on the ratification of 2026-10-24 with the floor argument for a "
     "function outside library code that the documentation or the repository configuration names, and give the reason for the naming "
     "rule and its class onset")
 
