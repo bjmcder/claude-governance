@@ -22,7 +22,7 @@ import json
 import shutil
 import tempfile
 import unittest
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, tzinfo
 from pathlib import Path
 from unittest import mock
 
@@ -87,6 +87,42 @@ def no_anchor() -> mock._patch:
         decorator or a context.
     """
     return mock.patch("govharness.cli.environment.read_config", SignerConfig)
+
+
+class FrozenDatetime(datetime):
+    """A ``datetime`` whose ``now`` is ``NOW``, for the command."""
+
+    @classmethod
+    def now(cls, tz: tzinfo | None = None) -> datetime:
+        """Return ``NOW`` in the zone asked for.
+
+        Parameters
+        ----------
+        tz : tzinfo | None
+            The zone, as ``datetime.now`` takes it.
+
+        Returns
+        -------
+        datetime
+            ``NOW``, converted to that zone.
+        """
+        return NOW.astimezone(tz)
+
+
+def frozen_clock() -> mock._patch:
+    """Return a patch under which the command derives at ``NOW``.
+
+    The command reads the clock; a test that relies on the expiry of
+    ``FIELDS`` must not fail once the real clock passes it (review of
+    unit 0012, M1).
+
+    Returns
+    -------
+    mock._patch
+        A patch of ``datetime`` in the command, usable as a decorator
+        or a context.
+    """
+    return mock.patch("govharness.cli.environment.datetime", FrozenDatetime)
 
 
 def write_authorization(root: Path, **fields: object) -> None:
@@ -700,6 +736,7 @@ class Configuration(unittest.TestCase):
                 self.assertNotIn(path, denied())
                 self.assertNotIn(path, denied(post))
 
+    @frozen_clock()
     @no_anchor()
     def test_command_option(self) -> None:
         """Behavior: ``--authorization`` opens the writes of an
@@ -830,6 +867,7 @@ class Unsigned(unittest.TestCase):
                 self.assertEqual(len(found.writes), 1)
                 self.assertEqual(len(found.summary), 1)
 
+    @frozen_clock()
     @no_anchor()
     def test_command_refuses_and_accepts(self) -> None:
         """Behavior: ``environment --authorization`` with no signer
@@ -947,6 +985,7 @@ class AfterReview(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "cannot be read"):
                 full_reading(root, accept_unsigned=True)
 
+    @frozen_clock()
     @no_anchor()
     def test_command_malformed_ledger(self) -> None:
         """Behavior: the command on a ledger whose last entry has a scope
@@ -985,6 +1024,7 @@ class AfterReview(unittest.TestCase):
                 self.assertFalse(out.exists())
                 self.assertIn("is no list of paths", err.getvalue())
 
+    @frozen_clock()
     def test_command_anchor_without_register(self) -> None:
         """Behavior: where the signer configuration names an anchor key
         and the corpus holds no register, the command refuses an
@@ -1021,6 +1061,7 @@ class AfterReview(unittest.TestCase):
         self.assertIn("anchor key", err.getvalue())
         self.assertIn("--accept-unsigned has no effect", err.getvalue())
 
+    @frozen_clock()
     @no_anchor()
     def test_removed_register_refuses(self) -> None:
         """Behavior: where the corpus holds no signer register but its
@@ -1095,6 +1136,7 @@ class AfterReview(unittest.TestCase):
                         bool(unsigned),
                     )
 
+    @frozen_clock()
     @no_anchor()
     def test_command_records_unsigned_reliance(self) -> None:
         """Behavior: the command with --accept-unsigned writes the
@@ -1121,6 +1163,7 @@ class AfterReview(unittest.TestCase):
         self.assertIn(f"exists: {IDENT}", coverage)
         self.assertIn(f"exists: {IDENT}", entry["rationale"])
 
+    @frozen_clock()
     def test_command_verifies_signatures(self) -> None:
         """Behavior: with a founded signer register, the command relies on
         an authorize that the human owner's key signed, and names no
@@ -1233,13 +1276,21 @@ class Horizon(unittest.TestCase):
         """Behavior: with no horizon given, an expiry 91 days after the
         derivation is refused with the horizon named, and one 89 or
         exactly 90 days after it is accepted, with the horizon named in
-        the summary.
+        the summary. Written with the offset +14:00, exactly 90 days is
+        accepted and a minute more refused, so the comparison is of
+        moments, not of local times.
 
-        Reference: unit 0012; security verification of unit 0008, M-c.
+        Reference: unit 0012; security verification of unit 0008, M-c;
+        review of unit 0012, L1.
         """
         self.assertEqual(DEFAULT_HORIZON, timedelta(days=90))
-        within = (NOW + timedelta(days=89)).isoformat()
-        for expires in (within, (NOW + timedelta(days=90)).isoformat()):
+        east = timezone(timedelta(hours=14))
+        edge = NOW + timedelta(days=90)
+        for expires in (
+            (NOW + timedelta(days=89)).isoformat(),
+            edge.isoformat(),
+            edge.astimezone(east).isoformat(),
+        ):
             with self.subTest(expires=expires):
                 root = self.granted(expires)
                 found = read_authorizations(
@@ -1251,14 +1302,21 @@ class Horizon(unittest.TestCase):
                 self.assertIn(
                     "under the expiry horizon of 90 days", found.summary[0]
                 )
-        root = self.granted((NOW + timedelta(days=91)).isoformat())
-        with self.assertRaisesRegex(
-            ValueError, "beyond the expiry horizon of 90 days"
+        for expires in (
+            (NOW + timedelta(days=91)).isoformat(),
+            (edge + timedelta(minutes=1)).astimezone(east).isoformat(),
         ):
-            read_authorizations(
-                read_corpus(root), read_tree(root), read_ledger(root),
-                (IDENT,), NOW, ROLE, False, False, accept_unsigned=True,
-            )
+            root = self.granted(expires)
+            with (
+                self.subTest(expires=expires),
+                self.assertRaisesRegex(
+                    ValueError, "beyond the expiry horizon of 90 days"
+                ),
+            ):
+                read_authorizations(
+                    read_corpus(root), read_tree(root), read_ledger(root),
+                    (IDENT,), NOW, ROLE, False, False, accept_unsigned=True,
+                )
 
     def test_until_revoked_needs_none(self) -> None:
         """Behavior: an authorization that lapses only when revoked is
@@ -1345,6 +1403,7 @@ class Horizon(unittest.TestCase):
             ):
                 reading(root, horizon=horizon)
 
+    @frozen_clock()
     @no_anchor()
     def test_command_horizon(self) -> None:
         """Behavior: the command refuses, by default, an expiry 200 days
@@ -1355,7 +1414,7 @@ class Horizon(unittest.TestCase):
 
         Reference: unit 0012; security verification of unit 0008, M-c.
         """
-        now = datetime.now(timezone.utc)
+        now = NOW
         far = (now + timedelta(days=200)).isoformat(timespec="seconds")
         near = (now + timedelta(days=30)).isoformat(timespec="seconds")
         results = {}

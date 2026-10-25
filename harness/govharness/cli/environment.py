@@ -154,7 +154,16 @@ def add_environment(sub: argparse._SubParsersAction) -> None:
     )
     mode = command.add_mutually_exclusive_group(required=True)
     mode.add_argument("--write", type=Path, metavar="OUT")
-    mode.add_argument("--check", action="store_true")
+    mode.add_argument(
+        "--check",
+        action="store_true",
+        help=(
+            "compare the installed files with a fresh rendering; give it "
+            "the options of the derivation it checks, --expiry-horizon "
+            "included, since the default horizon may refuse an "
+            "authorization that the derivation accepted"
+        ),
+    )
     command.set_defaults(run=lambda a, _: run_environment(a))
 
 

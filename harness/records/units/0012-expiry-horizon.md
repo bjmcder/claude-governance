@@ -63,4 +63,16 @@ The security verification of unit 0008 (`review-records/round-2026-10-24/harn-au
 
 ## Review
 
-Left for the reviewer.
+- The review of commit 489a680 (`review-records/harness/review-unit-0012.md`) found no High finding, one Medium (M1), and two Low (L1, L2). Each is addressed in the section below.
+
+## Revision after review
+
+This section supersedes the statements above where they differ: the command tests no longer read the real clock, so the item Open above is closed.
+
+- M1: the command tests read the real clock, so from 2027-01-01, the expiry of `FIELDS`, they would fail as expired. `tests/derive/test_authorizations.py` now has `FrozenDatetime`, a `datetime` whose `now` returns `NOW`, and `frozen_clock()`, which patches `datetime` in `cli/environment.py` the way `no_anchor()` patches `read_config`. The command reads the clock only in `authorized`, so the patch reaches nothing else. It is stacked on each command test that reaches the reading of authorizations: `test_command_option`, `test_command_refuses_and_accepts`, `test_command_malformed_ledger`, `test_command_anchor_without_register`, `test_removed_register_refuses`, `test_command_records_unsigned_reliance`, `test_command_verifies_signatures`, and `test_command_horizon`. `test_command_horizon` now takes its expiries from `NOW`. `test_command_malformed_horizon` stops at the parser and needs no patch.
+  - Checked on a copy of the harness, with the expiry of `FIELDS` moved to 2026-10-24T18:00Z, after `NOW` and before the real clock (2026-10-25T12:03Z). With the patch made inert, four command tests ended in errors. With it, every command test passed. In both runs `test_until_revoked_and_horizon` failed, because the move itself breaks its assertion that the expiry lies beyond 30 days.
+  - A cleaner follow-up, as the review says, is a `now` parameter on `authorized`.
+- L1: no test passed a non-UTC offset against the horizon, so comparing local times (`moment.replace(tzinfo=None) - now.replace(tzinfo=None)`) survived. `test_default_bound` now also accepts `NOW` plus exactly 90 days written as +14:00, and refuses the same plus one minute. Checked on a copy: that mutation now fails `test_default_bound` at the +14:00 case.
+- L2: the help of `--check` now says to give it the options of the derivation it checks, `--expiry-horizon` included, since the default horizon may refuse an authorization that the derivation accepted.
+- Suite: `cd harness && python3 -B -m unittest discover -s tests` ran 247 tests, OK (202 s). The count is unchanged, since the new cases are subtests of `test_default_bound`.
+- Ruff 0.16.10 reports no finding on `cli/environment.py` or the test file. With `--line-length 79 --select E501` it reports the same 6 earlier lines on the test file, and none on the CLI.
