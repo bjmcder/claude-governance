@@ -37,8 +37,8 @@ ROW = (f"| 1.0.1 | {DATE} | Editorial amendment (GOV.41): {READING}; no obligati
 
 RATIONALE = (f"Editorial amendment of HW.GPU, revision 1.0.1, ratified by the custodian on {DATE}: {READING}. "
              'The change is editorial under STND.IDENT.3 because the Selector text cites the selector of the '
-             'sub-profile it already names, and the Notes now name exactly the Article that the field instantiates '
-             'of HW.GPU.4 lists, from which the rank, waivability, and class onset they state follow as before; the '
+             'sub-profile it already names, and the Notes now name exactly the Article that the `instantiates` '
+             'field of HW.GPU.4 lists, from which the rank, waivability, and class onset they state follow as before; the '
              'wording of every provision stays as it was, so it alters no obligation, permission, or defined '
              'meaning. Transition (GOV.42): none, because no obligation changes. Review: record '
              'review-records/round-2026-10-25-close/p5/.'

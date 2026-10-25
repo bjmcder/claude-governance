@@ -19,8 +19,8 @@ AT = "2026-10-25T21:01:00+00:00"
 EDITS = [
     ('STND/CLASS/_doc.md', [
         (('The table of STND.CLASS.10 lists what waits for a more severe class and what a more severe class adds.'),
-         ('The table of STND.CLASS.10 lists what waits for a more severe class and what a more severe class adds; '
-          'no part of Simplicity (SIMPL) is among them.')),
+         ('The table of STND.CLASS.10 lists what waits for a more severe class and what a more severe class adds. '
+          'The table holds no part of Simplicity (SIMPL).')),
     ]),
 ]
 

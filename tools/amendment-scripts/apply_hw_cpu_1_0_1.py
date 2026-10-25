@@ -32,7 +32,7 @@ ROW = (f"| 1.0.1 | {DATE} | Editorial amendment (GOV.41): {READING}; no obligati
 
 RATIONALE = (f"Editorial amendment of HW.CPU, revision 1.0.1, ratified by the custodian on {DATE}: {READING}. "
              'The change is editorial under STND.IDENT.3 because the sentence now names exactly the Articles that '
-             'the field instantiates of those provisions lists, and the rank, waivability, and class onset it '
+             'the `instantiates` fields of those provisions list, and the rank, waivability, and class onset it '
              'states follow from those Articles as before; the wording of every provision stays as it was, so it '
              'alters no obligation, permission, or defined meaning. Transition (GOV.42): none, because no '
              'obligation changes. Review: record review-records/round-2026-10-25-close/p5/.'

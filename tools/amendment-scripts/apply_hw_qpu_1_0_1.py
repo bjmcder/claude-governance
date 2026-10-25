@@ -35,8 +35,8 @@ ROW = (f"| 1.0.1 | {DATE} | Editorial amendment (GOV.41): {READING}; no obligati
 
 RATIONALE = (f"Editorial amendment of HW.QPU, revision 1.0.1, ratified by the custodian on {DATE}: {READING}. "
              'The change is editorial under STND.IDENT.3 because the Selector text cites the selectors of the '
-             'sub-profiles it already names, and the Notes now name exactly the Articles that the field '
-             'instantiates of those provisions lists, from which the rank, waivability, and class onset they state '
+             'sub-profiles it already names, and the Notes now name exactly the Articles that the '
+             '`instantiates` fields of those provisions list, from which the rank, waivability, and class onset they state '
              'follow as before; the wording of every provision stays as it was, so it alters no obligation, '
              'permission, or defined meaning. Transition (GOV.42): none, because no obligation changes. Review: '
              'record review-records/round-2026-10-25-close/p5/.'

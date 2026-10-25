@@ -24,8 +24,8 @@ EDITS = [
     ]),
 ]
 
-READING = ('the informative Notes cite STND.INSTR.4 and STND.INSTR.5, which hold the dry runs and the halt on a '
-           'failed step that the Notes assign to STND.INSTR, and References lists STND.INSTR')
+READING = ('the informative Notes cite STND.INSTR.4 and STND.INSTR.5, which hold the shell guards and dry runs '
+           'that the Notes assign to STND.INSTR, and References lists STND.INSTR')
 
 ROW = (f"| 1.5.1 | {DATE} | Editorial amendment (GOV.41): {READING}; no obligation, permission, or defined "
        "meaning changes. |")

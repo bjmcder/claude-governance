@@ -21,7 +21,7 @@ EDITS = [
         (('The space KNOW of the governance corpus, with one directory per domain (STND.IDENT.15), and the tag '
           "vocabulary TAG, with one directory per facet, are the custodians' shared knowledge base and tags."),
          ('The space of the governance corpus for knowledge entries (KNOW), with one directory per domain '
-          "(STND.IDENT.15), and its tag vocabulary (TAG), with one directory per facet, are the custodians' shared "
+          "(STND.IDENT.15), and the tag vocabulary of that corpus (TAG), with one directory per facet, are the custodians' shared "
           'knowledge base and tags.')),
         (('The facet TAG.COMP is local to a project.'),
          ('The component facet (TAG.COMP) is local to a project.')),
