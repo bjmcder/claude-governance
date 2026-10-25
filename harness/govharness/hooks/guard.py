@@ -192,8 +192,21 @@ PUSH_OPTIONS = {
 }
 # Git configuration that sends a push elsewhere, adds to what it
 # pushes, or runs a program for the transport: sections, then keys by
-# section and key, then keys of each remote.
-GIT_SECTIONS = {"alias", "credential", "include", "includeif", "url"}
+# section and key, then keys of each remote. Sections ``hook`` (hooks
+# defined in the configuration, which run in a push like those of the
+# hooks directory), ``gpg`` (the programs of a signed push), and
+# ``protocol`` (which transports git may use) are referred whole, since
+# the guard does not model them (review of unit 0014, M1 and L3).
+GIT_SECTIONS = {
+    "alias",
+    "credential",
+    "gpg",
+    "hook",
+    "include",
+    "includeif",
+    "protocol",
+    "url",
+}
 GIT_KEYS = {
     ("core", "askpass"),
     ("core", "fsmonitor"),
@@ -205,7 +218,11 @@ GIT_KEYS = {
     # Pages a push, which then runs GIT_PAGER (GIT_ADMITTED).
     ("pager", "push"),
     ("push", "followtags"),
+    # Signs a push, which then runs the program of gpg.
+    ("push", "gpgsign"),
     ("push", "recursesubmodules"),
+    # Changes how git calls the ssh program of the transport.
+    ("ssh", "variant"),
     ("submodule", "recurse"),
 }
 # The variables of git that leave an authorized push unreferred; every
@@ -214,11 +231,13 @@ GIT_KEYS = {
 # runs GIT_PAGER only when paged, by ``--paginate``, which no admitted
 # push takes, or by ``pager.push``, which GIT_KEYS refers.
 # GIT_TERMINAL_PROMPT, set false, only stops git asking on the terminal
-# for a credential; it supplies none (git(1), Environment Variables).
+# for a credential; it supplies none (git(1), Environment Variables), so
+# it stands only with a value in PROMPT_OFF, and any other value refers.
 # Claude Code sets GIT_EDITOR in the shell of the agent.
 GIT_ADMITTED = frozenset(
     {"GIT_EDITOR", "GIT_PAGER", "GIT_SEQUENCE_EDITOR", "GIT_TERMINAL_PROMPT"}
 )
+PROMPT_OFF = {"0", "false"}
 # Options of git subcommands that take the next word, so that a ``-n``
 # after one is its value, not a dry run.
 DRY_VALUED = {"--exclude", "--pathspec-from-file", "-e", "-o"}
@@ -2113,6 +2132,9 @@ def push_grant(
     unadmitted = sorted(
         k for k in os.environ if k.startswith("GIT_") and k not in GIT_ADMITTED
     )
+    prompt = os.environ.get("GIT_TERMINAL_PROMPT")
+    if prompt is not None and prompt not in PROMPT_OFF:
+        unadmitted.insert(0, "GIT_TERMINAL_PROMPT")
     if unadmitted:
         why = f"the environment sets a variable of git, {unadmitted[0]}"
         return refer(why)

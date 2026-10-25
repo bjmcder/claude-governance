@@ -74,4 +74,24 @@ The installation-kit check of 2026-10-25 (`review-records/round-2026-10-25-close
 
 ## Review
 
-Left for the reviewer.
+- The security review of commit 6e9086c (`review-records/harness/review-unit-0014.md`) found no High finding, two Medium (M1, M2), and four Low (L1 to L4). Each is addressed in the section below.
+
+## Revision after review
+
+This section supersedes the statements above where they differ.
+
+- M1: git 2.56 runs a hook defined in the configuration (`hook.<friendly-name>.command` with `.event`, git-config(1)) in a push, and the guard did not read it. The reviewer's probe ran one, and the guard answered `allow`. `hook` now joins `GIT_SECTIONS`, so any key of that section, in the repository's, the worktree's, the account's, or the system's configuration, refers the push. Tests:
+  - `test_hook_defined_in_configuration` reproduces the case with a pre-push hook in each of the four files, the hooks directory empty, and expects a referral that names the section.
+  - `test_repository_configuration` adds `[hook "h"]`, `[hook.h]`, and `[hook] jobs`.
+  - The README and unit 0008 no longer say that the repository's hooks are fully modeled. The README says "hooks directories" and states the change, and unit 0008 has a correction.
+- M2: the tests now hold the admitted list closed.
+  - `GIT_VARIABLES` in `tests/hooks/test_remote_writes.py` holds, as data, every name in the section Environment Variables of git(1) of the installed git 2.56.0. It also holds those of git-config(1) (`GIT_CONFIG`, `GIT_CONFIG_COUNT`, `GIT_CONFIG_KEY_0`, `GIT_CONFIG_VALUE_0`), names git reads without listing there (`GIT_CONFIG_PARAMETERS`, `GIT_PROXY_COMMAND`, `GIT_TEMPLATE_DIR`, `GIT_PAGER_IN_USE`), and two look-alikes. That makes 84 names.
+  - `test_environment_variable_of_git` sets each name not in a fixed `ADMITTED` of the four, to a word and to the empty string. It expects a referral, also beside `GIT_EDITOR`, with the name in the reason.
+  - `test_admitted_list_is_closed` asserts that `guard.GIT_ADMITTED` equals the four, and that each of them is one that git(1) lists.
+  - Mutants, each patched in turn and the test file run: admitting any one of the eight that survived the review (`GIT_CONFIG_PARAMETERS`, `GIT_SSH`, `GIT_NAMESPACE`, `GIT_TEMPLATE_DIR`, `GIT_ALLOW_PROTOCOL`, `GIT_PROTOCOL_FROM_USER`, `GIT_ALTERNATE_OBJECT_DIRECTORIES`, `GIT_WORK_TREE`) now fails five subtests or more. So does admitting one of the six the review found caught, or `GIT_PROGRESS_DELAY`. No mutant survives.
+- L1: `GIT_TERMINAL_PROMPT` stands only with a value in `PROMPT_OFF`, which is `0` or `false`. git(1) calls it a Boolean whose false value stops the prompt. git-config(1) also reads `no`, `off`, and the empty string as false, but these refer, which fails closed. Any other value refers, and the reason names the variable. `test_admitted_variables_of_git` allows `0` and `false` and refers `1`, `true`, `yes`, the empty string, `FALSE`, `no`, `off`, and `00`. Mutants that admit any value, or only `0`, fail.
+- L2: the record above already states that the reasoning holds for git 2.56. The values of `GIT_EDITOR`, `GIT_SEQUENCE_EDITOR`, and `GIT_PAGER` are still not checked, since no allowed push runs them. Hooks and credential helpers inherit the variables, but every hook, now including those in the configuration, refers.
+- L3: the guard now refers a push where the configuration sets any key of the sections `gpg` and `protocol`, or `push.gpgSign` or `ssh.variant`, since it does not model them. `gpg.program` and `gpg.<format>.program` name programs of a signed push, `protocol.*` changes which transports git may use, and `ssh.variant` changes how git calls ssh. The cases are in `test_repository_configuration`, and a mutant that drops any of them fails. **This is stricter.** An authorized push that the configuration signs (`push.gpgSign`) is now referred. So is any push from an account with a `gpg` key set, such as `gpg.format = ssh` for signing commits, even where the push itself is not signed. An owner who signs gains nothing from a push authorization until the guard models signing. `AUTHORIZED_GAP`, the README, unit 0008, and `tools/install-tests.md` (step 4) say so.
+- L4: left as is. INSTALL.md names the harness directory of the checkout that derived it. If that checkout is a worktree that is later removed, the printed `cd` fails, and the check does not run. It never passes wrongly. The owner derives from the main checkout, as `tools/install-tests.md` does.
+- Suite: `cd harness && python3 -B -m unittest discover -s tests` ran 253 tests, OK (201 s). That is two more than before this revision: `test_admitted_list_is_closed` and `test_hook_defined_in_configuration`.
+- Ruff 0.16.10 on `hooks/guard.py`, `derive/environment/claude_code.py`, and `tests/hooks/test_remote_writes.py` reports the same findings as before this revision: the 7 earlier ones on the guard and 16 ISC004 on the adapter. With `--line-length 79 --select E501`, the only findings are on lines this unit did not write.
