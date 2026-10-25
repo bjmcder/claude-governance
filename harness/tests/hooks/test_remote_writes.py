@@ -134,6 +134,27 @@ class Repository:
             patch.stop()
         self.tmp.cleanup()
 
+    def reply(self, command: str) -> dict | None:
+        """Return the guard's whole reply to one shell command in the work.
+
+        Parameters
+        ----------
+        command : str
+            The command line.
+
+        Returns
+        -------
+        dict | None
+            The reply, with its reason, or None for no answer.
+        """
+        event = {
+            "tool_name": "Bash",
+            "tool_input": {"command": command},
+            "cwd": str(self.work),
+        }
+        policy = guard.read_policy(self.policy)
+        return guard.decide(guard.check_call(event, policy), policy)
+
     def answer(
         self, command: str, cwd: str | None = None, tool: str = "Bash"
     ) -> str | None:
@@ -437,13 +458,68 @@ class PushShape(RepositoryCase):
 
     def test_environment_variable_of_git(self) -> None:
         """Behavior: while the account's environment sets a variable of
-        git, an authorized push is referred.
+        git other than the four admitted, an authorized push is
+        referred, and the reason names the variable; one admitted beside
+        it does not lift the referral.
 
-        Reference: such a variable can name another configuration file
-        or a program for the transport.
+        Reference: such a variable can name another repository, another
+        configuration file or more configuration, a program for the
+        transport, a proxy, or the programs git runs (git(1),
+        Environment Variables). A sample, not every variable.
         """
-        with mock.patch.dict(os.environ, {"GIT_CONFIG_GLOBAL": "/x"}):
-            self.assert_answers(ASK, "git push origin main")
+        for name, value in (
+            ("GIT_DIR", "/tmp/other"),
+            ("GIT_SSH_COMMAND", "evil"),
+            ("GIT_CONFIG_GLOBAL", "/x"),
+            ("GIT_CONFIG_COUNT", "1"),
+            ("GIT_PROXY_COMMAND", "evil"),
+            ("GIT_EXEC_PATH", "/tmp/bin"),
+            ("GIT_ASKPASS", "evil"),
+            ("GIT_TRACE", "1"),
+            ("GIT_EDITOR_X", "true"),
+            ("GIT_", "x"),
+        ):
+            with self.subTest(name=name):
+                with mock.patch.dict(os.environ, {name: value}):
+                    self.assert_answers(ASK, "git push origin main")
+                with mock.patch.dict(
+                    os.environ, {name: value, "GIT_EDITOR": "true"}
+                ):
+                    reply = self.repo.reply("git push origin main")
+                output = reply["hookSpecificOutput"]
+                self.assertEqual(output["permissionDecision"], ASK)
+                self.assertIn(
+                    f"the environment sets a variable of git, {name}",
+                    output["permissionDecisionReason"],
+                )
+
+    def test_admitted_variables_of_git(self) -> None:
+        """Behavior: GIT_EDITOR, GIT_SEQUENCE_EDITOR, GIT_PAGER, and
+        GIT_TERMINAL_PROMPT, each alone and all together, leave an
+        authorized push allowed; a push the policy does not name is
+        still referred.
+
+        Reference: unit 0014. A push launches no editor, pages only
+        under ``--paginate`` or ``pager.push``, and GIT_TERMINAL_PROMPT
+        only stops a prompt (git(1), Environment Variables; git-config(1),
+        ``pager.<cmd>``). Claude Code sets ``GIT_EDITOR=true`` in the
+        agent's shell, so before this unit every authorized push in a
+        session whose hook inherits it was referred.
+        """
+        values = {
+            "GIT_EDITOR": "true",
+            "GIT_SEQUENCE_EDITOR": "evil",
+            "GIT_PAGER": "evil",
+            "GIT_TERMINAL_PROMPT": "0",
+        }
+        for name, value in [*values.items(), ("all", None)]:
+            change = values if value is None else {name: value}
+            with (
+                self.subTest(name=name),
+                mock.patch.dict(os.environ, change),
+            ):
+                self.assert_answers(ALLOW, "git push origin main")
+                self.assert_answers(ASK, "git push origin other")
 
 
 class RepositoryFound(RepositoryCase):
@@ -537,6 +613,8 @@ class Redirection(unittest.TestCase):
             "[push]\n\tfollowTags = true\n",
             "[push]\n\trecurseSubmodules = on-demand\n",
             "[submodule]\n\trecurse\n",
+            "[pager]\n\tpush = true\n",
+            "[Pager]\n\tPush = evil\n",
             "[core]\n\tsshCommand = evil\n",
             "[core]\n\thooksPath = hooks\n",
             "[core]\n\tfsmonitor = evil\n",
@@ -732,6 +810,25 @@ class TrackerPost(RepositoryCase):
             f"gh issue comment 2² {repo} -b x",
             f"./gh issue comment 1 {repo} -b x",
         )
+
+    def test_environment_variable_of_gh(self) -> None:
+        """Behavior: while the account's environment sets any variable
+        of gh, an authorized post is referred; the admitted variables of
+        git do not reach a post.
+
+        Reference: such a variable can name another host or repository,
+        or a token or configuration (gh help environment); unit 0014
+        admits no variable of gh.
+        """
+        post = "gh issue comment 1 -R git.example.org/team/work -b x"
+        for name in ("GH_REPO", "GH_HOST", "GH_TOKEN", "GH_CONFIG_DIR"):
+            with (
+                self.subTest(name=name),
+                mock.patch.dict(os.environ, {name: "x"}),
+            ):
+                self.assert_answers(ASK, post)
+        with mock.patch.dict(os.environ, {"GIT_EDITOR": "true"}):
+            self.assert_answers(ALLOW, post)
 
     def test_gh_aliases_and_extensions(self) -> None:
         """Behavior: setting a gh alias or installing an extension is a

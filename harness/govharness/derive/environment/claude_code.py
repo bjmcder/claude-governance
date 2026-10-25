@@ -15,6 +15,9 @@ them, and two reports for the owner:
 - ``coverage.md``: how far each outcome is enforced (STND.HARN.19).
 - ``entry-draft.json``: the draft entry of STND.DFLT.22, naming only the
   outcomes enforced in full (STND.HARN.20).
+- ``INSTALL.md``: the owner's steps: the programs the configuration
+  runs, the installation, the check with every option of the
+  derivation, and the command that appends the entry.
 
 Everything under ``root/`` installs at the same path under ``/``.
 Routine actions inside the working bounds are allowed without a prompt,
@@ -55,8 +58,16 @@ COVERAGE = PurePosixPath("coverage.md")
 ENTRY = PurePosixPath("entry-draft.json")
 INSTALL = PurePosixPath("INSTALL.md")
 PYTHON = "/usr/bin/python3"
-# Programs the configuration runs, checked as installed files are.
-PROGRAMS = (PYTHON,)
+# Programs the configuration runs, checked as installed files are, and
+# what each does. On Linux the sandbox of Claude Code needs bubblewrap
+# and socat (its documentation for sandboxing); without them, work that
+# is not assured runs unsandboxed.
+PROGRAM_ROLES = {
+    PYTHON: "the interpreter that the hook runs the guard with",
+    "/usr/bin/bwrap": "bubblewrap, which the sandbox confines commands with",
+    "/usr/bin/socat": "socat, which relays the sandbox's network proxy",
+}
+PROGRAMS = tuple(PROGRAM_ROLES)
 FULL, PARTIAL, NONE = "full", "partial", "none"
 RECORDS = "records"  # The directory of STND.DFLT.2.
 CHECKPOINTS = (
@@ -180,8 +191,11 @@ AUTHORIZED_GAP = (
     "repository's, the worktree's, the account's, and the system's) "
     "rewrites no address and sets no push address, inclusion, alias, "
     "credential helper, hooks path, transport program, proxy, pushing of "
-    "tags, or recursion into submodules, while the guard's environment "
-    "sets no variable of git or gh. The text rules that refer every push "
+    "tags, recursion into submodules, or paging of a push, while the "
+    "guard's environment sets no variable of gh and no variable of git "
+    "other than GIT_EDITOR, GIT_SEQUENCE_EDITOR, GIT_PAGER, and "
+    "GIT_TERMINAL_PROMPT, which a push does not read or reads only to "
+    "stop a prompt. The text rules that refer every push "
     "and every such post stay, and a permission rule may outrank a "
     "hook's allow; until an installation test shows that the allow "
     "passes, an authorized write may still be referred, and, in an "
@@ -282,6 +296,35 @@ class Locations:
     paths: tuple[str, ...]
     homes: tuple[str, ...]
     unmapped: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class Derivation:
+    """How the configuration was derived, so that INSTALL.md repeats it.
+
+    Parameters
+    ----------
+    harness : str
+        Absolute path of the directory that holds ``govharness``, from
+        which ``python3 -m govharness`` runs.
+    corpus : str
+        Absolute path of the corpus root the derivation read.
+    options : tuple[str, ...]
+        Every option of the derivation as it was given, with paths made
+        absolute, and without ``--write``; ``--check`` with these
+        derives the same files.
+    out : str
+        Absolute path of the output directory, which holds INSTALL.md.
+    """
+
+    harness: str
+    corpus: str
+    options: tuple[str, ...]
+    out: str
+
+
+# What INSTALL.md names where the caller gives no derivation.
+UNSTATED = Derivation("HARNESS", "CORPUS", ("OPTIONS",), "OUT")
 
 
 LocationRule = Callable[[Inputs], tuple[tuple[str, ...], tuple[str, ...]]]
@@ -804,76 +847,231 @@ def coverage_report(
     )
 
 
-def install_notes(inputs: Inputs) -> str:
+def shell_command(groups: list[list[str]]) -> str:
+    """Render one shell command, a group of words to a line.
+
+    Parameters
+    ----------
+    groups : list[list[str]]
+        Words of the command, grouped as the lines should hold them,
+        such as an option with its value; an empty group is skipped.
+
+    Returns
+    -------
+    str
+        The command, each word quoted for the shell where it needs it,
+        and each line after the first continued and indented.
+    """
+    return " \\\n    ".join(shlex.join(words) for words in groups if words)
+
+
+def option_groups(options: tuple[str, ...]) -> list[list[str]]:
+    """Group options with their values, one option to a line.
+
+    Parameters
+    ----------
+    options : tuple[str, ...]
+        Options as the command takes them.
+
+    Returns
+    -------
+    list[list[str]]
+        Each option with the words that follow it up to the next one.
+    """
+    groups: list[list[str]] = []
+    for word in options:
+        if word.startswith("--") or not groups:
+            groups.append([word])
+        else:
+            groups[-1].append(word)
+    return groups
+
+
+def install_notes(
+    inputs: Inputs,
+    draft: dict[str, object],
+    derivation: Derivation = UNSTATED,
+) -> str:
     """Render the installation steps for the human owner.
 
     Parameters
     ----------
     inputs : Inputs
         The owner's statement of the environment.
+    draft : dict[str, object]
+        The draft entry, whose fields the command that appends it
+        repeats.
+    derivation : Derivation
+        How the configuration was derived; without it, the steps name
+        placeholders.
 
     Returns
     -------
     str
-        Markdown text.
+        Markdown text. The check repeats the corpus root and every
+        option of the derivation, so that it renders the same files
+        (unit 0014).
     """
     files = (SETTINGS, POLICY, GUARD)
-    lines = [
+    install = [
         f"install -o root -g root -m 0644 {path} /{path.relative_to(ROOT)}"
         for path in files
+    ]
+    module = ["python3", "-B", "-m", "govharness"]
+    check = shell_command(
+        [
+            [*module, "environment", derivation.corpus],
+            *option_groups(derivation.options),
+            ["--check"],
+        ]
+    )
+
+    def field(name: str) -> str:
+        """Return a field of the draft as ``ledger append`` takes it.
+
+        Parameters
+        ----------
+        name : str
+            Name of the field.
+
+        Returns
+        -------
+        str
+            Its value; a list's items separated by commas.
+        """
+        value = draft[name]
+        return ",".join(value) if isinstance(value, list) else str(value)
+
+    append = shell_command(
+        [
+            [*module, "ledger", "append", derivation.corpus],
+            ["--type", field("type")],
+            ["--actor", field("actor")],
+            ["--role", field("role")],
+            ["--authority", field("authority")],
+            ["--targets", field("targets")],
+            ["--scope", field("scope")],
+            ["--sign", "KEY"] if inputs.assured else [],
+            ["--rationale", field("rationale")],
+        ]
+    )
+    programs = [f"- `{path}`: {role}." for path, role in PROGRAM_ROLES.items()]
+    placeholders = [
+        (
+            "HARNESS, CORPUS, OPTIONS, and OUT are placeholders: the "
+            "directory that holds `govharness`, the corpus root, every "
+            "option of the derivation but `--write`, and the directory "
+            "that holds this file."
+        ),
+        "",
+    ]
+    signature = (
+        ", with your signature (STND.DFLT.23); KEY is your signing key."
+        if inputs.assured
+        else "; for work that is not assured it needs no signature and "
+        "displaces no provision (STND.DFLT.22, STND.DFLT.23)."
+    )
+    revocation = [
+        (
+            "The guard lets the remote writes of each authorization named "
+            "here proceed until it expires. After revoking one, derive and "
+            "install the configuration again, since the installed policy "
+            "does not read the ledger (STND.HARN.29)."
+        ),
+        "",
     ]
     return "\n".join(
         [
             "# Installing the Claude Code configuration",
             "",
-            "The human owner installs these files from an administrator "
-            "account; an agent never does (PRIME.9).",
-            "",
-            "```sh",
-            "install -d -o root -g root -m 0755 /etc/claude-code "
-            "/etc/governance",
-            *lines,
-            "```",
-            "",
-            "Then, from the agent's account, confirm that the installed "
-            "files match and that the account cannot alter them "
-            "(STND.HARN.21):",
-            "",
-            "```sh",
-            "python -m govharness environment CORPUS --work "
-            f"{inputs.work} --home {inputs.home} --check"
-            "  # with the same inputs",
-            "```",
-            "",
-            "Last, review `coverage.md` and `entry-draft.json`, and append "
-            "the entry to the work ledger"
-            + (
-                " with your signature (STND.DFLT.23)."
-                if inputs.assured
-                else "; for work that is not assured it needs no "
-                "signature and displaces no provision (STND.DFLT.22, "
-                "STND.DFLT.23)."
-            )
-            + " Append it with the type `configure` (STND.HARN.7).",
-            "",
-            *(
-                [
-                    "The guard lets the remote writes of each authorization "
-                    "named here proceed until it expires. After revoking one, "
-                    "derive and install the configuration again, since the "
-                    "installed policy does not read the ledger "
-                    "(STND.HARN.29).",
-                    "",
-                ]
-                if inputs.remote_writes
-                else []
+            (
+                "The human owner installs these files from an administrator "
+                "account; an agent never does (PRIME.9)."
             ),
+            "",
+            *(placeholders if derivation == UNSTATED else []),
+            "## Before installing",
+            "",
+            (
+                "The configuration runs these programs, and the check below "
+                "reports each one that is missing or that the agent's "
+                "account is able to alter (STND.HARN.21):"
+            ),
+            "",
+            *programs,
+            "",
+            (
+                "Install any that is missing, at that path, from the "
+                "system's packages. Without the sandbox's programs Claude "
+                "Code does not start assured work, and runs other work "
+                "unsandboxed, saying that the sandbox is unavailable."
+            ),
+            "",
+            "## Install",
+            "",
+            (
+                "From a root shell, inside the output directory of the "
+                "derivation, which holds this file, since the paths of the "
+                "files are relative to it:"
+            ),
+            "",
+            "```sh",
+            shlex.join(["cd", derivation.out]),
+            "install -d -o root -g root -m 0755 /etc/claude-code"
+            + " /etc/governance",
+            *install,
+            "```",
+            "",
+            "## Check",
+            "",
+            (
+                "Then, from the agent's account (not root), confirm that "
+                "the installed files match and that the account cannot "
+                "alter them or the programs above (STND.HARN.21). Run the "
+                "check from the directory that holds `govharness`, as "
+                "below. It names the corpus root that the derivation read, "
+                f"`{derivation.corpus}`, and every option the derivation "
+                "was given; a check with other options renders other files "
+                "and reports that they differ from their generation."
+            ),
+            "",
+            "```sh",
+            shlex.join(["cd", derivation.harness]),
+            check,
+            "```",
+            "",
+            "Expected: `environment: PASS`.",
+            "",
+            "## Record",
+            "",
+            (
+                "Last, review `coverage.md` and `entry-draft.json`, and "
+                "append the entry, with the type `configure` "
+                "(STND.HARN.7), to the corpus ledger, "
+                f"`{derivation.corpus}/{LEDGER_FILE}`{signature} The "
+                "command below repeats the fields of `entry-draft.json`. "
+                "Where the entry ends a transition (GOV.42) that waits on "
+                "an installed configuration, name that ledger entry in the "
+                "rationale before appending. From the directory that holds "
+                "`govharness`:"
+            ),
+            "",
+            "```sh",
+            shlex.join(["cd", derivation.harness]),
+            append,
+            shlex.join([*module, "verify", derivation.corpus]),
+            "```",
+            "",
+            *(revocation if inputs.remote_writes else []),
         ]
     )
 
 
 def render(
-    corpus: Corpus, inputs: Inputs, guard_source: str
+    corpus: Corpus,
+    inputs: Inputs,
+    guard_source: str,
+    derivation: Derivation = UNSTATED,
 ) -> dict[PurePosixPath, str]:
     """Render every file of the Claude Code configuration.
 
@@ -885,6 +1083,9 @@ def render(
         The owner's statement of the environment.
     guard_source : str
         Text of ``govharness/hooks/guard.py``.
+    derivation : Derivation
+        How the command derived the configuration, which INSTALL.md
+        repeats; it changes no installed file.
 
     Returns
     -------
@@ -909,12 +1110,10 @@ def render(
         + "\n",
         GUARD: guard_source,
     }
+    draft = entry_draft(coverage, installed, inputs.unsigned)
     return {
         **installed,
         COVERAGE: coverage_report(table, coverage, inputs),
-        ENTRY: json.dumps(
-            entry_draft(coverage, installed, inputs.unsigned), indent=2
-        )
-        + "\n",
-        INSTALL: install_notes(inputs),
+        ENTRY: json.dumps(draft, indent=2) + "\n",
+        INSTALL: install_notes(inputs, draft, derivation),
     }

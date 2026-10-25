@@ -1,6 +1,6 @@
 # Installation tests of unit 0008
 
-For the human owner. These steps install the derived Claude Code configuration, run the three installation tests that `OPEN-ITEMS.md` item 2 asks for, record them in unit 0008, and append the `configure` entry that ends the transition of ledger entry 53 for STND.HARN.18. The kit was prepared on 2026-10-25 (`review-records/round-2026-10-25-close/install-kit.md`). No agent performs any step here.
+For the human owner. These steps install the derived Claude Code configuration, run the three installation tests that `OPEN-ITEMS.md` item 2 asks for, record them in unit 0008, and append the `configure` entry that ends the transition of ledger entry 53 for STND.HARN.18. The kit was prepared on 2026-10-25 (`review-records/round-2026-10-25-close/install-kit.md`) and revised for unit 0014, which fixes that check's findings 1 to 5. No agent performs any step here.
 
 Set these in each shell you use, the root shell included:
 
@@ -15,10 +15,10 @@ TESTREPO=install-test                   # a disposable repository, never a real 
 
 ## Before you start
 
-1. The QA.8 code review of the harness (definition of done, items 9 and 10) is merged. Derive from that harness. A later change to the harness changes the hash of `guard.py`, so derive again after it.
-2. As root, install `socat` (`pacman -S socat`). On Linux the Claude Code sandbox needs `bubblewrap` and `socat`. `bubblewrap` is present on this machine, but `socat` is not. Without it, Claude Code runs unsandboxed, because work that is not assured does not require the sandbox, and tests 2 and 3 then test nothing.
+1. The QA.8 code review of the harness (definition of done, items 9 and 10) is merged, and so is unit 0014 (`harness/records/units/0014-installation-notes.md`), which these steps assume. Derive from that harness. A later change to the harness changes the hash of `guard.py`, so derive again after it.
+2. As root, install `socat` (`pacman -S socat`). On Linux the Claude Code sandbox needs `bubblewrap` and `socat`. `bubblewrap` is present on this machine, but `socat` is not. Without it, Claude Code runs unsandboxed, because work that is not assured does not require the sandbox, and tests 2 and 3 then test nothing. INSTALL.md lists these programs, and the check of step 9 reports `/usr/bin/bwrap` or `/usr/bin/socat` if either is missing or alterable by the agent's account.
 3. On `$HOST`, create the disposable repository `$OWNER/$TESTREPO` and open one issue in it, number 1. Use your SSH key for it. Do not use a credential helper: any `credential` key makes the guard refer every push.
-4. As the agent's account, `git config --global --name-only -l` lists no key in the sections `credential`, `url`, `include`, `includeif`, or `alias`. It also lists none of `core.hookspath`, `core.askpass`, `core.sshcommand`, `core.fsmonitor`, `core.gitproxy`, `http.proxy`, `push.followtags`, `push.recursesubmodules`, or `submodule.recurse`. Also, `env | grep -E '^(GIT|GH)_'` prints nothing in the shell where you start Claude Code. Any one of these makes the guard refer the authorized write.
+4. As the agent's account, `git config --global --name-only -l` lists no key in the sections `credential`, `url`, `include`, `includeif`, or `alias`. It also lists none of `core.hookspath`, `core.askpass`, `core.sshcommand`, `core.fsmonitor`, `core.gitproxy`, `http.proxy`, `push.followtags`, `push.recursesubmodules`, or `submodule.recurse`. Nor does it list `pager.push`. Also, `env | grep -E '^(GIT|GH)_'` prints nothing in the shell where you start Claude Code, other than `GIT_EDITOR`, `GIT_SEQUENCE_EDITOR`, `GIT_PAGER`, or `GIT_TERMINAL_PROMPT`, which the guard admits (unit 0014). Any one of these makes the guard refer the authorized write.
 
 ## Derive the test configuration
 
@@ -77,7 +77,7 @@ Read the printed `authorization:` lines. They must name the commit at `git@$HOST
 
 ## Install, as root
 
-8. Run the block of `$TEST/out/INSTALL.md` from a root shell, from inside `$TEST/out`, since its paths are relative to that directory:
+8. Run the block under "Install" in `$TEST/out/INSTALL.md` from a root shell. It begins with `cd` to `$TEST/out`, since its paths are relative to that directory:
 
 ```sh
 cd "$TEST/out"
@@ -87,13 +87,13 @@ install -o root -g root -m 0644 root/etc/governance/environment.json /etc/govern
 install -o root -g root -m 0644 root/etc/governance/guard.py /etc/governance/guard.py
 ```
 
-9. As the agent's account (not root), check the installation. Give it every option of step 7. The `--check` line that INSTALL.md prints omits them, and as printed it fails with "differs from its generation":
+9. As the agent's account (not root), check the installation. Run the block under "Check" in `$TEST/out/INSTALL.md` as printed. It changes to `$REPO/harness` and names the corpus root and every option of step 7, with paths made absolute. This command is the same check:
 
 ```sh
 cd "$REPO/harness" && python3 -B -m govharness environment "$TEST/corpus" "${OPTS[@]}" --check
 ```
 
-Expected: `environment: PASS`.
+Expected: `environment: PASS`. A check with fewer options fails with "differs from its generation". Run it within the expiry horizon of the derivation and before `INSTT.AUTH.1` expires, since the check derives again at that moment.
 
 ## Run the tests
 
@@ -114,7 +114,7 @@ Precondition: `grep -cF 'Bash(git push *)' /etc/claude-code/managed-settings.jso
 What a failure means:
 
 - If 1a or 1c is prompted by Claude Code's own permission prompt, with no "Governance" reason, then the ask rule outranks the hook's `allow`. Authorized writes then stay referred: that is safe, but the authorization gains nothing.
-- If the prompt carries the guard's reason, read it. "The environment sets a variable of git" means the session passes a `GIT_` variable to the hook. Claude Code sets `GIT_EDITOR=true` in the agent's shell. If that reason appears, test 1a cannot settle the question, so 1c decides it, and the guard's reading of the variable is a finding for the harness.
+- If the prompt carries the guard's reason, read it. "The environment sets a variable of git, NAME" means the session passes that `GIT_` variable to the hook. Claude Code sets `GIT_EDITOR=true` in the agent's shell, but the guard admits it and three others (unit 0014), so the reason names some other variable. Note its name. Test 1a then cannot settle the question, so 1c decides it. Record the variable: it may be one more for the guard to admit.
 - If 1b or 1d proceeds without a prompt, the referral is not in force. Remove the installed files and record a defect.
 
 ### Test 2: the opened secret is readable, the others are not
@@ -174,9 +174,9 @@ cd "$REPO/harness"
 python3 -B -m govharness environment governance --work "$REPO" --home "$AGENT_HOME" --write "$REPO/.scratch/install-kit/final"
 ```
 
-Install it as in step 8, from that directory. Check it as in step 9, with the same options as the derivation and `governance` as the corpus.
+Install it as in step 8, from the block of `final/INSTALL.md`. Check it as in step 9, with the block under "Check" of `final/INSTALL.md`, which names the live corpus and the options of this derivation.
 
-15. Append the `configure` entry to the corpus ledger, `harness/governance/ledger.jsonl`, which holds entry 53. INSTALL.md says "work ledger", but entry 53's transition lives in the corpus ledger. Take `--targets` and the rationale from `final/entry-draft.json`, and add the last sentence below:
+15. Append the `configure` entry to the corpus ledger, `harness/governance/ledger.jsonl`, which holds entry 53. The block under "Record" of `final/INSTALL.md` gives this command, with the corpus ledger named and the fields of `final/entry-draft.json` filled in. Before you run it, add the last sentence below to its rationale, since entry 53's transition ends with this entry. In outline:
 
 ```sh
 cd "$REPO/harness"
