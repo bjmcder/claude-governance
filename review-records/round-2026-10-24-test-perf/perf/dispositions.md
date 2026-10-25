@@ -40,7 +40,7 @@ No conflict among the 596 pairs of 0.1.
 | O1: STND.PERF.18 and MEAS.3, MEAS.7; weak alternative | Accepted. The Notes say that one record meets both where MEAS binds. The alternative is now "be recorded as a decision under VV.3, with its criterion and the time at which that criterion was set". |
 | O2: STND.PERF.2 and HW.20 | Accepted. STND.PERF.2 opens "Other than for a budget of a constrained target, which HW.20 holds" (HW.20 in `refers_to`). The Notes say that a deadline governed by HW.20 needs a bound on worst-case execution time, which no sample statistic gives. |
 | O3: STND.PERF.22 and HW.3 | Accepted: "the record that HW.3 gives of its execution path" (HW.3 in `refers_to`). |
-| O4: cite PRIME.2 in STND.PERF.21 | Not taken. Citing PRIME.2 would make the provision binding, and the custodian decided that every provision of STND.PERF is a default. |
+| O4: cite PRIME.2 in STND.PERF.21 | Not taken. Citing PRIME.2 would make the provision binding, and the custodian decided that every provision of STND.PERF is a default. The harness forces the binding mark once the instantiates closure reaches PRIME and fails a non-waivable default (GOV.17), and binding would raise the floor beyond NUMER.26, which reaches stochastic results only (GOV.11). |
 | O5: samples across a fallback or throttle (U5) | Accepted: the Notes say that such an event enters the exclusion criterion of STND.PERF.18 or the record of the sample. |
 | Smaller: STND.PERF.12 s2 and HW.22 data movement | Accepted: the Notes say that, for a claim governed by HW.22, data movement is counted whatever a measurement states of first use. |
 | Smaller: STND.PERF.13 and REPRO.2 | Accepted: the Notes say that REPRO.2 still records every factor that affects results. |
@@ -52,3 +52,40 @@ No conflict among the 596 pairs of 0.1.
 - `govharness rehearse` and `verify`: every check passes. g.18 gives one warning, the same as in the live corpus; no PERF provision has more than three modals.
 - `findings.py 'STND\.PERF'`: none.
 - Pair delta: 13 pairs are new in 0.2, and 19 pairs of 0.1 drop out (STND.PERF.5 against NUMER, HW, MEAS, and ML provisions, through INTPR.9, which it no longer instantiates now that its second sentence has moved to STND.PERF.19). The new pairs are STND.PERF.24 against 12 provisions through VV.3, and STND.PERF.5 against AGENT.13 through RSRC.6. The drafter read them and found no conflict; they are for the verification.
+
+# Dispositions: STND.PERF 0.2 to 0.3
+
+The review of draft 0.2 is verify-0.2.md, a cold verification. It found no conflict and no unowned matter, and it confirmed the 13 delta pairs. Draft 0.3 is draft-0.3.md. Numbers, titles, `instantiates`, and `refers_to` are unchanged, so the pairs regenerated from 0.3 are identical to pairs-0.2.md (590), and the delta against 0.2 is empty.
+
+| Finding | Disposition |
+| --- | --- |
+| D1: three Notes sentences state an obligation in the indicative | Accepted. The fallback sentence is now a reason: an event of HW.9 changes what the sample measures, which makes it a matter for STND.PERF.18 and STND.PERF.13. The STND.VVUQ.82 sentence now says that whether that reasoning reaches variation of time is open in p1, and that this standard draws the analogy without adopting it. The sequencing sentence is cut; the Notes keep only that a held resource is not left free in the sense of AGENT.40. |
+| D2: STND.PERF.21 s2 has two conditions | Accepted as suggested: "After the removal of a cause outside the code that the record of a failed check of performance states, the check MAY be repeated (VV.3)." |
+| D3: STND.PERF.23 s2 has a trailing condition | Accepted as suggested, with Should-fix 2 applied. S2 begins "Where the performance history shows the variation of a quantity", and a new S3 begins "Where the performance history is too short to show that variation". STND.PERF.23 now carries three modals. findings.py gives the g.18 review notice for that bundle, and the Notes say that the three sentences apply together. |
+| S1: the Term "Performance evaluation" lets an unplanned measurement escape | Accepted as suggested: the Term ends "...; STND.PERF.3 and STND.PERF.8 state what makes it systematic." |
+| S2: "regression guard" for a check against the requirement | Accepted. STND.PERF.23 s3 has "the verification SHOULD check" new measurements against the requirement. The Notes say this is a check, not a regression guard in the sense of the Lexicon. |
+| S3: the onset paragraph omits STND.PERF.13 s2 | Accepted: the second sentences of STND.PERF.11, STND.PERF.13, and STND.PERF.16 are named together at CSQ3. |
+| S4: sources in the Notes | Accepted. "Threefold until a reboot" is cited to p1 H1. The top-down sentence is cited to p2 H5, from a secondary source whose paper p2 did not read. The average of ratios is marked as inference, and the debate over the geometric mean as unresolved in p1. The sentence on requested clock frequency and on one binary is cited to p1 answers 6 and 7. The profiler study is marked secondary. |
+| S5: the rationale on STND.VVUQ.77 and STND.PERF.21 | Accepted. The rationale now cites RSRC, HW.20, HW.22, STND.OFFLD.31, and AGENT.40 in the provisions and STND.VVUQ.77 in the Notes. It states the exception of STND.PERF.21 for the removal of a stated cause outside the code. |
+| S6: the "three" of STND.PERF.7 | Kept as a marked, unverified default with its way out. It is listed for the custodian as a decision, with the form that has no number ("enough values to distinguish the rates of growth in question"). |
+| O4 disposition: add GOV.17 and GOV.11 | Accepted: the row for O4 of the 0.1 pair review now gives both. |
+| Optional: "serve as models"; "Several sources" | Accepted: "are models for them and not citations"; "Where a source was read as an extract that a retrieval tool wrote, p1 and p2 say so". |
+| Optional: STND.PERF.13 s2 names a means | Accepted. The outcome is "order their runs so that drift and carry-over between runs fall on neither side alone", and the Notes give interleaving and randomizing as the means in p1. |
+| Optional: STND.PERF.5 s2 "whether or not"; "rate" in STND.PERF.4 s2 | Accepted: "each statement of that comparison, in a reported result, a release, or another record, SHOULD meet the conditions that HW.22 states"; "the measured value as a fraction of the bound ... a documented or a measured value of the limiting resource". |
+| Optional: unused imported Term | Accepted: Performance approximation is dropped from the Terms, and the Notes say "an approximation adopted for speed" beside NUMER.17. |
+
+## Checks of 0.3
+
+- `govharness rehearse` and `verify`: every check passes. g.18 gives one warning, the same as in the live corpus.
+- `findings.py 'STND\.PERF'`: one review notice, g.18 for the three modals of STND.PERF.23, which the Notes cover as a bundle applied together.
+- Pairs: unchanged from pairs-0.2.md, so the delta against 0.2 is empty.
+
+# Dispositions: STND.PERF 0.3, lead's corrections
+
+Delta verification of draft 0.3: verify-0.3.md, no Defect.
+
+| Finding | Disposition |
+| --- | --- |
+| Should-fix 1: "so other units do not start on it while the measurements run" states AGENT.40's obligation in the indicative | Accepted: the sentence ends at "not left free in that sense". |
+| Optional 2: PERF.23 s3 substitutes a check without saying for what | Accepted: "in place of that guard". |
+| Optional 3: g.18 wording | Accepted: "and none applies apart from the others". |
