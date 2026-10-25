@@ -1,0 +1,61 @@
+# Pairs for review of the changed and new provisions of STND.PY (STND.HARN.28)
+
+From `python3 -B -m govharness pairs <rehearsed copy> STND.PY` on entry 147 plus apply_close_p2.py, limited to the rows whose changed side is STND.PY.22, STND.PY.25, STND.PY.32, STND.PY.33, STND.PY.34, STND.PY.35, STND.PY.36.
+
+No pair: STND.PY.36.
+
+51 pair(s).
+
+| # | Changed side | Other provision | Bases |
+| --- | --- | --- | --- |
+| 1 | STND.PY.22 | HDES.14 | PRIME.4 |
+| 2 | STND.PY.22 | HW.8 | PRIME.4 |
+| 3 | STND.PY.22 | HW.GPU.3 | PRIME.4 |
+| 4 | STND.PY.25 | CPS.5 | DSGN.2 |
+| 5 | STND.PY.25 | CPS.9 | DSGN.2 |
+| 6 | STND.PY.25 | HDES.14 | PRIME.4 |
+| 7 | STND.PY.25 | HW.8 | PRIME.4 |
+| 8 | STND.PY.25 | HW.GPU.3 | PRIME.4 |
+| 9 | STND.PY.25 | ML.6 | DSGN.2 |
+| 10 | STND.PY.32 | HDES.14 | PRIME.4 |
+| 11 | STND.PY.32 | HW.8 | PRIME.4 |
+| 12 | STND.PY.32 | HW.GPU.3 | PRIME.4 |
+| 13 | STND.PY.33 | HDES.3 | REPRO.1, REPRO.9 |
+| 14 | STND.PY.33 | HDES.ASIC.12 | REPRO.1 |
+| 15 | STND.PY.33 | HDES.FPGA.4 | REPRO.1 |
+| 16 | STND.PY.33 | HW.3 | REPRO.1 |
+| 17 | STND.PY.33 | HW.ASIC.3 | REPRO.1 |
+| 18 | STND.PY.33 | HW.EMBED.5 | REPRO.1 |
+| 19 | STND.PY.33 | HW.FPGA.3 | REPRO.1 |
+| 20 | STND.PY.33 | HW.QPU.3 | REPRO.1 |
+| 21 | STND.PY.33 | MEAS.4 | REPRO.1 |
+| 22 | STND.PY.33 | ML.3 | REPRO.1, REPRO.9 |
+| 23 | STND.PY.34 | HDES.11 | DSGN.4 |
+| 24 | STND.PY.34 | HDES.ASIC.10 | DSGN.4 |
+| 25 | STND.PY.34 | HDES.FPGA.3 | DSGN.4 |
+| 26 | STND.PY.34 | HW.13 | DSGN.4 |
+| 27 | STND.PY.34 | HW.14 | DSGN.4 |
+| 28 | STND.PY.35 | CPS.3 | DSGN.5 |
+| 29 | STND.PY.35 | CPS.4 | DSGN.5 |
+| 30 | STND.PY.35 | CPS.8 | DSGN.5 |
+| 31 | STND.PY.35 | HDES.10 | DSGN.5 |
+| 32 | STND.PY.35 | HDES.12 | DSGN.5 |
+| 33 | STND.PY.35 | HDES.15 | DSGN.5 |
+| 34 | STND.PY.35 | HDES.4 | DSGN.5 |
+| 35 | STND.PY.35 | HDES.5 | DSGN.5 |
+| 36 | STND.PY.35 | HDES.7 | DSGN.5 |
+| 37 | STND.PY.35 | HDES.ASIC.3 | DSGN.5 |
+| 38 | STND.PY.35 | HDES.ASIC.4 | DSGN.5 |
+| 39 | STND.PY.35 | HDES.ASIC.5 | DSGN.5 |
+| 40 | STND.PY.35 | HDES.ASIC.7 | DSGN.5 |
+| 41 | STND.PY.35 | HDES.FPGA.3 | DSGN.5 |
+| 42 | STND.PY.35 | HDES.FPGA.5 | DSGN.5 |
+| 43 | STND.PY.35 | HW.13 | DSGN.5 |
+| 44 | STND.PY.35 | HW.18 | DSGN.5 |
+| 45 | STND.PY.35 | HW.4 | DSGN.5 |
+| 46 | STND.PY.35 | HW.5 | DSGN.5 |
+| 47 | STND.PY.35 | HW.6 | DSGN.5 |
+| 48 | STND.PY.35 | HW.7 | DSGN.5 |
+| 49 | STND.PY.35 | HW.CPU.3 | DSGN.5 |
+| 50 | STND.PY.35 | HW.EMBED.4 | DSGN.5 |
+| 51 | STND.PY.35 | NUMER.5 | DSGN.5 |
