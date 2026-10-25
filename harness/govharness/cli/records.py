@@ -30,7 +30,7 @@ from govharness.core.corpus import (
 )
 from govharness.core.entry import DOC_FILE, LEDGER_FILE
 from govharness.core.hashing import canonical_json
-from govharness.ledger.chain import append, read_ledger_file
+from govharness.ledger.chain import append, read_ledger, read_ledger_file
 from govharness.ledger.gpg import read_config
 from govharness.ledger.register import REGISTER_ID, read_register
 from govharness.ledger.signatures import check_signatures
@@ -39,6 +39,7 @@ from govharness.ledger.transactions import (
     GOVERNANCE,
     Transaction,
     chain_problems,
+    head_problems,
 )
 from govharness.workflows.rehearse import SourceChanged, rehearse
 from govharness.workflows.signers import (
@@ -157,8 +158,9 @@ def _check_signatures(
     -------
     int
         1 when a ledger's chain is broken (sequence numbers, links, or
-        hashes), a signature fails, or the corpus has no signer
-        register; else 0.
+        hashes), the corpus ledger lacks the head that the signer
+        configuration pins, a signature fails, or the corpus has no
+        signer register; else 0.
     """
     corpus_ledger = (args.corpus / LEDGER_FILE).resolve()
     if (
@@ -173,8 +175,16 @@ def _check_signatures(
         print(f"- no signer register {REGISTER_ID}/{DOC_FILE} in the corpus")
         return 1
     register = read_register(text, config.gpg)
-    corpus_entries = read_ledger_file(args.corpus / LEDGER_FILE)
+    corpus_entries = read_ledger(args.corpus)
     failures = [f"- {line}" for line in chain_problems(corpus_entries)]
+    if config.ignored is not None:
+        failures.append(
+            f"- the signer configuration {config.ignored} can be altered "
+            "by this account, so its anchor and head pin are ignored"
+        )
+    failures += [
+        f"- {line}" for line in head_problems(corpus_entries, config.head)
+    ]
     failures += check_signatures(corpus_entries, register, GOVERNANCE, config)
     if args.ledger_id != GOVERNANCE:
         entries = read_ledger_file(args.ledger)

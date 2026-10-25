@@ -5,12 +5,14 @@ reads the signer configuration (decision 0001, DSGN.16). Verification
 runs ``gpg`` with a fixed ``PATH`` against a throwaway keyring of the
 registered keys, in a temporary directory that only this module writes.
 
-The configuration names the anchor key that founds the signer register
-and the ``gpg`` binary. The human owner keeps it where the agent's
-account cannot write it (``CONFIG_PATH``). A file or binary that the
-running user is able to alter is ignored, because a check settles
-reliance only when the agent relying on it is unable to alter the
-verifier or its anchor.
+The configuration names the anchor key that founds the signer register,
+the ``gpg`` binary, and, optionally, the head of the corpus ledger: the
+sequence number and hash of an entry the ledger must still hold, so
+that entries cut from its end are seen. The human owner keeps it where
+the agent's account cannot write it (``CONFIG_PATH``). A file or binary
+that the running user is able to alter is ignored, because a check
+settles reliance only when the agent relying on it is unable to alter
+the verifier or its anchor.
 """
 
 from __future__ import annotations
@@ -46,10 +48,21 @@ class SignerConfig:
         Fingerprint of the key that founds the signer register.
     gpg : str
         Absolute path of the ``gpg`` binary.
+    head : object
+        The head pin of the corpus ledger as the file gives it,
+        ``{"seq": N, "hash": H}``, or ``None``; it is checked, malformed
+        or not, by ``transactions.head_problems``.
+    ignored : str | None
+        A configuration file that exists but that the running user can
+        alter, so that its anchor and head pin were not read; the
+        ledger check reports it, since a head pin dropped without a word
+        would let a cut pass.
     """
 
     anchor: str | None = None
     gpg: str = DEFAULT_GPG
+    head: object = None
+    ignored: str | None = None
 
 
 def unalterable(path: Path) -> bool:
@@ -84,17 +97,20 @@ def read_config(path: Path | None = None) -> SignerConfig:
     Returns
     -------
     SignerConfig
-        The anchor and the ``gpg`` path, taken only from a file, and a
-        binary, that the running user is unable to alter; otherwise no
-        anchor, so that the founding check fails.
+        The anchor, the ``gpg`` path, and the head pin, taken only from
+        a file, and a binary, that the running user is unable to alter;
+        otherwise no anchor, so that the founding check fails, and no
+        head pin, with ``ignored`` naming a file that exists.
     """
     path = path or CONFIG_PATH
     if not unalterable(path):
-        return SignerConfig()
+        return SignerConfig(ignored=str(path) if path.exists() else None)
     data = json.loads(path.read_text(encoding="utf-8"))
     gpg = str(data.get("gpg", DEFAULT_GPG))
     return SignerConfig(
-        data.get("anchor"), gpg if unalterable(Path(gpg)) else DEFAULT_GPG
+        data.get("anchor"),
+        gpg if unalterable(Path(gpg)) else DEFAULT_GPG,
+        data.get("head"),
     )
 
 

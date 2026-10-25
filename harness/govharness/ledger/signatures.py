@@ -73,7 +73,10 @@ def _valid_for(
     Returns
     -------
     bool
-        Whether a row grants that key this ledger, actor, and entry.
+        Whether a row grants that key this ledger, actor, and entry:
+        a row of the ledger or ``all``, as the term Accepted signature
+        of STND.HARN reads, so an open ``all`` row accepts the key
+        whatever row of the ledger is closed.
     """
     return any(
         row["Fingerprint"] == fpr
@@ -85,6 +88,36 @@ def _valid_for(
         )
         for row in register.signers
     )
+
+
+def required_of(
+    register: SignerRegister, entry: Transaction, ledger: str
+) -> list[str]:
+    """Return the requirements that oblige an entry to be signed.
+
+    Parameters
+    ----------
+    register : SignerRegister
+        The signer register.
+    entry : Transaction
+        The entry, with its ``seq`` and ``actor``.
+    ledger : str
+        Ledger the entry belongs to.
+
+    Returns
+    -------
+    list[str]
+        The ``From entry`` of each well-formed row that requires the
+        entry's actor to sign it.
+    """
+    return [
+        row["From entry"]
+        for row in register.required
+        if applies(row, ledger)
+        and row.get("Actor") == entry.get("actor")
+        and row.get("From entry", "").isdigit()
+        and int(entry.get("seq") or 0) >= int(row["From entry"])
+    ]
 
 
 def _spoofed(register: SignerRegister, actor: str) -> bool:
@@ -205,17 +238,11 @@ def _entry_failures(
             f"- seq {seq}: key {fpr} may not sign for `{actor}` here"
         )
         fpr = None
-    for row in register.required:
-        if (
-            applies(row, ledger)
-            and row["Actor"] == actor
-            and int(seq or 0) >= int(row["From entry"])
-            and fpr is None
-        ):
-            failures.append(
-                f"- seq {seq}: `{actor}` must sign from entry "
-                f"{row['From entry']}"
-            )
+    if fpr is None:
+        failures += [
+            f"- seq {seq}: `{actor}` must sign from entry {start}"
+            for start in required_of(register, entry, ledger)
+        ]
     return failures, fpr
 
 

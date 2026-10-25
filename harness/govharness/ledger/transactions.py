@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import re
+from pathlib import PurePosixPath
 from typing import Any
 
 from govharness.core.hashing import ledger_entry_hash
@@ -41,6 +42,10 @@ REVISION_NAMED_RE = re.compile(r"revision (\d+(?:\.\d+)+)", re.IGNORECASE)
 def parse_ledger(text: str) -> list[Transaction]:
     """Parse the lines of a ledger file.
 
+    Lines end at a line feed only. The ledger is written with Unicode
+    unescaped, so a text field may hold U+2028, U+2029, or U+0085,
+    which ``str.splitlines`` would also take for line ends.
+
     Parameters
     ----------
     text : str
@@ -50,8 +55,21 @@ def parse_ledger(text: str) -> list[Transaction]:
     -------
     list[Transaction]
         Entries in file order; blank lines are skipped.
+
+    Raises
+    ------
+    ValueError
+        If a line is not JSON; the message names its line number.
     """
-    return [json.loads(line) for line in text.splitlines() if line.strip()]
+    entries: list[Transaction] = []
+    for number, line in enumerate(text.split("\n"), start=1):
+        if not line.strip():
+            continue
+        try:
+            entries.append(json.loads(line))
+        except ValueError as error:
+            raise ValueError(f"line {number}: {error}") from error
+    return entries
 
 
 def ledger_of(entry: Transaction) -> str:
@@ -181,3 +199,128 @@ def link_problems(entry: Transaction, previous: str | None) -> list[str]:
     if entry.get("hash") != ledger_entry_hash(entry):
         problems.append(f"ledger entry altered at seq {entry.get('seq')}")
     return problems
+
+
+def head_problems(entries: list[Transaction], head: object) -> list[str]:
+    """Return how a ledger lacks the entry its head pin names, if it does.
+
+    Any prefix of an intact chain is an intact chain, so only a record
+    of the head kept where the agent cannot write it shows that entries
+    were cut from the end. The human owner keeps it in the signer
+    configuration (``gpg.read_config``).
+
+    Parameters
+    ----------
+    entries : list[Transaction]
+        The ledger, in order.
+    head : object
+        The head pin, ``{"seq": N, "hash": H}``, or ``None`` for none.
+
+    Returns
+    -------
+    list[str]
+        A line when the pin is malformed, or when entry N is missing or
+        its hash is not H; the entries after N are not pinned.
+    """
+    if head is None:
+        return []
+    seq = head.get("seq") if isinstance(head, dict) else None
+    pinned = head.get("hash") if isinstance(head, dict) else None
+    if (
+        not isinstance(seq, int)
+        or isinstance(seq, bool)
+        or seq < 1
+        or not isinstance(pinned, str)
+    ):
+        problem = f"the signer configuration's head pin is malformed: {head}"
+    elif seq > len(entries):
+        problem = (
+            f"the ledger ends at entry {len(entries)}, before entry {seq}, "
+            "which the signer configuration pins: entries were cut"
+        )
+    elif entries[seq - 1].get("hash") != pinned:
+        problem = (
+            f"ledger entry {seq} is not the one the signer configuration "
+            "pins: the ledger was rewritten"
+        )
+    else:
+        return []
+    return [problem]
+
+
+def covers(outer: str, inner: str) -> bool:
+    """Return True when one scope path holds another.
+
+    Parameters
+    ----------
+    outer : str
+        Scope path, such as ``STND``.
+    inner : str
+        Scope path, such as ``STND/DFLT``.
+
+    Returns
+    -------
+    bool
+        Whether ``inner`` is ``outer`` or lies under it.
+    """
+    parts = PurePosixPath(outer).parts
+    return PurePosixPath(inner).parts[: len(parts)] == parts
+
+
+def scope_key(entry: Transaction) -> tuple[str, ...]:
+    """Return the scope of an entry as the key of its pin.
+
+    Parameters
+    ----------
+    entry : Transaction
+        Ledger entry.
+
+    Returns
+    -------
+    tuple[str, ...]
+        Its scope paths, sorted; empty when it pins nothing.
+    """
+    return tuple(
+        sorted(s for s in entry.get("scope") or [] if isinstance(s, str))
+    )
+
+
+def latest_pins(entries: list[Transaction]) -> list[Transaction]:
+    """Return the latest transaction of each scope, in ledger order.
+
+    A pin holds until the next transaction of the same scope, the same
+    paths in any order (STND.HARN.9: "the latest governance-ledger
+    transaction with that scope"); a transaction of another scope does
+    not replace it, even where it covers the same files.
+
+    Parameters
+    ----------
+    entries : list[Transaction]
+        The ledger, in order.
+
+    Returns
+    -------
+    list[Transaction]
+        For each scope that some entry pins, its last entry.
+    """
+    latest: dict[tuple[str, ...], tuple[int, Transaction]] = {}
+    for position, entry in enumerate(entries):
+        if scope_key(entry):
+            latest[scope_key(entry)] = (position, entry)
+    return [entry for _, entry in sorted(latest.values(), key=_first)]
+
+
+def _first(pair: tuple[int, Transaction]) -> int:
+    """Return the position of a (position, entry) pair.
+
+    Parameters
+    ----------
+    pair : tuple[int, Transaction]
+        Position in the ledger and the entry.
+
+    Returns
+    -------
+    int
+        The position.
+    """
+    return pair[0]
