@@ -3,7 +3,7 @@
 This is the code review of the whole harness that item 9 of the definition of done of 2026-10-25 asks for (`review-records/round-2026-10-25-close/definition-of-done.md`), after units 0009 to 0014 were merged. It is held under QA.8 (review independence): the reviewers are agents of another configuration than the authors. Three reviewers each read one disjoint part of the code at main (6391253 or later).
 
 **Before you start.**
-- REPO is `/home/brianm/projects/utils/governance-ledger109`, and the harness is `REPO/harness/` (standard library only; run from `harness/`).
+- REPO is `/home/brianm/projects/utils/governance-harness`, and the harness is `REPO/harness/` (standard library only; run from `harness/`).
 - Read `harness/README.md`, `REPO/CUSTODIAN.md`, and the unit records of your part in `harness/records/units/`. Earlier reviews are in `harness/records/reviews/` and `review-records/harness/`: do not report again a finding that they record as fixed, unless it has come back.
 - **Do not edit any file except your report.** Keep scratch files, copies, and mutated trees in your own new directory `/tmp/claude-1000/qa8-<part>/`. To test a change, copy the tree there.
 - **Tests:** run the tests of your part (`python3 -B -m unittest tests.<module>`), and the ones a probe needs. Do not run the full suite; the lead runs it.

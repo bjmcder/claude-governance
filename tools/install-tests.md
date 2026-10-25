@@ -5,7 +5,7 @@ For the human owner. These steps install the derived Claude Code configuration, 
 Set these in each shell you use, the root shell included:
 
 ```sh
-REPO=/home/brianm/projects/utils/governance-ledger109
+REPO=/home/brianm/projects/utils/governance-harness
 TEST=/home/brianm/install-test          # disposable; delete it afterwards
 AGENT_HOME=/home/brianm                 # home of the account Claude Code runs as
 HOST=github.com                         # host of the disposable repository you name
