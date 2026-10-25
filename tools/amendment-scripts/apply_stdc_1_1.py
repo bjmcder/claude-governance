@@ -71,9 +71,9 @@ STDC31 = [
      "condition (DSGN.1, STND.STDC.2)."),
 ]
 
-NEW40 = P(40, "Finite-value options in C", "Provisions of STND.CXX", """
-The C reading of STND.CXX.18 SHALL apply to the C source of the work, keeping its modal (PRIME.4, STND.CXX.18).
-""", ["PRIME.4"], refs=["STND.CXX.18"], mode="binding")
+NEW40 = P(40, "Finite-value options in C", "Undefined behavior", """
+A translation unit of C source that holds a check of a floating-point value that STND.CODE.6, CPS.5, or CPS.9 requires SHALL NOT be compiled with an option that lets the compiler assume that floating-point values are finite (PRIME.4, DSGN.2, STND.CODE.21).
+""", ["PRIME.4", "DSGN.2", "CPS.5", "CPS.9"], refs=["STND.CODE.6", "STND.CODE.21"], mode="binding")
 
 NEW39 = P(39, "C naming conventions", "Names", """
 Each name that the C source of the work declares SHOULD follow the naming convention that the repository configuration names (INTPR.1). A name that the notation documented under NUMER.4 fixes MAY keep the case and the form of its symbol, as STND.DOCS.12 permits (INTPR.4).
@@ -87,7 +87,8 @@ DOC = [
      "define, in place of restating it (STND.STDC.1 and STND.STDC.2), records",
      "It applies to C source each default of STND.CXX whose outcome holds for C, in a C reading that its Terms "
      "define, in place of restating it (STND.STDC.1), states the C form of the responses to a failure that PRIME.4 "
-     "lists (STND.STDC.2), applies the binding form of STND.CXX.18 to C in the same reading (STND.STDC.40), "
+     "lists (STND.STDC.2), states for C the binding form of STND.CXX.18 on the option that assumes finite values "
+     "(STND.STDC.40), "
      "records"),
     ("data that crosses to other languages (STND.STDC.36), and the checks of C code (STND.STDC.37 and STND.STDC.38). "
      "Through STND.STDC.1 and STND.STDC.2, the high-assurance provisions of STND.CXX apply to C: conformance to the "
@@ -140,12 +141,11 @@ DOC = [
      "STND.STDC.2 adds that a report through errno alone does not pass the condition to the caller. STND.CODE.15 is "
      "met by the attribute that an edition provides for a result not to be discarded, or by a compiler's equivalent "
      "(c1, Error reporting and ignored returns). The assert macro is the C case of STND.CODE.6 and of the second "
-     "sentence of STND.CODE.16, whose Notes give the reasoning: NDEBUG, defined by an option of the compiler or by a "
-     "line of the source before the header of the macro is included, makes the macro an expression that does nothing, "
-     "and the macro is defined again at each inclusion of the header (a2, N3220 7.2). An option that assumes finite "
+     "sentence of STND.CODE.16, whose Notes give the reasoning from the C header (a2, N3220 7.2). An option that assumes finite "
      "values may remove a test for non-finite values (a2); STND.CODE.21 "
-     "recommends against it in every language, and STND.STDC.40 keeps for C the binding form that the table of "
-     "STND.STDC.2 applied to C in revision 1.0. C places no function in the public interface by a construct of the "
+     "recommends against it in every language, and STND.STDC.40 states for C, in the words of STND.CXX.18, the "
+     "binding form that the table of "
+     "STND.STDC.2 applied to C in revision 1.0; a later change of STND.CXX.18 does not change it. C places no function in the public interface by a construct of the "
      "language, because external linkage also serves the calls between the translation units of one program, so "
      "the documentation or the repository configuration names the interface for outside use of the term Untrusted "
      "input, and a check of an argument of a function that it names is a check of untrusted input under "
@@ -199,7 +199,10 @@ DOC = [
      "does not, so it raises no floor (GOV.11), the argument that the ratification of 2026-10-24 accepted for the "
      "errno clause of STND.STDC 1.0. STND.STDC.40 keeps for C the binding form of STND.CXX.18, which the same "
      "ratification applied to C through the table of STND.STDC.2, at the cost of one choice of option for a unit that "
-     "holds a required check. Both bind at every class. The "
+     "holds a required check. For C the hazard is this: the documentation of two compilers states the option as a "
+     "license to assume that arguments and results are not NaNs or infinities (a2), the removal of a test by "
+     "isnan or isfinite under it is unverified, and the binding form stays for C by the ratification of 2026-10-24, "
+     "while STND.CODE.21 is the default for every other language. Both bind at every class. The "
      "binding provisions of STND.CODE that reach C, STND.CODE.6, STND.CODE.7, STND.CODE.14, STND.CODE.15, "
      "STND.CODE.16, and STND.CODE.18, carry the floor arguments that the Notes of STND.CODE give for each language."),
 ]
@@ -211,8 +214,8 @@ READING = (
     "the C readings of STND.CXX.16, STND.CXX.17, STND.CXX.18, and STND.CXX.29 by the one change that C needs, that a "
     "listed condition passed to the caller is reported in the return value or in an object that the contract names "
     "and not through errno alone, and instantiates PRIME.4 alone; it keeps its identifier for the errno clause of its "
-    "own table, and no identifier is given to another provision; new STND.STDC.40 (binding, PRIME.4) keeps the C "
-    "reading of STND.CXX.18, the option that assumes finite values, which the table of STND.STDC.2 held; the C "
+    "own table, and no identifier is given to another provision; new STND.STDC.40 (binding, PRIME.4) states in C "
+    "words the row of STND.CXX.18, the option that assumes finite values, which the table of STND.STDC.2 held; the C "
     "readings of STND.CXX.16, STND.CXX.17, and STND.CXX.29 give way to STND.CODE.14, STND.CODE.15, and STND.CODE.18; "
     "STND.STDC.28 and STND.STDC.30 cite STND.CODE.14 and STND.STDC.2 in place of the C reading of STND.CXX.16, and "
     "STND.STDC.31 cites STND.STDC.2 for a listed condition; new STND.STDC.39 (default, from CSQ3) leaves the "

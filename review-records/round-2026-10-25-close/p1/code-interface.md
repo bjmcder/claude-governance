@@ -1,13 +1,25 @@
-# P1 interface: what STND.CODE 1.2 holds for the P2 and P3 drafters (revision 0.2)
+# P1 interface: what STND.CODE 1.2 holds for the P2 and P3 drafters (revision 0.3)
 
-Status: revised after the cold review and the pair review of P1 (2026-10-25); see `dispositions.md`. Source: `tools/amendment-scripts/apply_code_1_2.py`. Apply P1 first; `apply_close_p1.py` runs STND.CODE 1.2, STND.STDC 1.1, STND.CXX 1.2 in that order. The texts below are copied from the rehearsed copy.
+Status: revised after the cold review, the pair review, and the verification of 0.2 (2026-10-25); see `dispositions.md`. Source: `tools/amendment-scripts/apply_code_1_2.py`. Apply P1 first; `apply_close_p1.py` runs STND.CODE 1.2, STND.STDC 1.1, STND.CXX 1.2 in that order. The texts below are copied from the rehearsed copy.
+
+## Changes from 0.2
+
+Changes after the verification of 0.2 (`verify-0.2.md`).
+
+| ID | Change | What a citer does |
+| --- | --- | --- |
+| **STND.CODE.14** | **Text change.** The pass to the caller now reads "in its result, in an argument that the caller passes to receive it, or by a mechanism of its language, an exception among them, that propagates the condition to the caller". This names the status argument of FTN.29 (P3's O5) and widens the permission. | **P2 and P3:** where a first sentence is restated or cited, cite this whole clause. A Fortran status argument, a Rust panic, an exception of Python or Julia, and an error of a Lean monad all fall within it. |
+| STND.CODE Notes | Two changes. The Notes no longer say that STND.CODE.14 asks the end of a program to carry a diagnosis; PRIME.4 states that outcome (S1). The NDEBUG fact is stated for C, with C++ marked unverified (S2, O1). | None. |
+| STND.CXX.33 (new) | A default from CSQ1 (INTPR.8). Where the implementation's terminate handler writes no diagnosis of a listed condition, the program installs a handler or catches the exception in its entry point (S1). It is outside the binding STND.CXX.32. | None. |
+| STND.STDC.40 | Restated in C words: "A translation unit of C source ... SHALL NOT be compiled with an option that lets the compiler assume that floating-point values are finite". It now instantiates PRIME.4, DSGN.2, CPS.5, and CPS.9, refers to STND.CODE.6 and STND.CODE.21, and no longer refers to STND.CXX.18 (O5). The STDC Floor states the C hazard (S3). | None. |
+| STND.CODE.15, .16, .17 to .21, term | Unchanged since 0.2. | None. |
 
 ## Changes from 0.1
 
 | ID | Change | What a citer does |
 | --- | --- | --- |
 | Term Untrusted input | Three changes: "public interface of the work" is now "interface for outside use"; the language clause reads "places in its public interface"; and "function" now includes procedure, subroutine, method, and other callable units. | P2 and P3 keep their own Public interface Terms unchanged in meaning. FTN can drop "a procedure is a function". FTN drops the exclusion of external procedures, because a documented one is in the interface (pair F5). |
-| STND.CODE.14 | Text change. "in a result that the contract of the code names for it" becomes "in its result", the words of PY.22, JL.15, RUST.13, FTN.29, LEAN.25. | No change needed. P2 relied on the outcome, not on the dropped clause. |
+| STND.CODE.14 | Text change. "in a result that the contract of the code names for it" was dropped (F1). The pass to the caller is "in its result or by a mechanism of its language that propagates it". | None needed. P2 relied on the outcome, not on the dropped clause. |
 | STND.CODE.16 | Narrowed and split. Sentence 1 (CPS.5 and CPS.9) is unchanged. Sentence 2 now reads "a definition that the source of the work gives to conditional compilation". The old sentence 3 (finite-value options) is removed and becomes STND.CODE.21. | Citations of "the first sentence of STND.CODE.16" stand. Retarget citations of the finite-value sentence to STND.CODE.21. |
 | STND.CODE.19 | Text change. The toolchain is now "each tool that compiles, synthesizes, interprets, simulates, or runs that code, and each library implementation that the code uses", so hardware descriptions are covered. | None. |
 | **STND.CODE.21 (new)** | Finite-value assumptions near checks. A **default** (DSGN.2, from CSQ3) covering an execution setting and an annotation in the source (Julia `@fastmath`). | STND.FTN.18 now states the same default for Fortran, with the annotation left out. P3 may cite STND.CODE.21 from it, or withdraw it. The FTN Notes sentence on CXX.18 stays true. |
@@ -42,7 +54,7 @@ A check that rejects invalid untrusted input where that input enters SHALL NOT b
 
 Binding. Instantiates PRIME.4. Refers to PRIME.13. Section: Failures.
 
-Where code detects a condition that PRIME.4 lists, it SHALL halt with a diagnosis, enter the designed safe state of PRIME.13 of the hardware that it commands, degrade visibly with a diagnosis, or pass the condition to its caller, in its result or by a mechanism of its language, an exception among them, that propagates the condition to the caller (PRIME.4).
+Where code detects a condition that PRIME.4 lists, it SHALL halt with a diagnosis, enter the designed safe state of PRIME.13 of the hardware that it commands, degrade visibly with a diagnosis, or pass the condition to its caller, in its result, in an argument that the caller passes to receive it, or by a mechanism of its language, an exception among them, that propagates the condition to the caller (PRIME.4).
 
 ### STND.CODE.15 Ignored failure results diagnosed
 
@@ -100,7 +112,8 @@ STND.CODE.6 changed only in wording: "invalid input where untrusted data enters"
 | STND.CXX.32 (new) | Diagnoses from terminate handlers (binding, conditioned on a handler that the work installs) |
 | STND.STDC.2 | kept, retitled C responses to listed failures (errno rule) |
 | STND.STDC.39 (new) | C naming conventions |
-| STND.STDC.40 (new) | Finite-value options in C (binding, the C reading of STND.CXX.18) |
+| STND.STDC.40 (new) | Finite-value options in C (binding; CXX.18's rule in C words) |
+| STND.CXX.33 (new) | Terminate handlers where defaults are silent (default, from CSQ1) |
 
 ## What P2 and P3 still need to do
 

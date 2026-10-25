@@ -62,3 +62,31 @@ The CXX checking paragraph is corrected. It describes P2's new default in words,
 9. **CXX.27 against JL.34:** no change, for the reason now in the CXX Notes. Recommend no change.
 10. **STDC.2 and STDC.40:** both keep floor arguments ratified on 2026-10-24. **STDC.39** (naming, R18). Recommend yes.
 11. **Withdrawal** of CXX.16, .17, and .28 to .31; **CXX.18 kept**. Recommend yes.
+
+## Verification of 0.2 (`verify-0.2.md`): dispositions for 0.3
+
+| Item | Disposition |
+| --- | --- |
+| S1 | **Option (b).** New **STND.CXX.33**, "Terminate handlers where defaults are silent". It is a default that instantiates INTPR.8, with PRIME.4 and STND.CODE.14 in refers_to, and applies from CSQ1, the row of INTPR.8. Where the implementation's terminate handler writes no diagnosis of a listed condition, each program installs a handler or catches the exception in its entry point. It stays outside the binding STND.CXX.32. The CODE and CXX Notes no longer claim that STND.CODE.14 asks the end of a program to carry a diagnosis: they say no provision of STND.CODE or STND.CXX binds it, and PRIME.4 states the outcome. **Corrected reason for disposition D3:** a separate default is added after all, because no binding provision covered the case. |
+| S2 | **Fixed.** The CODE Notes state the NDEBUG fact for C (a2, N3220 7.2) and mark the C++ header unverified. The CXX Notes say that the same for `<cassert>` is unverified. |
+| S3 | **Fixed.** The STDC Floor paragraph now states the C hazard: two compilers document a license to assume no NaN or infinity (a2), the removal of an isnan or isfinite test is unverified, the binding form stays for C by the ratification of 2026-10-24, and STND.CODE.21 is the default for every other language. |
+| S4 | **Fixed.** The CODE Notes (Responses and the floor sentence), the CODE rationale and history row, and `code-interface.md` 0.3 all state the whole pass-to-the-caller clause. |
+| P3 O5 | **Accepted.** STND.CODE.14 now reads "in its result, in an argument that the caller passes to receive it, or by a mechanism of its language ...". This widens a permission, so its floor stays wording only. The Notes name the status argument of STND.FTN.29. |
+| O1 | **Fixed.** The rationale says "before the inclusion of the header of the assert macro"; the Notes say a definition after the last inclusion is outside sentence 2. |
+| O2 | **Fixed.** The STDC Notes keep the language fact and cite STND.CODE for the reasoning. |
+| O3 | **Fixed.** Both statements are marked "(unverified)". |
+| O4 | **Fixed.** The CODE Notes say the three sentences of STND.CODE.19 apply together. |
+| O5 | **Fixed by restatement.** STND.STDC.40 states the outcome in C words, the text of STND.CXX.18 for C source: instantiates PRIME.4, DSGN.2, CPS.5, and CPS.9; refers to STND.CODE.6 and STND.CODE.21. A later change of STND.CXX.18 does not change C silently, and the Notes say so. |
+
+### Rehearsal of 0.3
+
+- `apply_close_p1.py` on entry 147: all eight verify families PASS, with g.18 warnings only.
+- `findings.py`: no defect anywhere in the corpus.
+- `check_refs`: 0 missing rows for the three documents.
+- Pairs regenerated: CODE 93, STDC 44, CXX 69.
+- Reading copies `<ID>-0.3.md`; `delta-0.2-0.3.md`.
+
+### Decisions added for the custodian
+
+12. **STND.CXX.33** as a default from CSQ1 (INTPR.8). Recommend yes. The alternative is an onset of CSQ3.
+13. **The status-argument clause of STND.CODE.14**, a widened permission. Its floor is wording only. Recommend yes.

@@ -1,8 +1,8 @@
-# Pairs for review of the changed and new provisions of STND.STDC (STND.HARN.28), revision 0.2
+# Pairs for review of the changed and new provisions of STND.STDC (STND.HARN.28), revision 0.3
 
 From `python3 -B -m govharness pairs <rehearsed copy> STND.STDC`, limited to the rows whose changed side is STND.STDC.1, STND.STDC.2, STND.STDC.28, STND.STDC.30, STND.STDC.31, STND.STDC.39, STND.STDC.40. Withdrawn provisions have no rows.
 
-41 pair(s).
+44 pair(s).
 
 | # | Changed side | Other provision | Bases |
 | --- | --- | --- | --- |
@@ -44,6 +44,9 @@ From `python3 -B -m govharness pairs <rehearsed copy> STND.STDC`, limited to the
 | 36 | STND.STDC.2 | HW.8 | PRIME.4 |
 | 37 | STND.STDC.2 | HW.GPU.3 | PRIME.4 |
 | 38 | STND.STDC.39 | NUMER.4 | INTPR.1 |
-| 39 | STND.STDC.40 | HDES.14 | PRIME.4 |
-| 40 | STND.STDC.40 | HW.8 | PRIME.4 |
-| 41 | STND.STDC.40 | HW.GPU.3 | PRIME.4 |
+| 39 | STND.STDC.40 | CPS.5 | DSGN.2 |
+| 40 | STND.STDC.40 | CPS.9 | DSGN.2 |
+| 41 | STND.STDC.40 | HDES.14 | PRIME.4 |
+| 42 | STND.STDC.40 | HW.8 | PRIME.4 |
+| 43 | STND.STDC.40 | HW.GPU.3 | PRIME.4 |
+| 44 | STND.STDC.40 | ML.6 | DSGN.2 |

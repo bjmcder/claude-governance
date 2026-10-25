@@ -44,7 +44,7 @@ def swap_paragraphs(root: Path, rel: str, swaps: list[tuple[str, str, str]]) -> 
 
 NEW = [
     P(14, "Responses to listed failures", "Failures", """
-Where code detects a condition that PRIME.4 lists, it SHALL halt with a diagnosis, enter the designed safe state of PRIME.13 of the hardware that it commands, degrade visibly with a diagnosis, or pass the condition to its caller, in its result or by a mechanism of its language, an exception among them, that propagates the condition to the caller (PRIME.4).
+Where code detects a condition that PRIME.4 lists, it SHALL halt with a diagnosis, enter the designed safe state of PRIME.13 of the hardware that it commands, degrade visibly with a diagnosis, or pass the condition to its caller, in its result, in an argument that the caller passes to receive it, or by a mechanism of its language, an exception among them, that propagates the condition to the caller (PRIME.4).
 """, ["PRIME.4"], refs=["PRIME.13"], mode="binding"),
     P(15, "Ignored failure results diagnosed", "Failures", """
 Where the language, or a compiler or a static check among the means of the work, provides a form of declaration for a function, or for the type of its result, under which each call that ignores that result is diagnosed, each function of the work that returns a failure of a kind that PRIME.4 lists SHALL be declared in such a form (PRIME.4).
@@ -150,9 +150,12 @@ NOTES_NEW = [
     "C++, Lean, and hardware descriptions.",
 
     "Responses. STND.CODE.14 lists the responses that PRIME.4 admits, together with the pass of the condition to a "
-    "caller, in its result or by a mechanism of its language that propagates it, which STND.CODE.7 keeps from "
-    "discarding it and which STND.CODE.14 binds in turn; a condition that no caller answers ends in a halt, which "
-    "the provision asks to carry its diagnosis. A Rust panic propagates the condition under the unwinding strategy "
+    "caller, in its result, in an argument that the caller passes to receive it, or by a mechanism of its language "
+    "that propagates it, which STND.CODE.7 keeps from discarding it and which STND.CODE.14 binds in turn. A "
+    "condition that a mechanism of the language carries past every caller ends the program; no provision of this "
+    "standard asks that end to carry a diagnosis, PRIME.4 states that outcome, and STND.RUST.13 and STND.CXX give "
+    "the forms of their languages for a panic hook and a terminate handler. A status argument, the form of "
+    "STND.FTN.29, is an argument that the caller passes to receive the condition. A Rust panic propagates the condition under the unwinding strategy "
     "and halts under the aborting one, so it is a response under either. Each language standard gives the forms "
     "of its language: STND.PY.22, STND.JL.15, STND.RUST.13, STND.FTN.29, and STND.LEAN.25 name them, the status "
     "argument of Fortran and the error of a Lean monad among them. Where a language standard adds to them, its "
@@ -161,7 +164,9 @@ NOTES_NEW = [
     "the panic hook of STND.RUST.13, the report through errno that STND.STDC.2 excludes, and the terminate handler "
     "that STND.CXX governs. In a hardware description, the condition passes to the caller as a status at the "
     "interface, the form that HDES.14 asks for saturation and overflow. STND.CODE.14 asks only the responses that "
-    "PRIME.4 already requires, in the words of the first sentences of those provisions, and so raises no floor in "
+    "PRIME.4 already requires, with the pass to the caller in its result, in an argument that the caller passes to "
+    "receive it, or by a mechanism of its language that propagates it, the forms that the first sentences of those "
+    "provisions name, and so raises no floor in "
     "any language (GOV.11); the custodian's rulings of 2026-10-23 that the same list raises no floor were made for "
     "C++, Python, and Julia, and the argument for the other languages is the one given here.",
 
@@ -187,10 +192,11 @@ NOTES_NEW = [
     "execution setting removes is absent from each build and each run under that setting, where CPS.5 or CPS.9 "
     "still requires it. Its second sentence reaches a check that a definition that the source gives to conditional "
     "compilation turns off, which is not an execution setting and which STND.CODE.6 therefore does not "
-    "reach. The assert macro of C and C++ expands to an expression that does nothing where NDEBUG is defined at the "
-    "point at which its header is included, whether an option of the compiler or a line of the source before that "
-    "inclusion defines it (research note round-addenda/a2-language-facts.md, which cites the working draft of C, "
-    "7.2), and a "
+    "reach. The assert macro of C expands to an expression that does nothing where NDEBUG is defined at the point at "
+    "which its header is included, whether an option of the compiler or a line of the source before that inclusion "
+    "defines it, and is defined again at each inclusion of the header (research note "
+    "round-addenda/a2-language-facts.md, which cites the working draft of C, 7.2); the same for the header of C++ "
+    "is unverified. A definition after the last inclusion turns nothing off and is outside the second sentence. A "
     "check under a directive of conditional compilation on a macro that the source defines is removed in the same "
     "way; the two sentences exclude these forms for a check of untrusted input and for a check that CPS.5 or CPS.9 "
     "requires. In Python and Julia, the first sentence extends to the checks of CPS.5 and CPS.9 the forms that "
@@ -254,7 +260,8 @@ NOTES_NEW = [
     "DSGN.3, and VV.1, whose CSQ0 row the restricted subset serves, and those rows hold in every language alike. "
     "STND.CODE.20 asks the record of each deviation wherever such a standard is adopted (REPRO.7). A project "
     "replaces each of the three by a recorded decision with an alternative that meets the same outcome, so they "
-    "block no work in a language for which no standard is published. The custodian's rulings on high assurance were "
+    "block no work in a language for which no standard is published. The three sentences of STND.CODE.19 concern "
+    "one edition of one body of code and apply together. The custodian's rulings on high assurance were "
     "made for C++, and STND.STDC applied them to C on 2026-10-24; for the other languages the argument is the one "
     "just given. STND.CODE.18 adds to PRIME.2 only the naming of the means that checked a claim of conformance, at "
     "the cost of one sentence for each claim, and concerns claims and not the constructs of a language, so the "
@@ -276,11 +283,12 @@ NOTES_CLASS = (
 READING = (
     "new STND.CODE.14 to STND.CODE.21 state for every language the shared rules that STND.CXX held for C++ and "
     "STND.STDC applied to C in its C reading: STND.CODE.14 (binding, PRIME.4) the responses to a failure that PRIME.4 "
-    "lists, from STND.CXX.16; STND.CODE.15 (binding, PRIME.4) a declaration under which an ignored returned failure "
+    "lists, with the pass to the caller in its result, in an argument that the caller passes to receive it, or by "
+    "a mechanism of its language that propagates it, from STND.CXX.16; STND.CODE.15 (binding, PRIME.4) a declaration under which an ignored returned failure "
     "is diagnosed, from STND.CXX.17, conditioned on a language or toolchain that provides one; STND.CODE.16 "
     "(binding, PRIME.4) the checks of CPS.5 and CPS.9 kept from removal by an execution setting, from the first "
     "sentence of STND.CXX.18, and a check of STND.CODE.6 not written in a form that a definition that the source "
-    "gives to conditional compilation turns off, which reaches a definition of NDEBUG in C and C++ source; "
+    "gives to conditional compilation turns off, which reaches a definition of NDEBUG in C and C++ source before the inclusion of the header of the assert macro; "
     "STND.CODE.21 (default, from CSQ3) no assumption of finite floating-point values, by an execution setting or an "
     "annotation, in code that holds a check of a floating-point value, the outcome of the second sentence of "
     "STND.CXX.18, whose binding form stays in STND.CXX.18 for C++; STND.CODE.17 to STND.CODE.20 (STND.CODE.18 "
@@ -314,7 +322,8 @@ RATIONALE = (
     "being to open each with the condition that the work is high-assurance code in a language whose standard applies "
     "the provision. STND.CODE.21 is a default, so the ratified default STND.FTN.18 is not made binding. The move "
     "leaves STND.PY.22, STND.PY.25, STND.JL.13, and STND.JL.15 as ruled on 2026-10-23: STND.CODE.14 states their "
-    "first sentences in their words and leaves their other sentences standing; the term keeps the public interfaces "
+    "first sentences, with the pass to the caller in its result, in an argument that the caller passes to receive "
+    "it, or by a mechanism of its language that propagates it, and leaves their other sentences standing; the term keeps the public interfaces "
     "that STND.PY and STND.JL define; STND.CODE.16 adds to Python and Julia the checks of CPS.5 and CPS.9, and to "
     "Julia only a check that `@static if` on a constant of the source turns off. Transition (GOV.42): existing "
     "code meets the new provisions when a change next touches it; high-assurance code meets STND.CODE.17 to "

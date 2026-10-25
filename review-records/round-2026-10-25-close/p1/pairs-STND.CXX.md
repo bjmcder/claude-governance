@@ -1,6 +1,6 @@
-# Pairs for review of the changed and new provisions of STND.CXX (STND.HARN.28), revision 0.2
+# Pairs for review of the changed and new provisions of STND.CXX (STND.HARN.28), revision 0.3
 
-From `python3 -B -m govharness pairs <rehearsed copy> STND.CXX`, limited to the rows whose changed side is STND.CXX.2, STND.CXX.8, STND.CXX.18, STND.CXX.21, STND.CXX.22, STND.CXX.32. Withdrawn provisions have no rows.
+From `python3 -B -m govharness pairs <rehearsed copy> STND.CXX`, limited to the rows whose changed side is STND.CXX.2, STND.CXX.8, STND.CXX.18, STND.CXX.21, STND.CXX.22, STND.CXX.32, STND.CXX.33. Withdrawn provisions have no rows.
 
 69 pair(s).
 

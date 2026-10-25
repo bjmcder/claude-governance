@@ -51,6 +51,10 @@ NEW32 = P(32, "Diagnoses from terminate handlers", "Failures", """
 Where the work installs a terminate handler, that handler SHALL deliver to the operator, or to the record of the run, a diagnosis of each condition that PRIME.4 lists and that a C++ exception carries to it (PRIME.4, STND.CODE.14).
 """, ["PRIME.4"], refs=["STND.CODE.14"], mode="binding")
 
+NEW33 = P(33, "Terminate handlers where defaults are silent", "Failures", """
+Where the terminate handler that the implementation provides writes no diagnosis of a condition that PRIME.4 lists and that a C++ exception carries to it, each program of the work SHOULD install a terminate handler that writes one, or catch such an exception in its entry point and respond to it as STND.CODE.14 provides (INTPR.8).
+""", ["INTPR.8"], refs=["PRIME.4", "STND.CODE.14"])
+
 CXX18 = [
     ('refers_to: ["STND.CODE.6"]', 'refers_to: ["STND.CODE.6", "STND.CODE.21"]'),
     ("Where CPS.5 or CPS.9 applies to the work, each check that it requires SHALL run, with its response, in every "
@@ -101,7 +105,7 @@ PURPOSE_1 = (
     "STND.CXX.10), and recommends generic code and metaprogramming that a reader is able to follow (STND.CXX.11, "
     "STND.CXX.12, and STND.CXX.13). It fixes names and declaration comments (STND.CXX.14 and STND.CXX.15). It covers "
     "failures, including the option that assumes finite values, the boundaries to code that does not follow C++ "
-    "rules, and a terminate handler of the work (STND.CXX.18, STND.CXX.19, STND.CXX.20, STND.CXX.21, STND.CXX.22, STND.CXX.23, "
+    "rules, and the terminate handler (STND.CXX.18, STND.CXX.19, STND.CXX.20, STND.CXX.21, STND.CXX.22, STND.CXX.23, "
     "STND.CXX.24, and STND.CXX.32), and the mechanical checks of C++ code (STND.CXX.25, STND.CXX.26, and "
     "STND.CXX.27). STND.CODE holds for C++, as for every language, the responses to a failure that PRIME.4 lists, "
     "the declarations that keep a returned failure from being ignored, and the checks that no setting or definition "
@@ -143,7 +147,7 @@ NOTES = [
      "of STND.JL.34 runs the tests once under the production setting, and the Julia standard holds in a default of "
      "its own the bounds checking of the production configuration. In safe Rust, indexing is checked in every build "
      "(unverified here), and STND.RUST.20 concerns overflow checks and debug assertions. The C++ standard library "
-     "checks no precondition unless a check mode of it is chosen, so STND.CXX.27 asks for that mode in each reporting "
+     "checks no precondition unless a check mode of it is chosen (unverified), so STND.CXX.27 asks for that mode in each reporting "
      "build, and the checking builds of STND.CXX.26 are the counterpart of the forced checks of STND.JL.34. A test "
      "under the settings of the reporting build is the evidence that HW.7 asks wherever a claim rests on the "
      "delivered arithmetic that those settings fix, in C++ as in Julia."),
@@ -159,7 +163,8 @@ FAILURES = (
     "extends that to the checks of CPS.5 and CPS.9 where those apply. The settings that remove a check in C++ "
     "include `NDEBUG` for `assert`, the evaluation semantic of a contract assertion, the check mode of the library, "
     "and the contract settings of a support library; `NDEBUG` defined in the source before `<cassert>` is included "
-    "is the case of the second sentence of STND.CODE.16, whose Notes give the reasoning for `assert` in C and C++. "
+    "is the case of the second sentence of STND.CODE.16, whose Notes give the reasoning from the C header; that "
+    "`<cassert>` behaves in the same way is unverified. "
     "STND.CXX.18 keeps the binding C++ form of STND.CODE.21 for a translation unit that holds a required check of a "
     "floating-point value, as ruled for C++. Library checks therefore remain a second layer that STND.CXX.27 lets a "
     "budget remove. Each build that STND.BUILD calls a reporting build is a build from which the work reports a "
@@ -168,9 +173,13 @@ FAILURES = (
     "calls `std::abort` (unverified); whether an implementation of the standard library writes a diagnosis first is "
     "unverified for each implementation. STND.CXX.32 is the counterpart of the second sentence of STND.RUST.13 for a "
     "panic, and is conditioned as that sentence is: where the work installs a terminate handler, the handler "
-    "delivers the diagnosis of a listed condition that an exception carries to it, and where the work installs "
-    "none, STND.CODE.14 still asks the halt to carry its diagnosis, which a catch in the entry point of the program "
-    "is one way to give. In a program that commands hardware, the end of the program through a terminate handler is "
+    "delivers the diagnosis of a listed condition that an exception carries to it. Where the work installs none, an "
+    "exception that no handler catches is a pass to the caller that STND.CODE.14 admits, and no binding provision "
+    "of this standard or of STND.CODE asks the end of the program to carry a diagnosis; PRIME.4 states that "
+    "outcome. STND.CXX.33 is the default for that case: where the handler that the implementation provides writes "
+    "no diagnosis, it recommends that the program install one, or catch the exception in its entry point. It "
+    "instantiates INTPR.8, the diagnostics captured by default, and applies from CSQ1 by the row of that provision "
+    "in STND.CLASS.10. In a program that commands hardware, the end of the program through a terminate handler is "
     "a loss of the commanding software that CPS.4 verifies, and the designed safe state of PRIME.13 is reached on "
     "it, which HW.EMBED.4 states for each output. With C++ exceptions disabled, each throw that remains in the "
     "library ends the program (unverified for each library), which is a halt under STND.CODE.14 once the abort "
@@ -235,7 +244,8 @@ CLASS = (
     "at the cost of the wording of that handler; without it a handler of the work is able to end the program "
     "without a diagnosis. It asks for no work that PRIME.4 does not, so it raises no floor (GOV.11); no ruling of the "
     "custodian covers it, and the argument is the one that the ratification of 2026-10-24 accepted for the second "
-    "sentence of STND.RUST.13, which is conditioned in the same way. STND.CXX.3 asks an "
+    "sentence of STND.RUST.13, which is conditioned in the same way. STND.CXX.33 is a default that instantiates "
+    "INTPR.8 and applies from CSQ1, the class from which STND.CLASS.10 asks diagnostics captured by default. STND.CXX.3 asks an "
     "agent for one decision record when it lowers an edition, or creates a unit below the edition of STND.CXX.2 or "
     "its project alternative, which at CSQ4, where STND.CXX.2 may be omitted, costs one sentence; without it the "
     "custodian's direction on the edition is lost silently. That STND.CXX.3 and STND.CXX.18 raise no floor (GOV.11) is "
@@ -252,7 +262,9 @@ READING = (
     "sentence of STND.CXX.2 leaves the later features of high-assurance code to STND.CODE.19; new STND.CXX.32 "
     "(binding, PRIME.4) has a terminate handler that the work installs deliver the diagnosis of each listed "
     "condition that a C++ exception carries to it, the C++ counterpart of the second sentence of STND.RUST.13 and "
-    "conditioned as it is; Terms import Untrusted input, High-assurance code, and High-assurance coding standard "
+    "conditioned as it is; new STND.CXX.33 (default, from CSQ1) recommends a terminate handler, or a catch in the "
+    "entry point, where the handler that the implementation provides writes no diagnosis of a listed condition; "
+    "Terms import Untrusted input, High-assurance code, and High-assurance coding standard "
     "from STND.CODE and drop this standard's own definitions of the last two; the Purpose and the Notes cite "
     "STND.CODE for the moved rules and for the reasoning on `assert`, give the reason why STND.CXX.27 has no "
     "counterpart in STND.JL.34 and STND.RUST.20, and state the floor argument and the onset of STND.CXX.32")
@@ -262,7 +274,7 @@ ROW = f"| 1.2 | {DATE} | Minor amendment (GOV.41): {READING}. |"
 RATIONALE = (
     f"Minor amendment of STND.CXX to revision 1.2, ratified by the custodian on {DATE}, on STND.CODE 1.2: {READING}. "
     "The change is minor because it removes six provisions and a sentence, alters the second sentence of "
-    "STND.CXX.2, and adds one binding provision. The obligations of C++ code that the withdrawn provisions and "
+    "STND.CXX.2, and adds one binding and one default provision. The obligations of C++ code that the withdrawn provisions and "
     "sentence held stay in force through STND.CODE.14 to STND.CODE.20 and STND.CXX.18, with two changes that the Notes "
     "of STND.CODE argue: STND.CODE.15 applies where a form of declaration that diagnoses an ignored result exists, "
     "which the nodiscard attribute gives C++ at each edition that has it, and the second sentence of STND.CODE.16 "
@@ -270,12 +282,12 @@ RATIONALE = (
     "permission of a default from widening one that STND.CODE.19 limits to one feature. The withdrawn identifiers "
     "are listed in the field withdrawn and are never given to another provision (STND.IDENT.14). The citations in "
     "STND.CXX.2, STND.CXX.8, STND.CXX.21, and STND.CXX.22 change their target and not their outcome. Class onsets: "
-    "STND.CXX.32 binds at every class; no other onset changes. Floor (GOV.11): STND.CXX.32 reaches only a terminate "
+    "STND.CXX.32 binds at every class; STND.CXX.33 applies from CSQ1 (INTPR.8); no other onset changes. Floor (GOV.11): STND.CXX.32 reaches only a terminate "
     "handler that the work installs and a listed condition that already ends the program there, and asks only for "
     "the actionable diagnosis that PRIME.4 names, at the cost of the wording of that handler; no ruling covers it, "
     "and the custodian decides it (R22). STND.CXX.27 is unchanged, a reasoned no change: Julia checks an index "
     "unless `@inbounds` or `--check-bounds=no` removes the check and keeps the check of an untrusted index from both "
-    "(STND.JL.13), safe Rust checks indexing, and the C++ standard library checks nothing unless a check mode is "
+    "(STND.JL.13), safe Rust checks indexing (unverified), and the C++ standard library checks nothing unless a check mode is "
     "chosen. Transition (GOV.42): existing code meets STND.CXX.32 when a change next touches its terminate handler. "
     "Review of STND.HARN.28 by the command pairs, a cold review, and their dispositions; record "
     "review-records/round-2026-10-25-close/p1/."
@@ -292,7 +304,9 @@ def apply(root: Path) -> None:
     replace_text(root, "STND/CXX/8.md", CXX8)
     replace_text(root, "STND/CXX/21.md", CXX21)
     replace_text(root, "STND/CXX/22.md", CXX22)
-    (root / "STND/CXX/32.md").write_text(B.provision_text("STND.CXX", NEW32, "adopted", DATE), encoding="utf-8")
+    for p in (NEW32, NEW33):
+        (root / f"STND/CXX/{p['n']}.md").write_text(B.provision_text("STND.CXX", p, "adopted", DATE),
+                                                     encoding="utf-8")
     replace_text(root, "STND/CXX/_doc.md", FRONT + [(PURPOSE_2_OLD, PURPOSE_2_NEW)] + TERMS + NOTES
                  + [(FAILURES_OLD_HEAD, FAILURES)])
     swap_paragraphs(root, "STND/CXX/_doc.md", [
@@ -301,11 +315,12 @@ def apply(root: Path) -> None:
         ("The custodian rules that for high assurance", HA_2_SHA, ""),
         ("Under STND.CLASS.10, each default instantiates only VV", CLASS_SHA, CLASS),
     ])
-    res = B.derive_fields(root, ["STND.CXX.2", "STND.CXX.8", "STND.CXX.18", "STND.CXX.21", "STND.CXX.22", "STND.CXX.32"])
+    res = B.derive_fields(root, ["STND.CXX.2", "STND.CXX.8", "STND.CXX.18", "STND.CXX.21", "STND.CXX.22", "STND.CXX.32",
+                                 "STND.CXX.33"])
     for ident, r in res.items():
         if r.unresolved:
             raise ValueError(f"{ident}: {r}")
-    if not res["STND.CXX.32"].forced:
+    if not res["STND.CXX.32"].forced or res["STND.CXX.33"].forced:
         raise ValueError("STND.CXX.32: not binding")
     raise_revision(root, "STND/CXX", "1.1.1", "1.2", ROW)
     B.write_references(root, ["STND.CXX"])

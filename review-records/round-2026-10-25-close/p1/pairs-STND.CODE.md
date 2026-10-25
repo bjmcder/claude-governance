@@ -1,4 +1,4 @@
-# Pairs for review of the changed and new provisions of STND.CODE (STND.HARN.28), revision 0.2
+# Pairs for review of the changed and new provisions of STND.CODE (STND.HARN.28), revision 0.3
 
 From `python3 -B -m govharness pairs <rehearsed copy> STND.CODE`, limited to the rows whose changed side is STND.CODE.6, STND.CODE.14, STND.CODE.15, STND.CODE.16, STND.CODE.17, STND.CODE.18, STND.CODE.19, STND.CODE.20, STND.CODE.21. Withdrawn provisions have no rows.
 
