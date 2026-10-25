@@ -201,9 +201,32 @@ class BareNames(unittest.TestCase):
                 self.assertNotIn(NAMED, named_documents(corpus, SUBJECT))
                 self.assertIsNone(references_problem(corpus, SUBJECT))
                 self.assertEqual(g25(index), "PASS")
-        other = inserted(example.replace("Example", "Profile"))
-        self.assertIn(NAMED, named_documents(corpus_of(other), SUBJECT))
-        self.assertEqual(g25(other), "FAIL")
+        read = {
+            "other table": inserted(example.replace("Example", "Profile")),
+            "Example in a row only": inserted(
+                f"| Item | Profile |\n| --- | --- |\n| Example | {NAMED} |"
+            ),
+        }
+        for name, index in read.items():
+            with self.subTest(name):
+                self.assertIn(
+                    NAMED, named_documents(corpus_of(index), SUBJECT)
+                )
+                self.assertEqual(g25(index), "FAIL")
+
+    def test_references_section_is_not_read(self) -> None:
+        """Behavior: a name in the References section is not a bare name
+        of the text.
+
+        Reference: ``naming_text``, which leaves out the section that
+        g.25 compares with the derived one.
+        """
+        index = live_index()
+        index[SUBJECT].body = index[SUBJECT].body.replace(
+            f"## {SECTION}\n", f"## {SECTION}\n\n{NAMED}\n", 1
+        )
+        corpus = corpus_of(index)
+        self.assertNotIn(NAMED, named_documents(corpus, SUBJECT))
 
     def test_lvl0_is_not_read(self) -> None:
         """Behavior: a document of LVL0, or of no level, is not read for

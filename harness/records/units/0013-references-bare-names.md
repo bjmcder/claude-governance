@@ -69,4 +69,8 @@ The check of References, g.25, compared each References table with the table der
 
 ## Review
 
-Left to the reviewer.
+- The review of commit b1fce24 (`review-records/harness/review-unit-0013.md`) found no High or Medium finding, and three Low (L1 to L3). It found no regression: on the live corpus `verify`, `check`, `references --check`, and `compose --check` give the same results as on main, and on the corpus of entry 147 the wrapper reports the same 16 documents as the old script.
+- L1, fixed: `tools/check_refs.py` dropped an unknown, LVL0, or mistyped DOC argument without a word. It now names each DOC that g.25 does not read on stderr and exits 2.
+- L2, fixed: two mutations survived the tests, reading the References section, and deciding the Example skip on any row instead of the header. `test_references_section_is_not_read` and the case "Example in a row only" of `test_mentions_are_ignored` now catch each; both mutations were rerun and fail the tests.
+- L3, no change: the path in which a finding in a draft is listed is the severity model of the drafting family, which g.25 inherits unchanged, and `tests/checks/test_drafting.py` (`test_draft_and_lvl0_never_fail`) covers it for every key.
+- The notes of the review (NAME_RE also reads link paths, HTML comments, single-quoted words, and indented or tilde code blocks) err toward a finding, and the corpus holds none of them; no change.

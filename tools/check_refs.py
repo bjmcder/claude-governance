@@ -12,7 +12,7 @@ of a table whose header names a column Example, quoted spans, and code.
 
 Unlike `verify`, this script prints every finding of g.25, including those of drafts, which
 `verify` only lists. With DOC arguments it prints only the findings of those documents.
-Exit status: 1 when it prints a finding, else 0.
+Exit status: 1 when it prints a finding, else 0; 2 when a DOC is not a document g.25 reads.
 """
 from __future__ import annotations
 
@@ -45,11 +45,15 @@ def main(argv: list[str]) -> int:
         print("no drafting standard in the corpus", file=sys.stderr)
         return 2
     subjects = [u.subject for u in drafting.units_for(BELOW, {"informative", "body"})]
+    unknown = sorted(set(argv[1:]) - set(subjects))
+    if unknown:
+        print(f"not a document g.25 reads: {', '.join(unknown)}", file=sys.stderr)
+        return 2
     wanted = argv[1:] or subjects
     findings = [f for f in references_listed(drafting) if f.subject in wanted]
     for finding in findings:
         print(f"{finding.subject}: {finding.text}")
-    print(f"checked {len(set(wanted) & set(subjects))} documents; {len(findings)} with missing rows")
+    print(f"checked {len(set(wanted))} documents; {len(findings)} with missing rows")
     return 1 if findings else 0
 
 
