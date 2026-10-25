@@ -11,7 +11,11 @@ while it is in force (STND.HARN.29); one that is not in force is an
 error. Where no signature is required, because the work is not assured
 and no signer register exists, the derivation is refused unless the
 owner passes ``--accept-unsigned``, and the summary then says that each
-authorization was accepted unsigned.
+authorization was accepted unsigned. ``--expiry-horizon`` bounds the
+time from the derivation to an authorization's expiry, 90 days unless
+the owner gives another number of days; under a bound, one that lapses
+only when revoked is refused, and ``--expiry-horizon none`` lifts the
+bound (unit 0012). The summary names the horizon in force.
 """
 
 from __future__ import annotations
@@ -34,9 +38,12 @@ from govharness.core.corpus import (
 from govharness.derive.environment import claude_code
 from govharness.derive.environment.authorizations import (
     ACCEPT_UNSIGNED,
+    DEFAULT_HORIZON,
+    NO_HORIZON,
     REGISTER_REMOVED,
     Reading,
     ledger_shape,
+    parse_horizon,
     read_authorizations,
     register_trace,
 )
@@ -49,6 +56,31 @@ from govharness.workflows.environment import installed_problems
 # The guard is installed as a file, so the command reads its source and
 # never imports it.
 GUARD_SOURCE = Path(__file__).resolve().parents[1] / "hooks" / "guard.py"
+
+
+def expiry_horizon(text: str) -> timedelta | None:
+    """Parse ``--expiry-horizon``: whole days from 1, or ``none``.
+
+    Parameters
+    ----------
+    text : str
+        The argument.
+
+    Returns
+    -------
+    timedelta | None
+        The horizon, or None where the owner lifts the bound.
+
+    Raises
+    ------
+    argparse.ArgumentTypeError
+        If the argument is neither, with the reason, so that a mistyped
+        horizon is a usage error (exit 2) rather than no bound.
+    """
+    try:
+        return parse_horizon(text)
+    except ValueError as error:
+        raise argparse.ArgumentTypeError(str(error)) from error
 
 
 def add_environment(sub: argparse._SubParsersAction) -> None:
@@ -98,9 +130,14 @@ def add_environment(sub: argparse._SubParsersAction) -> None:
     )
     command.add_argument(
         "--expiry-horizon",
-        type=int,
-        metavar="DAYS",
-        help="refuse an authorization that expires later, or never",
+        type=expiry_horizon,
+        default=DEFAULT_HORIZON,
+        metavar="DAYS|none",
+        help=(
+            "refuse an authorization that expires more than DAYS days "
+            "after the derivation, or never (default "
+            f"{DEFAULT_HORIZON.days}); {NO_HORIZON} lifts the bound"
+        ),
     )
     command.add_argument(
         ACCEPT_UNSIGNED,
@@ -213,11 +250,6 @@ def authorized(args: argparse.Namespace, tree: Tree) -> Reading:
         and ledger_shape(ledger) is None
         and not ledger_problems(tree, ledger, config)
     )
-    horizon = (
-        None
-        if args.expiry_horizon is None
-        else timedelta(days=args.expiry_horizon)
-    )
     try:
         return read_authorizations(
             Corpus(load_entries(tree)),
@@ -228,7 +260,7 @@ def authorized(args: argparse.Namespace, tree: Tree) -> Reading:
             args.role,
             signed,
             verified,
-            horizon,
+            args.expiry_horizon,
             args.accept_unsigned,
         )
     except ValueError as error:
