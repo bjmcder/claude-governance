@@ -11,7 +11,6 @@ Work that the custodian has directed or that a ratified round left open. It repl
    - a shell write to `.git/config` failing under the M-a `denyWrite`.
 
    The transition of ledger entry 53 for STND.HARN.18 ends when that reviewed harness is installed and its configure entry records it. Whether the entry-53 transition for STND.HARN.26 to .28 has ended is for the custodian to record.
-3. **M-b: expiry horizon.** Give `--expiry-horizon` a stated default bound. Later.
 
 ## Corpus, for later amendment rounds
 
