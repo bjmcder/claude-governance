@@ -70,14 +70,21 @@ def _store(args: argparse.Namespace) -> SolveStore | None:
 
 
 def _report_refused(store: SolveStore | None) -> None:
-    """Name each cache entry a run refused, on the standard error.
+    """Name each cache entry a run skipped or refused, on stderr.
 
     Parameters
     ----------
     store : SolveStore | None
         The store of the run.
     """
-    for key, reason in sorted((store.rejected if store else {}).items()):
+    if store is None:
+        return
+    for key, reason in sorted(store.skipped.items()):
+        print(
+            f"solve cache: entry {key} skipped ({reason}); recomputed",
+            file=sys.stderr,
+        )
+    for key, reason in sorted(store.rejected.items()):
         print(
             f"solve cache: entry {key} refused ({reason}); recomputed",
             file=sys.stderr,
@@ -137,11 +144,11 @@ def run_verify(args: argparse.Namespace) -> int:
     Returns
     -------
     int
-        1 if any check failed, 2 if the cache lies inside the corpus,
-        else 0.
+        1 if any check failed, 2 if the cache cannot be used (inside
+        the corpus, or a relative ``GOVHARNESS_CACHE_DIR``), else 0.
     """
-    store = _store(args)
     try:
+        store = _store(args)
         found = verify_corpus(
             args.root,
             logic=not args.no_logic,
@@ -197,8 +204,8 @@ def run_check(args: argparse.Namespace) -> int:
     Returns
     -------
     int
-        1 if any check failed, 2 if the cache lies inside the corpus,
-        else 0.
+        1 if any check failed, 2 if the cache cannot be used (inside
+        the corpus, or a relative ``GOVHARNESS_CACHE_DIR``), else 0.
     """
     try:
         store = usable_store(args.root, _store(args) or False)

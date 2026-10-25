@@ -25,7 +25,7 @@ from govharness.checks.verification import Verification
 from govharness.core.corpus import tree_digests
 from govharness.ledger.chain import read_ledger
 from govharness.ledger.transactions import Transaction
-from govharness.workflows.verification import verify_corpus
+from govharness.workflows.verification import usable_store, verify_corpus
 
 Script = Callable[[Path], None]
 
@@ -150,18 +150,24 @@ def rehearse(root: Path, script: Path, work: Path | None = None) -> Rehearsal:
     SourceChanged
         If a file or directory of the source corpus was added or
         removed, or a file was altered.
+    ValueError
+        If the solve cache the environment names cannot be used
+        (``usable_store``): checked against the source before anything
+        is copied, and against the copy before the script runs.
     """
     # Absolute, so that a script that changes the working directory
     # cannot make the second snapshot read another tree.
     root = root.absolute()
+    store = usable_store(root, True)
     before = tree_digests(root)
     work = (work or Path(tempfile.mkdtemp(prefix="rehearsal-"))).absolute()
     copy = work / root.name
     shutil.copytree(root, copy)
+    store = usable_store(copy, store or False)
     already = len(read_ledger(copy))
     try:
         load_script(script.absolute())(copy)
-        verification = verify_corpus(copy)
+        verification = verify_corpus(copy, cache=store or False)
     finally:
         changed = _changed(before, tree_digests(root))
         if changed:

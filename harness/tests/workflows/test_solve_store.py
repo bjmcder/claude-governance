@@ -20,7 +20,9 @@ from pathlib import Path
 from unittest import mock
 
 from govharness.cli.main import main
+from govharness.core.corpus import tree_digests
 from govharness.workflows import solve_store
+from govharness.workflows.amend import Change, record_transaction
 from govharness.workflows.rehearse import rehearse
 from govharness.workflows.solve_store import (
     ENV_DIRECTORY,
@@ -168,7 +170,20 @@ class Store(unittest.TestCase):
             (tmp / "elsewhere" / f"{linked}.json").write_bytes(b"planted")
             (tmp / "cache" / "05").symlink_to(tmp / "elsewhere")
             self.assertEqual(
-                store.load([*keys.values(), linked, KEY]), {KEY: b"real"}
+                store.load([*keys.values(), linked, KEY, OTHER]),
+                {KEY: b"real"},
+            )
+            self.assertEqual(
+                store.skipped,
+                {
+                    keys["link"]: "the entry is a symbolic link",
+                    keys["pipe"]: "the entry is not a regular file",
+                    keys["directory"]: "the entry is not a regular file",
+                    keys[
+                        "large"
+                    ]: f"the entry is larger than {MAX_ENTRY} bytes",
+                    linked: "its directory is a symbolic link",
+                },
             )
             store.save({linked: b"new"})
             self.assertEqual(
@@ -294,6 +309,118 @@ class Location(unittest.TestCase):
                     self.assertIn("inside the corpus", err)
             self.assertFalse(inside.exists())
 
+    def test_cache_reaching_the_corpus_by_dots_or_link_is_refused(
+        self,
+    ) -> None:
+        """Behavior: a cache directory that reaches the corpus through
+        ``..`` or through a symbolic link is refused like a direct one.
+
+        Reference: a copy of the corpus beside a directory ``x`` and a
+        link to the copy's ``STND``; without ``resolve`` in
+        ``SolveStore.inside`` neither path lies under the root.
+        """
+        with corpus_copy() as root:
+            (root.parent / "x").mkdir()
+            (root.parent / "link").symlink_to(root / "STND")
+            for label, directory in (
+                ("dots", root.parent / "x" / ".." / root.name / "c"),
+                ("link", root.parent / "link" / "c"),
+            ):
+                with self.subTest(label):
+                    store = open_store(True, directory)
+                    self.assertTrue(store.inside(root))
+                    code, _, err = run(
+                        ["verify", str(root), "--cache-dir", str(directory)]
+                    )
+                    self.assertEqual(code, 2)
+                    self.assertIn("inside the corpus", err)
+            self.assertFalse((root / "STND" / "c").exists())
+
+    def test_amendment_refused_before_any_write(self) -> None:
+        """Behavior: with the environment's cache inside the corpus,
+        ``record_transaction`` and ``rehearse`` raise ``ValueError``
+        before they write: the ledger, the manifests, and every other
+        file are unchanged, and no copy is made.
+
+        Reference: a copy of the corpus with ``GOVHARNESS_CACHE_DIR``
+        under it, the transaction of the editorial amendment of
+        ``test_rehearse``, and that amendment rehearsed.
+        """
+        with corpus_copy() as root, scratch() as tmp:
+            script = write_script(tmp, AMENDMENT)
+            before = tree_digests(root)
+            change = Change(
+                kind="amend",
+                actor="The Custodian",
+                role="custodians",
+                at="2026-10-25T12:00:00+00:00",
+                authority=["GOV.40"],
+                targets=["STND.INSTR"],
+                scope=["STND/INSTR"],
+                rationale="A test of a refused cache.",
+            )
+            inside = {ENV_DIRECTORY: str(root / "STND" / "cache")}
+            with mock.patch.dict(os.environ, inside):
+                with self.assertRaises(ValueError):
+                    record_transaction(root, change)
+                (tmp / "work").mkdir()
+                with self.assertRaises(ValueError):
+                    rehearse(root, script, tmp / "work")
+            self.assertEqual(tree_digests(root), before)
+            self.assertEqual(list((tmp / "work").iterdir()), [])
+
+    def test_relative_paths(self) -> None:
+        """Behavior: a relative ``GOVHARNESS_CACHE_DIR`` is refused, by
+        ``open_store`` with ``ValueError`` and by ``verify`` with exit 2;
+        a relative ``--cache-dir`` is made absolute when the command
+        starts.
+
+        Reference: the relative path ``cache`` from a scratch directory.
+        """
+        with scratch() as tmp:
+            with mock.patch.dict(os.environ, {ENV_DIRECTORY: "cache"}):
+                with self.assertRaises(ValueError):
+                    open_store()
+                code, _, err = run(["verify", "--no-logic", str(ROOT)])
+                self.assertEqual(code, 2)
+                self.assertIn("must be an absolute path", err)
+            here = Path.cwd()
+            try:
+                os.chdir(tmp)
+                store = open_store(True, Path("cache"))
+            finally:
+                os.chdir(here)
+            self.assertEqual(store.directory, tmp.absolute() / "cache")
+
+    def test_library_default_writes_no_cache(self) -> None:
+        """Behavior: ``verify_corpus`` without ``cache`` writes no entry,
+        even where the environment names a cache.
+
+        Reference: the live corpus, with ``GOVHARNESS_CACHE_DIR`` set to
+        a scratch directory that must stay absent.
+        """
+        with scratch() as tmp:
+            named = {ENV_DIRECTORY: str(tmp / "cache")}
+            with mock.patch.dict(os.environ, named):
+                self.assertTrue(verify_corpus(ROOT).passed())
+            self.assertFalse((tmp / "cache").exists())
+
+    def test_version_covers_the_canonical_json(self) -> None:
+        """Behavior: the version digests ``core/hashing.py``, whose
+        canonical JSON builds every key, as well as the solver.
+
+        Reference: the module list ``SOURCES``.
+        """
+        names = {module.__name__ for module in solve_store.SOURCES}
+        self.assertEqual(
+            names,
+            {
+                "govharness.checks.logic.satlib",
+                "govharness.checks.logic.solvecache",
+                "govharness.core.hashing",
+            },
+        )
+
 
 class Commands(unittest.TestCase):
     """``verify`` and ``check`` print the same with or without a cache."""
@@ -344,10 +471,12 @@ class Commands(unittest.TestCase):
             self.assertEqual(outputs["none"], outputs["cold"])
 
     def test_corrupt_entry_is_named_and_rewritten(self) -> None:
-        """Behavior: a corrupt entry leaves the output of ``verify`` as
-        it was, is named on the standard error, and is rewritten whole.
+        """Behavior: a corrupt entry, or one that is no regular file,
+        leaves the output of ``verify`` as it was, is named on the
+        standard error as refused or skipped, and is rewritten whole.
 
-        Reference: every entry of a warm cache truncated to half.
+        Reference: every entry of a warm cache truncated to half, then
+        one entry replaced by a named pipe.
         """
         with scratch() as tmp:
             cache = ["--cache-dir", str(tmp / "cache")]
@@ -358,6 +487,16 @@ class Commands(unittest.TestCase):
             again, printed, err = run(["verify", str(ROOT), *cache])
             self.assertEqual((again, printed), (code, expected))
             self.assertEqual(err.count("refused (not JSON); recomputed"), 8)
+            first = next(iter(good))
+            first.unlink()
+            os.mkfifo(first)
+            _, printed, err = run(["verify", str(ROOT), *cache])
+            self.assertEqual(printed, expected)
+            self.assertIn(
+                f"entry {first.stem} skipped (the entry is not a regular "
+                "file); recomputed",
+                err,
+            )
             self.assertEqual({p: p.read_bytes() for p in good}, good)
 
 

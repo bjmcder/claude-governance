@@ -70,4 +70,38 @@ Every amendment transaction runs a full `verify` (`record_transaction` in `workf
 
 ## Review
 
-Left for the reviewer.
+The review of commit `26886e3` (`review-records/harness/review-unit-0011.md` in the main checkout) found the claims holding. In 3000 fuzzed sets with 20 planted entries each, every accepted entry equaled a fresh solve. Flipped, damaged, and planted entries on the corpus were refused or skipped, with identical output. Four concurrent cold processes were safe. Its timings agree with the record. It found one defect (M1), one unexecuted path (M2), one test gap (T1), and four low findings. The section below records the disposition.
+
+## Revision after review
+
+This section supersedes the Record above where they differ: the z3 bullet of the integrity check, the test counts, and `SOURCES`.
+
+- M1 (defect: `record_transaction` appended the ledger entry before `verify_corpus` refused a cache inside the corpus; `rehearse` likewise): fixed.
+  - `record_transaction` calls `usable_store(root, True)` right after checking its scopes, before it rebuilds a manifest or appends, and passes that store to its verify.
+  - `rehearse` calls it on the source before it snapshots or copies anything, and on the copy before the script runs.
+  - Both document the `ValueError`.
+  - `Location.test_amendment_refused_before_any_write` sets `GOVHARNESS_CACHE_DIR` inside a corpus copy. Both calls raise, every file digest of the copy (ledger and manifests included) is unchanged, and the rehearsal's work directory stays empty. With the earlier code the ledger gained a line, and this test fails.
+- M2 (the z3 path cannot run here): of the two options, I chose to re-solve rather than reuse a z3 core. An unsatisfiable z3 result is no longer saved, and an unsatisfiable z3 entry found in the cache is refused ("a z3 core is not reused"). The reasons:
+  - A z3 core cannot be confirmed to be the one a fresh z3 run lists, so reusing it could change the listed core facts.
+  - z3 does not run the built-in solver's costly minimisation, so re-solving costs little.
+  - This leaves one guarantee for every reused core: it is exactly the fresh one.
+
+  A z3 model is still reused after the model check, since no output shows a model. `confirms_core` loses its `exact` parameter and is always exact. Without z3, `Z3Path` runs `solve_z3` against `StubZ3`, a stand-in that solves with the built-in solver:
+  - `test_core_positions_are_parsed`: positions and names are read from the tracking names, an axiom tracker is dropped, z3's order is kept, and names holding `__` or shared by two clauses are handled.
+  - `test_z3_model_is_reused_and_core_is_not`: a z3 model is saved and hit; a z3 core is not saved.
+  - `test_z3_cores_are_not_reused`, replacing `test_any_core_that_refutes_passes_for_z3`: planted z3 cores are refused.
+
+  A run with real z3 is still not done.
+- T1 (no `..` or link path): `Location.test_cache_reaching_the_corpus_by_dots_or_link_is_refused` covers `<parent>/x/../<corpus>/c` and a link to the copy's `STND`, through `inside` and through `verify` (exit 2). With `resolve` removed from `inside`, both subtests fail; that mutant was run.
+- L1: `SOURCES` now includes `core/hashing.py`, whose `canonical_json` builds every key (`Location.test_version_covers_the_canonical_json`).
+- L2: `SolveStore.load` records in `skipped`, with a reason, each entry that is present but not read: a link, a linked shard directory, not a regular file, too large, or unopenable. `verify` and `check` print `solve cache: entry K skipped (reason); recomputed` on the standard error; an absent entry is not named. `test_unreadable_entries_are_skipped` asserts the five reasons. `test_corrupt_entry_is_named_and_rewritten` replaces an entry by a named pipe: the standard output is unchanged, the line is printed, and the entry is rewritten.
+- L3, both parts adopted:
+  - `verify_corpus` now defaults to `cache=False`, so a library caller writes no cache unless it asks (`test_library_default_writes_no_cache`). `verify`, `check`, `record_transaction`, and `rehearse` turn the cache on.
+  - A relative `GOVHARNESS_CACHE_DIR` is refused with `ValueError`, or exit 2 from the commands, since it would name another directory from each working directory. A relative `--cache-dir` is made absolute when the command starts (`test_relative_paths`).
+  - Hit counts and eviction are still not offered; see Open above.
+- L4 (no `fsync`): left as is. A crash can leave an empty or partial entry, which is refused and recomputed (`test_corrupt_entries_are_recomputed`, `test_corrupt_entry_is_named_and_rewritten`), so durability would buy nothing but time per write.
+- Also found while writing the M2 tests: `test_wrong_status_is_refused` used the first three facts of the two-core set as its satisfiable set, but `a`, `not a`, `b` is unsatisfiable. The planted cores it named were still refused, but for the wrong reason. The test now uses `a` and `b` alone, which are satisfiable.
+- After the revision:
+  - Tests: 240 tests in 202.1 s, all passing (`test_solvecache.py` 15, `test_solve_store.py` 15).
+  - `verify governance`, median of 3: 3.00 s without the cache, 3.00 s cold, 1.91 s warm. Output identical in all nine runs (SHA-256 `330541e4...`).
+  - Ruff 0.16.10 at 79 columns: no new finding on the changed files. `ruff format --check` passes on them.

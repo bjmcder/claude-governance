@@ -13,8 +13,10 @@ from __future__ import annotations
 import json
 import random
 import unittest
+from unittest import mock
 
 from govharness.checks.base import CheckContext
+from govharness.checks.logic import satlib
 from govharness.checks.logic.proofs import (
     _negations_of,
     base_of,
@@ -292,8 +294,8 @@ class PlantedEntries(unittest.TestCase):
         """Behavior: a satisfiable entry for an unsatisfiable set, and an
         unsatisfiable one for a satisfiable set, are refused.
 
-        Reference: the two-core set with an all-false model; the set
-        without its fourth fact, with each core a planter could name.
+        Reference: the two-core set with an all-false model; its facts
+        ``a`` and ``b`` alone, with each core a planter could name.
         """
         unsat = two_cores()
         key = solve_key(unsat, VERSION, BUILTIN)
@@ -302,9 +304,9 @@ class PlantedEntries(unittest.TestCase):
             decode_entry(planted, key, unsat, BUILTIN),
             (None, "the model fails a clause"),
         )
-        sat = ClauseSet(unsat.clauses[:3])
+        sat = ClauseSet([unsat.clauses[0], unsat.clauses[2]])
         key = solve_key(sat, VERSION, BUILTIN)
-        for core in ([], [0], [0, 1, 2], [2]):
+        for core in ([], [0], [0, 1], [1]):
             with self.subTest(core=core):
                 planted = entry(key, satisfiable=False, core=core)
                 self.assertEqual(
@@ -332,30 +334,28 @@ class PlantedEntries(unittest.TestCase):
                 )
         with_axiom = ClauseSet([("axiom:c", [("c", True)])])
         with_axiom.clauses += clause_set.clauses
-        self.assertFalse(confirms_core(with_axiom, [0, 3, 4], exact=False))
-        self.assertTrue(confirms_core(with_axiom, [3, 4], exact=True))
+        self.assertFalse(confirms_core(with_axiom, [0, 3, 4]))
+        self.assertFalse(confirms_core(with_axiom, [1, 2]))
+        self.assertTrue(confirms_core(with_axiom, [3, 4]))
 
-    def test_any_core_that_refutes_passes_for_z3(self) -> None:
-        """Behavior: for a z3 entry, which the built-in solver cannot
-        reproduce, a core is accepted when the axioms and its facts are
-        unsatisfiable, and refused otherwise.
+    def test_z3_cores_are_not_reused(self) -> None:
+        """Behavior: an unsatisfiable z3 entry is refused, even one whose
+        core refutes, since a fresh z3 run could list other core facts.
 
-        Reference: the two-core set: either pair refutes, one fact does
-        not.
+        Reference: the two-core set: either pair refutes.
         """
         clause_set = two_cores()
         backend = "z3 4.13.0"
         key = solve_key(clause_set, VERSION, backend)
-        for core, accepted in (([0, 1], True), ([3, 2], True), ([0], False)):
+        for core in ([0, 1], [3, 2], [0]):
             with self.subTest(core=core):
                 planted = entry(
                     key, backend=backend, satisfiable=False, core=core
                 )
-                result, _ = decode_entry(planted, key, clause_set, backend)
-                self.assertEqual(result is not None, accepted)
-                if result is not None:
-                    names = [clause_set.clauses[p][0] for p in core]
-                    self.assertEqual(result.core, names)
+                self.assertEqual(
+                    decode_entry(planted, key, clause_set, backend),
+                    (None, "a z3 core is not reused"),
+                )
 
     def test_planted_entries_change_no_verdict_of_the_corpus(self) -> None:
         """Behavior: on the live corpus, an entry of the opposite status
@@ -429,6 +429,258 @@ class PlantedEntries(unittest.TestCase):
         report, _ = logic_report(damaged, cache)
         self.assertEqual(rendered(report), rendered(fresh))
         self.assertEqual(cache.rejected, {key: "the model fails a clause"})
+
+
+class StubZ3:
+    """A stand-in for the z3 module, solving with the built-in solver.
+
+    It offers what ``satlib.solve_z3`` calls. Atoms are their names and a
+    tracker is its name, so ``str`` of a core item is the tracking name
+    ``solve_z3`` writes, ``__track_<position>__<clause name>``. The core
+    it reports is the built-in core with one axiom tracker added, which
+    ``solve_z3`` must drop, in reverse order, which it must keep.
+    """
+
+    sat = "sat"
+    VERSION = "4.99.0"
+
+    @staticmethod
+    def Bool(name: str) -> str:
+        """Return an atom, its name.
+
+        Parameters
+        ----------
+        name : str
+            Name of the atom or tracker.
+
+        Returns
+        -------
+        str
+            The name.
+        """
+        return name
+
+    @staticmethod
+    def Not(atom: str) -> tuple[str, str]:
+        """Return a negated atom.
+
+        Parameters
+        ----------
+        atom : str
+            The atom.
+
+        Returns
+        -------
+        tuple[str, str]
+            ``("not", atom)``.
+        """
+        return ("not", atom)
+
+    @staticmethod
+    def Or(*terms: object) -> tuple[object, ...]:
+        """Return a clause, its terms.
+
+        Parameters
+        ----------
+        *terms : object
+            Atoms and negated atoms.
+
+        Returns
+        -------
+        tuple[object, ...]
+            The terms.
+        """
+        return terms
+
+    @staticmethod
+    def is_true(value: object) -> bool:
+        """Return whether a model value is true.
+
+        Parameters
+        ----------
+        value : object
+            A value from ``Model.eval``.
+
+        Returns
+        -------
+        bool
+            Whether it is ``True``.
+        """
+        return value is True
+
+    @classmethod
+    def get_version_string(cls) -> str:
+        """Return the stub's version.
+
+        Returns
+        -------
+        str
+            ``VERSION``.
+        """
+        return cls.VERSION
+
+    class Model:
+        """A model of the built-in solver, read as z3's.
+
+        Parameters
+        ----------
+        values : dict[str, bool]
+            Value of each variable.
+        """
+
+        def __init__(self, values: dict[str, bool]) -> None:
+            """Keep the values.
+
+            Parameters
+            ----------
+            values : dict[str, bool]
+                Value of each variable.
+            """
+            self.values = values
+
+        def eval(self, atom: str, model_completion: bool) -> bool:
+            """Return the value of an atom.
+
+            Parameters
+            ----------
+            atom : str
+                The atom.
+            model_completion : bool
+                Ignored; every atom has a value.
+
+            Returns
+            -------
+            bool
+                Its value.
+            """
+            return self.values[atom]
+
+    class Solver:
+        """A solver over tracked clauses."""
+
+        def __init__(self) -> None:
+            """Start with no clause."""
+            self.tracked: list[tuple[tuple[object, ...], str]] = []
+            self.result: SolveResult | None = None
+
+        def set(self, **options: object) -> None:
+            """Accept options.
+
+            Parameters
+            ----------
+            **options : object
+                Ignored.
+            """
+
+        def assert_and_track(
+            self, clause: tuple[object, ...], tracker: str
+        ) -> None:
+            """Add a clause with its tracker.
+
+            Parameters
+            ----------
+            clause : tuple[object, ...]
+                Terms of the clause.
+            tracker : str
+                Tracking name.
+            """
+            self.tracked.append((clause, tracker))
+
+        def check(self) -> str:
+            """Solve the tracked clauses with the built-in solver.
+
+            Returns
+            -------
+            str
+                ``sat`` or ``unsat``.
+            """
+            clause_set = ClauseSet()
+            for clause, tracker in self.tracked:
+                literals = [
+                    (t[1], False) if isinstance(t, tuple) else (str(t), True)
+                    for t in clause
+                ]
+                clause_set.add(tracker.split("__", 2)[2], *literals)
+            self.result = solve(clause_set, use_z3=False)
+            return "sat" if self.result.satisfiable else "unsat"
+
+        def model(self) -> StubZ3.Model:
+            """Return the model found.
+
+            Returns
+            -------
+            StubZ3.Model
+                The built-in model.
+            """
+            assert self.result is not None
+            return StubZ3.Model(self.result.model)
+
+        def unsat_core(self) -> list[str]:
+            """Return the trackers of a core, an axiom's among them.
+
+            Returns
+            -------
+            list[str]
+                Trackers of the built-in core and of the first axiom,
+                in reverse order.
+            """
+            assert self.result is not None
+            trackers = [self.tracked[p][1] for p in self.result.positions]
+            axioms = [
+                t
+                for _, t in self.tracked
+                if not t.split("__", 2)[2].startswith(FACT_PREFIXES)
+            ]
+            return (trackers + axioms[:1])[::-1]
+
+
+class Z3Path(unittest.TestCase):
+    """The z3 path runs against a stub, since z3 is not installed."""
+
+    def setUp(self) -> None:
+        """Put the stub in place of z3 for each test."""
+        patcher = mock.patch.object(satlib, "_Z3", StubZ3)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def test_core_positions_are_parsed(self) -> None:
+        """Behavior: ``solve_z3`` reads each core position and name from
+        its tracking names, drops the axioms, and keeps z3's order, even
+        for names that hold ``__`` or are shared by two clauses.
+
+        Reference: the two-core set with an axiom in front and a fact
+        named with ``__`` repeated; the stub reports the built-in core,
+        reversed, with the axiom.
+        """
+        clause_set = ClauseSet([("axiom:x__y", [("c", True)])])
+        clause_set.clauses += two_cores().clauses
+        clause_set.fact("fact:b", "b", False)
+        result = solve(clause_set, use_z3=True)
+        fresh = solve(clause_set, use_z3=False)
+        self.assertEqual(result.backend, "z3 4.99.0")
+        self.assertFalse(result.satisfiable)
+        self.assertEqual(result.positions, fresh.positions[::-1])
+        self.assertEqual(result.core, fresh.core[::-1])
+
+    def test_z3_model_is_reused_and_core_is_not(self) -> None:
+        """Behavior: with z3, a satisfiable result is saved and reused
+        after its model is checked; an unsatisfiable one is not saved,
+        so it is solved afresh each time.
+
+        Reference: the two-core set's facts ``a`` and ``b`` alone, and
+        the set whole.
+        """
+        whole = two_cores()
+        sat = ClauseSet([whole.clauses[0], whole.clauses[2]])
+        first = SolveCache(VERSION)
+        fresh = solve_cached(sat, True, first)
+        self.assertEqual(fresh.backend, "z3 4.99.0")
+        second = SolveCache(VERSION, known=dict(first.fresh))
+        self.assertEqual(solve_cached(sat, True, second), fresh)
+        self.assertEqual(len(second.hits), 1)
+        unsat = SolveCache(VERSION)
+        self.assertFalse(solve_cached(whole, True, unsat).satisfiable)
+        self.assertEqual(unsat.fresh, {})
 
 
 class Reuse(unittest.TestCase):

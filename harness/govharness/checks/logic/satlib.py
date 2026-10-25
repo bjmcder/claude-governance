@@ -474,18 +474,17 @@ def satisfies(clause_set: ClauseSet, model: dict[str, bool]) -> bool:
     )
 
 
-def confirms_core(
-    clause_set: ClauseSet, positions: list[int], exact: bool
-) -> bool:
-    """Return whether fact clauses are an unsatisfiable core of a set.
+def confirms_core(clause_set: ClauseSet, positions: list[int]) -> bool:
+    """Return whether fact clauses are the core ``solve_builtin`` finds.
 
     The axioms with the clauses at ``positions`` must be unsatisfiable,
-    so the whole set is too: one search. With ``exact``, the positions
-    must also be the core that ``solve_builtin`` finds, which takes one
-    more search for each position: the minimisation drops a fact exactly
-    when the facts kept before it and every fact after it, with the
-    axioms, are unsatisfiable. A dropped fact needs no search, since
-    those clauses include the core; a kept fact needs them satisfiable.
+    so the whole set is too: one search. The positions must also be, in
+    increasing order, the core that the minimisation of
+    ``solve_builtin`` finds, which takes one more search for each
+    position: the minimisation drops a fact exactly when the facts kept
+    before it and every fact after it, with the axioms, are
+    unsatisfiable. A dropped fact needs no search, since those clauses
+    include the core; a kept fact needs them satisfiable.
 
     Parameters
     ----------
@@ -493,14 +492,11 @@ def confirms_core(
         The clauses.
     positions : list[int]
         Positions of fact clauses in the set.
-    exact : bool
-        Whether the positions must be the built-in solver's core: in
-        increasing order, and minimal by its rule.
 
     Returns
     -------
     bool
-        True when the positions name fact clauses and pass the test.
+        True when the positions name fact clauses and are that core.
     """
     total = len(clause_set.clauses)
     if any(not 0 <= p < total for p in positions):
@@ -513,11 +509,9 @@ def confirms_core(
         return False
     names, coded = _encode([c for _, c in clause_set.clauses])
     axioms, facts = _split(clause_set, coded)
-    if _dpll(axioms + [coded[p] for p in positions], len(names)) is not None:
-        return False
-    if not exact:
-        return True
     if positions != sorted(positions):
+        return False
+    if _dpll(axioms + [coded[p] for p in positions], len(names)) is not None:
         return False
     for number, kept in enumerate(positions):
         trial = positions[:number] + [p for p in facts if p > kept]

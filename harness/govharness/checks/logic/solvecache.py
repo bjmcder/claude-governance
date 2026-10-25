@@ -17,13 +17,16 @@ read and write no file. An entry holds the status, the backend, the
 model as one bit a variable, and the core as positions in the clause
 set: no text of the corpus. An entry is reused only after a check that
 a planted entry cannot pass with a wrong verdict: a model must satisfy
-every clause, and the axioms with a core's facts must be unsatisfiable;
-for the built-in solver the core must also be exactly the one its
-minimisation finds, so a reused core is the fresh one. A model is
-checked only for satisfying the clauses, not for being the model a
-fresh solve finds; no check, report, or output shows a model. Any
-entry that is malformed, of another key, format, or backend, or fails
-its check, is ignored, recorded in ``rejected``, and recomputed.
+every clause, and a core must be exactly the one the built-in solver's
+minimisation finds, which also makes the axioms with its facts
+unsatisfiable, so a reused core is the fresh one. A model is checked
+only for satisfying the clauses, not for being the model a fresh solve
+finds; no check, report, or output shows a model. A core found by z3
+is neither saved nor reused: it cannot be reproduced without z3, so a
+reused one could list other core facts than a fresh z3 run, and z3
+needs no costly minimisation to find it again. Any entry that is
+malformed, of another key, format, or backend, or fails its check, is
+ignored, recorded in ``rejected``, and recomputed.
 """
 
 from __future__ import annotations
@@ -263,8 +266,8 @@ def _core_result(
     clause_set : ClauseSet
         The clauses.
     backend : str
-        Backend of the entry; the built-in solver's core must be exactly
-        the one it finds.
+        Backend of the entry; only the built-in solver's cores are
+        reused, and each must be exactly the one it finds.
 
     Returns
     -------
@@ -278,7 +281,9 @@ def _core_result(
         or "model" in entry
     ):
         return None, "malformed core"
-    if not confirms_core(clause_set, positions, exact=backend == BUILTIN):
+    if backend != BUILTIN:
+        return None, "a z3 core is not reused"
+    if not confirms_core(clause_set, positions):
         return None, "the core is not confirmed"
     core = [clause_set.clauses[p][0] for p in positions]
     return SolveResult(False, {}, core, backend, list(positions)), ""
@@ -308,7 +313,7 @@ def solve_cached(
     -------
     SolveResult
         The result of ``satlib.solve``, or the same result rebuilt from
-        a checked entry.
+        a checked entry. An unsatisfiable result of z3 is not saved.
     """
     if cache is None:
         return solve(clause_set, use_z3)
@@ -323,5 +328,6 @@ def solve_cached(
             return result
         cache.rejected[key] = reason
     result = solve(clause_set, use_z3)
-    cache.fresh[key] = encode_entry(key, result)
+    if result.satisfiable or result.backend == BUILTIN:
+        cache.fresh[key] = encode_entry(key, result)
     return result

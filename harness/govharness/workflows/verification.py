@@ -70,7 +70,9 @@ def usable_store(root: Path, cache: SolveStore | bool) -> SolveStore | None:
     ------
     ValueError
         If the store's directory lies inside the corpus, which the
-        cache's files would then change.
+        cache's files would then change, or the environment names a
+        relative directory. A workflow that writes calls this before
+        its first write.
     """
     store = open_store() if cache is True else cache or None
     if store is None:
@@ -87,7 +89,7 @@ def verify_corpus(
     root: Path,
     logic: bool = True,
     use_z3: bool = True,
-    cache: SolveStore | bool = True,
+    cache: SolveStore | bool = False,
 ) -> Verification:
     """Load the corpus at a root and verify it.
 
@@ -101,8 +103,9 @@ def verify_corpus(
         Whether the proofs may use z3 when it is importable.
     cache : SolveStore | bool
         The solve cache: a store, ``True`` for the one the environment
-        names, or ``False`` for none. The results are the same in every
-        case.
+        names, or ``False``, the default, for none, so that a library
+        caller writes no cache unless it asks. The results are the same
+        in every case.
 
     Returns
     -------
