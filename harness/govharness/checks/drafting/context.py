@@ -27,12 +27,13 @@ from govharness.checks.drafting.tables import (
     StandardTables,
     expression_pattern,
     read_standard_tables,
+    table_cells,
 )
 from govharness.checks.lineage.derivation import lower_provisions
 from govharness.core.corpus import Corpus
 from govharness.core.entry import Entry
 from govharness.core.tables import parse_tables, section_text
-from govharness.core.text import sentences_of, unquoted
+from govharness.core.text import prose_lines, split_sentences, unquoted
 
 STANDARD_ID = "STND.DRAFT"
 ALL_GROUPS = {"self", "lower", "draft", "lvl0"}
@@ -55,6 +56,9 @@ NOT_IMPERATIVE_SECOND = frozenset(
     "of is are and or for in on to as with by at".split()
 )
 TableRow = tuple[list[str], str]
+# A whole sentence ends at terminal punctuation only; the sentences of a
+# unit also end at semicolons and colons (``core.text``).
+TERMINAL_RE = re.compile(r"(?<=[.!?])\s+(?=[A-Z(\"“])")
 
 
 @dataclass
@@ -100,6 +104,9 @@ class Unit:
         ``binding`` or ``default`` for a provision below LVL0.
     body : str
         The Markdown body.
+    whole : list[str]
+        Sentences ended only by terminal punctuation, so that clauses
+        joined by a semicolon or a colon are one sentence.
     """
 
     subject: str
@@ -109,6 +116,7 @@ class Unit:
     sentences: list[str]
     mode: str | None = None
     body: str = ""
+    whole: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -306,16 +314,24 @@ def _unit(entry: Entry, group: str, kind: str, mode: str | None) -> Unit:
     Returns
     -------
     Unit
-        The unit with the entry's sentences.
+        The unit with the entry's sentences, those of the cells of a
+        provision's tables after them (``table_cells``).
     """
+    texts = prose_lines(entry.body) + table_cells(entry)
     return Unit(
         str(entry.meta["id"]),
         group,
         kind,
         str(entry.meta.get("level")),
-        sentences_of(entry.body),
+        [s for text in texts for s in split_sentences(text)],
         mode,
         entry.body,
+        [
+            p.strip()
+            for text in texts
+            for p in TERMINAL_RE.split(text)
+            if p.strip()
+        ],
     )
 
 

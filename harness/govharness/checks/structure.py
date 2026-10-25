@@ -1,23 +1,28 @@
 """Structural checks of ``verify``: identifiers, mnemonics, references.
 
 ids: every entry's ``id`` matches its path. mnemonics: every top-level
-directory is a well-formed mnemonic, two to five uppercase letters with
-an optional digit of an ordinal scale (LVL0). references: every
+directory is a well-formed mnemonic, two to five uppercase letters
+(STND.IDENT.17), or a grade of an ordinal scale that the register MNEM
+lists, its mnemonic and one digit (GOV.37; LVL0). references: every
 identifier or section locator named in ``cites``, ``governed_by``,
 ``instantiates``, or ``refers_to`` resolves.
 """
 
 from __future__ import annotations
 
-import re
-
 from govharness.checks.base import Check, CheckContext, Verdict
+from govharness.checks.revisions.identifiers import (
+    GRADE_RE,
+    MNEMONIC_RE,
+    Register,
+    read_register,
+    usage_problems,
+)
 from govharness.core.corpus import Tree
 from govharness.core.entry import TEMPLATE_PREFIX, Entry, path_to_id
 from govharness.core.locators import heading_slug, reference_resolves
 
 FAMILY = "structure"
-MNEMONIC_RE = re.compile(r"^[A-Z]{2,5}\d?$")
 REFERENCE_FIELDS = ("cites", "governed_by", "instantiates", "refers_to")
 
 
@@ -57,26 +62,33 @@ def id_problems(entries: list[Entry]) -> list[str]:
     ]
 
 
-def mnemonic_problems(tree: Tree) -> list[str]:
+def mnemonic_problems(tree: Tree, register: Register) -> list[str]:
     """Return the top-level directories that are not mnemonics.
 
     Parameters
     ----------
     tree : Tree
         Snapshot of the corpus files.
+    register : Register
+        Rows of the mnemonic register, from which a grade such as
+        ``LVL0`` is read.
 
     Returns
     -------
     list[str]
-        One line per malformed directory name; templates are skipped.
+        One line per directory name that is neither a mnemonic nor a
+        registered grade; templates are skipped.
     """
-    return [
-        f"bad mnemonic: {d.name}"
-        for d in tree.directories
-        if len(d.parts) == 1
-        and not d.name.startswith(TEMPLATE_PREFIX)
-        and not MNEMONIC_RE.match(d.name)
-    ]
+    problems = []
+    for d in tree.directories:
+        if len(d.parts) != 1 or d.name.startswith(TEMPLATE_PREFIX):
+            continue
+        if MNEMONIC_RE.match(d.name):
+            continue
+        if GRADE_RE.match(d.name) and not usage_problems(d.name, register):
+            continue
+        problems.append(f"bad mnemonic: {d.name}")
+    return problems
 
 
 def reference_problems(entries: list[Entry]) -> list[str]:
@@ -142,7 +154,8 @@ def mnemonics_formed(ctx: CheckContext) -> Verdict:
     Verdict
         FAIL with one line per bad directory name.
     """
-    return failing(mnemonic_problems(ctx.require_tree()))
+    register, _ = read_register(ctx.corpus)
+    return failing(mnemonic_problems(ctx.require_tree(), register))
 
 
 def references_resolve(ctx: CheckContext) -> Verdict:

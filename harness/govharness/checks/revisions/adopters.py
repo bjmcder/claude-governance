@@ -80,8 +80,31 @@ def _not_a_role(value: str, roles: set[str]) -> bool:
     return not value.startswith("The ") or normalize_label(value) not in roles
 
 
+def adopter_field(meta: dict[str, Any]) -> str:
+    """Return the field in which a document names its adopter.
+
+    Parameters
+    ----------
+    meta : dict[str, Any]
+        Front matter of a document.
+
+    Returns
+    -------
+    str
+        ``ratified_by`` for the constitution, else ``adopted_by``
+        (STND.IDENT.12).
+    """
+    return (
+        "ratified_by" if meta.get("kind") == "constitution" else "adopted_by"
+    )
+
+
 def adopters_named(ctx: CheckContext) -> Verdict:
     """Check v.5: adopter fields name a role that the Lexicon defines.
+
+    STND.IDENT.12 names the field for each kind, ``ratified_by`` for the
+    constitution and ``adopted_by`` for the others, and requires it
+    whatever the status, so a draft names the role that will adopt it.
 
     Parameters
     ----------
@@ -91,15 +114,18 @@ def adopters_named(ctx: CheckContext) -> Verdict:
     Returns
     -------
     Verdict
-        FAIL on a document with no adopter field or one that is not a
-        role label.
+        FAIL on a document without the adopter field of its kind, or
+        with an adopter field that is not a role label.
     """
     roles = role_labels(ctx.corpus)
     problems: list[str] = []
     for entry in documents(ctx.corpus):
+        wanted = adopter_field(entry.meta)
+        if wanted not in entry.meta:
+            problems.append(
+                f"- {entry.meta['id']}: names no adopter in `{wanted}`"
+            )
         named = [f for f in ADOPTER_FIELDS if f in entry.meta]
-        if not named:
-            problems.append(f"- {entry.meta['id']}: names no adopter")
         for name in named:
             value = str(entry.meta[name] or "")
             if _not_a_role(value, roles):

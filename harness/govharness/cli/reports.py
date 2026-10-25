@@ -120,14 +120,19 @@ def summary_lines(found: Verification) -> list[str]:
     -------
     list[str]
         The entry count, one status line per section with its first
-        failure lines, and the warnings.
+        failure lines, or the first warning lines of a structural check
+        that warns, and the warnings of the logic checks.
     """
     lines = [f"entries: {found.entries}"]
+    cautions = found.cautions()
     for name, errors in found.sections().items():
-        lines.append(
-            f"{name}: {'PASS' if not errors else f'FAIL ({len(errors)})'}"
-        )
-        lines += [f"  {error}" for error in errors[:SHOWN_PER_CHECK]]
+        noted = cautions.get(name, [])
+        if errors:
+            status = f"FAIL ({len(errors)})"
+        else:
+            status = f"WARN ({len(noted)})" if noted else "PASS"
+        lines.append(f"{name}: {status}")
+        lines += [f"  {line}" for line in (errors or noted)[:SHOWN_PER_CHECK]]
     lines += [f"  warn: {warning}" for warning in found.warnings()]
     return lines
 

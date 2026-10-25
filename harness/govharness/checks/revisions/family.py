@@ -2,7 +2,9 @@
 
 v.6 the table of revision classes is present and well formed; v.7 every
 provision of the standard names its checks, and every check enforces a
-provision; v.8 withdrawn identifiers are listed and never reused.
+provision; v.8 withdrawn identifiers are listed and never reused, and
+every provision identifier the corpus cites is a provision or listed as
+withdrawn.
 """
 
 from __future__ import annotations
@@ -10,6 +12,7 @@ from __future__ import annotations
 import re
 
 from govharness.checks.base import Check, CheckContext, Verdict
+from govharness.checks.drafting.citations import naming_text
 from govharness.checks.revisions import adopters, history, identifiers
 from govharness.checks.revisions.classes import (
     STANDARD_ID,
@@ -17,6 +20,8 @@ from govharness.checks.revisions.classes import (
     classes_of,
     documents,
 )
+from govharness.core.corpus import Corpus
+from govharness.core.text import ids_in
 
 FAMILY = "revisions"
 # The keys a provision of STND.IDENT may name; v.7 checks the naming
@@ -33,6 +38,10 @@ CITABLE_KEYS = (
     "v.10",
     "v.11",
 )
+# Front-matter fields that hold no citation: the entry's own identifier,
+# and the withdrawn identifiers, which v.8 compares with the numbering.
+NOT_CITING = ("id", "withdrawn")
+CITERS_SHOWN = 3
 
 
 def classes_formed(ctx: CheckContext) -> Verdict:
@@ -101,11 +110,14 @@ def withdrawn(ctx: CheckContext) -> Verdict:
     Returns
     -------
     Verdict
-        FAIL on a listed identifier of another document or in use, or
-        a gap in a document's numbering that is not listed.
+        FAIL on a listed identifier of another document or in use, a
+        gap in a document's numbering that is not listed, or a cited
+        identifier that is neither a provision nor listed
+        (``_unresolved_citations``).
     """
     corpus = ctx.corpus
     problems: list[str] = []
+    retired: set[str] = set()
     for doc in documents(corpus):
         did = str(doc.meta["id"])
         listed = [str(w) for w in doc.meta.get("withdrawn") or []]
@@ -117,6 +129,7 @@ def withdrawn(ctx: CheckContext) -> Verdict:
                 problems.append(f"- {did}: `{ident}` is not its identifier")
                 continue
             gone.add(int(found[1]))
+            retired.add(ident)
             if ident in corpus.by_id:
                 problems.append(f"- {did}: withdrawn `{ident}` is in use")
         numbers = {
@@ -130,7 +143,83 @@ def withdrawn(ctx: CheckContext) -> Verdict:
                 f"- {did}: {did}.{n} is missing and not listed as withdrawn"
                 for n in sorted(gaps)
             ]
+    problems += _unresolved_citations(corpus, retired)
     return Verdict("FAIL" if problems else "PASS", problems)
+
+
+def cited_provisions(corpus: Corpus) -> dict[str, set[str]]:
+    """Return each numbered identifier the corpus cites, and its citers.
+
+    A body is read as g.25 reads it for bare names (``naming_text``):
+    its References section, Revision History, tables with a column
+    Example, quoted spans, and code are left out. Every front-matter
+    value is read except the entry's own ``id`` and its ``withdrawn``
+    list.
+
+    Parameters
+    ----------
+    corpus : Corpus
+        Indexed corpus.
+
+    Returns
+    -------
+    dict[str, set[str]]
+        Identifiers such as ``GOV.12``, each with the entries citing it.
+    """
+    cited: dict[str, set[str]] = {}
+    for entry in corpus.entries:
+        texts = [naming_text(entry.body)]
+        for key, value in entry.meta.items():
+            if key in NOT_CITING:
+                continue
+            values = value if isinstance(value, list) else [value]
+            texts += [v for v in values if isinstance(v, str)]
+        citer = str(entry.meta["id"])
+        for text in texts:
+            for ident in ids_in(text):
+                cited.setdefault(ident, set()).add(citer)
+    return cited
+
+
+def _unresolved_citations(corpus: Corpus, retired: set[str]) -> list[str]:
+    """Return the cited identifiers that name no provision.
+
+    An identifier cited after its provision was deleted, with no entry
+    in ``withdrawn``, is a withdrawal the document does not list
+    (STND.IDENT.14), even when no gap in the numbering shows it, as for
+    the highest number of a document.
+
+    Parameters
+    ----------
+    corpus : Corpus
+        Indexed corpus.
+    retired : set[str]
+        Identifiers that a field ``withdrawn`` lists.
+
+    Returns
+    -------
+    list[str]
+        One line per identifier that is neither an entry of the corpus
+        nor listed as withdrawn, with the first entries citing it. An
+        identifier whose first mnemonic no entry of the corpus uses
+        names an item of another scheme, such as a rule of the C++ Core
+        Guidelines (``ES.11``), and is not read.
+    """
+    mnemonics = {str(e.meta["id"]).split(".")[0] for e in corpus.entries}
+    problems = []
+    for ident, citers in sorted(cited_provisions(corpus).items()):
+        if ident in corpus.by_id or ident in retired:
+            continue
+        if ident.split(".")[0] not in mnemonics:
+            continue
+        shown = ", ".join(sorted(citers)[:CITERS_SHOWN])
+        more = len(citers) - CITERS_SHOWN
+        tail = f" and {more} more" if more > 0 else ""
+        problems.append(
+            f"- {ident} is cited ({shown}{tail}) but is neither a "
+            "provision nor listed as withdrawn"
+        )
+    return problems
 
 
 IDENT = (STANDARD_ID,)
@@ -189,7 +278,8 @@ CHECKS: tuple[Check, ...] = (
     Check(
         "v.8",
         FAMILY,
-        "Withdrawn identifiers are listed and never reused",
+        "Withdrawn identifiers are listed and never reused, and every "
+        "cited provision exists or is listed as withdrawn",
         ("STND.IDENT.14",),
         withdrawn,
     ),

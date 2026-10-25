@@ -15,7 +15,14 @@ from collections.abc import Callable
 from pathlib import PurePosixPath
 
 from govharness.checks.base import CheckContext
+from govharness.checks.drafting import expressions, modals, roles
 from govharness.checks.drafting import family as drafting
+from govharness.checks.drafting.context import (
+    Finding,
+    build_context,
+    is_imperative,
+)
+from govharness.checks.drafting.family import Finder
 from govharness.checks.lineage import family as lineage
 from govharness.checks.registry import run_checks
 from govharness.core.entry import Entry
@@ -347,6 +354,40 @@ CASES: dict[str, tuple[Mutation, dict[str, str]]] = {
         _append("STND.DRAFT.2", "The tool doesn't halt."),
         {"g.21": "FAIL"},
     ),
+    "typographic contraction": (
+        _append("STND.DRAFT.2", "The tool doesn\u2019t halt."),
+        {"g.21": "FAIL"},
+    ),
+    "typographic contraction of will": (
+        _append("STND.DRAFT.2", "The tool\u2019ll halt."),
+        {"g.21": "FAIL"},
+    ),
+    # ``core.text`` ends a sentence at a semicolon only before a capital,
+    # so the second clause opens with one (QA.8 part C, L3).
+    "two modals joined by a semicolon": (
+        _append(
+            "STND.DRAFT.2",
+            "An actor SHALL record it; X SHALL read it.",
+        ),
+        {"g.4": "FAIL"},
+    ),
+    "excluded expression in a table row": (
+        lambda e: setattr(
+            e["STND.PERF.1"],
+            "body",
+            e["STND.PERF.1"].body + "\n\n| x | The code may not run |\n",
+        ),
+        {"g.5": "FAIL"},
+    ),
+    "lowercase modal in a table cell": (
+        lambda e: setattr(
+            e["STND.PERF.1"],
+            "body",
+            e["STND.PERF.1"].body
+            + "\n\n| Item | Rule |\n| --- | --- |\n| x | It shall run. |\n",
+        ),
+        {"g.3": "FAIL"},
+    ),
     "first person": (
         _append("STND.DRAFT.2", "We SHALL record it."),
         {"g.21": "FAIL"},
@@ -455,6 +496,20 @@ class DraftingChecks(unittest.TestCase):
                         f"{name}: {key} is {got.get(key)}, want {status}",
                     )
 
+    def test_person_word_inside_a_word(self) -> None:
+        """Behavior: a person word joined to a word by an apostrophe,
+        straight or typographic, is part of that word, and g.21 passes.
+
+        Reference: STND.DRAFT.32 and its table of person words; QA.8
+        part C, H2, and the review of unit 0017, M-A.
+        """
+        for mark in ("'", "\u2019"):
+            with self.subTest(mark=mark):
+                got = statuses(
+                    _append("STND.DRAFT.2", f"The table names d{mark}us.")
+                )
+                self.assertEqual(got.get("g.21", "PASS"), "PASS")
+
     def test_traceability_knows_every_registered_key(self) -> None:
         """Behavior: g.23 accepts a key of any registered check, whatever
         families the run includes, and still fails on an unknown key.
@@ -481,6 +536,249 @@ class DraftingChecks(unittest.TestCase):
         not apply to LVL0 and undivided drafts form a punch list.
         """
         self.assertEqual(statuses(lambda e: None)["g.24"], "INFO")
+
+
+def findings(mutation: Mutation, finder: Finder) -> list[Finding]:
+    """Apply a mutation and return one finder's findings.
+
+    Parameters
+    ----------
+    mutation : Mutation
+        Damages the index in place.
+    finder : Finder
+        A drafting finder, such as ``modals.one_modal``.
+
+    Returns
+    -------
+    list[Finding]
+        Its findings on the damaged copy.
+    """
+    index = live_index()
+    mutation(index)
+    ctx = build_context(corpus_of(index))
+    assert ctx is not None
+    return finder(ctx)
+
+
+def _instrument(text: str) -> Mutation:
+    """Return a mutation that adds an instantiated LVL3 instrument.
+
+    Parameters
+    ----------
+    text : str
+        Body of the waiver DEMO.WAIV.1.
+
+    Returns
+    -------
+    Mutation
+        The mutation.
+    """
+
+    def apply(e: Index) -> None:
+        """Add DEMO.WAIV.1.
+
+        Parameters
+        ----------
+        e : Index
+            Copy of the corpus entries by identifier; changed in place.
+        """
+        meta = {
+            "id": "DEMO.WAIV.1",
+            "level": "LVL3",
+            "kind": "waiver",
+            "title": "Probe waiver",
+            "status": "adopted",
+        }
+        e["DEMO.WAIV.1"] = Entry(PurePosixPath("DEMO/WAIV/1.md"), meta, text)
+
+    return apply
+
+
+class HeldBehavior(unittest.TestCase):
+    """Behavior that no case above held (QA.8 part C, M2 and M5)."""
+
+    def test_provision_that_imposes_nothing(self) -> None:
+        """Behavior: g.4 finds a provision with no modal, status word,
+        or imperative, and a status word alone imposes something.
+
+        Reference: STND.DRAFT.4 and STND.DRAFT.5; the status words of
+        the Normative Language table (``is a defect``). QA.8 part C,
+        M5: the mutations of ``modals.py`` line 190 and of the status
+        filter of ``context.py``.
+        """
+        nothing = "the provision imposes nothing"
+
+        def subjects(body: str) -> list[str]:
+            """Return the subjects g.4 finds imposing nothing.
+
+            Parameters
+            ----------
+            body : str
+                Body given to STND.DRAFT.2.
+
+            Returns
+            -------
+            list[str]
+                Subjects of the findings.
+            """
+            found = findings(
+                lambda e: setattr(e["STND.DRAFT.2"], "body", body),
+                modals.one_modal,
+            )
+            return [f.subject for f in found if nothing in f.text]
+
+        self.assertEqual(subjects("This is a note."), ["STND.DRAFT.2"])
+        self.assertEqual(subjects("A record without a date is a defect."), [])
+
+    def test_imperative_heuristic(self) -> None:
+        """Behavior: an imperative opens with do, never, please, or a
+        listed verb not followed by a word that marks a noun phrase.
+
+        Reference: the heuristic of g.8 (README, "Not yet built"); QA.8
+        part C, M5, the mutations of ``is_imperative``.
+        """
+        for sentence in ("Never act.", "Please act.", "Record.", "Record it."):
+            with self.subTest(sentence):
+                self.assertTrue(is_imperative(sentence))
+        for sentence in ("", "Record of it.", "Record of.", "A record."):
+            with self.subTest(sentence):
+                self.assertFalse(is_imperative(sentence))
+
+    def test_fill_in_guidance_in_instrument(self) -> None:
+        """Behavior: fill-in guidance left in an instantiated LVL3
+        instrument is a defect, and the label elsewhere is not.
+
+        Reference: STND.DRAFT.11; QA.8 part C, M5, the mutations of
+        ``expressions.py`` lines 140 to 142. STND.DRAFT.11 itself
+        names the label in quotation marks.
+        """
+        found = findings(
+            _instrument("Fill-in guidance: state the scope."),
+            expressions.informative_markers,
+        )
+        left = [f.subject for f in found if "fill-in guidance" in f.text]
+        self.assertEqual(left, ["DEMO.WAIV.1"])
+        found = findings(
+            _instrument("The scope is stated."),
+            expressions.informative_markers,
+        )
+        self.assertFalse([f for f in found if "fill-in guidance" in f.text])
+
+    def test_conditions(self) -> None:
+        """Behavior: g.12 lists a sentence with two conditions, and one
+        whose condition follows the modal, and neither a sentence with
+        one condition nor one whose conditions come first.
+
+        Reference: STND.DRAFT.16; QA.8 part C, M5, the mutations of the
+        bound ``len(starts) > 1`` and of the test of a late condition.
+        STND.DRAFT.2 has no g.12 finding of its own.
+        """
+
+        def texts(sentence: str) -> list[str]:
+            """Return g.12's findings on STND.DRAFT.2 with one sentence.
+
+            Parameters
+            ----------
+            sentence : str
+                Sentence appended to STND.DRAFT.2.
+
+            Returns
+            -------
+            list[str]
+                Text of each finding on STND.DRAFT.2.
+            """
+            found = findings(
+                _append("STND.DRAFT.2", sentence), expressions.conditions
+            )
+            return [f.text for f in found if f.subject == "STND.DRAFT.2"]
+
+        two = texts(
+            "Where a check fails and where a log is full, X SHALL halt."
+        )
+        self.assertEqual([t[:12] for t in two], ["2 conditions"])
+        self.assertEqual(texts("Where a check fails, X SHALL halt."), [])
+        late = texts("X SHALL halt where a check fails.")
+        self.assertEqual(
+            [t[:28] for t in late], ["condition follows the clause"]
+        )
+
+    def test_title_bound(self) -> None:
+        """Behavior: a title of one to six words passes g.17 and one of
+        seven fails.
+
+        Reference: STND.DRAFT.26 (a short noun phrase, the six-word
+        bound of the README); QA.8 part C, M5, the mutations of the
+        bounds in ``roles.py``.
+        """
+
+        def flagged(title: str) -> bool:
+            """Return whether g.17 finds STND.DRAFT.2 with a title.
+
+            Parameters
+            ----------
+            title : str
+                Title given to STND.DRAFT.2.
+
+            Returns
+            -------
+            bool
+                Whether a finding names STND.DRAFT.2.
+            """
+            found = findings(_meta("STND.DRAFT.2", title=title), roles.titles)
+            return any(f.subject == "STND.DRAFT.2" for f in found)
+
+        self.assertFalse(flagged("Probe"))
+        self.assertFalse(flagged("One two three four five six"))
+        self.assertTrue(flagged("One two three four five six more"))
+
+    def test_table_cells(self) -> None:
+        """Behavior: the cells of a table in a provision are read as
+        prose, a quoted expression in them is a mention, and a table
+        that the provision names in ``defines`` is left out.
+
+        Reference: STND.DRAFT, Normative and informative parts ("the
+        body of a numbered provision, including a table it contains, is
+        normative") and STND.DRAFT.3; QA.8 part C, M2.
+        """
+
+        def row(rule: str, text: str) -> Mutation:
+            """Return a mutation that adds a table to a provision.
+
+            Parameters
+            ----------
+            rule : str
+                Identifier of the provision.
+            text : str
+                Text of the second cell of its one row.
+
+            Returns
+            -------
+            Mutation
+                The mutation.
+            """
+
+            def apply(e: Index) -> None:
+                """Add the table.
+
+                Parameters
+                ----------
+                e : Index
+                    Copy of the corpus entries by identifier; changed in
+                    place.
+                """
+                table = "| Item | Rule |\n| --- | --- |\n"
+                e[rule].body += f"\n\n{table}| x | {text} |\n"
+
+            return apply
+
+        used = statuses(row("STND.PERF.1", "The code may not run."))
+        self.assertEqual(used["g.5"], "FAIL")
+        quoted = statuses(
+            row("STND.PERF.1", 'The words "may not" are barred.')
+        )
+        self.assertEqual(quoted["g.5"], "PASS")
+        defined = statuses(row("STND.DRAFT.17", "The code may not run."))
+        self.assertEqual(defined["g.5"], "PASS")
 
 
 if __name__ == "__main__":

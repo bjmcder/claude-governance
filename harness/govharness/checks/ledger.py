@@ -32,6 +32,7 @@ from govharness.ledger.signatures import check_signatures
 from govharness.ledger.transactions import (
     GOVERNANCE,
     Transaction,
+    covers,
     entry_problems,
     head_problems,
     latest_pins,
@@ -160,6 +161,54 @@ def ledger_intact(ctx: CheckContext) -> Verdict:
     return Verdict("FAIL" if problems else "PASS", problems)
 
 
+def unpinned_files(ctx: CheckContext) -> Verdict:
+    """Check unpinned: list the Markdown files that no scope covers.
+
+    STND.HARN.9 compares only the scopes that transactions name, so a
+    file outside every scope can change with no transaction and the
+    ledger check still passes (QA.8 part C, M1). Whether every file of
+    governance is to be pinned is the corpus's question; until it says
+    so, this check warns and never fails. A directory none of whose
+    Markdown files is covered is named once, with its count of files.
+
+    Parameters
+    ----------
+    ctx : CheckContext
+        Context of the run.
+
+    Returns
+    -------
+    Verdict
+        WARN with one line per uncovered directory or file, else PASS.
+    """
+    scopes = {
+        s
+        for entry in ctx.ledger or []
+        for s in entry.get("scope") or []
+        if isinstance(s, str)
+    }
+    files = ctx.require_tree().markdown()
+    covered = [
+        p for p in files if any(covers(s, p.as_posix()) for s in scopes)
+    ]
+    groups: dict[str, int] = {}
+    for path in sorted(set(files) - set(covered)):
+        name = path.as_posix()
+        for depth in range(1, len(path.parts)):
+            top = PurePosixPath(*path.parts[:depth])
+            if not any(top in p.parents for p in covered):
+                name = f"{top.as_posix()}/"
+                break
+        groups[name] = groups.get(name, 0) + 1
+    lines = [
+        f"- {name} ({count} file{'s' if count > 1 else ''})"
+        if name.endswith("/")
+        else f"- {name}"
+        for name, count in sorted(groups.items())
+    ]
+    return Verdict("WARN" if lines else "PASS", lines)
+
+
 CHECKS: tuple[Check, ...] = (
     Check(
         "ledger",
@@ -167,5 +216,12 @@ CHECKS: tuple[Check, ...] = (
         "The ledger chain is intact, its pins hold, and its signatures verify",
         ("GOV.36",),
         ledger_intact,
+    ),
+    Check(
+        "unpinned",
+        FAMILY,
+        "Every Markdown file lies under a scope that a transaction names",
+        ("GOV.36",),
+        unpinned_files,
     ),
 )
