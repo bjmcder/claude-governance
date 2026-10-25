@@ -14,7 +14,7 @@ import re
 from pathlib import PurePosixPath
 
 from govharness.core.corpus import Corpus, Tree
-from govharness.core.entry import DOC_FILE
+from govharness.core.entry import DOC_FILE, Entry
 from govharness.core.locators import cited_in_text
 from govharness.core.tables import HISTORY_HEADING
 from govharness.core.text import unquoted
@@ -68,6 +68,30 @@ def without_section(body: str) -> str:
     return SECTION_RE.sub("", body)
 
 
+def members_of(corpus: Corpus, doc_id: str) -> list[Entry]:
+    """Return a document's entry and the entries of its directory.
+
+    Parameters
+    ----------
+    corpus : Corpus
+        Indexed corpus.
+    doc_id : str
+        Identifier of the document.
+
+    Returns
+    -------
+    list[Entry]
+        The document first, then its provisions and terms; the entries
+        of a sub-directory belong to their own document.
+    """
+    doc = corpus.by_id[doc_id]
+    return [doc] + [
+        e
+        for e in corpus.entries
+        if e.path.parent == doc.path.parent and e.path.name != DOC_FILE
+    ]
+
+
 def cited_documents(corpus: Corpus, doc_id: str) -> list[str]:
     """Return the sorted documents, other than itself, a document cites.
 
@@ -83,14 +107,8 @@ def cited_documents(corpus: Corpus, doc_id: str) -> list[str]:
     list[str]
         Identifiers of the cited documents.
     """
-    doc = corpus.by_id[doc_id]
-    members = [doc] + [
-        e
-        for e in corpus.entries
-        if e.path.parent == doc.path.parent and e.path.name != DOC_FILE
-    ]
     named: set[str] = set()
-    for entry in members:
+    for entry in members_of(corpus, doc_id):
         text = without_section(entry.body)
         named |= cited_in_text(corpus.by_id, unquoted(text))
         for name in FIELDS:
