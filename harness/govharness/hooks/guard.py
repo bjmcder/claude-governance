@@ -35,7 +35,8 @@ write of a computed item is referred, since its items cannot be listed
 (STND.DFLT.24), and so is a read of one while the store holds a closed
 file. A program the guard does not know is searched for a command it
 knows, so that a launcher such as ``timeout`` or ``uv run`` does not
-hide one; the command found is read with the launcher's standard input,
+hide a command it knows; the command found is read with the launcher's
+standard input,
 so that ``echo ... | env sh`` is read as ``echo ... | sh``. A word
 ``NAME=value`` of a simple command, other than an argument of a program
 that takes only text such as ``grep``, is read as an assignment: the
@@ -65,19 +66,34 @@ substitution, as ``sh < <(...)`` does, also behind a launcher;
 ``rg --pre``; a ``cd`` to a relative name in a line that sets
 ``CDPATH``; and a line whose reading needs more than ``MAX_PATHS``
 paths or ``TIME_BUDGET`` seconds, so that the guard answers within the
-hook's timeout. Lines nested more than ``MAX_DEPTH`` deep are denied as
-unreadable.
+hook's timeout. As a backstop, ``main`` runs the reading in a thread
+and refers the call if it does not finish within ``GUARD_WALL`` seconds,
+so that a loop that forgets ``Scan.spend`` cannot stall the guard past
+the timeout (re-review of unit 0015, R1). Lines nested more than
+``MAX_DEPTH`` deep are denied as unreadable.
 
-The guard sees only what a call names. A program that deletes, writes,
+The guard sees only what a call names, and reads each program word and
+assignment as the literal text given. A program that deletes, writes,
 or connects by itself, whether a script, code given inline to an
 interpreter, or an alias or function of the shell defined earlier, is
 not seen, nor what the members of an archive overwrite, a pattern of
 the shell's ``extglob`` option, a symbolic link made in the same line or
 changed after the check, or an alias in git's configuration that has
 the name of one of git's script commands (such as ``submodule`` or
-``mergetool``) where that script is not installed; the coverage report
-of the adapter
-states each such gap (STND.HARN.19). The file uses the standard library
+``mergetool``) where that script is not installed. Nor, as the
+re-review of unit 0015 found and the custodian left as known limits
+(R2 to R9), does it read a program word that is computed, a glob, a
+brace, or split by ``env -S``, including behind a launcher; a git
+variable or assignment given other than as a literal ``NAME=value``
+word (``NAME+=``, a bare ``export NAME``, ``printf -v``, ``read``, or a
+computed word in ``env`` or ``export``); a setting that ``git clone``
+or ``submodule`` gives by ``-c`` or ``--config`` after the subcommand;
+the shifted first file of ``git merge-file`` behind a valued option; a
+script that ``ed``, ``ex``, or ``vim`` runs; an alias used after
+``shopt -s expand_aliases``, or a joined ``mapfile -C`` callback; and a
+write by ``sed``'s ``w`` command or ``shuf -o``. The coverage report of
+the adapter states each such gap (STND.HARN.19). The file uses the
+standard library
 alone and imports nothing from the package, because it is installed
 outside the work, where the agent's account is unable to alter it.
 """
@@ -91,6 +107,7 @@ import os
 import re
 import shlex
 import sys
+import threading
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -112,6 +129,13 @@ MAX_COMMAND = 100_000
 # well inside the timeout.
 MAX_PATHS = 20_000
 TIME_BUDGET = 3.0
+# A hard wall on the reading, enforced in ``main`` by a thread the
+# reading runs in: past it the call is referred, whatever the reading
+# is doing, so that no loop that forgets ``Scan.spend`` can stall the
+# guard past the hook's timeout of 10 s (re-review of unit 0015, R1).
+# It is above ``TIME_BUDGET``, the bound the reading aims for, and well
+# below the hook's timeout.
+GUARD_WALL = 7.0
 # Most command lines nested in one another, by substitution or ``bash
 # -c``; a deeper call is unreadable and denied, as one whose nesting
 # exceeds the interpreter's was before (review 0005).
@@ -1130,7 +1154,11 @@ def protected_target(path: str, policy: Policy) -> str | None:
 
 
 def lift_heredocs(
-    text: str, bodies: list[str], expanded: list[int], doubts: list[str]
+    text: str,
+    bodies: list[str],
+    expanded: list[int],
+    doubts: list[str],
+    scan: Scan | None = None,
 ) -> tuple[str, str]:
     """Replace each here-document by a here-string that names its body.
 
@@ -1165,6 +1193,11 @@ def lift_heredocs(
         in which the shell runs each command substitution.
     doubts : list[str]
         Receives the reason for each place the reading is uncertain.
+    scan : Scan | None
+        The reading so far, whose ``spend`` is called in the loop so
+        that a long or deeply nested line is stopped at the time bound
+        (re-review of unit 0015, R1); None where the caller holds no
+        scan, as a test does.
 
     Returns
     -------
@@ -1179,15 +1212,22 @@ def lift_heredocs(
     # Open contexts: quotes ' " $', "{" for ${, "(" for a group, "$("
     # and "`" for a command substitution, "#(" for arithmetic.
     stack: list[str] = []
+    # How many ``$(`` and backquote contexts the stack holds, counted
+    # beside it so that the test is not a scan of the whole stack on
+    # each character, which was quadratic (re-review of unit 0015, R1).
+    subs = 0
+    ticks = 0
     index = 0
     # The last character kept, which tells whether a "#" begins a word.
     last = ""
     while index < len(text):
+        if scan is not None and index % 256 == 0:
+            scan.spend(0)
         char = text[index]
         context = stack[-1] if stack else ""
         step, piece = 1, None
         boundary = not last or last in " \t\n;&|("
-        substituted = "$(" in stack or "`" in stack
+        substituted = subs > 0 or ticks > 0
         if context == "'":
             if char == "'":
                 stack.pop()
@@ -1202,10 +1242,13 @@ def lift_heredocs(
             if char == ("'" if context == "$'" else '"'):
                 stack.pop()
             elif context == '"' and text.startswith("$(", index):
-                stack.append("#(" if text.startswith("$((", index) else "$(")
+                marker = "#(" if text.startswith("$((", index) else "$("
+                stack.append(marker)
+                subs += marker == "$("
                 step = 2
             elif context == '"' and char == "`":
                 stack.append("`")
+                ticks += 1
             elif context == '"' and text.startswith("${", index):
                 stack.append("{")
         else:
@@ -1220,6 +1263,7 @@ def lift_heredocs(
                 step = 3 if char == "$" else 2
             elif text.startswith("$(", index):
                 stack.append("$(")
+                subs += 1
                 step = 2
             elif text.startswith("$'", index):
                 stack.append("$'")
@@ -1230,14 +1274,16 @@ def lift_heredocs(
             elif char == "`":
                 if context == "`":
                     stack.pop()
+                    ticks -= 1
                 else:
                     stack.append("`")
+                    ticks += 1
             elif char in {"'", '"'}:
                 stack.append(char)
             elif char == "(":
                 stack.append("#(" if arithmetic else "(")
             elif char == ")" and context in {"(", "$(", "#("}:
-                stack.pop()
+                subs -= stack.pop() == "$("
             elif char == "}" and context == "{":
                 stack.pop()
             elif char == "#" and not arithmetic and boundary:
@@ -1288,7 +1334,7 @@ def lift_heredocs(
     return "".join(out), "".join(kept)
 
 
-def command_starts(text: str) -> list[str]:
+def command_starts(text: str, scan: Scan | None = None) -> list[str]:
     """Return the program word of each command, read a second, simpler way.
 
     This reading knows only quotes, backslashes, comments, and where a
@@ -1304,6 +1350,10 @@ def command_starts(text: str) -> list[str]:
     text : str
         A command line, its here-document bodies lifted out and its
         comments kept.
+    scan : Scan | None
+        The reading so far, whose ``spend`` is called in the loop to
+        hold the time bound (re-review of unit 0015, R1); None where the
+        caller holds no scan, as a test does.
 
     Returns
     -------
@@ -1319,6 +1369,8 @@ def command_starts(text: str) -> list[str]:
     comment = False
     index = 0
     while index <= len(text):
+        if scan is not None and index % 256 == 0:
+            scan.spend(0)
         char = text[index] if index < len(text) else "\n"
         top = stack[-1] if stack else ""
         ends = char in " \t\n;&|()`" and top in {"", "(", "`"}
@@ -4367,7 +4419,7 @@ def read_line(line: str, scan: Scan, strict: bool) -> None:
     """
     expanded: list[int] = []
     doubts: list[str] = []
-    line, kept = lift_heredocs(line, scan.bodies, expanded, doubts)
+    line, kept = lift_heredocs(line, scan.bodies, expanded, doubts, scan)
     for slot in expanded:
         # The shell runs each substitution of a body whose delimiter is
         # not quoted (QA.8, H3). The span of one that holds a comment or
@@ -4396,7 +4448,7 @@ def read_line(line: str, scan: Scan, strict: bool) -> None:
     # finds that the first reading did not read is a disagreement.
     missed = [
         word
-        for word in command_starts(kept)
+        for word in command_starts(kept, scan)
         if PurePosixPath(word).name in KNOWN and word not in scan.programs
     ]
     if missed:
@@ -4787,6 +4839,55 @@ def fault_answer(error: Exception, assured: bool) -> dict[str, Any]:
     }
 
 
+def read_within_wall(event: dict[str, Any], policy: Policy) -> Findings:
+    """Read a call, but refer it if the reading passes ``GUARD_WALL``.
+
+    The reading runs in a daemon thread. Where it does not finish within
+    ``GUARD_WALL`` seconds, the thread is left to die with the process
+    and the call is referred as too large to read, so that no reading,
+    however it loops, stalls the guard past the hook's timeout (QA.8,
+    H4; re-review of unit 0015, R1). The referral is a referral like any
+    other, so an unattended session denies it and ``--assured`` asks.
+
+    Parameters
+    ----------
+    event : dict[str, Any]
+        The hook input.
+    policy : Policy
+        The policy.
+
+    Returns
+    -------
+    Findings
+        The outcomes read, or a lone referral where the wall is hit.
+
+    Raises
+    ------
+    Exception
+        Whatever the reading raised, so that the caller denies the call.
+    """
+    box: dict[str, Any] = {}
+
+    def run() -> None:
+        """Read the call in the thread, storing the result or the fault."""
+        try:
+            box["found"] = check_call(event, policy)
+        except BaseException as error:  # noqa: BLE001 - re-raised below
+            box["error"] = error
+
+    thread = threading.Thread(target=run, daemon=True)
+    thread.start()
+    thread.join(GUARD_WALL)
+    if thread.is_alive():
+        found = Findings()
+        reason = f"command too large to read: more than {GUARD_WALL:g} s"
+        found.add("selective-destruction", reason)
+        return found
+    if "error" in box:
+        raise box["error"]
+    return box["found"]
+
+
 def main(argv: list[str]) -> int:
     """Read a call and a policy, and print the decision.
 
@@ -4813,7 +4914,7 @@ def main(argv: list[str]) -> int:
         return 0
     try:
         event = json.load(sys.stdin)
-        answer = decide(check_call(event, policy), policy)
+        answer = decide(read_within_wall(event, policy), policy)
     except Exception as error:  # noqa: BLE001 - a call never passes a fault
         # The policy was read, so the call brought the fault about, such
         # as a malformed input or a nesting too deep to parse. Letting it

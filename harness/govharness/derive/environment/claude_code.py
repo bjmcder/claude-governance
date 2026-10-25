@@ -118,7 +118,11 @@ COVERAGE_TABLE: dict[str, tuple[str, str]] = {
         "program that a configuration written by another program has git "
         "run, and an alias in the configuration named like one of git's "
         "script commands, such as submodule, where that script is not "
-        "installed.",
+        "installed. By the re-review of unit 0015, these stay unseen as "
+        "known limits: a -c or --config setting that clone or submodule "
+        "gives after the subcommand; the first file of git merge-file "
+        "shifted by a valued option; and a git variable set other than "
+        "as a literal NAME=value word.",
     ),
     "record-entries": (
         PARTIAL,
@@ -183,7 +187,13 @@ COVERAGE_TABLE: dict[str, tuple[str, str]] = {
         "script or reads commands from a pipe or a substitution, also "
         "behind a launcher such as env, nice, or timeout, rg --pre, and a "
         "call too large to read within the guard's bound; "
-        "a program that selects items by itself is not seen.",
+        "a program that selects items by itself is not seen. By the "
+        "re-review of unit 0015, these stay unseen as known limits: a "
+        "program word that is computed, a glob, a brace, or split by "
+        "env -S, including behind a launcher; a command run through an "
+        "alias, ed, ex, or vim, or a joined mapfile -C callback; a git "
+        "variable or assignment not given as a literal NAME=value word; "
+        "and a write by sed's w command or shuf -o.",
     ),
     "enforcing-configuration": (
         PARTIAL,
@@ -883,8 +893,9 @@ def coverage_report(
             "and says that it is unavailable;",
             "- the guard answers within its timeout of 10 s; it refers a "
             "call it cannot read within its own bound on paths and time, "
-            "which ends well inside the timeout, but a guard that the "
-            "machine stalls past the timeout lets the call proceed;",
+            "and, as a backstop, refers any reading that passes a hard "
+            "wall of 7 s, so a stalled reading is referred rather than "
+            "left to time out;",
             "- the agent's account holds no privilege grant.",
             "",
             "In an unattended session the guard refuses what it would "

@@ -1253,6 +1253,63 @@ class WorkBound(unittest.TestCase):
             with self.subTest(unattended=unattended):
                 self.assertEqual(answer["permissionDecision"], decision)
 
+    def test_deep_openers_answer_quickly(self) -> None:
+        """Behavior: a line that is almost all ``(``, ``( ``, or ``${``
+        is read in well under the hook's timeout.
+
+        Reference: re-review of unit 0015, R1; before the fix,
+        ``lift_heredocs`` scanned its whole context stack for each
+        character, which was quadratic and took 6 to 20 s on these at
+        100 KB, past the 10 s timeout. The margin here is generous for a
+        loaded host.
+        """
+        for label, command in (
+            ("open parens", "(" * 99_990),
+            ("paren space", "echo " + "( " * 45_000),
+            ("dollar brace", "${" * 45_000),
+        ):
+            event = {"tool_name": "Bash", "tool_input": {"command": command},
+                     "cwd": WORK}
+            started = guard.time.monotonic()
+            guard.check_call(event, guard.read_policy(POLICY))
+            spent = guard.time.monotonic() - started
+            with self.subTest(label=label):
+                self.assertLess(spent, 5.0)
+
+    def test_hard_wall_refers_a_stalled_reading(self) -> None:
+        """Behavior: where the reading does not finish within the hard
+        wall, ``main`` refers the call rather than let it time out; the
+        reading itself is stopped by the deadline, so the wall is a
+        backstop for a loop that forgets ``Scan.spend``.
+
+        Reference: re-review of unit 0015, R1. The wall is lowered and a
+        reading made to hang, so the test does not stall.
+        """
+        event = {"tool_name": "Bash", "tool_input": {"command": "ls"},
+                 "cwd": WORK}
+
+        def hang(_event: dict, _policy: object) -> None:
+            """Stand in for a reading that never finishes.
+
+            Parameters
+            ----------
+            _event : dict
+                The call, ignored.
+            _policy : object
+                The policy, ignored.
+            """
+            # Sleep, not a busy loop, so the daemon thread left behind
+            # releases the interpreter lock and does not slow later tests.
+            guard.time.sleep(5)
+
+        with mock.patch.object(guard, "GUARD_WALL", 0.2), mock.patch.object(
+            guard, "check_call", side_effect=hang
+        ):
+            found = guard.read_within_wall(event, guard.read_policy(POLICY))
+        self.assertEqual(
+            {key for key, _ in found.reached}, {"selective-destruction"}
+        )
+
 
 class XargsCommands(unittest.TestCase):
     """QA.8 H5: a command fed through xargs is not left unread."""
@@ -1754,7 +1811,11 @@ class ReviewOfUnit0015(unittest.TestCase):
         plain = guard.lift_heredocs
 
         def lossy(
-            text: str, bodies: list, expanded: list, doubts: list
+            text: str,
+            bodies: list,
+            expanded: list,
+            doubts: list,
+            scan: object = None,
         ) -> tuple[str, str]:
             """Lift a line, then drop all of it after its first ``#``.
 
@@ -1768,13 +1829,15 @@ class ReviewOfUnit0015(unittest.TestCase):
                 Receives each expanded body's index.
             doubts : list
                 Receives each doubt.
+            scan : object
+                The reading so far, passed through unchanged.
 
             Returns
             -------
             tuple[str, str]
                 The shortened line, and the line with its comments.
             """
-            _, kept = plain(text, bodies, expanded, doubts)
+            _, kept = plain(text, bodies, expanded, doubts, scan)
             return kept.split("#")[0], kept
 
         with mock.patch.object(guard, "lift_heredocs", lossy):
