@@ -9,6 +9,9 @@ the live corpus. Agreement is exact: the writes returned, or the reason
 an authorization is not in force, are the ones stated. Unit 0010 adds
 the refusal of unsigned authorizations where no signer register exists
 and the work is not assured, unless the owner accepts them unsigned.
+Unit 0012 adds the default expiry horizon of 90 days, which the
+helpers ``reading`` and ``full_reading`` apply as the command does; the
+expiry of ``FIELDS`` lies within it.
 """
 
 from __future__ import annotations
@@ -19,7 +22,7 @@ import json
 import shutil
 import tempfile
 import unittest
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, tzinfo
 from pathlib import Path
 from unittest import mock
 
@@ -27,8 +30,10 @@ from govharness.cli.main import main
 from govharness.core.corpus import Corpus, corpus_hash, read_corpus, read_tree
 from govharness.derive.environment import claude_code
 from govharness.derive.environment.authorizations import (
+    DEFAULT_HORIZON,
     Reading,
     ledger_shape,
+    parse_horizon,
     read_authorizations,
     register_trace,
 )
@@ -82,6 +87,42 @@ def no_anchor() -> mock._patch:
         decorator or a context.
     """
     return mock.patch("govharness.cli.environment.read_config", SignerConfig)
+
+
+class FrozenDatetime(datetime):
+    """A ``datetime`` whose ``now`` is ``NOW``, for the command."""
+
+    @classmethod
+    def now(cls, tz: tzinfo | None = None) -> datetime:
+        """Return ``NOW`` in the zone asked for.
+
+        Parameters
+        ----------
+        tz : tzinfo | None
+            The zone, as ``datetime.now`` takes it.
+
+        Returns
+        -------
+        datetime
+            ``NOW``, converted to that zone.
+        """
+        return NOW.astimezone(tz)
+
+
+def frozen_clock() -> mock._patch:
+    """Return a patch under which the command derives at ``NOW``.
+
+    The command reads the clock; a test that relies on the expiry of
+    ``FIELDS`` must not fail once the real clock passes it (review of
+    unit 0012, M1).
+
+    Returns
+    -------
+    mock._patch
+        A patch of ``datetime`` in the command, usable as a decorator
+        or a context.
+    """
+    return mock.patch("govharness.cli.environment.datetime", FrozenDatetime)
 
 
 def write_authorization(root: Path, **fields: object) -> None:
@@ -144,7 +185,7 @@ def reading(
     assured: bool = False,
     verified: bool = False,
     role: str = ROLE,
-    horizon: timedelta | None = None,
+    horizon: timedelta | None = DEFAULT_HORIZON,
     accept_unsigned: bool = True,
 ) -> tuple[tuple[RemoteWrite, ...], tuple[str, ...]]:
     """Read the authorization of a root at ``NOW``.
@@ -185,7 +226,7 @@ def full_reading(
     signed: bool = False,
     verified: bool = False,
     role: str = ROLE,
-    horizon: timedelta | None = None,
+    horizon: timedelta | None = DEFAULT_HORIZON,
     accept_unsigned: bool = False,
 ) -> Reading:
     """Read the authorization of a root at ``NOW``, with its summary.
@@ -559,15 +600,21 @@ class ExtensionAndDuration(unittest.TestCase):
 
     def test_until_revoked_and_horizon(self) -> None:
         """Behavior: an authorization that lapses only when revoked is in
-        force and opens a write with no expiry; an owner's horizon
-        refuses it, and refuses an expiry beyond the horizon.
+        force under no horizon and opens a write with no expiry; an
+        owner's horizon refuses it, and refuses an expiry beyond the
+        horizon.
 
         Reference: STND.PROJ.6, field expires; GUARD.10, a stated
         duration; security review M5, a horizon the owner sets.
+
+        Unit 0012: the first reading passes ``horizon=None`` (the
+        owner's ``--expiry-horizon none``), since the helpers now apply
+        the default horizon, under which "until revoked" is refused; the
+        last assertion matches the reason as it now names the horizon.
         """
         write_authorization(self.root, expires="until revoked")
         record(self.root)
-        writes, _ = reading(self.root)
+        writes, _ = reading(self.root, horizon=None)
         self.assertEqual(writes[0].expires, "")
         with self.assertRaisesRegex(ValueError, "horizon"):
             reading(self.root, horizon=timedelta(days=90))
@@ -576,7 +623,9 @@ class ExtensionAndDuration(unittest.TestCase):
         write_authorization(later)
         record(later)
         self.assertEqual(len(reading(later, horizon=timedelta(days=90))[0]), 1)
-        with self.assertRaisesRegex(ValueError, "beyond the horizon"):
+        with self.assertRaisesRegex(
+            ValueError, "beyond the expiry horizon of 30 days"
+        ):
             reading(later, horizon=timedelta(days=30))
 
     def test_forged_targets_and_dates(self) -> None:
@@ -687,6 +736,7 @@ class Configuration(unittest.TestCase):
                 self.assertNotIn(path, denied())
                 self.assertNotIn(path, denied(post))
 
+    @frozen_clock()
     @no_anchor()
     def test_command_option(self) -> None:
         """Behavior: ``--authorization`` opens the writes of an
@@ -817,6 +867,7 @@ class Unsigned(unittest.TestCase):
                 self.assertEqual(len(found.writes), 1)
                 self.assertEqual(len(found.summary), 1)
 
+    @frozen_clock()
     @no_anchor()
     def test_command_refuses_and_accepts(self) -> None:
         """Behavior: ``environment --authorization`` with no signer
@@ -934,6 +985,7 @@ class AfterReview(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "cannot be read"):
                 full_reading(root, accept_unsigned=True)
 
+    @frozen_clock()
     @no_anchor()
     def test_command_malformed_ledger(self) -> None:
         """Behavior: the command on a ledger whose last entry has a scope
@@ -972,6 +1024,7 @@ class AfterReview(unittest.TestCase):
                 self.assertFalse(out.exists())
                 self.assertIn("is no list of paths", err.getvalue())
 
+    @frozen_clock()
     def test_command_anchor_without_register(self) -> None:
         """Behavior: where the signer configuration names an anchor key
         and the corpus holds no register, the command refuses an
@@ -1008,6 +1061,7 @@ class AfterReview(unittest.TestCase):
         self.assertIn("anchor key", err.getvalue())
         self.assertIn("--accept-unsigned has no effect", err.getvalue())
 
+    @frozen_clock()
     @no_anchor()
     def test_removed_register_refuses(self) -> None:
         """Behavior: where the corpus holds no signer register but its
@@ -1082,6 +1136,7 @@ class AfterReview(unittest.TestCase):
                         bool(unsigned),
                     )
 
+    @frozen_clock()
     @no_anchor()
     def test_command_records_unsigned_reliance(self) -> None:
         """Behavior: the command with --accept-unsigned writes the
@@ -1108,6 +1163,7 @@ class AfterReview(unittest.TestCase):
         self.assertIn(f"exists: {IDENT}", coverage)
         self.assertIn(f"exists: {IDENT}", entry["rationale"])
 
+    @frozen_clock()
     def test_command_verifies_signatures(self) -> None:
         """Behavior: with a founded signer register, the command relies on
         an authorize that the human owner's key signed, and names no
@@ -1181,6 +1237,266 @@ class AfterReview(unittest.TestCase):
         self.assertEqual(forged, 1)
         self.assertIn("signature", err.getvalue())
         self.assertIn("has no effect", err.getvalue())
+
+
+class Horizon(unittest.TestCase):
+    """Unit 0012: the expiry horizon defaults to 90 days.
+
+    An expiry bounds how long an installed configuration relies on an
+    authorization after a revocation that it does not see (security
+    verification of unit 0008, M-c; ``OPEN-ITEMS.md``, M-b).
+    """
+
+    def setUp(self) -> None:
+        """Make an empty corpus root."""
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+
+    def granted(self, expires: str) -> Path:
+        """Return a fresh root holding the authorization, recorded.
+
+        Parameters
+        ----------
+        expires : str
+            Its field expires.
+
+        Returns
+        -------
+        Path
+            The root.
+        """
+        root = self.root / str(len(list(self.root.iterdir())))
+        root.mkdir()
+        write_authorization(root, expires=expires)
+        record(root)
+        return root
+
+    def test_default_bound(self) -> None:
+        """Behavior: with no horizon given, an expiry 91 days after the
+        derivation is refused with the horizon named, and one 89 or
+        exactly 90 days after it is accepted, with the horizon named in
+        the summary. Written with the offset +14:00, exactly 90 days is
+        accepted and a minute more refused, so the comparison is of
+        moments, not of local times.
+
+        Reference: unit 0012; security verification of unit 0008, M-c;
+        review of unit 0012, L1.
+        """
+        self.assertEqual(DEFAULT_HORIZON, timedelta(days=90))
+        east = timezone(timedelta(hours=14))
+        edge = NOW + timedelta(days=90)
+        for expires in (
+            (NOW + timedelta(days=89)).isoformat(),
+            edge.isoformat(),
+            edge.astimezone(east).isoformat(),
+        ):
+            with self.subTest(expires=expires):
+                root = self.granted(expires)
+                found = read_authorizations(
+                    read_corpus(root), read_tree(root), read_ledger(root),
+                    (IDENT,), NOW, ROLE, False, False,
+                    accept_unsigned=True,
+                )
+                self.assertEqual(found.writes[0].expires, expires)
+                self.assertIn(
+                    "under the expiry horizon of 90 days", found.summary[0]
+                )
+        for expires in (
+            (NOW + timedelta(days=91)).isoformat(),
+            (edge + timedelta(minutes=1)).astimezone(east).isoformat(),
+        ):
+            root = self.granted(expires)
+            with (
+                self.subTest(expires=expires),
+                self.assertRaisesRegex(
+                    ValueError, "beyond the expiry horizon of 90 days"
+                ),
+            ):
+                read_authorizations(
+                    read_corpus(root), read_tree(root), read_ledger(root),
+                    (IDENT,), NOW, ROLE, False, False, accept_unsigned=True,
+                )
+
+    def test_until_revoked_needs_none(self) -> None:
+        """Behavior: an authorization that lapses only when revoked is
+        refused under the default horizon, with the way to lift it, and
+        accepted under none, whose summary says that no horizon bounds
+        it.
+
+        Reference: unit 0012; GUARD.10, a stated duration.
+        """
+        root = self.granted("until revoked")
+        with self.assertRaisesRegex(
+            ValueError,
+            "lapses only when revoked, beyond the expiry horizon of 90 "
+            "days \\(--expiry-horizon none lifts it\\)",
+        ):
+            full_reading(root, accept_unsigned=True)
+        found = full_reading(root, horizon=None, accept_unsigned=True)
+        self.assertEqual(found.writes[0].expires, "")
+        self.assertIn(
+            "expires when revoked, under no expiry horizon "
+            "(--expiry-horizon none)",
+            found.summary[0],
+        )
+
+    def test_explicit_horizon(self) -> None:
+        """Behavior: an explicit horizon bounds as before, shorter or
+        longer than the default, and the summary names it; a horizon so
+        long that the derivation's time plus it passes the calendar's
+        end raises no overflow and still refuses "until revoked".
+
+        Reference: unit 0012; security review M5, a horizon the owner
+        sets.
+        """
+        later = self.granted((NOW + timedelta(days=100)).isoformat())
+        with self.assertRaisesRegex(
+            ValueError, "beyond the expiry horizon of 30 days"
+        ):
+            reading(later, horizon=timedelta(days=30))
+        found = full_reading(
+            later, horizon=timedelta(days=120), accept_unsigned=True
+        )
+        self.assertEqual(len(found.writes), 1)
+        self.assertIn("the expiry horizon of 120 days", found.summary[0])
+        longest = parse_horizon("999999999")
+        far = self.granted("9999-12-31T00:00:00+00:00")
+        self.assertEqual(len(reading(far, horizon=longest)[0]), 1)
+        revoked = self.granted("until revoked")
+        with self.assertRaisesRegex(ValueError, "lapses only when revoked"):
+            reading(revoked, horizon=longest)
+
+    def test_parse_horizon(self) -> None:
+        """Behavior: ``none`` lifts the bound and whole days from 1 give
+        a horizon; zero, a sign, a fraction, a unit, blanks, another
+        case of none, digits of another script, and more than nine
+        digits are refused with the reason, and no exception other than
+        ``ValueError`` escapes.
+
+        Reference: unit 0012; PRIME.4, a failure is loud.
+        """
+        self.assertIsNone(parse_horizon("none"))
+        self.assertEqual(parse_horizon("1"), timedelta(days=1))
+        self.assertEqual(parse_horizon("090"), timedelta(days=90))
+        for text in (
+            "", "0", "000", "-5", "+90", "9.5", "90d", "1e3", " 90",
+            "90 ", "None", "NONE", "٩٠", "9_0", "1234567890",
+        ):
+            with (
+                self.subTest(text=text),
+                self.assertRaisesRegex(ValueError, "is no expiry horizon"),
+            ):
+                parse_horizon(text)
+
+    def test_horizon_not_positive(self) -> None:
+        """Behavior: a horizon of zero or less given to the reading stops
+        it with the reason.
+
+        Reference: unit 0012; fail closed.
+        """
+        root = self.granted(FIELDS["expires"])
+        for horizon in (timedelta(0), timedelta(days=-1)):
+            with (
+                self.subTest(horizon=horizon),
+                self.assertRaisesRegex(ValueError, "admits no expiry"),
+            ):
+                reading(root, horizon=horizon)
+
+    @frozen_clock()
+    @no_anchor()
+    def test_command_horizon(self) -> None:
+        """Behavior: the command refuses, by default, an expiry 200 days
+        away and "until revoked", exiting 1 with the reason and writing
+        nothing; ``--expiry-horizon 365`` accepts the first and
+        ``--expiry-horizon none`` the second, and the summary names the
+        horizon in force; an expiry within 90 days passes by default.
+
+        Reference: unit 0012; security verification of unit 0008, M-c.
+        """
+        now = NOW
+        far = (now + timedelta(days=200)).isoformat(timespec="seconds")
+        near = (now + timedelta(days=30)).isoformat(timespec="seconds")
+        results = {}
+        with corpus_copy() as root:
+            args = [
+                "environment", str(root), "--work", str(root),
+                "--home", str(root), "--authorization", IDENT,
+                "--role", ROLE, "--accept-unsigned",
+            ]
+            for case, expires, extra in (
+                ("far default", far, []),
+                ("far 365", far, ["--expiry-horizon", "365"]),
+                ("revoked default", "until revoked", []),
+                (
+                    "revoked none",
+                    "until revoked",
+                    ["--expiry-horizon", "none"],
+                ),
+                ("near default", near, []),
+            ):
+                write_authorization(root, expires=expires)
+                record(root)
+                out = root.parent / case.replace(" ", "-")
+                shown, err = io.StringIO(), io.StringIO()
+                with (
+                    contextlib.redirect_stdout(shown),
+                    contextlib.redirect_stderr(err),
+                ):
+                    code = main([*args, *extra, "--write", str(out)])
+                results[case] = (
+                    code, out.exists(), shown.getvalue(), err.getvalue()
+                )
+        for case in ("far default", "revoked default"):
+            code, written, _, err = results[case]
+            with self.subTest(case=case):
+                self.assertEqual(code, 1)
+                self.assertFalse(written)
+                self.assertIn("the expiry horizon of 90 days", err)
+        self.assertIn(f"its expiry {far} is beyond", results["far default"][3])
+        self.assertIn(
+            "--expiry-horizon none lifts it", results["revoked default"][3]
+        )
+        for case, named in (
+            ("far 365", "under the expiry horizon of 365 days"),
+            (
+                "revoked none",
+                "under no expiry horizon (--expiry-horizon none)",
+            ),
+            ("near default", "under the expiry horizon of 90 days"),
+        ):
+            code, written, shown, _ = results[case]
+            with self.subTest(case=case):
+                self.assertEqual(code, 0)
+                self.assertTrue(written)
+                self.assertIn(named, shown)
+
+    def test_command_malformed_horizon(self) -> None:
+        """Behavior: ``--expiry-horizon`` with a value that is neither
+        whole days from 1 nor none is a usage error, exit 2, with the
+        reason, and no traceback.
+
+        Reference: unit 0012; PRIME.4; the root argument's refusal
+        (unit 0001, defect 4) is the pattern.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            for text in ("abc", "0", "-5", "None", "9" * 12):
+                with self.subTest(text=text):
+                    err = io.StringIO()
+                    with (
+                        contextlib.redirect_stderr(err),
+                        self.assertRaises(SystemExit) as stop,
+                    ):
+                        main(
+                            [
+                                "environment", tmp, "--work", tmp,
+                                "--home", tmp, "--expiry-horizon", text,
+                                "--write", str(Path(tmp) / "out"),
+                            ]
+                        )
+                    self.assertEqual(stop.exception.code, 2)
+                    self.assertIn("is no expiry horizon", err.getvalue())
+                    self.assertFalse((Path(tmp) / "out").exists())
 
 
 def read_corpus_live() -> Corpus:

@@ -45,6 +45,15 @@ and verification of unit 0010). The ledger is read for that before its
 chain is checked, so the reading takes any shape of entry: a ledger
 whose shape it cannot read counts as recording a register (fail
 closed), and the derivation stops with the reason.
+
+An expiry also bounds how long an installed configuration relies on an
+authorization after its revocation, since a revocation reaches the
+configuration only when it is derived again. The owner's horizon
+therefore defaults to ``DEFAULT_HORIZON``: an authorization whose
+expiry lies further from the derivation, or that lapses only when
+revoked, is refused with the reason, and the owner lifts the bound by
+stating ``none`` (security verification of unit 0008, M-c; unit 0012).
+The summary names the horizon in force.
 """
 
 from __future__ import annotations
@@ -89,11 +98,68 @@ BRANCH_RE = re.compile(r"[A-Za-z0-9_][A-Za-z0-9._-]*(?:/[A-Za-z0-9._-]+)*")
 # The owner's statement that authorizations are relied on unsigned, as
 # the command line spells it.
 ACCEPT_UNSIGNED = "--accept-unsigned"
+# The longest time from the derivation to an expiry that the owner
+# accepts unless it states another, and the word that lifts the bound.
+DEFAULT_HORIZON = timedelta(days=90)
+NO_HORIZON = "none"
+# A horizon in whole days, as the command line spells it: at most nine
+# digits, so that it never exceeds the largest timedelta.
+HORIZON_DAYS_RE = re.compile(r"[0-9]{1,9}")
 # What follows the trace of a register that the corpus lacks.
 REGISTER_REMOVED = (
     "so a signature is still required, none verifies, and "
     f"{ACCEPT_UNSIGNED} has no effect; found or restore {REGISTER_ID}"
 )
+
+
+def parse_horizon(text: str) -> timedelta | None:
+    """Return the expiry horizon that the owner states in words.
+
+    Parameters
+    ----------
+    text : str
+        ``none``, or a whole number of days from 1, in decimal digits.
+
+    Returns
+    -------
+    timedelta | None
+        The horizon, or None where the owner lifts the bound.
+
+    Raises
+    ------
+    ValueError
+        If the text is neither, with the reason. A zero is refused
+        rather than read as no bound, since it would admit no expiry.
+    """
+    if text == NO_HORIZON:
+        return None
+    if not HORIZON_DAYS_RE.fullmatch(text) or int(text) == 0:
+        raise ValueError(
+            f"{text!r} is no expiry horizon: give a whole number of days "
+            f"from 1, or {NO_HORIZON} to lift the bound"
+        )
+    return timedelta(days=int(text))
+
+
+def horizon_text(horizon: timedelta | None) -> str:
+    """Return the expiry horizon as the summary and the reasons name it.
+
+    Parameters
+    ----------
+    horizon : timedelta | None
+        The horizon in force, or None for no bound.
+
+    Returns
+    -------
+    str
+        The horizon in days, where it is a whole number of them, or
+        the statement that there is none.
+    """
+    if horizon is None:
+        return f"no expiry horizon (--expiry-horizon {NO_HORIZON})"
+    if horizon == timedelta(days=horizon.days):
+        return f"the expiry horizon of {horizon.days} days"
+    return f"the expiry horizon of {horizon}"
 
 
 def ledger_shape(ledger: list[Any]) -> str | None:
@@ -427,7 +493,8 @@ def read_one(
         The role or agent for which the configuration is derived.
     horizon : timedelta | None
         The longest time from the derivation to an expiry that the owner
-        accepts, or None for no bound.
+        accepts, or None for no bound. Under a bound, an authorization
+        that lapses only when revoked is refused.
 
     Returns
     -------
@@ -460,14 +527,23 @@ def read_one(
     expires = meta.get("expires")
     if expires == UNTIL_REVOKED:
         if horizon is not None:
-            problems.append("it lapses only when revoked, beyond the horizon")
+            problems.append(
+                "it lapses only when revoked, beyond "
+                f"{horizon_text(horizon)} (--expiry-horizon {NO_HORIZON} "
+                "lifts it)"
+            )
     else:
         try:
             moment = timestamp(expires)
+            # The difference, not ``now + horizon``, so that no horizon
+            # overflows the calendar.
             if moment <= now:
                 problems.append(f"expired at {expires}")
-            elif horizon is not None and moment > now + horizon:
-                problems.append(f"its expiry {expires} is beyond the horizon")
+            elif horizon is not None and moment - now > horizon:
+                problems.append(
+                    f"its expiry {expires} is beyond {horizon_text(horizon)}"
+                    f" (a longer --expiry-horizon, or {NO_HORIZON}, lifts it)"
+                )
         except ValueError as error:
             problems.append(f"expires: {error}")
     delegable = meta.get("delegable_to")
@@ -504,8 +580,9 @@ class Reading:
         One line per authorization, or kind, whose writes stay referred.
     summary : tuple[str, ...]
         One line per authorization read, with the transaction that pins
-        it, for the owner to compare with what was granted, and one
-        more for each that was accepted unsigned.
+        it and the expiry horizon in force, for the owner to compare
+        with what was granted, and one more for each that was accepted
+        unsigned.
     unsigned : tuple[str, ...]
         Identifiers of the authorizations relied on unsigned, for the
         coverage report and the draft entry.
@@ -526,7 +603,7 @@ def read_authorizations(
     role: str,
     signed: bool,
     verified: bool,
-    horizon: timedelta | None = None,
+    horizon: timedelta | None = DEFAULT_HORIZON,
     accept_unsigned: bool = False,
 ) -> Reading:
     """Return the remote writes that the named authorizations open.
@@ -553,7 +630,10 @@ def read_authorizations(
     verified : bool
         Whether every signature of the ledger verifies.
     horizon : timedelta | None
-        The longest time to an expiry that the owner accepts.
+        The longest time from the derivation to an expiry that the owner
+        accepts: ``DEFAULT_HORIZON`` unless the owner states another, or
+        None where the owner lifts the bound. Under a bound, an
+        authorization that lapses only when revoked is refused.
     accept_unsigned : bool
         Whether the owner accepts the authorizations unsigned where no
         signature is required (``signed`` false). Without it, the
@@ -568,12 +648,15 @@ def read_authorizations(
     Raises
     ------
     ValueError
-        If the ledger's shape cannot be read, an authorization is not in
-        force, or none is required to be signed and the owner did not
-        accept them unsigned, with every reason.
+        If the horizon is not positive, the ledger's shape cannot be
+        read, an authorization is not in force, or none is required to
+        be signed and the owner did not accept them unsigned, with every
+        reason.
     """
     if now.utcoffset() is None:
         raise ValueError("the time of the derivation has no UTC offset")
+    if horizon is not None and horizon <= timedelta(0):
+        raise ValueError(f"{horizon_text(horizon)} admits no expiry")
     shape = ledger_shape(ledger)
     if shape:
         raise ValueError(f"the ledger cannot be read: {shape}")
@@ -598,7 +681,7 @@ def read_authorizations(
         summary.append(
             f"{ident}: pinned by seq {seq}; "
             f"{'standing' if meta['standing'] else 'per action'}; expires "
-            f"{expires or 'when revoked'}; "
+            f"{expires or 'when revoked'}, under {horizon_text(horizon)}; "
             + "; ".join(
                 f"{', '.join(i['kinds'])} at {i['destination']}"
                 + (f" ({', '.join(i['branches'])})" if i["branches"] else "")
