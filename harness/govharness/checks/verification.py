@@ -3,8 +3,9 @@
 This is what ``verify`` runs, as data, on a snapshot of the corpus and
 its ledger; ``workflows.verification`` loads them from a root. The
 command line renders the result, and the workflows run it after a
-change. Only a ``FAIL`` fails the verification; ``WARN`` results are
-carried for a reader.
+change. Only a ``FAIL`` fails the verification; ``WARN`` results, of
+the structural checks and of the logic checks, are carried for a
+reader.
 """
 
 from __future__ import annotations
@@ -55,6 +56,21 @@ class Verification:
                 f"{r.key} {r.title}" for r in self.logic.failures()
             ]
         return found
+
+    def cautions(self) -> dict[str, list[str]]:
+        """Return the warning lines of each structural check that warns.
+
+        Returns
+        -------
+        dict[str, list[str]]
+            Detail lines by structural check name, for each ``WARN``
+            result, such as the files that no scope pins.
+        """
+        return {
+            r.key: r.details
+            for r in self.structure.results
+            if r.status == "WARN"
+        }
 
     def warnings(self) -> list[str]:
         """Return one line per logic check that warns.

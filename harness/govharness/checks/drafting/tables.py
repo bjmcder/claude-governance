@@ -13,7 +13,9 @@ import re
 from dataclasses import dataclass, field
 
 from govharness.core.corpus import Corpus
-from govharness.core.tables import read_table, section_text
+from govharness.core.entry import Entry
+from govharness.core.tables import parse_tables, read_table, section_text
+from govharness.core.text import CODE_RE, FENCE_RE
 
 TABLE_SPECS: dict[str, tuple[str, ...]] = {
     "modal-set": (
@@ -238,3 +240,37 @@ def terms_of(body: str) -> dict[str, str]:
         return {}
     rows = read_table(section, TERMS_HEADER)
     return {r["Term"]: r["Definition"] for r in rows}
+
+
+def table_cells(entry: Entry) -> list[str]:
+    """Return the table cells of a provision that are read as prose.
+
+    The body of a numbered provision, including a table it contains, is
+    normative (STND.DRAFT, Normative and informative parts), so each
+    data cell is read as prose, its inline code left out. A table that
+    the provision names in ``defines`` is data that the harness or a
+    reader looks up, and its expression columns mention words rather
+    than use them, so a provision with ``defines`` contributes none.
+    Header cells are read too: a row without the delimiter row below it
+    is no table in Markdown, but ``parse_tables`` takes it for a header.
+
+    Parameters
+    ----------
+    entry : Entry
+        Any entry.
+
+    Returns
+    -------
+    list[str]
+        Text of each cell, in order; empty for an entry that is not a
+        provision or that defines a table.
+    """
+    if entry.meta.get("kind") != "provision" or entry.meta.get("defines"):
+        return []
+    return [
+        text
+        for header, rows in parse_tables(FENCE_RE.sub("\n", entry.body))
+        for row in (header, *rows)
+        for cell in row
+        if (text := CODE_RE.sub(" ", cell).strip())
+    ]

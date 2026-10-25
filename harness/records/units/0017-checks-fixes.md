@@ -1,0 +1,133 @@
+# Unit 0017: checks fixes of QA.8 part C
+
+The QA.8 review of part C (`review-records/harness/qa8-part-c.md`) read `checks/` with its tests and found 2 High, 5 Medium, and 9 Low findings. The High findings are a withdrawal of a document's highest-numbered provision that v.8 cannot see, since it leaves no gap (H1), and a contraction written with a typographic apostrophe that g.21 misses (H2). The Medium findings are content outside every ledger scope that can change with only a regeneration of the manifests (M1), table cells that neither the drafting checks nor d.1 read, although a table in a provision is normative (M2), an effect scan of `checks/` that is a denylist (M3), v.5 failing a draft that names no adopter (M4), and behavior that no test holds (M5). This unit fixes every High and Medium finding as far as the corpus supports, and the Lows L1, L3, L4, and L7. The corpus questions go to Open. Nothing under `harness/governance/`, `hooks/`, `ledger/`, `workflows/`, or `core/` changed.
+
+## Definition of done
+
+1. H1: a cited identifier that names no provision and is not listed in a field `withdrawn` fails, so deleting STND.PERF.26 while STND.PERF cites it fails v.8. The check uses the skip rules of g.25 and passes on the live corpus. The record names what still misses an uncited trailing provision.
+2. H2: g.21 finds a contraction and a person word written with `'` or `’`.
+3. M1: the ledger check still pins only the scopes that transactions name (STND.HARN.9). A new check warns, and never fails, on each Markdown file that no scope covers, one line per uncovered directory, and `verify` prints the lines. Whether every file must be pinned goes to Open.
+4. M2: the cells of tables in provision bodies are read by the g checks and d.1, except the tables of a provision that names a table in `defines`. A quoted expression in a cell is a mention (STND.DRAFT.3). The live corpus still passes.
+5. M3: for `checks/`, `test_architecture.py` admits only listed imports, builtin names, and attribute names, and the names the package defines. Every case of the review, the controls included, is a test.
+6. M4: v.5 follows the letter of STND.IDENT.12.
+7. M5: a test kills each surviving mutation of the review's table, and f.2 to f.8, d.0, d.3 to d.6, ids, and mnemonics have tests. Each mutation, rerun on a scratch copy with the review's mutator, is killed, or is shown equivalent.
+8. L1, L3, L4, L5, L7, and L9 are fixed where cheap, or the record says why not.
+9. The tests of `tests/checks`, `test_architecture`, `test_conventions`, and the modules changed pass; `verify governance` passes on the live corpus; ruff adds no finding on the changed lines; the README describes each change of behavior.
+
+## Record
+
+- H1 and L1, done in `checks/revisions/family.py`, as part of v.8, which STND.IDENT.14 names.
+  - `cited_provisions(corpus)` collects every numbered identifier (`core.text.ids_in`) in each entry's body and front matter. A body is read through `drafting.citations.naming_text`, the reading of g.25: the References section, the Revision History, tables with a column Example, quoted spans, and code are left out. Every front-matter value is read except `id` and `withdrawn`, so a citation in `binding_reason` counts.
+  - `_unresolved_citations` fails each identifier that is neither an entry nor listed in any field `withdrawn`: "STND.PERF.26 is cited (STND.PERF) but is neither a provision nor listed as withdrawn". An identifier whose first mnemonic no entry uses is another scheme's and is not read. On the live corpus these are the C++ Core Guidelines rules of STND.CXX (`ES.11`, `NL.7`, and others) and the clauses of the unratified revision 0.11 that AGENT's notes name (`VI.15`, `VI.16`). With that rule the live corpus passes.
+  - The check covers L1: `GOV.999` in a body or `AGENT.99` in a binding reason fails, where before only g.16 warned, and only in a default provision. It serves STND.DRAFT.22, whose `checked_by` names l.1 only; see Open.
+  - Test: `tests/checks/test_revisions.py`, `HeldBehavior.test_cited_provisions_resolve`: STND.PERF.26 deleted fails with exactly that line; deleted and listed passes; `GOV.999` in the Purpose of STND.PERF fails with one line, while `ES.11` and a quoted `"GOV.998"` in the same sentence pass; `AGENT.99` in a binding reason fails; the cited withdrawn `STND.CXX.16` passes.
+  - What remains: a trailing provision that nothing cites, deleted under a ledger transaction. The transaction pins the new content, so the ledger check passes; no gap shows, so v.8 passes; and v.3 and v.4 test the revision history and its transactions, not which provisions a revision removed. Nothing in the harness catches it. The transaction itself records it, by its scope and its rationale, for the QA.7 review. See Open.
+- H2, done in `checks/drafting/style.py`. `APOSTROPHE` is `'` and U+2019; `CONTRACTION_RE` and the lookarounds of the person-word pattern use both. The live corpus holds no U+2019, so no finding changes. Test: the case "typographic contraction" of `tests/checks/test_drafting.py` (`The tool doesn’t halt.`, g.21 FAIL).
+- M1, done in `checks/ledger.py`, `checks/verification.py`, and `cli/reports.py`.
+  - `checks/ledger.py` gains one function, `unpinned_files`, registered as the check `unpinned` beside `ledger`, and imports `covers` from `ledger.transactions`. The existing functions are unchanged, so unit 0016's pin logic merges beside it. A file is covered when a scope of any transaction is its path or a directory above it. A directory none of whose Markdown files is covered is named once, with its count.
+  - `Verification.cautions` returns the detail lines of each structural check that warns, and `summary_lines` prints the section as `WARN (n)` with its lines. Only a FAIL fails `verify`, as before. On the live corpus:
+
+    ```text
+    unpinned: WARN (5)
+      - KNOW/ (1 file)
+      - README.md
+      - STND/_doc.md
+      - TAG/ (8 files)
+      - _PROJECT/ (9 files)
+    ```
+
+  - Tests: `tests/checks/test_structure.py`, `test_unpinned_files` (the five lines on the live tree and ledger; PASS once two transactions name those scopes).
+- M2, done in `checks/drafting/tables.py`, `checks/drafting/context.py`, and `checks/logic/wording.py`.
+  - `table_cells(entry)` returns the text of every cell, header row included, of the tables of a provision, inline code left out. A header is read because a row without the delimiter row below it is no table in Markdown, though `parse_tables` takes it for a header; the review's repro is such a row. A provision with a non-empty `defines` gives none: every provision of the live corpus holds at most one table, so its table is the one `defines` names. Every column of the live corpus that lists expressions (the tables of STND.DRAFT, and STND.DOCS.8 and STND.DOCS.9) lies in such a table, so the brief's two exclusions are one rule here; the harness has no other mark of an expression column.
+  - `Unit.sentences` now holds the sentences of the prose lines and then of the cells; `unquoted` makes a quoted span in a cell a mention, as elsewhere (STND.DRAFT.3).
+  - d.1: `table_rows_kept(entry)` keeps the table rows of a provision that defines no table in the text `scan_phrases` reads; every other table, in a document or a defining provision, is still dropped. The other d checks are unchanged.
+  - On the live corpus no check fails or warns that did not before. Listed findings (INFO, class review, group lower) are added: g.8 three ("Record" and "Test" in the table of STND.HARN.29, "commit" in STND.PROJ.7), g.12 one (STND.PROJ.6), and g.14 eight numbers (ISO 8601 twice in STND.PROJ.6, and the tier numbers 1 to 6 of STND.VVUQ.1). The d family is unchanged.
+  - Tests: in `tests/checks/test_drafting.py`, the cases "excluded expression in a table row" (the review's lone row on STND.PERF.1, g.5 FAIL) and "lowercase modal in a table cell" (g.3 FAIL), and `HeldBehavior.test_table_cells` (a used expression fails g.5, the quoted one passes, the same row in STND.DRAFT.17, which defines a table, passes). In `tests/checks/test_logic.py`, the case "barred expression in a table row" (d.1 FAIL) and `HeldBehavior.test_table_rows_in_d1` (used fails, quoted and defining pass).
+- M3, done in `tests/test_architecture.py`. `unlisted_uses(name, tree, defined)` reports, for a module of `govharness.checks`, each import outside `CHECK_IMPORTS` (with `importlib.util` and `z3` admitted in `logic/satlib.py` alone, `CHECK_IMPORTS_IN`), each builtin name outside `CHECK_BUILTINS`, and each attribute name outside `CHECK_ATTRIBUTES` and the names the package defines (`defined_names`: functions, classes, methods, fields, module-level names, attributes set on `self`), less every effect name of the scan. The lists hold what `checks/` uses today, each name read and found to touch no file, process, or network: string, container, `re`, `PurePosixPath`, `hashlib`, `json`, `itertools`, and the z3 API. `getattr` is not admitted, nor is `read_text` as an attribute, so `f = path.read_text` and `getattr(path, "read_text")()` fail. The denylist scan stays for the other packages. Tests: `test_checks_use_only_listed_names` (every module of `checks/`, one subtest each) and `test_allowlist_refuses_effects` (the 13 cases the review found passing, its 8 controls, and `z3` outside satlib, each refused; a use of `re` admitted). The review's own method, one line appended to `checks/manifests.py` and the architecture test run, was repeated for all 21 of its cases: see the audit.
+- M4, done in `checks/revisions/adopters.py`, under the letter of STND.IDENT.12: "A constitution, profile, sub-profile, or standard SHALL name its adopter in the field `adopted_by`, or in the field `ratified_by` for the constitution". The brief asks v.5 to require the field only where STND.IDENT.12 and the status require it. The provision sets no status, and no other provision exempts a draft (STND.IDENT.10 gives a draft only its major segment of zero), so the field stays required of a draft, and the review's draft with no adopter still fails v.5: a draft names the role that GOV.41 makes its adopter. Exempting drafts would read the provision differently from its words, so the question goes to Open. The letter does name the field per kind, which the code did not: it took either field for any document. `adopter_field(meta)` gives `ratified_by` for the constitution and `adopted_by` for the others, and v.5 fails a document without its own field ("LVL0: names no adopter in `ratified_by`"). The live corpus passes. Test: `HeldBehavior.test_adopter_field_of_each_kind` (the constitution with `adopted_by`, a standard with `ratified_by`, and the review's draft, each one FAIL line). Whether a draft is exempt goes to Open.
+- M5. Tests that hold what the review found unheld, by module:
+  - `tests/checks/test_structure.py`: `test_ids_match_paths`; `test_mnemonics` (the live tree passes, and of `STND LVL0 LVL3 _PROJECT LVL4 STND1 Ab ABCDEF A` exactly the last five fail); `test_ledger_verdict` (`ledger_intact` passes the live tree and ledger and fails once entry 5 is altered).
+  - `tests/checks/test_logic.py`: cases "missing floor provision" (VV.7 deleted, b.1), "self-grant cites nothing that resolves" (b.5), "procedures waivable" (b.6), "loud failure unlinked" (c.3), "term without group" (e.1), "prime directives unranked" (f.4), and "nothing barred" (d.0); `HeldBehavior.test_parts_in_neither_set` (b.3's line for the parts in neither set, `none` live, `['QA']` with QA dropped from GOV.44), `test_tighten_cites_exactly_the_procedures` (b.4 passes PRIME.15 citing exactly GOV.40 and GOV.44), `test_reserved_back_links` (c.4: PRIME.13 is the live one-way link; GUARD.5 links back by citation or by the word reserved, and fails without both), `test_listed_words` (d.0, d.3, d.4, d.5, d.6), and `test_claims_proved` (f.2 to f.7 entailed and f.8 not, live; each of f.2, f.3, f.5, f.6, and f.7 fails once the clauses that force it are removed from the base, and f.8 is reported INFO once GUARD is ranked above PRIN and GOV). f.2 to f.7 are entailed by the encoding whenever f.1 holds, so no damage to the corpus fails them; the test changes the base through `mock.patch.object(proofs, "build_base", ...)` to show that each verdict depends on its claim.
+  - `tests/checks/test_revisions.py`: `HeldBehavior.test_duplicate_history_row` (LVL0's 1.6 repeated fails v.3 "does not follow the row above"), `test_major_step` (1.6 to 2.0 by a major amendment passes v.3), `test_grade_bounds` (LVL0 and LVL3 registered, LVL4 not), `test_near_siblings` (the live register has no near pair; a row GOVX gives exactly one INFO line).
+  - `tests/checks/test_drafting.py`: `HeldBehavior.test_provision_that_imposes_nothing` (g.4 on "This is a note.", not on "A record without a date is a defect."), `test_imperative_heuristic`, `test_fill_in_guidance_in_instrument` (a LVL3 waiver with the label, one finding; without it, none), `test_conditions` (g.12 lists two conditions, "2 conditions", and a condition after the modal, "condition follows the clause"; one condition before the modal gives none), and `test_title_bound` (titles of one and six words pass g.17, seven fail).
+  - The mutation at `expressions.py:248`, `c > modal.start()` to `>=`, is equivalent: a condition word and a modal never start at the same place. It survives, as expected.
+- L3, done in `checks/drafting/context.py` and `modals.py`. `Unit.whole` holds the sentences ended only by terminal punctuation, and g.4 counts the modals of each, so "An actor SHALL record it; X SHALL read it." fails. The other checks keep their sentences, which end at a semicolon or a colon before a capital letter (`core.text`); the case first written, with "; a reviewer", was one sentence under either reading, so undoing the fix left it failing, and the revert run below found it. The case now opens its second clause with a capital. No live sentence so read holds two modals. Test: the case "two modals joined by a semicolon".
+- L4, done in `checks/structure.py`. A top-level directory passes as two to five uppercase letters (STND.IDENT.17), or as a grade that the register lists, a mnemonic with grades and a digit in its span (GOV.37), read with `revisions.identifiers.read_register` and `usage_problems`, which v.10 uses. `LVL0` passes, `LVL4` and `STND1` fail. Test: `test_mnemonics`.
+- L5, not done. No provision requires that `checked_by` name a registered check outside STND.DRAFT (g.23) and STND.IDENT (v.7); STND.DRAFT says what the field means only in its informative section Representation in the harness. A check would add an obligation the corpus does not state. See Open.
+- L7, done in `tests/test_conventions.py`: positional-only parameters are counted with the others. Test: `test_audit_finds_a_bare_function` adds `def f(x, /)`.
+- L9, not changed in code. The section Checks of STND.DRAFT says a finding fails when "the provision concerned is binding". The code, its docstring, and the README read the provision of STND.DRAFT that the check enforces, under which a default provision with a g.3 defect fails because STND.DRAFT.2 is binding. The other reading, the provision in which the finding stands, is as open to the words. The section is informative, and the reading is the custodian's to fix; see Open.
+- L2, L6, and L8 were not in this unit's brief and are unchanged.
+- `checks/ledger.py` was touched only as the brief allows, plus one name in an import. Unit 0016's changes to the pin logic merge beside the new function.
+- Ruff 0.16.10, line length 79, on the 17 changed Python files: no finding on a changed line. Five findings remain on lines this unit did not write (SIM905 twice in `drafting/context.py`, FURB167 in `drafting/style.py` and `logic/wording.py`, SIM102 in `test_conventions.py`). `ruff format --check` passes on the changed files.
+- README, `harness/README.md`: the layout line of `checks/` names the allowlist of `test_architecture` (M3); item 2 of What `verify` checks gives the grades of the register (L4); item 5 describes the check `unpinned` and its live warning (M1); item 8 says that structural warnings are printed; the rows d.0 to d.6 and v.1 to v.8 of the check table say that d.1 reads the table rows of a provision (M2), that v.5 wants the field of each kind (M4), and that v.8 fails a cited identifier that resolves to nothing (H1, L1); the section on the g family says how table cells, g.4's sentences, and the typographic apostrophe are read (M2, L3, H2); and the counts of damage cases are 21 for `test_logic` and 45 for `test_drafting`.
+
+## Audit
+
+1. Met: `test_cited_provisions_resolve`; v.8 passes on the live corpus. The residual is stated above and in Open.
+2. Met: the case "typographic contraction"; reverting the apostrophe set fails it.
+3. Met: `test_unpinned_files` and the `verify` output above. Open item 1.
+4. Met: the M2 tests above; on the live corpus only listed (INFO) findings are added, and `verify` passes.
+5. Met: `test_checks_use_only_listed_names` and `test_allowlist_refuses_effects`, and the appended-line runs below.
+6. Met under the letter: `test_adopter_field_of_each_kind`. The review's draft still fails; Open item 2.
+7. Met: the tests above, and the runs below.
+8. Met for L1, L3, L4, and L7; L5 and L9 not done, with reasons, and in Open.
+9. Met: see the test, verify, ruff, and README items.
+
+Mutation runs, on a copy of the harness under `/tmp/claude-1000/unit-0017/r/`, one process at a time, with `/tmp/claude-1000/unit-0017/mut_seq.py`, a sequential form of the review's `mutate.py` with its operators, run on the line ranges of the review's table (shifted to this unit's lines):
+
+| Module, lines (review's lines) | Tests | Sites | Killed | Survived |
+| --- | --- | --- | --- | --- |
+| `structure.py` 61, 78-92 (56, 76-78) | `test_structure` | 9 | 9 | 0 |
+| `ledger.py` 155 (106) | `test_structure` | 1 | 1 | 0 |
+| `revisions/history.py` 157 | `test_revisions` | 4 | 4 | 0 |
+| `revisions/identifiers.py` 176, 332-339 (176, 332-335) | `test_revisions` | 16 | 16 | 0 |
+| `revisions/classes.py` 278 | `test_revisions` | 3 | 3 | 0 |
+| `drafting/modals.py` 196 (190) | `test_drafting.HeldBehavior` | 4 | 4 | 0 |
+| `drafting/context.py` 260, 434-440 (252, 418-424) | `test_drafting.HeldBehavior` | 13 | 13 | 0 |
+| `drafting/expressions.py` 140-142, 238, 248 | `test_drafting.HeldBehavior` | 9 | 8 | 1, equivalent |
+| `drafting/roles.py` 49 | `test_drafting.HeldBehavior` | 7 | 7 | 0 |
+| `logic/authority.py` 161-164, 258, 291, 330-331, 457, 485-496 (164, 258, 291, 330-331, 457, 485-496) | `test_logic` | 26 | 26 | 0 |
+| Total | | 92 | 91 | 1 |
+
+The first pass left five drafting mutants alive: `len(starts) > 1` to `>=` and the late-condition test at `expressions.py:238` and `:248`, and the lower bound of the title at `roles.py:49` (`1 <=` to `1 <`, and 1 to 2). `test_conditions` and `test_title_bound` were then given a sentence of one condition, a condition after the modal, and a title of one word, and the two sites were run again (13 sites): every mutant is killed except `c > modal.start()` to `>=` at `expressions.py:248`, which is equivalent (above). The table counts the second run for those two modules. Logs: `/tmp/claude-1000/unit-0017/mutations.log` (first pass) and `followup.log`.
+
+Each fix undone in turn on a fresh copy (`/tmp/claude-1000/unit-0017/revert.py`), with the test that holds it:
+
+| Fix undone | Test run | Result |
+| --- | --- | --- |
+| H2: `APOSTROPHE` back to `'` alone | `DraftingChecks.test_mutations_are_caught` | fails |
+| H1: `_unresolved_citations` not called | `test_revisions.HeldBehavior` | fails |
+| M1: `unpinned` always PASS | `test_structure` | fails |
+| M2: no table cells in a unit | `test_drafting.HeldBehavior` | fails |
+| M2: tables of a provision with `defines` read | `test_drafting.HeldBehavior` | fails |
+| M2: d.1 drops every table row | `test_logic.HeldBehavior` | fails |
+| M4: either adopter field for any kind | `test_revisions.HeldBehavior` | fails |
+| L3: g.4 counts `unit.sentences` | `DraftingChecks.test_mutations_are_caught` | passed on the first run (see L3); fails with the corrected case |
+| L4: any grade-shaped name passes | `test_structure` | fails |
+| L7: `posonlyargs` not counted | `test_conventions` | fails |
+
+M3: each of the review's 13 passing cases and 8 controls, appended in turn to `checks/manifests.py` of a fresh copy, fails `tests.test_architecture` (21 of 21).
+
+Tests, per STND.TEST, from `harness/` with `TMPDIR` in scratch:
+
+- `python3 -B -m unittest discover -s tests/checks -t .`: 88 tests, OK (226 s); the review counted 58.
+- `python3 -B -m unittest tests.test_architecture tests.test_conventions`: 14 tests, OK; the review counted 12.
+- `python3 -B -m unittest discover -s tests/cli -t .`, for `cli/reports.py`: 2 tests, OK.
+- `python3 -B -m govharness verify governance`: exit 0. Every section passes as at bc65b95, and `unpinned` warns with the five lines above; the logic warning of g.18 is the one bc65b95 gives.
+- Not run: the full suite, and z3 (not installed).
+
+## Open
+
+1. **M1: pinning every governing file.** STND.HARN.9 compares only the scopes that transactions name, so `KNOW/`, `TAG/`, `_PROJECT/`, `STND/_doc.md`, and `README.md` can change with no transaction while `verify` passes; GOV.36 calls such a change a defect, but no provision makes the harness see it. The harness now warns. If the custodian wants a failure, a sentence such as this one in STND.HARN would make it so: "Where a Markdown file under the corpus root lies under no scope of a governance-ledger transaction, a harness SHALL report FAIL (GOV.36)." The live corpus would then need one transaction pinning those five paths before the amendment takes effect, and the check `unpinned` would turn its WARN into FAIL.
+2. **M4: an adopter for a draft.** STND.IDENT.12 requires the field of every constitution, profile, sub-profile, and standard, whatever its status, so a draft names the role that will adopt it, and v.5 fails a draft that does not. If drafts are to be exempt: "A constitution, profile, sub-profile, or standard that is adopted or ratified SHALL name its adopter in the field `adopted_by`, or in the field `ratified_by` for the constitution, by the label of a role that the Lexicon defines (GOV.41)." v.5 would then test the field only where `status` is adopted or ratified, a change of one line.
+3. **M2: tables that list expressions, and defining tables.** STND.DRAFT makes a table in a provision normative and STND.DRAFT.3 asks for quotation marks around a modal or an excluded expression that a provision mentions. The tables of STND.DRAFT.1, STND.DRAFT.7, and the others list such expressions unquoted, so read strictly they break STND.DRAFT.3; the harness leaves every table of a provision with `defines` unread. That also leaves unread the prose of defining tables in other standards, such as the tests of STND.CLASS.1 and the outcomes of STND.HARN.18, though STND.DRAFT says nothing to exempt them. Draft wording for STND.DRAFT.3: "A modal or an excluded expression that a provision mentions without using it SHALL be enclosed in quotation marks, except in a column of a table whose entries are expressions (LVL0#normative-language)." With it, the harness would need a mark of such a column, for example the headings it already reads (Modal, Expression, Qualifier, Word, British, American, Not used, Used, Pattern, Forms to watch), and could then read the other cells of defining tables.
+4. **H1: a withdrawal nothing cites.** A trailing provision deleted under a ledger transaction, uncited, is caught by no check, and its number could be reused later without a FAIL. Two corpus changes would close it: a revision history entry that names each identifier the revision withdraws ("Minor amendment (GOV.41): STND.PERF.26 is withdrawn"), which v.8 could compare with `withdrawn`, or a field in each document that records its highest provision number. Draft for STND.IDENT.14, second option: "A document of a kind listed in STND.IDENT.1 SHALL state in its front-matter field `last_provision` the highest number it has given a provision (GOV.37)."
+5. **Withdrawn identifiers of LVL0.** v.8 compares a document with the identifiers of its own number (`DOC.N`). The provisions of LVL0 are numbered by part (`GOV.12`), and LVL0 has no `withdrawn` field; listed there, `GOV.12` would fail as "not its identifier". STND.IDENT.14 does not say where the constitution lists a withdrawn provision of a part. The question had no case before this unit; now a cited, deleted LVL0 provision fails v.8 with no way to list it. Draft: "The constitution SHALL list in its field `withdrawn` each withdrawn identifier of a provision of any of its parts (GOV.37)."
+6. **L1 and STND.DRAFT.22.** The dangling-citation half of v.8 enforces STND.DRAFT.22 ("A citation SHALL resolve to a provision or a section of the corpus"), whose `checked_by` names only l.1. Adding v.8 there (an editorial amendment of STND.DRAFT) would let g.23 and the readers see the link.
+7. **L5: `checked_by` outside STND.DRAFT and STND.IDENT.** No provision requires that the key name a registered check. Draft for STND.HARN: "Where a provision's field `checked_by` names a key that is neither a check of the harness nor `review`, a harness SHALL report FAIL (INTPR.3)." All lower provisions are clean today.
+8. **L9: the provision concerned.** Draft for the section Checks of STND.DRAFT: "A finding in another document fails when this standard is adopted and the provision of this standard that the check enforces is binding, and warns otherwise." This is the reading the harness implements; the other reading would make every finding in a default provision a warning.
+9. **L3: sentence.** STND.DRAFT.4 counts the modals of a "sentence" and does not define it. g.4 now reads a sentence as ending at terminal punctuation; the other checks also end one at a semicolon or a colon. A term Sentence in STND.DRAFT would settle it.
+
+## Review
+
+Left to the reviewer.

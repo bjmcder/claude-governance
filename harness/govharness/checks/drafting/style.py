@@ -14,7 +14,12 @@ from govharness.checks.drafting.context import (
 )
 from govharness.core.text import snippet, unquoted
 
-CONTRACTION_RE = re.compile(r"\b\w+(?:n't|'ll|'re|'ve|'d|'m)\b", re.I)
+# An apostrophe is written straight or typographic (U+2019).
+APOSTROPHE = "'\u2019"
+CONTRACTION_RE = re.compile(
+    rf"\b\w+(?:n[{APOSTROPHE}]t|[{APOSTROPHE}](?:ll|re|ve|d|m))\b",
+    re.IGNORECASE,
+)
 
 
 def person(ctx: DraftingContext) -> list[Finding]:
@@ -34,7 +39,7 @@ def person(ctx: DraftingContext) -> list[Finding]:
     for row in ctx.tables.tables.get("person-words", []):
         word = row["Word"]
         pattern = re.compile(
-            rf"(?<![\w'-]){re.escape(word)}(?![\w'-])",
+            rf"(?<![\w{APOSTROPHE}-]){re.escape(word)}(?![\w{APOSTROPHE}-])",
             0 if word.isupper() or len(word) == 1 else re.IGNORECASE,
         )
         for unit in ctx.units_for(ALL_GROUPS, {"provision", "body"}):

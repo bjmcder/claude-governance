@@ -8,6 +8,7 @@ import re
 from typing import Any
 
 from govharness.core.corpus import Corpus
+from govharness.core.entry import Entry
 from govharness.core.locators import heading_slug
 from govharness.core.text import (
     normalise_term,
@@ -51,20 +52,50 @@ def extract_excluded(corpus: Corpus) -> dict[str, Any]:
     return {"strict": strict, "advisory": advisory}
 
 
-def _strip_quotes(text: str) -> str:
-    """Remove quoted spans and table rows: both mention, not use.
+def table_rows_kept(entry: Entry) -> bool:
+    """Return True when the table rows of an entry are read as prose.
+
+    The body of a numbered provision, including a table it contains, is
+    normative; a table that the provision names in ``defines`` is data,
+    as for the drafting checks (``drafting.tables.table_cells``).
+
+    Parameters
+    ----------
+    entry : Entry
+        Any entry.
+
+    Returns
+    -------
+    bool
+        Whether the entry is a provision that defines no table.
+    """
+    return entry.meta.get("kind") == "provision" and not entry.meta.get(
+        "defines"
+    )
+
+
+def _strip_quotes(text: str, keep_tables: bool = False) -> str:
+    """Remove quoted spans and, unless kept, table rows.
 
     Parameters
     ----------
     text : str
         Markdown body.
+    keep_tables : bool
+        Whether table rows stay, as in a provision that defines no
+        table (``table_rows_kept``).
 
     Returns
     -------
     str
-        The text without table rows and with quoted spans blanked.
+        The text with quoted spans blanked, and without table rows
+        unless they are kept.
     """
-    lines = [ln for ln in text.splitlines() if not ln.lstrip().startswith("|")]
+    lines = [
+        ln
+        for ln in text.splitlines()
+        if keep_tables or not ln.lstrip().startswith("|")
+    ]
     return QUOTED_RE.sub(" ", "\n".join(lines))
 
 
@@ -72,6 +103,8 @@ def scan_phrases(
     corpus: Corpus, phrases: dict[str, str]
 ) -> list[dict[str, str]]:
     """Find uses of the phrases outside quotation marks.
+
+    Table rows are read only in a provision that defines no table.
 
     Parameters
     ----------
@@ -87,7 +120,7 @@ def scan_phrases(
     """
     hits: list[dict[str, str]] = []
     for entry in corpus.entries:
-        text = _strip_quotes(entry.body)
+        text = _strip_quotes(entry.body, table_rows_kept(entry))
         for phrase in phrases:
             pattern = rf"(?<![\w-]){re.escape(phrase)}(?![\w-])"
             for match in re.finditer(pattern, text, re.IGNORECASE):

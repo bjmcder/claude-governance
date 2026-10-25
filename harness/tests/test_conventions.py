@@ -58,7 +58,11 @@ def problems(node: Definition) -> list[str]:
     arguments = node.args
     named = [
         a
-        for a in [*arguments.args, *arguments.kwonlyargs]
+        for a in [
+            *arguments.posonlyargs,
+            *arguments.args,
+            *arguments.kwonlyargs,
+        ]
         if a.arg not in {"self", "cls"}
     ]
     starred = [a for a in (arguments.vararg, arguments.kwarg) if a]
@@ -112,6 +116,9 @@ class Conventions(unittest.TestCase):
                 "no Parameters section",
             ],
         )
+        node = ast.parse('def f(x, /):\n    """Do."""\n').body[0]
+        assert isinstance(node, ast.FunctionDef)
+        self.assertIn("x unannotated", problems(node))
 
 
 if __name__ == "__main__":

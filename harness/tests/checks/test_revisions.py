@@ -19,6 +19,7 @@ from govharness.checks.revisions import family as revisions
 from govharness.checks.revisions.adopters import role_labels, template_problems
 from govharness.checks.revisions.identifiers import (
     form_problem,
+    read_register,
     usage_problems,
 )
 from govharness.core.entry import Entry
@@ -48,6 +49,30 @@ def statuses(mutation: Mutation) -> dict[str, str]:
     ctx = CheckContext(corpus_of(index), ledger)
     report = run_checks((revisions,), ctx)
     return {r.key: r.status for r in report.results}
+
+
+def result(mutation: Mutation, key: str) -> tuple[str, list[str]]:
+    """Apply a mutation and return one v check's status and details.
+
+    Parameters
+    ----------
+    mutation : Mutation
+        Damages the index or the ledger in place.
+    key : str
+        Key of the check, such as ``v.3``.
+
+    Returns
+    -------
+    tuple[str, list[str]]
+        Its status and detail lines.
+    """
+    index = live_index()
+    ledger = live_ledger()
+    mutation(index, ledger)
+    ctx = CheckContext(corpus_of(index), ledger)
+    report = run_checks((revisions,), ctx)
+    (found,) = [r for r in report.results if r.key == key]
+    return found.status, found.details
 
 
 def _meta(rule: str, **fields: object) -> Mutation:
@@ -603,6 +628,226 @@ class RevisionChecks(unittest.TestCase):
             ("project", "WAIV"): {"Status": "active", "Grades": "none"},
         }
         self.assertEqual(usage_problems("NAME.WAIV.3", register, projects), [])
+
+
+def _draft_without_adopter(index: Index, ledger: Ledger) -> None:
+    """Make STND.PERF a draft at 0.1 with no adopter, as in QA.8 M4.
+
+    Parameters
+    ----------
+    index : Index
+        Copy of the corpus entries by identifier; changed in place.
+    ledger : Ledger
+        Copy of the ledger entries; changed in place.
+    """
+    meta = index["STND.PERF"].meta
+    meta.update(status="draft", revision="0.1")
+    del meta["adopted_by"]
+    meta.pop("adopted", None)
+
+
+def _cite(document: str, text: str) -> Mutation:
+    """Return a mutation that adds a sentence to a document's Purpose.
+
+    Parameters
+    ----------
+    document : str
+        Identifier of the document.
+    text : str
+        Sentence added at the end of its first section.
+
+    Returns
+    -------
+    Mutation
+        The mutation.
+    """
+
+    def apply(index: Index, ledger: Ledger) -> None:
+        """Insert the sentence before the second heading.
+
+        Parameters
+        ----------
+        index : Index
+            Copy of the corpus entries by identifier; changed in place.
+        ledger : Ledger
+            Copy of the ledger entries; changed in place.
+        """
+        body = index[document].body
+        cut = body.index("\n## ", body.index("## ") + 3)
+        index[document].body = f"{body[:cut]} {text}{body[cut:]}"
+
+    return apply
+
+
+class HeldBehavior(unittest.TestCase):
+    """Behavior that no case above held (QA.8 part C, M4, M5, and H1)."""
+
+    def test_duplicate_history_row(self) -> None:
+        """Behavior: a history row that repeats the revision above it
+        fails v.3 as out of order.
+
+        Reference: STND.IDENT.9 (no reuse); QA.8 part C, M5, the
+        mutation of ``history.py`` from ``<=`` to ``<``. LVL0's last
+        row, 1.6, is repeated, so the field still equals the last row.
+        """
+        status, details = result(
+            _history_row(
+                "| 1.6 | 2026-10-11 | Minor amendment (GOV.40): x. |"
+            ),
+            "v.3",
+        )
+        self.assertEqual(status, "FAIL")
+        self.assertIn("- LVL0: 1.6 does not follow the row above", details)
+
+    def test_major_step(self) -> None:
+        """Behavior: a major step to 2.0 passes v.3.
+
+        Reference: the table of STND.IDENT.3 (Major raises the major
+        segment and resets the others); QA.8 part C, M5, the mutation
+        of ``classes.py`` that took 1.6 to 3.0 as the major step.
+        """
+
+        def major(index: Index, ledger: Ledger) -> None:
+            """Raise LVL0 to 2.0 by a major amendment.
+
+            Parameters
+            ----------
+            index : Index
+                Copy of the corpus entries by identifier; changed in
+                place.
+            ledger : Ledger
+                Copy of the ledger entries; changed in place.
+            """
+            _history_row(
+                "| 2.0 | 2026-10-12 | Major amendment (GOV.40): x. |"
+            )(index, ledger)
+            index["LVL0"].meta["revision"] = "2.0"
+
+        self.assertEqual(result(major, "v.3"), ("PASS", []))
+
+    def test_grade_bounds(self) -> None:
+        """Behavior: both ends of a grade span are registered grades.
+
+        Reference: STND.IDENT.22 and the register row of LVL, grades 0
+        to 3; QA.8 part C, M5, the mutation of the upper bound.
+        """
+        register, _ = read_register(corpus_of(live_index()))
+        self.assertEqual(usage_problems("LVL0", register), [])
+        self.assertEqual(usage_problems("LVL3", register), [])
+        self.assertEqual(len(usage_problems("LVL4", register)), 1)
+
+    def test_near_siblings(self) -> None:
+        """Behavior: v.10 lists siblings at a letter distance of 1 that
+        are not established acronyms, and nothing else.
+
+        Reference: STND.IDENT.18; QA.8 part C, M5, the mutations of the
+        sibling filter. The live register has no such pair (CPU, GPU,
+        and QPU are established acronyms; CPS and CPU, or JL and ML,
+        have different parents). A row GOVX beside GOV adds one.
+        """
+        self.assertEqual(result(lambda i, x: None, "v.10"), ("PASS", []))
+        status, details = result(
+            _replace(
+                "MNEM",
+                "| GOV | none |",
+                "| GOVX | none | Probe | none | none | active |\n"
+                "| GOV | none |",
+            ),
+            "v.10",
+        )
+        self.assertEqual(status, "INFO")
+        self.assertEqual(
+            details,
+            ["- `GOV` and `GOVX` under `none` are at a letter distance of 1"],
+        )
+
+    def test_adopter_field_of_each_kind(self) -> None:
+        """Behavior: the constitution names its adopter in
+        ``ratified_by`` and every other document in ``adopted_by``,
+        whatever its status.
+
+        Reference: the letter of STND.IDENT.12, which names the field
+        per kind and sets no status; QA.8 part C, M4, whose draft
+        without an adopter therefore still fails (see the record's
+        Open section).
+        """
+        cases = {
+            "constitution with adopted_by": lambda index, ledger: index[
+                "LVL0"
+            ].meta.update(adopted_by=index["LVL0"].meta.pop("ratified_by")),
+            "standard with ratified_by": lambda index, ledger: index[
+                "STND.PERF"
+            ].meta.update(
+                ratified_by=index["STND.PERF"].meta.pop("adopted_by")
+            ),
+            "draft without adopter": _draft_without_adopter,
+        }
+        for name, mutation in cases.items():
+            with self.subTest(name):
+                status, details = result(mutation, "v.5")
+                self.assertEqual(status, "FAIL")
+                self.assertEqual(len(details), 1, details)
+                self.assertIn("names no adopter in", details[0])
+
+    def test_cited_provisions_resolve(self) -> None:
+        """Behavior: v.8 fails on a provision deleted without being
+        listed as withdrawn when the corpus still cites it, even where
+        no gap shows it, and on any cited identifier of the corpus's
+        mnemonics that names nothing.
+
+        Reference: STND.IDENT.14 and STND.DRAFT.22; QA.8 part C, H1 (the
+        highest-numbered provision STND.PERF.26 deleted, which
+        STND.PERF cites) and L1 (GOV.999 in a body, AGENT.99 in a
+        binding reason). A cited withdrawn identifier, an identifier of
+        another scheme (the C++ Core Guidelines' ES.11), and a quoted
+        one pass.
+        """
+        status, details = result(
+            lambda index, ledger: index.pop("STND.PERF.26"), "v.8"
+        )
+        self.assertEqual(status, "FAIL")
+        self.assertEqual(
+            details,
+            [
+                (
+                    "- STND.PERF.26 is cited (STND.PERF) but is neither a "
+                    "provision nor listed as withdrawn"
+                )
+            ],
+        )
+
+        def listed(index: Index, ledger: Ledger) -> None:
+            """Delete STND.PERF.26 and list it as withdrawn.
+
+            Parameters
+            ----------
+            index : Index
+                Copy of the corpus entries by identifier; changed in
+                place.
+            ledger : Ledger
+                Copy of the ledger entries; changed in place.
+            """
+            del index["STND.PERF.26"]
+            index["STND.PERF"].meta["withdrawn"] = ["STND.PERF.26"]
+
+        self.assertEqual(result(listed, "v.8"), ("PASS", []))
+        status, details = result(
+            _cite("STND.PERF", 'See GOV.999, ES.11, and "GOV.998".'),
+            "v.8",
+        )
+        self.assertEqual(status, "FAIL")
+        self.assertEqual(len(details), 1, details)
+        self.assertIn("GOV.999 is cited (STND.PERF)", details[0])
+        status, details = result(
+            _meta("STND.PERF.3", binding_reason="As AGENT.99 requires."),
+            "v.8",
+        )
+        self.assertEqual(status, "FAIL")
+        self.assertIn("AGENT.99 is cited (STND.PERF.3)", details[0])
+        self.assertEqual(
+            result(_cite("STND.PERF", "See STND.CXX.16."), "v.8"),
+            ("PASS", []),
+        )
 
 
 if __name__ == "__main__":

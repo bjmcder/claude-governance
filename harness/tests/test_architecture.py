@@ -14,11 +14,17 @@ of the package, so that a check that hashes files through
 ``core.corpus.corpus_hash`` reads files as surely as one that calls
 ``read_bytes``. Calls through values, such as the ``run`` function of
 a registered check, are not followed; that is the scan's known limit.
+
+The effect names are a denylist, which misses an effect it does not
+name. The modules of ``checks``, which perform no effect, are also held
+to an allowlist: each import, builtin name, and attribute name they use
+is listed, or is a name the package defines (QA.8 part C, M3).
 """
 
 from __future__ import annotations
 
 import ast
+import builtins
 import unittest
 from collections.abc import Iterator
 from pathlib import Path
@@ -311,6 +317,165 @@ def effects(node: ast.AST, aliases: dict[str, str] | None = None) -> set[str]:
                 found.add("print")
             if builtin in EXECUTE_CALLS or method in EXECUTE_METHODS:
                 found.add("execute")
+    return found
+
+
+# The checks compute on values they are given and perform no effect
+# (decision 0001), so their own source is held to an allowlist rather
+# than to the effect names above (QA.8 part C, M3): every import, every
+# builtin name, and every attribute name outside those the package
+# defines must be listed here. A name is listed only when using it
+# reads, writes, runs, and opens nothing.
+CHECKS_PACKAGE = "govharness.checks"
+CHECK_IMPORTS = {
+    "__future__.annotations",
+    "collections.Counter",
+    "collections.abc.Callable",
+    "dataclasses.dataclass",
+    "dataclasses.field",
+    "hashlib",
+    "itertools",
+    "json",
+    "pathlib.PurePosixPath",
+    "re",
+    "types.ModuleType",
+    "typing.Any",
+    "typing.TypeVar",
+}
+# The optional solver is found and imported by satlib alone.
+CHECK_IMPORTS_IN = {
+    "importlib.util": "govharness.checks.logic.satlib",
+    "z3": "govharness.checks.logic.satlib",
+}
+CHECK_BUILTINS = {
+    *("RecursionError", "UnicodeDecodeError", "ValueError"),
+    *("all", "any", "bool", "bytes", "chr", "dict", "enumerate"),
+    *("frozenset", "int", "isinstance", "len", "list", "max", "min"),
+    *("next", "object", "range", "repr", "set", "sorted", "str", "sum"),
+    *("tuple", "type", "zip"),
+}
+CHECK_ATTRIBUTES = {
+    # str, bytes, and format
+    *("decode", "encode", "endswith", "format", "format_map", "isdigit"),
+    *("isupper", "join", "lower", "lstrip", "partition", "removeprefix"),
+    *("removesuffix", "replace", "rsplit", "split", "splitlines"),
+    *("startswith", "strip"),
+    # list, dict, and set
+    *("__getitem__", "add", "append", "copy", "count", "extend", "get"),
+    *("index", "items", "pop", "setdefault", "update", "values"),
+    # re and its matches
+    *("DOTALL", "I", "IGNORECASE", "M", "MULTILINE", "Pattern"),
+    *("compile", "end", "escape", "findall", "finditer", "fullmatch"),
+    *("group", "match", "search", "span", "start", "sub"),
+    # pathlib.PurePosixPath, which touches no file
+    *("as_posix", "name", "parent", "parents", "parts"),
+    # hashlib, json, and itertools
+    *("hexdigest", "sha256", "loads", "combinations", "permutations"),
+    # importlib.util.find_spec, and the z3 API (satlib only)
+    *("util", "find_spec", "Bool", "Not", "Or", "Solver"),
+    *("assert_and_track", "check", "eval", "get_version_string"),
+    *("is_true", "model", "sat", "set", "unsat_core"),
+}
+# Names whose use performs an effect, never admitted through the names
+# the package defines.
+EFFECT_NAMES = READ_CALLS | WRITE_CALLS | EXECUTE_CALLS | EXECUTE_METHODS
+
+
+def defined_names(parsed: dict[str, ast.Module]) -> set[str]:
+    """Return the names the package defines, which attributes may use.
+
+    Parameters
+    ----------
+    parsed : dict[str, ast.Module]
+        Syntax tree by module name.
+
+    Returns
+    -------
+    set[str]
+        Names of functions, classes, methods, fields, module-level
+        assignments, and attributes assigned on ``self``, less the
+        names of effects.
+    """
+    found: set[str] = set()
+    for tree in parsed.values():
+        for node in ast.walk(tree):
+            if isinstance(node, ast.FunctionDef | ast.ClassDef):
+                found.add(node.name)
+            targets: list[ast.expr] = []
+            if isinstance(node, ast.Assign):
+                targets = list(node.targets)
+            elif isinstance(node, ast.AnnAssign):
+                targets = [node.target]
+            for target in targets:
+                if isinstance(target, ast.Name):
+                    found.add(target.id)
+                elif isinstance(target, ast.Attribute):
+                    found.add(target.attr)
+    return found - EFFECT_NAMES
+
+
+def unlisted_uses(name: str, tree: ast.Module, defined: set[str]) -> list[str]:
+    """Return the imports and names of a checks module the list lacks.
+
+    Parameters
+    ----------
+    name : str
+        Module name.
+    tree : ast.Module
+        Its syntax tree.
+    defined : set[str]
+        Names the package defines (``defined_names``).
+
+    Returns
+    -------
+    list[str]
+        One line per import, builtin name, or attribute name outside
+        ``CHECK_IMPORTS``, ``CHECK_IMPORTS_IN``, ``CHECK_BUILTINS``,
+        ``CHECK_ATTRIBUTES``, and ``defined``.
+    """
+    builtin = set(dir(builtins))
+    found: list[str] = []
+
+    def admitted(dotted: str) -> bool:
+        """Return True when an import is listed for this module.
+
+        Parameters
+        ----------
+        dotted : str
+            The module, or ``module.name`` for a ``from`` import.
+
+        Returns
+        -------
+        bool
+            Whether the import is admitted.
+        """
+        return (
+            dotted.startswith("govharness")
+            or dotted in CHECK_IMPORTS
+            or CHECK_IMPORTS_IN.get(dotted) == name
+        )
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            found += [
+                f"line {node.lineno}: import {a.name}"
+                for a in node.names
+                if not admitted(a.name)
+            ]
+        elif isinstance(node, ast.ImportFrom):
+            found += [
+                f"line {node.lineno}: from {node.module} import {a.name}"
+                for a in node.names
+                if not admitted(f"{node.module}.{a.name}")
+            ]
+        elif isinstance(node, ast.Name) and node.id in builtin:
+            if node.id not in CHECK_BUILTINS:
+                found.append(f"line {node.lineno}: builtin {node.id}")
+        elif (
+            isinstance(node, ast.Attribute)
+            and node.attr not in CHECK_ATTRIBUTES | defined
+        ):
+            found.append(f"line {node.lineno}: attribute .{node.attr}")
     return found
 
 
@@ -695,6 +860,66 @@ class Architecture(unittest.TestCase):
             ),
             {"random", "execute"},
         )
+
+    def test_checks_use_only_listed_names(self) -> None:
+        """Behavior: every module of ``checks`` imports, and uses as
+        builtins and attributes, only the names the allowlist admits
+        or the package defines.
+
+        Reference: decision 0001 (``checks`` reads and writes no file)
+        and DSGN.16; QA.8 part C, M3, which found effects that the
+        effect names above do not list.
+        """
+        parsed = modules()
+        defined = defined_names(parsed)
+        for name, tree in parsed.items():
+            if name.startswith(CHECKS_PACKAGE):
+                with self.subTest(name):
+                    self.assertEqual(unlisted_uses(name, tree, defined), [])
+
+    def test_allowlist_refuses_effects(self) -> None:
+        """Behavior: each use the review appended to a checks module is
+        refused, those the effect scan missed and its controls alike,
+        and a use of ``re`` is admitted.
+
+        Reference: QA.8 part C, M3: one line appended to
+        ``checks/manifests.py`` per case.
+        """
+        defined = defined_names(modules())
+        module = f"{CHECKS_PACKAGE}.manifests"
+        refused = {
+            "smtplib": "import smtplib\n",
+            "ftplib": "import ftplib\n",
+            "sqlite3": "import sqlite3\nsqlite3.connect('x')\n",
+            "zipfile": "from zipfile import ZipFile\nZipFile('x')\n",
+            "fileinput": "import fileinput\nfileinput.input()\n",
+            "multiprocessing": "import multiprocessing\n",
+            "threading": "import threading\nthreading.Thread()\n",
+            "logging": "import logging\nlogging.FileHandler('x')\n",
+            "stdin": "import sys\nsys.stdin.read()\n",
+            "sys.path": "import sys\nsys.path.append('x')\n",
+            "uuid": "import uuid\nuuid.uuid4()\n",
+            "bound method": "f = path.read_text\nf()\n",
+            "getattr": "getattr(path, 'read_text')()\n",
+            "open": "open('x')\n",
+            "subprocess": "import subprocess\n",
+            "listdir": "import os\nos.listdir('.')\n",
+            "Path.read_text": (
+                "from pathlib import Path\nPath('x').read_text()\n"
+            ),
+            "builtins.open": "import builtins\nbuiltins.open('x')\n",
+            "importlib": "import importlib\nimportlib.import_module('x')\n",
+            "eval": "eval('1')\n",
+            "gzip": "import gzip\ngzip.open('x')\n",
+            "z3 outside satlib": "import z3\n",
+        }
+        for case, source in refused.items():
+            with self.subTest(case):
+                self.assertTrue(
+                    unlisted_uses(module, ast.parse(source), defined)
+                )
+        clean = "import re\nre.compile('a').search(text).group(0)\n"
+        self.assertEqual(unlisted_uses(module, ast.parse(clean), defined), [])
 
     def test_scan_follows_calls(self) -> None:
         """Behavior: a function that calls a reading function of another
