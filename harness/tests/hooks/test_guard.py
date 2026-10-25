@@ -1000,5 +1000,657 @@ class Decisions(unittest.TestCase):
         )
 
 
+
+def assert_reaches(
+    case: unittest.TestCase, outcome: str, commands: tuple
+) -> None:
+    """Assert that each command reaches an outcome, one subtest each.
+
+    Parameters
+    ----------
+    case : unittest.TestCase
+        The test.
+    outcome : str
+        Key of the outcome.
+    commands : tuple
+        Command lines.
+    """
+    for command in commands:
+        with case.subTest(command=command):
+            case.assertIn(outcome, shell(command))
+
+
+class CommentsAndContinuations(unittest.TestCase):
+    """QA.8 H1: a comment or a joined line hides nothing that follows."""
+
+    def test_comment_before_a_later_line(self) -> None:
+        """Behavior: a command on the line after a comment is read.
+
+        Reference: QA.8 part A, H1; bash ends a comment at the newline
+        and runs the next line (checked in a scratch directory). Before
+        unit 0015 each reached no outcome.
+        """
+        assert_reaches(self, "elevated-privilege", ("ls # note\nsudo id",))
+        assert_reaches(
+            self,
+            "history-rewrite",
+            ("ls # note\ngit push --force origin main",),
+        )
+        assert_reaches(
+            self, "record-entries", ("ls # note\nrm /srv/work/ledger.jsonl",)
+        )
+
+    def test_hash_inside_a_word(self) -> None:
+        """Behavior: a ``#`` that does not begin a word starts no comment.
+
+        Reference: QA.8 part A, H1; bash prints ``a#b``, ``$#``, and
+        ``${#x}`` and runs the command after the ``;``.
+        """
+        assert_reaches(
+            self, "record-entries", ("echo a#b; rm /srv/work/ledger.jsonl",)
+        )
+        assert_reaches(
+            self,
+            "elevated-privilege",
+            ("echo $#; sudo id", "echo ${#x}; sudo id"),
+        )
+
+    def test_line_continuation(self) -> None:
+        """Behavior: a backslash before a newline joins the two lines.
+
+        Reference: QA.8 part A, H1; bash runs ``sud\\<newline>o id`` as
+        ``sudo id``, and ``w\\<newline>#x`` is the word ``w#x``, so the
+        ``#`` there starts no comment.
+        """
+        assert_reaches(
+            self,
+            "elevated-privilege",
+            ("sud\\\no id", "echo w\\\n#x; sudo id"),
+        )
+        assert_reaches(
+            self, "record-entries", ("rm /srv/work/ledg\\\ner.jsonl",)
+        )
+        assert_reaches(
+            self, "history-rewrite", ("git pu\\\nsh --force origin main",)
+        )
+
+    def test_quoted_hash_and_continuation(self) -> None:
+        """Behavior: a quoted ``#`` is text, and a backslash before a
+        newline inside single quotes or ``$'...'`` stays.
+
+        Reference: bash, checked in a scratch directory: ``echo $'a\\
+        <newline>b'`` keeps the backslash.
+        """
+        self.assertEqual(shell("echo '# not a comment'"), set())
+        self.assertEqual(shell("echo 'sud\\\no id'"), set())
+
+
+class GitAliases(unittest.TestCase):
+    """QA.8 H2: an alias does not hide what git runs."""
+
+    def test_alias_given_in_the_call(self) -> None:
+        """Behavior: ``git -c alias.NAME=...`` is referred, since the
+        alias is no command of git, and so is a setting taken from a
+        variable, which may name a program git runs.
+
+        Reference: QA.8 part A, H2; the reviewer ran the first against a
+        local bare repository and the forced update went through. Git
+        ignores an alias that has the name of one of its commands.
+        """
+        self.assertIn(
+            "selective-destruction",
+            shell("git --config-env=core.pager=PAGER log"),
+        )
+        assert_reaches(
+            self,
+            "selective-destruction",
+            (
+                "git -c alias.p=push p --force origin main",
+                "git -c alias.p=push p origin +main",
+                "git -c alias.q=rebase q -i HEAD~3",
+            ),
+        )
+
+    def test_alias_set_by_an_earlier_call(self) -> None:
+        """Behavior: ``git config alias.p push`` is referred, and so is
+        any subcommand that is not a command of git, such as ``p``.
+
+        Reference: QA.8 part A, H2; two calls did what one cannot.
+        """
+        assert_reaches(
+            self,
+            "selective-destruction",
+            ("git config alias.p push", "git p --force origin main"),
+        )
+
+    def test_plain_settings_pass(self) -> None:
+        """Behavior: reading the configuration, and setting the name or
+        mail of the author, reach no outcome.
+
+        Reference: decision 0002, routine work runs without a prompt.
+        """
+        for command in (
+            "git config user.email a@b.c",
+            "git config --get remote.origin.url",
+            "git config -l",
+        ):
+            with self.subTest(command=command):
+                self.assertEqual(shell(command), set())
+
+
+class UnquotedHereDocuments(unittest.TestCase):
+    """QA.8 H3: the shell runs substitutions in an unquoted body."""
+
+    def test_substitution_in_the_body(self) -> None:
+        """Behavior: ``$(...)`` and backquotes in the body of a
+        here-document whose delimiter is not quoted are read.
+
+        Reference: QA.8 part A, H3; bash expands such a body (checked in
+        a scratch directory).
+        """
+        assert_reaches(
+            self,
+            "elevated-privilege",
+            (
+                "cat <<EOF\n$(sudo id)\nEOF",
+                "cat <<EOF\n`sudo id`\nEOF",
+                "cat <<-EOF\n\t$(sudo id)\n\tEOF",
+                "echo ok <<EOF\n$(sudo id)\nEOF",
+            ),
+        )
+        assert_reaches(
+            self,
+            "record-entries",
+            ("cat <<EOF\n$(rm /srv/work/ledger.jsonl)\nEOF",),
+        )
+
+    def test_quoted_delimiter_is_data(self) -> None:
+        """Behavior: the body of a here-document whose delimiter is
+        quoted runs nothing.
+
+        Reference: QA.8 part A, H3; bash does not expand it.
+        """
+        for command in (
+            "cat <<'EOF'\n$(sudo id)\nEOF",
+            'cat <<"EOF"\n`sudo id`\nEOF',
+            "cat <<\\EOF\n$(sudo id)\nEOF",
+        ):
+            with self.subTest(command=command):
+                self.assertEqual(shell(command), set())
+
+
+class WorkBound(unittest.TestCase):
+    """QA.8 H4: the guard answers within its own budget."""
+
+    SLOW = (
+        ";".join(f"cd /tmp/d{i}" for i in range(15))
+        + "; rm "
+        + " ".join(["x/{a,b}{c,d}{e,f}{g,h}{i,j}{k,l}"] * 300)
+        + "; sudo id"
+    )
+
+    def test_too_many_paths_is_referred(self) -> None:
+        """Behavior: a line that resolves more than ``MAX_PATHS`` paths
+        is referred as too large to read, well inside the timeout.
+
+        Reference: QA.8 part A, H4, the reviewer's ``slow2.py`` input of
+        300 operands, which took 6.7 s before unit 0015; the hook's
+        timeout is 10 s, after which the call proceeds.
+        """
+        event = {"tool_name": "Bash", "tool_input": {"command": self.SLOW},
+                 "cwd": WORK}
+        started = guard.time.monotonic()
+        found = guard.check_call(event, guard.read_policy(POLICY))
+        spent = guard.time.monotonic() - started
+        self.assertIn(
+            ("selective-destruction",
+             f"command too large to read: more than {guard.MAX_PATHS} paths"),
+            found.reached,
+        )
+        self.assertLess(spent, guard.TIME_BUDGET + 2)
+
+    def test_deadline_is_referred(self) -> None:
+        """Behavior: a reading past its deadline stops and is referred.
+
+        Reference: QA.8 part A, H4; the clock is made to pass the budget
+        at once, so the test does not depend on the machine's speed.
+        """
+        clock = iter([0.0] + [guard.TIME_BUDGET + 1] * 100)
+        with mock.patch.object(
+            guard.time, "monotonic", side_effect=lambda: next(clock)
+        ):
+            found = shell("ls; ls")
+        self.assertEqual(found, {"selective-destruction"})
+
+    def test_assured_answer_is_never_silent(self) -> None:
+        """Behavior: under the assured profile the slow line gets an
+        answer that refers it, attended, and refuses it, unattended.
+
+        Reference: STND.HARN.23, a call is refused where a program the
+        guard runs fails; QA.8 part A, H4.
+        """
+        event = {"tool_name": "Bash", "tool_input": {"command": self.SLOW},
+                 "cwd": WORK}
+        for unattended, decision in ((False, "ask"), (True, "deny")):
+            with tempfile.TemporaryDirectory() as tmp:
+                path = Path(tmp) / "policy.json"
+                policy = {**POLICY, "unattended": unattended}
+                path.write_text(json.dumps(policy), encoding="utf-8")
+                out = io.StringIO()
+                stdin = io.StringIO(json.dumps(event))
+                with mock.patch("sys.stdin", stdin), redirect_stdout(out):
+                    guard.main(["guard", str(path), "--assured"])
+            answer = json.loads(out.getvalue())["hookSpecificOutput"]
+            with self.subTest(unattended=unattended):
+                self.assertEqual(answer["permissionDecision"], decision)
+
+
+class XargsCommands(unittest.TestCase):
+    """QA.8 H5: a command fed through xargs is not left unread."""
+
+    def test_launcher_or_replace_string(self) -> None:
+        """Behavior: xargs whose program is a launcher, or is named by
+        the replace string, is referred.
+
+        Reference: QA.8 part A, H5; each reached no outcome.
+        """
+        # With the replace string "at", xargs runs "c" + "hmod" + ...,
+        # chmod, though the program as written is cat.
+        self.assertIn(
+            "selective-destruction", shell("echo hmod | xargs -I at cat u+s f")
+        )
+        assert_reaches(
+            self,
+            "selective-destruction",
+            (
+                "echo sudo id | xargs env",
+                "echo sudo | xargs -I@ @ id",
+                'echo "rm /srv/work/ledger.jsonl" | xargs env',
+                'echo "rm /srv/work/ledger.jsonl" | xargs nice',
+            ),
+        )
+
+    def test_readers_pass(self) -> None:
+        """Behavior: xargs feeding a program that only reads passes.
+
+        Reference: decision 0002; these change nothing.
+        """
+        for command in (
+            "find . -name '*.py' | xargs grep -l TODO",
+            "find . -name '*.py' | xargs wc -l",
+            "ls | xargs -I{} echo {}",
+        ):
+            with self.subTest(command=command):
+                self.assertEqual(shell(command), set())
+
+
+class LinkThenParent(unittest.TestCase):
+    """QA.8 H6: ``..`` after a symbolic link is resolved as the system does."""
+
+    def test_writes_through_link_and_parent(self) -> None:
+        """Behavior: a write to ``l/../evil``, where ``l`` leads out of
+        the work, reaches write-bounds, by the shell and by Write.
+
+        Reference: QA.8 part A, H6; the system resolves ``l/..`` as the
+        parent of the link's target, and in a scratch directory
+        ``echo x > l/../evil`` wrote ``outside/evil``.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            work, deep = root / "work", root / "outside" / "deep"
+            work.mkdir()
+            deep.mkdir(parents=True)
+            (work / "l").symlink_to(deep)
+            policy = {**POLICY, "work": str(work), "writable": [str(work)]}
+            for command in (
+                "echo x > l/../evil",
+                "touch l/../evil",
+                "rm l/../evil",
+                "cp a l/../evil",
+            ):
+                with self.subTest(command=command):
+                    found = in_work(
+                        str(work), policy, "Bash", {"command": command}
+                    )
+                    self.assertIn("write-bounds", found)
+            data = {"file_path": str(work / "l/../evil")}
+            found = in_work(str(work), policy, "Write", data)
+            self.assertEqual(found, {"write-bounds"})
+            inside = {"command": "echo x > sub/../notes.txt"}
+            self.assertEqual(in_work(str(work), policy, "Bash", inside), set())
+
+
+class PatternWrites(unittest.TestCase):
+    """QA.8 H7: a pattern in a write target reaches what it may match."""
+
+    def test_pattern_reaches_protected_names(self) -> None:
+        """Behavior: a pattern that may match a ledger or a file of
+        ``.git`` reaches record-entries or history-rewrite.
+
+        Reference: QA.8 part A, H7; bash expands a pattern in a
+        redirection that matches one file, and in a scratch directory
+        ``echo hi > ledger.json?`` overwrote ``ledger.jsonl``, as did
+        ``ledger.jso[^x]l``.
+        """
+        assert_reaches(
+            self,
+            "record-entries",
+            (
+                "echo x > /srv/work/ledger.json?",
+                "cp /dev/null /srv/work/ledger.jso[n]l",
+                "tee /srv/work/ledg*.jsonl",
+                "echo x > /srv/work/ledger.jso[^x]l",
+            ),
+        )
+        assert_reaches(
+            self,
+            "history-rewrite",
+            (
+                "echo x > /srv/work/.gi?/config",
+                "echo x > /srv/work/.g*/hooks/pre-push",
+            ),
+        )
+        self.assertIn(
+            "enforcing-configuration", shell("echo x > /srv/work/.cl*/s.json")
+        )
+
+    def test_ordinary_patterns_pass(self) -> None:
+        """Behavior: a pattern that matches no protected name passes.
+
+        Reference: decision 0002; an edit or mode change over the
+        sources is routine.
+        """
+        for command in ("chmod +x scripts/*.sh", "sed -i 's/a/b/' src/*.py"):
+            with self.subTest(command=command):
+                self.assertEqual(shell(command), set())
+
+
+class OperandPositions(unittest.TestCase):
+    """QA.8 M1: the script and mode options leave the files in view."""
+
+    def test_script_and_reference_options(self) -> None:
+        """Behavior: the file of ``sed -i`` with a joined or long
+        script option, and of ``chmod --reference``, is checked.
+
+        Reference: QA.8 part A, M1; each dropped ``/etc/passwd``.
+        """
+        assert_reaches(
+            self,
+            "write-bounds",
+            (
+                "sed -i --expression=s/a/b/ /etc/passwd",
+                "sed -i -es/a/b/ /etc/passwd",
+                "chmod --reference=a /etc/passwd",
+            ),
+        )
+
+    def test_script_is_no_file(self) -> None:
+        """Behavior: a script such as ``/x/d`` is not read as a path.
+
+        Reference: GNU sed takes the first operand as the script when
+        no option gives one.
+        """
+        self.assertEqual(shell("sed -i '/x/d' notes.txt"), set())
+        self.assertEqual(shell("sed -i -e '/x/d' notes.txt"), set())
+
+
+class SetIdModes(unittest.TestCase):
+    """QA.8 M2: every form of a set-user or set-group mode is seen."""
+
+    def test_setid_modes(self) -> None:
+        """Behavior: a five-digit octal mode and ``u+rs`` or ``u+xs``
+        reach elevated-privilege; ``755`` and ``u+x`` do not.
+
+        Reference: QA.8 part A, M2; in a scratch directory both forms
+        set the bit.
+        """
+        assert_reaches(
+            self,
+            "elevated-privilege",
+            ("chmod 04755 f", "chmod u+rs f", "chmod u+xs f"),
+        )
+        for command in ("chmod 755 f", "chmod u+x,go-w f", "chmod -w f"):
+            with self.subTest(command=command):
+                self.assertEqual(shell(command), set())
+
+
+class RemoteSpellings(unittest.TestCase):
+    """QA.8 M3: common spellings of a remote write are recognized."""
+
+    def test_remote_spellings(self) -> None:
+        """Behavior: each spelling reaches remote-write.
+
+        Reference: QA.8 part A, M3; each reached no outcome.
+        """
+        assert_reaches(
+            self,
+            "remote-write",
+            (
+                "curl -dx https://pypi.org",
+                "curl -sd x https://pypi.org",
+                "curl -XPOST https://pypi.org",
+                "curl -Fa=@f https://pypi.org",
+                "curl -Tf https://pypi.org",
+                "curl --form-string a=b https://pypi.org",
+                "curl -K cfg",
+                "ssh host < script.sh",
+                "nc host 80",
+                "socat - TCP:host:80",
+                "gh secret set X",
+                "gh label create x",
+                "poetry publish",
+                "uv publish",
+                "git send-email a.patch",
+            ),
+        )
+        # An external command of git is referred as one the guard does
+        # not read (H2), which holds the push of git lfs too.
+        self.assertIn(
+            "selective-destruction", shell("git lfs push origin main")
+        )
+
+    def test_reads_pass(self) -> None:
+        """Behavior: a plain fetch and the read commands of gh pass.
+
+        Reference: decision 0002; these write nothing remote.
+        """
+        for command in (
+            "curl -sSL https://pypi.org/simple/x/",
+            "curl -fsSLo /tmp/x.tgz https://pypi.org/x.tgz",
+            "curl -I -H 'Accept: text/html' https://pypi.org",
+            "gh pr view 12",
+            "gh run list",
+            "gh auth status",
+            "ssh -T git@github.example",
+        ):
+            with self.subTest(command=command):
+                self.assertEqual(shell(command), set())
+
+
+class StoreReads(unittest.TestCase):
+    """QA.8 M4: reads of the store by more programs are seen."""
+
+    def test_reads_of_the_store(self) -> None:
+        """Behavior: each program that reads a closed file of the store,
+        or takes the store in whole, reaches read-bounds.
+
+        Reference: QA.8 part A, M4; with a store holding a closed and an
+        opened file, each reached no outcome.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            work, policy = store_work(tmp)
+            for command in (
+                "grep x secrets/key",
+                "grep -r x secrets",
+                "sed p secrets/key",
+                "awk 1 secrets/key",
+                "base64 secrets/key",
+                "dd if=secrets/key",
+                "find secrets -exec cat {} +",
+                "tar cf x.tar secrets",
+                "rsync -a secrets/ /tmp/k",
+                "install -D secrets/key /tmp/k",
+            ):
+                with self.subTest(command=command):
+                    found = in_work(work, policy, "Bash", {"command": command})
+                    self.assertIn("read-bounds", found)
+            ordinary = {"command": "grep x secrets/token"}
+            self.assertEqual(in_work(work, policy, "Bash", ordinary), set())
+
+
+class WriteDestinations(unittest.TestCase):
+    """QA.8 M5: the destination of more writing programs is checked."""
+
+    def test_destinations_outside(self) -> None:
+        """Behavior: each destination outside the work reaches
+        write-bounds, and ``gzip`` of the ledger reaches record-entries.
+
+        Reference: QA.8 part A, M5; each reached no outcome.
+        """
+        assert_reaches(
+            self,
+            "write-bounds",
+            (
+                "rsync a /etc/x",
+                "tar xf a.tar -C /etc",
+                "curl -o /etc/x https://pypi.org",
+                "wget -O /etc/x https://pypi.org",
+                "sort -o /etc/x a",
+                "git archive --output=/etc/x HEAD",
+                "git config --file /etc/x a.b c",
+                "git config --global alias.p push",
+                "git init /etc/foo",
+                "git clone https://git.example/x /etc/foo",
+                "git worktree add /etc/wt",
+                "find . -fprint /etc/x",
+            ),
+        )
+        assert_reaches(
+            self, "record-entries", ("gzip /srv/work/ledger.jsonl",)
+        )
+
+
+class GitDestructiveForms(unittest.TestCase):
+    """QA.8 M6: destructive git forms outside the earlier list."""
+
+    def test_destructive_forms(self) -> None:
+        """Behavior: each form reaches selective-destruction or
+        history-rewrite.
+
+        Reference: QA.8 part A, M6; the reviewer ran the first, which
+        removed an untracked file since the last option wins.
+        """
+        assert_reaches(
+            self,
+            "selective-destruction",
+            (
+                "git clean -n --no-dry-run -f",
+                "git restore --staged --worktree .",
+            ),
+        )
+        assert_reaches(
+            self,
+            "history-rewrite",
+            (
+                "git reset --keep HEAD~5",
+                "git branch -m a b",
+                "git symbolic-ref HEAD refs/heads/x",
+                "git fast-import",
+            ),
+        )
+
+    def test_unstaging_passes(self) -> None:
+        """Behavior: unstaging by ``reset`` or ``restore --staged``, and
+        reading ``HEAD`` by ``symbolic-ref``, reach no outcome.
+
+        Reference: decision 0002.
+        """
+        for command in (
+            "git reset",
+            "git reset HEAD file.txt",
+            "git reset -- file.txt",
+            "git restore --staged file.txt",
+            "git symbolic-ref HEAD",
+        ):
+            with self.subTest(command=command):
+                self.assertEqual(shell(command), set())
+
+
+class LowFindings(unittest.TestCase):
+    """QA.8 L1 and L2: CDPATH, and sourcing what the call gives."""
+
+    def test_cdpath(self) -> None:
+        """Behavior: after a line sets ``CDPATH``, a ``cd`` to a relative
+        name leads to a directory the guard cannot tell.
+
+        Reference: QA.8 part A, L1. The line itself was referred before
+        unit 0015 too, but only because a relative ``cd``, read again on
+        each pass, grows the directories to ``MAX_DIRECTORIES``; the
+        rule is therefore also held on one ``cd``.
+        """
+        self.assertIn(
+            "selective-destruction",
+            shell("CDPATH=/etc:. ; cd ssl; echo x > cert"),
+        )
+        policy = guard.read_policy(POLICY)
+        for assigned, expected in (({"CDPATH"}, None), (set(), f"{WORK}/ssl")):
+            scan = guard.Scan(
+                policy, guard.Findings(), [WORK], "/home/agent", assigned
+            )
+            guard.enter_directory("ssl", scan)
+            with self.subTest(assigned=assigned):
+                self.assertEqual(scan.cwds, [WORK, expected])
+
+    def test_sourced_and_substituted_scripts(self) -> None:
+        """Behavior: a sourced standard input is read, and a shell or
+        ``source`` that runs a process substitution is referred.
+
+        Reference: QA.8 part A, L2.
+        """
+        self.assertIn(
+            "elevated-privilege", shell(". /dev/stdin <<< 'sudo id'")
+        )
+        assert_reaches(
+            self,
+            "selective-destruction",
+            ("bash <(echo sudo id)", "source <(echo sudo id)"),
+        )
+        self.assertEqual(shell("diff <(sort a) <(sort b)"), set())
+        self.assertEqual(shell("source .venv/bin/activate"), set())
+
+
+class OrdinaryWork(unittest.TestCase):
+    """Unit 0015 adds no friction to ordinary work (design rule 2)."""
+
+    def test_ordinary_commands(self) -> None:
+        """Behavior: ordinary agent commands reach no outcome.
+
+        Reference: decision 0002, routine work runs without a prompt.
+        ``rm -r build`` stays referred, by STND.INSTR.4, as before.
+        """
+        for command in (
+            "# Build and test\nmake\n# then lint\nruff check .",
+            "cd src  # into the sources\npython3 -B -m unittest",
+            "grep -rn TODO src/",
+            "sed -n '1,20p' README.md",
+            "curl -s https://pypi.org/pypi/x/json | head",
+            "git status",
+            "git log --oneline -5",
+            "git diff HEAD~1 -- src",
+            "git add -A && git commit -m 'Fix #12'",
+            "git commit -m \"$(cat <<'EOF'\nFix: don't break\nEOF\n)\"",
+            "cat > notes.md <<'EOF'\n$(sudo id) `rm -rf /`\nEOF",
+            "rm build/a.o build/b.o",
+            "rmdir build",
+            "cp a.txt b.txt",
+            "cp -r src backup",
+            "echo $(( 1 + 2 )) # sum",
+            "tar czf /tmp/out.tgz src",
+            "uv run pytest -q",
+        ):
+            with self.subTest(command=command):
+                self.assertEqual(shell(command), set())
+
+
 if __name__ == "__main__":
     unittest.main()

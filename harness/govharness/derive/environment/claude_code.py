@@ -83,24 +83,36 @@ COVERAGE_TABLE: dict[str, tuple[str, str]] = {
         PARTIAL,
         "The guard reads the shell commands and file tools that name a "
         "location, and refers a removal whose items it cannot resolve. "
-        "The sandbox does not protect the work, its records, or its "
-        "version control, which lie inside the writable work. Not seen: "
-        "a program that removes or moves a location by itself, including "
-        "a script, code given inline to an interpreter, and an alias or "
-        "function defined earlier; a symbolic link made in the same "
-        "command line.",
+        "It reads a shell line as the shell does in its quotes, comments, "
+        "joined lines, here-documents, substitutions, and compound "
+        "commands, and resolves a .. after a symbolic link where the "
+        "system resolves it. What it cannot read "
+        "within its bound on paths and time is referred. The sandbox does "
+        "not protect the work, its records, or its version control, which "
+        "lie inside the writable work. Not seen: a program that removes "
+        "or moves a location by itself, including a script, code given "
+        "inline to an interpreter, and an alias or function of the shell "
+        "defined earlier; a symbolic link made in the same command line, "
+        "or changed between the check and the run; a pattern of the "
+        "shell's extglob option.",
     ),
     "history-rewrite": (
         PARTIAL,
-        "The guard reads git commands as written; git run by a script, "
-        "a configured alias, a hook, or a misspelled subcommand that git "
-        "corrects is not seen.",
+        "The guard reads git commands as written. It refers an alias "
+        "given in the call, a setting taken from a variable, a write of "
+        "git's configuration other than a few settings that run nothing, "
+        "and every subcommand that is not a command of git, which covers "
+        "an alias set earlier, an external command such as git lfs, and "
+        "a misspelling that git corrects. Not seen: git run by a script "
+        "or a hook, and a program that a configuration written by "
+        "another program has git run.",
     ),
     "record-entries": (
         PARTIAL,
         "Ledger files are protected from the file tools and from shell "
-        "commands that name them; other records are not, and a program "
-        "that rewrites a ledger is not seen.",
+        "commands that name them, by name or by a pattern that may match "
+        "them; other records are not, and a program that rewrites a "
+        "ledger is not seen, including an archive extracted over one.",
     ),
     "elevated-privilege": (
         PARTIAL,
@@ -110,15 +122,23 @@ COVERAGE_TABLE: dict[str, tuple[str, str]] = {
     ),
     "write-bounds": (
         PARTIAL,
-        "The sandbox confines shell commands. The guard confines the "
-        "file tools by the path it checks before the call, so a symbolic "
-        "link changed between the check and the write is not seen. "
-        "Servers of other tools run outside the sandbox.",
+        "The sandbox confines shell commands. The guard also checks the "
+        "destinations of the shell writers it models, among them "
+        "redirections, copies and moves, rsync, tar, compressors, the "
+        "outputs of curl, wget, and sort, and the directories and files "
+        "that git init, clone, worktree, archive, and config write. The "
+        "guard confines the file tools by the path it checks before the "
+        "call, so a symbolic link changed between the check and the "
+        "write is not seen. Servers of other tools run outside the "
+        "sandbox.",
     ),
     "read-bounds": (
         PARTIAL,
-        "The guard refers reads by the file tools and by common shell "
-        "readers given a path; other programs read unseen.",
+        "The guard refers reads by the file tools and by the shell "
+        "programs it reads given a path: common readers, searches by "
+        "grep and rg, sed, awk, dd, the sources of a copy, rsync, or "
+        "archive, and the files that a command run by find takes; other "
+        "programs read unseen.",
     ),
     "network-bounds": (
         PARTIAL,
@@ -128,14 +148,22 @@ COVERAGE_TABLE: dict[str, tuple[str, str]] = {
     ),
     "remote-write": (
         PARTIAL,
-        "Known writing commands and unopened tools of other servers are "
-        "referred. Not seen: a write by a tool the owner opens, and a "
-        "program that writes to an opened domain by itself.",
+        "Known writing commands are referred, with their options read "
+        "in clusters, joined values, and abbreviations: uploads, "
+        "publishers, curl's data and methods, git's pushes and mail, ssh "
+        "given a command or fed a script, connectors such as nc and "
+        "socat, and every command of gh outside a list of reads; so are "
+        "unopened tools of other servers. Not seen: a write by a tool the "
+        "owner opens, and a program that writes to an opened domain by "
+        "itself.",
     ),
     "selective-destruction": (
         PARTIAL,
         "Recursive, pattern, and computed removals by shell commands are "
-        "referred; a program that selects items by itself is not seen.",
+        "referred, as are a command that xargs builds from its input "
+        "unless its program only reads, a shell that runs a computed "
+        "script, and a call too large to read within the guard's bound; "
+        "a program that selects items by itself is not seen.",
     ),
     "enforcing-configuration": (
         PARTIAL,
@@ -831,8 +859,10 @@ def coverage_report(
             "- the sandbox is available; for assured work the settings "
             "refuse to run without it, and for other work Claude Code runs "
             "and says that it is unavailable;",
-            "- the guard answers within its timeout of 10 s; a guard that "
-            "does not answer in time lets the call proceed;",
+            "- the guard answers within its timeout of 10 s; it refers a "
+            "call it cannot read within its own bound on paths and time, "
+            "which ends well inside the timeout, but a guard that the "
+            "machine stalls past the timeout lets the call proceed;",
             "- the agent's account holds no privilege grant.",
             "",
             "In an unattended session the guard refuses what it would "
