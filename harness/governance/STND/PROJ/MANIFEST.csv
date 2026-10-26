@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.PROJ,standard,LVL2,Project constitution template,adopted,_doc.md,400f4ad81629dae4e9f56871d5693731a246e159a0b97d85d9c1de0011f9b724,12492
+STND.PROJ,standard,LVL2,Project constitution template,adopted,_doc.md,9426eaf37eed552b0156c1b291d238aecf3206124d47494687580b75ac2c8400,12433
 STND.PROJ.1,provision,LVL2,Constitution sections,adopted,1.md,f8b7bdbc0f5ab64dc54c3439dccfd4f007ae372c01b0d5005c92285b983dd444,5016
 STND.PROJ.2,provision,LVL2,Sections adopted by citation,adopted,2.md,dd7eb27bbe5516320717c00eaea9e45617cdf01604e8a317781878af74642fe2,426
 STND.PROJ.3,provision,LVL2,Proposed standing authorizations,adopted,3.md,d5ab909f429dd7fe3117944534c8852db843e35aa356ce6cf89507843da2fe0f,2250

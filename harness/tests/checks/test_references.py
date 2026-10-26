@@ -1,9 +1,10 @@
 """Tests of g.25 on bare document names (unit 0013).
 
-g.25 fails when a document at LVL1 to LVL3 names another document by its
-bare identifier, outside its Revision History, tables of examples,
-quoted spans, and code, without citing it; the derived References table
-then lacks the row. Each case changes an in-memory copy of the corpus.
+A document at LVL1 to LVL3 that names another document by its bare
+identifier, outside its Revision History, tables of examples, quoted
+spans, and code, cites it (the term Cited document of STND.DRAFT), so the
+derived References table holds its row, and g.25 fails where the table
+lacks it. Each case changes an in-memory copy of the corpus.
 STND.CLASS is the subject: it is adopted, below the drafting standard,
 and does not cite HDES, the document the cases name.
 """
@@ -16,16 +17,14 @@ import unittest
 
 from govharness.checks.base import CheckContext
 from govharness.checks.drafting import family as drafting
-from govharness.checks.drafting.citations import (
-    named_documents,
-    references_problem,
-)
+from govharness.checks.drafting.citations import references_problem
 from govharness.checks.drafting.context import BELOW, build_context
 from govharness.checks.registry import run_checks
 from govharness.core.corpus import Corpus
 from govharness.derive.references import (
     SECTION,
     cited_documents,
+    named_documents,
     references_table,
     with_section,
 )
@@ -110,13 +109,18 @@ class BareNames(unittest.TestCase):
         self.assertNotIn(NAMED, named_documents(corpus, SUBJECT))
         self.assertIsNone(references_problem(corpus, SUBJECT))
 
-    def test_uncited_name_fails(self) -> None:
+    def test_bare_name_needs_its_row(self) -> None:
         """Behavior: a bare name with no row fails g.25, class defect, in
-        the document's text and in the text of one of its provisions.
+        the document's text and in the text of one of its provisions;
+        the derived table holds the row, and with it g.25 passes, with
+        no citation behind the name.
 
-        Reference: STND.DRAFT.34 (binding, checked_by g.25), unit 0013
-        design (ii), and the gaps of the closing round of 2026-10-25,
-        such as "MEAS binds them" in CPS (``p5/gaps.md``).
+        Reference: STND.DRAFT.34 (binding, checked_by g.25) and the term
+        Cited document of STND.DRAFT 1.5 (a document named by its
+        identifier alone is cited; decision 1 of the round of
+        2026-10-26, as clarified: a row suffices); the gaps of the
+        closing round of 2026-10-25, such as "MEAS binds them" in CPS
+        (``p5/gaps.md``).
         """
         cases = {
             "document": inserted(f"The {NAMED} profile is out of scope."),
@@ -127,8 +131,9 @@ class BareNames(unittest.TestCase):
             with self.subTest(name):
                 corpus = corpus_of(index)
                 self.assertIn(NAMED, named_documents(corpus, SUBJECT))
+                self.assertIn(NAMED, cited_documents(corpus, SUBJECT))
                 problem = references_problem(corpus, SUBJECT) or ""
-                self.assertIn(f"text names {NAMED} without", problem)
+                self.assertIn(f"missing {NAMED}", problem)
                 self.assertEqual(g25(index), "FAIL")
                 ctx = build_context(corpus)
                 assert ctx is not None
@@ -138,6 +143,27 @@ class BareNames(unittest.TestCase):
                     if f.subject == SUBJECT
                 ]
                 self.assertEqual([f.cls for f in found], ["defect"])
+                index[SUBJECT].body = rederived(corpus, SUBJECT)
+                corpus = corpus_of(index)
+                self.assertIsNone(references_problem(corpus, SUBJECT))
+
+    def test_withdrawn_identifier_cites_its_document(self) -> None:
+        """Behavior: a citation of a withdrawn provision, in a revision
+        row, still cites the document that lists it as withdrawn.
+
+        Reference: STND.IDENT.14; STND.CXX.16, which STND.CXX 1.2
+        withdrew, cited in a revision row of STND.CLASS. The rehearsal of
+        the round of 2026-10-26 found the gap: such a row counted as a
+        citation until the withdrawal, and then left a table row that
+        nothing cited.
+        """
+        index = live_index()
+        entry = index[SUBJECT]
+        entry.body = entry.body.rstrip("\n") + (
+            "\n| 9.9 | 2026-10-26 | Editorial amendment (GOV.41): as "
+            "STND.CXX.16 once said. |\n"
+        )
+        self.assertIn("STND.CXX", cited_documents(corpus_of(index), SUBJECT))
 
     def test_citation_derives_the_row(self) -> None:
         """Behavior: once the name is cited, by a provision or by the

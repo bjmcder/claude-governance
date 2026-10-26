@@ -762,14 +762,13 @@ class HeldBehavior(unittest.TestCase):
         )
 
     def test_adopter_field_of_each_kind(self) -> None:
-        """Behavior: the constitution names its adopter in
-        ``ratified_by`` and every other document in ``adopted_by``,
-        whatever its status.
+        """Behavior: an adopted or ratified document names its adopter,
+        the constitution in ``ratified_by`` and every other document in
+        ``adopted_by``; a draft or a planned document need not.
 
-        Reference: the letter of STND.IDENT.12, which names the field
-        per kind and sets no status; QA.8 part C, M4, whose draft
-        without an adopter therefore still fails (see the record's
-        Open section).
+        Reference: STND.IDENT.12 as amended in the round of 2026-10-26
+        ("that is adopted or ratified"); QA.8 part C, M4, whose draft
+        without an adopter now passes.
         """
         cases = {
             "constitution with adopted_by": lambda index, ledger: index[
@@ -780,7 +779,6 @@ class HeldBehavior(unittest.TestCase):
             ].meta.update(
                 ratified_by=index["STND.PERF"].meta.pop("adopted_by")
             ),
-            "draft without adopter": _draft_without_adopter,
         }
         for name, mutation in cases.items():
             with self.subTest(name):
@@ -788,6 +786,70 @@ class HeldBehavior(unittest.TestCase):
                 self.assertEqual(status, "FAIL")
                 self.assertEqual(len(details), 1, details)
                 self.assertIn("names no adopter in", details[0])
+
+        def planned(index: Index, ledger: Ledger) -> None:
+            """Make STND.PERF planned, with no adopter.
+
+            Parameters
+            ----------
+            index : Index
+                Copy of the corpus entries by identifier; changed in
+                place.
+            ledger : Ledger
+                Copy of the ledger entries; changed in place.
+            """
+            _draft_without_adopter(index, ledger)
+            index["STND.PERF"].meta.update(status="planned")
+
+        for name, mutation in {
+            "draft without adopter": _draft_without_adopter,
+            "planned without adopter": planned,
+        }.items():
+            with self.subTest(name):
+                self.assertEqual(result(mutation, "v.5")[0], "PASS")
+
+    def test_withdrawn_constitution_provisions(self) -> None:
+        """Behavior: the constitution lists in its field ``withdrawn``
+        a withdrawn provision of a part; unlisted, the gap fails.
+
+        Reference: STND.IDENT.24; GOV.12 deleted from a copy, with and
+        without ``withdrawn: ["GOV.12"]`` on LVL0, and GOV.12's citations
+        listed as withdrawn by the same field.
+        """
+
+        def deleted(index: Index, ledger: Ledger) -> None:
+            """Delete GOV.12 without listing it.
+
+            Parameters
+            ----------
+            index : Index
+                Copy of the corpus entries by identifier; changed in
+                place.
+            ledger : Ledger
+                Copy of the ledger entries; changed in place.
+            """
+            del index["GOV.12"]
+
+        def listed(index: Index, ledger: Ledger) -> None:
+            """Delete GOV.12 and list it on LVL0.
+
+            Parameters
+            ----------
+            index : Index
+                Copy of the corpus entries by identifier; changed in
+                place.
+            ledger : Ledger
+                Copy of the ledger entries; changed in place.
+            """
+            deleted(index, ledger)
+            index["LVL0"].meta["withdrawn"] = ["GOV.12"]
+
+        status, details = result(deleted, "v.8")
+        self.assertEqual(status, "FAIL")
+        self.assertIn(
+            "- LVL0: GOV.12 is missing and not listed as withdrawn", details
+        )
+        self.assertEqual(result(listed, "v.8"), ("PASS", []))
 
     def test_cited_provisions_resolve(self) -> None:
         """Behavior: v.8 fails on a provision deleted without being

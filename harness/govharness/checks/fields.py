@@ -5,7 +5,9 @@ templates: every owner field of a project template names a role
 from the file snapshot. status: every entry carries the status of the
 document in its directory, and an entry of an adopted or ratified
 document carries an adoption date, so that adopting a document cannot
-leave its provisions at draft.
+leave its provisions at draft. checked-by: every key in a field
+``checked_by`` is ``review`` or the key of a registered check
+(STND.HARN.32).
 """
 
 from __future__ import annotations
@@ -120,6 +122,36 @@ def statuses_agree(ctx: CheckContext) -> Verdict:
     return failing(status_problems(ctx.corpus.entries))
 
 
+def check_keys_known(ctx: CheckContext) -> Verdict | None:
+    """Check checked-by: every ``checked_by`` key names a check.
+
+    A key that names no registered check claims a check that the
+    harness does not make (STND.HARN.32); ``review`` names a reader.
+
+    Parameters
+    ----------
+    ctx : CheckContext
+        Context of the run; ``known_keys`` holds the registered keys.
+
+    Returns
+    -------
+    Verdict | None
+        FAIL with one line per entry and unknown key; ``None`` where the
+        context holds no registered keys, as outside ``run_checks``.
+    """
+    if not ctx.known_keys:
+        return None
+    known = ctx.known_keys | {"review"}
+    return failing(
+        [
+            f"- {entry.meta['id']}: `{key}` names no check"
+            for entry in ctx.corpus.entries
+            for key in entry.meta.get("checked_by") or []
+            if str(key) not in known
+        ]
+    )
+
+
 CHECKS: tuple[Check, ...] = (
     Check(
         "templates",
@@ -134,5 +166,12 @@ CHECKS: tuple[Check, ...] = (
         "Every entry carries its document's status and adoption date",
         ("GOV.41",),
         statuses_agree,
+    ),
+    Check(
+        "checked-by",
+        FAMILY,
+        "Every checked_by key names a registered check or review",
+        ("STND.HARN.32",),
+        check_keys_known,
     ),
 )

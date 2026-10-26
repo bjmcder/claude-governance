@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-HW.GPU,sub-profile,LVL1,Accelerators,adopted,_doc.md,01652dd85692056ec2c4efd1b12e7f9c8652c18ec0ba15e722b30fc99f82c502,8179
+HW.GPU,sub-profile,LVL1,Accelerators,adopted,_doc.md,470ed3b71e49a5e5e137e8b8f553b182b808ce4e37bbd123f01b66bdd2d95006,8410
 HW.GPU.1,provision,LVL1,Accelerator selector,adopted,1.md,577f54f31cfdf65563c9cbbf76895dd61c37778dfd8754eb8e75e5100a83a77e,503
 HW.GPU.2,provision,LVL1,Accelerator shared matters,adopted,2.md,1c77327c622d1595caaefd311c6e25550d0c2a1eca1a8242bba3cf1129fbf764,537
 HW.GPU.3,provision,LVL1,Completion of offloaded work,adopted,3.md,6afd91dc500327258c3eacf01aa2154e187dbfdca7dfc5e330191c2b1cac778d,567

@@ -3,11 +3,11 @@
 The hash chain is intact, each entry's sequence number is its position,
 and each transaction's pinned ``corpus_hash`` still matches its scope,
 so an edit made outside the ledger is reported (GOV.36). A pin holds
-until the next transaction of the same scope (STND.HARN.9,
-``transactions.latest_pins``). Every signature verifies against the
-signer register ``SIGNR`` where one exists, every entry the register
-requires to be signed is signed, and every change to the register after
-its founding is signed.
+until a later transaction's scope reaches each of its paths
+(STND.HARN.9, ``transactions.pins_in_force``). Every signature verifies
+against the signer register ``SIGNR`` where one exists, every entry the
+register requires to be signed is signed, and every change to the
+register after its founding is signed.
 
 The signer configuration, which the agent cannot alter, is trusted over
 the corpus: where it names an anchor, a corpus without ``SIGNR`` fails,
@@ -24,7 +24,7 @@ from __future__ import annotations
 from pathlib import PurePosixPath
 
 from govharness.checks.base import Check, CheckContext, Verdict
-from govharness.core.corpus import Tree, has_directory, scope_hash
+from govharness.core.corpus import Tree, has_scope_path, scope_hash
 from govharness.core.entry import DOC_FILE
 from govharness.ledger.gpg import SignerConfig
 from govharness.ledger.register import REGISTER_ID, read_register
@@ -32,10 +32,10 @@ from govharness.ledger.signatures import check_signatures
 from govharness.ledger.transactions import (
     GOVERNANCE,
     Transaction,
-    covers,
     entry_problems,
     head_problems,
-    latest_pins,
+    pins_in_force,
+    reaches,
     scope_key,
 )
 
@@ -83,7 +83,7 @@ def ledger_problems(
         previous = entry.get("hash")
         seq = entry.get("seq")
         for path in entry.get("scope") or []:
-            if not has_directory(tree, path):
+            if not has_scope_path(tree, path):
                 errors.append(f"seq {seq}: scope {path} does not exist")
         if entry.get("scope") and not isinstance(
             entry.get("corpus_hash"), str
@@ -105,7 +105,7 @@ def ledger_problems(
 
 
 def _stale_pins(tree: Tree, entries: list[Transaction]) -> list[str]:
-    """Return a line for each latest pin the corpus no longer matches.
+    """Return a line for each pin in force the corpus no longer matches.
 
     Parameters
     ----------
@@ -117,12 +117,12 @@ def _stale_pins(tree: Tree, entries: list[Transaction]) -> list[str]:
     Returns
     -------
     list[str]
-        One line per latest pin of a scope (``transactions.latest_pins``)
+        One line per pin in force (``transactions.pins_in_force``)
         whose ``corpus_hash`` differs from the scope's hash, or whose
         scope holds a file name that cannot be hashed.
     """
     errors: list[str] = []
-    for entry in latest_pins(entries):
+    for entry in pins_in_force(entries):
         scope = list(scope_key(entry))
         pinned = entry.get("corpus_hash")
         try:
@@ -162,14 +162,13 @@ def ledger_intact(ctx: CheckContext) -> Verdict:
 
 
 def unpinned_files(ctx: CheckContext) -> Verdict:
-    """Check unpinned: list the Markdown files that no scope covers.
+    """Check unpinned: FAIL for each Markdown file that no scope reaches.
 
     STND.HARN.9 compares only the scopes that transactions name, so a
-    file outside every scope can change with no transaction and the
-    ledger check still passes (QA.8 part C, M1). Whether every file of
-    governance is to be pinned is the corpus's question; until it says
-    so, this check warns and never fails. A directory none of whose
-    Markdown files is covered is named once, with its count of files.
+    file outside every scope could change with no transaction and the
+    ledger check still pass; STND.HARN.31 makes such a file a FAIL. A
+    directory none of whose Markdown files is reached is named once,
+    with its count of files.
 
     Parameters
     ----------
@@ -179,18 +178,16 @@ def unpinned_files(ctx: CheckContext) -> Verdict:
     Returns
     -------
     Verdict
-        WARN with one line per uncovered directory or file, else PASS.
+        FAIL with one line per unreached directory or file, else PASS.
     """
-    scopes = {
+    scopes = tuple(
         s
         for entry in ctx.ledger or []
         for s in entry.get("scope") or []
         if isinstance(s, str)
-    }
+    )
     files = ctx.require_tree().markdown()
-    covered = [
-        p for p in files if any(covers(s, p.as_posix()) for s in scopes)
-    ]
+    covered = [p for p in files if reaches(scopes, p.as_posix())]
     groups: dict[str, int] = {}
     for path in sorted(set(files) - set(covered)):
         name = path.as_posix()
@@ -206,7 +203,7 @@ def unpinned_files(ctx: CheckContext) -> Verdict:
         else f"- {name}"
         for name, count in sorted(groups.items())
     ]
-    return Verdict("WARN" if lines else "PASS", lines)
+    return Verdict("FAIL" if lines else "PASS", lines)
 
 
 CHECKS: tuple[Check, ...] = (
@@ -221,7 +218,7 @@ CHECKS: tuple[Check, ...] = (
         "unpinned",
         FAMILY,
         "Every Markdown file lies under a scope that a transaction names",
-        ("GOV.36",),
+        ("STND.HARN.31",),
         unpinned_files,
     ),
 )

@@ -331,6 +331,57 @@ def is_directory(root: Path, rel: str) -> bool:
     return inside_root(rel) and (root / rel).is_dir()
 
 
+def is_scope_path(root: Path, rel: str) -> bool:
+    """Return True when a path under the root can be a ledger scope.
+
+    A scope names corpus directories and ".md" files (STND.HARN.7).
+
+    Parameters
+    ----------
+    root : Path
+        Corpus root.
+    rel : str
+        Path relative to the root, such as ``STND/DRAFT`` or
+        ``README.md``.
+
+    Returns
+    -------
+    bool
+        Whether the path lies inside the root and names a directory or
+        a Markdown file.
+    """
+    if not inside_root(rel):
+        return False
+    path = root / rel
+    return path.is_dir() or (path.is_file() and path.name.endswith(".md"))
+
+
+def has_scope_path(tree: Tree, rel: str) -> bool:
+    """Return True when a snapshot holds a ledger scope path.
+
+    A scope names corpus directories and ".md" files (STND.HARN.7).
+
+    Parameters
+    ----------
+    tree : Tree
+        Snapshot of the corpus.
+    rel : str
+        Path relative to the root, such as a ledger scope ``STND/DRAFT``.
+
+    Returns
+    -------
+    bool
+        Whether the path lies inside the root and names a directory or
+        a Markdown file of the snapshot.
+    """
+    if not inside_root(rel):
+        return False
+    pure = PurePosixPath(rel)
+    return pure in tree.directories or (
+        pure in tree.files and pure.name.endswith(".md")
+    )
+
+
 def has_directory(tree: Tree, rel: str) -> bool:
     """Return True when a snapshot holds a directory at a relative path.
 
@@ -364,8 +415,10 @@ def scope_hash(tree: Tree, prefixes: list[str]) -> str:
     -------
     str
         SHA-256 over the ``path:digest`` lines of the included files,
-        scope by scope in sorted order and by path within a scope;
-        manifests are not Markdown and are excluded.
+        scope by scope in sorted order and by path within a scope, each
+        file once, under the first scope path that reaches it (the term
+        Content hash of STND.HARN); manifests are not Markdown and are
+        excluded.
 
     Raises
     ------
@@ -376,11 +429,13 @@ def scope_hash(tree: Tree, prefixes: list[str]) -> str:
         so such a name is refused instead.
     """
     lines: list[str] = []
+    seen: set[PurePosixPath] = set()
     for prefix in sorted(p for p in prefixes if inside_root(p)):
         parts = PurePosixPath(prefix).parts
         for rel in tree.markdown():
-            if rel.parts[: len(parts)] != parts:
+            if rel.parts[: len(parts)] != parts or rel in seen:
                 continue
+            seen.add(rel)
             name = rel.as_posix()
             if any(unicodedata.category(c) == "Cc" for c in name):
                 raise ValueError(

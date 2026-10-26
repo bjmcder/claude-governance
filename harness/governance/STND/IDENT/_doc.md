@@ -4,7 +4,7 @@ level: "LVL2"
 kind: "standard"
 title: "Identifier scheme and mnemonic register"
 status: "adopted"
-revision: "1.3.3"
+revision: "1.4"
 adopted: "2026-10-09"
 adopted_by: "The Custodian"
 instantiates: ["GOV.37", "GOV.43", "GOV.40", "GOV.41", "REPRO.5"]
@@ -62,7 +62,7 @@ Each provision is one file, `STND/IDENT/<n>.md`, with the fields the drafting st
 
 ## Checks
 
-The harness reports the revision checks (family v) with `python -m govharness check` and `verify`. Each fails, because a revision record that disagrees with itself or with the ledger defeats its purpose. The checks read the table of revision classes, the revision history of each adopted document, and the ledger. Whether a change was given the class its content warrants is a judgment, and whether each redraft of a draft raised the minor segment by one is not readable from the files, because a draft keeps no revision history. A reader therefore checks the provisions on classing a change and on redrafting. The check v.8 compares the numbered provisions of each document with its field `withdrawn`: a gap in the numbering that the field does not list, or a listed identifier that names a provision, fails. The check v.9 compares the identifier of every item, and every identifier in its fields, with the form for its kind, and the slug of every Lexicon term with its term. The check v.10 reads the mnemonic register, confirms that the identifier of every item that is not retired uses only active mnemonics and registered grades, and lists for a reader each pair of siblings at a letter distance of 1 that are not established acronyms. The check v.11 confirms that every transaction with the scope MNEM is of type register and made by the custodians.
+The harness reports the revision checks (family v) with `python -m govharness check` and `verify`. Each fails, because a revision record that disagrees with itself or with the ledger defeats its purpose. The checks read the table of revision classes, the revision history of each adopted document, and the ledger. Whether a change was given the class its content warrants is a judgment, and whether each redraft of a draft raised the minor segment by one is not readable from the files, because a draft keeps no revision history. A reader therefore checks the provisions on classing a change and on redrafting. The check v.8 compares the numbered provisions of each document with its field `withdrawn`, and those of each part of the constitution with the field `withdrawn` of the constitution: a gap in the numbering that the field does not list, a listed identifier that names a provision or is not the document's own, or a cited identifier that names no provision and is not listed, fails. The check v.9 compares the identifier of every item, and every identifier in its fields, with the form for its kind, and the slug of every Lexicon term with its term. The check v.10 reads the mnemonic register, confirms that the identifier of every item that is not retired uses only active mnemonics and registered grades, and lists for a reader each pair of siblings at a letter distance of 1 that are not established acronyms. The check v.11 confirms that every transaction with the scope MNEM is of type register and made by the custodians.
 
 ## References
 
@@ -88,3 +88,4 @@ The harness reports the revision checks (family v) with `python -m govharness ch
 | 1.3.1 | 2026-10-10 | Editorial amendment (GOV.41): the section References lists the documents this standard cites, as STND.DRAFT.34 requires; no obligation changes. |
 | 1.3.2 | 2026-10-10 | Editorial amendment (GOV.41): the Checks section names the commands of the harness package instead of the retired scripts; no obligation changes. |
 | 1.3.3 | 2026-10-25 | Editorial amendment (GOV.41): the informative section Representation in the harness cites the mnemonic register MNEM, which STND.IDENT.19 and STND.IDENT.20 name, and References lists MNEM; no obligation, permission, or defined meaning changes. |
+| 1.4 | 2026-10-26 | Minor amendment (GOV.41): STND.IDENT.12 asks the label of its adopter only of a document that is adopted or ratified, so a draft or a planned document names none; new STND.IDENT.24: the constitution lists in its field withdrawn each withdrawn provision of the parts named in its field parts; the section Checks describes v.8 in full, with the field withdrawn of the constitution. Transition (GOV.42): none. |

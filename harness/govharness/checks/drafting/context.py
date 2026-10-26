@@ -33,7 +33,7 @@ from govharness.checks.lineage.derivation import lower_provisions
 from govharness.core.corpus import Corpus
 from govharness.core.entry import Entry
 from govharness.core.tables import parse_tables, section_text
-from govharness.core.text import prose_lines, split_sentences, unquoted
+from govharness.core.text import prose_lines, unquoted
 
 STANDARD_ID = "STND.DRAFT"
 ALL_GROUPS = {"self", "lower", "draft", "lvl0"}
@@ -56,8 +56,8 @@ NOT_IMPERATIVE_SECOND = frozenset(
     "of is are and or for in on to as with by at".split()
 )
 TableRow = tuple[list[str], str]
-# A whole sentence ends at terminal punctuation only; the sentences of a
-# unit also end at semicolons and colons (``core.text``).
+# A sentence ends at terminal punctuation only, so clauses joined by a
+# semicolon or a colon are one sentence (the term Sentence of STND.DRAFT).
 TERMINAL_RE = re.compile(r"(?<=[.!?])\s+(?=[A-Z(\"“])")
 
 
@@ -99,14 +99,11 @@ class Unit:
     level : str
         Level of the entry.
     sentences : list[str]
-        Sentences of its prose.
+        Sentences of its prose (the term Sentence of STND.DRAFT).
     mode : str | None
         ``binding`` or ``default`` for a provision below LVL0.
     body : str
         The Markdown body.
-    whole : list[str]
-        Sentences ended only by terminal punctuation, so that clauses
-        joined by a semicolon or a colon are one sentence.
     """
 
     subject: str
@@ -116,7 +113,6 @@ class Unit:
     sentences: list[str]
     mode: str | None = None
     body: str = ""
-    whole: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -323,15 +319,14 @@ def _unit(entry: Entry, group: str, kind: str, mode: str | None) -> Unit:
         group,
         kind,
         str(entry.meta.get("level")),
-        [s for text in texts for s in split_sentences(text)],
+        [
+            part.strip()
+            for text in texts
+            for part in TERMINAL_RE.split(text)
+            if part.strip()
+        ],
         mode,
         entry.body,
-        [
-            p.strip()
-            for text in texts
-            for p in TERMINAL_RE.split(text)
-            if p.strip()
-        ],
     )
 
 

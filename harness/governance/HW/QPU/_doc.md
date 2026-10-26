@@ -5,7 +5,7 @@ kind: "sub-profile"
 title: "Quantum processors"
 status: "adopted"
 adopted: "2026-10-18"
-revision: "1.0.1"
+revision: "1.0.2"
 selector: "Binds when a component of the work executes, or is admitted to execute, on a quantum processor (HW.QPU.1)."
 parent: "HW"
 adopted_by: "The Custodian"
@@ -64,7 +64,7 @@ The reference path of a quantum computation is usually a classical simulation, w
 
 HW.5 governs the classical numerical operations of a path on a quantum processor. For its quantum operations, the hardware contract states the native operations, their error rates, and the noise model on which the component relies (HW.4), and that noise is not a hardware fault (HW). The calibration record of each job serves as a record of those properties that the hardware gives for the run (HW.7).
 
-Submitting a job to a remote quantum processor is a remote write, and usually an expenditure, that needs a recorded authorization (PRIME.7, PRIME.8, GUARD.1); an access credential is used only as the provisioned environment allows and is never written where it persists (AGENT.45). Where the provider's service lies within the provisioned environment, a standing authorization with a cost limit (GUARD.11, GUARD.15) spares a referral per job; otherwise each submission transmits data beyond that environment and is authorized per action (GUARD.11). Under STND.HARN.18 and the transition of ledger entry 53, each remote write is referred unless an authorization in force names its destination and kind.
+Submitting a job to a remote quantum processor is a remote write, and usually an expenditure, that needs a recorded authorization (PRIME.7, PRIME.8, GUARD.1); an access credential is used only as the provisioned environment allows and is never written where it persists (AGENT.45). Where the provider's service lies within the provisioned environment, a standing authorization with a cost limit (GUARD.11, GUARD.15) spares a referral per job; otherwise each submission transmits data beyond that environment and is authorized per action (GUARD.11). A submission that no authorization in force covers is one that PRIME.7 and PRIME.14 have the agent halt and refer.
 
 Device noise often sets a floor below which more shots, mitigation, or recompilation do not lower the uncertainty of an estimate. HW.QPU.8 has such a result reported with the uncertainty it achieved and the shortfall from its required precision, and stops spending on more shots, mitigation, or recompilation once a recorded trend of the uncertainty against what was tried shows the floor; the result then does not meet its required precision, and says so (NUMER.5, PRIME.3), rather than being refined without end. That stop is a stopping criterion in the sense of NUMER.10. Where the path is an alternative execution path, the recorded trend is the kind of evidence, other than the comparison, on which a path-specific limit under HW.18 rests. A different algorithm, a shallower circuit, or another device remains open, as a new path or a new result.
 
@@ -89,7 +89,6 @@ Each provision other than the selector and the shared-matters provision instanti
 | RSRC | Resources |
 | STND.CLASS | Consequence-class criteria |
 | STND.DRAFT | Drafting standard |
-| STND.HARN | Harness specification |
 | STND.VVUQ | Verification, validation, and uncertainty quantification methods |
 | VV | Correctness |
 
@@ -99,3 +98,4 @@ Each provision other than the selector and the shared-matters provision instanti
 | --- | --- | --- |
 | 1.0 | 2026-10-18 | Adopted. |
 | 1.0.1 | 2026-10-25 | Editorial amendment (GOV.41): the informative Selector text cites HW.CPU.1 and HW.GPU.1, the selectors of the sub-profiles that a simulation of a quantum computation meets, and References lists HW.CPU and HW.GPU; the Notes name only the Articles that the provisions other than the selector and the shared-matters provision instantiate, so that the Design and Simplicity Articles, which none of them instantiates, are no longer named; no obligation, permission, or defined meaning changes. |
+| 1.0.2 | 2026-10-26 | Editorial amendment (GOV.41): the Notes state the referral of a submission that no authorization covers by PRIME.7 and PRIME.14, in place of the provision of STND.HARN on a derived configuration, which STND.HARN 1.4 withdraws; no obligation, permission, or defined meaning changes. |

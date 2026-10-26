@@ -19,7 +19,7 @@ from govharness.core.corpus import corpus_hash, read_tree, tree_digests
 from govharness.core.hashing import ledger_entry_hash
 from govharness.ledger.chain import append, read_ledger
 from govharness.ledger.gpg import SignerConfig
-from govharness.ledger.transactions import latest_pins
+from govharness.ledger.transactions import pins_in_force
 from govharness.workflows.amend import Change, record_transaction
 from tests.ledger.test_chain import ANNOTATION, renumber, rewrite
 from tests.ledger.test_signatures import append_unchecked
@@ -50,19 +50,24 @@ class LedgerCheck(unittest.TestCase):
 
     def test_ledger_pins(self) -> None:
         """Behavior: an edit outside the ledger, an altered entry, and a
-        scope that names no directory each fail; an unpinned edit does
-        not.
+        scope that names no directory each fail.
 
-        Reference: injected edits to TAG (pinned by no
-        transaction) and STND/CLASS (pinned by entry 36), an altered
+        Reference: injected edits to TAG (pinned alone by entry 184, in
+        the round of 2026-10-26; before it no transaction pinned TAG and
+        the edit passed) and STND/CLASS (pinned by entry 36), an altered
         reason in entry 5, and a misspelled scope in the last entry, then
         the scope ``..``, which leaves the root (passed by the flat code;
         fixed by review 0001).
         """
         with corpus_copy() as root:
             self.assertEqual(problems(root), [])
-            unpinned = root / "TAG" / "_doc.md"
-            unpinned.write_text(unpinned.read_text() + " ", "utf-8")
+            tag = root / "TAG" / "_doc.md"
+            text = tag.read_text()
+            tag.write_text(text + " ", "utf-8")
+            errors = problems(root)
+            self.assertEqual(len(errors), 1)
+            self.assertRegex(errors[0], r"since seq \d+: TAG$")
+            tag.write_text(text, "utf-8")
             self.assertEqual(problems(root), [])
             pinned = root / "STND" / "CLASS" / "1.md"
             pinned.write_text(pinned.read_text() + " ", "utf-8")
@@ -144,7 +149,7 @@ def pin(root: Path, scope: list[str]) -> dict[str, Any]:
 
 
 class Pins(unittest.TestCase):
-    """A pin holds until the next transaction of its scope (unit 0016)."""
+    """A pin holds until a later scope reaches each of its paths."""
 
     def assert_refused(self, root: Path, scope: list[str], seq: int) -> None:
         """Assert that recording a scope is refused, the tree unchanged.
@@ -176,38 +181,30 @@ class Pins(unittest.TestCase):
         self.assertEqual(tree_digests(root), before)
 
     def test_wider_scope_after_narrower(self) -> None:
-        """Behavior: a scope that covers an older pin of another scope
-        is refused before any write, naming that pin; the change is
-        recorded with the older scope, and the corpus verifies.
+        """Behavior: a scope that reaches each path of an older pin ends
+        it, and the corpus verifies; a narrower scope after it is then
+        refused before any write, naming the wider pin.
 
-        Reference: STND/DFLT edited, then recorded with STND/PY, then
-        under STND. QA.8 part B, M4: the append went in, and the older
-        pin of STND/DFLT alone went stale, as STND.HARN.9 reads.
+        Reference: STND/DFLT edited, then recorded with STND/DFLT and
+        STND/PY (STND.HARN.9 and the term Pin in force: the pins of
+        STND/DFLT and of STND/PY alone end); then STND/DFLT edited again
+        and recorded alone.
         """
         with corpus_copy() as root:
-            seq = max(
-                e["seq"]
-                for e in read_ledger(root)
-                if e.get("scope") == ["STND/DFLT"]
-            )
             edit(root, "STND/DFLT/1.md")
-            self.assert_refused(root, ["STND/DFLT", "STND/PY"], seq)
-            self.assert_refused(root, ["STND"], seq)
-            pin(root, ["STND/DFLT"])
+            wide = pin(root, ["STND/DFLT", "STND/PY"])
             self.assertEqual(problems(root), [])
+            edit(root, "STND/DFLT/1.md")
+            self.assert_refused(root, ["STND/DFLT"], wide["seq"])
 
     def test_narrower_scope_after_wider(self) -> None:
-        """Behavior: a scope that covers part of an older pin of another
-        scope is refused before any write, naming that pin.
+        """Behavior: a scope that covers part of a pin in force is
+        refused before any write, naming that pin; the change is then
+        recorded with a scope that reaches each of its paths.
 
         Reference: STND/DFLT and STND/PY pinned together by a line
-        chained by hand, as before this unit an append could write it;
-        STND/DFLT edited, then recorded alone, the converse case of M4.
-        Its record with the wider scope is refused too, since the pins
-        of STND/DFLT and STND/PY alone share its content: two scopes
-        over the same files leave no transaction that records a change
-        of them, which is why ``append`` refuses a scope that shares
-        content with another at all.
+        chained by hand; STND/DFLT edited, then recorded alone, the
+        converse case of unit 0016's M4, and then with both paths.
         """
         with corpus_copy() as root:
             scope = ["STND/DFLT", "STND/PY"]
@@ -223,21 +220,18 @@ class Pins(unittest.TestCase):
             self.assertEqual(problems(root), [])
             edit(root, "STND/DFLT/1.md")
             self.assert_refused(root, ["STND/DFLT"], wide)
-            narrow = max(
-                e["seq"]
-                for e in read_ledger(root)
-                if e.get("scope") == ["STND/DFLT"]
-            )
-            self.assert_refused(root, scope, narrow)
+            pin(root, scope)
+            self.assertEqual(problems(root), [])
 
     def test_scope_under_and_over_a_pin(self) -> None:
-        """Behavior: a scope strictly under a pin of another scope, and
-        one strictly over it, are each refused before any write, naming
-        that pin.
+        """Behavior: a scope strictly under a pin in force is refused
+        before any write, naming that pin; one strictly over a pin is
+        recorded and ends it.
 
         Reference: the live pin of HW and a new scope HW/CPU; then a
-        pin of HW/CPU chained by hand and a new scope HW. Review of unit
-        0016, M-B: testing one direction only let the other drop.
+        pin of HW/CPU chained by hand and a new scope HW, which reaches
+        both. Review of unit 0016, M-B: testing one direction only let
+        the other drop.
         """
         with corpus_copy() as root:
             seq = max(
@@ -253,15 +247,19 @@ class Pins(unittest.TestCase):
                     "corpus_hash": corpus_hash(root, ["HW/CPU"]),
                 },
             )
-            self.assert_refused(root, ["HW"], len(read_ledger(root)))
+            edit(root, "HW/CPU/1.md")
+            pin(root, ["HW"])
+            self.assertEqual(problems(root), [])
 
     def test_letter_of_the_content_pin(self) -> None:
-        """Behavior: the latest pin of each scope is compared, even
-        where a later transaction of another scope covers its files.
+        """Behavior: a pin that a later scope reaches whole is no longer
+        compared; one that a later file scope reaches only in part still
+        is, and fails once its content changes.
 
         Reference: STND/DFLT edited, then pinned with STND/PY by a line
-        chained by hand. STND.HARN.9 fails "the latest governance-ledger
-        transaction with that scope", here the pin of STND/DFLT alone.
+        chained by hand (no failure); then STND/DFLT/1.md edited and
+        pinned alone, a file scope (STND.HARN.7), which leaves the pin
+        of STND/DFLT and STND/PY in force and stale.
         """
         with corpus_copy() as root:
             edit(root, "STND/DFLT/1.md")
@@ -274,31 +272,70 @@ class Pins(unittest.TestCase):
                     "corpus_hash": corpus_hash(root, scope),
                 },
             )
+            self.assertEqual(problems(root), [])
+            edit(root, "STND/DFLT/1.md")
+            part = ["STND/DFLT/1.md"]
+            append_unchecked(
+                root,
+                {
+                    **ANNOTATION,
+                    "scope": part,
+                    "corpus_hash": corpus_hash(root, part),
+                },
+            )
             found = problems(root)
             self.assertEqual(len(found), 1)
             self.assertRegex(
                 found[0],
                 r"content changed outside the ledger since seq "
-                r"\d+: STND/DFLT$",
+                r"\d+: STND/DFLT, STND/PY$",
             )
 
-    def test_latest_pins(self) -> None:
-        """Behavior: the latest entry of each scope, the paths in any
-        order, is kept, in ledger order.
+    def test_file_scope_and_hash(self) -> None:
+        """Behavior: a Markdown file is a scope that a transaction
+        records; a file reached by two paths of one scope is hashed
+        once.
+
+        Reference: STND.HARN.7 and the term Content hash of STND.HARN;
+        README.md recorded by ``append``; the hash of
+        STND/HARN with and without STND/HARN/7.md beside it.
+        """
+        with corpus_copy() as root:
+            pin(root, ["README.md"])
+            self.assertEqual(problems(root), [])
+            self.assertEqual(
+                corpus_hash(root, ["STND/HARN", "STND/HARN/7.md"]),
+                corpus_hash(root, ["STND/HARN"]),
+            )
+
+    def test_pins_in_force(self) -> None:
+        """Behavior: a pin ends where a later scope reaches each of its
+        paths: the same scope in any order, or a wider one; a narrower
+        scope, or one that shares only some paths, leaves it in force.
 
         Reference: hand-built entries over STND, STND/DFLT, STND/PY,
-        and STND/CXX.
+        STND/CXX, and README.md, and the terms Pin in force and Reach of
+        STND.HARN.
         """
         entries = [
             {"seq": 1, "scope": ["STND/DFLT"]},
             {"seq": 2, "scope": ["STND/PY", "STND/CXX"]},
             {"seq": 3, "scope": []},
             {"seq": 4, "scope": ["STND/CXX", "STND/PY"]},
-            {"seq": 5, "scope": ["STND"]},
-            {"seq": 6, "scope": ["STND/DFLT"]},
+            {"seq": 5, "scope": ["STND/PY", "README.md"]},
+            {"seq": 6, "scope": ["README.md"]},
         ]
-        self.assertEqual([e["seq"] for e in latest_pins(entries)], [4, 5, 6])
-        self.assertEqual([e["seq"] for e in latest_pins(entries[:3])], [1, 2])
+        # 2 ends at 4; 4 stays, as 5 reaches STND/PY only; 5 stays, as
+        # 6 reaches README.md only.
+        self.assertEqual(
+            [e["seq"] for e in pins_in_force(entries)], [1, 4, 5, 6]
+        )
+        wider = [*entries, {"seq": 7, "scope": ["STND", "README.md"]}]
+        self.assertEqual([e["seq"] for e in pins_in_force(wider)], [7])
+        narrower = [{"seq": 0, "scope": ["STND"]}, *entries[:1]]
+        self.assertEqual(
+            [e["seq"] for e in pins_in_force(narrower)], [0, 1]
+        )
 
     def test_scope_without_corpus_hash(self) -> None:
         """Behavior: an entry with a scope and no ``corpus_hash`` is a

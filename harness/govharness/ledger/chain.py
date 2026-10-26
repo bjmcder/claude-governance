@@ -2,13 +2,13 @@
 
 This is the one module that reads or appends a ledger file (decision
 0001, DSGN.16). The ledger (``ledger.jsonl``) is append-only: each entry
-records the hash of the previous entry and its own hash over every
-other field. A transaction's ``scope`` names the directories whose
-content it pins; their combined hash is stored as ``corpus_hash``. With
-a signer, the signer's ``gpg`` key signs the entry digest before the
-entry is hashed; without one the ``signature`` field is empty. Another
-ledger, such as the ledger of a piece of work, carries its identifier
-in the field ``ledger``.
+records the hash of the previous entry and its own hash over every other
+field. A transaction's ``scope`` names the directories and Markdown
+files whose content it pins; their combined hash is stored as
+``corpus_hash``. With a signer, the signer's ``gpg`` key signs the entry
+digest before the entry is hashed; without one the ``signature`` field
+is empty. Another ledger, such as the ledger of a piece of work, carries
+its identifier in the field ``ledger``.
 
 An append first checks the whole existing chain (sequence numbers,
 ``prev`` links, and entry hashes) and refuses a broken one, so that a
@@ -17,13 +17,13 @@ writing, an entry that would itself fail ``verify`` for good, since an
 entry is never edited: an unsigned entry that the signer register
 requires to be signed, an unsigned register transaction, a register
 transaction that records a register with problems, a scope that shares
-content with the pin of another scope, and a line that does not read
-back as the entry. It writes one
-line, then flushes and syncs the file, so that a crash cannot leave the
-entry half written in the operating system's buffers. The protocol for
-concurrent appends (DSGN.15): each holds an exclusive ``flock`` on the
-ledger file from reading the chain to syncing its line, so two appends
-never take the same sequence number.
+content with a pin in force without reaching each of its paths, and a
+line that does not read back as the entry. It writes one line, then
+flushes and syncs the file, so that a crash cannot leave the entry half
+written in the operating system's buffers. The protocol for concurrent
+appends (DSGN.15): each holds an exclusive ``flock`` on the ledger file
+from reading the chain to syncing its line, so two appends never take
+the same sequence number.
 """
 
 from __future__ import annotations
@@ -51,9 +51,10 @@ from govharness.ledger.transactions import (
     chain_problems,
     covers,
     entry_digest,
-    latest_pins,
     ledger_of,
     parse_ledger,
+    pins_in_force,
+    reaches,
     scope_key,
 )
 
@@ -288,8 +289,8 @@ def _refusals(
         sign it; it records the register unsigned, which the anchor key
         must sign for the founding and a listed signer for every later
         change (STND.HARN.13); it records the register while the
-        register has problems; or its scope shares content with the
-        pin of another scope (``_shared_pins``).
+        register has problems; or its scope shares content with a pin
+        in force without reaching each of its paths (``_shared_pins``).
     """
     reasons: list[str] = []
     scope = [s for s in chained.get("scope") or [] if isinstance(s, str)]
@@ -322,15 +323,17 @@ def _refusals(
 def _shared_pins(
     history: list[Transaction], chained: Transaction
 ) -> list[str]:
-    """Return the pins of other scopes that share content with an entry's.
+    """Return the pins in force that an entry's scope would leave stale.
 
-    A pin holds until the next transaction of the same scope
-    (STND.HARN.9), so a transaction of another scope over the same
-    files leaves the older pin in force, and stale once that content
-    changes. Refusing only a change that stales one is not enough: two
-    scopes that share content, once both pinned, would make every later
-    change of it stale one of them, with no transaction left to record
-    it. So a scope may share content with no pin of another scope.
+    A later transaction ends a pin only where its scope reaches each
+    path of the pin's scope (STND.HARN.9, the term Pin in force), so a
+    scope that shares content with a pin in force and does not reach
+    each of its paths leaves that pin in force, stale once the shared
+    content changes. Refusing only a change that stales one is not
+    enough: two such scopes, once both pinned, would make every later
+    change of the shared content stale one of them. So an entry's scope
+    may share content with a pin in force only by reaching each of its
+    paths, which widens it or repeats it.
 
     Parameters
     ----------
@@ -342,20 +345,22 @@ def _shared_pins(
     Returns
     -------
     list[str]
-        A reason for each latest pin (``transactions.latest_pins``) of
-        another scope that names a path of the entry's scope, or a
-        directory above or below one.
+        A reason for each pin in force (``transactions.pins_in_force``)
+        that names a path of the entry's scope, or a directory above or
+        below one, and some path of which the entry's scope does not
+        reach.
     """
     scope = scope_key(chained)
     reasons: list[str] = []
-    for old in latest_pins(history):
+    for old in pins_in_force(history):
         paths = scope_key(old)
-        if paths != scope and any(
+        shares = any(
             covers(a, b) or covers(b, a) for a in paths for b in scope
-        ):
+        )
+        if shares and not all(reaches(scope, p) for p in paths):
             reasons.append(
                 f"entry {old.get('seq')} pins the scope {', '.join(paths)}, "
                 "which shares content with this one: record the change "
-                "with that scope"
+                "with a scope that reaches each of its paths"
             )
     return reasons

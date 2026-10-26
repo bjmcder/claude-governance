@@ -1,8 +1,8 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.DRAFT,standard,LVL2,Drafting standard,adopted,_doc.md,043ebbab3e90f0315e9d0f628a09140c0330c96418f0cf221161b12797d1dd77,10083
+STND.DRAFT,standard,LVL2,Drafting standard,adopted,_doc.md,5508957b1af8a2f05308cf58619d54ecf7fc42b136e1793644c18d6b1ffb8f7e,11545
 STND.DRAFT.1,provision,LVL2,Modal set,adopted,1.md,64d7bdde409caebd8294b7eba5425d3ece94eb240f6076fed5f08ff21a66713e,1023
 STND.DRAFT.2,provision,LVL2,Capital letters,adopted,2.md,1ed5fe279abd3d90aa8ce589ea5ccc79d9ce0129cf5887c4623f4f83390d1698,571
-STND.DRAFT.3,provision,LVL2,Mentioned words,adopted,3.md,f5635332068aa4ff522a47fcff336b38540da1243a4ff664c49be9a274d0d6ef,644
+STND.DRAFT.3,provision,LVL2,Mentioned words,adopted,3.md,8cdc0f28dadd0c0b3132ab9dd8224eaa05eb1158b928c6621217371bc681d76c,711
 STND.DRAFT.4,provision,LVL2,Explicit modal,adopted,4.md,74e3220240ffd2717d3d75d7b33d9c2f6a5eba4c67eeaee93271a0a5c2449c74,669
 STND.DRAFT.5,provision,LVL2,Unmodalized sentences,adopted,5.md,6f9eae62f2ae150b9456df3f22d8cd2f38e832cfbcd23ec7e3525753f2f9d1d4,678
 STND.DRAFT.6,provision,LVL2,Normative extent,adopted,6.md,0ef31872f32c2aa6ed5f256ff65c850e8a4fbf0ceda69b6b85af4f9607e0a5e5,734
@@ -21,7 +21,7 @@ STND.DRAFT.18,provision,LVL2,Numeric limits,adopted,18.md,812ea9f7212813c14698e3
 STND.DRAFT.19,provision,LVL2,Instantiated provisions,adopted,19.md,2c7096b7cb57a518b4669903d740f6e0237fa61f083d97a476be1d775683dd89,413
 STND.DRAFT.20,provision,LVL2,Citation form,adopted,20.md,4aa2ad1898c600ce5126038bd9f0faa8db34e557f8d64579fc973a20382090cb,404
 STND.DRAFT.21,provision,LVL2,Citation by position,adopted,21.md,cf18afaf031581497b59d14462b8f7b0ad7bf4fde39f0e4b2f98fcde0e551e74,352
-STND.DRAFT.22,provision,LVL2,Resolvable citations,adopted,22.md,dbe17a22b55120b38a7b259a44805e6151fb40fdba57dd2dffbd72f7969d5ddf,364
+STND.DRAFT.22,provision,LVL2,Resolvable citations,adopted,22.md,7c2d93229f081d0a5c984fd38880ead83ff131da70f5970a496e8c01772554c0,371
 STND.DRAFT.23,provision,LVL2,Citation fit,adopted,23.md,8f371d1b23d58e82e0b50459cb7940aac936d85ecf0223cd66b1313490217702,410
 STND.DRAFT.24,provision,LVL2,Listed identifiers,adopted,24.md,eb12042e0396901fb3a14aa7dbd6cf72b05a76f2b3e8bcb777842b6a7a85cb98,420
 STND.DRAFT.25,provision,LVL2,Binding reason,adopted,25.md,331cbca80637d30d3ebb15dfdb447c84bc7395c7a8b7f889b18001541c62a2c5,609
