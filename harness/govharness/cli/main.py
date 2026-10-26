@@ -22,8 +22,6 @@ Commands::
                                           the signer register SIGNR
     compose ROOT (--check | --write)      reading copies in ROOT/../rendered
     rehearse ROOT SCRIPT                  run an amendment on a copy
-    environment ROOT --work PATH (--write OUT | --check)
-                                          an agent's environment (STND.HARN)
 """
 
 from __future__ import annotations
@@ -39,7 +37,6 @@ from govharness.cli.derived import (
     run_manifests,
     run_references,
 )
-from govharness.cli.environment import add_environment
 from govharness.cli.query import add_query
 from govharness.cli.records import run_append, run_rehearse, run_sign
 from govharness.cli.reports import run_check, run_verify
@@ -226,7 +223,6 @@ def build_parser() -> argparse.ArgumentParser:
     _add_ledger(sub)
     _add_sign(sub)
     _add_rehearse(sub)
-    add_environment(sub)
     return parser
 
 

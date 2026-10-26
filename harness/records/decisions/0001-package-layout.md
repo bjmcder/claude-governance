@@ -2,6 +2,8 @@
 
 Status: accepted for unit 0001 (REPRO.7). Author: Claude, agent.
 
+Since unit 0018 the package has no `govharness.hooks` and no `derive/environment/`; the rows below that name them are history.
+
 ## Context
 
 Twenty-three flat scripts import one another freely. The corpus model sits in `govlib.py` and also in `logic_facts.py`. The drafting checks import a command-line script (`references.py`). `verify.py` and `check_logic.py` each report results in their own format. A mistaken tools path once let a rehearsal append to the live ledger. That error is recorded as ledger entries 30 and 31.
