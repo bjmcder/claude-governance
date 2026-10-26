@@ -152,6 +152,32 @@ class AmendmentPrimitives(unittest.TestCase):
                 record_transaction(root, change)
             self.assertEqual(text_of(root, "ledger.jsonl"), ledger)
 
+    def test_record_takes_a_file_scope(self) -> None:
+        """Behavior: a Markdown file is a scope that ``record_transaction``
+        records; a missing file, and a file that is not Markdown, are
+        refused before anything is written.
+
+        Reference: STND.HARN.7 as amended in the round of 2026-10-26
+        ("corpus directories and ".md" files"); README.md, then
+        README.mdx and STND/DFLT/MANIFEST.csv.
+        """
+        with corpus_copy() as root:
+            count = len(read_ledger(root))
+            pin = {**EDITORIAL.__dict__, "kind": "annotate", "targets": []}
+            change = Change(**{**pin, "scope": ["README.md"]})
+            recorded = record_transaction(root, change)
+            self.assertEqual(recorded.entry["scope"], ["README.md"])
+            self.assertEqual(len(read_ledger(root)), count + 1)
+            ledger = text_of(root, "ledger.jsonl")
+            for scope in ("README.mdx", "STND/DFLT/MANIFEST.csv"):
+                with self.subTest(scope):
+                    change = Change(**{**pin, "scope": [scope]})
+                    with self.assertRaisesRegex(
+                        ValueError, "no directory or Markdown file"
+                    ):
+                        record_transaction(root, change)
+                    self.assertEqual(text_of(root, "ledger.jsonl"), ledger)
+
 
 class RecordRefusals(unittest.TestCase):
     """``record_transaction`` writes nothing it then refuses (unit 0016)."""

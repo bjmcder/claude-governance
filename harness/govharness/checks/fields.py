@@ -122,7 +122,7 @@ def statuses_agree(ctx: CheckContext) -> Verdict:
     return failing(status_problems(ctx.corpus.entries))
 
 
-def check_keys_known(ctx: CheckContext) -> Verdict:
+def check_keys_known(ctx: CheckContext) -> Verdict | None:
     """Check checked-by: every ``checked_by`` key names a check.
 
     A key that names no registered check claims a check that the
@@ -135,9 +135,12 @@ def check_keys_known(ctx: CheckContext) -> Verdict:
 
     Returns
     -------
-    Verdict
-        FAIL with one line per entry and unknown key.
+    Verdict | None
+        FAIL with one line per entry and unknown key; ``None`` where the
+        context holds no registered keys, as outside ``run_checks``.
     """
+    if not ctx.known_keys:
+        return None
     known = ctx.known_keys | {"review"}
     return failing(
         [

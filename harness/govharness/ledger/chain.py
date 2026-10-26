@@ -2,13 +2,13 @@
 
 This is the one module that reads or appends a ledger file (decision
 0001, DSGN.16). The ledger (``ledger.jsonl``) is append-only: each entry
-records the hash of the previous entry and its own hash over every
-other field. A transaction's ``scope`` names the directories and
-Markdown files whose content it pins; their combined hash is stored as ``corpus_hash``. With
-a signer, the signer's ``gpg`` key signs the entry digest before the
-entry is hashed; without one the ``signature`` field is empty. Another
-ledger, such as the ledger of a piece of work, carries its identifier
-in the field ``ledger``.
+records the hash of the previous entry and its own hash over every other
+field. A transaction's ``scope`` names the directories and Markdown
+files whose content it pins; their combined hash is stored as
+``corpus_hash``. With a signer, the signer's ``gpg`` key signs the entry
+digest before the entry is hashed; without one the ``signature`` field
+is empty. Another ledger, such as the ledger of a piece of work, carries
+its identifier in the field ``ledger``.
 
 An append first checks the whole existing chain (sequence numbers,
 ``prev`` links, and entry hashes) and refuses a broken one, so that a
