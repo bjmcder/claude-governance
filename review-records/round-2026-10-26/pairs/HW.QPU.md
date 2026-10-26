@@ -1,0 +1,938 @@
+# Pairs for review before a change of HW.QPU (STND.HARN.28)
+
+932 pair(s).
+
+| # | Changed side | Other provision | Bases |
+| --- | --- | --- | --- |
+| 1 | HW.QPU.3 | HDES.3 | REPRO.1, REPRO.2 |
+| 2 | HW.QPU.3 | HDES.7 | REPRO.2 |
+| 3 | HW.QPU.3 | HDES.ASIC.12 | REPRO.1 |
+| 4 | HW.QPU.3 | HDES.FPGA.4 | REPRO.1 |
+| 5 | HW.QPU.3 | HW.3 | REPRO.1, REPRO.2 |
+| 6 | HW.QPU.3 | HW.5 | REPRO.2 |
+| 7 | HW.QPU.3 | HW.7 | REPRO.2 |
+| 8 | HW.QPU.3 | HW.ASIC.3 | REPRO.1, REPRO.2 |
+| 9 | HW.QPU.3 | HW.CPU.3 | REPRO.2 |
+| 10 | HW.QPU.3 | HW.EMBED.5 | REPRO.1 |
+| 11 | HW.QPU.3 | HW.FPGA.3 | REPRO.1, REPRO.2 |
+| 12 | HW.QPU.3 | MEAS.4 | REPRO.1 |
+| 13 | HW.QPU.3 | ML.3 | REPRO.1 |
+| 14 | HW.QPU.3 | NUMER.5 | REPRO.2 |
+| 15 | HW.QPU.3 | STND.ANNEX.1 | REPRO.2 |
+| 16 | HW.QPU.3 | STND.ANNEX.10 | REPRO.2 |
+| 17 | HW.QPU.3 | STND.ANNEX.2 | REPRO.2 |
+| 18 | HW.QPU.3 | STND.ANNEX.5 | REPRO.2 |
+| 19 | HW.QPU.3 | STND.ANNEX.6 | REPRO.2 |
+| 20 | HW.QPU.3 | STND.ANNEX.7 | REPRO.2 |
+| 21 | HW.QPU.3 | STND.ANNEX.8 | REPRO.2 |
+| 22 | HW.QPU.3 | STND.ANNEX.9 | REPRO.2 |
+| 23 | HW.QPU.3 | STND.BUILD.1 | REPRO.1 |
+| 24 | HW.QPU.3 | STND.BUILD.11 | REPRO.2 |
+| 25 | HW.QPU.3 | STND.BUILD.14 | REPRO.1 |
+| 26 | HW.QPU.3 | STND.BUILD.16 | REPRO.2 |
+| 27 | HW.QPU.3 | STND.BUILD.17 | REPRO.2 |
+| 28 | HW.QPU.3 | STND.BUILD.2 | REPRO.1 |
+| 29 | HW.QPU.3 | STND.BUILD.20 | REPRO.1 |
+| 30 | HW.QPU.3 | STND.BUILD.23 | REPRO.1 |
+| 31 | HW.QPU.3 | STND.BUILD.25 | REPRO.1, REPRO.2 |
+| 32 | HW.QPU.3 | STND.BUILD.4 | REPRO.1 |
+| 33 | HW.QPU.3 | STND.BUILD.6 | REPRO.1 |
+| 34 | HW.QPU.3 | STND.BUILD.7 | REPRO.1 |
+| 35 | HW.QPU.3 | STND.BUILD.8 | REPRO.2 |
+| 36 | HW.QPU.3 | STND.CODE.9 | REPRO.1 |
+| 37 | HW.QPU.3 | STND.CXX.10 | REPRO.2 |
+| 38 | HW.QPU.3 | STND.CXX.4 | REPRO.2 |
+| 39 | HW.QPU.3 | STND.CXX.9 | REPRO.2 |
+| 40 | HW.QPU.3 | STND.DEPS.8 | REPRO.1, REPRO.2 |
+| 41 | HW.QPU.3 | STND.FTN.1 | REPRO.2 |
+| 42 | HW.QPU.3 | STND.FTN.13 | REPRO.2 |
+| 43 | HW.QPU.3 | STND.FTN.2 | REPRO.2 |
+| 44 | HW.QPU.3 | STND.FTN.21 | REPRO.2 |
+| 45 | HW.QPU.3 | STND.JL.1 | REPRO.2 |
+| 46 | HW.QPU.3 | STND.JL.19 | REPRO.2 |
+| 47 | HW.QPU.3 | STND.JL.23 | REPRO.1 |
+| 48 | HW.QPU.3 | STND.JL.4 | REPRO.1 |
+| 49 | HW.QPU.3 | STND.JL.5 | REPRO.2 |
+| 50 | HW.QPU.3 | STND.LEAN.1 | REPRO.1, REPRO.2 |
+| 51 | HW.QPU.3 | STND.LEAN.21 | REPRO.1 |
+| 52 | HW.QPU.3 | STND.MPI.2 | REPRO.2 |
+| 53 | HW.QPU.3 | STND.OFFLD.24 | REPRO.2 |
+| 54 | HW.QPU.3 | STND.OFFLD.25 | REPRO.2 |
+| 55 | HW.QPU.3 | STND.OMP.3 | REPRO.2 |
+| 56 | HW.QPU.3 | STND.PERF.13 | REPRO.2 |
+| 57 | HW.QPU.3 | STND.PERF.22 | REPRO.1 |
+| 58 | HW.QPU.3 | STND.PERF.26 | REPRO.2 |
+| 59 | HW.QPU.3 | STND.PY.16 | REPRO.1 |
+| 60 | HW.QPU.3 | STND.PY.33 | REPRO.1 |
+| 61 | HW.QPU.3 | STND.RUST.2 | REPRO.2 |
+| 62 | HW.QPU.3 | STND.RUST.30 | REPRO.1 |
+| 63 | HW.QPU.3 | STND.STDC.1 | REPRO.2 |
+| 64 | HW.QPU.3 | STND.SV.1 | REPRO.2 |
+| 65 | HW.QPU.3 | STND.SV.2 | REPRO.2 |
+| 66 | HW.QPU.3 | STND.SV.23 | REPRO.1 |
+| 67 | HW.QPU.3 | STND.SV.3 | REPRO.2 |
+| 68 | HW.QPU.3 | STND.TEST.11 | REPRO.1 |
+| 69 | HW.QPU.3 | STND.TEST.16 | REPRO.1 |
+| 70 | HW.QPU.3 | STND.TEST.8 | REPRO.1 |
+| 71 | HW.QPU.3 | STND.TEST.9 | REPRO.1 |
+| 72 | HW.QPU.3 | STND.VVUQ.38 | REPRO.2 |
+| 73 | HW.QPU.3 | STND.VVUQ.9 | REPRO.2 |
+| 74 | HW.QPU.3 | STND.WFLOW.24 | REPRO.1 |
+| 75 | HW.QPU.3 | STND.WFLOW.36 | REPRO.1 |
+| 76 | HW.QPU.3 | STND.WFLOW.6 | REPRO.1 |
+| 77 | HW.QPU.3 | STND.WPROC.15 | REPRO.1 |
+| 78 | HW.QPU.4 | HDES.6 | VV.5 |
+| 79 | HW.QPU.4 | HDES.8 | VV.5 |
+| 80 | HW.QPU.4 | HDES.ASIC.11 | VV.5 |
+| 81 | HW.QPU.4 | HDES.ASIC.12 | VV.5 |
+| 82 | HW.QPU.4 | HDES.ASIC.3 | VV.5 |
+| 83 | HW.QPU.4 | HDES.ASIC.5 | VV.5, matter: uncertainty of a computed result |
+| 84 | HW.QPU.4 | HW.20 | INTPR.9 |
+| 85 | HW.QPU.4 | HW.9 | INTPR.9 |
+| 86 | HW.QPU.4 | HW.EMBED.6 | INTPR.9 |
+| 87 | HW.QPU.4 | MEAS.6 | INTPR.9 |
+| 88 | HW.QPU.4 | ML.4 | VV.5 |
+| 89 | HW.QPU.4 | ML.5 | INTPR.9, matter: uncertainty of a computed result |
+| 90 | HW.QPU.4 | NUMER.10 | INTPR.9 |
+| 91 | HW.QPU.4 | NUMER.12 | matter: uncertainty of a computed result |
+| 92 | HW.QPU.4 | NUMER.13 | INTPR.9, VV.5, matter: uncertainty of a computed result |
+| 93 | HW.QPU.4 | NUMER.14 | INTPR.9, matter: uncertainty of a computed result |
+| 94 | HW.QPU.4 | NUMER.15 | INTPR.9, matter: uncertainty of a computed result |
+| 95 | HW.QPU.4 | NUMER.18 | INTPR.9 |
+| 96 | HW.QPU.4 | NUMER.20 | INTPR.9, matter: uncertainty of a computed result |
+| 97 | HW.QPU.4 | NUMER.21 | INTPR.9, VV.5 |
+| 98 | HW.QPU.4 | NUMER.22 | INTPR.9, matter: uncertainty of a computed result |
+| 99 | HW.QPU.4 | NUMER.23 | INTPR.9, matter: uncertainty of a computed result |
+| 100 | HW.QPU.4 | NUMER.29 | INTPR.9 |
+| 101 | HW.QPU.4 | NUMER.7 | VV.5 |
+| 102 | HW.QPU.4 | NUMER.8 | INTPR.9 |
+| 103 | HW.QPU.4 | NUMER.9 | INTPR.9, matter: uncertainty of a computed result |
+| 104 | HW.QPU.4 | STND.LEAN.4 | VV.5 |
+| 105 | HW.QPU.4 | STND.MPI.22 | INTPR.9 |
+| 106 | HW.QPU.4 | STND.OFFLD.2 | INTPR.9 |
+| 107 | HW.QPU.4 | STND.PERF.11 | INTPR.9 |
+| 108 | HW.QPU.4 | STND.PERF.14 | INTPR.9 |
+| 109 | HW.QPU.4 | STND.PERF.15 | INTPR.9 |
+| 110 | HW.QPU.4 | STND.PERF.17 | INTPR.9 |
+| 111 | HW.QPU.4 | STND.PERF.19 | INTPR.9 |
+| 112 | HW.QPU.4 | STND.PERF.4 | INTPR.9 |
+| 113 | HW.QPU.4 | STND.PERF.6 | INTPR.9 |
+| 114 | HW.QPU.4 | STND.PERF.8 | INTPR.9 |
+| 115 | HW.QPU.4 | STND.PERF.9 | INTPR.9 |
+| 116 | HW.QPU.4 | STND.SV.18 | VV.5 |
+| 117 | HW.QPU.4 | STND.SV.20 | VV.5 |
+| 118 | HW.QPU.4 | STND.SV.21 | VV.5 |
+| 119 | HW.QPU.4 | STND.TEST.12 | VV.5 |
+| 120 | HW.QPU.4 | STND.TEST.17 | INTPR.9 |
+| 121 | HW.QPU.4 | STND.TEST.9 | VV.5 |
+| 122 | HW.QPU.4 | STND.VVUQ.10 | INTPR.9, VV.5 |
+| 123 | HW.QPU.4 | STND.VVUQ.11 | INTPR.9, VV.5 |
+| 124 | HW.QPU.4 | STND.VVUQ.12 | INTPR.9, VV.5 |
+| 125 | HW.QPU.4 | STND.VVUQ.15 | INTPR.9 |
+| 126 | HW.QPU.4 | STND.VVUQ.16 | INTPR.9, VV.5 |
+| 127 | HW.QPU.4 | STND.VVUQ.20 | VV.5 |
+| 128 | HW.QPU.4 | STND.VVUQ.21 | VV.5 |
+| 129 | HW.QPU.4 | STND.VVUQ.22 | INTPR.9, VV.5 |
+| 130 | HW.QPU.4 | STND.VVUQ.23 | VV.5 |
+| 131 | HW.QPU.4 | STND.VVUQ.24 | INTPR.9, VV.5 |
+| 132 | HW.QPU.4 | STND.VVUQ.25 | INTPR.9 |
+| 133 | HW.QPU.4 | STND.VVUQ.26 | INTPR.9 |
+| 134 | HW.QPU.4 | STND.VVUQ.27 | INTPR.9 |
+| 135 | HW.QPU.4 | STND.VVUQ.28 | INTPR.9, VV.5 |
+| 136 | HW.QPU.4 | STND.VVUQ.29 | INTPR.9 |
+| 137 | HW.QPU.4 | STND.VVUQ.30 | INTPR.9 |
+| 138 | HW.QPU.4 | STND.VVUQ.31 | INTPR.9 |
+| 139 | HW.QPU.4 | STND.VVUQ.32 | INTPR.9 |
+| 140 | HW.QPU.4 | STND.VVUQ.39 | INTPR.9, VV.5 |
+| 141 | HW.QPU.4 | STND.VVUQ.40 | INTPR.9, VV.5 |
+| 142 | HW.QPU.4 | STND.VVUQ.41 | INTPR.9, VV.5 |
+| 143 | HW.QPU.4 | STND.VVUQ.42 | INTPR.9, VV.5 |
+| 144 | HW.QPU.4 | STND.VVUQ.43 | INTPR.9, VV.5 |
+| 145 | HW.QPU.4 | STND.VVUQ.44 | INTPR.9, VV.5 |
+| 146 | HW.QPU.4 | STND.VVUQ.45 | INTPR.9, VV.5 |
+| 147 | HW.QPU.4 | STND.VVUQ.46 | INTPR.9, VV.5 |
+| 148 | HW.QPU.4 | STND.VVUQ.47 | INTPR.9, VV.5 |
+| 149 | HW.QPU.4 | STND.VVUQ.48 | INTPR.9, VV.5 |
+| 150 | HW.QPU.4 | STND.VVUQ.49 | INTPR.9 |
+| 151 | HW.QPU.4 | STND.VVUQ.54 | INTPR.9 |
+| 152 | HW.QPU.4 | STND.VVUQ.55 | INTPR.9, VV.5 |
+| 153 | HW.QPU.4 | STND.VVUQ.56 | INTPR.9, VV.5 |
+| 154 | HW.QPU.4 | STND.VVUQ.57 | INTPR.9 |
+| 155 | HW.QPU.4 | STND.VVUQ.58 | INTPR.9 |
+| 156 | HW.QPU.4 | STND.VVUQ.59 | INTPR.9 |
+| 157 | HW.QPU.4 | STND.VVUQ.6 | INTPR.9, VV.5 |
+| 158 | HW.QPU.4 | STND.VVUQ.60 | INTPR.9 |
+| 159 | HW.QPU.4 | STND.VVUQ.61 | INTPR.9 |
+| 160 | HW.QPU.4 | STND.VVUQ.68 | INTPR.9 |
+| 161 | HW.QPU.4 | STND.VVUQ.7 | VV.5 |
+| 162 | HW.QPU.4 | STND.VVUQ.72 | INTPR.9 |
+| 163 | HW.QPU.4 | STND.VVUQ.73 | INTPR.9 |
+| 164 | HW.QPU.4 | STND.VVUQ.76 | INTPR.9, VV.5 |
+| 165 | HW.QPU.4 | STND.VVUQ.9 | INTPR.9, VV.5 |
+| 166 | HW.QPU.4 | STND.WFLOW.13 | INTPR.9 |
+| 167 | HW.QPU.4 | STND.WFLOW.29 | INTPR.9 |
+| 168 | HW.QPU.4 | STND.WFLOW.35 | INTPR.9 |
+| 169 | HW.QPU.5 | AGENT.12 | VV.1 |
+| 170 | HW.QPU.5 | AGENT.41 | INTPR.10 |
+| 171 | HW.QPU.5 | CPS.4 | VV.1 |
+| 172 | HW.QPU.5 | CPS.6 | VV.1 |
+| 173 | HW.QPU.5 | CPS.8 | VV.1 |
+| 174 | HW.QPU.5 | HDES.10 | INTPR.10, VV.1 |
+| 175 | HW.QPU.5 | HDES.11 | VV.1 |
+| 176 | HW.QPU.5 | HDES.12 | VV.1 |
+| 177 | HW.QPU.5 | HDES.15 | VV.1 |
+| 178 | HW.QPU.5 | HDES.5 | INTPR.10 |
+| 179 | HW.QPU.5 | HDES.6 | INTPR.10, VV.1, VV.5 |
+| 180 | HW.QPU.5 | HDES.7 | VV.1 |
+| 181 | HW.QPU.5 | HDES.8 | INTPR.10, VV.1, VV.5 |
+| 182 | HW.QPU.5 | HDES.9 | INTPR.10, VV.1 |
+| 183 | HW.QPU.5 | HDES.ASIC.10 | VV.1 |
+| 184 | HW.QPU.5 | HDES.ASIC.11 | INTPR.10, VV.1, VV.5 |
+| 185 | HW.QPU.5 | HDES.ASIC.12 | INTPR.10, VV.1, VV.5 |
+| 186 | HW.QPU.5 | HDES.ASIC.3 | INTPR.10, VV.1, VV.5 |
+| 187 | HW.QPU.5 | HDES.ASIC.4 | VV.1 |
+| 188 | HW.QPU.5 | HDES.ASIC.5 | INTPR.10, VV.1, VV.5 |
+| 189 | HW.QPU.5 | HDES.ASIC.6 | VV.1 |
+| 190 | HW.QPU.5 | HDES.ASIC.7 | VV.1 |
+| 191 | HW.QPU.5 | HDES.ASIC.8 | VV.1 |
+| 192 | HW.QPU.5 | HDES.ASIC.9 | VV.1 |
+| 193 | HW.QPU.5 | HDES.FPGA.3 | VV.1 |
+| 194 | HW.QPU.5 | HDES.FPGA.5 | VV.1 |
+| 195 | HW.QPU.5 | HW.10 | INTPR.10, VV.1 |
+| 196 | HW.QPU.5 | HW.15 | VV.1 |
+| 197 | HW.QPU.5 | HW.16 | VV.1 |
+| 198 | HW.QPU.5 | HW.17 | INTPR.10, VV.1 |
+| 199 | HW.QPU.5 | HW.18 | INTPR.10 |
+| 200 | HW.QPU.5 | HW.20 | VV.1 |
+| 201 | HW.QPU.5 | HW.6 | VV.1 |
+| 202 | HW.QPU.5 | HW.7 | INTPR.10 |
+| 203 | HW.QPU.5 | HW.ASIC.4 | INTPR.10, VV.1 |
+| 204 | HW.QPU.5 | HW.CPU.3 | INTPR.10 |
+| 205 | HW.QPU.5 | HW.EMBED.3 | VV.1 |
+| 206 | HW.QPU.5 | HW.EMBED.4 | VV.1 |
+| 207 | HW.QPU.5 | HW.EMBED.6 | INTPR.10 |
+| 208 | HW.QPU.5 | HW.FPGA.4 | INTPR.10, VV.1 |
+| 209 | HW.QPU.5 | MEAS.5 | INTPR.10 |
+| 210 | HW.QPU.5 | MEAS.6 | INTPR.10 |
+| 211 | HW.QPU.5 | ML.4 | VV.1, VV.5 |
+| 212 | HW.QPU.5 | ML.5 | INTPR.10, VV.1 |
+| 213 | HW.QPU.5 | ML.6 | INTPR.10 |
+| 214 | HW.QPU.5 | NUMER.11 | VV.1 |
+| 215 | HW.QPU.5 | NUMER.12 | INTPR.10, VV.1 |
+| 216 | HW.QPU.5 | NUMER.13 | VV.1, VV.5 |
+| 217 | HW.QPU.5 | NUMER.14 | VV.1 |
+| 218 | HW.QPU.5 | NUMER.16 | INTPR.10 |
+| 219 | HW.QPU.5 | NUMER.17 | VV.1 |
+| 220 | HW.QPU.5 | NUMER.18 | INTPR.10 |
+| 221 | HW.QPU.5 | NUMER.19 | VV.1 |
+| 222 | HW.QPU.5 | NUMER.20 | INTPR.10 |
+| 223 | HW.QPU.5 | NUMER.21 | VV.5 |
+| 224 | HW.QPU.5 | NUMER.22 | VV.1 |
+| 225 | HW.QPU.5 | NUMER.23 | VV.1 |
+| 226 | HW.QPU.5 | NUMER.24 | VV.1 |
+| 227 | HW.QPU.5 | NUMER.25 | VV.1 |
+| 228 | HW.QPU.5 | NUMER.28 | VV.1 |
+| 229 | HW.QPU.5 | NUMER.29 | VV.1 |
+| 230 | HW.QPU.5 | NUMER.5 | VV.1 |
+| 231 | HW.QPU.5 | NUMER.6 | VV.1 |
+| 232 | HW.QPU.5 | NUMER.7 | VV.1, VV.5 |
+| 233 | HW.QPU.5 | NUMER.8 | VV.1 |
+| 234 | HW.QPU.5 | NUMER.9 | VV.1 |
+| 235 | HW.QPU.5 | STND.ANNEX.10 | VV.1 |
+| 236 | HW.QPU.5 | STND.ANNEX.2 | VV.1 |
+| 237 | HW.QPU.5 | STND.ANNEX.4 | VV.1 |
+| 238 | HW.QPU.5 | STND.ANNEX.9 | VV.1 |
+| 239 | HW.QPU.5 | STND.BUILD.13 | INTPR.10, VV.1 |
+| 240 | HW.QPU.5 | STND.BUILD.26 | INTPR.10 |
+| 241 | HW.QPU.5 | STND.CLASS.10 | INTPR.10, VV.1 |
+| 242 | HW.QPU.5 | STND.CODE.19 | VV.1 |
+| 243 | HW.QPU.5 | STND.CONC.24 | VV.1 |
+| 244 | HW.QPU.5 | STND.CONC.26 | VV.1 |
+| 245 | HW.QPU.5 | STND.CONC.27 | INTPR.10, VV.1 |
+| 246 | HW.QPU.5 | STND.CONC.28 | VV.1 |
+| 247 | HW.QPU.5 | STND.CXX.13 | VV.1 |
+| 248 | HW.QPU.5 | STND.FTN.28 | VV.1 |
+| 249 | HW.QPU.5 | STND.LEAN.10 | VV.1 |
+| 250 | HW.QPU.5 | STND.LEAN.13 | VV.1 |
+| 251 | HW.QPU.5 | STND.LEAN.14 | VV.1 |
+| 252 | HW.QPU.5 | STND.LEAN.15 | VV.1 |
+| 253 | HW.QPU.5 | STND.LEAN.16 | VV.1 |
+| 254 | HW.QPU.5 | STND.LEAN.17 | INTPR.10, VV.1 |
+| 255 | HW.QPU.5 | STND.LEAN.18 | VV.1 |
+| 256 | HW.QPU.5 | STND.LEAN.19 | VV.1 |
+| 257 | HW.QPU.5 | STND.LEAN.20 | INTPR.10, VV.1 |
+| 258 | HW.QPU.5 | STND.LEAN.21 | VV.1 |
+| 259 | HW.QPU.5 | STND.LEAN.22 | VV.1 |
+| 260 | HW.QPU.5 | STND.LEAN.23 | INTPR.10, VV.1 |
+| 261 | HW.QPU.5 | STND.LEAN.4 | INTPR.10, VV.1, VV.5 |
+| 262 | HW.QPU.5 | STND.LEAN.6 | VV.1 |
+| 263 | HW.QPU.5 | STND.LEAN.7 | VV.1 |
+| 264 | HW.QPU.5 | STND.LEAN.8 | VV.1 |
+| 265 | HW.QPU.5 | STND.MPI.24 | VV.1 |
+| 266 | HW.QPU.5 | STND.OFFLD.12 | VV.1 |
+| 267 | HW.QPU.5 | STND.OFFLD.26 | VV.1 |
+| 268 | HW.QPU.5 | STND.OFFLD.27 | VV.1 |
+| 269 | HW.QPU.5 | STND.OFFLD.28 | VV.1 |
+| 270 | HW.QPU.5 | STND.OFFLD.29 | VV.1 |
+| 271 | HW.QPU.5 | STND.OFFLD.3 | VV.1 |
+| 272 | HW.QPU.5 | STND.OMP.16 | VV.1 |
+| 273 | HW.QPU.5 | STND.OMP.2 | VV.1 |
+| 274 | HW.QPU.5 | STND.OMP.23 | VV.1 |
+| 275 | HW.QPU.5 | STND.OMP.31 | VV.1 |
+| 276 | HW.QPU.5 | STND.OMP.33 | VV.1 |
+| 277 | HW.QPU.5 | STND.OMP.4 | VV.1 |
+| 278 | HW.QPU.5 | STND.PERF.11 | VV.1 |
+| 279 | HW.QPU.5 | STND.PERF.13 | VV.1 |
+| 280 | HW.QPU.5 | STND.PERF.16 | VV.1 |
+| 281 | HW.QPU.5 | STND.PERF.7 | INTPR.10 |
+| 282 | HW.QPU.5 | STND.RUST.33 | INTPR.10, VV.1 |
+| 283 | HW.QPU.5 | STND.RUST.8 | VV.1 |
+| 284 | HW.QPU.5 | STND.STDC.16 | VV.1 |
+| 285 | HW.QPU.5 | STND.STDC.26 | VV.1 |
+| 286 | HW.QPU.5 | STND.STDC.38 | INTPR.10, VV.1 |
+| 287 | HW.QPU.5 | STND.SV.10 | VV.1 |
+| 288 | HW.QPU.5 | STND.SV.11 | VV.1 |
+| 289 | HW.QPU.5 | STND.SV.12 | VV.1 |
+| 290 | HW.QPU.5 | STND.SV.13 | VV.1 |
+| 291 | HW.QPU.5 | STND.SV.15 | VV.1 |
+| 292 | HW.QPU.5 | STND.SV.16 | VV.1 |
+| 293 | HW.QPU.5 | STND.SV.17 | VV.1 |
+| 294 | HW.QPU.5 | STND.SV.18 | INTPR.10, VV.1, VV.5 |
+| 295 | HW.QPU.5 | STND.SV.19 | VV.1 |
+| 296 | HW.QPU.5 | STND.SV.2 | INTPR.10 |
+| 297 | HW.QPU.5 | STND.SV.20 | INTPR.10, VV.1, VV.5 |
+| 298 | HW.QPU.5 | STND.SV.21 | INTPR.10, VV.5 |
+| 299 | HW.QPU.5 | STND.SV.22 | VV.1 |
+| 300 | HW.QPU.5 | STND.SV.24 | INTPR.10 |
+| 301 | HW.QPU.5 | STND.SV.25 | VV.1 |
+| 302 | HW.QPU.5 | STND.SV.26 | VV.1 |
+| 303 | HW.QPU.5 | STND.TEST.12 | VV.1, VV.5 |
+| 304 | HW.QPU.5 | STND.TEST.15 | INTPR.10, VV.1 |
+| 305 | HW.QPU.5 | STND.TEST.17 | VV.1 |
+| 306 | HW.QPU.5 | STND.TEST.19 | VV.1 |
+| 307 | HW.QPU.5 | STND.TEST.9 | VV.5 |
+| 308 | HW.QPU.5 | STND.VVUQ.1 | VV.1 |
+| 309 | HW.QPU.5 | STND.VVUQ.10 | VV.1, VV.5 |
+| 310 | HW.QPU.5 | STND.VVUQ.11 | VV.1, VV.5 |
+| 311 | HW.QPU.5 | STND.VVUQ.12 | VV.1, VV.5 |
+| 312 | HW.QPU.5 | STND.VVUQ.13 | VV.1 |
+| 313 | HW.QPU.5 | STND.VVUQ.15 | VV.1 |
+| 314 | HW.QPU.5 | STND.VVUQ.16 | INTPR.10, VV.1, VV.5 |
+| 315 | HW.QPU.5 | STND.VVUQ.17 | VV.1 |
+| 316 | HW.QPU.5 | STND.VVUQ.18 | VV.1 |
+| 317 | HW.QPU.5 | STND.VVUQ.19 | VV.1 |
+| 318 | HW.QPU.5 | STND.VVUQ.2 | VV.1 |
+| 319 | HW.QPU.5 | STND.VVUQ.20 | VV.1, VV.5 |
+| 320 | HW.QPU.5 | STND.VVUQ.21 | VV.1, VV.5 |
+| 321 | HW.QPU.5 | STND.VVUQ.22 | VV.1, VV.5 |
+| 322 | HW.QPU.5 | STND.VVUQ.23 | VV.1, VV.5 |
+| 323 | HW.QPU.5 | STND.VVUQ.24 | VV.1, VV.5 |
+| 324 | HW.QPU.5 | STND.VVUQ.25 | VV.1 |
+| 325 | HW.QPU.5 | STND.VVUQ.26 | VV.1 |
+| 326 | HW.QPU.5 | STND.VVUQ.27 | VV.1 |
+| 327 | HW.QPU.5 | STND.VVUQ.28 | VV.1, VV.5 |
+| 328 | HW.QPU.5 | STND.VVUQ.29 | VV.1 |
+| 329 | HW.QPU.5 | STND.VVUQ.3 | VV.1 |
+| 330 | HW.QPU.5 | STND.VVUQ.31 | VV.1 |
+| 331 | HW.QPU.5 | STND.VVUQ.32 | VV.1 |
+| 332 | HW.QPU.5 | STND.VVUQ.33 | VV.1 |
+| 333 | HW.QPU.5 | STND.VVUQ.34 | VV.1 |
+| 334 | HW.QPU.5 | STND.VVUQ.35 | VV.1 |
+| 335 | HW.QPU.5 | STND.VVUQ.36 | INTPR.10, VV.1 |
+| 336 | HW.QPU.5 | STND.VVUQ.37 | INTPR.10, VV.1 |
+| 337 | HW.QPU.5 | STND.VVUQ.38 | VV.1 |
+| 338 | HW.QPU.5 | STND.VVUQ.39 | VV.1, VV.5 |
+| 339 | HW.QPU.5 | STND.VVUQ.4 | VV.1 |
+| 340 | HW.QPU.5 | STND.VVUQ.40 | VV.1, VV.5 |
+| 341 | HW.QPU.5 | STND.VVUQ.41 | VV.1, VV.5 |
+| 342 | HW.QPU.5 | STND.VVUQ.42 | VV.1, VV.5 |
+| 343 | HW.QPU.5 | STND.VVUQ.43 | VV.1, VV.5 |
+| 344 | HW.QPU.5 | STND.VVUQ.44 | VV.1, VV.5 |
+| 345 | HW.QPU.5 | STND.VVUQ.45 | VV.1, VV.5 |
+| 346 | HW.QPU.5 | STND.VVUQ.46 | VV.1, VV.5 |
+| 347 | HW.QPU.5 | STND.VVUQ.47 | INTPR.10, VV.1, VV.5 |
+| 348 | HW.QPU.5 | STND.VVUQ.48 | INTPR.10, VV.1, VV.5 |
+| 349 | HW.QPU.5 | STND.VVUQ.5 | VV.1 |
+| 350 | HW.QPU.5 | STND.VVUQ.50 | INTPR.10, VV.1 |
+| 351 | HW.QPU.5 | STND.VVUQ.51 | VV.1 |
+| 352 | HW.QPU.5 | STND.VVUQ.52 | VV.1 |
+| 353 | HW.QPU.5 | STND.VVUQ.53 | VV.1 |
+| 354 | HW.QPU.5 | STND.VVUQ.54 | INTPR.10 |
+| 355 | HW.QPU.5 | STND.VVUQ.55 | VV.5 |
+| 356 | HW.QPU.5 | STND.VVUQ.56 | VV.5 |
+| 357 | HW.QPU.5 | STND.VVUQ.57 | VV.1 |
+| 358 | HW.QPU.5 | STND.VVUQ.58 | VV.1 |
+| 359 | HW.QPU.5 | STND.VVUQ.59 | VV.1 |
+| 360 | HW.QPU.5 | STND.VVUQ.6 | VV.1, VV.5 |
+| 361 | HW.QPU.5 | STND.VVUQ.60 | VV.1 |
+| 362 | HW.QPU.5 | STND.VVUQ.61 | VV.1 |
+| 363 | HW.QPU.5 | STND.VVUQ.62 | VV.1 |
+| 364 | HW.QPU.5 | STND.VVUQ.63 | VV.1 |
+| 365 | HW.QPU.5 | STND.VVUQ.64 | VV.1 |
+| 366 | HW.QPU.5 | STND.VVUQ.65 | VV.1 |
+| 367 | HW.QPU.5 | STND.VVUQ.67 | VV.1 |
+| 368 | HW.QPU.5 | STND.VVUQ.68 | VV.1 |
+| 369 | HW.QPU.5 | STND.VVUQ.69 | VV.1 |
+| 370 | HW.QPU.5 | STND.VVUQ.7 | VV.1, VV.5 |
+| 371 | HW.QPU.5 | STND.VVUQ.70 | VV.1 |
+| 372 | HW.QPU.5 | STND.VVUQ.71 | VV.1 |
+| 373 | HW.QPU.5 | STND.VVUQ.72 | VV.1 |
+| 374 | HW.QPU.5 | STND.VVUQ.73 | VV.1 |
+| 375 | HW.QPU.5 | STND.VVUQ.74 | VV.1 |
+| 376 | HW.QPU.5 | STND.VVUQ.76 | VV.1, VV.5 |
+| 377 | HW.QPU.5 | STND.VVUQ.77 | VV.1 |
+| 378 | HW.QPU.5 | STND.VVUQ.79 | VV.1 |
+| 379 | HW.QPU.5 | STND.VVUQ.8 | VV.1 |
+| 380 | HW.QPU.5 | STND.VVUQ.80 | VV.1 |
+| 381 | HW.QPU.5 | STND.VVUQ.81 | VV.1 |
+| 382 | HW.QPU.5 | STND.VVUQ.9 | VV.1, VV.5 |
+| 383 | HW.QPU.5 | STND.WFLOW.37 | VV.1 |
+| 384 | HW.QPU.5 | STND.WFLOW.38 | VV.1 |
+| 385 | HW.QPU.5 | STND.WFLOW.39 | VV.1 |
+| 386 | HW.QPU.5 | STND.WFLOW.40 | VV.1 |
+| 387 | HW.QPU.6 | AGENT.12 | VV.1 |
+| 388 | HW.QPU.6 | CPS.4 | VV.1 |
+| 389 | HW.QPU.6 | CPS.6 | VV.1 |
+| 390 | HW.QPU.6 | CPS.8 | VV.1 |
+| 391 | HW.QPU.6 | HDES.10 | VV.1 |
+| 392 | HW.QPU.6 | HDES.11 | VV.1 |
+| 393 | HW.QPU.6 | HDES.12 | VV.1 |
+| 394 | HW.QPU.6 | HDES.15 | VV.1 |
+| 395 | HW.QPU.6 | HDES.6 | VV.1 |
+| 396 | HW.QPU.6 | HDES.7 | VV.1, matter: precision a result requires, matter: tolerance basis of a numerical comparison |
+| 397 | HW.QPU.6 | HDES.8 | VV.1 |
+| 398 | HW.QPU.6 | HDES.9 | VV.1 |
+| 399 | HW.QPU.6 | HDES.ASIC.10 | VV.1 |
+| 400 | HW.QPU.6 | HDES.ASIC.11 | VV.1 |
+| 401 | HW.QPU.6 | HDES.ASIC.12 | VV.1 |
+| 402 | HW.QPU.6 | HDES.ASIC.3 | VV.1 |
+| 403 | HW.QPU.6 | HDES.ASIC.4 | VV.1 |
+| 404 | HW.QPU.6 | HDES.ASIC.5 | VV.1, matter: tolerance basis of a numerical comparison, matter: uncertainty of a computed result |
+| 405 | HW.QPU.6 | HDES.ASIC.6 | VV.1, matter: tolerance basis of a numerical comparison |
+| 406 | HW.QPU.6 | HDES.ASIC.7 | VV.1 |
+| 407 | HW.QPU.6 | HDES.ASIC.8 | VV.1 |
+| 408 | HW.QPU.6 | HDES.ASIC.9 | VV.1 |
+| 409 | HW.QPU.6 | HDES.FPGA.3 | VV.1 |
+| 410 | HW.QPU.6 | HDES.FPGA.5 | VV.1 |
+| 411 | HW.QPU.6 | HW.10 | VV.1 |
+| 412 | HW.QPU.6 | HW.15 | VV.1 |
+| 413 | HW.QPU.6 | HW.16 | VV.1, matter: precision a result requires, matter: tolerance basis of a numerical comparison |
+| 414 | HW.QPU.6 | HW.17 | VV.1 |
+| 415 | HW.QPU.6 | HW.20 | INTPR.9, VV.1 |
+| 416 | HW.QPU.6 | HW.22 | matter: tolerance basis of a numerical comparison |
+| 417 | HW.QPU.6 | HW.6 | VV.1 |
+| 418 | HW.QPU.6 | HW.9 | INTPR.9 |
+| 419 | HW.QPU.6 | HW.ASIC.4 | VV.1 |
+| 420 | HW.QPU.6 | HW.EMBED.3 | VV.1 |
+| 421 | HW.QPU.6 | HW.EMBED.4 | VV.1 |
+| 422 | HW.QPU.6 | HW.EMBED.6 | INTPR.9 |
+| 423 | HW.QPU.6 | HW.FPGA.4 | VV.1 |
+| 424 | HW.QPU.6 | MEAS.6 | INTPR.9 |
+| 425 | HW.QPU.6 | ML.4 | VV.1 |
+| 426 | HW.QPU.6 | ML.5 | INTPR.9, VV.1, matter: uncertainty of a computed result |
+| 427 | HW.QPU.6 | NUMER.10 | INTPR.9 |
+| 428 | HW.QPU.6 | NUMER.11 | VV.1, matter: tolerance basis of a numerical comparison |
+| 429 | HW.QPU.6 | NUMER.12 | VV.1, matter: precision a result requires, matter: uncertainty of a computed result |
+| 430 | HW.QPU.6 | NUMER.13 | INTPR.9, VV.1, matter: uncertainty of a computed result |
+| 431 | HW.QPU.6 | NUMER.14 | INTPR.9, VV.1, matter: uncertainty of a computed result |
+| 432 | HW.QPU.6 | NUMER.15 | INTPR.9, matter: uncertainty of a computed result |
+| 433 | HW.QPU.6 | NUMER.17 | VV.1, matter: precision a result requires |
+| 434 | HW.QPU.6 | NUMER.18 | INTPR.9 |
+| 435 | HW.QPU.6 | NUMER.19 | VV.1 |
+| 436 | HW.QPU.6 | NUMER.20 | INTPR.9, matter: uncertainty of a computed result |
+| 437 | HW.QPU.6 | NUMER.21 | INTPR.9 |
+| 438 | HW.QPU.6 | NUMER.22 | INTPR.9, VV.1, matter: uncertainty of a computed result |
+| 439 | HW.QPU.6 | NUMER.23 | INTPR.9, VV.1, matter: uncertainty of a computed result |
+| 440 | HW.QPU.6 | NUMER.24 | VV.1 |
+| 441 | HW.QPU.6 | NUMER.25 | VV.1, matter: tolerance basis of a numerical comparison |
+| 442 | HW.QPU.6 | NUMER.28 | VV.1 |
+| 443 | HW.QPU.6 | NUMER.29 | INTPR.9, VV.1 |
+| 444 | HW.QPU.6 | NUMER.5 | VV.1, matter: precision a result requires |
+| 445 | HW.QPU.6 | NUMER.6 | VV.1 |
+| 446 | HW.QPU.6 | NUMER.7 | VV.1 |
+| 447 | HW.QPU.6 | NUMER.8 | INTPR.9, VV.1 |
+| 448 | HW.QPU.6 | NUMER.9 | INTPR.9, VV.1, matter: uncertainty of a computed result |
+| 449 | HW.QPU.6 | STND.ANNEX.10 | VV.1 |
+| 450 | HW.QPU.6 | STND.ANNEX.2 | VV.1 |
+| 451 | HW.QPU.6 | STND.ANNEX.4 | VV.1 |
+| 452 | HW.QPU.6 | STND.ANNEX.9 | VV.1 |
+| 453 | HW.QPU.6 | STND.BUILD.13 | VV.1 |
+| 454 | HW.QPU.6 | STND.CLASS.10 | VV.1 |
+| 455 | HW.QPU.6 | STND.CODE.19 | VV.1 |
+| 456 | HW.QPU.6 | STND.CONC.24 | VV.1 |
+| 457 | HW.QPU.6 | STND.CONC.26 | VV.1 |
+| 458 | HW.QPU.6 | STND.CONC.27 | VV.1 |
+| 459 | HW.QPU.6 | STND.CONC.28 | VV.1 |
+| 460 | HW.QPU.6 | STND.CXX.13 | VV.1 |
+| 461 | HW.QPU.6 | STND.FTN.28 | VV.1 |
+| 462 | HW.QPU.6 | STND.LEAN.10 | VV.1 |
+| 463 | HW.QPU.6 | STND.LEAN.13 | VV.1 |
+| 464 | HW.QPU.6 | STND.LEAN.14 | VV.1 |
+| 465 | HW.QPU.6 | STND.LEAN.15 | VV.1 |
+| 466 | HW.QPU.6 | STND.LEAN.16 | VV.1 |
+| 467 | HW.QPU.6 | STND.LEAN.17 | VV.1 |
+| 468 | HW.QPU.6 | STND.LEAN.18 | VV.1 |
+| 469 | HW.QPU.6 | STND.LEAN.19 | VV.1 |
+| 470 | HW.QPU.6 | STND.LEAN.20 | VV.1 |
+| 471 | HW.QPU.6 | STND.LEAN.21 | VV.1 |
+| 472 | HW.QPU.6 | STND.LEAN.22 | VV.1 |
+| 473 | HW.QPU.6 | STND.LEAN.23 | VV.1 |
+| 474 | HW.QPU.6 | STND.LEAN.4 | VV.1 |
+| 475 | HW.QPU.6 | STND.LEAN.6 | VV.1 |
+| 476 | HW.QPU.6 | STND.LEAN.7 | VV.1 |
+| 477 | HW.QPU.6 | STND.LEAN.8 | VV.1 |
+| 478 | HW.QPU.6 | STND.MPI.22 | INTPR.9 |
+| 479 | HW.QPU.6 | STND.MPI.24 | VV.1 |
+| 480 | HW.QPU.6 | STND.OFFLD.12 | VV.1 |
+| 481 | HW.QPU.6 | STND.OFFLD.2 | INTPR.9 |
+| 482 | HW.QPU.6 | STND.OFFLD.26 | VV.1 |
+| 483 | HW.QPU.6 | STND.OFFLD.27 | VV.1 |
+| 484 | HW.QPU.6 | STND.OFFLD.28 | VV.1 |
+| 485 | HW.QPU.6 | STND.OFFLD.29 | VV.1 |
+| 486 | HW.QPU.6 | STND.OFFLD.3 | VV.1 |
+| 487 | HW.QPU.6 | STND.OMP.16 | VV.1 |
+| 488 | HW.QPU.6 | STND.OMP.2 | VV.1 |
+| 489 | HW.QPU.6 | STND.OMP.23 | VV.1 |
+| 490 | HW.QPU.6 | STND.OMP.31 | VV.1 |
+| 491 | HW.QPU.6 | STND.OMP.33 | VV.1 |
+| 492 | HW.QPU.6 | STND.OMP.4 | VV.1 |
+| 493 | HW.QPU.6 | STND.PERF.11 | INTPR.9, VV.1 |
+| 494 | HW.QPU.6 | STND.PERF.13 | VV.1 |
+| 495 | HW.QPU.6 | STND.PERF.14 | INTPR.9 |
+| 496 | HW.QPU.6 | STND.PERF.15 | INTPR.9 |
+| 497 | HW.QPU.6 | STND.PERF.16 | VV.1 |
+| 498 | HW.QPU.6 | STND.PERF.17 | INTPR.9 |
+| 499 | HW.QPU.6 | STND.PERF.19 | INTPR.9 |
+| 500 | HW.QPU.6 | STND.PERF.4 | INTPR.9 |
+| 501 | HW.QPU.6 | STND.PERF.6 | INTPR.9 |
+| 502 | HW.QPU.6 | STND.PERF.8 | INTPR.9 |
+| 503 | HW.QPU.6 | STND.PERF.9 | INTPR.9 |
+| 504 | HW.QPU.6 | STND.RUST.33 | VV.1 |
+| 505 | HW.QPU.6 | STND.RUST.8 | VV.1 |
+| 506 | HW.QPU.6 | STND.STDC.16 | VV.1 |
+| 507 | HW.QPU.6 | STND.STDC.26 | VV.1 |
+| 508 | HW.QPU.6 | STND.STDC.38 | VV.1 |
+| 509 | HW.QPU.6 | STND.SV.10 | VV.1 |
+| 510 | HW.QPU.6 | STND.SV.11 | VV.1 |
+| 511 | HW.QPU.6 | STND.SV.12 | VV.1 |
+| 512 | HW.QPU.6 | STND.SV.13 | VV.1 |
+| 513 | HW.QPU.6 | STND.SV.15 | VV.1 |
+| 514 | HW.QPU.6 | STND.SV.16 | VV.1 |
+| 515 | HW.QPU.6 | STND.SV.17 | VV.1 |
+| 516 | HW.QPU.6 | STND.SV.18 | VV.1 |
+| 517 | HW.QPU.6 | STND.SV.19 | VV.1 |
+| 518 | HW.QPU.6 | STND.SV.20 | VV.1 |
+| 519 | HW.QPU.6 | STND.SV.22 | VV.1 |
+| 520 | HW.QPU.6 | STND.SV.25 | VV.1 |
+| 521 | HW.QPU.6 | STND.SV.26 | VV.1 |
+| 522 | HW.QPU.6 | STND.TEST.12 | VV.1 |
+| 523 | HW.QPU.6 | STND.TEST.15 | VV.1 |
+| 524 | HW.QPU.6 | STND.TEST.17 | INTPR.9, VV.1 |
+| 525 | HW.QPU.6 | STND.TEST.19 | VV.1 |
+| 526 | HW.QPU.6 | STND.VVUQ.1 | VV.1 |
+| 527 | HW.QPU.6 | STND.VVUQ.10 | INTPR.9, VV.1 |
+| 528 | HW.QPU.6 | STND.VVUQ.11 | INTPR.9, VV.1 |
+| 529 | HW.QPU.6 | STND.VVUQ.12 | INTPR.9, VV.1 |
+| 530 | HW.QPU.6 | STND.VVUQ.13 | VV.1 |
+| 531 | HW.QPU.6 | STND.VVUQ.15 | INTPR.9, VV.1 |
+| 532 | HW.QPU.6 | STND.VVUQ.16 | INTPR.9, VV.1 |
+| 533 | HW.QPU.6 | STND.VVUQ.17 | VV.1 |
+| 534 | HW.QPU.6 | STND.VVUQ.18 | VV.1 |
+| 535 | HW.QPU.6 | STND.VVUQ.19 | VV.1 |
+| 536 | HW.QPU.6 | STND.VVUQ.2 | VV.1 |
+| 537 | HW.QPU.6 | STND.VVUQ.20 | VV.1 |
+| 538 | HW.QPU.6 | STND.VVUQ.21 | VV.1 |
+| 539 | HW.QPU.6 | STND.VVUQ.22 | INTPR.9, VV.1 |
+| 540 | HW.QPU.6 | STND.VVUQ.23 | VV.1 |
+| 541 | HW.QPU.6 | STND.VVUQ.24 | INTPR.9, VV.1 |
+| 542 | HW.QPU.6 | STND.VVUQ.25 | INTPR.9, VV.1 |
+| 543 | HW.QPU.6 | STND.VVUQ.26 | INTPR.9, VV.1 |
+| 544 | HW.QPU.6 | STND.VVUQ.27 | INTPR.9, VV.1 |
+| 545 | HW.QPU.6 | STND.VVUQ.28 | INTPR.9, VV.1 |
+| 546 | HW.QPU.6 | STND.VVUQ.29 | INTPR.9, VV.1 |
+| 547 | HW.QPU.6 | STND.VVUQ.3 | VV.1 |
+| 548 | HW.QPU.6 | STND.VVUQ.30 | INTPR.9 |
+| 549 | HW.QPU.6 | STND.VVUQ.31 | INTPR.9, VV.1 |
+| 550 | HW.QPU.6 | STND.VVUQ.32 | INTPR.9, VV.1 |
+| 551 | HW.QPU.6 | STND.VVUQ.33 | VV.1 |
+| 552 | HW.QPU.6 | STND.VVUQ.34 | VV.1 |
+| 553 | HW.QPU.6 | STND.VVUQ.35 | VV.1 |
+| 554 | HW.QPU.6 | STND.VVUQ.36 | VV.1 |
+| 555 | HW.QPU.6 | STND.VVUQ.37 | VV.1 |
+| 556 | HW.QPU.6 | STND.VVUQ.38 | VV.1 |
+| 557 | HW.QPU.6 | STND.VVUQ.39 | INTPR.9, VV.1 |
+| 558 | HW.QPU.6 | STND.VVUQ.4 | VV.1 |
+| 559 | HW.QPU.6 | STND.VVUQ.40 | INTPR.9, VV.1 |
+| 560 | HW.QPU.6 | STND.VVUQ.41 | INTPR.9, VV.1 |
+| 561 | HW.QPU.6 | STND.VVUQ.42 | INTPR.9, VV.1 |
+| 562 | HW.QPU.6 | STND.VVUQ.43 | INTPR.9, VV.1 |
+| 563 | HW.QPU.6 | STND.VVUQ.44 | INTPR.9, VV.1 |
+| 564 | HW.QPU.6 | STND.VVUQ.45 | INTPR.9, VV.1 |
+| 565 | HW.QPU.6 | STND.VVUQ.46 | INTPR.9, VV.1 |
+| 566 | HW.QPU.6 | STND.VVUQ.47 | INTPR.9, VV.1 |
+| 567 | HW.QPU.6 | STND.VVUQ.48 | INTPR.9, VV.1 |
+| 568 | HW.QPU.6 | STND.VVUQ.49 | INTPR.9 |
+| 569 | HW.QPU.6 | STND.VVUQ.5 | VV.1 |
+| 570 | HW.QPU.6 | STND.VVUQ.50 | VV.1 |
+| 571 | HW.QPU.6 | STND.VVUQ.51 | VV.1 |
+| 572 | HW.QPU.6 | STND.VVUQ.52 | VV.1 |
+| 573 | HW.QPU.6 | STND.VVUQ.53 | VV.1 |
+| 574 | HW.QPU.6 | STND.VVUQ.54 | INTPR.9 |
+| 575 | HW.QPU.6 | STND.VVUQ.55 | INTPR.9 |
+| 576 | HW.QPU.6 | STND.VVUQ.56 | INTPR.9 |
+| 577 | HW.QPU.6 | STND.VVUQ.57 | INTPR.9, VV.1 |
+| 578 | HW.QPU.6 | STND.VVUQ.58 | INTPR.9, VV.1 |
+| 579 | HW.QPU.6 | STND.VVUQ.59 | INTPR.9, VV.1 |
+| 580 | HW.QPU.6 | STND.VVUQ.6 | INTPR.9, VV.1 |
+| 581 | HW.QPU.6 | STND.VVUQ.60 | INTPR.9, VV.1 |
+| 582 | HW.QPU.6 | STND.VVUQ.61 | INTPR.9, VV.1 |
+| 583 | HW.QPU.6 | STND.VVUQ.62 | VV.1 |
+| 584 | HW.QPU.6 | STND.VVUQ.63 | VV.1 |
+| 585 | HW.QPU.6 | STND.VVUQ.64 | VV.1 |
+| 586 | HW.QPU.6 | STND.VVUQ.65 | VV.1 |
+| 587 | HW.QPU.6 | STND.VVUQ.67 | VV.1 |
+| 588 | HW.QPU.6 | STND.VVUQ.68 | INTPR.9, VV.1 |
+| 589 | HW.QPU.6 | STND.VVUQ.69 | VV.1 |
+| 590 | HW.QPU.6 | STND.VVUQ.7 | VV.1 |
+| 591 | HW.QPU.6 | STND.VVUQ.70 | VV.1 |
+| 592 | HW.QPU.6 | STND.VVUQ.71 | VV.1 |
+| 593 | HW.QPU.6 | STND.VVUQ.72 | INTPR.9, VV.1 |
+| 594 | HW.QPU.6 | STND.VVUQ.73 | INTPR.9, VV.1 |
+| 595 | HW.QPU.6 | STND.VVUQ.74 | VV.1 |
+| 596 | HW.QPU.6 | STND.VVUQ.76 | INTPR.9, VV.1 |
+| 597 | HW.QPU.6 | STND.VVUQ.77 | VV.1 |
+| 598 | HW.QPU.6 | STND.VVUQ.79 | VV.1 |
+| 599 | HW.QPU.6 | STND.VVUQ.8 | VV.1 |
+| 600 | HW.QPU.6 | STND.VVUQ.80 | VV.1 |
+| 601 | HW.QPU.6 | STND.VVUQ.81 | VV.1 |
+| 602 | HW.QPU.6 | STND.VVUQ.9 | INTPR.9, VV.1 |
+| 603 | HW.QPU.6 | STND.WFLOW.13 | INTPR.9 |
+| 604 | HW.QPU.6 | STND.WFLOW.29 | INTPR.9 |
+| 605 | HW.QPU.6 | STND.WFLOW.35 | INTPR.9 |
+| 606 | HW.QPU.6 | STND.WFLOW.37 | VV.1 |
+| 607 | HW.QPU.6 | STND.WFLOW.38 | VV.1 |
+| 608 | HW.QPU.6 | STND.WFLOW.39 | VV.1 |
+| 609 | HW.QPU.6 | STND.WFLOW.40 | VV.1 |
+| 610 | HW.QPU.7 | AGENT.12 | VV.1 |
+| 611 | HW.QPU.7 | AGENT.41 | INTPR.10 |
+| 612 | HW.QPU.7 | CPS.4 | VV.1 |
+| 613 | HW.QPU.7 | CPS.6 | VV.1 |
+| 614 | HW.QPU.7 | CPS.8 | VV.1 |
+| 615 | HW.QPU.7 | HDES.10 | INTPR.10, VV.1 |
+| 616 | HW.QPU.7 | HDES.11 | VV.1 |
+| 617 | HW.QPU.7 | HDES.12 | VV.1 |
+| 618 | HW.QPU.7 | HDES.15 | VV.1 |
+| 619 | HW.QPU.7 | HDES.5 | INTPR.10 |
+| 620 | HW.QPU.7 | HDES.6 | INTPR.10, VV.1 |
+| 621 | HW.QPU.7 | HDES.7 | VV.1 |
+| 622 | HW.QPU.7 | HDES.8 | INTPR.10, VV.1 |
+| 623 | HW.QPU.7 | HDES.9 | INTPR.10, VV.1 |
+| 624 | HW.QPU.7 | HDES.ASIC.10 | VV.1 |
+| 625 | HW.QPU.7 | HDES.ASIC.11 | INTPR.10, VV.1 |
+| 626 | HW.QPU.7 | HDES.ASIC.12 | INTPR.10, VV.1 |
+| 627 | HW.QPU.7 | HDES.ASIC.3 | INTPR.10, VV.1 |
+| 628 | HW.QPU.7 | HDES.ASIC.4 | VV.1 |
+| 629 | HW.QPU.7 | HDES.ASIC.5 | INTPR.10, VV.1 |
+| 630 | HW.QPU.7 | HDES.ASIC.6 | VV.1 |
+| 631 | HW.QPU.7 | HDES.ASIC.7 | VV.1 |
+| 632 | HW.QPU.7 | HDES.ASIC.8 | VV.1 |
+| 633 | HW.QPU.7 | HDES.ASIC.9 | VV.1 |
+| 634 | HW.QPU.7 | HDES.FPGA.3 | VV.1 |
+| 635 | HW.QPU.7 | HDES.FPGA.5 | VV.1 |
+| 636 | HW.QPU.7 | HW.10 | INTPR.10, VV.1 |
+| 637 | HW.QPU.7 | HW.15 | VV.1 |
+| 638 | HW.QPU.7 | HW.16 | VV.1, matter: approximation disclosure |
+| 639 | HW.QPU.7 | HW.17 | INTPR.10, VV.1 |
+| 640 | HW.QPU.7 | HW.18 | INTPR.10 |
+| 641 | HW.QPU.7 | HW.20 | VV.1 |
+| 642 | HW.QPU.7 | HW.6 | VV.1 |
+| 643 | HW.QPU.7 | HW.7 | INTPR.10 |
+| 644 | HW.QPU.7 | HW.ASIC.4 | INTPR.10, VV.1 |
+| 645 | HW.QPU.7 | HW.CPU.3 | INTPR.10 |
+| 646 | HW.QPU.7 | HW.EMBED.3 | VV.1 |
+| 647 | HW.QPU.7 | HW.EMBED.4 | VV.1 |
+| 648 | HW.QPU.7 | HW.EMBED.6 | INTPR.10 |
+| 649 | HW.QPU.7 | HW.FPGA.4 | INTPR.10, VV.1 |
+| 650 | HW.QPU.7 | MEAS.5 | INTPR.10 |
+| 651 | HW.QPU.7 | MEAS.6 | INTPR.10 |
+| 652 | HW.QPU.7 | ML.4 | VV.1 |
+| 653 | HW.QPU.7 | ML.5 | INTPR.10, VV.1, matter: approximation disclosure |
+| 654 | HW.QPU.7 | ML.6 | INTPR.10 |
+| 655 | HW.QPU.7 | NUMER.11 | VV.1 |
+| 656 | HW.QPU.7 | NUMER.12 | INTPR.10, VV.1 |
+| 657 | HW.QPU.7 | NUMER.13 | VV.1 |
+| 658 | HW.QPU.7 | NUMER.14 | VV.1 |
+| 659 | HW.QPU.7 | NUMER.16 | INTPR.10, matter: approximation disclosure |
+| 660 | HW.QPU.7 | NUMER.17 | VV.1, matter: approximation disclosure |
+| 661 | HW.QPU.7 | NUMER.18 | INTPR.10 |
+| 662 | HW.QPU.7 | NUMER.19 | VV.1 |
+| 663 | HW.QPU.7 | NUMER.20 | INTPR.10 |
+| 664 | HW.QPU.7 | NUMER.22 | VV.1 |
+| 665 | HW.QPU.7 | NUMER.23 | VV.1 |
+| 666 | HW.QPU.7 | NUMER.24 | VV.1 |
+| 667 | HW.QPU.7 | NUMER.25 | VV.1 |
+| 668 | HW.QPU.7 | NUMER.28 | VV.1 |
+| 669 | HW.QPU.7 | NUMER.29 | VV.1 |
+| 670 | HW.QPU.7 | NUMER.5 | VV.1 |
+| 671 | HW.QPU.7 | NUMER.6 | VV.1 |
+| 672 | HW.QPU.7 | NUMER.7 | VV.1 |
+| 673 | HW.QPU.7 | NUMER.8 | VV.1 |
+| 674 | HW.QPU.7 | NUMER.9 | VV.1 |
+| 675 | HW.QPU.7 | STND.ANNEX.10 | VV.1 |
+| 676 | HW.QPU.7 | STND.ANNEX.2 | VV.1 |
+| 677 | HW.QPU.7 | STND.ANNEX.4 | VV.1 |
+| 678 | HW.QPU.7 | STND.ANNEX.9 | VV.1 |
+| 679 | HW.QPU.7 | STND.BUILD.13 | INTPR.10, VV.1 |
+| 680 | HW.QPU.7 | STND.BUILD.26 | INTPR.10 |
+| 681 | HW.QPU.7 | STND.CLASS.10 | INTPR.10, VV.1 |
+| 682 | HW.QPU.7 | STND.CODE.19 | VV.1 |
+| 683 | HW.QPU.7 | STND.CONC.24 | VV.1 |
+| 684 | HW.QPU.7 | STND.CONC.26 | VV.1 |
+| 685 | HW.QPU.7 | STND.CONC.27 | INTPR.10, VV.1 |
+| 686 | HW.QPU.7 | STND.CONC.28 | VV.1 |
+| 687 | HW.QPU.7 | STND.CXX.13 | VV.1 |
+| 688 | HW.QPU.7 | STND.FTN.28 | VV.1 |
+| 689 | HW.QPU.7 | STND.LEAN.10 | VV.1 |
+| 690 | HW.QPU.7 | STND.LEAN.13 | VV.1 |
+| 691 | HW.QPU.7 | STND.LEAN.14 | VV.1 |
+| 692 | HW.QPU.7 | STND.LEAN.15 | VV.1 |
+| 693 | HW.QPU.7 | STND.LEAN.16 | VV.1 |
+| 694 | HW.QPU.7 | STND.LEAN.17 | INTPR.10, VV.1 |
+| 695 | HW.QPU.7 | STND.LEAN.18 | VV.1 |
+| 696 | HW.QPU.7 | STND.LEAN.19 | VV.1 |
+| 697 | HW.QPU.7 | STND.LEAN.20 | INTPR.10, VV.1 |
+| 698 | HW.QPU.7 | STND.LEAN.21 | VV.1 |
+| 699 | HW.QPU.7 | STND.LEAN.22 | VV.1 |
+| 700 | HW.QPU.7 | STND.LEAN.23 | INTPR.10, VV.1 |
+| 701 | HW.QPU.7 | STND.LEAN.4 | INTPR.10, VV.1 |
+| 702 | HW.QPU.7 | STND.LEAN.6 | VV.1 |
+| 703 | HW.QPU.7 | STND.LEAN.7 | VV.1 |
+| 704 | HW.QPU.7 | STND.LEAN.8 | VV.1 |
+| 705 | HW.QPU.7 | STND.MPI.24 | VV.1 |
+| 706 | HW.QPU.7 | STND.OFFLD.12 | VV.1 |
+| 707 | HW.QPU.7 | STND.OFFLD.26 | VV.1 |
+| 708 | HW.QPU.7 | STND.OFFLD.27 | VV.1 |
+| 709 | HW.QPU.7 | STND.OFFLD.28 | VV.1 |
+| 710 | HW.QPU.7 | STND.OFFLD.29 | VV.1 |
+| 711 | HW.QPU.7 | STND.OFFLD.3 | VV.1 |
+| 712 | HW.QPU.7 | STND.OMP.16 | VV.1 |
+| 713 | HW.QPU.7 | STND.OMP.2 | VV.1 |
+| 714 | HW.QPU.7 | STND.OMP.23 | VV.1 |
+| 715 | HW.QPU.7 | STND.OMP.31 | VV.1 |
+| 716 | HW.QPU.7 | STND.OMP.33 | VV.1 |
+| 717 | HW.QPU.7 | STND.OMP.4 | VV.1 |
+| 718 | HW.QPU.7 | STND.PERF.11 | VV.1 |
+| 719 | HW.QPU.7 | STND.PERF.13 | VV.1 |
+| 720 | HW.QPU.7 | STND.PERF.16 | VV.1 |
+| 721 | HW.QPU.7 | STND.PERF.7 | INTPR.10 |
+| 722 | HW.QPU.7 | STND.RUST.33 | INTPR.10, VV.1 |
+| 723 | HW.QPU.7 | STND.RUST.8 | VV.1 |
+| 724 | HW.QPU.7 | STND.STDC.16 | VV.1 |
+| 725 | HW.QPU.7 | STND.STDC.26 | VV.1 |
+| 726 | HW.QPU.7 | STND.STDC.38 | INTPR.10, VV.1 |
+| 727 | HW.QPU.7 | STND.SV.10 | VV.1 |
+| 728 | HW.QPU.7 | STND.SV.11 | VV.1 |
+| 729 | HW.QPU.7 | STND.SV.12 | VV.1 |
+| 730 | HW.QPU.7 | STND.SV.13 | VV.1 |
+| 731 | HW.QPU.7 | STND.SV.15 | VV.1 |
+| 732 | HW.QPU.7 | STND.SV.16 | VV.1 |
+| 733 | HW.QPU.7 | STND.SV.17 | VV.1 |
+| 734 | HW.QPU.7 | STND.SV.18 | INTPR.10, VV.1 |
+| 735 | HW.QPU.7 | STND.SV.19 | VV.1 |
+| 736 | HW.QPU.7 | STND.SV.2 | INTPR.10 |
+| 737 | HW.QPU.7 | STND.SV.20 | INTPR.10, VV.1 |
+| 738 | HW.QPU.7 | STND.SV.21 | INTPR.10 |
+| 739 | HW.QPU.7 | STND.SV.22 | VV.1 |
+| 740 | HW.QPU.7 | STND.SV.24 | INTPR.10 |
+| 741 | HW.QPU.7 | STND.SV.25 | VV.1 |
+| 742 | HW.QPU.7 | STND.SV.26 | VV.1 |
+| 743 | HW.QPU.7 | STND.TEST.12 | VV.1 |
+| 744 | HW.QPU.7 | STND.TEST.15 | INTPR.10, VV.1 |
+| 745 | HW.QPU.7 | STND.TEST.17 | VV.1 |
+| 746 | HW.QPU.7 | STND.TEST.19 | VV.1 |
+| 747 | HW.QPU.7 | STND.VVUQ.1 | VV.1 |
+| 748 | HW.QPU.7 | STND.VVUQ.10 | VV.1 |
+| 749 | HW.QPU.7 | STND.VVUQ.11 | VV.1 |
+| 750 | HW.QPU.7 | STND.VVUQ.12 | VV.1 |
+| 751 | HW.QPU.7 | STND.VVUQ.13 | VV.1 |
+| 752 | HW.QPU.7 | STND.VVUQ.15 | VV.1 |
+| 753 | HW.QPU.7 | STND.VVUQ.16 | INTPR.10, VV.1 |
+| 754 | HW.QPU.7 | STND.VVUQ.17 | VV.1 |
+| 755 | HW.QPU.7 | STND.VVUQ.18 | VV.1 |
+| 756 | HW.QPU.7 | STND.VVUQ.19 | VV.1 |
+| 757 | HW.QPU.7 | STND.VVUQ.2 | VV.1 |
+| 758 | HW.QPU.7 | STND.VVUQ.20 | VV.1 |
+| 759 | HW.QPU.7 | STND.VVUQ.21 | VV.1 |
+| 760 | HW.QPU.7 | STND.VVUQ.22 | VV.1 |
+| 761 | HW.QPU.7 | STND.VVUQ.23 | VV.1 |
+| 762 | HW.QPU.7 | STND.VVUQ.24 | VV.1 |
+| 763 | HW.QPU.7 | STND.VVUQ.25 | VV.1 |
+| 764 | HW.QPU.7 | STND.VVUQ.26 | VV.1 |
+| 765 | HW.QPU.7 | STND.VVUQ.27 | VV.1 |
+| 766 | HW.QPU.7 | STND.VVUQ.28 | VV.1 |
+| 767 | HW.QPU.7 | STND.VVUQ.29 | VV.1 |
+| 768 | HW.QPU.7 | STND.VVUQ.3 | VV.1 |
+| 769 | HW.QPU.7 | STND.VVUQ.31 | VV.1 |
+| 770 | HW.QPU.7 | STND.VVUQ.32 | VV.1 |
+| 771 | HW.QPU.7 | STND.VVUQ.33 | VV.1 |
+| 772 | HW.QPU.7 | STND.VVUQ.34 | VV.1 |
+| 773 | HW.QPU.7 | STND.VVUQ.35 | VV.1 |
+| 774 | HW.QPU.7 | STND.VVUQ.36 | INTPR.10, VV.1 |
+| 775 | HW.QPU.7 | STND.VVUQ.37 | INTPR.10, VV.1 |
+| 776 | HW.QPU.7 | STND.VVUQ.38 | VV.1 |
+| 777 | HW.QPU.7 | STND.VVUQ.39 | VV.1 |
+| 778 | HW.QPU.7 | STND.VVUQ.4 | VV.1 |
+| 779 | HW.QPU.7 | STND.VVUQ.40 | VV.1 |
+| 780 | HW.QPU.7 | STND.VVUQ.41 | VV.1 |
+| 781 | HW.QPU.7 | STND.VVUQ.42 | VV.1 |
+| 782 | HW.QPU.7 | STND.VVUQ.43 | VV.1 |
+| 783 | HW.QPU.7 | STND.VVUQ.44 | VV.1 |
+| 784 | HW.QPU.7 | STND.VVUQ.45 | VV.1 |
+| 785 | HW.QPU.7 | STND.VVUQ.46 | VV.1 |
+| 786 | HW.QPU.7 | STND.VVUQ.47 | INTPR.10, VV.1 |
+| 787 | HW.QPU.7 | STND.VVUQ.48 | INTPR.10, VV.1 |
+| 788 | HW.QPU.7 | STND.VVUQ.5 | VV.1 |
+| 789 | HW.QPU.7 | STND.VVUQ.50 | INTPR.10, VV.1 |
+| 790 | HW.QPU.7 | STND.VVUQ.51 | VV.1 |
+| 791 | HW.QPU.7 | STND.VVUQ.52 | VV.1 |
+| 792 | HW.QPU.7 | STND.VVUQ.53 | VV.1 |
+| 793 | HW.QPU.7 | STND.VVUQ.54 | INTPR.10 |
+| 794 | HW.QPU.7 | STND.VVUQ.57 | VV.1 |
+| 795 | HW.QPU.7 | STND.VVUQ.58 | VV.1 |
+| 796 | HW.QPU.7 | STND.VVUQ.59 | VV.1 |
+| 797 | HW.QPU.7 | STND.VVUQ.6 | VV.1 |
+| 798 | HW.QPU.7 | STND.VVUQ.60 | VV.1 |
+| 799 | HW.QPU.7 | STND.VVUQ.61 | VV.1 |
+| 800 | HW.QPU.7 | STND.VVUQ.62 | VV.1 |
+| 801 | HW.QPU.7 | STND.VVUQ.63 | VV.1 |
+| 802 | HW.QPU.7 | STND.VVUQ.64 | VV.1 |
+| 803 | HW.QPU.7 | STND.VVUQ.65 | VV.1 |
+| 804 | HW.QPU.7 | STND.VVUQ.67 | VV.1 |
+| 805 | HW.QPU.7 | STND.VVUQ.68 | VV.1 |
+| 806 | HW.QPU.7 | STND.VVUQ.69 | VV.1 |
+| 807 | HW.QPU.7 | STND.VVUQ.7 | VV.1 |
+| 808 | HW.QPU.7 | STND.VVUQ.70 | VV.1 |
+| 809 | HW.QPU.7 | STND.VVUQ.71 | VV.1 |
+| 810 | HW.QPU.7 | STND.VVUQ.72 | VV.1 |
+| 811 | HW.QPU.7 | STND.VVUQ.73 | VV.1 |
+| 812 | HW.QPU.7 | STND.VVUQ.74 | VV.1 |
+| 813 | HW.QPU.7 | STND.VVUQ.76 | VV.1 |
+| 814 | HW.QPU.7 | STND.VVUQ.77 | VV.1 |
+| 815 | HW.QPU.7 | STND.VVUQ.79 | VV.1 |
+| 816 | HW.QPU.7 | STND.VVUQ.8 | VV.1 |
+| 817 | HW.QPU.7 | STND.VVUQ.80 | VV.1 |
+| 818 | HW.QPU.7 | STND.VVUQ.81 | VV.1 |
+| 819 | HW.QPU.7 | STND.VVUQ.9 | VV.1 |
+| 820 | HW.QPU.7 | STND.WFLOW.37 | VV.1 |
+| 821 | HW.QPU.7 | STND.WFLOW.38 | VV.1 |
+| 822 | HW.QPU.7 | STND.WFLOW.39 | VV.1 |
+| 823 | HW.QPU.7 | STND.WFLOW.40 | VV.1 |
+| 824 | HW.QPU.8 | AGENT.41 | INTPR.10 |
+| 825 | HW.QPU.8 | HDES.10 | INTPR.10 |
+| 826 | HW.QPU.8 | HDES.5 | INTPR.10 |
+| 827 | HW.QPU.8 | HDES.6 | INTPR.10, VV.5 |
+| 828 | HW.QPU.8 | HDES.7 | matter: precision a result requires |
+| 829 | HW.QPU.8 | HDES.8 | INTPR.10, VV.5 |
+| 830 | HW.QPU.8 | HDES.9 | INTPR.10 |
+| 831 | HW.QPU.8 | HDES.ASIC.11 | INTPR.10, VV.5 |
+| 832 | HW.QPU.8 | HDES.ASIC.12 | INTPR.10, VV.5 |
+| 833 | HW.QPU.8 | HDES.ASIC.3 | INTPR.10, VV.5 |
+| 834 | HW.QPU.8 | HDES.ASIC.5 | INTPR.10, VV.5, matter: uncertainty of a computed result |
+| 835 | HW.QPU.8 | HW.10 | INTPR.10 |
+| 836 | HW.QPU.8 | HW.16 | matter: precision a result requires |
+| 837 | HW.QPU.8 | HW.17 | INTPR.10 |
+| 838 | HW.QPU.8 | HW.18 | INTPR.10 |
+| 839 | HW.QPU.8 | HW.22 | RSRC.4 |
+| 840 | HW.QPU.8 | HW.7 | INTPR.10 |
+| 841 | HW.QPU.8 | HW.ASIC.4 | INTPR.10 |
+| 842 | HW.QPU.8 | HW.CPU.3 | INTPR.10 |
+| 843 | HW.QPU.8 | HW.CPU.4 | RSRC.4 |
+| 844 | HW.QPU.8 | HW.EMBED.6 | INTPR.10 |
+| 845 | HW.QPU.8 | HW.FPGA.4 | INTPR.10 |
+| 846 | HW.QPU.8 | HW.GPU.4 | RSRC.4 |
+| 847 | HW.QPU.8 | MEAS.5 | INTPR.10 |
+| 848 | HW.QPU.8 | MEAS.6 | INTPR.10 |
+| 849 | HW.QPU.8 | ML.4 | VV.5 |
+| 850 | HW.QPU.8 | ML.5 | INTPR.10, matter: uncertainty of a computed result |
+| 851 | HW.QPU.8 | ML.6 | INTPR.10 |
+| 852 | HW.QPU.8 | NUMER.12 | INTPR.10, matter: precision a result requires, matter: uncertainty of a computed result |
+| 853 | HW.QPU.8 | NUMER.13 | VV.5, matter: uncertainty of a computed result |
+| 854 | HW.QPU.8 | NUMER.14 | matter: uncertainty of a computed result |
+| 855 | HW.QPU.8 | NUMER.15 | matter: uncertainty of a computed result |
+| 856 | HW.QPU.8 | NUMER.16 | INTPR.10 |
+| 857 | HW.QPU.8 | NUMER.17 | RSRC.4, matter: precision a result requires |
+| 858 | HW.QPU.8 | NUMER.18 | INTPR.10 |
+| 859 | HW.QPU.8 | NUMER.20 | INTPR.10, matter: uncertainty of a computed result |
+| 860 | HW.QPU.8 | NUMER.21 | VV.5 |
+| 861 | HW.QPU.8 | NUMER.22 | matter: uncertainty of a computed result |
+| 862 | HW.QPU.8 | NUMER.23 | matter: uncertainty of a computed result |
+| 863 | HW.QPU.8 | NUMER.5 | matter: precision a result requires |
+| 864 | HW.QPU.8 | NUMER.7 | VV.5 |
+| 865 | HW.QPU.8 | NUMER.9 | matter: uncertainty of a computed result |
+| 866 | HW.QPU.8 | STND.BUILD.13 | INTPR.10 |
+| 867 | HW.QPU.8 | STND.BUILD.26 | INTPR.10 |
+| 868 | HW.QPU.8 | STND.CLASS.10 | INTPR.10 |
+| 869 | HW.QPU.8 | STND.CONC.27 | INTPR.10 |
+| 870 | HW.QPU.8 | STND.CXX.10 | RSRC.4 |
+| 871 | HW.QPU.8 | STND.CXX.27 | RSRC.4 |
+| 872 | HW.QPU.8 | STND.CXX.8 | RSRC.4 |
+| 873 | HW.QPU.8 | STND.JL.36 | RSRC.4 |
+| 874 | HW.QPU.8 | STND.LEAN.17 | INTPR.10 |
+| 875 | HW.QPU.8 | STND.LEAN.20 | INTPR.10 |
+| 876 | HW.QPU.8 | STND.LEAN.23 | INTPR.10 |
+| 877 | HW.QPU.8 | STND.LEAN.4 | INTPR.10, VV.5 |
+| 878 | HW.QPU.8 | STND.OFFLD.31 | RSRC.4 |
+| 879 | HW.QPU.8 | STND.PERF.1 | RSRC.4 |
+| 880 | HW.QPU.8 | STND.PERF.10 | RSRC.4 |
+| 881 | HW.QPU.8 | STND.PERF.12 | RSRC.4 |
+| 882 | HW.QPU.8 | STND.PERF.14 | RSRC.4 |
+| 883 | HW.QPU.8 | STND.PERF.24 | RSRC.4 |
+| 884 | HW.QPU.8 | STND.PERF.4 | RSRC.4 |
+| 885 | HW.QPU.8 | STND.PERF.5 | RSRC.4 |
+| 886 | HW.QPU.8 | STND.PERF.7 | INTPR.10 |
+| 887 | HW.QPU.8 | STND.PERF.8 | RSRC.4 |
+| 888 | HW.QPU.8 | STND.PERF.9 | RSRC.4 |
+| 889 | HW.QPU.8 | STND.RUST.33 | INTPR.10 |
+| 890 | HW.QPU.8 | STND.STDC.1 | RSRC.4 |
+| 891 | HW.QPU.8 | STND.STDC.38 | INTPR.10 |
+| 892 | HW.QPU.8 | STND.SV.18 | INTPR.10, VV.5 |
+| 893 | HW.QPU.8 | STND.SV.2 | INTPR.10 |
+| 894 | HW.QPU.8 | STND.SV.20 | INTPR.10, VV.5 |
+| 895 | HW.QPU.8 | STND.SV.21 | INTPR.10, VV.5 |
+| 896 | HW.QPU.8 | STND.SV.24 | INTPR.10 |
+| 897 | HW.QPU.8 | STND.TEST.12 | VV.5 |
+| 898 | HW.QPU.8 | STND.TEST.15 | INTPR.10 |
+| 899 | HW.QPU.8 | STND.TEST.9 | VV.5 |
+| 900 | HW.QPU.8 | STND.VVUQ.10 | VV.5 |
+| 901 | HW.QPU.8 | STND.VVUQ.11 | VV.5 |
+| 902 | HW.QPU.8 | STND.VVUQ.12 | VV.5 |
+| 903 | HW.QPU.8 | STND.VVUQ.16 | INTPR.10, VV.5 |
+| 904 | HW.QPU.8 | STND.VVUQ.20 | VV.5 |
+| 905 | HW.QPU.8 | STND.VVUQ.21 | VV.5 |
+| 906 | HW.QPU.8 | STND.VVUQ.22 | VV.5 |
+| 907 | HW.QPU.8 | STND.VVUQ.23 | VV.5 |
+| 908 | HW.QPU.8 | STND.VVUQ.24 | VV.5 |
+| 909 | HW.QPU.8 | STND.VVUQ.28 | VV.5 |
+| 910 | HW.QPU.8 | STND.VVUQ.36 | INTPR.10 |
+| 911 | HW.QPU.8 | STND.VVUQ.37 | INTPR.10 |
+| 912 | HW.QPU.8 | STND.VVUQ.39 | VV.5 |
+| 913 | HW.QPU.8 | STND.VVUQ.40 | VV.5 |
+| 914 | HW.QPU.8 | STND.VVUQ.41 | VV.5 |
+| 915 | HW.QPU.8 | STND.VVUQ.42 | VV.5 |
+| 916 | HW.QPU.8 | STND.VVUQ.43 | VV.5 |
+| 917 | HW.QPU.8 | STND.VVUQ.44 | VV.5 |
+| 918 | HW.QPU.8 | STND.VVUQ.45 | VV.5 |
+| 919 | HW.QPU.8 | STND.VVUQ.46 | VV.5 |
+| 920 | HW.QPU.8 | STND.VVUQ.47 | INTPR.10, VV.5 |
+| 921 | HW.QPU.8 | STND.VVUQ.48 | INTPR.10, VV.5 |
+| 922 | HW.QPU.8 | STND.VVUQ.50 | INTPR.10, RSRC.4 |
+| 923 | HW.QPU.8 | STND.VVUQ.54 | INTPR.10 |
+| 924 | HW.QPU.8 | STND.VVUQ.55 | VV.5 |
+| 925 | HW.QPU.8 | STND.VVUQ.56 | VV.5 |
+| 926 | HW.QPU.8 | STND.VVUQ.6 | VV.5 |
+| 927 | HW.QPU.8 | STND.VVUQ.7 | VV.5 |
+| 928 | HW.QPU.8 | STND.VVUQ.75 | RSRC.4 |
+| 929 | HW.QPU.8 | STND.VVUQ.76 | VV.5 |
+| 930 | HW.QPU.8 | STND.VVUQ.77 | RSRC.4 |
+| 931 | HW.QPU.8 | STND.VVUQ.82 | RSRC.4 |
+| 932 | HW.QPU.8 | STND.VVUQ.9 | VV.5 |

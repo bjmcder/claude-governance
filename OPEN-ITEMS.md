@@ -4,6 +4,8 @@ This file lists the work the custodian has directed, and the items a ratified ro
 
 ## Corpus, for a later round
 
+The custodian decided the open questions of units 0013, 0016, 0017, and 0018 on 2026-10-26 (`review-records/round-2026-10-26/decisions.md`). Each of those items below is drafted as that record says, except Accepted signature, which waits for a signer register.
+
 The first two the custodian deferred on 2026-10-25; the others arose from units 0013, 0016, and 0017, which made the harness follow the corpus as written, and from unit 0018, which dropped the environment derivation. Each unit record holds draft wording.
 
 - **Foreign interfaces in STND.CODE.** Add one STND.CODE provision on foreign interfaces, with one definition of Foreign interface (now defined in five standards) and one of Lock file (in STND.PY and STND.RUST). It replaces the callback, ownership, and lock-file rules that now stand alike in several language standards (GOV.31). This is decision 26 of `review-records/round-2026-10-25-close/decisions-final.md`.
