@@ -39,9 +39,6 @@ LAYERS = {
     "workflows": 3,
     "cli": 4,
     "__main__": 4,
-    # Programs the environment runs; they import nothing from the
-    # package (test_hooks_stand_alone).
-    "hooks": 4,
 }
 CLI = "govharness.cli."
 WORKFLOWS = "govharness.workflows."
@@ -54,7 +51,6 @@ SIGNATURES = "govharness.ledger.signatures"
 LEDGER_CHECK = "govharness.checks.ledger"
 REHEARSE = "govharness.workflows.rehearse"
 SOLVE_STORE = "govharness.workflows.solve_store"
-HOOKS = "govharness.hooks."
 # Each effect, the calls or names that perform it, and where it may
 # happen. A prefix ending in "." admits every module of a package.
 READ_CALLS = {
@@ -100,21 +96,18 @@ EFFECTS: dict[str, tuple[str, ...]] = {
     # files named on the command line in the cli; the entries of the
     # solve cache, and the solver source that versions them, in
     # workflows/solve_store.py (unit 0011).
-    "read": (CORPUS, CHAIN, GPG, CLI, HOOKS, SOLVE_STORE),
+    "read": (CORPUS, CHAIN, GPG, CLI, SOLVE_STORE),
     # Ledger appends, gpg's throwaway keyring, workflows under the root
     # passed to them, and the files the cli writes.
-    # A hook opens its policy file, and the scan counts open() as a
-    # write.
-    "write": (CHAIN, GPG, WORKFLOWS, CLI, HOOKS),
+    "write": (CHAIN, GPG, WORKFLOWS, CLI),
     "process": (GPG,),
     # The solve cache reads the variables that name or disable it.
-    "environment": (GPG, HOOKS, SOLVE_STORE),
+    "environment": (GPG, SOLVE_STORE),
     "temporary": (GPG, WORKFLOWS),
     "copy": (WORKFLOWS,),
-    "print": (CLI, MAIN, HOOKS),
-    # The guard compares the expiry of an authorization with the time
-    # of each call (STND.HARN.29, unit 0008).
-    "clock": (CLI, HOOKS),
+    "print": (CLI, MAIN),
+    # A ledger append records the time of the call by default.
+    "clock": (CLI,),
     # A rehearsal runs the amendment script it is given.
     "execute": (REHEARSE,),
     # No module changes the interpreter's state, such as its recursion
@@ -768,18 +761,6 @@ class Architecture(unittest.TestCase):
                     own, other = layer_of(name), layer_of(target)
                     if own is not None and other is not None:
                         self.assertLessEqual(other, own)
-
-    def test_hooks_stand_alone(self) -> None:
-        """Behavior: a hook imports nothing from the package.
-
-        Reference: decision 0001; a hook is installed outside the work,
-        where the package is not, so an import would fail closed on
-        every call.
-        """
-        for name, targets in import_graph().items():
-            if name.startswith(HOOKS):
-                with self.subTest(name):
-                    self.assertEqual(targets, set())
 
     def test_no_import_cycle(self) -> None:
         """Behavior: the imports between modules form no cycle.

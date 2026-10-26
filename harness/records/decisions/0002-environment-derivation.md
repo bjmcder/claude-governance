@@ -2,6 +2,8 @@
 
 Status: proposed with the STND.HARN 0.1 draft (REPRO.7). Author: Claude, agent.
 
+Withdrawn by unit 0018 (2026-10-26): the human owner dropped the environment derivation and the guard, and the harness derives no configuration. The code is in git history before that unit.
+
 ## Context
 
 The human owner wants agents to run unattended, without approving routine actions, and without risking irreversible mass deletion. STND.INSTR names no tool or method (GOV.18). It states that environment means are derived from it and from STND.DFLT and are recorded under STND.DFLT.22.

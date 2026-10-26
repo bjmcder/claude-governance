@@ -2,22 +2,9 @@
 
 This file lists the work the custodian has directed, and the items a ratified round left open. It replaces the open items of the former HANDOFF.md (see git history). To close an item, do it and remove its line. The record of the work stays in git and in `review-records/`.
 
-## Harness, in the custodian's order
-
-1. **Installation, the custodian's own step.** The steps are in `tools/install-tests.md`:
-   1. Install `socat`. The sandbox needs it, and `environment --check` reports it missing.
-   2. Derive the configuration from the merged harness, and install it as root, as INSTALL.md states.
-   3. Run the three installation tests, and record the results in unit 0008.
-   4. Append the configure entry that ends the transition of ledger entry 53 for STND.HARN.18.
-   5. In `/etc/governance/signer.json`, set a `head` pin, and move it forward after each transaction that must not be lost, such as a revocation (unit 0016; the command is in harness/README.md, Signatures). Without it, the end of the ledger can be cut and `verify` still passes. When SIGNR is founded, found it and set `anchor` together, the register first.
-
-   Whether the transition of entry 53 for STND.HARN.26 to .28 has ended is also for the custodian to record.
-
-Known limits, not scheduled (custodian, 2026-10-25): the guard does not read the forms R2 to R10 of `review-records/harness/rereview-unit-0015.md`. These are computed or patterned program words, `env -S`, and git settings or variables given in other forms; `merge-file` operands; `ed` and `ex` scripts; aliases; sed's `w` and `e`. They are listed in `harness/records/units/0015-guard-fixes.md` and the guard's coverage table. A later unit may take them up if the custodian asks.
-
 ## Corpus, for a later round
 
-The first two the custodian deferred on 2026-10-25; the others arose from units 0013, 0016, and 0017, which made the harness follow the corpus as written. Each unit record holds draft wording.
+The first two the custodian deferred on 2026-10-25; the others arose from units 0013, 0016, and 0017, which made the harness follow the corpus as written, and from unit 0018, which dropped the environment derivation. Each unit record holds draft wording.
 
 - **Foreign interfaces in STND.CODE.** Add one STND.CODE provision on foreign interfaces, with one definition of Foreign interface (now defined in five standards) and one of Lock file (in STND.PY and STND.RUST). It replaces the callback, ownership, and lock-file rules that now stand alike in several language standards (GOV.31). This is decision 26 of `review-records/round-2026-10-25-close/decisions-final.md`.
 - **STND.OFFLD.31 and the first filling of caches and memory**, which STND.PERF.12 names. Consider it at STND.OFFLD's next minor amendment (decision 27).
@@ -33,3 +20,5 @@ The first two the custodian deferred on 2026-10-25; the others arose from units 
 - **`checked_by` keys (unit 0017, L5).** A STND.HARN rule that every `checked_by` key names a registered check, outside STND.DRAFT and STND.IDENT too.
 - **STND.DRAFT, section Checks (unit 0017, L9).** Reword "the provision concerned" as "the provision of this standard that the check enforces", the reading the harness uses.
 - **The term Sentence (unit 0017, L3).** A defined term in STND.DRAFT, which g.4 and g.18 count by.
+- **The transition of ledger entry 53.** The harness implements STND.HARN.26 to STND.HARN.28 (checks m.1 and m.2, and `pairs`), so the reading that the transition asks of QA.7 reviews is no longer needed; whether to record its end is for the custodian. The part for STND.HARN.18 no longer arises, since the harness derives no configuration (unit 0018).
+- **Provisions on a derived configuration (unit 0018).** STND.HARN.18 to STND.HARN.23 and STND.HARN.29, and the authorization form of STND.PROJ.6 and STND.PROJ.7 that STND.HARN.29 relies on, apply only where a harness derives a configuration, and this one derives none. Whether to keep them as written for another harness, or withdraw them.
