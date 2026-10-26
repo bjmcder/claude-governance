@@ -26,5 +26,5 @@ HW.ASIC,sub-profile,LVL1,Application-specific integrated circuits,adopted,ASIC/,
 HW.CPU,sub-profile,LVL1,General-purpose processors,adopted,CPU/,53483757046a286b824fcb413062bac4eb9bfd974f7e40644f291761ff09f815,11002
 HW.EMBED,sub-profile,LVL1,Embedded controllers,adopted,EMBED/,2748d0a979e3e91d8a767b86f61428e6b15c3300fb059eeb25fed6e89c83496d,13892
 HW.FPGA,sub-profile,LVL1,Field-programmable gate arrays,adopted,FPGA/,17d82ffc038c328446de780eb360ee4413891f9406e3d71de473f0cd9f6fbd6d,8871
-HW.GPU,sub-profile,LVL1,Accelerators,adopted,GPU/,0ce93f130cdc096ef86468787e1675bb1d6af92cb5f22d3f91433368437f39f7,10617
-HW.QPU,sub-profile,LVL1,Quantum processors,adopted,QPU/,f05112535886fe331b402d645b1cf28a9abd27d47ea5148faf4d6273e433e0b4,19137
+HW.GPU,sub-profile,LVL1,Accelerators,adopted,GPU/,5235d49d7d0e594fb2fcb2dde7c54bb5d2381fe34d2fcbbdc0c6b4b48b6f7fd7,10848
+HW.QPU,sub-profile,LVL1,Quantum processors,adopted,QPU/,be024eafbb79017db74ab3456aa0a30197e025acf1b3ebbfca631dd0e4c7576b,19368

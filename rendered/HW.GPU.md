@@ -1,6 +1,6 @@
-# Accelerators (HW.GPU) 1.0.1
+# Accelerators (HW.GPU) 1.0.2
 
-Adopted by The Custodian as revision 1.0 in ledger entry 69 (2026-10-18); revised to 1.0.1 in entry 164 (2026-10-25). This reading copy is composed from the per-provision files in HW/GPU/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 69 (2026-10-18); revised to 1.0.1 in entry 164 (2026-10-25) and 1.0.2 in entry 178 (2026-10-26). This reading copy is composed from the per-provision files in HW/GPU/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -48,7 +48,7 @@ Many runtime libraries default to reduced-precision inputs or accumulation in ma
 
 Data movement, on-demand migration of memory that exceeds the accelerator's capacity, dispatch, and time in which the accelerator waits on the host often dominate the run time of offloaded work. HW.GPU.4 records them in the runs that track resource use while a budget is not yet known (RSRC.2) or that measure it for an optimization (RSRC.4), so that optimization targets the measured bottleneck and claims count them (HW.22). These are development and tuning runs: a production run whose budget is stated and met omits the record and its measurement overhead, keeping only the record its class asks (RSRC.3), and returns to it when a regression or a new optimization calls for it. Where a quantity is measurable only with elevated privileges or with a profiler that the run does not use, the record says so, and nothing more is asked.
 
-Submitting work to a rented accelerator is a remote write, and usually an expenditure, that needs a recorded authorization (PRIME.7, PRIME.8, GUARD.1). Where the provider's service lies within the provisioned environment, a standing authorization with a cost limit (GUARD.11, GUARD.15) spares a referral per job; otherwise each submission transmits data beyond that environment and is authorized per action (GUARD.11). Under STND.HARN.18 and the transition of ledger entry 53, each remote write is referred unless an authorization in force names its destination and kind. Provisioning the rented service as part of the environment is therefore what makes unattended use of it possible.
+Submitting work to a rented accelerator is a remote write, and usually an expenditure, that needs a recorded authorization (PRIME.7, PRIME.8, GUARD.1). Where the provider's service lies within the provisioned environment, a standing authorization with a cost limit (GUARD.11, GUARD.15) spares a referral per job; otherwise each submission transmits data beyond that environment and is authorized per action (GUARD.11). A submission that no authorization in force covers is one that PRIME.7 and PRIME.14 have the agent halt and refer. Provisioning the rented service as part of the environment is therefore what makes unattended use of it possible.
 
 HW.GPU addresses one matter that HW owns, the hardware contract of an execution path (HW.GPU.2), through HW.GPU.3, which cites HW.8.
 
@@ -67,7 +67,6 @@ HW.GPU.3 instantiates PRIME.4 and binds at every class. Every other provision ex
 | RSRC | Resources |
 | STND.CLASS | Consequence-class criteria |
 | STND.DRAFT | Drafting standard |
-| STND.HARN | Harness specification |
 | STND.VVUQ | Verification, validation, and uncertainty quantification methods |
 
 ## Provisions
@@ -116,3 +115,4 @@ Where a run of an execution path on an accelerator measures its resource use und
 | --- | --- | --- |
 | 1.0 | 2026-10-18 | Adopted. |
 | 1.0.1 | 2026-10-25 | Editorial amendment (GOV.41): the informative Selector text cites HW.CPU.1, the selector of the sub-profile that host code outside the accelerator's path meets, and References lists HW.CPU; the Notes name RSRC as the only Article that the provisions other than HW.GPU.3, the selector, and the shared-matters provision instantiate, in place of six Articles of which they instantiate RSRC alone; no obligation, permission, or defined meaning changes. |
+| 1.0.2 | 2026-10-26 | Editorial amendment (GOV.41): the Notes state the referral of a submission that no authorization covers by PRIME.7 and PRIME.14, in place of the provision of STND.HARN on a derived configuration, which STND.HARN 1.4 withdraws; no obligation, permission, or defined meaning changes. |

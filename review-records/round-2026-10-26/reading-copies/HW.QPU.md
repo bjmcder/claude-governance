@@ -1,6 +1,6 @@
 # Quantum processors (HW.QPU) 1.0.2
 
-This reading copy is composed from the per-provision files in HW/QPU/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 70 (2026-10-18); revised to 1.0.1 in entry 165 (2026-10-25) and 1.0.2 in entry 179 (2026-10-26). This reading copy is composed from the per-provision files in HW/QPU/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 

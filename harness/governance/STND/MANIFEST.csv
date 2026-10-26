@@ -8,12 +8,12 @@ STND.CONC,standard,LVL2,Concurrency standard,adopted,CONC/,87096a72c50fa7799ac5b
 STND.CREW,standard,LVL2,Agent roles standard,adopted,CREW/,d443984f3de9c8670dd96179ecb6820bd43591919f5953615c9da50d54213331,40417
 STND.CXX,standard,LVL2,C++ standard,adopted,CXX/,6c35cd3114cc0075edc7ea1c07572a128a30a40d977bb6c4f0c209ccfae5712f,56280
 STND.DEPS,standard,LVL2,Dependency policy,adopted,DEPS/,8fed8233aa0a4ddfd224fed73fa635d479f4c85bb1aa6dbd0540cc717de2bf08,13015
-STND.DFLT,standard,LVL2,Defaults,adopted,DFLT/,39abbf3747fc6edfa20aca2651ef40dc212713e67c68a97b3e445678e2cc23e5,30840
+STND.DFLT,standard,LVL2,Defaults,adopted,DFLT/,a4b7727ae58aeb260c3f45ef2bf3531cfd2a825d229ee9cd07f69e008042b080,30966
 STND.DOCS,standard,LVL2,Documentation standard,adopted,DOCS/,7dbc2a31eb2a45aaa4bc6deb99d21421b7f508a1e13bafc9fcc75b5ba75774c7,30177
-STND.DRAFT,standard,LVL2,Drafting standard,adopted,DRAFT/,42fe1e8dde8c0336715e75f22d00f0757417527ae1bf79eca4c2b5501b12f48a,37873
+STND.DRAFT,standard,LVL2,Drafting standard,adopted,DRAFT/,9b817674bde7e8eb432dc1505fe81ddfa1ff9789ff4efff09379de99cabafad9,39409
 STND.FTN,standard,LVL2,Fortran standard,adopted,FTN/,b01111ad9c4ce46752cac21e69eb25de2fdbe8ba9614483ccea7855ee2c1c3d3,65318
-STND.HARN,standard,LVL2,Harness specification,adopted,HARN/,88742cf8d6c17d8dcbe601351044b9797c31497e12dafb59ea1d879c998fd96e,32500
-STND.IDENT,standard,LVL2,Identifier scheme and mnemonic register,adopted,IDENT/,26d0cdb4be97a1f0cffcefcd560babc013476d0ae1d757beae5dbd0b738899b5,21692
+STND.HARN,standard,LVL2,Harness specification,adopted,HARN/,1cfd7b674617e071eefb956db3791a3e9ebfaa808ff0ee13385bf048e3cc0bc7,23086
+STND.IDENT,standard,LVL2,Identifier scheme and mnemonic register,adopted,IDENT/,deea3ef3cacfc20fc7cd956173b5601764261091fdfd6c53ac40bb789607f78f,22791
 STND.INSTR,standard,LVL2,Agent instructions,adopted,INSTR/,a071027c0454b76ddcb6b880ece28325ada2241376f48191c367e0bc612d7cdf,9625
 STND.JL,standard,LVL2,Julia standard,adopted,JL/,bb83cca02451a0516cd34065cfe18479c21174ffb57c76b57291c17219f39b79,65002
 STND.KNOW,standard,LVL2,Knowledge base and tags,adopted,KNOW/,01e3a6442613dd9a89e50d0ac5659ce4649a8f4cb78a4e9da23c73a28861a1f4,17679
@@ -22,7 +22,7 @@ STND.MPI,standard,LVL2,Message Passing Interface standard,adopted,MPI/,26a1fd6d8
 STND.OFFLD,standard,LVL2,Accelerator offload standard,adopted,OFFLD/,182f28cd4d478651f97a7244ffb97b505536c8c74cd260b9d4e84c6feb550a7a,41672
 STND.OMP,standard,LVL2,OpenMP standard,adopted,OMP/,18f58f503954c419f0b29f06a90bb3bb0c6c0ef56160bea63983a85fd9876e77,47736
 STND.PERF,standard,LVL2,Performance evaluation standard,adopted,PERF/,1e5a07d347660d460f3c5aa34647f17c16203667cac5db39aa9ac5a59e8758a1,41045
-STND.PROJ,standard,LVL2,Project constitution template,adopted,PROJ/,d13722a1d32337728f9bd9712f3a7e0b38401dc6699dfb8517492fe533323f46,24616
+STND.PROJ,standard,LVL2,Project constitution template,adopted,PROJ/,f8ed12ca4ee60f13dc20ae04092b72731fd47d0ee04baa240b823742c8264abb,24557
 STND.PY,standard,LVL2,Python standard,adopted,PY/,8fd543052e8f6f7068881ce50d890e287d54e510293a3ffde6673d68ecdd8472,57334
 STND.RUST,standard,LVL2,Rust standard,adopted,RUST/,ba1af17f1bcd18368ea4d7f144fb17ea5a63d6b459384db48b7a01f16f8c124b,61191
 STND.STDC,standard,LVL2,C standard,adopted,STDC/,d136404f012e3de8a94619ef8832d180f119c9ab39b23d0c09e7d3306a2b973e,61630

@@ -1,6 +1,6 @@
 # Identifier scheme and mnemonic register (STND.IDENT) 1.4
 
-This reading copy is composed from the per-provision files in STND/IDENT/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 10 (2026-10-09); revised to 1.1 in entry 18 (2026-10-09), 1.2 in entry 25 (2026-10-10), 1.3 in entry 27 (2026-10-10), 1.3.1 in entry 35 (2026-10-10), 1.3.2 in entry 45 (2026-10-10), 1.3.3 in entry 157 (2026-10-25), and 1.4 in entry 182 (2026-10-26). This reading copy is composed from the per-provision files in STND/IDENT/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 

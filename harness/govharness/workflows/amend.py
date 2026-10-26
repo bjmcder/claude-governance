@@ -17,7 +17,7 @@ from pathlib import Path, PurePosixPath
 from govharness.checks.verification import Verification
 from govharness.core.corpus import (
     corpus_hash,
-    is_directory,
+    is_scope_path,
     read_text,
     read_tree,
 )
@@ -236,15 +236,19 @@ def record_transaction(root: Path, change: Change) -> Recorded:
     Raises
     ------
     ValueError
-        If a scope names no directory, the ledger refuses the entry
+        If a scope names no directory or Markdown file, the ledger
+        refuses the entry
         (``chain.append``: an unknown type, a broken or unreadable
         ledger, an entry the register requires to be signed, and the
         rest), or the solve cache cannot be used (``usable_store``).
         Every refusal comes before anything is written.
     """
-    missing = [s for s in change.scope if not is_directory(root, s)]
+    missing = [s for s in change.scope if not is_scope_path(root, s)]
     if missing:
-        raise ValueError(f"scope names no directory: {', '.join(missing)}")
+        raise ValueError(
+            "scope names no directory or Markdown file: "
+            + ", ".join(missing)
+        )
     store = usable_store(root, True)
     scope = list(change.scope)
     entry = append(

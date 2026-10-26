@@ -5,7 +5,7 @@ DSGN,article,LVL0,Design,ratified,DSGN/,d6a6d37d662aa68914ea892ce78fc45bb8552502
 GOV,article,LVL0,Governance,ratified,GOV/,4e29d8b6dd4690db48fba20a324a53750d2e3a80ab2793641bbbf83ee3063acc,28681
 GUARD,article,LVL0,Safeguards,ratified,GUARD/,d1f65f60679834a939b446a300b74d146b9924ae729cf85c01622237ad4ddd44,9987
 HDES,profile,LVL1,Hardware design,adopted,HDES/,220a8713342893b47200497a4d770e464caa9ec05d8533bf278d2aea316182aa,63860
-HW,profile,LVL1,Execution hardware,adopted,HW/,6c0692aaedda23cb6dda271115e4aeb7fb01579827070ee2cc49123a6e515af1,115698
+HW,profile,LVL1,Execution hardware,adopted,HW/,c067b3346b8362c9f67da73303b0a1ba15586ceade07e2cc1282fbb9fd466e36,116160
 INTPR,article,LVL0,Interpretability,ratified,INTPR/,e2616075e5e9a87e40c3fa537523d2f171a1bddf874137f28e9746c9a62b48fe,6558
 KNOW,knowledge-base,,Knowledge base,planned,KNOW/,c177753716de5f94e8b85b7421da6a7f1b31466778538973c994b6161c0ad95b,266
 LEX,lexicon,LVL0,Lexicon,ratified,LEX/,6da577e1be59c323bde73f03c62458bf4ed3e4363f2ff5fd547005fe87a6d948,48949
@@ -20,6 +20,6 @@ QA,article,LVL0,Process,ratified,QA/,41f0da9567751b48be70b33937a53fbe1552ac34ea8
 REPRO,article,LVL0,Reproducibility,ratified,REPRO/,1ccf6751a74df2f66f071281ace1f7efe0a697a6fd3b8cb97ae7c7f0d2d14cff,6427
 RSRC,article,LVL0,Resources,ratified,RSRC/,a3c38c61532f09f658f02c432765b91278d060d6609d5f4863535fccbfd595ec,5743
 SIMPL,article,LVL0,Simplicity,ratified,SIMPL/,b45087bd012080077c60359a128f60d9bea33070de5ea143ea95dc42459a665b,4604
-STND,standards,LVL2,Standards,planned,STND/,015f9397f8bada87b28d2cdfc6fb43f9d916fc71cab2baf122e6355aecfcb676,1343339
+STND,standards,LVL2,Standards,planned,STND/,177d3ba16a86712fb2cacb7bd5646163f41cdedef70a526bdfc8576a75229c36,1336627
 TAG,tag-vocabulary,,Tag vocabulary,planned,TAG/,7583a2ec9ee995ceedf75d7457bfb9dda4d29b200bfdd84ee2802e6b3bf7f8bf,1194
 VV,article,LVL0,Correctness,ratified,VV/,83e168a630992578af51ce52207539ac1496dde1b3c2a2676049755f19da1da6,4823

@@ -2,8 +2,9 @@
 
 ``ledger append`` appends one transaction. Only a human owner or the
 custodians sign adoption-type transactions. Any transaction's scope may
-name a subpath such as ``STND/DRAFT``; a scope that names no directory
-of the corpus, or leaves it, is refused. A ``review`` transaction
+name a subpath such as ``STND/DRAFT``, or a Markdown file such as
+``README.md`` (STND.HARN.7); a scope that names neither, or leaves the
+corpus, is refused. A ``review`` transaction
 records an independent review (QA.7) and is not a revision. An
 ``annotate`` transaction adds facts about earlier transactions, because
 an entry is never edited.
@@ -25,7 +26,7 @@ from pathlib import Path
 from govharness.cli.reports import summary_lines
 from govharness.core.corpus import (
     corpus_hash,
-    is_directory,
+    is_scope_path,
     read_optional_text,
 )
 from govharness.core.entry import DOC_FILE, LEDGER_FILE
@@ -90,9 +91,12 @@ def run_append(
     }:
         parser.error("a work ledger needs its own --ledger-id")
     scope = _split(args.scope)
-    missing = [s for s in scope if not is_directory(args.root, s)]
+    missing = [s for s in scope if not is_scope_path(args.root, s)]
     if missing:
-        parser.error(f"scope names no directory: {', '.join(missing)}")
+        parser.error(
+            "scope names no directory or Markdown file: "
+            + ", ".join(missing)
+        )
     try:
         written = _append_entry(args, scope)
     except ValueError as refusal:

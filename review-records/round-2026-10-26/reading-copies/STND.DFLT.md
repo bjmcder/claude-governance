@@ -1,6 +1,6 @@
 # Defaults (STND.DFLT) 1.5.2
 
-This reading copy is composed from the per-provision files in STND/DFLT/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 33 (2026-10-10); revised to 1.0.1 in entry 37 (2026-10-10), 1.0.2 in entry 39 (2026-10-10), 1.1 in entry 40 (2026-10-10), 1.2 in entry 42 (2026-10-10), 1.3 in entry 50 (2026-10-11), 1.4 in entry 56 (2026-10-11), 1.5 in entry 90 (2026-10-20), 1.5.1 in entry 159 (2026-10-25), and 1.5.2 in entry 176 (2026-10-26). This reading copy is composed from the per-provision files in STND/DFLT/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 

@@ -1,6 +1,6 @@
 # Harness specification (STND.HARN) 1.4
 
-This reading copy is composed from the per-provision files in STND/HARN/ of the governance harness; the harness files are the system of record. Withdrawn identifiers, never reused: STND.HARN.18, STND.HARN.19, STND.HARN.20, STND.HARN.21, STND.HARN.22, STND.HARN.23, STND.HARN.29, and STND.HARN.30.
+Adopted by The Custodian as revision 1.0 in ledger entry 43 (2026-10-10); revised to 1.1 in entry 53 (2026-10-11), 1.2 in entry 141 (2026-10-24), 1.3 in entry 175 (2026-10-25), and 1.4 in entry 180 (2026-10-26). This reading copy is composed from the per-provision files in STND/HARN/ of the governance harness; the harness files are the system of record. Withdrawn identifiers, never reused: STND.HARN.18, STND.HARN.19, STND.HARN.20, STND.HARN.21, STND.HARN.22, STND.HARN.23, STND.HARN.29, and STND.HARN.30.
 
 ## Purpose and scope
 

@@ -1,6 +1,6 @@
 # Project constitution template (STND.PROJ) 1.2.1
 
-This reading copy is composed from the per-provision files in STND/PROJ/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 96 (2026-10-20); revised to 1.1 in entry 99 (2026-10-21), 1.2 in entry 140 (2026-10-24), and 1.2.1 in entry 177 (2026-10-26). This reading copy is composed from the per-provision files in STND/PROJ/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 

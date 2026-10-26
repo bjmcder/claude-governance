@@ -160,9 +160,9 @@ def capitals(ctx: DraftingContext) -> list[Finding]:
 def one_modal(ctx: DraftingContext) -> list[Finding]:
     """g.4: one modal per sentence, and each provision imposes something.
 
-    A sentence ends at terminal punctuation here (``Unit.whole``), so
-    two clauses joined by a semicolon, each with its modal, are one
-    sentence with two.
+    A sentence ends at terminal punctuation (the term Sentence of
+    STND.DRAFT), so two clauses joined by a semicolon, each with its
+    modal, are one sentence with two.
 
     Parameters
     ----------
@@ -177,7 +177,7 @@ def one_modal(ctx: DraftingContext) -> list[Finding]:
     """
     found = []
     for unit in ctx.units_for(BELOW, {"provision", "body"}):
-        for sentence in unit.whole:
+        for sentence in unit.sentences:
             count = len(modals_in(ctx, sentence))
             if count >= 2:
                 found.append(

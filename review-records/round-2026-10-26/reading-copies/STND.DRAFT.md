@@ -1,6 +1,6 @@
 # Drafting standard (STND.DRAFT) 1.5
 
-This reading copy is composed from the per-provision files in STND/DRAFT/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 9 (2026-10-09); revised to 1.0.1 in entry 11 (2026-10-09), 1.0.2 in entry 20 (2026-10-10), 1.0.3 in entry 26 (2026-10-10), 1.1 in entry 29 (2026-10-10), 1.2 in entry 34 (2026-10-10), 1.2.1 in entry 44 (2026-10-10), 1.3 in entry 52 (2026-10-11), 1.4 in entry 66 (2026-10-18), and 1.5 in entry 181 (2026-10-26). This reading copy is composed from the per-provision files in STND/DRAFT/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 

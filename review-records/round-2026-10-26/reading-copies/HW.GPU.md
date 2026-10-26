@@ -1,6 +1,6 @@
 # Accelerators (HW.GPU) 1.0.2
 
-This reading copy is composed from the per-provision files in HW/GPU/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 69 (2026-10-18); revised to 1.0.1 in entry 164 (2026-10-25) and 1.0.2 in entry 178 (2026-10-26). This reading copy is composed from the per-provision files in HW/GPU/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 

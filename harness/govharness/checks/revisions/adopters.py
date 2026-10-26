@@ -15,6 +15,8 @@ from govharness.checks.revisions.classes import documents
 from govharness.core.corpus import Corpus
 
 ADOPTER_FIELDS = ("ratified_by", "adopted_by")
+# The statuses under which STND.IDENT.12 asks for the adopter field.
+IN_FORCE = ("adopted", "ratified")
 TEMPLATE_FIELDS = (
     "human_owner",
     "adopted_by",
@@ -103,8 +105,10 @@ def adopters_named(ctx: CheckContext) -> Verdict:
     """Check v.5: adopter fields name a role that the Lexicon defines.
 
     STND.IDENT.12 names the field for each kind, ``ratified_by`` for the
-    constitution and ``adopted_by`` for the others, and requires it
-    whatever the status, so a draft names the role that will adopt it.
+    constitution and ``adopted_by`` for the others, and requires it of
+    a document that is adopted or ratified; a draft or a planned
+    document names no adopter yet. A field that is present names a role
+    label whatever the status.
 
     Parameters
     ----------
@@ -114,14 +118,16 @@ def adopters_named(ctx: CheckContext) -> Verdict:
     Returns
     -------
     Verdict
-        FAIL on a document without the adopter field of its kind, or
-        with an adopter field that is not a role label.
+        FAIL on an adopted or ratified document without the adopter
+        field of its kind, or on a document with an adopter field that
+        is not a role label.
     """
     roles = role_labels(ctx.corpus)
     problems: list[str] = []
     for entry in documents(ctx.corpus):
         wanted = adopter_field(entry.meta)
-        if wanted not in entry.meta:
+        in_force = entry.meta.get("status") in IN_FORCE
+        if in_force and wanted not in entry.meta:
             problems.append(
                 f"- {entry.meta['id']}: names no adopter in `{wanted}`"
             )

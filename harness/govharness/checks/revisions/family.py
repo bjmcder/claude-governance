@@ -12,7 +12,6 @@ from __future__ import annotations
 import re
 
 from govharness.checks.base import Check, CheckContext, Verdict
-from govharness.checks.drafting.citations import naming_text
 from govharness.checks.revisions import adopters, history, identifiers
 from govharness.checks.revisions.classes import (
     STANDARD_ID,
@@ -21,7 +20,9 @@ from govharness.checks.revisions.classes import (
     documents,
 )
 from govharness.core.corpus import Corpus
+from govharness.core.entry import Entry
 from govharness.core.text import ids_in
+from govharness.derive.references import naming_text
 
 FAMILY = "revisions"
 # The keys a provision of STND.IDENT may name; v.7 checks the naming
@@ -121,30 +122,63 @@ def withdrawn(ctx: CheckContext) -> Verdict:
     for doc in documents(corpus):
         did = str(doc.meta["id"])
         listed = [str(w) for w in doc.meta.get("withdrawn") or []]
-        pattern = re.compile(rf"{re.escape(did)}\.(\d+)")
-        gone: set[int] = set()
+        patterns = {
+            prefix: re.compile(rf"{re.escape(prefix)}\.(\d+)")
+            for prefix in numbered_by(doc)
+        }
+        gone: dict[str, set[int]] = {prefix: set() for prefix in patterns}
         for ident in listed:
-            found = pattern.fullmatch(ident)
+            found = next(
+                (
+                    (prefix, m)
+                    for prefix, pattern in patterns.items()
+                    if (m := pattern.fullmatch(ident))
+                ),
+                None,
+            )
             if found is None:
                 problems.append(f"- {did}: `{ident}` is not its identifier")
                 continue
-            gone.add(int(found[1]))
+            gone[found[0]].add(int(found[1][1]))
             retired.add(ident)
             if ident in corpus.by_id:
                 problems.append(f"- {did}: withdrawn `{ident}` is in use")
-        numbers = {
-            int(m[1])
-            for e in corpus.provisions()
-            if (m := pattern.fullmatch(str(e.meta["id"])))
-        }
-        if numbers:
-            gaps = set(range(1, max(numbers) + 1)) - numbers - gone
-            problems += [
-                f"- {did}: {did}.{n} is missing and not listed as withdrawn"
-                for n in sorted(gaps)
-            ]
+        for prefix, pattern in patterns.items():
+            numbers = {
+                int(m[1])
+                for e in corpus.provisions()
+                if (m := pattern.fullmatch(str(e.meta["id"])))
+            }
+            if numbers:
+                gaps = set(range(1, max(numbers) + 1))
+                gaps -= numbers | gone[prefix]
+                problems += [
+                    f"- {did}: {prefix}.{n} is missing and not listed as "
+                    "withdrawn"
+                    for n in sorted(gaps)
+                ]
     problems += _unresolved_citations(corpus, retired)
     return Verdict("FAIL" if problems else "PASS", problems)
+
+
+def numbered_by(doc: Entry) -> list[str]:
+    """Return the prefixes by which a document numbers its provisions.
+
+    Parameters
+    ----------
+    doc : Entry
+        A document carrying a revision.
+
+    Returns
+    -------
+    list[str]
+        The parts named in the field ``parts`` for the constitution,
+        whose provisions are numbered by part (GOV.37, STND.IDENT.24),
+        and the document's own identifier otherwise (STND.IDENT.14).
+    """
+    if doc.meta.get("kind") == "constitution":
+        return [str(part) for part in doc.meta.get("parts") or []]
+    return [str(doc.meta["id"])]
 
 
 def cited_provisions(corpus: Corpus) -> dict[str, set[str]]:

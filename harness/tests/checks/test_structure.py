@@ -11,8 +11,9 @@ import unittest
 from pathlib import PurePosixPath
 
 from govharness.checks.base import CheckContext
-from govharness.checks.fields import status_problems
+from govharness.checks.fields import check_keys_known, status_problems
 from govharness.checks.ledger import ledger_intact, unpinned_files
+from govharness.checks.registry import registered_keys
 from govharness.checks.revisions.identifiers import read_register
 from govharness.checks.structure import (
     id_problems,
@@ -29,6 +30,9 @@ from tests.support import (
     live_index,
     live_ledger,
 )
+
+# The paths that no transaction pinned before the round of 2026-10-26.
+UNPINNED = {"KNOW", "README.md", "STND/_doc.md", "TAG", "_PROJECT"}
 
 
 class StructureChecks(unittest.TestCase):
@@ -143,20 +147,23 @@ class StructureChecks(unittest.TestCase):
         self.assertEqual(verdict(), "FAIL")
 
     def test_unpinned_files(self) -> None:
-        """Behavior: the files under no scope that a transaction names
-        are listed as a warning, a directory none of whose files is
-        covered once; the warning goes once a scope covers them.
+        """Behavior: each Markdown file that no scope reaches fails, a
+        directory none of whose files is reached named once; the failure
+        goes once a scope reaches them, a file scope included.
 
-        Reference: STND.HARN.9 (only the scopes transactions name are
-        compared) and GOV.36; QA.8 part C, M1. The live corpus pins no
-        scope over KNOW, TAG, the project template, STND/_doc.md, and
-        README.md.
+        Reference: STND.HARN.31 and the term Reach of STND.HARN; QA.8
+        part C, M1. The live ledger without the transactions that pin
+        KNOW, TAG, the project template, STND/_doc.md, and README.md.
         """
         tree = read_tree(ROOT)
-        ledger = live_ledger()
+        ledger = [
+            e
+            for e in live_ledger()
+            if not set(e.get("scope") or []) & UNPINNED
+        ]
         ctx = CheckContext(corpus_of(live_index()), ledger, tree=tree)
         found = unpinned_files(ctx)
-        self.assertEqual(found.status, "WARN")
+        self.assertEqual(found.status, "FAIL")
         self.assertEqual(
             found.details,
             [
@@ -167,10 +174,30 @@ class StructureChecks(unittest.TestCase):
                 "- _PROJECT/ (9 files)",
             ],
         )
-        ledger.append({"scope": ["KNOW", "TAG", "_PROJECT", "STND"]})
-        ledger.append({"scope": ["README.md"]})
+        ledger += [{"scope": [path]} for path in sorted(UNPINNED)]
         found = unpinned_files(CheckContext(Corpus([]), ledger, tree=tree))
         self.assertEqual((found.status, found.details), ("PASS", []))
+
+    def test_check_keys_known(self) -> None:
+        """Behavior: a ``checked_by`` key that names no registered check
+        fails, naming the entry and the key; ``review`` and every key of
+        the live corpus pass.
+
+        Reference: STND.HARN.32; the key of STND.HARN.9 changed to a
+        key no check has.
+        """
+        index = live_index()
+        ctx = CheckContext(corpus_of(index), live_ledger())
+        ctx.known_keys = registered_keys()
+        self.assertEqual(check_keys_known(ctx).status, "PASS")
+        index["STND.HARN.9"].meta["checked_by"] = ["review", "ledgr"]
+        ctx = CheckContext(corpus_of(index), live_ledger())
+        ctx.known_keys = registered_keys()
+        found = check_keys_known(ctx)
+        self.assertEqual(
+            (found.status, found.details),
+            ("FAIL", ["- STND.HARN.9: `ledgr` names no check"]),
+        )
 
 
 if __name__ == "__main__":

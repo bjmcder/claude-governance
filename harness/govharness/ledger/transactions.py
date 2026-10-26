@@ -285,13 +285,33 @@ def scope_key(entry: Transaction) -> tuple[str, ...]:
     )
 
 
-def latest_pins(entries: list[Transaction]) -> list[Transaction]:
-    """Return the latest transaction of each scope, in ledger order.
+def reaches(scope: tuple[str, ...], path: str) -> bool:
+    """Return True when a scope reaches a path (the term Reach of STND.HARN).
 
-    A pin holds until the next transaction of the same scope, the same
-    paths in any order (STND.HARN.9: "the latest governance-ledger
-    transaction with that scope"); a transaction of another scope does
-    not replace it, even where it covers the same files.
+    Parameters
+    ----------
+    scope : tuple[str, ...]
+        Scope paths of a transaction.
+    path : str
+        A path, such as a scope path of another transaction or a file.
+
+    Returns
+    -------
+    bool
+        Whether one of the scope's paths is the path or a directory
+        above it.
+    """
+    return any(covers(own, path) for own in scope)
+
+
+def pins_in_force(entries: list[Transaction]) -> list[Transaction]:
+    """Return the pins in force, in ledger order (STND.HARN.9).
+
+    A transaction with a scope is a pin in force unless a later one has
+    a scope that reaches each path of its scope (the terms Pin in force
+    and Reach of STND.HARN). The same scope again ends a pin, and so
+    does a wider one; a narrower scope, or one that shares only some
+    paths, leaves it in force.
 
     Parameters
     ----------
@@ -301,26 +321,15 @@ def latest_pins(entries: list[Transaction]) -> list[Transaction]:
     Returns
     -------
     list[Transaction]
-        For each scope that some entry pins, its last entry.
+        Each entry with a scope that no later entry's scope reaches
+        whole.
     """
-    latest: dict[tuple[str, ...], tuple[int, Transaction]] = {}
-    for position, entry in enumerate(entries):
-        if scope_key(entry):
-            latest[scope_key(entry)] = (position, entry)
-    return [entry for _, entry in sorted(latest.values(), key=_first)]
-
-
-def _first(pair: tuple[int, Transaction]) -> int:
-    """Return the position of a (position, entry) pair.
-
-    Parameters
-    ----------
-    pair : tuple[int, Transaction]
-        Position in the ledger and the entry.
-
-    Returns
-    -------
-    int
-        The position.
-    """
-    return pair[0]
+    pinned = [entry for entry in entries if scope_key(entry)]
+    return [
+        entry
+        for position, entry in enumerate(pinned)
+        if not any(
+            all(reaches(scope_key(later), p) for p in scope_key(entry))
+            for later in pinned[position + 1 :]
+        )
+    ]

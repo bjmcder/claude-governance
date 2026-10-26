@@ -1,6 +1,6 @@
-# Drafting standard (STND.DRAFT) 1.4
+# Drafting standard (STND.DRAFT) 1.5
 
-Adopted by The Custodian as revision 1.0 in ledger entry 9 (2026-10-09); revised to 1.0.1 in entry 11 (2026-10-09), 1.0.2 in entry 20 (2026-10-10), 1.0.3 in entry 26 (2026-10-10), 1.1 in entry 29 (2026-10-10), 1.2 in entry 34 (2026-10-10), 1.2.1 in entry 44 (2026-10-10), 1.3 in entry 52 (2026-10-11), and 1.4 in entry 66 (2026-10-18). This reading copy is composed from the per-provision files in STND/DRAFT/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 9 (2026-10-09); revised to 1.0.1 in entry 11 (2026-10-09), 1.0.2 in entry 20 (2026-10-10), 1.0.3 in entry 26 (2026-10-10), 1.1 in entry 29 (2026-10-10), 1.2 in entry 34 (2026-10-10), 1.2.1 in entry 44 (2026-10-10), 1.3 in entry 52 (2026-10-11), 1.4 in entry 66 (2026-10-18), and 1.5 in entry 181 (2026-10-26). This reading copy is composed from the per-provision files in STND/DRAFT/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -18,6 +18,7 @@ This section fixes meaning and imposes no obligation, as the Lexicon does.
 | --- | --- |
 | Modal | One of the five words in the table of STND.DRAFT.1. |
 | Excluded expression | An expression of the table of STND.DRAFT.7. |
+| Sentence | Text that ends at a period, a question mark, or an exclamation point, or at the end of a paragraph, a list item, or a table cell, not counting a mark inside an identifier, a number, an abbreviation, or quotation marks. |
 | Informative sentence | A sentence that states no obligation, prohibition, recommendation, or permission. |
 | Imperative sentence | A sentence whose main verb is in the imperative mood and names no actor. |
 | Status word | A phrase of the Normative Language table that states a status of an artifact, such as "is a defect" or "has no authority". |
@@ -32,7 +33,7 @@ This section fixes meaning and imposes no obligation, as the Lexicon does.
 | Owning profile | The profile whose shared-matters table gives a shared matter as its own. |
 | Shared matter | A subject of obligations that one profile owns and that other profiles address by citing the owning profile's provisions, such as the uncertainty of a computed result or a safe state. |
 | Subject | The thing that a provision's obligation concerns, named in the provision. |
-| Cited document | A document other than the citing one, named, itself or through one of its provisions, terms, or locators, in a citation or a reference field of the citing document or of its provisions. |
+| Cited document | A document other than the citing one, named, itself or through one of its provisions, terms, or locators, in a citation or a reference field of the citing document or of its provisions, or named in their text by its identifier alone. A name by identifier alone does not count inside quotation marks, a code span, a table with a column headed Example, the section References, or the revision history, and the identifier LVL0 alone never counts. |
 
 ## Representation in the harness
 
@@ -49,7 +50,7 @@ A profile's tables named selector and shared-matters are read by the harness by 
 
 ## Checks
 
-The harness reports the lineage checks (family l) and the drafting checks (family g) with `python -m govharness check`. A finding in this standard fails. A finding in another document fails when this standard is adopted and the provision concerned is binding, and warns otherwise. Findings in LVL0 and in documents not yet divided into numbered provisions form an advisory punch list and never fail, because this standard governs below LVL0 and numbered provisions. The check g.25 compares each references table with the cited documents that `python -m govharness references` derives from the corpus and writes.
+The harness reports the lineage checks (family l) and the drafting checks (family g) with `python -m govharness check`. A finding in this standard fails. A finding in another document fails when this standard is adopted and a binding provision of this standard names the check in its field `checked_by`, and warns otherwise. Findings in LVL0 and in documents not yet divided into numbered provisions form an advisory punch list and never fail, because this standard governs below LVL0 and numbered provisions. The check g.25 compares each references table with the cited documents that `python -m govharness references` derives from the corpus and writes. The command derives a row for each document that the text names by its identifier alone, as for a citation, and g.25 fails where the table lacks it, whether or not a citation backs the name.
 
 ## References
 
@@ -93,7 +94,7 @@ A modal SHALL be written in capital letters (LVL0#normative-language).
 
 Binding. Instantiates LVL0#normative-language.
 
-A modal or an excluded expression that a provision mentions without using it SHALL be enclosed in quotation marks (LVL0#normative-language).
+Outside a column whose entries are modals or excluded expressions, a modal or an excluded expression that a provision mentions without using it SHALL be enclosed in quotation marks (LVL0#normative-language).
 
 #### STND.DRAFT.4 Explicit modal
 
@@ -498,3 +499,4 @@ A provision at LVL1 or LVL2 SHALL NOT require a decision of the human owner othe
 | 1.2.1 | 2026-10-10 | Editorial amendment (GOV.41): the Checks section names the commands of the harness package instead of the retired scripts; no obligation changes. |
 | 1.3 | 2026-10-11 | Minor amendment (GOV.41): new section Profiles, STND.DRAFT.35 to STND.DRAFT.41, fixes selector attributes and their coverage of sub-profiles, the subjects of profile provisions (domain items, and execution paths for HW), the allocation of shared matters to one owning profile, obligations at the boundary between domains, and evidence stated by content; the Terms define Attribute, Domain item, Execution path, Owning profile, Shared matter, Subject, Assigned decision, and Decision of the human owner; new section Human owner decisions, STND.DRAFT.42, bars profiles and LVL2 standards from asking the human owner for a decision that LVL0 neither requires nor reserves, has them accept standing authorizations wherever LVL0 permits, and limits each referral's halt to the line of work it concerns. |
 | 1.4 | 2026-10-18 | Minor amendment (GOV.41), conforming on the adoption of HW: the term Execution path takes the definition that HW gives, which adds the hardware models, firmware, drivers, runtime libraries, and settings that a path admits, by reference to HW. |
+| 1.5 | 2026-10-26 | Minor amendment (GOV.41): the term Cited document also covers a document named in the text by its identifier alone, outside quotation marks, code spans, tables with a column headed Example, the section References, and the revision history, and never by the identifier LVL0 alone; new term Sentence; STND.DRAFT.3 asks for no quotation marks in a column whose entries are modals or excluded expressions; STND.DRAFT.22 names v.8 among its checks; the section Checks says that a finding in another document fails where a binding provision of this standard names the check, and that a document named by its identifier alone has its row derived, so that g.25 fails where the table lacks it. Transition (GOV.42): none. |
