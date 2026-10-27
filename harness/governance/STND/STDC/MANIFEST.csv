@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.STDC,standard,LVL2,C standard,adopted,_doc.md,b1fee66cd25d65ca640993ad3d01a98676e57a6025cd7bea1f8ebd23d56632a0,34317
+STND.STDC,standard,LVL2,C standard,adopted,_doc.md,67376a17e8c1093ddc6989ded6bd3a33b75a7d1eb77a9d0640b49a1e84cbb9f8,34768
 STND.STDC.1,provision,LVL2,C++ defaults applied to C,adopted,1.md,17b43d69bb6a764f1eab38689c0bdfab8d3fde9b5eb3f6b7e191a0eb91d3f25b,2076
 STND.STDC.2,provision,LVL2,C responses to listed failures,adopted,2.md,b5e02c41883a1ae6e9a8f2e3314f925eae19bb6164f4adce00421b239c1f041b,487
 STND.STDC.3,provision,LVL2,Lowered C editions recorded,adopted,3.md,2a127b7d31e562e1eea66d1d4c0fee4d1e18d9681c2a0477e169c0c6aedc38e5,612
@@ -35,7 +35,6 @@ STND.STDC.32,provision,LVL2,Errno as a report of failure,adopted,32.md,bf73f17ca
 STND.STDC.33,provision,LVL2,Signal handler calls,adopted,33.md,c5e6eeb47a8e0fd4f729a8796d0cf3fd3757f6d830f7efda0faf4a3af95f1282,516
 STND.STDC.34,provision,LVL2,Computational exception signals,adopted,34.md,085af6a204691a47a181b6d22889341f9035507c0a90a3cd9a8147ca6e2dddd8,491
 STND.STDC.35,provision,LVL2,Adjacent bit-fields shared,adopted,35.md,f5c088b5096f91f5a794284f7c8f74cc29131cb32d5b425575c0242001de7fa7,534
-STND.STDC.36,provision,LVL2,Data crossing to other languages,adopted,36.md,88ae2e0551d2fd2a3ce91e7b782fd8b2740ab3496414c243390064e9e2202d9d,627
 STND.STDC.37,provision,LVL2,C warnings and detected behavior,adopted,37.md,1d20aa58ba6cd3b59d191dc973072780ba3dce6f4071af42e0842d0421851d95,1170
 STND.STDC.38,provision,LVL2,Stated limits of analysis,adopted,38.md,7cdb487103191753e39c57a262f44d6a21b80271ac8cc746b2b97ab844d932f9,505
 STND.STDC.39,provision,LVL2,C naming conventions,adopted,39.md,585adeb54d265b188d59e7096abf901e6c5a72494366dcb4284c891d217ac350,591

@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.FTN,standard,LVL2,Fortran standard,adopted,_doc.md,955b7d6ccf14d75f40742145eba4547b87d85829f4eefebe36ebceac6e15e979,38904
+STND.FTN,standard,LVL2,Fortran standard,adopted,_doc.md,45b6d955caae3e4c79436ebc6c4c45868883af802e5adff0122e802981eafc94,39366
 STND.FTN.1,provision,LVL2,Revision in force,adopted,1.md,63ac3b2bd6611a8703ede61f5e95aa91bf1d08e7cdb491d388f4e914e2844033,814
 STND.FTN.2,provision,LVL2,Fortran compiler options,adopted,2.md,b22114b850c668dbc0c2239778d63f031be72a499020f6d96d9e102dcbcedbbf,836
 STND.FTN.3,provision,LVL2,Deleted and obsolescent forms,adopted,3.md,fca3c5ed09ffcc3e285e009443542926f46da61b20f52eb8c7ca50bb4526b65b,748

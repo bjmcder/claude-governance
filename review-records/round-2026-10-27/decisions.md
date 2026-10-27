@@ -8,3 +8,7 @@ The custodian's answers of 2026-10-27 on the first item of `OPEN-ITEMS.md`: fore
 2. **Home of lock files.** STND.DEPS defines Lock file once, and holds the shared rule on committing it.
 3. **Form of the lock-file rule.** The rule asks a committed lock file only of an environment or a build that produces reported results, the form of STND.PY.33 and STND.JL.4, so that it carries the least burden. A package that other work uses, and that produces no reported result itself, may leave its lock file uncommitted. The third sentence of STND.RUST.30, on builds from the locked revisions, stays a Rust rule.
 4. **Reach.** The STND.CODE rules apply to every language, as STND.CODE does by its scope: C, Fortran, Lean, and hardware descriptions gain the defaults where they have a foreign interface.
+
+## Ratification of 2026-10-27
+
+After the cold and pair reviews A and B, the cold verification, the reconciliation review, and a last cold verification, none with an open defect, the custodian ratified the round as drafted, accepting the twelve drafting choices at the end of `dispositions.md`.

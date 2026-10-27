@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.CODE,standard,LVL2,Coding standard,adopted,_doc.md,3332da5b2cda21f343b02b94ecd8abc04ac09e52f2287875785910f66881b60d,27954
+STND.CODE,standard,LVL2,Coding standard,adopted,_doc.md,870d9e68f48fc20a9ac83bbf4092db7e36e8825313a43036d7e1fe10f39cc1c4,34202
 STND.CODE.1,provision,LVL2,Mechanical cycle check,adopted,1.md,6f0d23339a1ba66cb37a5d1f2b240a41d68c1cce72c200623e31a305d97984c9,411
 STND.CODE.2,provision,LVL2,Inputs through interfaces,adopted,2.md,40dccdc405a5f703a9b275930b07fe9465e12c55c7c2bd7983d0b34a001606b9,532
 STND.CODE.3,provision,LVL2,Contracts at declarations,adopted,3.md,19267f546fed0f99693e175851c5a2660b3e9c2062c0cdebf488b4f17a1f7590,547
@@ -21,3 +21,8 @@ STND.CODE.18,provision,LVL2,High-assurance conformance claims,adopted,18.md,786e
 STND.CODE.19,provision,LVL2,High-assurance language edition,adopted,19.md,37b77caffaa084810e62a999f7ee3e70055926bd5e4342cc4cd869c3f78600a6,1214
 STND.CODE.20,provision,LVL2,Recorded high-assurance deviations,adopted,20.md,3787f0c30c69f0ebb345227aa1660ed75a9d2412046f27835869928ce58f5083,695
 STND.CODE.21,provision,LVL2,Finite-value assumptions near checks,adopted,21.md,229f0428df40c1a684692141a5d3fa56af3e44a4908d78ac0dfd96dbc1b86c7e,776
+STND.CODE.22,provision,LVL2,Data at foreign interfaces,adopted,22.md,949ddbecb6f41f84b0d81dc8bf9f5f801d595c385256e9c6222c14dadc569849,789
+STND.CODE.23,provision,LVL2,Arrays at foreign interfaces,adopted,23.md,97cf22ef3e566ba67a2a95911585cd0c789f8810f2b89f0d571bc25c4bae3e59,568
+STND.CODE.24,provision,LVL2,Failures crossing foreign interfaces,adopted,24.md,e441acfcc0d5764b8ba8b147bc7e05b72d673a8fdf35fb08d9eca6d398299e95,997
+STND.CODE.25,provision,LVL2,Ownership at foreign interfaces,adopted,25.md,44a911a1f4e7ec8ea130f04382d894b56743049cbf039f32156a310d6e166e19,734
+STND.CODE.26,provision,LVL2,Objects that foreign code keeps,adopted,26.md,9f6772c6192951ef5f04e046f5d0f10c9ad808a4ed27fd4f17d9d51248027874,534
