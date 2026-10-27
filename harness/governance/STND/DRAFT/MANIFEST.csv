@@ -1,8 +1,8 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.DRAFT,standard,LVL2,Drafting standard,adopted,_doc.md,5508957b1af8a2f05308cf58619d54ecf7fc42b136e1793644c18d6b1ffb8f7e,11545
+STND.DRAFT,standard,LVL2,Drafting standard,adopted,_doc.md,26817c2879436a1948bcb1637680d7d04b2b423fbb453ccc1d0b989b12fcd274,12824
 STND.DRAFT.1,provision,LVL2,Modal set,adopted,1.md,64d7bdde409caebd8294b7eba5425d3ece94eb240f6076fed5f08ff21a66713e,1023
 STND.DRAFT.2,provision,LVL2,Capital letters,adopted,2.md,1ed5fe279abd3d90aa8ce589ea5ccc79d9ce0129cf5887c4623f4f83390d1698,571
-STND.DRAFT.3,provision,LVL2,Mentioned words,adopted,3.md,8cdc0f28dadd0c0b3132ab9dd8224eaa05eb1158b928c6621217371bc681d76c,711
+STND.DRAFT.3,provision,LVL2,Mentioned words,adopted,3.md,bbcc54e30e032f722c76cb32692147a7c653ded982329c56ca4269cf105b57e5,670
 STND.DRAFT.4,provision,LVL2,Explicit modal,adopted,4.md,74e3220240ffd2717d3d75d7b33d9c2f6a5eba4c67eeaee93271a0a5c2449c74,669
 STND.DRAFT.5,provision,LVL2,Unmodalized sentences,adopted,5.md,6f9eae62f2ae150b9456df3f22d8cd2f38e832cfbcd23ec7e3525753f2f9d1d4,678
 STND.DRAFT.6,provision,LVL2,Normative extent,adopted,6.md,0ef31872f32c2aa6ed5f256ff65c850e8a4fbf0ceda69b6b85af4f9607e0a5e5,734

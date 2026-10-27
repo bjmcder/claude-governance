@@ -99,7 +99,7 @@ harness/
 
 ## Current state
 
-As of ledger entry 199 (2026-10-27). `show governance ID` prints the current text and revision of any document.
+As of ledger entry 201 (2026-10-27). `show governance ID` prints the current text and revision of any document.
 
 | Level | Contents | Status |
 | --- | --- | --- |
@@ -118,10 +118,10 @@ As of ledger entry 199 (2026-10-27). `show governance ID` prints the current tex
 | CPS | 1.0.1 | 9 | Cyber-physical and actuation |
 | MEAS | 1.0 | 7 | Measurement and instrumentation |
 | ML | 1.0.1 | 7 | Learned models |
-| STND.DRAFT | 1.5 | 42 | Drafting standard |
+| STND.DRAFT | 1.6 | 42 | Drafting standard |
 | STND.IDENT | 1.4 | 24 | Identifier scheme and mnemonic register |
 | STND.CLASS | 1.3.1 | 12 | Consequence-class criteria (identifiers 8, 9, and 11 to 16 withdrawn) |
-| STND.DFLT | 1.5.2 | 31 | Defaults |
+| STND.DFLT | 1.5.3 | 31 | Defaults |
 | STND.INSTR | 1.4 | 10 | Agent instructions |
 | STND.HARN | 1.4 | 24 | Harness specification (identifiers 18 to 23, 29, and 30 withdrawn) |
 | STND.VVUQ | 1.4 | 83 | Verification, validation, and uncertainty quantification methods |
@@ -151,7 +151,7 @@ As of ledger entry 199 (2026-10-27). `show governance ID` prints the current tex
 | STND.PERF | 1.0.1 | 26 | Performance evaluation standard |
 | STND.TEST | 1.0 | 19 | Testing methods standard |
 
-The ledger holds 199 transactions: 48 `adopt`, 120 `amend`, 17 `register`, 3 `review`, 3 `rule`, and 8 `annotate`. The mnemonic register `governance/MNEM/_doc.md` (STND.IDENT.19) holds every mnemonic in use; a new mnemonic, including that of a project or of a kind of LVL3 instrument, is registered by the custodians (STND.IDENT.23).
+The ledger holds 201 transactions: 48 `adopt`, 122 `amend`, 17 `register`, 3 `review`, 3 `rule`, and 8 `annotate`. The mnemonic register `governance/MNEM/_doc.md` (STND.IDENT.19) holds every mnemonic in use; a new mnemonic, including that of a project or of a kind of LVL3 instrument, is registered by the custodians (STND.IDENT.23).
 
 ## Commands
 
@@ -292,7 +292,7 @@ Text identifiers must equal `instantiates` plus `refers_to` (g.16).
 
 ### The drafting standard (g family)
 
-The engine reads the tables of STND.DRAFT (modal set, excluded expressions, vague qualifiers, quantifiers, role words, person words, spelling), expands every expression to its inflections, and scans four groups of subjects. The cells of a table in a provision are read as prose, except in a provision that names a table in `defines`, whose tables are data and whose expression columns mention rather than use; a quoted span is a mention there as elsewhere (STND.DRAFT.3). STND.DRAFT 1.5 exempts only columns of modals or excluded expressions from quotation marks; reading the other cells of defining tables would find defects in binding provisions (the column Normative Language entry of STND.DRAFT.1, "Any actor" in STND.DFLT.18), so they stay unread until a round settles them (`OPEN-ITEMS.md`). A sentence ends at terminal punctuation (the term Sentence of STND.DRAFT), so two clauses joined by a semicolon or a colon are one sentence, for g.4 and every other drafting check. g.21 knows the apostrophe written straight or typographic (unit 0017). A finding of class defect is certain by the standard's own words; one of class review is a candidate for a reader.
+The engine reads the tables of STND.DRAFT (modal set, excluded expressions, vague qualifiers, quantifiers, role words, person words, spelling), expands every expression to its inflections, and scans four groups of subjects. The cells of a table in a provision are read as prose, other than the cells of a mention column (the term of STND.DRAFT 1.6), which the harness finds by the headings that STND.DRAFT names: Modal, Normative Language entry, Expression, Read as, Qualifier, Word, British, American, Not used, Used, and Opening words (`MENTION_COLUMNS` in `checks/drafting/tables.py`). A table that a provision names in `defines` is read so too, without its header row, whose headings are data; a quoted span is a mention there as elsewhere (STND.DRAFT.3). A new table whose column is mentioned under another heading adds that heading to the list. The logic checks still read no cell of a defining table (`checks/logic/wording.py`). A sentence ends at terminal punctuation (the term Sentence of STND.DRAFT), so two clauses joined by a semicolon or a colon are one sentence, for g.4 and every other drafting check. g.21 knows the apostrophe written straight or typographic (unit 0017). A finding of class defect is certain by the standard's own words; one of class review is a candidate for a reader.
 
 | Group | Subjects | Result |
 | --- | --- | --- |
@@ -314,7 +314,7 @@ A revision number is `major.minor` or `major.minor.editorial`, as in 1.0 or 1.0.
 - `find` and `context` match words, not meanings: "push" finds the items that say "push", not the definition of remote write, and a question in full sentences matches its common words; give the corpus's own terms.
 - No signer register is founded yet, so every `signature` field is blank.
 - Authority tiers are classified per sentence by wording. Cross-provision action classes (the same action named in two provisions) are not compared.
-- Imperative sentences are found by a verb list, not a parse (g.8, review).
+- Imperative sentences are found by a verb list, not a parse (g.8, review); a listed verb alone without terminal punctuation, a label in a table cell, is not one.
 - Whether a quoted expression is mentioned or used, whether a qualifier has a criterion, and whether a citation names something the provision really makes more specific are left to a reader (`checked_by: review`).
 
 All of these belong to STND.HARN.
