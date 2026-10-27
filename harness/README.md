@@ -99,7 +99,7 @@ harness/
 
 ## Current state
 
-As of ledger entry 199 (2026-10-27). `show governance ID` prints the current text and revision of any document.
+As of ledger entry 201 (2026-10-27). `show governance ID` prints the current text and revision of any document.
 
 | Level | Contents | Status |
 | --- | --- | --- |
@@ -118,10 +118,10 @@ As of ledger entry 199 (2026-10-27). `show governance ID` prints the current tex
 | CPS | 1.0.1 | 9 | Cyber-physical and actuation |
 | MEAS | 1.0 | 7 | Measurement and instrumentation |
 | ML | 1.0.1 | 7 | Learned models |
-| STND.DRAFT | 1.5 | 42 | Drafting standard |
+| STND.DRAFT | 1.6 | 42 | Drafting standard |
 | STND.IDENT | 1.4 | 24 | Identifier scheme and mnemonic register |
 | STND.CLASS | 1.3.1 | 12 | Consequence-class criteria (identifiers 8, 9, and 11 to 16 withdrawn) |
-| STND.DFLT | 1.5.2 | 31 | Defaults |
+| STND.DFLT | 1.5.3 | 31 | Defaults |
 | STND.INSTR | 1.4 | 10 | Agent instructions |
 | STND.HARN | 1.4 | 24 | Harness specification (identifiers 18 to 23, 29, and 30 withdrawn) |
 | STND.VVUQ | 1.4 | 83 | Verification, validation, and uncertainty quantification methods |
@@ -151,7 +151,7 @@ As of ledger entry 199 (2026-10-27). `show governance ID` prints the current tex
 | STND.PERF | 1.0.1 | 26 | Performance evaluation standard |
 | STND.TEST | 1.0 | 19 | Testing methods standard |
 
-The ledger holds 199 transactions: 48 `adopt`, 120 `amend`, 17 `register`, 3 `review`, 3 `rule`, and 8 `annotate`. The mnemonic register `governance/MNEM/_doc.md` (STND.IDENT.19) holds every mnemonic in use; a new mnemonic, including that of a project or of a kind of LVL3 instrument, is registered by the custodians (STND.IDENT.23).
+The ledger holds 201 transactions: 48 `adopt`, 122 `amend`, 17 `register`, 3 `review`, 3 `rule`, and 8 `annotate`. The mnemonic register `governance/MNEM/_doc.md` (STND.IDENT.19) holds every mnemonic in use; a new mnemonic, including that of a project or of a kind of LVL3 instrument, is registered by the custodians (STND.IDENT.23).
 
 ## Commands
 

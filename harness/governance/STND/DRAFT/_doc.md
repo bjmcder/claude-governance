@@ -4,7 +4,7 @@ level: "LVL2"
 kind: "standard"
 title: "Drafting standard"
 status: "adopted"
-revision: "1.5"
+revision: "1.6"
 adopted: "2026-10-09"
 adopted_by: "The Custodian"
 instantiates: ["LVL0#normative-language", "LEX.drafting-standard", "GOV.11", "GOV.24", "GOV.25", "GOV.26", "GOV.27", "GOV.31", "GOV.50", "GUARD.11"]
@@ -28,6 +28,7 @@ This section fixes meaning and imposes no obligation, as the Lexicon does.
 | --- | --- |
 | Modal | One of the five words in the table of STND.DRAFT.1. |
 | Excluded expression | An expression of the table of STND.DRAFT.7. |
+| Mention column | A column of a table in a provision whose entries are the words, expressions, spellings, forms, or patterns that the provision names rather than uses. |
 | Sentence | Text that ends at a period, a question mark, or an exclamation point, or at the end of a paragraph, a list item, or a table cell, not counting a mark inside an identifier, a number, an abbreviation, or quotation marks. |
 | Informative sentence | A sentence that states no obligation, prohibition, recommendation, or permission. |
 | Imperative sentence | A sentence whose main verb is in the imperative mood and names no actor. |
@@ -53,7 +54,7 @@ Each provision is one file, `STND/DRAFT/<n>.md`, whose identifier is `STND.DRAFT
 - `binding_reason`: the uniformity reason, present when a binding provision reaches no prime directive, GUARD provision, or floor obligation.
 - `instantiates` and `refers_to`: identifiers and locators, as the provisions on citation fix.
 - `rank` and `waivable`: derived from the closure of `instantiates` (GOV.5, GOV.17); the harness verifies them and does not choose them.
-- `defines`: the name of a table that the provision holds. The harness reads each table by this name and by its column headings, so rewording a sentence cannot empty a list.
+- `defines`: the name of a table that the provision holds. The harness reads each table by this name and by its column headings, so rewording a sentence cannot empty a list. The drafting checks read each cell of a table in a provision as prose, other than a cell of a mention column, which the harness finds by its heading: Modal, Normative Language entry, Expression, Read as, Qualifier, Word, British, American, Not used, Used, and Opening words. A table with a mention column under another heading adds that heading to the harness. A column whose entries are mentioned in part is no mention column, and its mentioned entries are quoted.
 - `checked_by`: the checks that verify the provision. The value `review` means a reader decides.
 
 A profile's tables named selector and shared-matters are read by the harness by their column headings: Attribute and Defined by; Matter, Owning profile, and Provisions. The Provisions column gives each provision by its full identifier, separated by commas. A selector provision states, for example, that the profile binds a project whose classification makes at least one attribute of its table true; a shared-matters provision states that each matter of its table is governed in the document by the provisions that the table gives for it.
@@ -90,3 +91,4 @@ The harness reports the lineage checks (family l) and the drafting checks (famil
 | 1.3 | 2026-10-11 | Minor amendment (GOV.41): new section Profiles, STND.DRAFT.35 to STND.DRAFT.41, fixes selector attributes and their coverage of sub-profiles, the subjects of profile provisions (domain items, and execution paths for HW), the allocation of shared matters to one owning profile, obligations at the boundary between domains, and evidence stated by content; the Terms define Attribute, Domain item, Execution path, Owning profile, Shared matter, Subject, Assigned decision, and Decision of the human owner; new section Human owner decisions, STND.DRAFT.42, bars profiles and LVL2 standards from asking the human owner for a decision that LVL0 neither requires nor reserves, has them accept standing authorizations wherever LVL0 permits, and limits each referral's halt to the line of work it concerns. |
 | 1.4 | 2026-10-18 | Minor amendment (GOV.41), conforming on the adoption of HW: the term Execution path takes the definition that HW gives, which adds the hardware models, firmware, drivers, runtime libraries, and settings that a path admits, by reference to HW. |
 | 1.5 | 2026-10-26 | Minor amendment (GOV.41): the term Cited document also covers a document named in the text by its identifier alone, outside quotation marks, code spans, tables with a column headed Example, the section References, and the revision history, and never by the identifier LVL0 alone; new term Sentence; STND.DRAFT.3 asks for no quotation marks in a column whose entries are modals or excluded expressions; STND.DRAFT.22 names v.8 among its checks; the section Checks says that a finding in another document fails where a binding provision of this standard names the check, and that a document named by its identifier alone has its row derived, so that g.25 fails where the table lacks it. Transition (GOV.42): none. |
+| 1.6 | 2026-10-27 | Minor amendment (GOV.41): Terms define Mention column, a column of a table in a provision whose entries are the words, expressions, spellings, forms, or patterns that the provision names rather than uses; STND.DRAFT.3 uses the term in place of a column whose entries are modals or excluded expressions, so that a modal or an excluded expression that a column of words, spellings, forms, or patterns mentions is also left unquoted; the section Representation in the harness says that the drafting checks read each other cell of a table in a provision, and names the headings by which the harness finds a mention column. |

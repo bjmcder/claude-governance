@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.DFLT,standard,LVL2,Defaults,adopted,_doc.md,debdadf4625e1f2874e9254be72f4266f88883d20b19e5c3515d19cf55efc403,12882
+STND.DFLT,standard,LVL2,Defaults,adopted,_doc.md,421501c6e24a7f965dc091b683a7d8bb5257b4565e24a0a4a3df9a7d4410a1e4,13133
 STND.DFLT.1,provision,LVL2,Scope of application,adopted,1.md,1223e9131fe3c2ef2095b53e45c0358c5f7e5b7fbec5619069a9998e0d03a19c,396
 STND.DFLT.2,provision,LVL2,Records directory,adopted,2.md,6286562c859c952511db33322655a147bc303d69b7a0dfea008e0b7e8366a927,481
 STND.DFLT.3,provision,LVL2,Records format,adopted,3.md,185bda89908d5fbc8b1da7e587247ee7bd445ab74063c61643fa698663cf271b,413
@@ -17,7 +17,7 @@ STND.DFLT.14,provision,LVL2,Bulk size,adopted,14.md,c3fd9bb89c12fdab1018afcebd39
 STND.DFLT.15,provision,LVL2,Register exemptions,adopted,15.md,3d11ef38c3a4474e66343004dd28b32575403e8ea0f3e920891c2febe4545dac,978
 STND.DFLT.16,provision,LVL2,Authorization record,adopted,16.md,9fde3a7263306df0a88a2b6eee0a994230b9699a866845160d7ca4c8648e8cb2,473
 STND.DFLT.17,provision,LVL2,Authorization reliance,adopted,17.md,aad7cd2a57d7cd8d6252281670402f2b6f1a781edea202ce8aae42d87efcf08d,749
-STND.DFLT.18,provision,LVL2,Threat-model table,adopted,18.md,a25687f79b8738b69f4a54f1eda824c2d030e28bec29c6ede142b058a15f41ec,1082
+STND.DFLT.18,provision,LVL2,Threat-model table,adopted,18.md,600a0031724652c7145f1ca2943496dfd619d87be524743f4e3b9f26350484a5,1088
 STND.DFLT.19,provision,LVL2,Unlisted asset,adopted,19.md,1b70d41e35ce6f6d62d3c997c6cb026124967d2e2ec747d9248b9166ebe7cbd8,494
 STND.DFLT.20,provision,LVL2,Referral statement,adopted,20.md,7f9b9979526e2955957a3c6bd6ae55ba47f06ad3d5efb7eda570ea7dd7f5c64a,596
 STND.DFLT.21,provision,LVL2,Agent-instructions source,adopted,21.md,6920db75fa950643ee0580257bb04c46698eaecb8c91545b08db1c23fb18e282,440

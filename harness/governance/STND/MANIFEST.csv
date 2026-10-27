@@ -8,9 +8,9 @@ STND.CONC,standard,LVL2,Concurrency standard,adopted,CONC/,87096a72c50fa7799ac5b
 STND.CREW,standard,LVL2,Agent roles standard,adopted,CREW/,d443984f3de9c8670dd96179ecb6820bd43591919f5953615c9da50d54213331,40417
 STND.CXX,standard,LVL2,C++ standard,adopted,CXX/,fd9e40034ef4c5515c88a99d097bdbef4b3190e2b333ab8ff21a92d5542b857a,55310
 STND.DEPS,standard,LVL2,Dependency policy,adopted,DEPS/,a30f154eb10924f3a626ebcfcdd95f8acdf97c71d8ca54a0c1efd539a3bd01c0,15102
-STND.DFLT,standard,LVL2,Defaults,adopted,DFLT/,a4b7727ae58aeb260c3f45ef2bf3531cfd2a825d229ee9cd07f69e008042b080,30966
+STND.DFLT,standard,LVL2,Defaults,adopted,DFLT/,8369b691e594b6f02f3bb6634d51a0e3e2bf8c58e991d7d951e35c982dd1e5c1,31223
 STND.DOCS,standard,LVL2,Documentation standard,adopted,DOCS/,7dbc2a31eb2a45aaa4bc6deb99d21421b7f508a1e13bafc9fcc75b5ba75774c7,30177
-STND.DRAFT,standard,LVL2,Drafting standard,adopted,DRAFT/,9b817674bde7e8eb432dc1505fe81ddfa1ff9789ff4efff09379de99cabafad9,39409
+STND.DRAFT,standard,LVL2,Drafting standard,adopted,DRAFT/,5bcb8b4bc53f5edb37b2b71a63a9cc754b6ae6fd3b470b9869bf0fd86831a21d,40647
 STND.FTN,standard,LVL2,Fortran standard,adopted,FTN/,c65a4fa7c8e4a85719ff90f1a06b0e271143dc46ac821a5a633b4cab4d9f5df2,65780
 STND.HARN,standard,LVL2,Harness specification,adopted,HARN/,1cfd7b674617e071eefb956db3791a3e9ebfaa808ff0ee13385bf048e3cc0bc7,23086
 STND.IDENT,standard,LVL2,Identifier scheme and mnemonic register,adopted,IDENT/,deea3ef3cacfc20fc7cd956173b5601764261091fdfd6c53ac40bb789607f78f,22791

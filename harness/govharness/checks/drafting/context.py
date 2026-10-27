@@ -435,5 +435,5 @@ def is_imperative(sentence: str) -> bool:
     if first not in IMPERATIVE_VERBS:
         return False
     if len(words) < 2:
-        return sentence.rstrip().rstrip("\"')").endswith((".", "!"))
+        return re.search(r"[.!][\"')]*\s*$", sentence) is not None
     return words[1].lower() not in NOT_IMPERATIVE_SECOND

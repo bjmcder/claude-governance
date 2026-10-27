@@ -41,3 +41,7 @@ The trial reads the cells of the columns that are mentioned in part, Replace wit
 | O5 | The heading list belongs under what is drafted | Taken. |
 | Q1 | Did the custodian rule the term and the list? | The custodian ruled the term in STND.DRAFT with headings that the harness reads (decision 1); the list itself is drafted, for ratification. |
 | Q2 | Is a column mentioned in part a mention column? | No, as the section Representation in the harness now says; for ratification. |
+
+## Ratification of 2026-10-27
+
+The custodian ratified STND.DRAFT 1.6, with the heading list and the reading of a column mentioned in part, STND.DFLT 1.5.3, and unit 0020, as drafted.

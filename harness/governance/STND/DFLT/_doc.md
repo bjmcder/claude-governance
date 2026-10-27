@@ -4,7 +4,7 @@ level: "LVL2"
 kind: "standard"
 title: "Defaults"
 status: "adopted"
-revision: "1.5.2"
+revision: "1.5.3"
 adopted: "2026-10-10"
 adopted_by: "The Custodian"
 instantiates: ["GOV.22", "GOV.21"]
@@ -101,3 +101,4 @@ Locations that hold secrets or credentials by convention include the key directo
 | 1.5 | 2026-10-20 | Minor amendment (GOV.41), conforming on the adoption of AGENT: new STND.DFLT.28 places the workbench in the directory "workbench" of the records directory, its tools in "tools"; new STND.DFLT.29 to STND.DFLT.31 place the store of non-credential secrets of AGENT.44, where the human owner provides one, in the temporary directory "secrets" at the top of the work, one secret per file, have an agent confirm before its first write in a session that version control excludes it and that no other unprivileged account reads it, restoring either condition where it fails, and keep it out of archives, backups, transfers, and unauthorized recursive or pattern-selected operations; the working bounds admit each file of the store only to an agent authorized to handle its secret; STND.DFLT.17 enters a grant without the secrets it contains; the term Temporary location admits working copies of items whose source lies outside the work. |
 | 1.5.1 | 2026-10-25 | Editorial amendment (GOV.41): the informative Notes cite STND.INSTR.4 and STND.INSTR.5, which hold the shell guards and dry runs that the Notes assign to STND.INSTR, and References lists STND.INSTR; no obligation, permission, or defined meaning changes. |
 | 1.5.2 | 2026-10-26 | Editorial amendment (GOV.41): the Notes no longer say how a harness that derives an environment maps the bounds of the secret store, since STND.HARN 1.4 withdraws the provisions on a configuration that a harness derives; no obligation, permission, or defined meaning changes. |
+| 1.5.3 | 2026-10-27 | Editorial amendment (GOV.41): the Source column of STND.DFLT.18 reads "Every actor" in place of "Any actor", in its three rows, the quantifier that STND.DRAFT.17 forbids; no obligation, permission, or defined meaning changes. |
