@@ -21,3 +21,7 @@ Script: `tools/amendment-scripts/apply_offld_round_2026_10_27.py`, two transacti
 | Q | The reach of "costs of first use" beyond the first submission | Put to the custodian in item 1. |
 
 Rehearsal after the fixes: entries 198 and 199; every check passes with the g.18 warning that the corpus already carries; no drafting finding on STND.OFFLD.
+
+## Ratification of 2026-10-27
+
+The custodian ratified both amendments as drafted, with the reach of "costs of first use" and the transition of item 1.

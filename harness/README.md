@@ -99,7 +99,7 @@ harness/
 
 ## Current state
 
-As of ledger entry 197 (2026-10-27). `show governance ID` prints the current text and revision of any document.
+As of ledger entry 199 (2026-10-27). `show governance ID` prints the current text and revision of any document.
 
 | Level | Contents | Status |
 | --- | --- | --- |
@@ -140,7 +140,7 @@ As of ledger entry 197 (2026-10-27). `show governance ID` prints the current tex
 | STND.MPI | 1.0.2 | 25 | Message Passing Interface standard |
 | STND.CONC | 1.1 | 30 | Concurrency standard |
 | STND.OMP | 1.0.3 | 33 | OpenMP standard |
-| STND.OFFLD | 1.0.1 | 31 | Accelerator offload standard |
+| STND.OFFLD | 1.1 | 31 | Accelerator offload standard |
 | STND.BUILD | 1.0.2 | 26 | Build standard |
 | STND.WFLOW | 1.0 | 40 | Workflow and long-run resilience standard |
 | STND.STDC | 1.2 | 39 | C standard |
@@ -148,10 +148,10 @@ As of ledger entry 197 (2026-10-27). `show governance ID` prints the current tex
 | STND.FTN | 1.1.1 | 36 | Fortran standard |
 | STND.SV | 1.1 | 28 | Verilog and SystemVerilog standard |
 | STND.LEAN | 1.0.1 | 31 | Lean standard |
-| STND.PERF | 1.0 | 26 | Performance evaluation standard |
+| STND.PERF | 1.0.1 | 26 | Performance evaluation standard |
 | STND.TEST | 1.0 | 19 | Testing methods standard |
 
-The ledger holds 197 transactions: 48 `adopt`, 118 `amend`, 17 `register`, 3 `review`, 3 `rule`, and 8 `annotate`. The mnemonic register `governance/MNEM/_doc.md` (STND.IDENT.19) holds every mnemonic in use; a new mnemonic, including that of a project or of a kind of LVL3 instrument, is registered by the custodians (STND.IDENT.23).
+The ledger holds 199 transactions: 48 `adopt`, 120 `amend`, 17 `register`, 3 `review`, 3 `rule`, and 8 `annotate`. The mnemonic register `governance/MNEM/_doc.md` (STND.IDENT.19) holds every mnemonic in use; a new mnemonic, including that of a project or of a kind of LVL3 instrument, is registered by the custodians (STND.IDENT.23).
 
 ## Commands
 
