@@ -278,11 +278,16 @@ def table_cells(entry: Entry) -> list[str]:
     if entry.meta.get("kind") != "provision":
         return []
     defines = bool(entry.meta.get("defines"))
-    out = []
+    out: list[str] = []
     for header, rows in parse_tables(FENCE_RE.sub("\n", entry.body)):
-        kept = [i for i, h in enumerate(header) if h.strip() not in MENTION_COLUMNS]
-        for row in (rows if defines else (header, *rows)):
-            for i in kept:
-                if i < len(row) and (text := CODE_RE.sub(" ", row[i]).strip()):
+        mentioned = {
+            i for i, h in enumerate(header) if h.strip() in MENTION_COLUMNS
+        }
+        for n, row in enumerate(rows if defines else (header, *rows)):
+            is_header = not defines and n == 0
+            for i, cell in enumerate(row):
+                if i in mentioned and not is_header:
+                    continue
+                if text := CODE_RE.sub(" ", cell).strip():
                     out.append(text)
     return out

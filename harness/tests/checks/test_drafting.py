@@ -638,10 +638,16 @@ class HeldBehavior(unittest.TestCase):
         Reference: the heuristic of g.8 (README, "Not yet built"); QA.8
         part C, M5, the mutations of ``is_imperative``.
         """
-        for sentence in ("Never act.", "Please act.", "Record.", "Record it."):
+        for sentence in (
+            "Never act.", "Please act.", "Record.", "Record!", 'Record."',
+            "Record it.",
+        ):
             with self.subTest(sentence):
                 self.assertTrue(is_imperative(sentence))
-        for sentence in ("", "Record of it.", "Record of.", "A record.", "review"):
+        for sentence in (
+            "", "Record of it.", "Record of.", "A record.", "review",
+            "Record?",
+        ):
             with self.subTest(sentence):
                 self.assertFalse(is_imperative(sentence))
 
@@ -831,6 +837,8 @@ class HeldBehavior(unittest.TestCase):
             statuses(cell("Note", "The code may not run."))["g.5"], "FAIL"
         )
         self.assertEqual(statuses(cell("Expression", "may not"))["g.5"], "PASS")
+        heading = statuses(cell("The code may not run.", "x"))
+        self.assertEqual(heading["g.5"], "PASS")
         quantified = findings(lambda e: None, expressions.quantifiers)
         self.assertFalse([f for f in quantified if f.subject == "STND.DRAFT.17"])
 
