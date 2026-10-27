@@ -29,7 +29,7 @@ STND.CODE and STND.DEPS come first, since every other amendment cites their new 
 - STND.CODE.24 lets a failure pass on where the contract of the interface carries it on to code of the work, as STND.PY.35 did and STND.RUST.25 did by its unwinding ABI; this relaxes STND.CXX.22 and STND.JL.39.
 - STND.DEPS.12 has no permission sentence for a package that other work uses, since the condition on reported results already leaves its lock file out; the Notes say so.
 
-`reading-copies/` holds a reading copy of each changed document, and `pairs/` the pairs of STND.HARN.28 for each; `pairs-changed.md` lists the 130 pairs whose changed side is a changed or new provision. The documents before the round are in `rendered/` at the repository root.
+`reading-copies/` holds a reading copy of each changed document, and `pairs/` the pairs of STND.HARN.28 for each; `pairs-changed.md` lists the 131 pairs whose changed side is a changed or new provision. The documents before the round are in `rendered/` at the repository root.
 
 ## Harness code
 

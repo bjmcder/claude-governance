@@ -48,7 +48,10 @@ SWAPS = [
     ("Dependency record has the meaning that STND.DEPS gives it;",
      "Foreign interface has the meaning that STND.CODE gives it, and a function that a block of foreign declarations "
      "declares, a function of the work exported with a foreign ABI, and a callback that the work passes to foreign "
-     "code are foreign interfaces; Dependency record and Lock file have the meanings that STND.DEPS gives them;"),
+     "code are foreign interfaces, and the declaration of a function of the work with an ABI under which both sides "
+     "of a foreign interface admit unwinding is a statement of the contract of that interface that it carries a "
+     "panic on to code of the work, in the sense of STND.CODE.24; Dependency record and Lock file have the meanings "
+     "that STND.DEPS gives them;"),
     ("| Foreign function interface | An interface through which Rust code of the work calls, or is called by, code "
      "that does not follow the Rust rules of ownership, borrowing, and unwinding: a function that a block of foreign "
      "declarations declares, a function of the work exported with a foreign ABI, and a callback that the work passes "
@@ -66,6 +69,11 @@ SWAPS = [
      "fetch record a digest where the publisher gives none. STND.RUST.30 has each build of the checks and of each "
      "release use the revisions of a committed lock file, and the check of STND.RUST.1 against newer revisions is "
      "the one build of the checks that leaves it."),
+    ("STND.RUST.1, STND.RUST.7, STND.RUST.11, STND.RUST.22, STND.RUST.24, STND.RUST.25, and STND.RUST.30 each hold "
+     "three modals on one subject: the releases of one crate, what one argument rests on, one destructor and its "
+     "release, one future, one type at one boundary, one function that a foreign interface invokes, and one file;",
+     "STND.RUST.1, STND.RUST.7, STND.RUST.11, and STND.RUST.22 each hold three modals on one subject: the releases of "
+     "one crate, what one argument rests on, one destructor and its release, and one future;"),
     ("a function exported over a foreign function interface among them,",
      "a function exported over a foreign interface among them,"),
 ]
@@ -95,12 +103,15 @@ READING = (
     "second sentence of STND.CODE.22; STND.RUST.25 keeps only the ABI that admits unwinding for a panic that "
     "STND.CODE.24 lets leave a function that a foreign interface invokes, the catch, the conversion, and the "
     "storing of a panic being STND.CODE.24; STND.RUST.27 keeps only the release in a `Drop` implementation, the "
-    "owner of a resource and the pass to it being STND.CODE.25; STND.RUST.30 keeps only the builds from the "
-    "revisions that a committed lock file records, the commitment being STND.DEPS.12; STND.RUST.24 to STND.RUST.27 "
-    "move to the section Foreign interfaces; Terms import Foreign interface from STND.CODE in place of this "
-    "standard's Foreign function interface, naming the Rust constructs that are foreign interfaces, and Lock file "
-    "from STND.DEPS, and STND.RUST.10 and the Notes use the imported term; the Purpose and the Notes on foreign "
-    "interfaces and packages follow")
+    "owner of a resource and the pass to it being STND.CODE.25, and is retitled Foreign resources released in Drop; "
+    "STND.RUST.30 keeps only the builds from the revisions that a committed lock file records, the commitment being "
+    "STND.DEPS.12, and is retitled Builds from locked revisions; STND.RUST.24 to STND.RUST.27 move to the section "
+    "Foreign interfaces; Terms import Foreign interface from STND.CODE in place of this standard's Foreign function "
+    "interface, naming the Rust constructs that are foreign interfaces and reading a declaration with an ABI that "
+    "admits unwinding as a statement of the contract that a panic is carried on, and Lock file from STND.DEPS, and "
+    "STND.RUST.10 and the Notes use the imported term; the Purpose, the Notes on foreign interfaces and packages, "
+    "and the class onset paragraph, which drops STND.RUST.24, STND.RUST.25, and STND.RUST.30 from the provisions of "
+    "three modals, follow")
 ROW = f"| 1.2 | {F.DATE} | Minor amendment (GOV.41): {READING}. |"
 
 RATIONALE = (
@@ -110,13 +121,19 @@ RATIONALE = (
     "and that the lock-file rule is conditioned on reported results (decisions 1 to 3). No provision is withdrawn: "
     "each of the four keeps Rust content, and STND.JL and STND.PY cite them. Rust code keeps each outcome of the "
     "removed sentences through STND.CODE.22, STND.CODE.24, and STND.CODE.25, in the same terms, with the word "
-    "only added to the release by the owner; STND.CODE.26 adds the lifetime of an object that foreign code keeps. "
+    "only added to the release by the owner. A function declared with an ABI under which both sides admit "
+    "unwinding still lets a panic leave in place of the catch, since Terms read that declaration as the statement "
+    "of the contract that the first sentence of STND.CODE.24 asks; STND.RUST.25 still asks that ABI wherever a "
+    "panic leaves. STND.CODE.26 adds the lifetime of an object that foreign code keeps, and the release in `Drop` "
+    "of STND.RUST.27 now reaches each resource that the work owns under STND.CODE.25, and not only one that a "
+    "foreign interface creates for it. "
     "STND.DEPS.12 no longer asks the lock file of a set of crates whose builds produce no reported result, which "
     "the first sentence of STND.RUST.30 asked unless other work used the crates; STND.RUST.30 now reaches the "
     "builds of a set of crates whose lock file is under version control. The term of STND.CODE covers the three "
-    "parts of the term Foreign function interface, and adds a thread that a foreign runtime starts in Rust code and "
-    "a structured block of a parallel directive. Each provision concerned is a default, so none raises the floor "
-    "(GOV.11). Class onsets: unchanged. Transition (GOV.42): none. "
+    "parts of the term Foreign function interface, and adds a thread that a foreign runtime starts in Rust code and, "
+    "for STND.CODE.24, a structured block of a parallel directive. Each provision concerned is a default, so none raises the floor "
+    "(GOV.11). Class onsets: unchanged; the provisions of three modals that the Notes list are those that still "
+    "hold three. Transition (GOV.42): none. "
     f"Decisions 1 to 3 of {F.RECORD}." + F.AUTHOR)
 
 

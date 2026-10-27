@@ -81,7 +81,7 @@ READING = (
     "language; the front matter lists the four as withdrawn; STND.JL.38 keeps only its `GC.@preserve` block, the "
     "lifetime of an object that foreign code keeps being STND.CODE.26; STND.JL.39 keeps only the storing of an "
     "`InterruptException` in place of its conversion, and its throw after the foreign call returns, the Julia form "
-    "of STND.CODE.24; Terms import Foreign interface from STND.CODE, naming the Julia constructs that are foreign "
+    "of STND.CODE.24, and is retitled Julia interrupts in foreign callbacks; Terms import Foreign interface from STND.CODE, naming the Julia constructs that are foreign "
     "interfaces, and Lock file from STND.DEPS, the manifest file of an environment being its lock file, and drop "
     "this standard's own definition; the Purpose, and the Notes on versions, foreign interfaces, and onsets, follow")
 ROW = f"| 1.3 | {F.DATE} | Minor amendment (GOV.41): {READING}. |"

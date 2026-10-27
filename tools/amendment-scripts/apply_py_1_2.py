@@ -51,6 +51,7 @@ SWAPS = [
      "STND.DEPS.12 keeps a lock file that the tools of the work write under version control wherever an "
      "environment of the work produces reported results, so that the revisions of a run are those of its source; it "
      "asks for no lock file where the tools write none. "),
+    ("as a requirements file is that pins", "as a requirements file does that pins"),
     ("STND.PY.34, STND.PY.35, and STND.PY.37 instantiate the schemas of DSGN.4 and the external contracts of DSGN.5, "
      "which STND.CLASS.10 applies from CSQ2, and apply from CSQ2; STND.PY.33 and STND.PY.36 rest on no row and apply "
      "from CSQ3.",
@@ -68,9 +69,10 @@ NOTES_FI = (
     "defaults where it is given none (unverified for each library). The ctypes module of the standard library is "
     "unable to determine the signature of a foreign function, checks no number of arguments where none are "
     "declared, and assumes that a function returns a C int unless its result type is declared; incorrect arguments "
-    "are able to corrupt memory or crash the interpreter (a2, S8). These hazards are why STND.CODE.22 reaches the "
-    "type of each argument and of the result of a function that the Python source declares to such a library, and "
-    "the layout of each structure that it declares. A slice of an array is a view whose elements are not always "
+    "are able to corrupt memory or crash the interpreter (a2, S8). These hazards are why, where an interface checks no "
+    "call against the foreign declaration, a declaration of the type of each argument and of the result in the "
+    "Python source is the means by which each type that crosses has the representation that STND.CODE.22 asks, and "
+    "why its second sentence reaches the layout of each structure that the source declares. A slice of an array is a view whose elements are not always "
     "adjacent in memory (unverified for each array library), and STND.CODE.23 reaches the strides of an array "
     "passed by a pointer to its elements. What a foreign interface does with an exception that a Python callback "
     "raises is unverified for each interface, so STND.CODE.24 asks for the catch unless the contract of the "
@@ -88,7 +90,7 @@ READING = (
     "STND.PY.37 are withdrawn, their outcomes being STND.CODE.22, STND.CODE.23, STND.CODE.25, and STND.CODE.26 for "
     "every language; the front matter lists the four as withdrawn; STND.PY.35 keeps only the storing of "
     "KeyboardInterrupt and SystemExit in place of their conversion, and their raise after the foreign call returns, "
-    "the Python form of STND.CODE.24; Terms import Foreign interface from STND.CODE, naming the Python constructs "
+    "the Python form of STND.CODE.24, and is retitled Python interrupts in foreign callbacks; Terms import Foreign interface from STND.CODE, naming the Python constructs "
     "that are foreign interfaces, and Lock file from STND.DEPS, and drop this standard's own definitions; the "
     "Purpose, and the Notes on versions, foreign interfaces, and onsets, follow")
 ROW = f"| 1.2 | {F.DATE} | Minor amendment (GOV.41): {READING}. |"
@@ -98,8 +100,10 @@ RATIONALE = (
     "minor under STND.IDENT.3 because it removes provisions, alters one, and alters two defined meanings. The "
     "custodian decided that the shared rules move to STND.CODE and STND.DEPS and that the provisions they cover "
     "wholly are withdrawn (decisions 1 to 3). Python code keeps each outcome of the withdrawn provisions: the "
-    "committed lock file through STND.DEPS.12, in the same form; the declared types and the compared layouts through "
-    "STND.CODE.22, which adds the alignment; the arrays through STND.CODE.23, which adds the origin of indexes; one "
+    "committed lock file through STND.DEPS.12, in the same form; the types and the compared layouts through "
+    "STND.CODE.22, which adds the alignment and asks the representation that the contract fixes, no longer a "
+    "declaration of each type in the Python source, the Notes giving that declaration as the means where an "
+    "interface checks no call; the arrays through STND.CODE.23, which adds the origin of indexes; one "
     "owner of each foreign resource through STND.CODE.25, which adds the pass to that owner before each other "
     "operation that is able to fail; and the references that foreign code relies on through STND.CODE.26. "
     "STND.PY.35 keeps its treatment of KeyboardInterrupt and SystemExit; the catch, the conversion, and the storing "
