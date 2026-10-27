@@ -422,7 +422,9 @@ def is_imperative(sentence: str) -> bool:
     -------
     bool
         Whether it opens with ``do``, ``never``, ``please``, or a listed
-        verb not followed by a word that marks a noun phrase.
+        verb not followed by a word that marks a noun phrase. A listed
+        verb alone is imperative only with terminal punctuation; without
+        it, it is a label, as a table cell holds one.
     """
     words = re.findall(r"[A-Za-z'-]+", unquoted(sentence))
     if not words:
@@ -432,4 +434,6 @@ def is_imperative(sentence: str) -> bool:
         return True
     if first not in IMPERATIVE_VERBS:
         return False
-    return len(words) < 2 or words[1].lower() not in NOT_IMPERATIVE_SECOND
+    if len(words) < 2:
+        return sentence.rstrip().endswith((".", "!"))
+    return words[1].lower() not in NOT_IMPERATIVE_SECOND

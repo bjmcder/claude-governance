@@ -23,8 +23,8 @@ AT = "2026-10-27T20:00:00+00:00"
 RECORD = "review-records/round-2026-10-27-tables/decisions.md"
 
 MENTION_HEADINGS = (
-    "Modal, Lowercase, Normative Language entry, Expression, Read as, Qualifier, Word, Replace with, Allowed "
-    "compounds, British, American, Not used, Used, Pattern, Forms to watch, Opening words, and Form")
+    "Modal, Normative Language entry, Expression, Read as, Qualifier, Word, British, American, Not used, Used, and "
+    "Opening words")
 
 DFLT18 = [
     ("| The work, its records, and its history | Change beyond authority | Any actor | Yes |",
@@ -49,7 +49,8 @@ DRAFT_DOC = [
      "its column headings, so rewording a sentence cannot empty a list. The drafting checks read each cell of a "
      "table in a provision as prose, other than a cell of a mention column, which the harness finds by its "
      f"heading: {MENTION_HEADINGS}. A table with a mention column under another heading adds that heading to the "
-     "harness."),
+     "harness. A column whose entries are mentioned in part is no mention column, and its mentioned entries are "
+     "quoted."),
 ]
 
 DFLT_READING = ("the Source column of STND.DFLT.18 reads \"Every actor\" in place of \"Any actor\", in its three "
@@ -74,10 +75,9 @@ DRAFT_ROW = f"| 1.6 | {F.DATE} | Minor amendment (GOV.41): {DRAFT_READING}. |"
 DRAFT_RATIONALE = (
     f"Minor amendment of STND.DRAFT, revision 1.6, ratified by the custodian on {F.DATE}: {DRAFT_READING}. The "
     "change is minor under STND.IDENT.3 because it adds a defined meaning and narrows the reach of STND.DRAFT.3: a "
-    "modal or an excluded expression in a column that lists words, spellings, forms, or patterns, in the tables of "
-    "STND.DRAFT.13, STND.DRAFT.17, STND.DRAFT.29, STND.DRAFT.32, STND.DRAFT.33, STND.DOCS.8, STND.DOCS.9, and "
-    "STND.IDENT.3 and STND.IDENT.15 among them, needs no quotation marks, as one in the columns of STND.DRAFT.1 and "
-    "STND.DRAFT.7 did not. STND.DRAFT.3 stays binding; the change relaxes it and asks nothing new, so it raises no "
+    "modal or an excluded expression in a column that lists words, spellings, or expressions, as in the tables of "
+    "STND.DRAFT.13, STND.DRAFT.17, STND.DRAFT.33, and STND.DOCS.8, needs no quotation marks, as one in the columns "
+    "of STND.DRAFT.1 and STND.DRAFT.7 did not; no cell of the corpus now holds one unquoted. STND.DRAFT.3 stays binding; the change relaxes it and asks nothing new, so it raises no "
     "floor (GOV.11). The custodian decided that a term of this standard, with the headings that the harness reads, "
     "marks the columns that a provision mentions (decision 1). Transition (GOV.42): none. Decision 1 of "
     f"{RECORD}; the open item of unit 0019, harness/records/units/0019-round-2026-10-26.md." + F.AUTHOR)

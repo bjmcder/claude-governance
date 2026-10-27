@@ -632,7 +632,8 @@ class HeldBehavior(unittest.TestCase):
 
     def test_imperative_heuristic(self) -> None:
         """Behavior: an imperative opens with do, never, please, or a
-        listed verb not followed by a word that marks a noun phrase.
+        listed verb not followed by a word that marks a noun phrase, and
+        a listed verb alone without terminal punctuation is a label.
 
         Reference: the heuristic of g.8 (README, "Not yet built"); QA.8
         part C, M5, the mutations of ``is_imperative``.
@@ -640,7 +641,7 @@ class HeldBehavior(unittest.TestCase):
         for sentence in ("Never act.", "Please act.", "Record.", "Record it."):
             with self.subTest(sentence):
                 self.assertTrue(is_imperative(sentence))
-        for sentence in ("", "Record of it.", "Record of.", "A record."):
+        for sentence in ("", "Record of it.", "Record of.", "A record.", "review"):
             with self.subTest(sentence):
                 self.assertFalse(is_imperative(sentence))
 
@@ -778,7 +779,60 @@ class HeldBehavior(unittest.TestCase):
         )
         self.assertEqual(quoted["g.5"], "PASS")
         defined = statuses(row("STND.DRAFT.17", "The code may not run."))
-        self.assertEqual(defined["g.5"], "PASS")
+        self.assertEqual(defined["g.5"], "FAIL")
+
+    def test_mention_columns(self) -> None:
+        """Behavior: in a table that a provision names in ``defines``,
+        the cells of a mention column are left out, and every other cell
+        is read as prose.
+
+        Reference: STND.DRAFT, term Mention column, and the section
+        Representation in the harness; STND.DRAFT.3.
+        """
+
+        def cell(heading: str, text: str) -> Mutation:
+            """Return a mutation that adds a column to STND.DRAFT.17.
+
+            Parameters
+            ----------
+            heading : str
+                Heading of the new column.
+            text : str
+                Text of its cell in each row.
+
+            Returns
+            -------
+            Mutation
+                The mutation.
+            """
+
+            def apply(e: Index) -> None:
+                """Add the column.
+
+                Parameters
+                ----------
+                e : Index
+                    Copy of the corpus entries by identifier; changed in
+                    place.
+                """
+                lines = e["STND.DRAFT.17"].body.split("\n")
+                for n, line in enumerate(lines):
+                    if line.startswith("| Word |"):
+                        lines[n] = line + f" {heading} |"
+                    elif line.startswith("| ---"):
+                        lines[n] = line + " --- |"
+                    elif line.startswith("| "):
+                        lines[n] = line + f" {text} |"
+                e["STND.DRAFT.17"].body = "\n".join(lines)
+
+            return apply
+
+        self.assertEqual(
+            statuses(cell("Note", "The code may not run."))["g.5"], "FAIL"
+        )
+        self.assertEqual(statuses(cell("Expression", "may not"))["g.5"], "PASS")
+        quantified = findings(lambda e: None, expressions.quantifiers)
+        self.assertFalse([f for f in quantified if f.subject == "STND.DRAFT.17"])
 
 
 if __name__ == "__main__":

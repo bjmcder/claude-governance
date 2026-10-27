@@ -242,17 +242,27 @@ def terms_of(body: str) -> dict[str, str]:
     return {r["Term"]: r["Definition"] for r in rows}
 
 
+# The headings of the mention columns that STND.DRAFT names in its section
+# Representation in the harness: their entries are mentioned, not used.
+MENTION_COLUMNS = frozenset({
+    "Modal", "Normative Language entry", "Expression", "Read as",
+    "Qualifier", "Word", "British", "American", "Not used", "Used",
+    "Opening words",
+})
+
+
 def table_cells(entry: Entry) -> list[str]:
     """Return the table cells of a provision that are read as prose.
 
     The body of a numbered provision, including a table it contains, is
     normative (STND.DRAFT, Normative and informative parts), so each
-    data cell is read as prose, its inline code left out. A table that
-    the provision names in ``defines`` is data that the harness or a
-    reader looks up, and its expression columns mention words rather
-    than use them, so a provision with ``defines`` contributes none.
-    Header cells are read too: a row without the delimiter row below it
-    is no table in Markdown, but ``parse_tables`` takes it for a header.
+    data cell is read as prose, its inline code left out. A cell of a
+    mention column (STND.DRAFT, term Mention column) is left out, being
+    a word that the provision mentions; the harness finds such a column
+    by its heading. Header cells are read too, except in a provision that
+    names its table in ``defines``, whose headings the harness reads as
+    data: elsewhere a row without the delimiter row below it is no table
+    in Markdown, but ``parse_tables`` takes it for a header.
 
     Parameters
     ----------
@@ -263,14 +273,16 @@ def table_cells(entry: Entry) -> list[str]:
     -------
     list[str]
         Text of each cell, in order; empty for an entry that is not a
-        provision or that defines a table.
+        provision.
     """
-    if entry.meta.get("kind") != "provision" or entry.meta.get("defines"):
+    if entry.meta.get("kind") != "provision":
         return []
-    return [
-        text
-        for header, rows in parse_tables(FENCE_RE.sub("\n", entry.body))
-        for row in (header, *rows)
-        for cell in row
-        if (text := CODE_RE.sub(" ", cell).strip())
-    ]
+    defines = bool(entry.meta.get("defines"))
+    out = []
+    for header, rows in parse_tables(FENCE_RE.sub("\n", entry.body)):
+        kept = [i for i, h in enumerate(header) if h.strip() not in MENTION_COLUMNS]
+        for row in (rows if defines else (header, *rows)):
+            for i in kept:
+                if i < len(row) and (text := CODE_RE.sub(" ", row[i]).strip()):
+                    out.append(text)
+    return out
