@@ -99,7 +99,7 @@ harness/
 
 ## Current state
 
-As of ledger entry 187 (2026-10-26). `show governance ID` prints the current text and revision of any document.
+As of ledger entry 197 (2026-10-27). `show governance ID` prints the current text and revision of any document.
 
 | Level | Contents | Status |
 | --- | --- | --- |
@@ -125,33 +125,33 @@ As of ledger entry 187 (2026-10-26). `show governance ID` prints the current tex
 | STND.INSTR | 1.4 | 10 | Agent instructions |
 | STND.HARN | 1.4 | 24 | Harness specification (identifiers 18 to 23, 29, and 30 withdrawn) |
 | STND.VVUQ | 1.4 | 83 | Verification, validation, and uncertainty quantification methods |
-| STND.CODE | 1.2 | 21 | Coding standard |
+| STND.CODE | 1.3 | 26 | Coding standard |
 | STND.THRT | 1.0 | 9 | Threat-model template |
 | STND.KNOW | 1.0.1 | 14 | Knowledge base and tags |
-| STND.DEPS | 1.0 | 11 | Dependency policy |
+| STND.DEPS | 1.1 | 12 | Dependency policy |
 | STND.PROJ | 1.2.1 | 7 | Project constitution template |
 | STND.WPROC | 1.1 | 15 | Work process standard |
 | STND.CREW | 1.1 | 23 | Agent roles standard |
 | STND.DOCS | 1.0 | 14 | Documentation standard |
-| STND.CXX | 1.2 | 27 | C++ standard |
-| STND.PY | 1.1 | 37 | Python standard |
-| STND.JL | 1.2 | 41 | Julia standard |
+| STND.CXX | 1.3 | 25 | C++ standard |
+| STND.PY | 1.2 | 33 | Python standard |
+| STND.JL | 1.3 | 37 | Julia standard |
 | STND.ANNEX | 1.0 | 10 | Hardware type annex |
-| STND.MPI | 1.0.1 | 25 | Message Passing Interface standard |
+| STND.MPI | 1.0.2 | 25 | Message Passing Interface standard |
 | STND.CONC | 1.1 | 30 | Concurrency standard |
-| STND.OMP | 1.0.2 | 33 | OpenMP standard |
+| STND.OMP | 1.0.3 | 33 | OpenMP standard |
 | STND.OFFLD | 1.0.1 | 31 | Accelerator offload standard |
 | STND.BUILD | 1.0.2 | 26 | Build standard |
 | STND.WFLOW | 1.0 | 40 | Workflow and long-run resilience standard |
-| STND.STDC | 1.1 | 40 | C standard |
-| STND.RUST | 1.1 | 34 | Rust standard |
-| STND.FTN | 1.1 | 36 | Fortran standard |
+| STND.STDC | 1.2 | 39 | C standard |
+| STND.RUST | 1.2 | 34 | Rust standard |
+| STND.FTN | 1.1.1 | 36 | Fortran standard |
 | STND.SV | 1.1 | 28 | Verilog and SystemVerilog standard |
 | STND.LEAN | 1.0.1 | 31 | Lean standard |
 | STND.PERF | 1.0 | 26 | Performance evaluation standard |
 | STND.TEST | 1.0 | 19 | Testing methods standard |
 
-The ledger holds 187 transactions: 48 `adopt`, 108 `amend`, 17 `register`, 3 `review`, 3 `rule`, and 8 `annotate`. The mnemonic register `governance/MNEM/_doc.md` (STND.IDENT.19) holds every mnemonic in use; a new mnemonic, including that of a project or of a kind of LVL3 instrument, is registered by the custodians (STND.IDENT.23).
+The ledger holds 197 transactions: 48 `adopt`, 118 `amend`, 17 `register`, 3 `review`, 3 `rule`, and 8 `annotate`. The mnemonic register `governance/MNEM/_doc.md` (STND.IDENT.19) holds every mnemonic in use; a new mnemonic, including that of a project or of a kind of LVL3 instrument, is registered by the custodians (STND.IDENT.23).
 
 ## Commands
 

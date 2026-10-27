@@ -1,9 +1,8 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.JL,standard,LVL2,Julia standard,adopted,_doc.md,68ac2c49aadb46adfbeeee72190ae68c0dc42813e1ad06c6b3df1d0c62e29888,36985
+STND.JL,standard,LVL2,Julia standard,adopted,_doc.md,665162b5ac66eccfb7d9148ba564eea8c33a2a0bc34388cc864a7d057e13dd42,37426
 STND.JL.1,provision,LVL2,Reference Julia version,adopted,1.md,7cb9092b698c6a12c71a8230be8ad91f127180e4f74db49d1eb3b55f7c48ce0b,819
 STND.JL.2,provision,LVL2,Julia compatibility bounds,adopted,2.md,93e7cac6b566594fbdde3534f7b37fce247ddf15b456711479e1bf00624f4d48,681
 STND.JL.3,provision,LVL2,Checked Julia versions,adopted,3.md,9e71459bc9b932d14212d81a2f3e3cf93b3c400e70ebd018e7546169a7915209,981
-STND.JL.4,provision,LVL2,Committed manifests,adopted,4.md,02534e7b3b3fd7ad989bb13082741ec796dd3ce0a73731afd7753f745590ab0d,617
 STND.JL.5,provision,LVL2,Recorded run settings,adopted,5.md,4d3083457a8d7ae6bc065095bd243b987174144026f96c51a9f52bf24cfd0134,655
 STND.JL.6,provision,LVL2,Julia naming conventions,adopted,6.md,446f25c3c218b24591957a3979f9f233821cea8d8fa9c9b891577f464f3703a9,1118
 STND.JL.7,provision,LVL2,Mutation marked in names,adopted,7.md,eddcdaf06df4b4f7043990e7ab6ccf48968ff9f4f83bed49acb81ee88045042e,518
@@ -36,8 +35,5 @@ STND.JL.33,provision,LVL2,Package hygiene checks,adopted,33.md,741d8318f8c26077e
 STND.JL.34,provision,LVL2,Julia test run settings,adopted,34.md,0bbeb9753629a3e2b74184d1757f73ee938fea48ca2ec48200d9e305aa5ed150,652
 STND.JL.35,provision,LVL2,Deprecations fail test runs,adopted,35.md,e9ac4573766a1b319525255ea3941134869a7377f9b14877767b715352f5c9ae,518
 STND.JL.36,provision,LVL2,Bounds checks in production,adopted,36.md,86db0bfe5beaf63424cc276b626871cbf280b0dd6c0e3a8022b64458053883f8,646
-STND.JL.37,provision,LVL2,Julia foreign call types,adopted,37.md,10387515f404fbd3e32d4ea7cdc05b5713fcbf3c0f3bb9cc31e47b4127fd7bc4,697
-STND.JL.38,provision,LVL2,Julia memory across foreign calls,adopted,38.md,d5abbec121a5eca9adb94d009cfc297ab3196592470e82696b9e17b567f53a5f,811
-STND.JL.39,provision,LVL2,Julia exceptions in foreign callbacks,adopted,39.md,a4cc7459bfae78078073b9521191a5f6afd9f8ee93423a14868cbc8642cac896,958
-STND.JL.40,provision,LVL2,Julia owners of foreign resources,adopted,40.md,6c5981be05dff61e855fed032ea3d6fc6a827dec7e926b83a2d398a0ee8c30ab,535
-STND.JL.41,provision,LVL2,Julia arrays at foreign calls,adopted,41.md,4d64238f207486d08da57ba7c3c16d3be20c868b43e6116d6df86f18b5f1c261,571
+STND.JL.38,provision,LVL2,Julia memory across foreign calls,adopted,38.md,54e11b4ab118e320d034dc438080443751fd65be7882f027ddf58a313d5dde73,553
+STND.JL.39,provision,LVL2,Julia interrupts in foreign callbacks,adopted,39.md,dba84f6f272a000cb043b0a63c063efe87e2be93c76f8107de97fa85795875e9,658
