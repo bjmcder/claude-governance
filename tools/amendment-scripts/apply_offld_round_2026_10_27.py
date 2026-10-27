@@ -29,8 +29,13 @@ OFFLD_NOTES = [(
     "The costs of first use that the two name differ: STND.PERF.12 names the first filling of caches and memory "
     "among them, and STND.OFFLD.31 names initialization and compilation at load only, so a record of offloaded work "
     "that states those two meets STND.OFFLD.31.",
-    "The two name the same costs of first use: initialization, compilation at load, and the first filling of caches "
-    "and memory, so one record of offloaded work that states them meets both.")]
+    "The two name the same costs of first use, which are initialization, compilation at load, and the first filling "
+    "of caches and memory, so one record of offloaded work that states them meets both."),
+    ("the first access to memory that migrates on demand is likely to pay for migration as well, which o3 did not "
+     "retrieve and is unverified;",
+     "the first access to memory that migrates on demand is likely to pay for migration as well, which o3 did not "
+     "retrieve and is unverified, and such a migration at first access is among the first filling of memory that "
+     "the second sentence of STND.OFFLD.31 names;")]
 
 PERF_NOTES = [(
     "and one record meets both standards; a later amendment of STND.OFFLD could have STND.OFFLD.31 cite them",
@@ -40,7 +45,8 @@ OFFLD_READING = (
     "the second sentence of STND.OFFLD.31 asks a measurement of offloaded work to state whether it includes the "
     "costs of first use, among them initialization, compilation at load, and the first filling of caches and "
     "memory, the costs that STND.PERF.12 names for every other measurement, in place of the costs of a first "
-    "submission, among them initialization and compilation at load; the Notes say that the two name the same costs")
+    "submission, among them initialization and compilation at load; the Notes say that the two name the same costs, "
+    "and that a migration of memory at first access is among the first filling of memory")
 OFFLD_ROW = f"| 1.1 | {F.DATE} | Minor amendment (GOV.41): {OFFLD_READING}. |"
 OFFLD_RATIONALE = (
     f"Minor amendment of STND.OFFLD, revision 1.1, ratified by the custodian on {F.DATE}: {OFFLD_READING}. The "
