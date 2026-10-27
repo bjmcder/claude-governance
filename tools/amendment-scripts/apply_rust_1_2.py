@@ -30,7 +30,7 @@ RUST25 = (
     "Where STND.CODE.24 lets a panic leave a function of the work that a foreign interface invokes, that function "
     "SHOULD be declared with an ABI under which both sides of the interface admit unwinding (DSGN.5).")
 RUST27 = (
-    "Each type of the work that owns a resource under STND.CODE.25 SHOULD release it in its `Drop` implementation "
+    "Each type of the work that owns an owned resource under STND.CODE.25 SHOULD release it in its `Drop` implementation "
     "(DSGN.14).")
 RUST30 = (
     "Other than the check against newer revisions of STND.RUST.1, each build of the checks and of each release of a "
@@ -48,7 +48,7 @@ SWAPS = [
     ("Dependency record has the meaning that STND.DEPS gives it;",
      "Foreign interface has the meaning that STND.CODE gives it, and a function that a block of foreign declarations "
      "declares, a function of the work exported with a foreign ABI, and a callback that the work passes to foreign "
-     "code are foreign interfaces, and the declaration of a function of the work with an ABI under which both sides "
+     "code are foreign interfaces; Owned resource has the meaning that STND.CODE gives it; and the declaration of a function of the work with an ABI under which both sides "
      "of a foreign interface admit unwinding is a statement of the contract of that interface that it carries a "
      "panic on to code of the work, in the sense of STND.CODE.24; Dependency record and Lock file have the meanings "
      "that STND.DEPS gives them;"),
@@ -119,13 +119,16 @@ RATIONALE = (
     "minor under STND.IDENT.3 because it alters provisions and two defined meanings. The custodian decided that the "
     "shared rules move to STND.CODE and STND.DEPS, that the language standards keep only what their languages add, "
     "and that the lock-file rule is conditioned on reported results (decisions 1 to 3). No provision is withdrawn: "
-    "each of the four keeps Rust content, and STND.JL and STND.PY cite them. Rust code keeps each outcome of the "
-    "removed sentences through STND.CODE.22, STND.CODE.24, and STND.CODE.25, in the same terms, with the word "
-    "only added to the release by the owner. A function declared with an ABI under which both sides admit "
+    "each of the four keeps Rust content, and STND.JL cites STND.RUST.27 until its own amendment, which follows "
+    "this one because this one drops the citation of STND.JL.4, so that a withdrawal here would leave a state of "
+    "the round that cites a withdrawn identifier. Rust code keeps each outcome of the "
+    "removed sentences through STND.CODE.22, STND.CODE.24, and STND.CODE.25, in the same terms, with the release "
+    "limited to the owner that the contract states, where STND.RUST.27 let the side and the allocator that the "
+    "contract names release it. A function declared with an ABI under which both sides admit "
     "unwinding still lets a panic leave in place of the catch, since Terms read that declaration as the statement "
     "of the contract that the first sentence of STND.CODE.24 asks; STND.RUST.25 still asks that ABI wherever a "
     "panic leaves. STND.CODE.26 adds the lifetime of an object that foreign code keeps, and the release in `Drop` "
-    "of STND.RUST.27 now reaches each resource that the work owns under STND.CODE.25, and not only one that a "
+    "of STND.RUST.27 now reaches each owned resource that the work owns under STND.CODE.25, and not only one that a "
     "foreign interface creates for it. "
     "STND.DEPS.12 no longer asks the lock file of a set of crates whose builds produce no reported result, which "
     "the first sentence of STND.RUST.30 asked unless other work used the crates; STND.RUST.30 now reaches the "

@@ -35,13 +35,16 @@ SWAPS = [
     ("Repository configuration, Static check, Execution setting, Untrusted input, High-assurance code, and "
      "High-assurance coding standard have the meanings that STND.CODE gives them;",
      "Repository configuration, Static check, Execution setting, Untrusted input, High-assurance code, "
-     "High-assurance coding standard, and Foreign interface have the meanings that STND.CODE gives them, and a C or "
+     "High-assurance coding standard, Foreign interface, and Owned resource have the meanings that STND.CODE gives "
+     "them, and a C or "
      "vendor library interface, and a callback or a thread that such a library or a runtime starts, are foreign "
      "interfaces;"),
     ("| Foreign interface | An interface through which C++ code of the work calls, or is called by, code that does "
      "not follow the C++ rules of ownership and exceptions: a C or vendor library interface, a callback or thread "
      "that such a library or a runtime starts, and a structured block of a compiler directive for parallel "
      "execution. |\n", ""),
+    ("| Owned resource | Memory, a file, a lock, a handle that a foreign interface issues, or another facility that "
+     "code acquires and has to release. |\n", ""),
     ("An owning raw pointer appears only inside a resource handle or in the wrapper of STND.CXX.20,",
      "An owning raw pointer appears only inside a resource handle or in an object that owns a foreign resource "
      "under STND.CODE.25,"),
@@ -56,7 +59,8 @@ READING = (
     "STND.CXX.20 and STND.CXX.22 are withdrawn, their outcomes being STND.CODE.25 and STND.CODE.24 for every "
     "language, and the front matter lists them as withdrawn; STND.CXX.5 cites STND.CODE.25 in place of "
     "STND.CXX.20; Terms import Foreign interface from STND.CODE, naming the C++ constructs that are foreign "
-    "interfaces, and drop this standard's own definition; the Purpose lists STND.CODE.22 to STND.CODE.26 and drops "
+    "interfaces, and Owned resource, which STND.CODE now defines in the words of this standard, and drop this "
+    "standard's own definitions; the Purpose lists STND.CODE.22 to STND.CODE.26 and drops "
     "the withdrawn provisions; the Notes cite STND.CODE.24 and STND.CODE.25 in their place")
 ROW = f"| 1.3 | {F.DATE} | Minor amendment (GOV.41): {READING}. |"
 
@@ -73,8 +77,12 @@ RATIONALE = (
     "interface carries on to code of the work. STND.CODE.22, STND.CODE.23, and STND.CODE.26 add the layouts, the "
     "arrays, and the lifetime of an object that foreign code keeps to C++. The term of STND.CODE covers each part "
     "of the term of this standard, the structured block of a parallel directive among them for STND.CODE.24, the "
-    "one rule that applied to it through STND.CXX.22, and reaches only code in the same process. STND.CXX.5 changes its "
-    "citation and not its outcome. The withdrawn identifiers are listed in the field withdrawn and are never given "
+    "one rule that applied to it through STND.CXX.22, and reaches only code in the same process; a structured block "
+    "is no longer a foreign interface for STND.CXX.4, STND.CXX.6, STND.CXX.8, or STND.CXX.10, none of which "
+    "concerns it. STND.CXX.20 had the foreign resource pass to a resource handle, a type that also defines or "
+    "deletes its copy and move operations, and STND.CODE.25 asks an object of the work that owns it and releases "
+    "it; STND.CXX.5 has that object release it in its destructor, but no longer asks it to be a resource handle, a "
+    "narrowing that the custodian is asked to accept. The withdrawn identifiers are listed in the field withdrawn and are never given "
     "to another provision (STND.IDENT.14). Each provision concerned is a default, so none raises the floor "
     "(GOV.11). Class onsets: STND.CODE.24 applies from CSQ2, as STND.CXX.22 did, and STND.CODE.25 from CSQ3, as "
     f"STND.CXX.20 did. Transition (GOV.42): none. Decision 1 of {F.RECORD}." + F.AUTHOR)

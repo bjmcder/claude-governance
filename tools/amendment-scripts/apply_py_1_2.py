@@ -32,7 +32,8 @@ SWAPS = [
     ("Repository configuration, Static check, Execution setting, Untrusted input, High-assurance code, and "
      "High-assurance coding standard have the meanings that STND.CODE gives them;",
      "Repository configuration, Static check, Execution setting, Untrusted input, High-assurance code, "
-     "High-assurance coding standard, and Foreign interface have the meanings that STND.CODE gives them, and a "
+     "High-assurance coding standard, Foreign interface, and Owned resource have the meanings that STND.CODE gives "
+     "them, and a "
      "function of a compiled extension module, a function that the work loads from a shared library while it runs, "
      "and a Python callable that the work passes to such code are foreign interfaces; Lock file has the meaning "
      "that STND.DEPS gives it;"),
@@ -51,7 +52,10 @@ SWAPS = [
      "STND.DEPS.12 keeps a lock file that the tools of the work write under version control wherever an "
      "environment of the work produces reported results, so that the revisions of a run are those of its source; it "
      "asks for no lock file where the tools write none. "),
-    ("as a requirements file is that pins", "as a requirements file does that pins"),
+    ("as a requirements file is that pins the exact revision of each package that the environment installs, its "
+     "transitive dependencies included.",
+     "as a requirements file that pins the exact revision of each package that the environment installs, its "
+     "transitive dependencies included, does."),
     ("STND.PY.34, STND.PY.35, and STND.PY.37 instantiate the schemas of DSGN.4 and the external contracts of DSGN.5, "
      "which STND.CLASS.10 applies from CSQ2, and apply from CSQ2; STND.PY.33 and STND.PY.36 rest on no row and apply "
      "from CSQ3.",
@@ -83,7 +87,8 @@ NOTES_FI = (
     "keeps no reference to a callback object, which the garbage collector is then able to free while C code still "
     "holds it, crashing the program when the callback is made (a2, S8); whether a buffer passed to foreign code is "
     "kept alive is unverified for each interface. STND.CODE.26 asks the work to keep each such object reachable, a "
-    "buffer and a callable among them, and STND.CODE.25 gives each resource that foreign code creates one owner.")
+    "buffer and a callable among them, and STND.CODE.25 gives each owned resource that foreign code creates one "
+    "owner.")
 
 READING = (
     "STND.PY.33 is withdrawn, its outcome being STND.DEPS.12 for every language; STND.PY.34, STND.PY.36, and "

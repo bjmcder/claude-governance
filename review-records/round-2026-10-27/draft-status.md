@@ -19,7 +19,7 @@ The scripts are in `tools/amendment-scripts/`, with the helpers of `fi_common.py
 
 ## Order
 
-STND.CODE and STND.DEPS come first, since every other amendment cites their new provisions. Each amendment that drops a citation of a provision to be withdrawn comes before the amendment that withdraws it, so that no state of the round cites a withdrawn identifier: STND.PY and STND.RUST drop STND.JL.4 before STND.JL withdraws it, and every document drops STND.CXX.20 and .22 before STND.CXX withdraws them. STND.RUST.27 is kept, cut to its release in a `Drop` implementation, since STND.JL and STND.PY cite STND.RUST.24 to STND.RUST.27 and STND.RUST cites STND.JL.4, which no order of single transactions could otherwise satisfy.
+STND.CODE and STND.DEPS come first, since every other amendment cites their new provisions. Each amendment that drops a citation of a provision to be withdrawn comes before the amendment that withdraws it, so that no state of the round cites a withdrawn identifier: STND.PY and STND.RUST drop STND.JL.4 before STND.JL withdraws it, and every document drops STND.CXX.20 and .22 before STND.CXX withdraws them. STND.RUST.27 is kept, cut to its release in a `Drop` implementation, since STND.JL cites STND.RUST.27 and STND.RUST cites STND.JL.4, which no order of single transactions could otherwise satisfy.
 
 ## What the drafting decided that the decisions did not
 

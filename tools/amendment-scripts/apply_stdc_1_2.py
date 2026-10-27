@@ -29,7 +29,10 @@ SWAPS = [
     ("Repository configuration, Static check, Execution setting, Untrusted input, High-assurance code, and "
      "High-assurance coding standard have the meanings that STND.CODE gives them.",
      "Repository configuration, Static check, Execution setting, Untrusted input, High-assurance code, "
-     "High-assurance coding standard, and Foreign interface have the meanings that STND.CODE gives them."),
+     "High-assurance coding standard, Foreign interface, and Owned resource have the meanings that STND.CODE gives "
+     "them."),
+    ("Translation unit, Toolchain matrix, and Owned resource have the meanings that STND.CXX gives them,",
+     "Translation unit and Toolchain matrix have the meanings that STND.CXX gives them,"),
     ("| Foreign interface | Of C source: an interface through which C source calls, or is called by, code written "
      "in another language; a callback or a thread that a runtime of another language starts in C source; or a "
      "structured block of a compiler directive for parallel execution. |\n", ""),
@@ -48,7 +51,7 @@ SWAPS = [
 READING = (
     "STND.STDC.36 is withdrawn, its outcome being STND.CODE.22 and STND.CODE.23 for every language, and the front "
     "matter lists it as withdrawn; Terms import Foreign interface from STND.CODE and drop this standard's own "
-    "definition; the Purpose drops STND.STDC.36 and names STND.CODE.22 to STND.CODE.26; the Notes cite STND.CODE.23 and STND.CODE.24 in place of "
+    "definition, and import Owned resource from STND.CODE, which now defines it, in place of STND.CXX; the Purpose drops STND.STDC.36 and names STND.CODE.22 to STND.CODE.26; the Notes cite STND.CODE.23 and STND.CODE.24 in place of "
     "STND.STDC.36 and STND.CXX.22, and drop STND.CXX.20 from the provisions of STND.CXX that do not carry to C")
 ROW = f"| 1.2 | {F.DATE} | Minor amendment (GOV.41): {READING}. |"
 

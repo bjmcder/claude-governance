@@ -29,12 +29,41 @@ Reviews: `review-a.md` (STND.CODE, STND.DEPS, STND.STDC, STND.CXX, and the edito
 | O1 | The count of pairs | Fixed: 131. |
 | O2 | "as a requirements file is that pins" | Fixed: "does that pins". |
 
+## Verification (`verify.md`) and reconciliation (`reconciliation.md`)
+
+Rehearsal after these fixes: entries 188 to 197; `verify` and `references --check` pass, with the g.18 warning that the corpus already carries; the drafting findings on the changed provisions are unchanged. Both reviews applied the modules one at a time and found no state of the round that cites a withdrawn identifier.
+
+| # | Finding | Disposition |
+| --- | --- | --- |
+| V1 | The fix of B O2 is still ungrammatical | Fixed: "as a requirements file that pins the exact revision of each package that the environment installs, its transitive dependencies included, does." |
+| V2, R1 | "Resource" in STND.CODE.25 and STND.RUST.27 is LEX.resource in another sense | Fixed by the reconciler's form: STND.CODE defines Owned resource, in the words of the term of STND.CXX, and STND.CODE.25 and STND.RUST.27 use it; STND.CXX drops its definition, and STND.CXX, STND.STDC, STND.PY, and STND.RUST import it from STND.CODE. |
+| V3 | The rationale of STND.RUST hides a narrowing ("the word only") | Fixed: "with the release limited to the owner that the contract states, where STND.RUST.27 let the side and the allocator that the contract names release it". |
+| V4 | The rationale of STND.CXX does not say that the block leaves the term for STND.CXX.4, .6, .8, .10 | Fixed, in the rationale. |
+| V5, R O3 | Move the structured block from the term into the text of STND.CODE.24 | Not taken; question 6 below. The reconciler judges the clause sound as a term. Written into STND.CODE.24, the block has no interface for its second and third sentences to test, so the clause would move into the provision with its two readings. |
+| V6 | "a panic" names a construct of a language | Not taken: GOV.18 and the Purpose of STND.CODE exclude a language, a tool, or a method, and a panic, like an exception, is a kind of failure that several languages have. |
+| V7 | "Same process" and hardware descriptions | Not taken: a simulator that loads code of another language into its process is reached; an instance of a block in another description language is not a call between languages of different rules. |
+| V8 | STND.FTN and STND.LEAN name no constructs | Not taken: the Notes of STND.CODE no longer say that each standard names them; STND.FTN.27 names the BIND attribute. |
+| V9 | What the contract includes rests on a Note | Fixed: the term Foreign interface says "The contract of a foreign interface includes the declaration of each of its functions in its own language and the documentation of the interface", and the Note is removed. |
+| R2 | The rationale of STND.CXX says that STND.CXX.5 keeps its outcome, though a resource handle is no longer asked | Fixed: the rationale states the narrowing; question 7 below. |
+| R3 | The rationale of STND.RUST says that STND.JL and STND.PY cite STND.RUST.24 to .27 | Fixed: STND.JL cites STND.RUST.27 until its own amendment, which follows STND.RUST's because STND.RUST drops its citation of STND.JL.4; `draft-status.md` likewise. |
+| R4 | The rationale of STND.CODE omits that a call to another process leaves the term | Fixed, in the rationale; question 8 below. |
+| R5 | STND.CODE.22 and .25 are bundles whose first sentence applies alone | Not changed: the Notes argue each second sentence as never applied without the first, the form of the ratified STND.PY.34 and STND.JL.37; question 1 below. |
+| R O2 | The scripts fix the date 2026-10-27 | Noted: `fi_common.DATE` is changed before application if ratification falls on another day. |
+| R O4 | The ban on releasing a predefined resource survives only as a Note | Not changed: the first sentence of STND.CODE.25 has each owned resource released only by its owner, and the Note names the interface as the owner of what it predefines. |
+
 ## Questions for the custodian
 
-The drafting made these choices beyond the decisions, and both reviews name them. Each is a default, and none raises the floor.
+The drafting made these choices beyond the decisions; the reviews name them. Each concerns a default, and none raises the floor.
 
-1. **Five provisions, not one.** Decision 26 of 2026-10-25 named one STND.CODE provision; STND.DRAFT.28 allows at most three sentences, never applied apart, so the rules are STND.CODE.22 to .26.
+1. **Five provisions, not one.** Decision 26 of 2026-10-25 named one STND.CODE provision; STND.DRAFT.28 allows at most three sentences, never applied apart, so the rules are STND.CODE.22 to .26. The second sentences of STND.CODE.22 and .25 apply to fewer cases than their first, and are argued as never applied without them.
 2. **STND.CODE.24 relaxes STND.CXX.22 and STND.JL.39.** A failure that the contract of the interface carries on to code of the work is left uncaught, as STND.PY.35 and STND.RUST.25 already allowed. The alternative is a catch in every case, which would tighten STND.PY.35 and STND.RUST.25.
-3. **STND.CODE.25 adds, for Python and Julia and for the languages newly reached, the pass of a foreign resource to its owner before each other operation that is able to fail**, which STND.CXX.20 and STND.RUST.27 asked.
-4. **STND.DEPS.12 has no permission sentence** for a package that other work uses and that produces no reported result. Decision 3 states that such a package may leave its lock file uncommitted; the condition of the provision already leaves it out, and the Notes say so. A sentence "... MAY keep its lock file out of version control" can be added if the custodian wants it stated in the body.
-5. **STND.RUST.27 is kept**, cut to the release in a `Drop` implementation, which no order of single transactions could otherwise reach without a state that cites a withdrawn identifier.
+3. **STND.CODE.25 adds the pass of a foreign resource to its owner before each other operation that is able to fail** for Python and Julia and the languages newly reached, as STND.CXX.20 and STND.RUST.27 asked.
+4. **STND.DEPS.12 has no permission sentence** for a package that other work uses and that produces no reported result; the condition of the provision already leaves it out, and the Notes say so. A sentence "... MAY keep its lock file out of version control" can be added. For Rust this narrows the first sentence of STND.RUST.30, as decision 3 asks.
+5. **STND.RUST.27 is kept**, cut to the release in a `Drop` implementation, and now reaches each owned resource that the work owns under STND.CODE.25, not only one that a foreign interface creates. The alternative, its withdrawal, needs a second amendment of STND.RUST in this round, after STND.JL.
+6. **The structured block of a parallel directive** is a foreign interface for STND.CODE.24 alone, by a clause of the term, which keeps the one use that STND.CXX and STND.STDC made of it. The alternatives: a foreign interface for all five rules, or named in the text of STND.CODE.24.
+7. **A C++ owner of a foreign resource** was a resource handle under STND.CXX.20, with its copy and move operations defined or deleted; STND.CODE.25 asks an object that owns it and releases it, and STND.CXX.5 its release in the destructor. Accept the narrowing, or keep the resource handle in STND.CXX.
+8. **A call to code in another process** leaves the term Foreign interface, which the words "code written in another language" of STND.PY, STND.JL, and STND.STDC reached.
+9. **The reading of an unwinding ABI in STND.RUST.** The Terms of STND.RUST read a declaration with an ABI under which both sides admit unwinding as the statement of the contract that STND.CODE.24 asks, so that STND.RUST.25 keeps its alternative to the catch.
+10. **The declared types of STND.PY.34.** STND.CODE.22 asks the representation that the contract fixes, and the Notes of STND.PY give the declaration of each type as the means where an interface checks no call; the declaration is no longer asked in the body.
+11. **The reach.** Under decision 4, STND.CODE.22 to .24 apply from CSQ2 to C++ layouts and to C, Fortran, Lean, and hardware descriptions, and STND.CODE.25 and .26 from CSQ3.
+12. **Ratification.** After one more cold verification of these fixes, if it finds no defect.
