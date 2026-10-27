@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.PERF,standard,LVL2,Performance evaluation standard,adopted,_doc.md,441436a59158fbfcbfeca7ffab88d4373dcc54961e361ceca5f970d66c43e9e3,22788
+STND.PERF,standard,LVL2,Performance evaluation standard,adopted,_doc.md,c17bebd706069c581d52a5691ed3f4d40a1f24a6231ecd35108b65b73cd40530,22984
 STND.PERF.1,provision,LVL2,Evaluation of performance-sensitive code,adopted,1.md,a734f91a0647f77dcaa8f3184d46eeaedae8a1d4d5ede74acc74d256b3beaa08,595
 STND.PERF.2,provision,LVL2,Performance requirement content,adopted,2.md,fe81754f9add2c520d4339f82d73ffdd2545bd94db9809e73da280afca74ccc5,720
 STND.PERF.3,provision,LVL2,Evaluation question stated,adopted,3.md,d66b14e26d1cae09784f536d939606a8b60c595ce29dd7963b8b3e9fe0e73753,647

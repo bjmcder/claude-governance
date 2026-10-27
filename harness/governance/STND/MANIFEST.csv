@@ -19,9 +19,9 @@ STND.JL,standard,LVL2,Julia standard,adopted,JL/,229edbceadf59ed86570420089c2c1a
 STND.KNOW,standard,LVL2,Knowledge base and tags,adopted,KNOW/,01e3a6442613dd9a89e50d0ac5659ce4649a8f4cb78a4e9da23c73a28861a1f4,17679
 STND.LEAN,standard,LVL2,Lean standard,adopted,LEAN/,be2dc1dd23c3fe830db3e10d3d1c41f96fc64c9a94bf426649b4e19d8b895c98,54815
 STND.MPI,standard,LVL2,Message Passing Interface standard,adopted,MPI/,fae4e6fccccd8f6984474c97e4322df95cb6990403e10547be5fd005c4cc5e1f,45638
-STND.OFFLD,standard,LVL2,Accelerator offload standard,adopted,OFFLD/,182f28cd4d478651f97a7244ffb97b505536c8c74cd260b9d4e84c6feb550a7a,41672
+STND.OFFLD,standard,LVL2,Accelerator offload standard,adopted,OFFLD/,f945560d7bbdb2bab33f9ac8b2e3fe78a644adf922c7e885d4d363006bbbb95f,42318
 STND.OMP,standard,LVL2,OpenMP standard,adopted,OMP/,15c8fcdccb88c64ae9785156a1fd3219ceb2ec82545d6426210ff569563e05c6,47990
-STND.PERF,standard,LVL2,Performance evaluation standard,adopted,PERF/,1e5a07d347660d460f3c5aa34647f17c16203667cac5db39aa9ac5a59e8758a1,41045
+STND.PERF,standard,LVL2,Performance evaluation standard,adopted,PERF/,20f02a8d46cecb5b5a3079fae8d0f6b897a109623dce65d0ea96ddcb5b571411,41241
 STND.PROJ,standard,LVL2,Project constitution template,adopted,PROJ/,f8ed12ca4ee60f13dc20ae04092b72731fd47d0ee04baa240b823742c8264abb,24557
 STND.PY,standard,LVL2,Python standard,adopted,PY/,172183c49a6529d3fea646dd1a0acdc7c95ea05000a2ee21e488dc907514662e,54040
 STND.RUST,standard,LVL2,Rust standard,adopted,RUST/,4e0bca2f0e36a27b490fa4aa425fcc23ac6e95c52fd705c0b73669d91d31d4d0,61980

@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.OFFLD,standard,LVL2,Accelerator offload standard,adopted,_doc.md,91a88123c1cca1d02aab8fe4f4f0cbc90030d1dd0a74e8a3d8d9c231f5fb9e32,23297
+STND.OFFLD,standard,LVL2,Accelerator offload standard,adopted,_doc.md,bc0624ab0e859caca7d307e3638e15b82784503ad1cd1b870cffcd78dc2b2e9a,23911
 STND.OFFLD.1,provision,LVL2,Fallback policy stated,adopted,1.md,81c63f4687aad00e027658f3cd94ad587f399c0a4b06d8024aa1a473aae672eb,417
 STND.OFFLD.2,provision,LVL2,Placement confirmed,adopted,2.md,2e23f052e5a2de3d6a84dc1114b8106f0d6feb72d306e76690dcb0983ccf881c,627
 STND.OFFLD.3,provision,LVL2,Fallback paths exercised,adopted,3.md,eebb5e188c80637ec526b7d31b639508015396094d34b8b866a50433afd4fc14,464
@@ -30,4 +30,4 @@ STND.OFFLD.27,provision,LVL2,Problem sizes under test,adopted,27.md,362ebea8ef4b
 STND.OFFLD.28,provision,LVL2,Injected failures under test,adopted,28.md,1e0138fcadd90636178691440ecbd5c7554e71489f494581decd82ff7c2c459f,570
 STND.OFFLD.29,provision,LVL2,Arithmetic settings under test,adopted,29.md,e6b9046c84cca2b2f047bb78307f33d884ae9ad6367105576dea4e4a6259fc31,534
 STND.OFFLD.30,provision,LVL2,Checks of device code,adopted,30.md,878bd3e14181abf94047099eece0bb839ba33c30769c4bc0f894ddffc622cc7e,602
-STND.OFFLD.31,provision,LVL2,Timing of offloaded work,adopted,31.md,917432aaf893a803eec083e8074e265ad17a8afc868cab00cc538cc08264f16f,615
+STND.OFFLD.31,provision,LVL2,Timing of offloaded work,adopted,31.md,635a76361e31d718c27a3ab9977cd1da27f589d9187b545cdf8c737e9d56b8e4,647
