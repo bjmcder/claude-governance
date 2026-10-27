@@ -30,7 +30,7 @@ RUST25 = (
     "Where STND.CODE.24 lets a panic leave a function of the work that a foreign interface invokes, that function "
     "SHOULD be declared with an ABI under which both sides of the interface admit unwinding (DSGN.5).")
 RUST27 = (
-    "Each type of the work that owns an owned resource under STND.CODE.25 SHOULD release it in its `Drop` implementation "
+    "Each type of the work that is the owner of an owned resource under STND.CODE.25 SHOULD release it in its `Drop` implementation "
     "(DSGN.14).")
 RUST30 = (
     "Other than the check against newer revisions of STND.RUST.1, each build of the checks and of each release of a "
@@ -48,7 +48,7 @@ SWAPS = [
     ("Dependency record has the meaning that STND.DEPS gives it;",
      "Foreign interface has the meaning that STND.CODE gives it, and a function that a block of foreign declarations "
      "declares, a function of the work exported with a foreign ABI, and a callback that the work passes to foreign "
-     "code are foreign interfaces; Owned resource has the meaning that STND.CODE gives it; and the declaration of a function of the work with an ABI under which both sides "
+     "code are foreign interfaces; Owned resource has the meaning that STND.CODE gives it; the declaration of a function of the work with an ABI under which both sides "
      "of a foreign interface admit unwinding is a statement of the contract of that interface that it carries a "
      "panic on to code of the work, in the sense of STND.CODE.24; Dependency record and Lock file have the meanings "
      "that STND.DEPS gives them;"),
@@ -92,7 +92,7 @@ NOTES_FI = (
     "section 3); STND.RUST.26 avoids both readings, and STND.RUST.25 lets a panic leave a function that a foreign "
     "interface invokes only under an ABI that admits its unwinding, the Rust form of the exception that the first "
     "sentence of STND.CODE.24 makes. A panic that STND.CODE.24 has caught and stored is answered as STND.RUST.13, "
-    "the Rust form of STND.CODE.14, gives. A type of the work that owns a foreign resource releases it in its "
+    "the Rust form of STND.CODE.14, gives. A type of the work that owns an owned resource releases it in its "
     "`Drop` implementation (STND.RUST.27), so that the release follows from the end of its owner. A callback that "
     "foreign code calls after the Rust data that it reaches is released is the hazard of STND.CODE.26, and falls "
     "under STND.CONC.5 where a concurrent task makes the call. The term Undefined behavior includes foreign code "
@@ -103,7 +103,7 @@ READING = (
     "second sentence of STND.CODE.22; STND.RUST.25 keeps only the ABI that admits unwinding for a panic that "
     "STND.CODE.24 lets leave a function that a foreign interface invokes, the catch, the conversion, and the "
     "storing of a panic being STND.CODE.24; STND.RUST.27 keeps only the release in a `Drop` implementation, the "
-    "owner of a resource and the pass to it being STND.CODE.25, and is retitled Foreign resources released in Drop; "
+    "owner of a resource and the pass to it being STND.CODE.25, and is retitled Owned resources released in Drop; "
     "STND.RUST.30 keeps only the builds from the revisions that a committed lock file records, the commitment being "
     "STND.DEPS.12, and is retitled Builds from locked revisions; STND.RUST.24 to STND.RUST.27 move to the section "
     "Foreign interfaces; Terms import Foreign interface from STND.CODE in place of this standard's Foreign function "
@@ -146,7 +146,7 @@ def apply(root: Path) -> None:
     F.set_body(root, "STND/RUST/25.md", RUST25, section=SECTION, refers_to=["STND.CODE.24"])
     F.set_body(root, "STND/RUST/26.md", (root / "STND/RUST/26.md").read_text(encoding="utf-8")
                .partition("\n---\n\n")[2], section=SECTION)
-    F.set_body(root, "STND/RUST/27.md", RUST27, section=SECTION, title="Foreign resources released in Drop",
+    F.set_body(root, "STND/RUST/27.md", RUST27, section=SECTION, title="Owned resources released in Drop",
                refers_to=["STND.CODE.25"])
     F.set_body(root, "STND/RUST/30.md", RUST30, title="Builds from locked revisions", instantiates=["REPRO.1"])
     replace_text(root, "STND/RUST/10.md", TEN)

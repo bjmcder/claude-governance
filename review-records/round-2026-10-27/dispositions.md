@@ -51,6 +51,20 @@ Rehearsal after these fixes: entries 188 to 197; `verify` and `references --chec
 | R O2 | The scripts fix the date 2026-10-27 | Noted: `fi_common.DATE` is changed before application if ratification falls on another day. |
 | R O4 | The ban on releasing a predefined resource survives only as a Note | Not changed: the first sentence of STND.CODE.25 has each owned resource released only by its owner, and the Note names the interface as the owner of what it predefines. |
 
+## Last verification (`verify-2.md`)
+
+No defect. Rehearsal after these fixes: entries 188 to 197; `verify` and `references --check` pass with the g.18 warning that the corpus already carries; no check rejects an intermediate state, in which the terms of the language standards stand beside those of STND.CODE until each amendment drops them.
+
+| # | Finding | Disposition |
+| --- | --- | --- |
+| 1 | "Foreign resource", defined nowhere, in STND.CXX.5 and the Notes of STND.CXX and STND.RUST; the title of STND.RUST.27 | Fixed: "owned resource" in each, and STND.RUST.27 is titled Owned resources released in Drop. |
+| 2 | Rationale 197 contradicts itself on the resource handle | Fixed: "an object of the work that owns it being that object", and "no owned resource that the interface predefines". |
+| 3 | V8 untrue: the Notes of STND.CODE say each language standard names its constructs | Fixed: "the language standards that use them import them, and those with constructs of their own name the constructs of their language that are foreign interfaces". |
+| 4 | A broken list in the Terms of STND.RUST | Fixed: "; the declaration of". |
+| 5 | "owns an owned resource" in STND.RUST.27 | Fixed: "is the owner of an owned resource under STND.CODE.25". |
+| A | The move of Owned resource to STND.CODE is not asked | Taken: question 12 below. |
+| B | Question 12 is a step of the process | Taken: it is a note after the questions. |
+
 ## Questions for the custodian
 
 The drafting made these choices beyond the decisions; the reviews name them. Each concerns a default, and none raises the floor.
@@ -66,4 +80,6 @@ The drafting made these choices beyond the decisions; the reviews name them. Eac
 9. **The reading of an unwinding ABI in STND.RUST.** The Terms of STND.RUST read a declaration with an ABI under which both sides admit unwinding as the statement of the contract that STND.CODE.24 asks, so that STND.RUST.25 keeps its alternative to the catch.
 10. **The declared types of STND.PY.34.** STND.CODE.22 asks the representation that the contract fixes, and the Notes of STND.PY give the declaration of each type as the means where an interface checks no call; the declaration is no longer asked in the body.
 11. **The reach.** Under decision 4, STND.CODE.22 to .24 apply from CSQ2 to C++ layouts and to C, Fortran, Lean, and hardware descriptions, and STND.CODE.25 and .26 from CSQ3.
-12. **Ratification.** After one more cold verification of these fixes, if it finds no defect.
+12. **Owned resource** moves from STND.CXX to STND.CODE, in the same words, so that STND.CODE.25 does not use the word resource of LEX.resource in another sense; STND.CXX, STND.STDC, STND.PY, and STND.RUST import it. The alternative is the word facility in STND.CODE.25, with the term left in STND.CXX.
+
+The last cold verification (`verify-2.md`) found no defect, and its findings are fixed above.

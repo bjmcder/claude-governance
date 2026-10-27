@@ -63,8 +63,8 @@ TERMS = [(
 
 NOTES = (
     "Foreign interfaces. The terms Foreign interface and Owned resource are defined here once, and the language "
-    "standards import them, the term Foreign interface each naming the constructs of its language that are foreign "
-    "interfaces (GOV.31). Code on the other side of a foreign interface does not check what code of the work "
+    "standards that use them import them, and those with constructs of their own name the constructs of their "
+    "language that are foreign interfaces (GOV.31). Code on the other side of a foreign interface does not check what code of the work "
     "assumes of it: the types and the layout of the data that cross, which failures leave a function and how, and "
     "who releases what and when. STND.CODE.22 to STND.CODE.26 state those assumptions as parts of the contract "
     "that DSGN.5 asks for each external component, and the language standards add only what their constructs make "

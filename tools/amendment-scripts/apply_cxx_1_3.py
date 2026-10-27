@@ -18,7 +18,7 @@ from govharness.workflows.amend import replace_text  # noqa: E402
 AT = "2026-10-27T12:00:09+00:00"
 
 CXX5 = [("or of a wrapper under STND.CXX.20 (DSGN.14).",
-         "or of an object that owns a foreign resource under STND.CODE.25 (DSGN.14).")]
+         "or of an object that owns an owned resource under STND.CODE.25 (DSGN.14).")]
 
 SWAPS = [
     ("It covers failures, including the option that assumes finite values, the boundaries to code that does not "
@@ -46,8 +46,10 @@ SWAPS = [
     ("| Owned resource | Memory, a file, a lock, a handle that a foreign interface issues, or another facility that "
      "code acquires and has to release. |\n", ""),
     ("An owning raw pointer appears only inside a resource handle or in the wrapper of STND.CXX.20,",
-     "An owning raw pointer appears only inside a resource handle or in an object that owns a foreign resource "
+     "An owning raw pointer appears only inside a resource handle or in an object that owns an owned resource "
      "under STND.CODE.25,"),
+    ("A factory that takes the creating call puts a resource that a foreign function returns",
+     "A factory that takes the creating call puts an owned resource that a foreign function returns"),
     ("into its handle before the next call that is able to fail (STND.CXX.20).",
      "into its handle before the next call that is able to fail (STND.CODE.25)."),
     ("STND.CXX.22 keeps a C++ exception out of C frames,", "STND.CODE.24 keeps a C++ exception out of C frames,"),
@@ -70,16 +72,16 @@ RATIONALE = (
     "that the shared rules on foreign interfaces move to STND.CODE and that the provisions they cover wholly are "
     "withdrawn (decision 1). C++ code keeps each outcome of the withdrawn provisions: the pass of a resource that a "
     "foreign interface creates to an object that owns it, before each other operation that is able to fail, "
-    "through the second sentence of STND.CODE.25, the resource handle of the work being that object; the release "
-    "of no resource that the interface predefines or that another component owns through its first sentence, which "
-    "has each resource released only by the owner that the contract states; and the catch, the conversion, and the "
+    "through the second sentence of STND.CODE.25, an object of the work that owns it being that object; the "
+    "release of no owned resource that the interface predefines or that another component owns through its first sentence, which "
+    "has each owned resource released only by the owner that the contract states; and the catch, the conversion, and the "
     "storing of a C++ exception through STND.CODE.24, which leaves uncaught an exception that the contract of the "
     "interface carries on to code of the work. STND.CODE.22, STND.CODE.23, and STND.CODE.26 add the layouts, the "
     "arrays, and the lifetime of an object that foreign code keeps to C++. The term of STND.CODE covers each part "
     "of the term of this standard, the structured block of a parallel directive among them for STND.CODE.24, the "
     "one rule that applied to it through STND.CXX.22, and reaches only code in the same process; a structured block "
     "is no longer a foreign interface for STND.CXX.4, STND.CXX.6, STND.CXX.8, or STND.CXX.10, none of which "
-    "concerns it. STND.CXX.20 had the foreign resource pass to a resource handle, a type that also defines or "
+    "concerns it. STND.CXX.20 had such an owned resource pass to a resource handle, a type that also defines or "
     "deletes its copy and move operations, and STND.CODE.25 asks an object of the work that owns it and releases "
     "it; STND.CXX.5 has that object release it in its destructor, but no longer asks it to be a resource handle, a "
     "narrowing that the custodian is asked to accept. The withdrawn identifiers are listed in the field withdrawn and are never given "
