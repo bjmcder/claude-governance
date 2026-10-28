@@ -17,7 +17,14 @@ from govharness.cli.arguments import corpus_root, default_root, split_root
 from govharness.core.corpus import Corpus, read_corpus
 from govharness.query.combination import review_pairs
 from govharness.query.graph import build_graph
-from govharness.query.retrieval import context, find, label, show, stems
+from govharness.query.retrieval import (
+    context,
+    find,
+    label,
+    resolve_ref,
+    show,
+    stems,
+)
 
 ROOT_HELP = "corpus root; else $GOVHARNESS_ROOT, else ./governance"
 
@@ -197,16 +204,18 @@ def run_pairs(args: argparse.Namespace) -> int:
     -------
     int
         1 when the changed document is not in the corpus, 2 when no
-        root is known, else 0.
+        root is known, else 0. An identifier in the wrong case names
+        its document, as it does for ``show``.
     """
     corpus = load("pairs", args.root)
     if corpus is None:
         return 2
-    if args.ident not in corpus.by_id:
+    ident = resolve_ref(corpus, build_graph(corpus), args.ident)
+    if ident is None or ident not in corpus.by_id:
         print(f"pairs: no document {args.ident}", file=sys.stderr)
         return 1
-    found = review_pairs(corpus, args.ident, tuple(args.amends))
-    print(f"# Pairs for review before a change of {args.ident} (STND.HARN.28)")
+    found = review_pairs(corpus, ident, tuple(args.amends))
+    print(f"# Pairs for review before a change of {ident} (STND.HARN.28)")
     print()
     print(f"{len(found)} pair(s).")
     print()

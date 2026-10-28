@@ -8,16 +8,23 @@ of STND.HARN.1 to STND.HARN.3.
 from __future__ import annotations
 
 import unittest
+from pathlib import PurePosixPath
 
 from govharness.core.corpus import Corpus
-from govharness.query.graph import build_graph, lineage
+from govharness.core.entry import Entry
+from govharness.query.graph import Graph, build_graph, lineage
 from govharness.query.retrieval import (
     ITEM,
     MATCHES,
     PROSE,
+    TERMS,
+    block,
     context,
     find,
+    items_below,
     kind_of,
+    names_below,
+    resolve_ref,
     show,
     stem,
     stems,
@@ -26,6 +33,48 @@ from tests.support import live_entries
 
 CORPUS = Corpus(live_entries())
 GRAPH = build_graph(CORPUS)
+
+
+def case_twins() -> tuple[Corpus, Graph]:
+    """Return a corpus of one document and two items alike but for case.
+
+    Returns
+    -------
+    tuple[Corpus, Graph]
+        GOV, with a Terms and a Notes section, holding GOV.1 and gov.1.
+    """
+    meta = {"kind": "provision", "status": "adopted"}
+    entries = [
+        Entry(
+            PurePosixPath("GOV/_doc.md"),
+            {"id": "GOV", "title": "Governance", "status": "adopted"},
+            "Lead text.\n\n## Terms\n\nA term.\n\n## Notes\n\nOn GOV.1.\n",
+        ),
+        Entry(PurePosixPath("GOV/1.md"), {**meta, "id": "GOV.1"}, "Upper."),
+        Entry(PurePosixPath("GOV/1l.md"), {**meta, "id": "gov.1"}, "Lower."),
+    ]
+    corpus = Corpus(entries)
+    return corpus, build_graph(corpus)
+
+
+def shown_nodes(shown: str) -> list[str]:
+    """Return the nodes whose blocks a ``context`` output shows, in order.
+
+    Parameters
+    ----------
+    shown : str
+        The output before "Also relevant, not shown".
+
+    Returns
+    -------
+    list[str]
+        The identifier or locator of each ``## `` heading.
+    """
+    return [
+        line[3:].split(" — ")[0]
+        for line in shown.splitlines()
+        if line.startswith("## ")
+    ]
 
 
 def found(query: str, in_force: bool = False, limit: int = 10) -> list[str]:
@@ -130,28 +179,52 @@ class Show(unittest.TestCase):
         self.assertIn("- STND.DFLT.7 — Criteria before work", text)
         self.assertNotIn("| Checkpoint |", text)
 
-    def test_cited_by_folds_sections_by_document(self) -> None:
+    def test_cited_by_folds_sections_by_heading(self) -> None:
         """Behavior: "Cited by" lists each citing provision on its own
-        line and folds the citing sections into one line per document,
-        naming the sections, so that no section has a line of its own.
+        line and folds the citing sections into one line per heading,
+        naming the documents, so that no section or document has a
+        line of its own; a citing lead text is one line too.
 
         Reference: STND.CLASS.10, cited by STND.KNOW.4, STND.PROJ.1,
-        and the Notes of more than thirty documents; HDES cites it in
-        two sections (STND.HARN.1; unit 0022, HR-11).
+        and the Notes of forty documents, HDES also in "Where the rest
+        lives"; PRIME.3, cited by the lead text of VV (STND.HARN.1;
+        unit 0022, HR-11, and its review, Medium 2 and mutant 10).
         """
         text = show(CORPUS, GRAPH, "STND.CLASS.10")
         cited = text.split("Cited by:")[1]
         lines = [line for line in cited.splitlines() if line.startswith("- ")]
         self.assertIn("- STND.KNOW.4 — Evidence level assignment", lines)
         self.assertIn("- STND.PROJ.1 — Constitution sections", lines)
-        self.assertIn("- STND.CODE — Coding standard: Notes", lines)
-        self.assertIn(
-            "- HDES — Hardware design: Notes, Where the rest lives", lines
-        )
+        notes = [line for line in lines if line.startswith("- Notes of: ")]
+        self.assertEqual(len(notes), 1)
+        self.assertIn(", HDES, ", notes[0])
+        self.assertIn(", STND.CODE, ", notes[0])
+        self.assertIn("- Where the rest lives of: HDES", lines)
         self.assertFalse([line for line in lines if "#" in line])
         citing = GRAPH.cited_by["STND.CLASS.10"]
-        docs = {n.partition("#")[0] for n in citing if "#" in n}
-        self.assertEqual(len(lines), len(citing) - len(citing) + 2 + len(docs))
+        headings = {GRAPH.sections[n].heading for n in citing if "#" in n}
+        self.assertEqual(len(lines), 2 + len(headings))
+        self.assertLess(len(text.splitlines()), 70)
+        self.assertIn("VV", GRAPH.cited_by["PRIME.3"])
+        cited = show(CORPUS, GRAPH, "PRIME.3").split("Cited by:")[1]
+        self.assertIn("\n- Lead text of: VV\n", cited)
+        self.assertNotIn("\n- VV — ", cited)
+
+    def test_ambiguous_case_is_not_resolved(self) -> None:
+        """Behavior: a reference that differs only by case from two
+        nodes names neither, so ``show`` raises KeyError, while each
+        exact identifier and a section in another case still resolve.
+
+        Reference: a corpus holding GOV.1 and gov.1 (unit 0022, HR-10;
+        its review, mutant 6).
+        """
+        corpus, graph = case_twins()
+        self.assertEqual(resolve_ref(corpus, graph, "GOV.1"), "GOV.1")
+        self.assertEqual(resolve_ref(corpus, graph, "gov.1"), "gov.1")
+        self.assertIsNone(resolve_ref(corpus, graph, "Gov.1"))
+        self.assertEqual(resolve_ref(corpus, graph, "gov#TERMS"), "GOV#terms")
+        with self.assertRaises(KeyError):
+            show(corpus, graph, "Gov.1")
 
     def test_case_insensitive_identifier(self) -> None:
         """Behavior: an identifier or locator in the wrong case shows
@@ -193,6 +266,30 @@ class Show(unittest.TestCase):
             show(CORPUS, GRAPH, "STND.PY.1", whole=True),
             show(CORPUS, GRAPH, "STND.PY.1"),
         )
+
+    def test_whole_document_opens_parts_only(self) -> None:
+        """Behavior: ``whole`` opens a part the document names, so LVL0
+        prints the provisions of PRIME and GOV; a document held by
+        identifier alone is named, not opened, so STND prints nothing
+        beyond its lists.
+
+        Reference: the ``parts`` of LVL0; STND, which holds the
+        standards and no provision of its own (unit 0022, HR-2; its
+        review, Low 1 and mutant 7).
+        """
+        below = items_below(CORPUS, "LVL0")
+        self.assertLess(set(CORPUS.parts), set(below))
+        self.assertIn("PRIME.1", below)
+        self.assertIn("GOV.38", below)
+        text = show(CORPUS, GRAPH, "LVL0", whole=True)
+        self.assertIn("\n## PRIME.1 — ", text)
+        self.assertIn(CORPUS.by_id["GOV.38"].body.strip(), text)
+        self.assertEqual(items_below(CORPUS, "STND"), [])
+        self.assertEqual(
+            show(CORPUS, GRAPH, "STND", whole=True),
+            show(CORPUS, GRAPH, "STND"),
+        )
+        self.assertIn("- STND.PY — ", show(CORPUS, GRAPH, "STND"))
 
     def test_cited_by_skips_records_and_contents(self) -> None:
         """Behavior: a revision history and a document's mention of its
@@ -286,8 +383,36 @@ class Find(unittest.TestCase):
         provisions = [k for k in CORPUS.by_id if k.startswith("STND.PY.")]
         self.assertGreater(len(provisions), 30)
         self.assertLessEqual(set(provisions), set(nodes[: sum(own)]))
+        self.assertIn("STND.PY#notes", nodes[: sum(own)])
+        self.assertTrue(names_below("stnd.py", "stnd.py#notes"))
+        self.assertTrue(names_below("stnd.py", "stnd.py.5"))
+        self.assertFalse(names_below("stnd.py", "stnd.pyx.1"))
+        self.assertFalse(names_below("stnd", "stnd.py.1"))
         self.assertEqual(stems("STND.DFLT#terms"), ["stnd.dflt#terms"])
         self.assertEqual(found("STND.DFLT#terms")[0], "STND.DFLT#terms")
+
+    def test_terms_sections_rank_between_items_and_prose(self) -> None:
+        """Behavior: a Terms section ranks after every provision, term,
+        entry, and tag and before every Notes section and lead text,
+        whatever its score.
+
+        Reference: "evidence level", where STND.KNOW#terms is the first
+        section and would be the sixteenth without its kind; "bulk
+        action" and STND.DFLT#terms (unit 0022, HR-1; its review,
+        mutant 3).
+        """
+        self.assertEqual(kind_of(CORPUS, GRAPH, "STND.DFLT#terms"), TERMS)
+        self.assertEqual(kind_of(CORPUS, GRAPH, "STND.DFLT#notes"), PROSE)
+        for query, section in (
+            ("evidence level", "STND.KNOW#terms"),
+            ("bulk action", "STND.DFLT#terms"),
+        ):
+            with self.subTest(query):
+                nodes = found(query, limit=100)
+                kinds = [kind_of(CORPUS, GRAPH, n) for n in nodes]
+                self.assertEqual(kinds, sorted(kinds))
+                self.assertIn(PROSE, kinds)
+                self.assertEqual(nodes[kinds.index(TERMS)], section)
 
     def test_title_ranks_first(self) -> None:
         """Behavior: the item titled "Bulk actions" outranks items that
@@ -331,27 +456,41 @@ class Context(unittest.TestCase):
         """
         self.assertEqual(context(CORPUS, GRAPH, "zyzzyva"), "")
 
-    def test_long_section_is_cut_not_dropped(self) -> None:
-        """Behavior: a prose section larger than the whole budget is
-        shown as far as the budget allows, with a marker naming the cut
-        and the command that prints it whole, rather than named only;
-        a provision is still shown whole or named.
+    def test_every_text_shown_is_whole(self) -> None:
+        """Behavior: what ``context`` prints before the names is exactly
+        the blocks of the nodes it shows, each whole; a section larger
+        than the budget is named, never cut, and does not take the
+        budget from the provisions behind it.
 
-        Reference: the locator STND.CODE#notes as the query, whose
-        best match is that Notes section, above 20 000 characters,
-        with a budget of 3000 (unit 0022, HR-1).
+        Reference: STND.HARN.3; "remote write authorization" in force,
+        where GUARD.10, .12, .13, and REPRO.12 are shown at the default
+        budget; STND.CODE#notes, above 20 000 characters, named at a
+        budget of 3000 and shown whole at 100 000 (unit 0022, HR-1; its
+        review, High 2).
         """
-        text = context(CORPUS, GRAPH, "STND.CODE#notes", budget=3000)
-        shown = text.split("Also relevant, not shown:")[0]
-        self.assertTrue(shown.startswith("## STND.CODE#notes — Notes"))
-        self.assertLessEqual(len(shown), 3000 + 2)
-        self.assertRegex(
-            shown,
-            r"\[cut: \d+ of \d+ characters; show STND\.CODE#notes "
-            r"prints it whole\]",
+        cases = (
+            ("remote write authorization", 8000, True),
+            ("remote write", 1500, False),
+            ("STND.CODE#notes", 3000, False),
+            ("STND.CODE#notes", 100_000, False),
         )
+        for query, budget, in_force in cases:
+            with self.subTest(query=query, budget=budget):
+                text = context(CORPUS, GRAPH, query, budget, in_force)
+                shown = text.split("Also relevant, not shown:")[0]
+                nodes = shown_nodes(shown)
+                blocks = [block(CORPUS, GRAPH, n) for n in nodes]
+                self.assertEqual(shown.rstrip("\n"), "\n\n".join(blocks))
+                self.assertLessEqual(sum(map(len, blocks)), budget)
+                self.assertNotIn("[cut:", text)
+        text = context(CORPUS, GRAPH, "remote write authorization", 8000, True)
+        for ident in ("GUARD.10", "GUARD.12", "GUARD.13", "REPRO.12"):
+            with self.subTest(ident):
+                self.assertIn(f"\n## {ident} — ", text)
+        text = context(CORPUS, GRAPH, "STND.CODE#notes", budget=3000)
+        self.assertNotIn("## STND.CODE#notes", text)
+        self.assertIn("\n- STND.CODE#notes — Notes", text)
         whole = context(CORPUS, GRAPH, "STND.CODE#notes", budget=100_000)
-        self.assertNotIn("[cut:", whole)
         self.assertIn(GRAPH.sections["STND.CODE#notes"].text, whole)
 
 

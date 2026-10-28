@@ -16,6 +16,8 @@ from pathlib import Path
 
 ENV_ROOT = "GOVHARNESS_ROOT"
 DEFAULT_ROOT = "governance"
+# The file every corpus root holds: the constitution's document.
+CORPUS_MARK = Path("LVL0") / "_doc.md"
 
 
 def corpus_root(text: str) -> Path:
@@ -73,6 +75,22 @@ def default_root() -> Path:
     )
 
 
+def holds_corpus(path: Path) -> bool:
+    """Return whether a directory is a corpus root.
+
+    Parameters
+    ----------
+    path : Path
+        Any path.
+
+    Returns
+    -------
+    bool
+        True where ``LVL0/_doc.md`` lies under it.
+    """
+    return (path / CORPUS_MARK).is_file()
+
+
 def split_root(
     first: str | None, rest: list[str]
 ) -> tuple[Path | None, list[str]]:
@@ -80,8 +98,9 @@ def split_root(
 
     The parser gives the first positional argument of ``find`` and
     ``context`` as the root. It is one only where a directory of that
-    name exists; otherwise it is the first word of the query and the
-    root is omitted.
+    name holds a corpus (``holds_corpus``); otherwise it is the first
+    word of the query and the root is omitted, so that a word naming a
+    directory of the project, such as ``tests``, stays a word.
 
     Parameters
     ----------
@@ -98,6 +117,6 @@ def split_root(
     """
     if first is None:
         return None, rest
-    if Path(first).is_dir():
+    if holds_corpus(Path(first)):
         return Path(first), rest
     return None, [first, *rest]

@@ -12,10 +12,7 @@ Three queries answer a reader without loading the corpus into view:
 - ``context``: the full text of the best matches and of the items they
   cite, within a budget of characters, the rest named only.
 
-Every text is returned whole or named only (GOV.39), except that
-``context`` cuts a prose section larger than its whole budget and marks
-the cut, so that a long Notes section never hides the provisions behind
-it.
+Every text is returned whole or named only (GOV.39, STND.HARN.3).
 """
 
 from __future__ import annotations
@@ -60,9 +57,8 @@ STEM_KEEP = 4
 # a document's lead text and its other sections, Notes among them.
 ITEM, TERMS, PROSE = 0, 1, 2
 TERMS_SLUG = "terms"
-# A prose section larger than the budget is cut to what is left of it,
-# with a marker, where at least this many characters remain.
-CUT_MIN = 200
+# What a folded "Cited by" calls a document's text before its sections.
+LEAD = "Lead text"
 # An identifier keeps its dots and hyphens, and a locator its section
 # slug; other words split at hyphens.
 WORD_RE = re.compile(
@@ -285,14 +281,16 @@ def listing(
     nodes : list[str]
         Identifiers or locators.
     fold : bool
-        Whether to fold a document's lead text and sections into one
-        line per document, after the items (unit 0022).
+        Whether to fold the lead texts and sections of documents into
+        one line per kind of part, after the items (unit 0022).
 
     Returns
     -------
     list[str]
-        Markdown lines: one per item and, with ``fold``, one per citing
-        document naming the parts of it that cite.
+        Markdown lines: one per item and, with ``fold``, one per
+        heading, such as ``Notes of: AGENT, CPS``, naming in id order
+        the documents whose section under that heading cites; the lead
+        texts are one line, ``Lead text of:``.
     """
     if not nodes:
         return []
@@ -305,10 +303,11 @@ def listing(
         if node in items:
             continue
         doc, _, slug = node.partition("#")
-        part = graph.sections[node].heading if slug else "lead text"
-        parts.setdefault(doc, []).append(part)
-    for doc in sorted(parts, key=id_order):
-        lines.append(f"- {label(corpus, graph, doc)}: {', '.join(parts[doc])}")
+        part = graph.sections[node].heading if slug else LEAD
+        parts.setdefault(part, []).append(doc)
+    for part in sorted(parts, key=str.lower):
+        docs = sorted(parts[part], key=id_order)
+        lines.append(f"- {part} of: {', '.join(docs)}")
     return ["", f"{name}:", *lines]
 
 
@@ -351,14 +350,20 @@ def items_below(corpus: Corpus, doc: str) -> list[str]:
     Returns
     -------
     list[str]
-        The items of ``held_by``; a held document, such as a part of
-        LVL0, is followed by its own items.
+        The items of ``held_by``; a part named in the document's
+        ``parts``, as LVL0 names PRIME, is followed by its own items. A
+        document held by identifier alone, as STND holds each standard,
+        is left out: ``show`` names it, and opening every standard
+        would print the whole corpus.
     """
+    parts = {str(p) for p in corpus.by_id[doc].meta.get("parts") or []}
     found: list[str] = []
     for node in held_by(corpus, doc):
-        found.append(node)
-        if is_document(corpus.by_id[node]):
+        if node in parts:
+            found.append(node)
             found += items_below(corpus, node)
+        elif not is_document(corpus.by_id[node]):
+            found.append(node)
     return found
 
 
@@ -385,14 +390,16 @@ def show(
         cites.
     whole : bool
         Whether to append each item a document holds, whole, in id
-        order, under its own heading (unit 0022); nothing for an item.
+        order, under its own heading (unit 0022), the parts of LVL0
+        opened and the standards under STND named only; nothing for an
+        item.
 
     Returns
     -------
     str
         Markdown: the text, a document's sections and items, what it
         derives from, what else it cites, and what cites it, the citing
-        sections folded into one line per document.
+        lead texts and sections folded into one line per heading.
 
     Raises
     ------
@@ -625,35 +632,6 @@ def names_below(word: str, node: str) -> bool:
     return "." in word and node.startswith((f"{word}.", f"{word}#"))
 
 
-def cut_text(text: str, node: str, left: int) -> str:
-    """Return the start of a text that fits what is left of a budget.
-
-    Parameters
-    ----------
-    text : str
-        The block of a node.
-    node : str
-        Its identifier or locator, named in the marker.
-    left : int
-        Characters left of the budget.
-
-    Returns
-    -------
-    str
-        The text cut at a line end, then a marker naming how much of it
-        is shown and that ``show`` prints it whole; empty where fewer
-        than ``CUT_MIN`` characters would remain.
-    """
-    marker = f"\n\n[cut: {{}} of {len(text)} characters; show {node} prints it whole]"
-    room = left - len(marker.format(len(text)))
-    if room < CUT_MIN:
-        return ""
-    kept = text[:room]
-    if "\n" in kept:
-        kept = kept[: kept.rfind("\n")]
-    return kept.rstrip() + marker.format(len(kept))
-
-
 def context(
     corpus: Corpus,
     graph: Graph,
@@ -681,10 +659,10 @@ def context(
     str
         Markdown: the best ``MATCHES`` matches, then the items and
         sections they cite, most cited first, each in full while the
-        budget lasts and named otherwise; a prose section larger than
-        the whole budget is cut to what is left, with a marker, rather
-        than named (unit 0022). Citations of a document's text are not
-        followed, nor are documents. Empty when no node holds a word.
+        budget lasts and named otherwise, a section larger than the
+        budget among them (STND.HARN.3). Citations of a document's text
+        are not followed, nor are documents. Empty when no node holds
+        a word.
     """
     matches = [m.node for m in find(corpus, graph, query, MATCHES, in_force)]
     if not matches:
@@ -709,13 +687,6 @@ def context(
         if len(text) <= left:
             shown.append(text)
             left -= len(text)
-        elif len(text) > budget and kind_of(corpus, graph, node) == PROSE:
-            cut = cut_text(text, node, left)
-            if cut:
-                shown.append(cut)
-                left -= len(cut)
-            else:
-                named.append(node)
         else:
             named.append(node)
     lines = ["\n\n".join(shown)] if shown else []

@@ -5,6 +5,7 @@ from __future__ import annotations
 import contextlib
 import io
 import os
+import sys
 import tempfile
 import unittest
 from collections.abc import Iterator
@@ -12,7 +13,7 @@ from pathlib import Path
 from unittest import mock
 
 from govharness.cli.arguments import ENV_ROOT, split_root
-from govharness.cli.main import main
+from govharness.cli.main import entry, main
 from tests.support import ROOT, corpus_copy
 
 ROOT_COMMANDS = (
@@ -144,22 +145,41 @@ class DefaultRoot(unittest.TestCase):
                     self.assertIn(f"{ENV_ROOT}=", err)
                     self.assertIn("no such directory", err)
 
-    def test_first_word_is_the_root_only_when_a_directory(self) -> None:
+    def test_first_word_is_the_root_only_when_a_corpus(self) -> None:
         """Behavior: for ``find`` and ``context``, the first positional
-        argument is the root where a directory of that name exists,
-        and the first word otherwise.
+        argument is the root where a directory of that name holds
+        ``LVL0/_doc.md``, and the first word otherwise, a word naming
+        a directory of the project included; so run from a project
+        with ``tests/``, with the variable set, ``find tests coverage``
+        searches the corpus for both words.
 
-        Reference: ``split_root`` on a temporary directory and on a
-        word that names none (unit 0022, HR-5).
+        Reference: ``split_root`` on the live corpus, on a temporary
+        directory, and on a word that names none; a working directory
+        holding ``tests/notes.md`` (unit 0022, HR-5; its review, High
+        1, where ``tests/`` was read as the corpus).
         """
+        self.assertEqual(split_root(str(ROOT), ["remote"]), (ROOT, ["remote"]))
         with tempfile.TemporaryDirectory() as tmp:
             self.assertEqual(
-                split_root(tmp, ["remote"]), (Path(tmp), ["remote"])
+                split_root(tmp, ["remote"]), (None, [tmp, "remote"])
             )
             absent = str(Path(tmp) / "remote")
             self.assertEqual(
                 split_root(absent, ["write"]), (None, [absent, "write"])
             )
+            tests = Path(tmp) / "tests"
+            tests.mkdir()
+            (tests / "notes.md").write_text("# Notes\n", encoding="utf-8")
+            with (
+                working_directory(Path(tmp)),
+                mock.patch.dict(os.environ, {ENV_ROOT: str(ROOT)}),
+            ):
+                for command in ("find", "context"):
+                    with self.subTest(command):
+                        short = run([command, "tests", "coverage"])
+                        long = run([command, str(ROOT), "tests", "coverage"])
+                        self.assertEqual(short[0], 0)
+                        self.assertEqual(short, long)
         self.assertEqual(split_root(None, ["write"]), (None, ["write"]))
 
 
@@ -193,15 +213,60 @@ class ExitCodes(unittest.TestCase):
                 self.assertEqual((code, err), (0, ""))
                 self.assertTrue(out)
 
-    def test_show_resolves_case(self) -> None:
+    def test_show_and_pairs_resolve_case(self) -> None:
         """Behavior: ``show`` of an identifier in the wrong case prints
-        the item.
+        the item, and ``pairs`` of one prints the pairs of the
+        document, under its identifier as the corpus writes it.
 
-        Reference: ``stnd.py`` for STND.PY (unit 0022, HR-10).
+        Reference: ``stnd.py`` for STND.PY, ``numer`` for NUMER (unit
+        0022, HR-10; its review, Low 4).
         """
         code, out, _ = run(["show", str(ROOT), "stnd.py"])
         self.assertEqual(code, 0)
         self.assertTrue(out.startswith("## STND.PY — Python standard"))
+        lower = run(["pairs", str(ROOT), "numer"])
+        self.assertEqual(lower[0], 0)
+        self.assertEqual(lower, run(["pairs", str(ROOT), "NUMER"]))
+        self.assertIn("change of NUMER (STND.HARN.28)", lower[1])
+
+    def test_best_hold_is_the_most_any_match_holds(self) -> None:
+        """Behavior: where no item holds every word, ``find`` reports
+        the most words any match holds, which may exceed what the
+        first match holds, since items rank before prose.
+
+        Reference: "evidence level assignment reproducibility zyzzyva"
+        on the live corpus: STND.KNOW.4 holds three words and is
+        first, the Notes of STND.CXX hold four (unit 0022, HR-1; its
+        review, mutant 12).
+        """
+        words = ["evidence", "level", "assignment", "reproducibility"]
+        code, out, _ = run(["find", str(ROOT), *words, "zyzzyva"])
+        self.assertEqual(code, 0)
+        lines = out.splitlines()
+        self.assertEqual(lines[0], "(no item holds every word; best hold 4)")
+        self.assertEqual(lines[1], "- STND.KNOW.4 — Evidence level assignment")
+        self.assertIn("- STND.CXX#notes — Notes", lines)
+
+    def test_entry_exits_with_the_code(self) -> None:
+        """Behavior: the console script's entry point exits with the
+        code of the command, 1 for an item not found and 0 for one
+        found.
+
+        Reference: ``show`` of STND.NOPE.1 and of GOV.38 through
+        ``entry`` with the arguments in ``sys.argv`` (unit 0022, HR-5;
+        its review, mutant 14).
+        """
+        for ident, expected in (("STND.NOPE.1", 1), ("GOV.38", 0)):
+            with self.subTest(ident):
+                argv = ["govharness", "show", str(ROOT), ident]
+                with (
+                    mock.patch.object(sys, "argv", argv),
+                    contextlib.redirect_stdout(io.StringIO()),
+                    contextlib.redirect_stderr(io.StringIO()),
+                    self.assertRaises(SystemExit) as stop,
+                ):
+                    entry()
+                self.assertEqual(stop.exception.code, expected)
 
     def test_show_all_prints_the_provisions(self) -> None:
         """Behavior: ``show DOC --all`` prints each provision of the

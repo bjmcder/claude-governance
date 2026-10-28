@@ -179,16 +179,19 @@ class ReadingCopies(unittest.TestCase):
         ``<ID>.md`` of every document into DIR, ``--check`` then
         passes, an edited provision makes its copy stale and the check
         names it, a Markdown file of DIR that no document produces is
-        named as an orphan and fails the check without being removed,
-        and ``compose`` without ``--all``, ``--check``, or ``--write``
-        is a usage error.
+        named as an orphan in both modes and fails the check without
+        being removed, DIR is created with its parents, and
+        ``compose`` without ``--all``, ``--check``, or ``--write`` is
+        a usage error.
 
         Reference: a copy of the corpus, whose documents are its
-        ``_doc.md`` files; an injected edit of STND/DFLT/1.md; a stray
-        ``NOPE.md`` (unit 0022, HR-6).
+        ``_doc.md`` files; a DIR two levels below an existing
+        directory; an injected edit of STND/DFLT/1.md; a stray
+        ``NOPE.md`` (unit 0022, HR-6; its review, Low 3 and mutant
+        16).
         """
         with corpus_copy() as root:
-            out_dir = root.parent / "all"
+            out_dir = root.parent / "all" / "copies"
             documents = sorted(
                 str(e.meta["id"])
                 for e in read_corpus(root).entries
@@ -219,6 +222,9 @@ class ReadingCopies(unittest.TestCase):
             )
             self.assertEqual((code, out), (1, "orphan: NOPE.md\nstale: 0\n"))
             self.assertTrue((out_dir / "NOPE.md").exists())
+            code, out = run("compose", str(root), "--all", str(out_dir))
+            self.assertEqual((code, out), (0, "orphan: NOPE.md\nwritten: 0\n"))
+            self.assertEqual((out_dir / "NOPE.md").read_text(), "stray\n")
             err = io.StringIO()
             with (
                 contextlib.redirect_stderr(err),

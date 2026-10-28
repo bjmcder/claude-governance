@@ -159,7 +159,7 @@ def run_compose(
         for name in stale:
             print(f"stale: {shown}{name}")
     else:
-        folder.mkdir(exist_ok=True)
+        folder.mkdir(parents=True, exist_ok=True)
         write_files(folder, stale)
     for name in orphans:
         print(f"orphan: {name}")
