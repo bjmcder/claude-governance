@@ -80,6 +80,14 @@ def add_query(sub: argparse._SubParsersAction) -> None:
         metavar="LVL0_ID",
         help="LVL0 provisions the change amends",
     )
+    pairs.add_argument(
+        "--with",
+        dest="also",
+        nargs="*",
+        default=[],
+        metavar="ID",
+        help="other documents or provisions that the change adopts or amends",
+    )
     pairs.set_defaults(run=lambda a, _: run_pairs(a))
     onset = sub.add_parser(
         "onset",
@@ -210,24 +218,31 @@ def run_pairs(args: argparse.Namespace) -> int:
     Parameters
     ----------
     args : argparse.Namespace
-        ``root``, ``ident``, and ``amends``.
+        ``root``, ``ident``, ``amends``, and ``also``, the other
+        documents of the same change.
 
     Returns
     -------
     int
-        1 when the changed document is not in the corpus, 2 when no
+        1 when a changed document is not in the corpus, 2 when no
         root is known, else 0. An identifier in the wrong case names
         its document, as it does for ``show``.
     """
     corpus = load("pairs", args.root)
     if corpus is None:
         return 2
-    ident = resolve_ref(corpus, build_graph(corpus), args.ident)
-    if ident is None or ident not in corpus.by_id:
-        print(f"pairs: no document {args.ident}", file=sys.stderr)
-        return 1
-    found = review_pairs(corpus, ident, tuple(args.amends))
-    print(f"# Pairs for review before a change of {ident} (STND.HARN.28)")
+    graph = build_graph(corpus)
+    docs: list[str] = []
+    for given in [args.ident, *args.also]:
+        ident = resolve_ref(corpus, graph, given)
+        if ident is None or ident not in corpus.by_id:
+            print(f"pairs: no document {given}", file=sys.stderr)
+            return 1
+        if ident not in docs:
+            docs.append(ident)
+    found = review_pairs(corpus, tuple(docs), tuple(args.amends))
+    names = ", ".join(docs)
+    print(f"# Pairs for review before a change of {names} (STND.HARN.28)")
     print()
     print(f"{len(found)} pair(s).")
     print()

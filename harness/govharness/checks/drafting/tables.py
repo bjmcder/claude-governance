@@ -1,10 +1,12 @@
 """Read the data tables of the drafting standard from its provisions.
 
 A provision of the standard that holds a table names it in the
-front-matter field ``defines``. The harness finds the table by that name
-and by its column headings, so rewording a sentence cannot empty a list.
-Expressions become regular expressions here, with inflections, so that
-"is not allowed" also matches "are not allowed".
+front-matter field ``defines``, as does a provision of another document
+that a provision of the standard refers to for a table. The harness
+finds the table by that name and by its column headings, so rewording a
+sentence cannot empty a list. Expressions become regular expressions
+here, with inflections, so that "is not allowed" also matches "are not
+allowed".
 """
 
 from __future__ import annotations
@@ -82,6 +84,9 @@ def read_standard_tables(corpus: Corpus, standard_id: str) -> StandardTables:
         if pid.startswith(prefix):
             for name in entry.meta.get("defines") or []:
                 holders.setdefault(name, []).append(pid)
+    for pid, name in sorted(cited_tables(corpus, prefix)):
+        if pid not in holders.setdefault(name, []):
+            holders[name].append(pid)
     for name, header in TABLE_SPECS.items():
         owners = holders.get(name, [])
         if len(owners) != 1:
@@ -101,6 +106,42 @@ def read_standard_tables(corpus: Corpus, standard_id: str) -> StandardTables:
         if name not in TABLE_SPECS:
             out.problems.append(f"unknown table name `{name}`")
     return out
+
+
+def cited_tables(corpus: Corpus, prefix: str) -> set[tuple[str, str]]:
+    """Return the known tables that a provision of the standard cites.
+
+    A provision of the standard may hold its rule and leave its table
+    to a provision of another document that it refers to, as round e of
+    2026-10-28 has STND.DRAFT.33 leave the spelling table to
+    STND.DOCS.8. A table name that TABLE_SPECS does not know is left to
+    the document that holds it.
+
+    Parameters
+    ----------
+    corpus : Corpus
+        Indexed corpus.
+    prefix : str
+        The identifier of the standard followed by a period.
+
+    Returns
+    -------
+    set[tuple[str, str]]
+        Pairs of the identifier of a provision outside the standard and
+        the name of a table of TABLE_SPECS that it defines.
+    """
+    found: set[tuple[str, str]] = set()
+    for pid, entry in corpus.by_id.items():
+        if not pid.startswith(prefix):
+            continue
+        for ref in entry.meta.get("refers_to") or []:
+            target = corpus.by_id.get(str(ref))
+            if target is None or str(ref).startswith(prefix):
+                continue
+            for name in target.meta.get("defines") or []:
+                if name in TABLE_SPECS:
+                    found.add((str(ref), name))
+    return found
 
 
 def table_problems(tables: StandardTables) -> list[str]:

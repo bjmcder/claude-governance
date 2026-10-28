@@ -229,6 +229,25 @@ class ExitCodes(unittest.TestCase):
         self.assertEqual(lower, run(["pairs", str(ROOT), "NUMER"]))
         self.assertIn("change of NUMER (STND.HARN.28)", lower[1])
 
+    def test_pairs_with_other_documents_of_the_change(self) -> None:
+        """Behavior: ``pairs ROOT NUMER --with HW`` lists the pairs of a
+        change of both documents, more than of NUMER alone, under a
+        heading that names both; an unknown document after ``--with``
+        exits 1.
+
+        Reference: STND.HARN.28 (unit 0024): pairs of common
+        instantiation are listed where both provisions are in documents
+        that the change adopts or amends.
+        """
+        alone = run(["pairs", str(ROOT), "NUMER"])
+        both = run(["pairs", str(ROOT), "NUMER", "--with", "hw"])
+        self.assertEqual(both[0], 0)
+        self.assertIn("change of NUMER, HW (STND.HARN.28)", both[1])
+        self.assertGreater(len(both[1]), len(alone[1]))
+        code, out, err = run(["pairs", str(ROOT), "NUMER", "--with", "NOPE"])
+        self.assertEqual((code, out), (1, ""))
+        self.assertIn("pairs: no document NOPE", err)
+
     def test_best_hold_is_the_most_any_match_holds(self) -> None:
         """Behavior: where no item holds every word, ``find`` reports
         the most words any match holds, which may exceed what the

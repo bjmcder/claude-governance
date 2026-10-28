@@ -787,6 +787,48 @@ class HeldBehavior(unittest.TestCase):
         defined = statuses(row("STND.DRAFT.17", "The code may not run."))
         self.assertEqual(defined["g.5"], "FAIL")
 
+    def test_spelling_table_in_a_cited_provision(self) -> None:
+        """Behavior: where STND.DRAFT.33 keeps its rule and cites
+        STND.DOCS.8 for the spelling table, g.22 reads the table there
+        and still finds a British spelling, and no table goes missing.
+
+        Reference: round e of 2026-10-28 merges the spelling table of
+        STND.DRAFT.33 into STND.DOCS.8 (CP26, unit 0024).
+        """
+
+        def move(e: Index) -> None:
+            """Move the table and its name to STND.DOCS.8.
+
+            Parameters
+            ----------
+            e : Index
+                Entries by identifier, changed in place.
+            """
+            rule, sep, table = e["STND.DRAFT.33"].body.partition("\n\n")
+            self.assertTrue(sep and table.startswith("| British |"))
+            e["STND.DRAFT.33"].body = rule
+            e["STND.DRAFT.33"].meta["defines"] = []
+            e["STND.DRAFT.33"].meta["refers_to"] = ["STND.DOCS.8"]
+            e["STND.DOCS.8"].body += "\n\n" + table
+            e["STND.DOCS.8"].meta["defines"] = ["american-usage", "spelling"]
+
+        clean = statuses(move)
+        self.assertEqual(clean["g.1"], "PASS")
+        self.assertEqual(clean["g.22"], "PASS")
+
+        def misspelt(e: Index) -> None:
+            """Move the table and misspell a provision of STND.DRAFT.
+
+            Parameters
+            ----------
+            e : Index
+                Entries by identifier, changed in place.
+            """
+            move(e)
+            e["STND.DRAFT.2"].body += " The behaviour SHALL be recorded."
+
+        self.assertEqual(statuses(misspelt)["g.22"], "FAIL")
+
     def test_mention_columns(self) -> None:
         """Behavior: in a table that a provision names in ``defines``,
         the cells of a mention column are left out, and every other cell
