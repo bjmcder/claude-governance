@@ -366,3 +366,25 @@ On branch `deep-review-2026-10-28`, nothing in the corpus has changed. The branc
   - `docs/` for people: installation with five options, adoption, operating, architecture, and the custodian's guide;
   - `for-agents/` for agents working in this repository;
   - a short `CLAUDE.md`.
+
+## Rulings of the custodian, 2026-10-28
+
+The custodian's words, quoted, then the reading on which the rounds are drafted. Each reading is put to the custodian again at ratification.
+
+| Item | Ruling | Reading for drafting |
+| --- | --- | --- |
+| A1 | "Agree. The way you performed on this work was the correct and intended way." | The human owner's direction of a unit of work, naming or accepting the agent configuration, authorizes the operating cost of that unit (PRIME.8). The agent records the direction as in A3. A standing envelope stays available, and a cap adopted under STND.DFLT.26 still governs where one exists. Drafted in STND.DFLT; GUARD.14 and PRIME.8 are unchanged. |
+| A2 | "Agree. builds, installs, and tests in the context of the project development is assumed to be permitted if done against the stated configuration or otherwise authorized. Installation of new packages or any builds/tests beyond the project bounds are a halt and refer." | A build, an install, or a test run within the working bounds, against the configuration that the work records under version control, or otherwise authorized, is permitted, and that configuration is the list of STND.DFLT.24. The installation of a package that the recorded configuration does not name, and a build or test run that reaches beyond the working bounds, halts and is referred. |
+| A3 | "Agree" | Option (a). |
+| A4 | "Agree" | Option (a). |
+| A5 | "Agree" | As proposed. |
+| B1 | "Agree" | Option (b). |
+| B2 | "Agree, but that should be defined so that it is clear and consistent" | Option (a), with a defined term for the store and fixed conditions, so that every reader applies it alike. |
+| C1 | "Agree" | Option (a). |
+| C2 | "Agree, minimize the upfront burden but enable design for upgrade" | Option (a). Nothing is owed before reclassification beyond the reason for a choice that the expected class drives. |
+| C3 to C8 | "Agree" | Option (a) each. |
+| D1 | "Agree" | Option (a). |
+| E1 | "Agree" | Option (a). |
+| F1 | "Agree" | The smaller entries are drafted from the reviewers' proposed text. |
+| F2 | "Agree" | Rounds in the recommended order. |
+| F3 | "I will handle this when we are done" | Nothing is pushed. The installation docs keep the placeholder URL. |
