@@ -18,6 +18,7 @@ from govharness.workflows.amend import replace_text  # noqa: E402
 SENTENCE_END = re.compile(r"(?<=[.!?])\s+(?=[A-Z(`\"])")
 GIVES = "applies from the class that its field `onset` gives"
 OMIT = "which work of CSQ4 may omit"
+HWFORM = ('apply from CSQ3 through the provisions of LVL0 that they also instantiate, a tightening above the floor (PRIME.15) for work that HW binds, since each asks a statement, a setting, a check, or a test that needs no hardware contract')
 CSQ3_TIGHTENS = ("where a field that gives CSQ3 for content that the table of STND.CLASS.10 starts at a more "
                  "severe class tightens above the floor (PRIME.15)")
 
@@ -78,7 +79,10 @@ NOTES: dict[str, list[tuple]] = {
     "AGENT": [
         ("A provision inherits the rank and waivability", "Every waivable provision (AGENT.2,",
          "Every waivable provision (AGENT.2,",
-         f"Every waivable provision is proportioned to class and {GIVES} under STND.CLASS.10."),
+         f"Every waivable provision is proportioned to class and {GIVES} under STND.CLASS.10, where a field that "
+         "gives CSQ3 for a status, a timing record, a tool kept under version control, or a statement of an item "
+         "not retrieved, content that the table of STND.CLASS.10 starts at a more severe class, tightens above the "
+         "floor (PRIME.15) at the cost of one answer, one record, or one statement."),
     ],
     "CPS": [
         (SELECTOR, SELECTOR, "Each such provision tightens above the floor",
@@ -109,7 +113,10 @@ NOTES: dict[str, list[tuple]] = {
          "contract of HW.4 and the delivered arithmetic, the evidence, and the currency with which HW.5 to HW.7 fill "
          "it start together at CSQ2, with the contract that DSGN.5 asks, while the identity record of HW.3 and the "
          "variation declaration of HW.12, which cost one record each and which a later reclassification needs, start "
-         "at CSQ3."),
+         "at CSQ3, and a field that gives CSQ3 for a report, a stated limit or exposure, or the verification of a "
+         "path, content that the table of STND.CLASS.10 starts at a more severe class, tightens above the floor "
+         "(PRIME.15) at the cost of one message, one statement, or one run, because a fallback, a limit, or an "
+         "exposure that a reader does not see is a silent misalignment at every class."),
     ],
     "HW.ASIC": [
         (SELECTOR, SELECTOR, "Each such provision tightens above the floor",
@@ -158,19 +165,25 @@ NOTES: dict[str, list[tuple]] = {
         ("Every provision other than NUMER.1, NUMER.2, and NUMER.26", "Every provision other than NUMER.1",
          "Every provision other than NUMER.1",
          "Every provision other than NUMER.1, NUMER.2, and NUMER.26 instantiates only VV, REPRO, INTPR, DSGN, SIMPL, "
-         f"or RSRC, inherits their rank and waivability (GOV.17), and {GIVES} under STND.CLASS.10."),
+         f"or RSRC, inherits their rank and waivability (GOV.17), and {GIVES} under STND.CLASS.10, where a field "
+         "that gives CSQ3 for a cited source, a stated precision, limit, or sensitivity, a disclosure, a reference "
+         "oracle, or a report, content that the table of STND.CLASS.10 starts at a more severe class, tightens "
+         "above the floor (PRIME.15), because each costs one statement, one record, or one message and the error it "
+         "exposes is silent at every class."),
     ],
     "STND.ANNEX": [
         ("Under STND.CLASS.10, each provision instantiates only DSGN.5", "Under STND.CLASS.10, each provision",
-         "STND.ANNEX.3 instantiates only DSGN.5 and HW.4",
+         "A citing contract at CSQ3 carries the rows of HW.4",
          "Under STND.CLASS.10, each provision instantiates only DSGN.5, REPRO.2, REPRO.3, and VV.1, and the provisions "
-         f"HW.4, HW.5, HW.6, HW.12, and HW.EMBED.4 that instantiate them, and {GIVES}, {OMIT}."),
+         f"HW.4, HW.5, HW.6, HW.12, and HW.EMBED.4 that instantiate them, and {GIVES}, {OMIT}: each default of a "
+         "contract starts at CSQ2 with the contract of HW.4 and its arithmetic and evidence under HW.5 and HW.6, "
+         "which it fills, and STND.ANNEX.1, a permission, carries the value null."),
     ],
     "STND.BUILD": [
         ("Under STND.CLASS.10, each provision instantiates only DSGN, SIMPL", "Under STND.CLASS.10, each provision",
          "Every other provision and sentence rests on no row",
          "Under STND.CLASS.10, each provision instantiates only DSGN, SIMPL, REPRO, RSRC, INTPR, VV, QA, or HW.5, and "
-         f"{GIVES}, {OMIT}."),
+         f"{GIVES}, {OMIT}, and the settings of STND.BUILD.11 {HWFORM}."),
     ],
     "STND.CODE": [
         ("Ignored results.", "STND.CODE.35 rests on the contract", "STND.CODE.35 rests on the contract", ""),
@@ -182,6 +195,10 @@ NOTES: dict[str, list[tuple]] = {
         ("Claims of soundness.", "STND.CODE.34 states the limits", "STND.CODE.34 states the limits",
          "STND.CODE.34 is a default, a tightening above the floor that a recorded decision replaces (PRIME.15, "
          "GOV.19), so it raises no floor (GOV.11)."),
+        ("STND.CODE.17 and STND.CODE.19 are defaults that apply from CSQ1", "These onsets depart from STND.CLASS.10.",
+         "STND.CODE.17 and STND.CODE.19 apply from CSQ1, earlier than",
+         "The fields of STND.CODE.17, STND.CODE.19, and STND.CODE.20 depart from the rule of "
+         "STND.CLASS#reading-the-standard: they tighten the CSQ0 rows of DSGN.3 and VV.1."),
         ("Foreign interfaces.", "STND.CODE.22 and STND.CODE.23 rest on the schema",
          "STND.CODE.22 and STND.CODE.23 rest on the schema", ""),
         ("Under STND.CLASS.10, each default provision other than STND.CODE.17", "Under STND.CLASS.10, each default",
@@ -206,7 +223,8 @@ NOTES: dict[str, list[tuple]] = {
          "Under STND.CLASS.10, each default",
          f"Under STND.CLASS.10, each default provision {GIVES}, {OMIT}, STND.CREW.4, STND.CREW.8, and STND.CREW.10 "
          "with the provisions of AGENT that they also instantiate, to which they add only the planning, the cost "
-         "model, and the report that they name."),
+         "model, and the report that they name, and STND.CREW.11, one merge at a time, a rule of a protocol and not "
+         "the verification of its invariants (DSGN.15), from CSQ3."),
     ],
     "STND.CXX": [
         ("STND.CODE.14 lists the responses", "It instantiates INTPR.8, the diagnostics", "It instantiates INTPR.8",
@@ -217,7 +235,7 @@ NOTES: dict[str, list[tuple]] = {
          f"HW, CPS, or NUMER, and {GIVES}, {OMIT}, where a field that gives CSQ3 for a part that the table of "
          "STND.CLASS.10 starts at a more severe class, the stated requirement of STND.CXX.13, the verification of "
          "STND.CXX.26, and the checks of STND.CXX.24 and STND.CXX.27, tightens above the floor (PRIME.15) at the "
-         "cost of a type, a check that a tool runs, or a statement."),
+         f"cost of a type, a check that a tool runs, or a statement, and the options of STND.CXX.4 {HWFORM}."),
         ("Under STND.CLASS.10, each default instantiates only VV, REPRO", "STND.CXX.33 is a default that instantiates",
          "STND.CXX.33 is a default that instantiates", ""),
     ],
@@ -225,18 +243,19 @@ NOTES: dict[str, list[tuple]] = {
         ("Under STND.CLASS.10, every default provision applies from CSQ3", "Under STND.CLASS.10",
          "Under STND.CLASS.10",
          f"Under STND.CLASS.10, every default provision {GIVES}, {OMIT}, STND.DEPS.5 asking for something only where "
-         "a contract of DSGN.5 exists, and STND.DEPS.10, a permission, carries no field."),
+         "a contract of DSGN.5 exists, and STND.DEPS.10, a permission, carries the value null."),
     ],
     "STND.DOCS": [
         ("Under STND.CLASS.10, STND.DOCS.2", "Under STND.CLASS.10", "STND.DOCS.6 and STND.DOCS.7 are permissions",
          f"Under STND.CLASS.10, each default {GIVES}, {OMIT}, and STND.DOCS.6 and STND.DOCS.7 are permissions, which "
-         "STND.CLASS.10 does not stage and which carry no field."),
+         "STND.CLASS.10 does not stage and which carry the value null."),
     ],
     "STND.FTN": [
         ("Class onset. Under STND.CLASS.10", "Under STND.CLASS.10", "No provision has three modals.",
          "Under STND.CLASS.10, each default instantiates only DSGN, SIMPL, REPRO, VV, INTPR, or a provision of NUMER "
-         f"or HW, and {GIVES}, {OMIT}, the rules of the form of code at an interface among them at CSQ3, and its part "
-         "that rests on NUMER or HW applies only to work that those profiles bind."),
+         f"or HW, and {GIVES}, {OMIT}, the rules of the form of code at an interface among them at CSQ3; its part "
+         "that rests on NUMER or HW applies only to work that those profiles bind, and the floating-point settings "
+         f"and tests of STND.FTN.16 and STND.FTN.17 {HWFORM}."),
     ],
     "STND.JL": [
         ("Class onset. Under STND.CLASS.10", "Under STND.CLASS.10", "STND.JL.5, STND.JL.19, and STND.JL.34 instantiate",
@@ -244,8 +263,8 @@ NOTES: dict[str, list[tuple]] = {
          f"provision of NUMER, HW, or HW.CPU, and {GIVES}, {OMIT}; the part of each default that rests on NUMER, "
          "HW.7, or HW.CPU.3 applies only to work that those profiles bind, the store of STND.JL.39 applies from CSQ3 "
          "with the catch of STND.CODE.24, and a field that gives CSQ3 to STND.JL.5, STND.JL.19, or STND.JL.34, which "
-         "also instantiate the contracts of DSGN.5, tightens above the floor (PRIME.15) for that work at the cost of "
-         "a record or one run of the tests."),
+         "also instantiate the contracts of DSGN.5 or carry out HW.7 or HW.CPU.3, tightens above the floor "
+         "(PRIME.15) for that work at the cost of a record or one run of the tests, and needs no hardware contract."),
     ],
     "STND.LEAN": [
         ("Class onset. Under STND.CLASS.10", "Under STND.CLASS.10", "STND.LEAN.5 instantiates PRIME.2",
@@ -266,15 +285,16 @@ NOTES: dict[str, list[tuple]] = {
          "Under STND.CLASS.10", "STND.PERF.12 and STND.PERF.14 also apply",
          "Under STND.CLASS.10, each provision instantiates only DSGN, SIMPL, REPRO, RSRC, INTPR, VV, or a provision "
          f"of HW, and {GIVES}, {OMIT}; a rule of the form of code that follows the documentation of a runtime "
-         "library or the hardware applies from CSQ3, and a part that carries out HW.5, HW.11, HW.13, or HW.14, or "
-         "relies on a limit that the hardware contract states, starts with that contract at CSQ2."),
+         "library or the hardware applies from CSQ3, a part that carries out HW.5, HW.11, HW.13, or HW.14, or "
+         "relies on a limit that the hardware contract states, starts with that contract at CSQ2, and the tests of "
+         f"STND.OFFLD.29 {HWFORM}."),
     ],
     "STND.OMP": [
         ("Under STND.CLASS.10, each provision instantiates only DSGN, SIMPL, REPRO, RSRC, VV", "Under STND.CLASS.10",
          "The sentences of each provision with three modals",
          "Under STND.CLASS.10, each provision instantiates only DSGN, SIMPL, REPRO, RSRC, VV, or a provision of HW, "
-         f"and {GIVES}, {OMIT}; the requires directive and the variant of STND.OMP.28 are rules of the form of code "
-         "and apply from CSQ3 with HW.19, a part that carries out HW.4, HW.5, HW.11, HW.13, or HW.14 starts with that "
+         f"and {GIVES}, {OMIT}; the features of the first sentence of STND.OMP.2, and the requires directive and the "
+         "variant of STND.OMP.28, are rules of the form of code and apply from CSQ3, the last with HW.19, a part that carries out HW.4, HW.5, HW.11, HW.13, or HW.14 starts with that "
          "provision at CSQ2, and the sentences of each provision with three modals share one onset."),
     ],
     "STND.PERF": [
@@ -293,7 +313,8 @@ NOTES: dict[str, list[tuple]] = {
          "Under STND.CLASS.10, each default provision instantiates only DSGN, SIMPL, INTPR, REPRO, VV, or a provision "
          f"of HW, and {GIVES}, {OMIT}; the representation attribute of STND.RUST.24 and the unwinding of "
          "STND.RUST.25 and STND.RUST.26 apply from CSQ3 with the other rules of the form of code, and the part that "
-         "rests on HW.5 or HW.7 applies only to work that HW binds."),
+         "rests on HW.5 or HW.7 applies only to work that HW binds; the settings of STND.RUST.2 and the run of the "
+         f"first sentence of STND.RUST.20 {HWFORM}."),
     ],
     "STND.STDC": [
         ("Class onset. Under STND.CLASS.10", "Under STND.CLASS.10", "STND.STDC.28 and the other defaults rest",
@@ -316,8 +337,8 @@ NOTES: dict[str, list[tuple]] = {
          f"{GIVES}, {OMIT}; at CSQ3 a statement of the repository configuration meets STND.TEST.2, the derivation "
          "by a tool being the mechanism that tracks dependencies between results, which the row of QA.14 asks from "
          "CSQ2, and the tiers, the integration depths, and the records of selection, reuse, omission, and reason "
-         "start at CSQ2, so that work of CSQ3 that runs its suite whole owes its verdicts and none of these "
-         "records."),
+         "start at CSQ2, so that at CSQ3 a selection is drawn from the whole suite, and work of CSQ3 that runs its "
+         "suite whole owes its verdicts and none of these records."),
     ],
     "STND.WFLOW": [
         ("Under STND.CLASS.10, each provision instantiates only DSGN, SIMPL, REPRO, RSRC, INTPR, VV, or QA",
@@ -335,8 +356,9 @@ NOTES: dict[str, list[tuple]] = {
     "STND.WPROC": [
         ("Under STND.CLASS.10, each default provision instantiates only", "Under STND.CLASS.10",
          "Under STND.CLASS.10",
-         f"Under STND.CLASS.10, each default provision {GIVES}, {OMIT}, and STND.WPROC.11, a permission, carries no "
-         "field."),
+         f"Under STND.CLASS.10, each default provision {GIVES}, {OMIT}, STND.WPROC.7 and STND.WPROC.8, rules of a "
+         "protocol of integration and not the verification of its invariants (DSGN.15), from CSQ3, and "
+         "STND.WPROC.11, a permission, carries the value null."),
     ],
 }
 
@@ -358,7 +380,8 @@ VVUQ_NOTE = (
     "STND.VVUQ.62, STND.VVUQ.64, and STND.VVUQ.82, with the basis of each tolerance that NUMER.11 asks, chooses the "
     "tier of each comparison, handles values that are not finite, states each tolerance with its relative and "
     "absolute parts within its bracket, keeps asserted checks and regression guards, and builds and tests random "
-    "streams; the methods of high-assurance numerics, from error budgets and noise floors to multiplicity control "
+    "streams, and at CSQ3 STND.VVUQ.64 judges a test with fresh seeds by the criterion that its acceptance "
+    "criterion states, since STND.VVUQ.33 to STND.VVUQ.35 start at CSQ2; the methods of high-assurance numerics, from error budgets and noise floors to multiplicity control "
     "and order tests at several levels, start at CSQ2, so that work of CSQ3 meets NUMER through the core, while the "
     "obligations of LVL0 that the other provisions serve apply to it in full. No default raises the floor (GOV.11).")
 
@@ -377,19 +400,26 @@ CLASS_NOTE = (
     "and a rewrite of each interface when it first applies at a reclassification. Where a field departs from the "
     "rule, the Notes of its document give the reason: a less severe class tightens above the floor (PRIME.15), and "
     "a more severe class keeps the methods of a standard beyond its core out of work of CSQ3, while the obligation "
-    "of LVL0 that such a part serves applies at CSQ3 in full. A binding provision, a provision that applies at every "
-    "class, and a permission carry no field.")
+    "of LVL0 that such a part serves applies at CSQ3 in full. A binding provision carries no field, and a provision "
+    "that applies at every class, or a permission, carries the value null.")
 
 DRAFT_FIELD = (
     "- `onset`: the class from which the provision applies under STND.CLASS.10, written as one class, `\"CSQ3\"`, "
     "or, where a part starts at a more severe class than the rest, as a list of the class of the provision followed "
     "by one pair of a part and its class for each such part, `[\"CSQ3\", [\"sentence 2\", \"CSQ2\"]]`. A part is "
     "`sentence N`, the Nth sentence of the body outside its tables, counted at terminal punctuation, or `row CELL`, "
-    "the row of a table of the body whose first cell is CELL. The class of the provision is CSQ0 to CSQ3, or CSQ4 in "
-    "a list, for a provision that applies at every class except its named parts. A binding provision, a provision "
-    "of LVL0, a provision that applies whole at every class, and a permission carry no field. The harness fails a "
-    "malformed value, a field on another item, and a part that the body does not hold.")
+    "the one row of a table of the body whose first cell is CELL. Each class is CSQ0 to CSQ3. The value `null` marks a "
+    "waivable provision that applies at every class, or a permission. A binding provision and a provision of LVL0 "
+    "carry no field. The harness fails a malformed value, a field on another item, a part that names no sentence or "
+    "no one row of the body, and, once one provision carries the field, a waivable provision below LVL0 without "
+    "it.")
 DRAFT_AFTER = "- `checked_by`: the checks that verify the provision."
+
+CLASS21 = [("the parts of the table of STND.CLASS.10 that apply from that class,",
+            "the parts of the table of STND.CLASS.10, and of the provisions below LVL0 whose field `onset` gives that "
+            "class, that apply from that class,")]
+CODE20_REACH = [("the marker of STND.CODE.20 reaches work of CSQ4 only where that work has chosen to adopt",
+                 "the marker of STND.CODE.20 reaches work of CSQ3 only where that work has chosen to adopt")]
 
 STDC1 = [("| STND.CXX.7 | CSQ2 |", "| STND.CXX.7 | CSQ3 |")]
 
@@ -406,6 +436,7 @@ def apply_notes(root: Path, doc_id: str) -> None:
         replace_text(root, rel, [("\n\n## References\n", f"\n\n{VVUQ_NOTE}\n\n## References\n")])
     if doc_id == "STND.CLASS":
         replace_text(root, "STND/CLASS/10.md", CLASS10)
+        replace_text(root, "STND/CLASS/21.md", CLASS21)
         insert_after(root, rel, "Work of CSQ3 meets the seven proportioned Articles", CLASS_NOTE)
     if doc_id == "STND.DRAFT":
         path = Path(root) / rel
@@ -415,5 +446,7 @@ def apply_notes(root: Path, doc_id: str) -> None:
             raise ValueError(f"{rel}: {len(hits)} lines open with the field checked_by")
         lines.insert(hits[0] + 1, DRAFT_FIELD)
         path.write_text("\n".join(lines), encoding="utf-8")
+    if doc_id == "STND.CODE":
+        replace_text(root, rel, CODE20_REACH)
     if doc_id == "STND.STDC":
         replace_text(root, "STND/STDC/1.md", STDC1)

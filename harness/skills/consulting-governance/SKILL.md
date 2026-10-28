@@ -61,7 +61,7 @@ In this table, ROOT is `"${CLAUDE_PLUGIN_ROOT}/governance"`, or nothing where `G
 | Under the defaults, where records go | `show ROOT STND.DFLT --all` |
 | What a class requires, and from which class | `show ROOT STND.CLASS.10`, `show ROOT STND.CLASS.18`, `show ROOT STND.CLASS.19` |
 | What a promotion to a more severe class owes | `show ROOT GOV.14`, `show ROOT STND.CLASS.10`, then `find ROOT CSQ2 --in-force` |
-| What does reclassification to CSQn add? | `onset ROOT CSQn`, then `show ROOT ID` for each provision relied on; `show ROOT STND.CLASS.22` for what the reclassification owes for past work |
+| What does reclassification to CSQn add? | `onset ROOT CSQn`, then `show ROOT ID` for each provision relied on |
 | Before a promotion or a release | `show ROOT QA.11`, `show ROOT QA.10`, `show ROOT GOV.50` |
 
 GOV.39 asks that a provision be read in full before it is relied on; `show` prints the full text, and a line of `find` names an item without its text.

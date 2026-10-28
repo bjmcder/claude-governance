@@ -30,12 +30,34 @@ from tests.support import corpus_copy, corpus_of, live_index, live_ledger
 PARTED = ["CSQ3", ["sentence 2", "CSQ2"]]
 
 
+def fielded() -> dict:
+    """Return the live index with ``"CSQ3"`` on each waivable provision
+    below LVL0, as a corpus that uses the field gives each one.
+
+    Returns
+    -------
+    dict
+        Entries by identifier.
+    """
+    index = live_index()
+    for entry in index.values():
+        meta = entry.meta
+        if (
+            meta.get("kind") == "provision"
+            and meta.get("level") != "LVL0"
+            and meta.get("waivable") is True
+        ):
+            meta["onset"] = "CSQ3"
+    return index
+
+
 class Reading(unittest.TestCase):
     """The value of the field is read, or refused with its reason."""
 
     def test_forms_read(self) -> None:
         """Behavior: a class reads as the whole provision; a list as the
-        class of the provision and each named part; CSQ4 opens a list.
+        class of the provision and each named part; ``null`` as every
+        class.
 
         Reference: the field `onset` of
         STND.DRAFT#representation-in-the-harness.
@@ -45,9 +67,10 @@ class Reading(unittest.TestCase):
             parse_onset(PARTED), Onset("CSQ3", (("sentence 2", "CSQ2"),))
         )
         self.assertEqual(
-            parse_onset(["CSQ4", ["row STND.CXX.24", "CSQ1"]]).classes(),
-            {"CSQ4", "CSQ1"},
+            parse_onset(["CSQ3", ["row STND.CXX.24", "CSQ1"]]).classes(),
+            {"CSQ3", "CSQ1"},
         )
+        self.assertEqual(parse_onset(None), Onset("CSQ4"))
 
     def test_malformed_values_refused(self) -> None:
         """Behavior: each malformed value is refused: CSQ4 or no class
@@ -69,6 +92,8 @@ class Reading(unittest.TestCase):
             ["CSQ2", ["sentence 2", "CSQ3"]],
             ["CSQ3", ["sentence 2", "CSQ2"], ["sentence 2", "CSQ1"]],
             ["CSQX", ["sentence 2", "CSQ2"]],
+            ["CSQ4", ["sentence 1", "CSQ1"]],
+            {"CSQ3": "sentence 2"},
         ]
         for value in bad:
             with self.subTest(value=value), self.assertRaises(ValueError):
@@ -91,20 +116,41 @@ class Reading(unittest.TestCase):
         self.assertTrue(sentences(stdc)[1].endswith("(REPRO.7)."))
         self.assertTrue(part_exists(stdc, "row STND.CXX.24"))
         self.assertFalse(part_exists(stdc, "row STND.CXX.99"))
+        self.assertFalse(part_exists(stdc, "row CSQ2"))
+        self.assertFalse(
+            part_exists(
+                stdc,
+                "row The type volatile std::sig_atomic_t is read as "
+                "volatile sig_atomic_t",
+            )
+        )
+        class10 = index["STND.CLASS.10"].body
+        self.assertFalse(part_exists(class10, "row CSQ2"))
+
+    def test_sentences_as_a_reader_counts(self) -> None:
+        """Behavior: a period inside a sentence before a lower-case word,
+        a semicolon, and the markers of a numbered list end no sentence.
+
+        Reference: the field `onset`, "counted at terminal punctuation".
+        """
+        body = (
+            "The work SHALL do one thing, e.g. the first; and more:\n"
+            "1. Item one;\n2. Item two.\nThe work SHOULD do another."
+        )
+        found = sentences(body)
+        self.assertEqual(len(found), 2)
+        self.assertTrue(found[0].endswith("Item two."))
 
     def test_described_beside_the_mode(self) -> None:
         """Behavior: an onset reads "from CSQ3; sentence 2 from CSQ2",
-        and a provision of class CSQ4 "at every class".
+        and ``null`` "at every class".
 
         Reference: the onset rendered beside the mode (ruling C7).
         """
         self.assertEqual(
             describe(parse_onset(PARTED)), "from CSQ3; sentence 2 from CSQ2"
         )
-        self.assertEqual(
-            describe(parse_onset(["CSQ4", ["sentence 1", "CSQ1"]])),
-            "at every class; sentence 1 from CSQ1",
-        )
+        self.assertEqual(describe(parse_onset(None)), "at every class")
 
 
 class Check(unittest.TestCase):
@@ -125,10 +171,33 @@ class Check(unittest.TestCase):
         tuple[str, list[str]]
             Status and details of the check.
         """
-        index = live_index()
+        index = fielded()
         index[ident].meta["onset"] = value
         found = onsets_valid(CheckContext(corpus_of(index), live_ledger()))
         return found.status, found.details
+
+    def test_missing_field_fails_once_the_field_is_used(self) -> None:
+        """Behavior: once one entry carries the field, a waivable
+        provision below LVL0 without it fails; ``null`` passes on a
+        waivable provision and fails on a binding one.
+
+        Reference: the field `onset`; an omitted field is not read as
+        an onset (review of round o, item 6).
+        """
+        index = fielded()
+        del index["STND.CODE.22"].meta["onset"]
+        found = onsets_valid(CheckContext(corpus_of(index), live_ledger()))
+        self.assertEqual(
+            (found.status, found.details),
+            (
+                "FAIL",
+                ["- STND.CODE.22: a waivable provision without an onset"],
+            ),
+        )
+        self.assertEqual(self.verdict("STND.CODE.22", None)[0], "PASS")
+        status, details = self.verdict("STND.CODE.6", None)
+        self.assertEqual(status, "FAIL")
+        self.assertIn("binds at every class", details[0])
 
     def test_live_corpus_passes(self) -> None:
         """Behavior: the live corpus, which carries no field, passes.
@@ -161,7 +230,12 @@ class Check(unittest.TestCase):
             (
                 "STND.CODE.22",
                 ["CSQ3", ["sentence 3", "CSQ2"]],
-                "names sentence 3, which its body does not hold",
+                "names sentence 3, which no one sentence or row",
+            ),
+            (
+                "STND.CLASS.10",
+                ["CSQ3", ["row CSQ2", "CSQ2"]],
+                "names row CSQ2, which no one sentence or row",
             ),
             ("STND.CODE.6", "CSQ3", "a provision that binds at every class"),
             ("VV.1", "CSQ3", "an item other than a provision below LVL0"),

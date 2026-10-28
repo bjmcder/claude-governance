@@ -8,7 +8,8 @@ document carries an adoption date, so that adopting a document cannot
 leave its provisions at draft. checked-by: every key in a field
 ``checked_by`` is ``review`` or the key of a registered check
 (STND.HARN.32). onset: every field ``onset`` is well formed, sits on a
-waivable provision below LVL0, and names parts that its body holds
+waivable provision below LVL0, and names parts that its body holds, and
+once the corpus uses the field every such provision carries it
 (STND.CLASS.10, unit 0023).
 """
 
@@ -28,7 +29,7 @@ from govharness.core.entry import (
     in_template,
     parse_entry,
 )
-from govharness.core.onset import onset_problems
+from govharness.core.onset import missing_onsets, onset_problems
 
 FAMILY = "structure"
 
@@ -167,16 +168,13 @@ def onsets_valid(ctx: CheckContext) -> Verdict:
     -------
     Verdict
         FAIL with one line per malformed field, per field on an item
-        that is not a waivable provision below LVL0, and per named part
-        that the body does not hold.
+        that is not a waivable provision below LVL0, per named part
+        that no one sentence or row of the body is, and, once one entry
+        carries the field, per waivable provision below LVL0 without it.
     """
-    return failing(
-        [
-            line
-            for entry in ctx.corpus.entries
-            for line in onset_problems(entry)
-        ]
-    )
+    entries = ctx.corpus.entries
+    problems = [line for entry in entries for line in onset_problems(entry)]
+    return failing(problems + missing_onsets(entries))
 
 
 CHECKS: tuple[Check, ...] = (

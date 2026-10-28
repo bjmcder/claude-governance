@@ -41,6 +41,12 @@ CODE_FORM_FLOOR = (
     "since each asks a type, an attribute, a declaration, or a catch at the time the code is written, which costs "
     "nothing then and a rewrite of each interface when it is added at a reclassification, and work of CSQ4 may still "
     "omit it")
+PROTOCOL_FLOOR = (
+    "Each move to CSQ3 asks work of CSQ3 for something it did not owe before, and rests on the rule of ruling C7, "
+    "under which a part applies from the row whose named item it asks for: the row of DSGN.15 names the verification "
+    "of the invariants of a protocol, which these parts do not ask; the burden is proportionate, since each asks the "
+    "order of merges that a team of agents follows anyway, at the cost of no record, and work of CSQ4 may still omit "
+    "it; the moves are put to the custodian, since the lists of the review do not name them")
 LIGHTER_FLOOR = ("Each move to CSQ2 removes an obligation from work of CSQ3 and leaves work of CSQ4 as it was, while "
                  "the obligations of LVL0 that the moved provisions serve apply at CSQ3 in full")
 
@@ -48,8 +54,9 @@ LIGHTER_FLOOR = ("Each move to CSQ2 removes an obligation from work of CSQ3 and 
 MINOR = {
     "STND.CLASS": (
         "STND.CLASS.10 applies each part of a provision below LVL0 from the class that the field onset of the "
-        "provision gives, and the Notes state the one rule by which the fields are set: a part applies from the row "
-        "of the table whose named item it asks for, and otherwise from CSQ3",
+        "provision gives, STND.CLASS.21 has the design admit the parts that the fields start at the expected class, "
+        "and the Notes state the one rule by which the fields are set: a part applies from the row of the table "
+        "whose named item it asks for, and otherwise from CSQ3",
         "No floor is raised (GOV.11): STND.CLASS.10 stays a default, a class that a field gives reaches only work of "
         "CSQ3 or a more severe class, work of CSQ4 may still omit every obligation above the floor, and the rule "
         "moves no onset by itself, each move standing in the transaction of the document that makes it",
@@ -88,7 +95,9 @@ MINOR = {
         "CS1, CS18"),
     "STND.CODE": (
         "the first sentence of STND.CODE.22, STND.CODE.23, STND.CODE.24, and STND.CODE.35 apply from CSQ3, as rules "
-        f"of the form of code and the catch at a foreign frame, and the comparison of layouts stays at CSQ2; {FIELDS}",
+        "of the form of code and the catch at a foreign frame, and the comparison of layouts stays at CSQ2; the "
+        "marker of STND.CODE.20 is stated from CSQ3, which STND.CLASS.10 already let work of CSQ4 omit; "
+        f"{FIELDS}",
         f"No floor is raised (GOV.11). {CODE_FORM_FLOOR}; STND.CODE.35, a rule of the same kind that the lists of the "
         "review do not name, is put to the custodian",
         "the first sentence of STND.CODE.22, STND.CODE.23, STND.CODE.24, and STND.CODE.35 from CSQ3, where they "
@@ -130,7 +139,7 @@ MINOR = {
         "CS1, CS5"),
     "STND.OFFLD": (
         "STND.OFFLD.7, the first sentence of STND.OFFLD.12, and the second sentence of STND.OFFLD.17 apply from CSQ3, "
-        f"as rules of the form of code, and STND.OFFLD.14 follows HW.5 to CSQ2; {FIELDS}",
+        f"as rules of the form of code, and STND.OFFLD.14 stays at CSQ2, now with HW.5; {FIELDS}",
         f"No floor is raised (GOV.11). {CODE_FORM_FLOOR}; the three moves are put to the custodian, since the lists "
         "of the review do not name them",
         "STND.OFFLD.7, the first sentence of STND.OFFLD.12, and the second sentence of STND.OFFLD.17 from CSQ3, "
@@ -138,13 +147,37 @@ MINOR = {
         "existing source conforms at the next change that touches it (STND.CLASS.22)",
         "CS1, CS6"),
     "STND.OMP": (
-        f"STND.OMP.28 applies from CSQ3, as a rule of the form of code, with HW.19; {FIELDS}",
-        f"No floor is raised (GOV.11). {CODE_FORM_FLOOR}; the move is put to the custodian, since the lists of the "
-        "review do not name it",
-        "STND.OMP.28 from CSQ3, where it applied from CSQ2; STND.OMP.30 stays at CSQ2, now with HW.5; the others as "
-        "before",
+        "the first sentence of STND.OMP.2 and STND.OMP.28 apply from CSQ3, as rules of the form of code, the second "
+        f"with HW.19; {FIELDS}",
+        f"No floor is raised (GOV.11). {CODE_FORM_FLOOR}; the moves are put to the custodian, since the lists of the "
+        "review do not name them",
+        "the first sentence of STND.OMP.2 and STND.OMP.28 from CSQ3, where they applied from CSQ2; STND.OMP.30 stays "
+        "at CSQ2, now with HW.5; the others as before",
         "existing source conforms at the next change that touches it (STND.CLASS.22)",
         "CS1, CS6"),
+    "STND.ANNEX": (
+        "each default of a contract applies from CSQ2, with the contract of HW.4 and the arithmetic and evidence of "
+        f"HW.5 and HW.6 that it fills, and STND.ANNEX.1, a permission, carries the value null; {FIELDS}",
+        f"No floor is raised (GOV.11). {LIGHTER_FLOOR}",
+        "STND.ANNEX.2 and STND.ANNEX.4 to STND.ANNEX.10 from CSQ2, where they applied from CSQ3; STND.ANNEX.3 as "
+        "before",
+        "a contract that work of CSQ3 holds and that cites a default keeps its citation",
+        "CS1, CS2"),
+    "STND.CREW": (
+        "STND.CREW.11 applies from CSQ3, one merge at a time being a rule of a protocol and not the verification of "
+        f"its invariants under the row of DSGN.15; {FIELDS}",
+        f"No floor is raised (GOV.11). {PROTOCOL_FLOOR}",
+        "STND.CREW.11 from CSQ3, where the Notes applied it from CSQ2; the others as before",
+        "a merge made before the reclassification stands; the rule applies to the next merge",
+        "CS1"),
+    "STND.WPROC": (
+        "STND.WPROC.7 and STND.WPROC.8 apply from CSQ3, the order of merges and the update of a branch before its "
+        f"merge being rules of a protocol and not the verification of its invariants under the row of DSGN.15; "
+        f"{FIELDS}",
+        f"No floor is raised (GOV.11). {PROTOCOL_FLOOR}",
+        "STND.WPROC.7 and STND.WPROC.8 from CSQ3, where the Notes applied them from CSQ2; the others as before",
+        "a merge made before the reclassification stands; the rules apply to the next merge",
+        "CS1"),
     "STND.PY": (
         f"STND.PY.35 applies from CSQ3, with the catch of STND.CODE.24 at a foreign frame; {FIELDS}",
         f"No floor is raised (GOV.11). {CODE_FORM_FLOOR}",

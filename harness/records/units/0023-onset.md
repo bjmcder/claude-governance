@@ -43,3 +43,28 @@ The first run found two reverts that survived, the unregistered check and the co
 - `python3 -B -m govharness verify governance`: every section PASS, `onset: PASS`, logic PASS, with the one warning g.18 as before. The live corpus has no field, so the new check passes and no other verdict changes.
 - Round o, rehearsed on rounds a, d, and c: `onset: PASS` with 766 fields set; `onset CSQ0` lists 2 items, `CSQ1` 22, `CSQ2` 149, `CSQ3` 627.
 - ruff, at the line length of the package (79), adds no finding on the changed files.
+
+## Revision after review
+
+The cold review of the code (`review-records/harness/review-unit-0023.md`) and of round o (`review-records/rounds-2026-10-28/round-o/review.md`, items 3 and 6) asked for these changes, all in `core/onset.py`, `checks/fields.py`, the tests, and the documentation; nothing in `cli/` changed, since round e's unit 0024 is editing it.
+
+- Medium 1, a row part must name one row: `part_exists` accepts `row CELL` only where exactly one data row of the body's tables opens with CELL, and `onset_problems` says "names row CSQ2, which no one sentence or row of its body is"; tested on STND.CLASS.10, whose table has eight rows opening with CSQ2.
+- Medium 2, the skill: the new row cites only `onset` and `show`, true before and after ratification.
+- Round o item 3, no CSQ4: `parse_onset` admits CSQ0 to CSQ3 as the class of a provision, alone or in a list, since STND.CLASS.10 gives CSQ4 no force.
+- Round o item 6, presence: `null` reads as every class and shows as `at every class`, for a waivable provision that applies at every class or a permission; it is refused on a binding provision like any field. `missing_onsets` fails, once one entry of the corpus carries the field, each waivable provision below LVL0 without it; the live corpus carries none, so its verdict is unchanged.
+- Low 1, the two survivors: `test_parts_name_sentences_and_rows` asks that a cell of another column name no row, and `test_sentences_as_a_reader_counts` that "e.g. the" and the markers of a numbered list end no sentence; both mutants now fail.
+- Low 2 and 4: the README row says "at a more severe class" and that the listing does not filter by status.
+- Low 3, numbered lists: `sentences` drops the marker of each list line before it counts, as `prose_lines` does.
+
+| Change reverted | Test | Result |
+| --- | --- | --- |
+| a row part shared by several rows accepted | `test_parts_name_sentences_and_rows`, `test_each_problem_fails` | fails (2) |
+| a row matched by any cell | `test_parts_name_sentences_and_rows` | fails |
+| sentences split at any whitespace after punctuation | `test_sentences_as_a_reader_counts` | fails |
+| list markers kept | `test_sentences_as_a_reader_counts` | fails |
+| a missing field not checked | `test_missing_field_fails_once_the_field_is_used` | fails |
+| CSQ4 accepted as the class of a list | `test_malformed_values_refused` | fails |
+| `null` refused | three tests | fails (1 failure, 2 errors) |
+
+Tests: `tests/checks/test_onset.py` holds 16. The module, `tests.checks.test_structure`, `tests.derive.test_reading_copy`, and the fast subset pass, but for one failure of `tests.test_conventions` on `tests/checks/test_combination.py:123`, a function without a docstring in round e's working tree, outside this unit. `verify governance` is unchanged: `onset: PASS`, with the warning g.18 alone. Round o rehearses with `onset: PASS` (765 values that give a class and 9 `null`).
+

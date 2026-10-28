@@ -7,11 +7,11 @@ provision, or a list whose first item is the class of the provision and
 each further item a pair ``[PART, CLASS]`` that gives a named part a
 more severe class: ``["CSQ3", ["sentence 2", "CSQ2"]]``. A part is
 ``sentence N``, the Nth sentence of the body outside its tables, or
-``row CELL``, the row of a table of the body whose first cell is CELL.
-The class of the provision is CSQ4 only in the list form, where the
-provision applies at every class but a part does not; a provision that
-applies at every class whole, and every binding provision, carries no
-field (unit 0023).
+``row CELL``, the one row of a table of the body whose first cell is
+CELL. The value ``null`` marks a waivable provision that applies at
+every class, or a permission. A binding provision, and a provision of
+LVL0, carries no field; once one entry of the corpus carries the field,
+every waivable provision below LVL0 carries it (unit 0023).
 """
 
 from __future__ import annotations
@@ -21,7 +21,7 @@ from dataclasses import dataclass
 
 from govharness.core.entry import Entry
 from govharness.core.tables import parse_tables
-from govharness.core.text import without_tables
+from govharness.core.text import BULLET_RE, without_tables
 
 FIELD = "onset"
 # The classes from the most severe to the least; a lower index is a
@@ -29,6 +29,8 @@ FIELD = "onset"
 CLASSES = ("CSQ0", "CSQ1", "CSQ2", "CSQ3", "CSQ4")
 # The classes a whole provision, or a named part, may start at.
 STARTS = CLASSES[:-1]
+# The class that ``null`` reads as: at every class.
+EVERY = CLASSES[-1]
 # A sentence of a body ends at terminal punctuation, as a reader counts
 # sentences; semicolons and colons do not end one here, unlike the
 # drafting checks' finer cut.
@@ -74,15 +76,18 @@ def parse_onset(value: object) -> Onset:
     Returns
     -------
     Onset
-        The class of the provision and of each named part.
+        The class of the provision and of each named part; ``null``
+        reads as CSQ4, at every class, with no part.
 
     Raises
     ------
     ValueError
-        If the value is neither a class of CSQ0 to CSQ3 nor a list of a
-        class of CSQ0 to CSQ4 followed by at least one pair of a part
-        and a more severe class, or if a part is named twice.
+        If the value is neither ``null``, a class of CSQ0 to CSQ3, nor a
+        list of such a class followed by at least one pair of a part and
+        a more severe class, or if a part is named twice.
     """
+    if value is None:
+        return Onset(EVERY)
     if isinstance(value, str):
         if value not in STARTS:
             raise ValueError(f"{value!r} is not a class of CSQ0 to CSQ3")
@@ -90,8 +95,8 @@ def parse_onset(value: object) -> Onset:
     if not isinstance(value, list) or len(value) < 2:
         raise ValueError("neither a class nor a list of a class and parts")
     base = value[0]
-    if base not in CLASSES:
-        raise ValueError(f"{base!r} is not a class")
+    if base not in STARTS:
+        raise ValueError(f"{base!r} is not a class of CSQ0 to CSQ3")
     parts: list[tuple[str, str]] = []
     for item in value[1:]:
         if (
@@ -125,7 +130,10 @@ def sentences(body: str) -> list[str]:
         The sentences, in order, each ending at terminal punctuation;
         the lines of a list belong to the sentence that leads into it.
     """
-    prose = " ".join(without_tables(body).split())
+    lines = [
+        BULLET_RE.sub("", line) for line in without_tables(body).split("\n")
+    ]
+    prose = " ".join(" ".join(lines).split())
     return [s for s in TERMINAL_RE.split(prose) if s.strip()]
 
 
@@ -158,14 +166,15 @@ def part_exists(body: str, part: str) -> bool:
     Returns
     -------
     bool
-        True when the body has an Nth sentence, or a row whose first
-        cell is CELL.
+        True when the body has an Nth sentence, or exactly one row
+        whose first cell is CELL; a row part that several rows share
+        names no one row.
     """
     number = SENTENCE_PART.fullmatch(part)
     if number:
         return int(number.group(1)) <= len(sentences(body))
     row = ROW_PART.fullmatch(part)
-    return bool(row) and row.group(1) in row_keys(body)
+    return bool(row) and row_keys(body).count(row.group(1)) == 1
 
 
 def onset_problems(entry: Entry) -> list[str]:
@@ -182,8 +191,8 @@ def onset_problems(entry: Entry) -> list[str]:
         Nothing where the entry has no field. Otherwise one line where
         the value is malformed, where the entry is not a provision below
         LVL0, where the provision is not waivable (it binds at every
-        class), and for each part that names no sentence or row of its
-        body.
+        class), and for each part that names no sentence and no one
+        row of its body.
     """
     meta = entry.meta
     if FIELD not in meta:
@@ -200,9 +209,38 @@ def onset_problems(entry: Entry) -> list[str]:
     if meta.get("waivable") is not True:
         return [f"- {name}: an onset on a provision that binds at every class"]
     return [
-        f"- {name}: onset names {part}, which its body does not hold"
+        f"- {name}: onset names {part}, which no one sentence or row of "
+        "its body is"
         for part, _ in onset.parts
         if not part_exists(entry.body, part)
+    ]
+
+
+def missing_onsets(entries: list[Entry]) -> list[str]:
+    """Return the waivable provisions below LVL0 that lack the field.
+
+    Parameters
+    ----------
+    entries : list[Entry]
+        The corpus entries.
+
+    Returns
+    -------
+    list[str]
+        Nothing while no entry carries the field, as before the field
+        was set; once one does, one line for each waivable provision
+        below LVL0 that carries none, so that an omitted field is not
+        read as an onset.
+    """
+    if not any(FIELD in e.meta for e in entries):
+        return []
+    return [
+        f"- {e.meta.get('id')}: a waivable provision without an onset"
+        for e in entries
+        if e.meta.get("kind") == "provision"
+        and e.meta.get("level") != "LVL0"
+        and e.meta.get("waivable") is True
+        and FIELD not in e.meta
     ]
 
 
@@ -240,9 +278,9 @@ def describe(onset: Onset) -> str:
     -------
     str
         ``from CSQ3``, then ``sentence 2 from CSQ2`` for each part;
-        a provision of class CSQ4 reads ``at every class``.
+        ``null`` reads ``at every class``.
     """
-    head = "at every class" if onset.base == "CSQ4" else f"from {onset.base}"
+    head = "at every class" if onset.base == EVERY else f"from {onset.base}"
     return "; ".join(
         [head, *(f"{part} from {cls}" for part, cls in onset.parts)]
     )

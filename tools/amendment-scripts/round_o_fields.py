@@ -2,8 +2,9 @@
 
 One row per waivable provision of a document below LVL0, in identifier order: its identifier, the value of its
 field `onset`, and the source of that value. A value is a class for the whole provision, a list of the class of
-the provision and one pair of a part and its more severe class for each part that starts later, or None where the
-provision applies at every class and carries no field. Binding provisions have no row: they bind at every class.
+the provision and one pair of a part and its more severe class for each part that starts later, or None, written `null`, where the
+provision applies at every class or is a permission. Binding provisions have no row and no field: they bind at every
+class.
 
 The sources:
 - "Notes of DOC: CSQn" is the onset that the Notes of that document gave before this round, which the one rule
@@ -14,7 +15,11 @@ The sources:
   CSQ3; "C7 code form (custodian)" is a rule of the same kind outside the lists of CL1 and CL2, put to the custodian;
 - "C7, CS2", "C7 core of STND.VVUQ (CP5)", "C7 core of STND.TEST (CP6)", and "C7 run machinery (CP4)" are the parts
   that ruling C7 keeps out of the CSQ3 core of a methods standard;
-- "CS5" and "CS18" settle those findings and are put to the custodian.
+- "C7 rule: a protocol rule, not its verification" is a part that the Notes started at CSQ2 with the row of DSGN.15
+  and that the rule starts at CSQ3, a move recorded as such;
+- "a tightening kept, reason in the Notes" is a part that asks for an item of the table and keeps CSQ3, with the
+  reason in the Notes of its document;
+- "CS5" and "CS18" settle those findings, CS5 put to the custodian.
 
 The review checks each value against its source; `apply_fields` refuses a waivable provision with no row, so a
 provision added by an earlier round is caught, not left without its onset.
@@ -34,11 +39,11 @@ ROWS = [
     ('AGENT.13', "CSQ3", 'Notes of AGENT: CSQ3'),
     ('AGENT.18', "CSQ3", 'Notes of AGENT: CSQ3'),
     ('AGENT.19', "CSQ3", 'Notes of AGENT: CSQ3'),
-    ('AGENT.20', "CSQ3", 'Notes of AGENT: CSQ3'),
+    ('AGENT.20', "CSQ3", 'Notes of AGENT: CSQ3, a tightening kept, reason in the Notes: a status report (INTPR.6 row)'),
     ('AGENT.21', "CSQ3", 'Notes of AGENT: CSQ3'),
     ('AGENT.22', "CSQ3", 'Notes of AGENT: CSQ3'),
     ('AGENT.23', "CSQ3", 'Notes of AGENT: CSQ3'),
-    ('AGENT.24', "CSQ3", 'Notes of AGENT: CSQ3'),
+    ('AGENT.24', "CSQ3", 'Notes of AGENT: CSQ3, a tightening kept, reason in the Notes: a timing record (RSRC.3 row)'),
     ('AGENT.25', "CSQ3", 'Notes of AGENT: CSQ3'),
     ('AGENT.26', "CSQ3", 'Notes of AGENT: CSQ3'),
     ('AGENT.27', "CSQ3", 'Notes of AGENT: CSQ3'),
@@ -48,10 +53,10 @@ ROWS = [
     ('AGENT.32', "CSQ3", 'Notes of AGENT: CSQ3'),
     ('AGENT.33', "CSQ3", 'Notes of AGENT: CSQ3'),
     ('AGENT.35', "CSQ3", 'Notes of AGENT: CSQ3'),
-    ('AGENT.36', "CSQ3", 'Notes of AGENT: CSQ3'),
+    ('AGENT.36', "CSQ3", 'Notes of AGENT: CSQ3, a tightening kept, reason in the Notes: tools under version control (REPRO.10 row)'),
     ('AGENT.37', "CSQ3", 'Notes of AGENT: CSQ3'),
     ('AGENT.40', "CSQ3", 'Notes of AGENT: CSQ3'),
-    ('AGENT.41', "CSQ3", 'Notes of AGENT: CSQ3'),
+    ('AGENT.41', "CSQ3", 'Notes of AGENT: CSQ3, a tightening kept, reason in the Notes: a statement of a gap (INTPR.10 row)'),
     ('CPS.3', "CSQ3", 'Notes of CPS: CSQ3, tightening kept'),
     ('CPS.4', "CSQ3", 'Notes of CPS: CSQ3, tightening kept'),
     ('CPS.5', "CSQ3", 'Notes of CPS: CSQ3, tightening kept'),
@@ -90,18 +95,18 @@ ROWS = [
     ('HW.6', "CSQ2", 'C7, CS2: evidence of the contract of HW.4 (DSGN.5 row); was CSQ3'),
     ('HW.7', "CSQ2", 'C7, CS2: currency of the contract of HW.4 (DSGN.5 row); was CSQ3'),
     ('HW.9', "CSQ3", 'Notes of HW: CSQ3'),
-    ('HW.10', "CSQ3", 'Notes of HW: CSQ3'),
+    ('HW.10', "CSQ3", 'Notes of HW: CSQ3, a tightening kept, reason in the Notes: a statement of exposure (INTPR.10 row)'),
     ('HW.11', "CSQ2", 'Notes of HW: CSQ2; verifies the invariants of DSGN.15'),
     ('HW.12', "CSQ3", 'Notes of HW: CSQ3'),
     ('HW.13', "CSQ2", 'Notes of HW: CSQ2; asks the contract and schema of a boundary'),
     ('HW.14', "CSQ2", 'Notes of HW: CSQ2; checks of the boundary schema (DSGN.4 row)'),
     ('HW.15', "CSQ3", 'Notes of HW: CSQ3'),
-    ('HW.16', "CSQ3", 'Notes of HW: CSQ3'),
-    ('HW.17', "CSQ3", 'Notes of HW: CSQ3'),
-    ('HW.18', "CSQ3", 'Notes of HW: CSQ3'),
-    ('HW.19', "CSQ3", 'Notes of HW: CSQ3'),
+    ('HW.16', "CSQ3", 'Notes of HW: CSQ3, a tightening kept, reason in the Notes: verification of a path (VV.6 row)'),
+    ('HW.17', "CSQ3", 'Notes of HW: CSQ3, a tightening kept, reason in the Notes: a comparison and its limit (VV.6, INTPR.10 rows)'),
+    ('HW.18', "CSQ3", 'Notes of HW: CSQ3, a tightening kept, reason in the Notes: a stated limit (DSGN.5, INTPR.10 rows)'),
+    ('HW.19', "CSQ3", 'Notes of HW: CSQ3, a tightening kept, reason in the Notes: a report (INTPR.7 row)'),
     ('HW.20', "CSQ3", 'Notes of HW: CSQ3'),
-    ('HW.21', "CSQ3", 'Notes of HW: CSQ3'),
+    ('HW.21', "CSQ3", 'Notes of HW: CSQ3, a tightening kept, reason in the Notes: a report and a record (INTPR.7, RSRC.3 rows)'),
     ('HW.22', "CSQ3", 'Notes of HW: CSQ3'),
     ('HW.ASIC.3', "CSQ3", 'Notes of HW.ASIC: CSQ3, tightening kept'),
     ('HW.ASIC.4', "CSQ2", 'CS18: its trigger, a mark under HDES.5, exists from CSQ2; was CSQ3, vacuous there'),
@@ -132,23 +137,23 @@ ROWS = [
     ('ML.6', "CSQ3", 'Notes of ML: CSQ3, tightening kept (CS4)'),
     ('ML.7', "CSQ3", 'Notes of ML: CSQ3, tightening kept (CS4)'),
     ('NUMER.3', "CSQ3", 'Notes of NUMER: CSQ3'),
-    ('NUMER.4', "CSQ3", 'Notes of NUMER: CSQ3'),
-    ('NUMER.5', "CSQ3", 'Notes of NUMER: CSQ3'),
-    ('NUMER.6', "CSQ3", 'Notes of NUMER: CSQ3'),
+    ('NUMER.4', "CSQ3", 'Notes of NUMER: CSQ3, a tightening kept, reason in the Notes: cited sources (VV.2 row)'),
+    ('NUMER.5', "CSQ3", 'Notes of NUMER: CSQ3, a tightening kept, reason in the Notes: a stated precision (DSGN.5 row)'),
+    ('NUMER.6', "CSQ3", 'Notes of NUMER: CSQ3, a tightening kept, reason in the Notes: a reference oracle (VV.1, VV.6 rows)'),
     ('NUMER.7', "CSQ3", 'Notes of NUMER: CSQ3'),
     ('NUMER.8', "CSQ3", 'Notes of NUMER: CSQ3'),
     ('NUMER.9', "CSQ3", 'Notes of NUMER: CSQ3'),
     ('NUMER.10', "CSQ3", 'Notes of NUMER: CSQ3'),
     ('NUMER.11', "CSQ3", 'Notes of NUMER: CSQ3'),
-    ('NUMER.12', "CSQ3", 'Notes of NUMER: CSQ3'),
+    ('NUMER.12', "CSQ3", 'Notes of NUMER: CSQ3, a tightening kept, reason in the Notes: a stated limit (INTPR.10 row)'),
     ('NUMER.13', "CSQ3", 'Notes of NUMER: CSQ3'),
     ('NUMER.14', "CSQ3", 'Notes of NUMER: CSQ3'),
     ('NUMER.15', "CSQ3", 'Notes of NUMER: CSQ3'),
-    ('NUMER.16', "CSQ3", 'Notes of NUMER: CSQ3'),
+    ('NUMER.16', "CSQ3", 'Notes of NUMER: CSQ3, a tightening kept, reason in the Notes: a disclosure (INTPR.10 row)'),
     ('NUMER.17', "CSQ3", 'Notes of NUMER: CSQ3'),
-    ('NUMER.18', "CSQ3", 'Notes of NUMER: CSQ3'),
+    ('NUMER.18', "CSQ3", 'Notes of NUMER: CSQ3, a tightening kept, reason in the Notes: a report and a limit (INTPR.7, INTPR.10 rows)'),
     ('NUMER.19', "CSQ3", 'Notes of NUMER: CSQ3'),
-    ('NUMER.20', "CSQ3", 'Notes of NUMER: CSQ3'),
+    ('NUMER.20', "CSQ3", 'Notes of NUMER: CSQ3, a tightening kept, reason in the Notes: a stated sensitivity (INTPR.10 row)'),
     ('NUMER.21', "CSQ3", 'Notes of NUMER: CSQ3'),
     ('NUMER.22', "CSQ3", 'Notes of NUMER: CSQ3'),
     ('NUMER.23', "CSQ3", 'Notes of NUMER: CSQ3'),
@@ -157,16 +162,16 @@ ROWS = [
     ('NUMER.27', "CSQ3", 'Notes of NUMER: CSQ3'),
     ('NUMER.28', "CSQ3", 'Notes of NUMER: CSQ3'),
     ('NUMER.29', "CSQ3", 'Notes of NUMER: CSQ3'),
-    ('STND.ANNEX.1', "CSQ3", 'rule: asks for no item of the table; Notes of STND.ANNEX: CSQ3'),
-    ('STND.ANNEX.2', "CSQ3", 'rule: asks for no item of the table; Notes of STND.ANNEX: CSQ3'),
+    ('STND.ANNEX.1', None, 'a permission, which STND.CLASS.10 does not stage'),
+    ('STND.ANNEX.2', "CSQ2", 'C7, CS2: a default of the contract that HW.4 to HW.6 fill, with them at CSQ2; was CSQ3'),
     ('STND.ANNEX.3', "CSQ2", 'Notes of STND.ANNEX: CSQ2; carries the rows of HW.4'),
-    ('STND.ANNEX.4', "CSQ3", 'rule: asks for no item of the table; Notes of STND.ANNEX: CSQ3'),
-    ('STND.ANNEX.5', "CSQ3", 'rule: asks for no item of the table; Notes of STND.ANNEX: CSQ3'),
-    ('STND.ANNEX.6', "CSQ3", 'rule: asks for no item of the table; Notes of STND.ANNEX: CSQ3'),
-    ('STND.ANNEX.7', "CSQ3", 'rule: asks for no item of the table; Notes of STND.ANNEX: CSQ3'),
-    ('STND.ANNEX.8', "CSQ3", 'rule: asks for no item of the table; Notes of STND.ANNEX: CSQ3'),
-    ('STND.ANNEX.9', "CSQ3", 'rule: asks for no item of the table; Notes of STND.ANNEX: CSQ3'),
-    ('STND.ANNEX.10', "CSQ3", 'rule: asks for no item of the table; Notes of STND.ANNEX: CSQ3'),
+    ('STND.ANNEX.4', "CSQ2", 'C7, CS2: a default of the contract that HW.4 to HW.6 fill, with them at CSQ2; was CSQ3'),
+    ('STND.ANNEX.5', "CSQ2", 'C7, CS2: a default of the contract that HW.4 to HW.6 fill, with them at CSQ2; was CSQ3'),
+    ('STND.ANNEX.6', "CSQ2", 'C7, CS2: a default of the contract that HW.4 to HW.6 fill, with them at CSQ2; was CSQ3'),
+    ('STND.ANNEX.7', "CSQ2", 'C7, CS2: a default of the contract that HW.4 to HW.6 fill, with them at CSQ2; was CSQ3'),
+    ('STND.ANNEX.8', "CSQ2", 'C7, CS2: a default of the contract that HW.4 to HW.6 fill, with them at CSQ2; was CSQ3'),
+    ('STND.ANNEX.9', "CSQ2", 'C7, CS2: a default of the contract that HW.4 to HW.6 fill, with them at CSQ2; was CSQ3'),
+    ('STND.ANNEX.10', "CSQ2", 'C7, CS2: a default of the contract that HW.4 to HW.6 fill, with them at CSQ2; was CSQ3'),
     ('STND.BUILD.1', "CSQ3", 'rule: asks for no item of the table; Notes of STND.BUILD: CSQ3'),
     ('STND.BUILD.2', "CSQ3", 'rule: asks for no item of the table; Notes of STND.BUILD: CSQ3'),
     ('STND.BUILD.3', "CSQ3", 'rule: asks for no item of the table; Notes of STND.BUILD: CSQ3'),
@@ -177,7 +182,7 @@ ROWS = [
     ('STND.BUILD.8', "CSQ3", 'rule: asks for no item of the table; Notes of STND.BUILD: CSQ3'),
     ('STND.BUILD.9', "CSQ3", 'rule: asks for no item of the table; Notes of STND.BUILD: CSQ3'),
     ('STND.BUILD.10', "CSQ3", 'rule: asks for no item of the table; Notes of STND.BUILD: CSQ3'),
-    ('STND.BUILD.11', "CSQ3", 'rule: asks for no item of the table; Notes of STND.BUILD: CSQ3'),
+    ('STND.BUILD.11', "CSQ3", 'Notes of STND.BUILD: CSQ3 through its LVL0 provisions; its form of HW.5, HW.7, or HW.CPU.3 needs no contract (reading 1)'),
     ('STND.BUILD.12', "CSQ3", 'rule: asks for no item of the table; Notes of STND.BUILD: CSQ3'),
     ('STND.BUILD.13', ["CSQ3", ["sentence 2", "CSQ2"]], 'Notes of STND.BUILD: s2 states a limit of validity (INTPR.10 row)'),
     ('STND.BUILD.14', "CSQ3", 'rule: asks for no item of the table; Notes of STND.BUILD: CSQ3'),
@@ -210,7 +215,7 @@ ROWS = [
     ('STND.CODE.13', "CSQ3", 'rule: asks for no item of the table; Notes of STND.CODE: CSQ3'),
     ('STND.CODE.17', "CSQ1", 'Notes of STND.CODE: CSQ1, ratified for C++ and C; tightens the CSQ0 rows'),
     ('STND.CODE.19', "CSQ1", 'Notes of STND.CODE: CSQ1, ratified for C++ and C; tightens the CSQ0 rows'),
-    ('STND.CODE.20', ["CSQ4", ["sentence 1", "CSQ1"]], 'Notes of STND.CODE (round c): record from CSQ1, marker wherever such a standard is adopted'),
+    ('STND.CODE.20', ["CSQ3", ["sentence 1", "CSQ1"]], 'Notes of STND.CODE (round c): record from CSQ1; the marker from CSQ3, which STND.CLASS.10 lets work of CSQ4 omit (D3)'),
     ('STND.CODE.22', ["CSQ3", ["sentence 2", "CSQ2"]], 'C7, CL1: s1 code form, was CSQ2; s2 comparison of layouts stays at the DSGN.4 row'),
     ('STND.CODE.23', "CSQ3", 'C7, CL1: code form, was CSQ2; the test of a call is an alternative means'),
     ('STND.CODE.24', "CSQ3", 'C7, CL2: the catch at a foreign frame, was CSQ2'),
@@ -259,7 +264,7 @@ ROWS = [
     ('STND.CREW.8', "CSQ3", 'rule: asks for no item of the table; Notes of STND.CREW: CSQ3'),
     ('STND.CREW.9', "CSQ3", 'rule: asks for no item of the table; Notes of STND.CREW: CSQ3'),
     ('STND.CREW.10', "CSQ3", 'rule: asks for no item of the table; Notes of STND.CREW: CSQ3'),
-    ('STND.CREW.11', "CSQ3", 'rule: asks for no item of the table; Notes of STND.CREW: CSQ3'),
+    ('STND.CREW.11', "CSQ3", 'C7 rule: a protocol rule, not its verification (DSGN.15); was CSQ2'),
     ('STND.CREW.15', "CSQ3", 'rule: asks for no item of the table; Notes of STND.CREW: CSQ3'),
     ('STND.CREW.16', "CSQ3", 'rule: asks for no item of the table; Notes of STND.CREW: CSQ3'),
     ('STND.CREW.17', "CSQ3", 'rule: asks for no item of the table; Notes of STND.CREW: CSQ3'),
@@ -267,7 +272,7 @@ ROWS = [
     ('STND.CREW.19', "CSQ3", 'rule: asks for no item of the table; Notes of STND.CREW: CSQ3'),
     ('STND.CXX.1', "CSQ3", 'rule: asks for no item of the table; Notes of STND.CXX: CSQ3'),
     ('STND.CXX.2', "CSQ3", 'rule: asks for no item of the table; Notes of STND.CXX: CSQ3'),
-    ('STND.CXX.4', "CSQ3", 'rule: asks for no item of the table; Notes of STND.CXX: CSQ3'),
+    ('STND.CXX.4', "CSQ3", 'Notes of STND.CXX: CSQ3 through its LVL0 provisions; its form of HW.5, HW.7, or HW.CPU.3 needs no contract (reading 1)'),
     ('STND.CXX.5', "CSQ3", 'rule: asks for no item of the table; Notes of STND.CXX: CSQ3'),
     ('STND.CXX.6', "CSQ3", 'rule: asks for no item of the table; Notes of STND.CXX: CSQ3'),
     ('STND.CXX.7', "CSQ3", 'rule: asks for no item of the table; Notes of STND.CXX: CSQ3'),
@@ -342,8 +347,8 @@ ROWS = [
     ('STND.FTN.13', "CSQ3", 'rule: asks for no item of the table; Notes of STND.FTN: CSQ3'),
     ('STND.FTN.14', "CSQ3", 'rule: asks for no item of the table; Notes of STND.FTN: CSQ3'),
     ('STND.FTN.15', "CSQ3", 'rule: asks for no item of the table; Notes of STND.FTN: CSQ3'),
-    ('STND.FTN.16', "CSQ3", 'rule: asks for no item of the table; Notes of STND.FTN: CSQ3'),
-    ('STND.FTN.17', "CSQ3", 'rule: asks for no item of the table; Notes of STND.FTN: CSQ3'),
+    ('STND.FTN.16', "CSQ3", 'Notes of STND.FTN: CSQ3 through its LVL0 provisions; its form of HW.5, HW.7, or HW.CPU.3 needs no contract (reading 1)'),
+    ('STND.FTN.17', "CSQ3", 'Notes of STND.FTN: CSQ3 through its LVL0 provisions; its form of HW.5, HW.7, or HW.CPU.3 needs no contract (reading 1)'),
     ('STND.FTN.19', "CSQ3", 'rule: asks for no item of the table; Notes of STND.FTN: CSQ3'),
     ('STND.FTN.20', "CSQ3", 'rule: asks for no item of the table; Notes of STND.FTN: CSQ3'),
     ('STND.FTN.21', "CSQ3", 'rule: asks for no item of the table; Notes of STND.FTN: CSQ3'),
@@ -373,7 +378,7 @@ ROWS = [
     ('STND.JL.16', "CSQ3", 'rule: asks for no item of the table; Notes of STND.JL: CSQ3'),
     ('STND.JL.17', "CSQ3", 'rule: asks for no item of the table; Notes of STND.JL: CSQ3'),
     ('STND.JL.18', "CSQ3", 'rule: asks for no item of the table; Notes of STND.JL: CSQ3'),
-    ('STND.JL.19', "CSQ3", 'rule: asks for no item of the table; Notes of STND.JL: CSQ3'),
+    ('STND.JL.19', "CSQ3", 'Notes of STND.JL: CSQ3 through its LVL0 provisions; its form of HW.5, HW.7, or HW.CPU.3 needs no contract (reading 1)'),
     ('STND.JL.20', "CSQ3", 'rule: asks for no item of the table; Notes of STND.JL: CSQ3'),
     ('STND.JL.22', "CSQ3", 'rule: asks for no item of the table; Notes of STND.JL: CSQ3'),
     ('STND.JL.25', "CSQ3", 'rule: asks for no item of the table; Notes of STND.JL: CSQ3'),
@@ -384,7 +389,7 @@ ROWS = [
     ('STND.JL.31', "CSQ3", 'rule: asks for no item of the table; Notes of STND.JL: CSQ3'),
     ('STND.JL.32', "CSQ3", 'rule: asks for no item of the table; Notes of STND.JL: CSQ3'),
     ('STND.JL.33', "CSQ3", 'rule: asks for no item of the table; Notes of STND.JL: CSQ3'),
-    ('STND.JL.34', "CSQ3", 'rule: asks for no item of the table; Notes of STND.JL: CSQ3'),
+    ('STND.JL.34', "CSQ3", 'Notes of STND.JL: CSQ3 through its LVL0 provisions; its form of HW.5, HW.7, or HW.CPU.3 needs no contract (reading 1)'),
     ('STND.JL.35', "CSQ3", 'rule: asks for no item of the table; Notes of STND.JL: CSQ3'),
     ('STND.JL.36', "CSQ1", 'Notes of STND.JL: checking of DSGN.2 (CSQ1 row)'),
     ('STND.JL.38', "CSQ3", 'rule: asks for no item of the table; Notes of STND.JL: CSQ3'),
@@ -468,11 +473,11 @@ ROWS = [
     ('STND.OFFLD.26', "CSQ3", 'rule: asks for no item of the table; Notes of STND.OFFLD: CSQ3'),
     ('STND.OFFLD.27', "CSQ3", 'rule: asks for no item of the table; Notes of STND.OFFLD: CSQ3'),
     ('STND.OFFLD.28', "CSQ3", 'rule: asks for no item of the table; Notes of STND.OFFLD: CSQ3'),
-    ('STND.OFFLD.29', "CSQ3", 'rule: asks for no item of the table; Notes of STND.OFFLD: CSQ3'),
+    ('STND.OFFLD.29', "CSQ3", 'Notes of STND.OFFLD: CSQ3 through its LVL0 provisions; its form of HW.5, HW.7, or HW.CPU.3 needs no contract (reading 1)'),
     ('STND.OFFLD.30', "CSQ2", 'Notes of STND.OFFLD: verifies invariants (DSGN.15) and HW.14'),
     ('STND.OFFLD.31', "CSQ3", 'rule: asks for no item of the table; Notes of STND.OFFLD: CSQ3'),
     ('STND.OMP.1', "CSQ3", 'rule: asks for no item of the table; Notes of STND.OMP: CSQ3'),
-    ('STND.OMP.2', "CSQ2", 'Notes of STND.OMP: checks the documentation of each implementation (DSGN.5)'),
+    ('STND.OMP.2', ["CSQ3", ["sentence 2", "CSQ2"]], 'C7 code form (custodian): s1 features that the documentation states, was CSQ2 by DSGN.5; s2 tests on each implementation stay CSQ2'),
     ('STND.OMP.3', "CSQ3", 'rule: asks for no item of the table; Notes of STND.OMP: CSQ3'),
     ('STND.OMP.4', "CSQ3", 'rule: asks for no item of the table; Notes of STND.OMP: CSQ3'),
     ('STND.OMP.5', "CSQ3", 'rule: asks for no item of the table; Notes of STND.OMP: CSQ3'),
@@ -557,7 +562,7 @@ ROWS = [
     ('STND.PY.31', "CSQ3", 'rule: asks for no item of the table; Notes of STND.PY: CSQ3'),
     ('STND.PY.35', "CSQ3", 'C7, CL2: the store at a foreign frame, was CSQ2'),
     ('STND.RUST.1', "CSQ3", 'rule: asks for no item of the table; Notes of STND.RUST: CSQ3'),
-    ('STND.RUST.2', "CSQ3", 'rule: asks for no item of the table; Notes of STND.RUST: CSQ3'),
+    ('STND.RUST.2', "CSQ3", 'Notes of STND.RUST: CSQ3 through its LVL0 provisions; its form of HW.5, HW.7, or HW.CPU.3 needs no contract (reading 1)'),
     ('STND.RUST.3', "CSQ3", 'rule: asks for no item of the table; Notes of STND.RUST: CSQ3'),
     ('STND.RUST.4', "CSQ3", 'rule: asks for no item of the table; Notes of STND.RUST: CSQ3'),
     ('STND.RUST.5', "CSQ3", 'rule: asks for no item of the table; Notes of STND.RUST: CSQ3'),
@@ -571,7 +576,7 @@ ROWS = [
     ('STND.RUST.17', "CSQ3", 'rule: asks for no item of the table; Notes of STND.RUST: CSQ3'),
     ('STND.RUST.18', "CSQ3", 'rule: asks for no item of the table; Notes of STND.RUST: CSQ3'),
     ('STND.RUST.19', "CSQ3", 'rule: asks for no item of the table; Notes of STND.RUST: CSQ3'),
-    ('STND.RUST.20', "CSQ3", 'rule: asks for no item of the table; Notes of STND.RUST: CSQ3'),
+    ('STND.RUST.20', "CSQ3", 'Notes of STND.RUST: CSQ3 through its LVL0 provisions; its form of HW.5, HW.7, or HW.CPU.3 needs no contract (reading 1)'),
     ('STND.RUST.21', "CSQ3", 'rule: asks for no item of the table; Notes of STND.RUST: CSQ3'),
     ('STND.RUST.22', "CSQ3", 'rule: asks for no item of the table; Notes of STND.RUST: CSQ3'),
     ('STND.RUST.23', "CSQ3", 'rule: asks for no item of the table; Notes of STND.RUST: CSQ3'),
@@ -797,8 +802,8 @@ ROWS = [
     ('STND.WPROC.4', "CSQ3", 'rule: asks for no item of the table; Notes of STND.WPROC: CSQ3'),
     ('STND.WPROC.5', "CSQ3", 'rule: asks for no item of the table; Notes of STND.WPROC: CSQ3'),
     ('STND.WPROC.6', "CSQ3", 'rule: asks for no item of the table; Notes of STND.WPROC: CSQ3'),
-    ('STND.WPROC.7', "CSQ3", 'rule: asks for no item of the table; Notes of STND.WPROC: CSQ3'),
-    ('STND.WPROC.8', "CSQ3", 'rule: asks for no item of the table; Notes of STND.WPROC: CSQ3'),
+    ('STND.WPROC.7', "CSQ3", 'C7 rule: a protocol rule, not its verification (DSGN.15); was CSQ2'),
+    ('STND.WPROC.8', "CSQ3", 'C7 rule: a protocol rule, not its verification (DSGN.15); was CSQ2'),
     ('STND.WPROC.9', "CSQ3", 'rule: asks for no item of the table; Notes of STND.WPROC: CSQ3'),
     ('STND.WPROC.10', "CSQ3", 'rule: asks for no item of the table; Notes of STND.WPROC: CSQ3'),
     ('STND.WPROC.11', None, 'a permission, which STND.CLASS.10 does not stage'),
@@ -846,7 +851,6 @@ def apply_fields(root: Path, doc_id: str) -> int:
             continue
         if not meta.get("waivable"):
             raise ValueError(f"{ident}: binds at every class and has a row of the onset table")
-        if ONSETS[ident] is not None:
-            _put(path, ONSETS[ident])
-            count += 1
+        _put(path, ONSETS[ident])
+        count += 1
     return count
