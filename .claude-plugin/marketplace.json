@@ -1,0 +1,14 @@
+{
+  "name": "governance-harness",
+  "owner": {
+    "name": "Brian J. McDermott"
+  },
+  "description": "The governance corpus and its read-only query harness, as a Claude Code plugin",
+  "plugins": [
+    {
+      "name": "governance",
+      "source": "./harness",
+      "description": "Read-only access to the governance corpus and its query harness"
+    }
+  ]
+}
