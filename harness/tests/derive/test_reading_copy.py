@@ -240,8 +240,8 @@ class ReadingCopies(unittest.TestCase):
         so the committed set is exactly one copy per document.
 
         Reference: ``REPO/rendered/``, the reading copies the
-        custodian's process rebuilds (CUSTODIAN.md step 8; unit 0022,
-        HR-6); regression guard.
+        custodian's process rebuilds (for-agents/standing-process.md,
+        step 8; unit 0022, HR-6); regression guard.
         """
         repo = Path(__file__).resolve().parents[3]
         code, out = run(

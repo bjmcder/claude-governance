@@ -123,5 +123,3 @@ govharness/
 ## Tests
 
 `tests/` mirrors the package, one directory per layer, with `tests/test_architecture.py` and `tests/test_conventions.py` at the top. [`harness/README.md`](../harness/README.md#tests) gives the commands that run them.
-
-`tests/equivalence/run_equivalence.py` is a regression guard that compares the package with the scripts it replaced, in `archive/tools-flat/`. That directory is not part of this repository, so the guard stops with an error here. Test discovery does not collect it, and no other test depends on it.
