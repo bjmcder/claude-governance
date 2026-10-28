@@ -1,28 +1,28 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.BUILD,standard,LVL2,Build standard,adopted,_doc.md,bdb0078031aae2974f4dd8c791a9eeeac8ca97fdc407b3d760fc030c450b119a,31793
-STND.BUILD.1,provision,LVL2,Declared inputs of build steps,adopted,1.md,a21727c26b72954dcd4eeaf382e62165abc959f6928a008c0830ee8eec7bd35d,512
-STND.BUILD.2,provision,LVL2,Inputs derived from the source,adopted,2.md,636099f9261525d614354d9f526ae5a0712f979143e705406977dc2994fc5423,571
-STND.BUILD.3,provision,LVL2,Schedule-independent build outputs,adopted,3.md,4e6105f632f1fc506d25885219ecc71b374e73266f7bbdeb75041a484193155e,681
-STND.BUILD.4,provision,LVL2,Generated files and generators,adopted,4.md,d28c5c480688d4e45a73c3ee8e844450aee4456d93093bd7aa211b5f41ed03e9,520
-STND.BUILD.5,provision,LVL2,Generated files under version control,adopted,5.md,b82f12cc69a4f338422c2fc9cde9da8bfc608eb23a7800b226d8bf1bf26e7f52,569
-STND.BUILD.6,provision,LVL2,Builds outside the source tree,adopted,6.md,266384c8620a2ca1d749fe628c4a7d0df108a7f7fd97834373426d8dc658e30a,542
-STND.BUILD.7,provision,LVL2,Fetching apart from building,adopted,7.md,35a8fa7a8a1fe2321299fbebb162c765389dffbb6db54a87b071e64769cf4c78,552
-STND.BUILD.8,provision,LVL2,Detected configuration properties,adopted,8.md,54a5869e381a3bc49139316a259b5786474202dbde2df37bdba3e989007de712,707
-STND.BUILD.9,provision,LVL2,Configuration of cross builds,adopted,9.md,7759f2a919c149cea7e300d8a3e293708cc4a5ddf94530abc65ee87bfb18730c,871
-STND.BUILD.10,provision,LVL2,Stated device code targets,adopted,10.md,9205029e17551160a7c4a8f149754d25ce2f15e72d9ad8040f15b6ea76576c17,761
-STND.BUILD.11,provision,LVL2,Result-affecting build settings,adopted,11.md,e47aa43a348e0462cbcb489b0abac2b76c2241edac4b83dbb975eb42ce38e1f1,830
-STND.BUILD.12,provision,LVL2,Warnings in checks and releases,adopted,12.md,32476c1628ceb39cd42e93726c6548e5d9903bb0833828b22d62fb20011654e1,657
-STND.BUILD.13,provision,LVL2,Checking builds kept apart,adopted,13.md,cdfcbb15bf98fd1ad0565e098a2bf9c532dc16e40b8f6af8c9aa4f317d422064,643
-STND.BUILD.14,provision,LVL2,Embedded build instant,adopted,14.md,ef7ab549f21dbf54007bfe0cb73d03b440dda8be989286f278e7c7de31dfffe1,547
-STND.BUILD.15,provision,LVL2,Fixed order of inputs,adopted,15.md,f00a8dcb4f2b7dc2bc6f88bb331bb81af7119b8d0a923f2d091f1f7a987e7928,563
-STND.BUILD.16,provision,LVL2,Locale and time zone of builds,adopted,16.md,1daaf51d592d9c43516cf31c36d41b9267418b68632d86f06a289770ad78aea6,554
-STND.BUILD.17,provision,LVL2,Build paths in outputs,adopted,17.md,f2e1f07a12be509fd2fc83cde97166a52d67dcd614856c8fe23c0cd017b9e0aa,607
-STND.BUILD.18,provision,LVL2,Randomness in build steps,adopted,18.md,6242a51f4e3be21214876c35ccf0264bfc0a006ae42dde017ac532c0c7b1755d,539
-STND.BUILD.19,provision,LVL2,Build comparisons at release,adopted,19.md,66e5b10d5c1a73d015f8f58152963ed3c9c0caed13c08328a352ca3a67b173ae,771
-STND.BUILD.20,provision,LVL2,Release archives from the revision,adopted,20.md,3e90741ee3d29bbc90b09f1342c5d35b83767d770862a444856503050c5e6f54,714
-STND.BUILD.21,provision,LVL2,Build scripts as code,adopted,21.md,673aa69e0ebd956c7ae09eb890744040dad7481d75ef961fbeb7c1337fcecce3,517
-STND.BUILD.22,provision,LVL2,Exclusion of test data,adopted,22.md,60866a62f7fe2ba5f38549f32ae4308e2c938499d406088d1471b7ac9a0880b3,433
-STND.BUILD.23,provision,LVL2,Build cache keys,adopted,23.md,3998a1540021da1fcb7b6c1724437c43f19d8801835a7bb4076db79ba9c5afe9,836
-STND.BUILD.24,provision,LVL2,Shared build cache writers,adopted,24.md,e1a7206523677cc2a1dbc59f239c59fa622999754d10d221c865b3b41c4a1968,702
-STND.BUILD.25,provision,LVL2,Build record,adopted,25.md,797ff4887283d014d9b4dbad328b613951a7f62f94e6bdaa02f97b736a688065,2471
-STND.BUILD.26,provision,LVL2,Build configurations under check,adopted,26.md,4e3c9306ff3cf44c419609043467ff887ac5971b04dafb1d3cc2df4e2abfdcb9,753
+STND.BUILD,standard,LVL2,Build standard,adopted,_doc.md,679ecc4f73ee60de7061ff93be6d61ed3af968121703b153b84734161b96a6fe,31381
+STND.BUILD.1,provision,LVL2,Declared inputs of build steps,adopted,1.md,16db556087d163127dcaa338d2469f16466fa1b067c11cfaa88b3aefe10117f4,526
+STND.BUILD.2,provision,LVL2,Inputs derived from the source,adopted,2.md,0f8a7a44e682025978b70c016f6298272c0f7fcb7ff5e4603517d5e69b6b4f22,585
+STND.BUILD.3,provision,LVL2,Schedule-independent build outputs,adopted,3.md,c7401e807bab93496d69c31ed883cde7dbee36cda57b37a2c89452c8c316bb5c,695
+STND.BUILD.4,provision,LVL2,Generated files and generators,adopted,4.md,84d781ecbb5739f507dbfc8c0d4414c50eb38ab41cc921fd6a3d0d2ff24eec1d,534
+STND.BUILD.5,provision,LVL2,Generated files under version control,adopted,5.md,f9963e580b40c53ad36604b1222f9fde37d0a13240dd6361ef43d1d2a9ccdf40,583
+STND.BUILD.6,provision,LVL2,Builds outside the source tree,adopted,6.md,6c91e239f0cd676aeff9c5899915ca040d6fead1f44f7d2cc9c580072df408bc,556
+STND.BUILD.7,provision,LVL2,Fetching apart from building,adopted,7.md,4415bd4d5ac5c33fdc548092683e7f9a6b3bd64cb958a3f7eb86b325d782d445,566
+STND.BUILD.8,provision,LVL2,Detected configuration properties,adopted,8.md,c83aee90584c58b975901e85e2935aef883d6ac06f67f377be876aa5b20ca913,721
+STND.BUILD.9,provision,LVL2,Configuration of cross builds,adopted,9.md,b4d1711ab0d256e770e0047dac4643bd5b587ea84a7cfbf60b3794a7dcbc1fa6,885
+STND.BUILD.10,provision,LVL2,Stated device code targets,adopted,10.md,2fcdf711a12f6319289c9fa0f563622214ff926bfb44bf8f3bf624e76691d847,775
+STND.BUILD.11,provision,LVL2,Result-affecting build settings,adopted,11.md,5102525fe7036162305ac5aa448335971804be83db726532fad4fc3bbd029f56,844
+STND.BUILD.12,provision,LVL2,Warnings in checks and releases,adopted,12.md,36e4cf3a678d8bc90631e506935298a0bf7fb34a856e20118709a5f1ec514dc9,671
+STND.BUILD.13,provision,LVL2,Checking builds kept apart,adopted,13.md,18217fe11aaf71ea0568cfaa0d2571e60ddfe93fe5f960b1c5729c831025a177,683
+STND.BUILD.14,provision,LVL2,Embedded build instant,adopted,14.md,895ae1fd06a6bacaaf6551aefa5f7c314440ec5ba49687a19e8674057877d483,561
+STND.BUILD.15,provision,LVL2,Fixed order of inputs,adopted,15.md,776a42b131f6945f045084f10eb4660be3067152591b24d82b10cd41b4d2ebdd,577
+STND.BUILD.16,provision,LVL2,Locale and time zone of builds,adopted,16.md,0158e99d04768adc1af8cf5faaabc24cc40d08763c2ad317ed2e734d869e83ec,568
+STND.BUILD.17,provision,LVL2,Build paths in outputs,adopted,17.md,3bd7bab0adc94fe1b0ee7e4aeceb588c9238094b29c282a075635b8c0999ef78,621
+STND.BUILD.18,provision,LVL2,Randomness in build steps,adopted,18.md,194421636992d31c947f343f318d98729cd9c410e6e8cf133d4369e3a18110f1,553
+STND.BUILD.19,provision,LVL2,Build comparisons at release,adopted,19.md,9cbe5acf4c05265e852648a1fd333c41daa74c2782d833adedb4f45493726c7a,785
+STND.BUILD.20,provision,LVL2,Release archives from the revision,adopted,20.md,24cf60d9ef94027df51b5433bd58f54e54eb397a65bbc0063b2f8a1a2b70a014,728
+STND.BUILD.21,provision,LVL2,Build scripts as code,adopted,21.md,6a23ee1bbc523058dcb363f7e02863631d3eb93dd5eb15141678437c3d5450f7,531
+STND.BUILD.22,provision,LVL2,Exclusion of test data,adopted,22.md,0da64a5726bc0ed7e60955086daf34d98e20615ed61396761207aad76e59dbfa,447
+STND.BUILD.23,provision,LVL2,Build cache keys,adopted,23.md,9235aa85ef8c6f21d967c7b664d54dc411465843c012e5b87ee17a474389cfb2,850
+STND.BUILD.24,provision,LVL2,Shared build cache writers,adopted,24.md,c137ae22f23577a3381adc090888f6a2292c61eb0fff950b87ce194a96c6aa44,716
+STND.BUILD.25,provision,LVL2,Build record,adopted,25.md,ad48a233676135cf0da33f4b636b3a3568f5ec50cf7999334dff3fd74dcc2ff5,2511
+STND.BUILD.26,provision,LVL2,Build configurations under check,adopted,26.md,1b1b6d2d108452d9889d4712f2fc9bc3497140c071c018386d9c803b6cc4ad26,793

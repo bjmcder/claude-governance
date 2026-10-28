@@ -1,6 +1,6 @@
-# Quantum processors (HW.QPU) 1.0.2
+# Quantum processors (HW.QPU) 1.1.2
 
-Adopted by The Custodian as revision 1.0 in ledger entry 70 (2026-10-18); revised to 1.0.1 in entry 165 (2026-10-25) and 1.0.2 in entry 179 (2026-10-26). This reading copy is composed from the per-provision files in HW/QPU/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 70 (2026-10-18); revised to 1.0.1 in entry 165 (2026-10-25), 1.0.2 in entry 179 (2026-10-26), 1.1 in entry 231 (2026-10-28), 1.1.1 in entry 258 (2026-10-28), and 1.1.2 in entry 309 (2026-10-28). This reading copy is composed from the per-provision files in HW/QPU/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -23,7 +23,7 @@ This section fixes meaning and imposes no obligation, as the Lexicon does.
 
 ## Selector
 
-HW.QPU.1 states the selector: the attribute Quantum processor execution, which HW defines and which HW.1 also gives (STND.DRAFT.36). Each provision names an execution path on a quantum processor as its subject (STND.DRAFT.38). The calls by which host code submits work to a quantum processor and retrieves its outcomes, and the processing of those outcomes by error mitigation, belong to the quantum processor's execution path, through its runtime libraries. An ideal or noisy simulation of a quantum computation is an execution path on the general-purpose processor or accelerator that runs it, and meets HW.CPU or HW.GPU (HW.CPU.1, HW.GPU.1), not this sub-profile.
+HW.QPU.1 states the selector: the attribute Hardware execution, which HW defines and which HW.1 gives (STND.DRAFT.36), so that the sub-profile binds with HW and its provisions reach a component through the execution paths of that component, recorded by hardware type where the section Architecture of the constitution names (STND.PROJ.1). Each provision names an execution path on a quantum processor as its subject (STND.DRAFT.38). The calls by which host code submits work to a quantum processor and retrieves its outcomes, and the processing of those outcomes by error mitigation, belong to the quantum processor's execution path, through its runtime libraries. An ideal or noisy simulation of a quantum computation is an execution path on the general-purpose processor or accelerator that runs it, and meets HW.CPU or HW.GPU (HW.CPU.1, HW.GPU.1), not this sub-profile.
 
 ## Where the rest lives
 
@@ -61,7 +61,7 @@ Device noise often sets a floor below which more shots, mitigation, or recompila
 
 HW.QPU addresses four matters that NUMER owns (HW.QPU.2): the precision a result requires, through HW.QPU.6 and HW.QPU.8, which cite NUMER.5; the uncertainty of a computed result, through HW.QPU.4, which cites NUMER.13, HW.QPU.6, which cites NUMER.23, and HW.QPU.8, which cites NUMER.13; approximation disclosure, through HW.QPU.7, which cites NUMER.16; and the tolerance basis of a numerical comparison, through HW.QPU.6, which cites NUMER.25.
 
-Each provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, or RSRC. Each such provision inherits their rank and waivability (GOV.17) and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, HW.QPU.3 to HW.QPU.8 apply from CSQ3. HW.QPU.5, HW.QPU.7, and HW.QPU.8 apply from CSQ3 although STND.CLASS.10 applies INTPR.10 from CSQ2, and so tighten above the floor (PRIME.15) at the cost of one statement in a record. No provision raises the floor (GOV.11).
+Each provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, or RSRC, inherits their rank and waivability (GOV.17), and applies from the class that its field `onset` gives under STND.CLASS.10, where a field that gives CSQ3 for a statement that the row of INTPR.10 starts at CSQ2 tightens above the floor (PRIME.15) at the cost of one statement in a record. No provision raises the floor (GOV.11).
 
 ## References
 
@@ -80,6 +80,7 @@ Each provision other than the selector and the shared-matters provision instanti
 | RSRC | Resources |
 | STND.CLASS | Consequence-class criteria |
 | STND.DRAFT | Drafting standard |
+| STND.PROJ | Project constitution template |
 | STND.VVUQ | Verification, validation, and uncertainty quantification methods |
 | VV | Correctness |
 
@@ -95,7 +96,7 @@ This sub-profile SHALL bind a project whose classification makes at least one at
 
 | Attribute | Defined by |
 | --- | --- |
-| Quantum processor execution | HW |
+| Hardware execution | HW |
 
 #### HW.QPU.2 Quantum processor shared matters
 
@@ -114,7 +115,7 @@ Each matter of the table of this provision SHALL be governed in this document by
 
 #### HW.QPU.3 Quantum execution record
 
-. Instantiates REPRO.1, REPRO.2.
+From CSQ3. Instantiates REPRO.1, REPRO.2.
 
 In addition to the record of HW.3, each execution path on a quantum processor SHALL record, with each result it computes, the executed circuit, the initial and final assignments of its qubits to the physical qubits of the device, the calibration record in force for each job, the number of shots, the compiler with its settings and seed, and the settings of error mitigation and error suppression in force, those its provider applies by default included, or name each of these that the provider does not disclose (REPRO.1, REPRO.2).
 
@@ -122,19 +123,19 @@ In addition to the record of HW.3, each execution path on a quantum processor SH
 
 #### HW.QPU.4 Device noise in uncertainty
 
-. Instantiates INTPR.9, VV.5.
+From CSQ3. Instantiates INTPR.9, VV.5.
 
 Each execution path on a quantum processor SHALL state, for each reported numerical result it computes, the bias that device noise leaves in that result after the error mitigation it applies, as a component of its uncertainty separate from those of NUMER.13, marked, and stated with its probability of containment, as NUMER.13 marks and states a component (INTPR.9, VV.5).
 
 #### HW.QPU.5 Error mitigation
 
-. Instantiates INTPR.10, VV.1, VV.5.
+From CSQ3. Instantiates INTPR.10, VV.1, VV.5.
 
 Each execution path on a quantum processor that applies error mitigation, a default of its provider included, SHALL state in the record of each result it computes the method, the assumptions about device noise on which it rests, and, for each assumption, evidence that it holds under the calibration record in force or that it is not established (INTPR.10, VV.1). Where an assumption of that method is not established, the path SHALL rest each estimate or bound of the bias of HW.QPU.4 on evidence other than that assumption (VV.1, VV.5).
 
 #### HW.QPU.6 Samples across calibrations
 
-. Instantiates VV.1, INTPR.9.
+From CSQ3. Instantiates VV.1, INTPR.9.
 
 Where an execution path on a quantum processor combines into one result samples from jobs whose calibration records differ in a property of the physical qubits or operations that its executed circuits use, the path SHALL carry with that result evidence under NUMER.23, judged by an acceptance criterion that meets NUMER.25, that the estimates of the quantity of interest from the samples of each calibration record differ by less than the result's required precision under NUMER.5, or include the variation among those estimates in that result's statistical uncertainty (VV.1, INTPR.9).
 
@@ -142,7 +143,7 @@ Where an execution path on a quantum processor combines into one result samples 
 
 #### HW.QPU.7 Compiled circuit equivalence
 
-. Instantiates VV.1, INTPR.10.
+From CSQ3. Instantiates VV.1, INTPR.10.
 
 Where the classical simulation of the disclosed executed circuits of an execution path on a quantum processor, those differing only in parameter values or in randomized operations of error mitigation or suppression counted once, completes within the time budget that its verification records, the path SHALL verify by that simulation, without the device, that the noiseless output distribution of each such circuit, under its recorded initial and final assignments of qubits and after the classical processing of outcomes that its record states, equals that of the source circuit within the rounding of that simulation and the estimate or bound of each approximation of compilation that its record lists under NUMER.16 (VV.1). Where the path does not run that simulation, or its record marks an approximation of compilation not assessed, the record of each result SHALL state that the equivalence of compilation is unchecked (INTPR.10).
 
@@ -150,7 +151,7 @@ Where the classical simulation of the disclosed executed circuits of an executio
 
 #### HW.QPU.8 Unattainable precision
 
-. Instantiates INTPR.10, VV.5, RSRC.4.
+From CSQ3. Instantiates INTPR.10, VV.5, RSRC.4.
 
 Where the uncertainty under NUMER.13 and HW.QPU.4 that an execution path on a quantum processor achieves for a reported numerical result within its budget exceeds that result's required precision under NUMER.5, the path SHALL report the result with the uncertainty achieved and the shortfall stated (INTPR.10, VV.5). Where a trend of that uncertainty against shots and against the settings of error mitigation and compilation that the path tried, recorded with that result, shows that further spending within the budget is unable to close that shortfall, the path SHALL stop spending budget on shots, error mitigation, and compilation for that result (RSRC.4).
 
@@ -161,3 +162,6 @@ Where the uncertainty under NUMER.13 and HW.QPU.4 that an execution path on a qu
 | 1.0 | 2026-10-18 | Adopted. |
 | 1.0.1 | 2026-10-25 | Editorial amendment (GOV.41): the informative Selector text cites HW.CPU.1 and HW.GPU.1, the selectors of the sub-profiles that a simulation of a quantum computation meets, and References lists HW.CPU and HW.GPU; the Notes name only the Articles that the provisions other than the selector and the shared-matters provision instantiate, so that the Design and Simplicity Articles, which none of them instantiates, are no longer named; no obligation, permission, or defined meaning changes. |
 | 1.0.2 | 2026-10-26 | Editorial amendment (GOV.41): the Notes state the referral of a submission that no authorization covers by PRIME.7 and PRIME.14, in place of the provision of STND.HARN on a derived configuration, which STND.HARN 1.4 withdraws; no obligation, permission, or defined meaning changes. |
+| 1.1 | 2026-10-28 | Minor amendment (GOV.41): the selector of HW.QPU.1 gives the attribute Hardware execution of HW.1 in place of its own, so that path scope alone decides which provisions reach a component, each provision naming an execution path on quantum processors as its subject (CS9). |
+| 1.1.1 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields; no obligation, permission, or defined meaning changes. |
+| 1.1.2 | 2026-10-28 | Editorial amendment (GOV.41): the Notes say that the provisions reach a component through its execution paths, recorded by hardware type where the section Architecture of the constitution names, in place of the paths that the classification lists, as STND.PROJ.1 now has it; no obligation, permission, or defined meaning changes. |

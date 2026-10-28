@@ -1,7 +1,7 @@
 id,kind,level,title,status,path,sha256,bytes
-HDES.FPGA,sub-profile,LVL1,Programmable logic design,adopted,_doc.md,14b602fba4796c00cba2c9cd7bdcf3206aa997391237ddf805c4798b0ae1c51f,6721
+HDES.FPGA,sub-profile,LVL1,Programmable logic design,adopted,_doc.md,d78889dafa6db8dce3e5ab275cb00e3576439a54dc6599fbdf595f434e056d56,6580
 HDES.FPGA.1,provision,LVL1,Programmable logic design selector,adopted,1.md,fc4948079cdcaf2e067257578ed1a5cbcde7d1c6a2dc4746516feb2c525a8e10,526
 HDES.FPGA.2,provision,LVL1,Programmable logic design shared matters,adopted,2.md,5cb337baab8e5d633b90812921ceda262078d47313ddd6d940981ae7458014e9,586
-HDES.FPGA.3,provision,LVL1,Board check before loading,adopted,3.md,96428819b677ed74fc3dde4749332f92cb70069ed4956dc9a6e355302f961d8e,966
-HDES.FPGA.4,provision,LVL1,Configuration identity,adopted,4.md,f524485fcc6ee2e888285e0210b5a7e9617c28d4f5d55df2c278ed0ee85ea8d9,558
-HDES.FPGA.5,provision,LVL1,Deployed configuration updates,adopted,5.md,31ed4f081495239acb307deef08c9627dd30ff0cd36ca6ad832fbfe438c1764f,802
+HDES.FPGA.3,provision,LVL1,Board check before loading,adopted,3.md,609412c300629e11be8cebf27c6fcd9bfd1d0b3d3fd0391d31cbb9ef0991e89a,980
+HDES.FPGA.4,provision,LVL1,Configuration identity,adopted,4.md,e313586816d660d8f67d2d2cc58388af13020028a940cbf96c0600b36aa53478,572
+HDES.FPGA.5,provision,LVL1,Deployed configuration updates,adopted,5.md,107a92a8cbc68954c9a907332a415555fe0a3f2c2c155458320af00def8bb9e9,816

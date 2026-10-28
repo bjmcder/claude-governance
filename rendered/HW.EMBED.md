@@ -1,6 +1,6 @@
-# Embedded controllers (HW.EMBED) 1.0.2
+# Embedded controllers (HW.EMBED) 1.1.2
 
-Adopted by The Custodian as revision 1.0 in ledger entry 71 (2026-10-18); revised to 1.0.1 in entry 84 (2026-10-19) and 1.0.2 in entry 166 (2026-10-25). This reading copy is composed from the per-provision files in HW/EMBED/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 71 (2026-10-18); revised to 1.0.1 in entry 84 (2026-10-19), 1.0.2 in entry 166 (2026-10-25), 1.1 in entry 232 (2026-10-28), 1.1.1 in entry 255 (2026-10-28), and 1.1.2 in entry 306 (2026-10-28). This reading copy is composed from the per-provision files in HW/EMBED/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -21,7 +21,7 @@ This section fixes meaning and imposes no obligation, as the Lexicon does.
 
 ## Selector
 
-HW.EMBED.1 states the selector: the attribute Embedded controller execution, which HW defines and which HW.1 also gives (STND.DRAFT.36). Each provision names an execution path on an embedded controller as its subject (STND.DRAFT.38). The host that receives a controller's data is a path on another hardware type, joined to the controller's path by a boundary contract (HW.13). The checks by which the host confirms the controller's image and contract properties, and detects its resets and stalls, belong to the controller's execution path.
+HW.EMBED.1 states the selector: the attribute Hardware execution, which HW defines and which HW.1 gives (STND.DRAFT.36), so that the sub-profile binds with HW and its provisions reach a component through the execution paths of that component, recorded by hardware type where the section Architecture of the constitution names (STND.PROJ.1). Each provision names an execution path on an embedded controller as its subject (STND.DRAFT.38). The host that receives a controller's data is a path on another hardware type, joined to the controller's path by a boundary contract (HW.13). The checks by which the host confirms the controller's image and contract properties, and detects its resets and stalls, belong to the controller's execution path.
 
 ## Where the rest lives
 
@@ -52,7 +52,7 @@ Each provision has a route that costs the target at most one reported identity a
 
 HW.EMBED addresses two matters that HW owns (HW.EMBED.2): the hardware contract of an execution path, through HW.EMBED.3, which cites HW.8, HW.EMBED.4, which cites HW.4 and HW.8, and HW.EMBED.6, which cites HW.9; and the budgets of a constrained target, through HW.EMBED.3 and HW.EMBED.6, which cite HW.20.
 
-Each provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, DSGN, or RSRC. Each such provision inherits their rank and waivability (GOV.17) and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, HW.EMBED.3 to HW.EMBED.6 apply from CSQ3; HW.EMBED.6 instantiates INTPR.10, which STND.CLASS.10 applies from CSQ2, and so tightens above the floor at the cost of one statement in a record. HW.EMBED.4 applies from CSQ3 although HW.4 applies from CSQ2, and so tightens above the floor (PRIME.15) for outputs that drive physical hardware. At every class, PRIME.13 holds for outputs that drive physical hardware. No provision raises the floor (GOV.11).
+Each provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, DSGN, or RSRC, inherits their rank and waivability (GOV.17), and applies from the class that its field `onset` gives under STND.CLASS.10, where a field that gives CSQ3 for content that the table of STND.CLASS.10 starts at a more severe class tightens above the floor (PRIME.15) for outputs that drive physical hardware, at the cost of one statement in a record for HW.EMBED.6 and of the stated outputs at reset and halt for HW.EMBED.4. At every class, PRIME.13 holds for outputs that drive physical hardware. No provision raises the floor (GOV.11).
 
 ## References
 
@@ -68,6 +68,7 @@ Each provision other than the selector and the shared-matters provision instanti
 | RSRC | Resources |
 | STND.CLASS | Consequence-class criteria |
 | STND.DRAFT | Drafting standard |
+| STND.PROJ | Project constitution template |
 | VV | Correctness |
 
 ## Provisions
@@ -82,7 +83,7 @@ This sub-profile SHALL bind a project whose classification makes at least one at
 
 | Attribute | Defined by |
 | --- | --- |
-| Embedded controller execution | HW |
+| Hardware execution | HW |
 
 #### HW.EMBED.2 Embedded controller shared matters
 
@@ -99,7 +100,7 @@ Each matter of the table of this provision SHALL be governed in this document by
 
 #### HW.EMBED.3 Bounded controller memory
 
-. Instantiates RSRC.1, VV.1.
+From CSQ3. Instantiates RSRC.1, VV.1.
 
 Before its image is first relied upon, each execution path on an embedded controller SHALL establish a bound, by analysis of the build or by a test on the target that forces the deepest nesting of interrupt handlers at the point of greatest stack use of the code they interrupt, on the memory that its stacks, static data, and dynamically allocated memory use, that nesting included, that fits the controller's memory within a recorded margin, the margin of HW.20 for a constrained target, or have in place a means that detects each overflow of that memory before it changes other memory and responds to it under HW.8 (RSRC.1, VV.1).
 
@@ -107,7 +108,7 @@ Before its image is first relied upon, each execution path on an embedded contro
 
 #### HW.EMBED.4 Outputs at reset and halt
 
-. Instantiates DSGN.5, VV.1.
+From CSQ3. Instantiates DSGN.5, VV.1.
 
 Each execution path on an embedded controller that drives an output commanding, configuring, or powering physical hardware SHALL state in its hardware contract under HW.4 the state of that output from power-on until the firmware sets it, during each reset, after a halt under HW.8, and from a stated time after the onset of each stall, with evidence for each state obtained on the target or from the documented specification of the controller and the design record of its circuit (DSGN.5, VV.1).
 
@@ -115,7 +116,7 @@ Each execution path on an embedded controller that drives an output commanding, 
 
 #### HW.EMBED.5 Image on the target
 
-. Instantiates REPRO.1, VV.8.
+From CSQ3. Instantiates REPRO.1, VV.8.
 
 Before a result computed on an embedded controller is relied upon, its execution path SHALL confirm, by an identity that the target reports, by one read from its memory, or by the read-back record of each write of an image to the target, that the image running on the target is the image whose verification the record of that result cites (REPRO.1, VV.8).
 
@@ -123,7 +124,7 @@ Before a result computed on an embedded controller is relied upon, its execution
 
 #### HW.EMBED.6 Resets and stalls in results
 
-. Instantiates INTPR.9, INTPR.10.
+From CSQ3. Instantiates INTPR.9, INTPR.10.
 
 Each execution path on an embedded controller that acquires or computes data over time SHALL detect, on the controller or on the host that receives its data, each reset of the controller and each stall of its firmware, and state each interval that they leave without data in the record of each result computed from that data, as HW.9 states hardware events (INTPR.9). Where the data that the host receives are unable to reveal a reset or a stall and detection on the controller would exceed a budget of HW.20, the path MAY state in the record of each such result, in place of that detection, that resets and stalls go undetected (INTPR.10).
 
@@ -134,3 +135,6 @@ Each execution path on an embedded controller that acquires or computes data ove
 | 1.0 | 2026-10-18 | Adopted. |
 | 1.0.1 | 2026-10-19 | Editorial amendment (GOV.41): the informative Notes describe CPS as adopted, citing CPS.4; no obligation changes. |
 | 1.0.2 | 2026-10-25 | Editorial amendment (GOV.41): the informative Notes name only the Articles that the provisions other than the selector and the shared-matters provision instantiate, so that the Simplicity Article, which none of them instantiates, is no longer named; no obligation, permission, or defined meaning changes. |
+| 1.1 | 2026-10-28 | Minor amendment (GOV.41): the selector of HW.EMBED.1 gives the attribute Hardware execution of HW.1 in place of its own, so that path scope alone decides which provisions reach a component, each provision naming an execution path on embedded controllers as its subject (CS9). |
+| 1.1.1 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields; no obligation, permission, or defined meaning changes. |
+| 1.1.2 | 2026-10-28 | Editorial amendment (GOV.41): the Notes say that the provisions reach a component through its execution paths, recorded by hardware type where the section Architecture of the constitution names, in place of the paths that the classification lists, as STND.PROJ.1 now has it; no obligation, permission, or defined meaning changes. |

@@ -4,7 +4,7 @@ level: "LVL2"
 kind: "standard"
 title: "Knowledge base and tags"
 status: "adopted"
-revision: "1.0.1"
+revision: "1.0.2"
 adopted: "2026-10-20"
 adopted_by: "The Custodian"
 instantiates: ["GOV.32", "GOV.33", "GOV.34", "GOV.37"]
@@ -14,7 +14,7 @@ waivable: false
 
 ## Purpose and scope
 
-This standard fixes what a knowledge entry states, its kinds and form, the evidence levels and the reliance ceiling of each, how an entry is established, revalidated, superseded, and retracted, how an entry drawn from a project's workbench is made and reconciled, and the permanence and use of tags (GOV.32 to GOV.34, GOV.37). GOV.33 assigns the ceiling of each evidence level to a LVL2 standard; STND.KNOW.5 sets it. Every provision but STND.KNOW.12 and STND.KNOW.14 is binding, because it instantiates GOV, which the floor holds (GOV.10), or a prime directive, and a knowledge base shared across projects is read the same way by each of them; STND.KNOW.12 and STND.KNOW.14 are defaults (GOV.19) that apply from CSQ3. A provision imposes nothing on work that keeps and consults no knowledge entry. No provision names a tool (GOV.18).
+This standard fixes what a knowledge entry states, its kinds and form, the evidence levels and the reliance ceiling of each, how an entry is established, revalidated, superseded, and retracted, how an entry drawn from a project's workbench is made and reconciled, and the permanence and use of tags (GOV.32 to GOV.34, GOV.37). GOV.33 assigns the ceiling of each evidence level to a LVL2 standard; STND.KNOW.5 sets it. Every provision but STND.KNOW.12 and STND.KNOW.14 is binding, because it instantiates GOV, which the floor holds (GOV.10), or a prime directive, and a knowledge base shared across projects is read the same way by each of them; STND.KNOW.12 and STND.KNOW.14 are defaults (GOV.19) that apply from the class that their field `onset` gives under STND.CLASS.10. A provision imposes nothing on work that keeps and consults no knowledge entry. No provision names a tool (GOV.18).
 
 ## Normative and informative parts
 
@@ -68,3 +68,4 @@ Which knowledge base serves a project is stated in its project constitution or, 
 | --- | --- | --- |
 | 1.0 | 2026-10-20 | Adopted. |
 | 1.0.1 | 2026-10-25 | Editorial amendment (GOV.41): the informative Notes cite the knowledge space KNOW, the tag vocabulary TAG, and the facet TAG.COMP of the governance corpus, which they named, and References lists KNOW, TAG, and TAG.COMP; no obligation, permission, or defined meaning changes. |
+| 1.0.2 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields; no obligation, permission, or defined meaning changes. |

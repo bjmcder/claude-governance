@@ -5,7 +5,7 @@ kind: "profile"
 title: "Hardware design"
 status: "adopted"
 adopted: "2026-10-18"
-revision: "1.0.2"
+revision: "1.0.4"
 selector: "Binds when the work produces, or is admitted to produce, a hardware description to be realized as a configuration of programmable logic or as an integrated circuit (HDES.1)."
 parent: null
 adopted_by: "The Custodian"
@@ -13,7 +13,7 @@ adopted_by: "The Custodian"
 
 ## Purpose and scope
 
-This profile holds the obligations of work that produces a hardware description to be realized as a configuration of programmable logic or as an integrated circuit, from the description to the first loading of a configuration or the submission of a layout for fabrication. A hardware description fails silently in ways software rarely does: a simulation that the transformed logic does not match, a path that no timing constraint covers or that a wrong exception hides, a signal that crosses between clocks without synchronization, a register whose power-on value nobody set, a warning that reported a changed behavior and was ignored, arithmetic narrower than the computation needs or that clamps without a trace, and fault mitigation that a transformation removed. The profile asks for a design record from which each realization is regenerated, a stated contract, verification of the description that runs without a manual step, equivalence of the description and the netlist, closed timing, verified crossings, a defined initial state, visible saturation, and recorded margins. Each provision is satisfied or not on evidence that the design record holds and that an agent or an automated check is able to evaluate. It names no language, tool, vendor, process, design kit, or method (GOV.18); the technology detail belongs in planned LVL2 standards. The sub-profiles HDES.FPGA and HDES.ASIC add what is specific to each realization (GOV.27); the test, validation, and use of a realized device are governed by HW and its sub-profiles HW.FPGA and HW.ASIC.
+This profile holds the obligations of work that produces a hardware description to be realized as a configuration of programmable logic or as an integrated circuit, from the description to the first loading of a configuration or the submission of a layout for fabrication. A hardware description fails silently in ways software rarely does: a simulation that the transformed logic does not match, a path that no timing constraint covers or that a wrong exception hides, a signal that crosses between clocks without synchronization, a register whose power-on value nobody set, a warning that reported a changed behavior and was ignored, arithmetic narrower than the computation needs or that clamps without a trace, and fault mitigation that a transformation removed. The profile asks for a design record from which each realization is regenerated, a stated contract, verification of the description that runs without a manual step, equivalence of the description and the netlist, closed timing, verified crossings, a defined initial state, visible saturation, and recorded margins. Each provision is satisfied or not on evidence that the design record holds and that an agent or an automated check is able to evaluate. It names no language, tool, vendor, process, design kit, or method (GOV.18); the technology detail belongs in LVL2 standards, STND.SV among them. The sub-profiles HDES.FPGA and HDES.ASIC add what is specific to each realization (GOV.27); the test, validation, and use of a realized device are governed by HW and its sub-profiles HW.FPGA and HW.ASIC.
 
 ## Normative and informative parts
 
@@ -63,7 +63,7 @@ LVL0 and the documents named here already govern these matters of hardware desig
 
 ## Notes
 
-Hardware design is carried out with many languages, schematic and layout editors, and tools, open and proprietary, which change faster than the failures they share. Each provision here therefore states an outcome that holds whatever the language, tool, or process, and is checked from the design record: a record that is present or absent, a check that ran or did not, a verdict, a coverage figure, or a list of what is not verified. The checks themselves, and the representations they read, are left to the work and to planned LVL2 standards. A step that no available check reads is not forbidden; it is named as unverified (HDES.8), and the gap travels with the design.
+Hardware design is carried out with many languages, schematic and layout editors, and tools, open and proprietary, which change faster than the failures they share. Each provision here therefore states an outcome that holds whatever the language, tool, or process, and is checked from the design record: a record that is present or absent, a check that ran or did not, a verdict, a coverage figure, or a list of what is not verified. The checks themselves, and the representations they read, are left to the work and to LVL2 standards, STND.SV among them. A step that no available check reads is not forbidden; it is named as unverified (HDES.8), and the gap travels with the design.
 
 HDES.4 asks for the contract against which everything else is verified: behavior at the interfaces, timing relations, limits, the shortest asynchronous pulse captured, and the regime of use, supply ramp rates included, stated before verification judges the design (VV.3). Where a realization is part of an execution path under HW, HDES.5 adds what HW.4, HW.5, and HW.13 ask, and marks which properties rest only on analysis or simulation. HW.FPGA.4 and HW.ASIC.4 then have each such property confirmed on devices or stated as unconfirmed in each result that relies on it. The fault kinds include upsets of state by radiation where the regime of use exposes the device to them.
 
@@ -83,7 +83,7 @@ Submitting a design for fabrication releases it, and the decision to release is 
 
 HDES owns one shared matter, the design record of a realized design, and addresses four that other profiles own (HDES.2): the hardware contract of an execution path, through HDES.5, which cites HW.4, HW.5, and HW.6, and HDES.7, which cites HW.5; the boundary contract between execution paths, through HDES.5, which cites HW.13; and the precision a result requires and the tolerance basis of a numerical comparison, through HDES.7, which cites NUMER.5 and NUMER.11.
 
-HDES.14 states how PRIME.4 applies to saturation and overflow, and binds at every class, adding nothing to the floor that PRIME.4 does not already hold. Every other provision except HDES.1 and HDES.2 instantiates only VV, REPRO, INTPR, DSGN, SIMPL, or RSRC, inherits their rank and waivability (GOV.17), and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, HDES.5 applies from CSQ2, and every other such provision from CSQ3. Some provisions apply at CSQ3 content of obligations that STND.CLASS.10 first asks at CSQ2 or CSQ1: a contract for each external component and for hardware (DSGN.5), a schema for each data structure crossing an interface (DSGN.4), verification of the invariants of each protocol for shared state (DSGN.15), documentation of the limits of validity (INTPR.10), and verification of each assembly and of the integrated system (VV.6). Each such provision tightens above the floor (PRIME.15), because its check runs without a person and the failure it prevents is silent at every class. No provision raises the floor (GOV.11).
+HDES.14 states how PRIME.4 applies to saturation and overflow, and binds at every class, adding nothing to the floor that PRIME.4 does not already hold. Every other provision except HDES.1 and HDES.2 instantiates only VV, REPRO, INTPR, DSGN, SIMPL, or RSRC, inherits their rank and waivability (GOV.17), and applies from the class that its field `onset` gives under STND.CLASS.10, where a field that gives CSQ3 for content that the table of STND.CLASS.10 starts at a more severe class tightens above the floor (PRIME.15), because its check runs without a person and the failure it prevents is silent at every class. No provision raises the floor (GOV.11).
 
 ## References
 
@@ -107,6 +107,7 @@ HDES.14 states how PRIME.4 applies to saturation and overflow, and binds at ever
 | SIMPL | Simplicity |
 | STND.CLASS | Consequence-class criteria |
 | STND.DRAFT | Drafting standard |
+| STND.SV | Verilog and SystemVerilog standard |
 | STND.VVUQ | Verification, validation, and uncertainty quantification methods |
 | VV | Correctness |
 
@@ -117,3 +118,5 @@ HDES.14 states how PRIME.4 applies to saturation and overflow, and binds at ever
 | 1.0 | 2026-10-18 | Adopted. |
 | 1.0.1 | 2026-10-19 | Editorial amendment (GOV.41): the informative text describes HW.FPGA and HW.ASIC as adopted, citing HW.FPGA.2, HW.FPGA.4, HW.ASIC.2, and HW.ASIC.4; no obligation changes. |
 | 1.0.2 | 2026-10-25 | Editorial amendment (GOV.41): the informative text cites HDES.FPGA.1 and HDES.ASIC.1, the selectors of its sub-profiles, HW.EMBED.1, the selector of HW.EMBED, and HDES.ASIC.12, the fabrication readiness record on which the human owner decides a submission, and References lists HDES.ASIC, HDES.FPGA, and HW.EMBED; no obligation, permission, or defined meaning changes. |
+| 1.0.3 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields; no obligation, permission, or defined meaning changes. |
+| 1.0.4 | 2026-10-28 | Editorial amendment (GOV.41): the Purpose and the Notes name STND.SV among the LVL2 standards that hold the detail of a technology, in place of planned standards, and References lists it; no obligation, permission, or defined meaning changes. |

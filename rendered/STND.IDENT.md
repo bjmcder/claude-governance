@@ -1,6 +1,6 @@
-# Identifier scheme and mnemonic register (STND.IDENT) 1.4
+# Identifier scheme and mnemonic register (STND.IDENT) 1.5
 
-Adopted by The Custodian as revision 1.0 in ledger entry 10 (2026-10-09); revised to 1.1 in entry 18 (2026-10-09), 1.2 in entry 25 (2026-10-10), 1.3 in entry 27 (2026-10-10), 1.3.1 in entry 35 (2026-10-10), 1.3.2 in entry 45 (2026-10-10), 1.3.3 in entry 157 (2026-10-25), and 1.4 in entry 182 (2026-10-26). This reading copy is composed from the per-provision files in STND/IDENT/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 10 (2026-10-09); revised to 1.1 in entry 18 (2026-10-09), 1.2 in entry 25 (2026-10-10), 1.3 in entry 27 (2026-10-10), 1.3.1 in entry 35 (2026-10-10), 1.3.2 in entry 45 (2026-10-10), 1.3.3 in entry 157 (2026-10-25), 1.4 in entry 182 (2026-10-26), and 1.5 in entry 295 (2026-10-28). This reading copy is composed from the per-provision files in STND/IDENT/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -154,7 +154,7 @@ A constitution, profile, sub-profile, or standard that is adopted or ratified SH
 
 Binding. Instantiates GOV.43.
 
-The QA.7 review of each revision of an adopted document SHALL be recorded no later than the ledger transaction of that revision (GOV.43). Where no review transaction precedes the transaction of a revision, the adopter's decision recorded in that transaction MAY serve as the QA.7 review of that revision (GOV.43).
+The QA.7 review of each revision of an adopted document SHALL be recorded no later than the ledger transaction of that revision (GOV.43). Where no review transaction precedes the transaction of a revision whose adopter is not its author, the adopter's decision recorded in that transaction MAY serve as the QA.7 review of that revision (GOV.43).
 
 ### Identifiers
 
@@ -247,3 +247,4 @@ The constitution SHALL list in its field `withdrawn` the identifier of each prov
 | 1.3.2 | 2026-10-10 | Editorial amendment (GOV.41): the Checks section names the commands of the harness package instead of the retired scripts; no obligation changes. |
 | 1.3.3 | 2026-10-25 | Editorial amendment (GOV.41): the informative section Representation in the harness cites the mnemonic register MNEM, which STND.IDENT.19 and STND.IDENT.20 name, and References lists MNEM; no obligation, permission, or defined meaning changes. |
 | 1.4 | 2026-10-26 | Minor amendment (GOV.41): STND.IDENT.12 asks the label of its adopter only of a document that is adopted or ratified, so a draft or a planned document names none; new STND.IDENT.24: the constitution lists in its field withdrawn each withdrawn provision of the parts named in its field parts; the section Checks describes v.8 in full, with the field withdrawn of the constitution. Transition (GOV.42): none. |
+| 1.5 | 2026-10-28 | Minor amendment (GOV.41): the adopter's decision serves as the QA.7 review of a revision only where the adopter is not the author of that revision. |

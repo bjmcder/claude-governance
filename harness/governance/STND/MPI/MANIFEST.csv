@@ -1,27 +1,24 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.MPI,standard,LVL2,Message Passing Interface standard,adopted,_doc.md,4ae6a8ad6dfb98151843e8fa4f33816938817c60c51a9e99435476bdc1d8e3cd,26746
-STND.MPI.1,provision,LVL2,MPI facilities used,adopted,1.md,af7d554cf45f3ad27f499a1e0fb5726afc1623aaba6e70570cfa9daae3109bb1,638
-STND.MPI.2,provision,LVL2,MPI execution path record,adopted,2.md,b63bb2a5656588f8b0b6771ff67969042ea389fd4fb9fe7f35ee17c8f0bb8140,755
-STND.MPI.3,provision,LVL2,Thread support level,adopted,3.md,fda6b2069fc377c2a191b8f564ea2ac27ea64ba8cf8fac3e1a44438918943770,730
-STND.MPI.4,provision,LVL2,Stated error handlers,adopted,4.md,64612d27cc8929bf2dbb26137af12d7f7d26b0188361b4f233a0ea915b4d6c39,744
+STND.MPI,standard,LVL2,Message Passing Interface standard,adopted,_doc.md,eb584fccb3d53c34029140b937410ff01e8bee9a710be4a9e3cf348b9b10d1a2,27879
+STND.MPI.1,provision,LVL2,MPI facilities used,adopted,1.md,d92fddbd51c60fd3ed052c594f3bcc618dd487189368ff3dbc7945d68ad936fc,652
+STND.MPI.2,provision,LVL2,MPI execution path record,adopted,2.md,75fe8aca0e81ebe75b5c77cf2b3fa8761db2f240091a1dd549c9f531cfc668b1,769
+STND.MPI.3,provision,LVL2,Thread support level,adopted,3.md,086776c3ba333581f081ffdd5fa5cbd430aac425edfafd8092491b9936269606,744
+STND.MPI.4,provision,LVL2,Stated error handlers,adopted,4.md,202c0c235622a5e5854de2f26723db42f9e3ee92e7a35eabec392d0b38885b90,758
 STND.MPI.5,provision,LVL2,MPI errors answered,adopted,5.md,7b3690e99cf53ef18d3b70718faaf87b47480027b6bca5ca12ac985e660efd02,947
 STND.MPI.6,provision,LVL2,Execution-wide halt,adopted,6.md,58492ed5d707e13b6126b63e8705bdaafd05dc55ba060196b9a01005fc43567c,699
-STND.MPI.7,provision,LVL2,Ended executions observed,adopted,7.md,a6c425a5c250dcdc63853bc61d38b6208715cb791da034bae42eddaa6571caf8,1034
-STND.MPI.8,provision,LVL2,Communicators from the caller,adopted,8.md,c3ebceee27701f0f2768c2dd3c765e354182ae70e41611c428c9b0fd11dc72fc,797
-STND.MPI.9,provision,LVL2,Caller's error handlers kept,adopted,9.md,61e7ec0f8d1ab60856b355f415bdc3ccb2b11b5f20d32cd38e5b1324efb2bd22,583
-STND.MPI.10,provision,LVL2,Process-wide MPI state,adopted,10.md,260df85b4655044dbdf27979fb3ed329542d5d9a6cd44b33839c7b834eec286f,811
-STND.MPI.11,provision,LVL2,Owned MPI handles,adopted,11.md,4afc2ab8c65c335d4e4afe9687d9f1ddfc74140220c65fe76c2b4dfd39b63d5b,578
-STND.MPI.12,provision,LVL2,Stated message protocol,adopted,12.md,bd87dcd02d59bd82d4c019bdca163ceda5c064e2361c2d3955e31d3ccefcfb1f,909
-STND.MPI.13,provision,LVL2,No reliance on buffering,adopted,13.md,2ca6fc96341db569cc39452b5c50cec8ca2223cafd58d3975f58ecb2a039f6cb,623
-STND.MPI.14,provision,LVL2,Message type signatures,adopted,14.md,9cb836a8bfb4b5aa394fe5023411db75f1b39e560fd1bcf22da45dc8df4eb891,775
-STND.MPI.15,provision,LVL2,Nondeterministic matching,adopted,15.md,f31487b602c5265b81e38b79592ea0906bc7dff5fb4c37697dbbd204ea1d039f,840
-STND.MPI.16,provision,LVL2,Nonblocking operation lifetimes,adopted,16.md,7bb1efaff299087b5940e516d2bb6e3905c25b97aac047111f3957e147c196eb,741
-STND.MPI.17,provision,LVL2,Collective call order,adopted,17.md,5885384fc53e128c30b902ee09f076686421af6fa9d7c145cc16ad8ff9178689,789
-STND.MPI.18,provision,LVL2,Process-count dependence declared,adopted,18.md,195a35bd3cd1d91b58c795938cab9fcd5c8c3dca398988f77afdf7fe04cc94de,677
-STND.MPI.19,provision,LVL2,Fixed-order collective reductions,adopted,19.md,13ae4230bc9bf932ac7ff7b4faa70fd3153ffe658a12a20fac2bb1b8d061fad5,853
-STND.MPI.20,provision,LVL2,Window synchronization protocol,adopted,20.md,51a99039e93bd243b8f0b60e1859e471b1edd58129ffe06a8d8c15a03714a60e,611
-STND.MPI.21,provision,LVL2,Shared file access,adopted,21.md,c2f030c4ee63a92e1fdcebc3434627e2b2e05dc445060653c9f82beab5e814be,634
-STND.MPI.22,provision,LVL2,Parallel file representation,adopted,22.md,399c07a02ba3621cbe660c7192a15ff9d5f5280d89260b3871c8c42ce470a76f,794
-STND.MPI.23,provision,LVL2,Threads sharing MPI objects,adopted,23.md,9fa58327891ef7f92e9e890e439affc1ae1bb02769feb7d04cc5392ad0692445,751
-STND.MPI.24,provision,LVL2,Tests across process counts,adopted,24.md,bac95f17f6faede521bcb312268350acbb842cb83c76a4cff6c1205b184bd4ca,911
-STND.MPI.25,provision,LVL2,MPI correctness checks,adopted,25.md,818c01de0e46edfdeb7e178c16ba9e4b1cafcd6c954a872cb345b0bef4215cb9,668
+STND.MPI.7,provision,LVL2,Ended executions observed,adopted,7.md,2bb7a6e1cbd9d7dd9cdddff8d63c70f309e908dbce91a2e37eb602380bc2e2db,1098
+STND.MPI.8,provision,LVL2,Communicators from the caller,adopted,8.md,0fe1b11e7043e340b9999cbfe776dfe13074db6e68b589ed2cc2db3a5040c094,811
+STND.MPI.9,provision,LVL2,Caller's error handlers kept,adopted,9.md,5b30524daf70bd84867bb8ffee505b7589d4b226959016b50bd0578971491edf,597
+STND.MPI.10,provision,LVL2,Process-wide MPI state,adopted,10.md,c8ab7c9372965952222b77c7f29d6715e1ccd58bf261ba238ca84ae7548f75ee,825
+STND.MPI.11,provision,LVL2,Owned MPI handles,adopted,11.md,34f27a3b1f492ac99411e4d719b180937f69a540be06029e63dec76b7052496c,592
+STND.MPI.12,provision,LVL2,Stated message protocol,adopted,12.md,ee4db60e568c525749b5572e174d81e545e07b4c6b7ac9ee0d20a36467e079ae,949
+STND.MPI.13,provision,LVL2,No reliance on buffering,adopted,13.md,cbb57719469cda01898583fc582e7e4bb9004ff40ea32caaca648dd8bd348c53,637
+STND.MPI.14,provision,LVL2,Message type signatures,adopted,14.md,1580f91d280a6890aa4ca42f92bb13d91aa776943a7c914e61d0c4f01414de5f,789
+STND.MPI.15,provision,LVL2,Nondeterministic matching,adopted,15.md,7dfd98ee4087bac0147b22b257e2880fa31ec0a306e88f15ed147c9f8eaaed39,854
+STND.MPI.16,provision,LVL2,Nonblocking operation lifetimes,adopted,16.md,8a10dbc15cf7ea143672c36197e8531604034f02e2d2af82ae93b86820a401ea,755
+STND.MPI.17,provision,LVL2,Collective call order,adopted,17.md,ed402a3a30fb6954e89c8d8d7e516f7f4f5657cc924ed2ab72c4d2ed24b485b3,803
+STND.MPI.20,provision,LVL2,Window synchronization protocol,adopted,20.md,316568a08c19adaf0c09ddcaa79722d5be8a12dc0db8163ff11cfd9653e08db3,625
+STND.MPI.21,provision,LVL2,Shared file access,adopted,21.md,3c2f4f18b5cd37bf094b93e5d807dd956c2988afa22e7f6b27f8a1157b08dcde,648
+STND.MPI.22,provision,LVL2,Parallel file representation,adopted,22.md,60ef894af252d8dc996c3904dfcc242a1f27f6a02a585465ecef6b760b0f2e67,834
+STND.MPI.23,provision,LVL2,Threads sharing MPI objects,adopted,23.md,5bd5368b03dfce5b012a17cce86db8afe24725eccfa420258ed26c2e95d05e93,765
+STND.MPI.25,provision,LVL2,MPI correctness checks,adopted,25.md,767a4e7ce1405a667ebc4186bced4826948f83738120eb10da4d6d30e4d6a643,682

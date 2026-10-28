@@ -1,30 +1,30 @@
 id,kind,level,title,status,path,sha256,bytes
-HW,profile,LVL1,Execution hardware,adopted,_doc.md,5ded23acc45ca25f6946f72757772b5aacc7f7772d00df13c222a61e4e52d379,24948
-HW.1,provision,LVL1,Execution hardware selector,adopted,1.md,b0a7ca1e85498ad82bbb5d324bd668bfdcb19195f7a2254a69725783ff06c394,681
+HW,profile,LVL1,Execution hardware,adopted,_doc.md,cf95f0608c06a78d7f24cd5cddb91648779a7364634261de6a04011c17a24ac1,25900
+HW.1,provision,LVL1,Execution hardware selector,adopted,1.md,e9ca47d0484e0fc314ab1e9d746d27889f1901b5167ff0193117483ce7881245,481
 HW.2,provision,LVL1,Hardware shared matters,adopted,2.md,8da9a8c43e04c92d67ea37d94c3c654b175f3b264c7928a8b110d90f00443ace,1172
-HW.3,provision,LVL1,Execution path record,adopted,3.md,50aa850151ab96fe72b5e34b44d17a5a592c62fc729ecf6b019bbb062f5ec066,713
-HW.4,provision,LVL1,Hardware contract,adopted,4.md,cfd74cb4e48e53e984340976b7f7c960223ead57518c99f6065753c35b6a646d,1005
-HW.5,provision,LVL1,Delivered arithmetic,adopted,5.md,17c541fb28657601c810ff3c63fbbcc16aa039c58df91c6c9dff0edbeee44352,983
-HW.6,provision,LVL1,Contract evidence,adopted,6.md,3a7e69585fda5317bb48a723f36d77256f15cdbeb7e258cb939bdc06927455b4,1228
-HW.7,provision,LVL1,Contract currency,adopted,7.md,1bbe64a70f7919abc00dc137ff16247589c4a92e4e3fff12644c50b88ffe4ef8,1319
+HW.3,provision,LVL1,Execution path record,adopted,3.md,2cb312f7e7a9828594263a662d4b3f1e33684196d6d8bd8ce3e6dcd8780f4279,727
+HW.4,provision,LVL1,Hardware contract,adopted,4.md,ef22595de5dcec38e7b5df089a4013bdf9458d45f228e49962ec8dc4f2770082,1019
+HW.5,provision,LVL1,Delivered arithmetic,adopted,5.md,b8d41404261b7b44b2892519d1a4b584e9a3606dc19d95a2a958af0756530c34,997
+HW.6,provision,LVL1,Contract evidence,adopted,6.md,c826d0c73ad04e7c5554aa378b27d1ef012ea5b66d138a4244fd116e19a6d92b,1242
+HW.7,provision,LVL1,Contract currency,adopted,7.md,cddef139e139f1b921e87564d6b3606583d50400de6d7553f28636dc59e79e4e,1333
 HW.8,provision,LVL1,Faults and exhaustion,adopted,8.md,c6ebaf323b553bf3025b9030340ee321d30d34ac4a85f8ff82535235a8772c3a,558
-HW.9,provision,LVL1,Results across hardware events,adopted,9.md,ec1e4b9c85188ebbe0413866e9f85b7cf7971fc725e6da1336d1f4dd7ec04a74,553
-HW.10,provision,LVL1,Undetected fault exposure,adopted,10.md,72bb744084a169c2cba5692b223d1d8d386488b96923f9dc51e0f2797dbd2a89,562
-HW.11,provision,LVL1,Memory model verification,adopted,11.md,f9f8545e7b89723c7841bd03a26be1e04177f45231ea63e932e3ab6a025069a8,613
-HW.12,provision,LVL1,Path variation,adopted,12.md,7b1a5e2d86384cb2b6bd0cc3abeef1e5b156ab5ac783051a31995900ccef3ed1,525
-HW.13,provision,LVL1,Boundary contract,adopted,13.md,6b2d1e37b72438c2e96acf12df78fca3601f6b34a4d359950bf4d2c36d750c39,781
-HW.14,provision,LVL1,Boundary checks,adopted,14.md,dd0c649237109573f89e7530ef80a1b57d12591844dce07d61141b83e1d79af6,762
-HW.15,provision,LVL1,Reference path,adopted,15.md,26840e582661acc5766f8ff6501625c07b970efed3770c69fd371f5b7dd0500c,566
-HW.16,provision,LVL1,Alternative path verification,adopted,16.md,2aad7ec476de01f65b63faf8bf0b1f15452c25ec2a05f321d2aa022533350112,978
-HW.17,provision,LVL1,Comparison beyond reference reach,adopted,17.md,51d0fd4075ef7295b69903de5a65db8938cfa2cc90dedae647317f8c1d4ff70c,1264
-HW.18,provision,LVL1,Path-specific limits,adopted,18.md,617b28986f6b41be9a997303c3ba8000871c00b33bb1517f4b5ad3f44e2658d7,880
-HW.19,provision,LVL1,Execution path fallback,adopted,19.md,e3903a569cbf41ad848e0a3eb5a527a9ba18ca46dacb2255710cab14aa9454ef,555
-HW.20,provision,LVL1,Constrained target budgets,adopted,20.md,aebd7f210a0267c955a992a838d6b9cf99642b8909a1e959bfc6a969edbd40a8,1327
-HW.21,provision,LVL1,Budget monitoring,adopted,21.md,393b2e31672233683fe47acee0d0fd0bddadda9dd70a2d2fd4bfb172cb382b27,529
-HW.22,provision,LVL1,Comparative performance claims,adopted,22.md,a1776c3dffd6e842d9371cafa0cd25d6c373eae41281088b7055f81b8b44b373,1134
-HW.ASIC,sub-profile,LVL1,Application-specific integrated circuits,adopted,ASIC/,089d6c2d53237f995dad1f8f82822eaf358fbec1f5bde9953281dcbb43a4192e,8543
-HW.CPU,sub-profile,LVL1,General-purpose processors,adopted,CPU/,53483757046a286b824fcb413062bac4eb9bfd974f7e40644f291761ff09f815,11002
-HW.EMBED,sub-profile,LVL1,Embedded controllers,adopted,EMBED/,2748d0a979e3e91d8a767b86f61428e6b15c3300fb059eeb25fed6e89c83496d,13892
-HW.FPGA,sub-profile,LVL1,Field-programmable gate arrays,adopted,FPGA/,17d82ffc038c328446de780eb360ee4413891f9406e3d71de473f0cd9f6fbd6d,8871
-HW.GPU,sub-profile,LVL1,Accelerators,adopted,GPU/,5235d49d7d0e594fb2fcb2dde7c54bb5d2381fe34d2fcbbdc0c6b4b48b6f7fd7,10848
-HW.QPU,sub-profile,LVL1,Quantum processors,adopted,QPU/,be024eafbb79017db74ab3456aa0a30197e025acf1b3ebbfca631dd0e4c7576b,19368
+HW.9,provision,LVL1,Results across hardware events,adopted,9.md,1e521d345d8c375f927bb2ce2ef040fe584ae3ec611e030d9124ad1d5be46d3b,567
+HW.10,provision,LVL1,Undetected fault exposure,adopted,10.md,26e3b22dad7d6da7a2aae68cd60eac21da8c2511ebb1945d6ced2ac0a0cd872c,576
+HW.11,provision,LVL1,Memory model verification,adopted,11.md,3e4496beb30d106a417b864fca0ecfd1c72879556a0182bce2dc37787de17fc2,627
+HW.12,provision,LVL1,Path variation,adopted,12.md,78faa54076d86c5fba561216262d9046f2e547637f66cc9afb25a28ae05b8346,539
+HW.13,provision,LVL1,Boundary contract,adopted,13.md,904320f9e69bb0e9396bee69404dfad141e8059eebe9564e082d7175f15ed495,795
+HW.14,provision,LVL1,Boundary checks,adopted,14.md,15612b30e7521f6280ef6e1c373655faec85ffca1278a995dc89abf29532bb0f,776
+HW.15,provision,LVL1,Reference path,adopted,15.md,299178b0afd39b3ab5c092b2cdfd7fba1031b5d9012e88f11c57bc5e86a62f70,580
+HW.16,provision,LVL1,Alternative path verification,adopted,16.md,76f5724ddfa2ce3ead784322689b508a607a46ee4e10adcf999f8e2e63d3ead9,992
+HW.17,provision,LVL1,Comparison beyond reference reach,adopted,17.md,6a297b66497daf382ef08f612fffede8a9afb02f33260fc3ee7fa59daff6ddd6,1278
+HW.18,provision,LVL1,Path-specific limits,adopted,18.md,2bffe553ab4319466b8c292cc3cbe3dfd54680cdd6d3468da9fa2940e3bb2069,894
+HW.19,provision,LVL1,Execution path fallback,adopted,19.md,6e6e9bc001ba02f70ac33172764f251fefc90bfd027d557898c45012771b71ea,640
+HW.20,provision,LVL1,Constrained target budgets,adopted,20.md,2d2841313ded037605bcced9546414937256d3ce50c1522bbb87fc1943bf06a0,1341
+HW.21,provision,LVL1,Budget monitoring,adopted,21.md,dc06eab449f464212291755cacb64b8ef46a5cdb69340f68f5041c739051e128,613
+HW.22,provision,LVL1,Comparative performance claims,adopted,22.md,03c77faecf12b096c3c8bec2f41c295d26094c59bddcc8b92de766667c860061,1148
+HW.ASIC,sub-profile,LVL1,Application-specific integrated circuits,adopted,ASIC/,00aeb0b559049ad4755f0640fcb9825ae736bb5832600ace98a3468e24e48c13,9654
+HW.CPU,sub-profile,LVL1,General-purpose processors,adopted,CPU/,19044c338dd3e9d09733c5e9a4c2d032b5cb97112b7504b2f328f643f25314cb,12413
+HW.EMBED,sub-profile,LVL1,Embedded controllers,adopted,EMBED/,ebb421250ddb46ed87103f747dfdb3f0450c25c15cf753ea4fab550c7f2693ef,14967
+HW.FPGA,sub-profile,LVL1,Field-programmable gate arrays,adopted,FPGA/,005e0830c16fccb49a6972919cd1bb996c16a183c918e031a571ada6b5e22c9f,9979
+HW.GPU,sub-profile,LVL1,Accelerators,adopted,GPU/,835f780340301f4a9a726591847ab6b1c72c9155d0f0757a894b6c0346f6e5f8,11907
+HW.QPU,sub-profile,LVL1,Quantum processors,adopted,QPU/,be5886f057f6f0d71e339fa3390e2da30d5477221d2415910c3e5c4c70f23180,20452

@@ -5,7 +5,7 @@ kind: "sub-profile"
 title: "Programmable logic design"
 status: "adopted"
 adopted: "2026-10-18"
-revision: "1.0.1"
+revision: "1.0.2"
 selector: "Binds when the work produces, or is admitted to produce, a hardware description to be realized as a configuration of programmable logic (HDES.FPGA.1)."
 parent: "HDES"
 adopted_by: "The Custodian"
@@ -53,7 +53,7 @@ A configuration whose identity is reported, read back, or recorded with the read
 
 HDES.FPGA addresses one matter (HDES.FPGA.2): the design record of a realized design, which HDES owns, through HDES.FPGA.3 and HDES.FPGA.4, which cite HDES.3.
 
-Every provision other than the selector and the shared-matters provision instantiates only VV, REPRO, or DSGN, so it inherits their rank and waivability (GOV.17) and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, HDES.FPGA.3 to HDES.FPGA.5 apply from CSQ3. Some provisions apply at CSQ3 content of obligations that STND.CLASS.10 first asks at CSQ2 or CSQ1: a contract for each external component and for hardware (DSGN.5), a schema for each data structure crossing an interface (DSGN.4), and provenance written with each output at production (REPRO.4). Each such provision tightens above the floor (PRIME.15), because its check runs without a person and the failure it prevents is silent at every class. No provision raises the floor (GOV.11).
+Every provision other than the selector and the shared-matters provision instantiates only VV, REPRO, or DSGN, inherits their rank and waivability (GOV.17), and applies from the class that its field `onset` gives under STND.CLASS.10, where a field that gives CSQ3 for content that the table of STND.CLASS.10 starts at a more severe class tightens above the floor (PRIME.15), because its check runs without a person and the failure it prevents is silent at every class. No provision raises the floor (GOV.11).
 
 ## References
 
@@ -78,3 +78,4 @@ Every provision other than the selector and the shared-matters provision instant
 | --- | --- | --- |
 | 1.0 | 2026-10-18 | Adopted. |
 | 1.0.1 | 2026-10-19 | Editorial amendment (GOV.41): the informative text describes HW.FPGA as adopted, citing HW.FPGA.4; no obligation changes. |
+| 1.0.2 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields; no obligation, permission, or defined meaning changes. |

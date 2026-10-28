@@ -10,9 +10,9 @@ GOV.7,provision,LVL0,Verification cost,ratified,7.md,a199db048305d124ccf287ee4c2
 GOV.8,provision,LVL0,Hardware constraints,ratified,8.md,556f89b0702c2e0afac5e713d06e7640e02d229c8e4b50f231e928d83a7d79d2,406
 GOV.9,provision,LVL0,Ambiguity,ratified,9.md,675da6e8aa4415253f2519fedddf3e6a2888d0289b4b29ae92d3d33f3b18b48f,954
 GOV.10,provision,LVL0,Floor,ratified,10.md,bf7ef2cd1ade43ba893b5f695bdbaa08b1268bfd871d373683a272674a7a768a,705
-GOV.11,provision,LVL0,Proportioned obligations,ratified,11.md,0e0184bdd70cb8a9b982bca7eb506f50bb63dfb71e425f83de982b7e51062b63,841
+GOV.11,provision,LVL0,Proportioned obligations,ratified,11.md,7ea08ebb6cf889a92c4b908e31b304eef22cf823fb4681f1c78b79b8db15bc48,765
 GOV.12,provision,LVL0,Consequence classes,ratified,12.md,af6c7e681136aeba36524aecbb8481b874869a9fd1b0635f3479df6bd5ee974b,1496
-GOV.13,provision,LVL0,Class assignment,ratified,13.md,e7428e15223e0ec84ba2a617df652e71619dc997afbdc5956fac2f1cc673da01,636
+GOV.13,provision,LVL0,Class assignment,ratified,13.md,71cdc69c2fcaa6a14c3897ec527a27e515202a35c5ee0e78db4da52d1f99de64,987
 GOV.14,provision,LVL0,Class follows use,ratified,14.md,c7eba076442e0c53558dbec272d7975c1a54940209d779a51c9ee5979ff5fb18,551
 GOV.15,provision,LVL0,Physical harm,ratified,15.md,2364ba9b85ee38a462a5d7d42dc6d59795cdd049cad1dbee40c8655a6a716bca,471
 GOV.16,provision,LVL0,Levels,ratified,16.md,50993b2ec54c0706ed1190125b16692d86f7cd5ba02725a80abb2af7ff1ab0fd,582
@@ -23,7 +23,7 @@ GOV.20,provision,LVL0,Project constitution,ratified,20.md,2d18eac78a2b2ac62e577e
 GOV.21,provision,LVL0,Project mechanisms,ratified,21.md,a5bb2d3c0bf220f5a2c078c2b353a6c269aaf798a7f43c5378c0597a3f801f14,921
 GOV.22,provision,LVL0,Defaults,ratified,22.md,cea89e8675503d8bdff772256b7feb11593cd90affb15543f3b6ea14a8f7e777,452
 GOV.23,provision,LVL0,Universality,ratified,23.md,a54f6110a7b9f71e66fe235ad2e2f6d24d75da90a5fe5d2f6152ed7744d05d5c,389
-GOV.24,provision,LVL0,Classification,ratified,24.md,8739f4c14312ea46909ed34aab3170382f8d27ee8f084d91b105b4c479558f9e,449
+GOV.24,provision,LVL0,Classification,ratified,24.md,2c0b8798938c0fb619653a815232d73a6a7b5cb0a7123de3d764c376cb8708d6,418
 GOV.25,provision,LVL0,Profile selection,ratified,25.md,2e33209312076254672efb804d6549b4f425124b2e121d4f8d419cbfdbfd7f0c,429
 GOV.26,provision,LVL0,Profile consistency,ratified,26.md,1fa7336ecaec5b4a08360127eb2d5e1cd8737add8cbeb1d18e800aa6964fd0e8,449
 GOV.27,provision,LVL0,Sub-profiles,ratified,27.md,6a7ff9cd61003743a980afe063328ea31132ab229cfa24c2778926090d447e68,297
@@ -47,7 +47,7 @@ GOV.44,provision,LVL0,Waiver,ratified,44.md,3e718647ba85822297f472cabd7d36b27a70
 GOV.45,provision,LVL0,Non-waivable obligations,ratified,45.md,9e734a1b6350d159399c990a1a1ee17bbccc1d5e0902b73a4818f4507d3ca48f,386
 GOV.46,provision,LVL0,Constitutional review,ratified,46.md,1324004a80326f2246f150a3f3b366616b69e18e853b9ce6bdad1c93e2c7ad5e,491
 GOV.47,provision,LVL0,Compliance audit,ratified,47.md,5959cb474bccf57234f7e50075034ef26d899fa8e3d040cf74cfcc886a35487b,440
-GOV.48,provision,LVL0,Agents bound,ratified,48.md,083cd226dacd7a4a9ed9157f1c10f97e3a7efc51839d68f8f05d4a27960b2aad,455
+GOV.48,provision,LVL0,Agents bound,ratified,48.md,f9c1aee6ef3e8a6401906d08d1abb02cac5548cab5c88b142c3db81196360532,395
 GOV.49,provision,LVL0,No self-adoption,ratified,49.md,face01e7a0e4c46dcbceaa7f71b23edc9a7e5206504fa280638e326da7d7fc23,419
 GOV.50,provision,LVL0,Owner-adopted judgments,ratified,50.md,045b08ad4502af9cb6da4244701a724b333ff1b5a26a5aefc8a44b86c27d4ab8,751
 GOV.51,provision,LVL0,Agent designation,ratified,51.md,8e6326aa5cbe8c8eb145965b2516877bea9a133e44b34998219f424dc8c7878d,478

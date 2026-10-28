@@ -5,8 +5,8 @@ kind: "sub-profile"
 title: "Quantum processors"
 status: "adopted"
 adopted: "2026-10-18"
-revision: "1.0.2"
-selector: "Binds when a component of the work executes, or is admitted to execute, on a quantum processor (HW.QPU.1)."
+revision: "1.1.2"
+selector: "Binds with HW, when a component of the work executes, or is admitted to execute, on a hardware type (HW.QPU.1); its provisions name execution paths on quantum processors."
 parent: "HW"
 adopted_by: "The Custodian"
 ---
@@ -32,7 +32,7 @@ This section fixes meaning and imposes no obligation, as the Lexicon does.
 
 ## Selector
 
-HW.QPU.1 states the selector: the attribute Quantum processor execution, which HW defines and which HW.1 also gives (STND.DRAFT.36). Each provision names an execution path on a quantum processor as its subject (STND.DRAFT.38). The calls by which host code submits work to a quantum processor and retrieves its outcomes, and the processing of those outcomes by error mitigation, belong to the quantum processor's execution path, through its runtime libraries. An ideal or noisy simulation of a quantum computation is an execution path on the general-purpose processor or accelerator that runs it, and meets HW.CPU or HW.GPU (HW.CPU.1, HW.GPU.1), not this sub-profile.
+HW.QPU.1 states the selector: the attribute Hardware execution, which HW defines and which HW.1 gives (STND.DRAFT.36), so that the sub-profile binds with HW and its provisions reach a component through the execution paths of that component, recorded by hardware type where the section Architecture of the constitution names (STND.PROJ.1). Each provision names an execution path on a quantum processor as its subject (STND.DRAFT.38). The calls by which host code submits work to a quantum processor and retrieves its outcomes, and the processing of those outcomes by error mitigation, belong to the quantum processor's execution path, through its runtime libraries. An ideal or noisy simulation of a quantum computation is an execution path on the general-purpose processor or accelerator that runs it, and meets HW.CPU or HW.GPU (HW.CPU.1, HW.GPU.1), not this sub-profile.
 
 ## Where the rest lives
 
@@ -70,7 +70,7 @@ Device noise often sets a floor below which more shots, mitigation, or recompila
 
 HW.QPU addresses four matters that NUMER owns (HW.QPU.2): the precision a result requires, through HW.QPU.6 and HW.QPU.8, which cite NUMER.5; the uncertainty of a computed result, through HW.QPU.4, which cites NUMER.13, HW.QPU.6, which cites NUMER.23, and HW.QPU.8, which cites NUMER.13; approximation disclosure, through HW.QPU.7, which cites NUMER.16; and the tolerance basis of a numerical comparison, through HW.QPU.6, which cites NUMER.25.
 
-Each provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, or RSRC. Each such provision inherits their rank and waivability (GOV.17) and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, HW.QPU.3 to HW.QPU.8 apply from CSQ3. HW.QPU.5, HW.QPU.7, and HW.QPU.8 apply from CSQ3 although STND.CLASS.10 applies INTPR.10 from CSQ2, and so tighten above the floor (PRIME.15) at the cost of one statement in a record. No provision raises the floor (GOV.11).
+Each provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, or RSRC, inherits their rank and waivability (GOV.17), and applies from the class that its field `onset` gives under STND.CLASS.10, where a field that gives CSQ3 for a statement that the row of INTPR.10 starts at CSQ2 tightens above the floor (PRIME.15) at the cost of one statement in a record. No provision raises the floor (GOV.11).
 
 ## References
 
@@ -89,6 +89,7 @@ Each provision other than the selector and the shared-matters provision instanti
 | RSRC | Resources |
 | STND.CLASS | Consequence-class criteria |
 | STND.DRAFT | Drafting standard |
+| STND.PROJ | Project constitution template |
 | STND.VVUQ | Verification, validation, and uncertainty quantification methods |
 | VV | Correctness |
 
@@ -99,3 +100,6 @@ Each provision other than the selector and the shared-matters provision instanti
 | 1.0 | 2026-10-18 | Adopted. |
 | 1.0.1 | 2026-10-25 | Editorial amendment (GOV.41): the informative Selector text cites HW.CPU.1 and HW.GPU.1, the selectors of the sub-profiles that a simulation of a quantum computation meets, and References lists HW.CPU and HW.GPU; the Notes name only the Articles that the provisions other than the selector and the shared-matters provision instantiate, so that the Design and Simplicity Articles, which none of them instantiates, are no longer named; no obligation, permission, or defined meaning changes. |
 | 1.0.2 | 2026-10-26 | Editorial amendment (GOV.41): the Notes state the referral of a submission that no authorization covers by PRIME.7 and PRIME.14, in place of the provision of STND.HARN on a derived configuration, which STND.HARN 1.4 withdraws; no obligation, permission, or defined meaning changes. |
+| 1.1 | 2026-10-28 | Minor amendment (GOV.41): the selector of HW.QPU.1 gives the attribute Hardware execution of HW.1 in place of its own, so that path scope alone decides which provisions reach a component, each provision naming an execution path on quantum processors as its subject (CS9). |
+| 1.1.1 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields; no obligation, permission, or defined meaning changes. |
+| 1.1.2 | 2026-10-28 | Editorial amendment (GOV.41): the Notes say that the provisions reach a component through its execution paths, recorded by hardware type where the section Architecture of the constitution names, in place of the paths that the classification lists, as STND.PROJ.1 now has it; no obligation, permission, or defined meaning changes. |

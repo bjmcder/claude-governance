@@ -1,6 +1,6 @@
-# Documentation standard (STND.DOCS) 1.0
+# Documentation standard (STND.DOCS) 1.0.2
 
-Adopted by The Custodian as revision 1.0 in ledger entry 100 (2026-10-23). This reading copy is composed from the per-provision files in STND/DOCS/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 100 (2026-10-23); revised to 1.0.1 in entry 269 (2026-10-28) and 1.0.2 in entry 291 (2026-10-28). This reading copy is composed from the per-provision files in STND/DOCS/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -29,7 +29,7 @@ Three provisions keep out the content that does not belong. STND.DOCS.3 removes 
 
 The Process record term draws the line by subject. A record of what the work is or does stays citable: a constant's source under STND.CODE.10, a command limit traced to its safe range (PRIME.13), a requirement, a hazard, or a defect. A record of how the work is governed, built, reviewed, or released does not appear in its documentation. A statement of the consequence class and its limits, which INTPR.10 and PRIME.3 call for, is a fact about the work and not a citation. STND.DOCS.6 admits governance and agents where they are the subject of the work, as in a governance harness. STND.DOCS.7 admits a statement that agents were used where a law, a license, a contract, or a publisher's policy requires one; the requirement carries the duty on its own terms, and the statement says what the requirement asks. Attribution of each change stays in the version history in every case (REPRO.5, STND.WPROC.2).
 
-The language provisions apply to all human-facing writing, the custodian's words being "everywhere and at all times": documentation, reports to the human owner, commit messages, records, and governance text, whose provisions STND.DRAFT.33 already covers. The tables of STND.DRAFT.33 and STND.DOCS.8 list common differences between British and American English and are not exhaustive; the rule is American spelling, punctuation, and usage in full. Where two American spellings are current, the dictionary that a project instrument names decides; where none is named, either current spelling conforms. Names in the source follow the same spelling, so that names agree across the custodian's projects, except a name that a dependency, a file format, an external interface, a persisted record, or a published interface of the work fixes; renaming such a name would break what depends on it.
+The language provisions apply to all human-facing writing, the custodian's words being "everywhere and at all times": documentation, reports to the human owner, commit messages, records, and governance text, whose provisions STND.DRAFT.33 already covers, with the spelling table of STND.DOCS.8, which the drafting check of American spelling reads. The two tables of STND.DOCS.8 list common differences between British and American English and are not exhaustive; the rule is American spelling, punctuation, and usage in full. Where two American spellings are current, the dictionary that a project instrument names decides; where none is named, either current spelling conforms. Names in the source follow the same spelling, so that names agree across the custodian's projects, except a name that a dependency, a file format, an external interface, a persisted record, or a published interface of the work fixes; renaming such a name would break what depends on it.
 
 STND.DOCS.9 rests on the field guide "Signs of AI writing" that Wikipedia editors keep, in the copy that the custodian supplied on 2026-10-22, and restates its signs in this standard's own words. The guide is descriptive: its signs are symptoms of writing that has drifted from specific facts toward generic, inflated statements, and it warns against treating the signs alone as the problem. The provision therefore states the underlying rule first, a specific, plain statement of each point with its source, and lists the patterns second. Each row names a habit; the words listed are typical of it, and a word in its technical sense is correct: an energy landscape, robust statistics, statistical leverage, a leading underscore, a cryptographic key, a statistically powerful test, a fuel-rich mixture. A list of three that has three members, an occasional em dash, a code block, a required label or warning, the marks of AGENT.3 and the label of PRIME.3, an agent's reply that asks the human owner a question, and a structure that governance prescribes are also correct. The guide's own caution holds: no single pattern shows that text was generated, people use every one of them, and neither people nor detectors reliably tell the two apart, so the table is a tool for editing and says nothing about who wrote a text. The guide also names what reads as written by a person: plain "is" and "has," plain words such as "used" for "utilized" and "wrote" for "authored," definite statements, and the ordinary qualifiers of speech. A fabricated reference breaches PRIME.2, and a citation not confirmed breaches VV.2.
 
@@ -39,7 +39,7 @@ The direction asks for its rules everywhere and at all times, and this standard 
 
 Documentation and the work change together (STND.DOCS.11). For work under STND.WPROC, a change is the change that a unit branch carries to its parent, so documentation edits are made on the unit branch and conflicts between them are resolved when the branch is updated from its parent (STND.WPROC.8). A statement outside the version history is recorded in defect tracking and reported as QA.5 asks when the change makes it false,. A statement agrees with the work at the revision it describes, so that a migration note describing an earlier revision is not in conflict. The direction's "globally consistent" means consistent across the whole of the work documentation. STND.DOCS.12 keeps one name for each concept; a mathematical symbol declared once and mapped to a name in the code is one name (INTPR.4, NUMER.4). STND.DOCS.13 runs the examples the documentation shows, within the checking environment and a stated tolerance, so that they fail when the work changes under them; a failing example is repaired with the work or corrected where it was wrong, and its shown result is not replaced by the output of the run that failed. These runs check the documentation and are not evidence for a claim of correctness. STND.DOCS.14 has the reviewer of each change look for the statements the change makes false, which a search for the names it alters finds.
 
-Under STND.CLASS.10, STND.DOCS.2, STND.DOCS.3, STND.DOCS.4, STND.DOCS.5, STND.DOCS.8, STND.DOCS.9, and STND.DOCS.11 to STND.DOCS.14 instantiate provisions of the Articles that STND.CLASS.10 applies in full from CSQ3, and apply from CSQ3; work of CSQ4 may omit them. STND.DOCS.6 and STND.DOCS.7 are permissions, which STND.CLASS.10 does not stage. STND.DOCS.8 and STND.DOCS.9 cite INTPR.12, as STND.DRAFT.33 does for spelling, because a successor reads the work most readily in one variety of English and plain prose. STND.DOCS.1 fixes how the floor documentation of INTPR.2 is written and asks for no documentation that the floor does not already require. Text that a change adds or alters conforms; text in an append-only record, a superseded decision record, or a past commit message stays as written (PRIME.5, GOV.36), and the transition is recorded in the ledger entry of adoption.
+Under STND.CLASS.10, each default applies from the class that its field `onset` gives, which work of CSQ4 may omit, and STND.DOCS.6 and STND.DOCS.7 are permissions, which STND.CLASS.10 does not stage and which carry the value null. STND.DOCS.8 and STND.DOCS.9 cite INTPR.12, as STND.DRAFT.33 does for spelling, because a successor reads the work most readily in one variety of English and plain prose. STND.DOCS.1 fixes how the floor documentation of INTPR.2 is written and asks for no documentation that the floor does not already require. Text that a change adds or alters conforms; text in an append-only record, a superseded decision record, or a past commit message stays as written (PRIME.5, GOV.36), and the transition is recorded in the ledger entry of adoption.
 
 ## References
 
@@ -73,37 +73,37 @@ Work documentation SHALL be written for a human reader who knows the domain of t
 
 #### STND.DOCS.2 Explanatory content
 
-Default. Instantiates INTPR.1.
+Default, from CSQ3. Instantiates INTPR.1.
 
 Work documentation SHOULD define each term of art on its first use and give an example of each element whose use is not evident (INTPR.1).
 
 #### STND.DOCS.3 Agents kept out of documentation
 
-Default. Instantiates INTPR.5.
+Default, from CSQ3. Instantiates INTPR.5.
 
 Other than as STND.DOCS.6 and STND.DOCS.7 permit, work documentation SHOULD NOT name an agent that works on the work (INTPR.5). Other than as STND.DOCS.6 and STND.DOCS.7 permit, work documentation SHOULD NOT describe agent conduct (INTPR.5). Work documentation SHOULD address only its human readers (INTPR.5).
 
 #### STND.DOCS.4 Edit narration kept out
 
-Default. Instantiates INTPR.5.
+Default, from CSQ3. Instantiates INTPR.5.
 
 Other than in a changelog, a release note, a migration note, or a deprecation notice, work documentation SHOULD NOT narrate the edits that brought the work to its present state, which the version history holds (INTPR.5, REPRO.5).
 
 #### STND.DOCS.5 Process records kept out
 
-Default. Instantiates INTPR.5.
+Default, from CSQ3. Instantiates INTPR.5.
 
 Other than as STND.DOCS.6 permits, work documentation SHOULD NOT cite a process record (INTPR.5).
 
 #### STND.DOCS.6 Governance as subject
 
-Default. Instantiates INTPR.5.
+Default, at every class. Instantiates INTPR.5.
 
 Where the subject of the work is governance or the conduct of agents, its work documentation MAY name agents, describe agent conduct, and cite the process records that belong to that subject (INTPR.5).
 
 #### STND.DOCS.7 Required statements of agent use
 
-Default. Instantiates INTPR.5.
+Default, at every class. Instantiates INTPR.5.
 
 Where a law, a license, a contract, or a publisher's policy requires of the work a statement of the use of agents, its work documentation MAY carry that statement in the words and in the place that the requirement names (INTPR.5, PRIN.2). Where such a requirement names no place, the statement MAY stand in the document that it concerns (INTPR.5, PRIN.2).
 
@@ -111,9 +111,9 @@ Where a law, a license, a contract, or a publisher's policy requires of the work
 
 #### STND.DOCS.8 American English
 
-Default. Instantiates INTPR.12, INTPR.1.
+Default, from CSQ3. Instantiates INTPR.12, INTPR.1.
 
-Other than in a quotation, a title, a proper name, a literal, a word mentioned as a word, or a name fixed outside the prose, human-facing writing SHOULD use American spelling, punctuation, and usage, of which the tables of STND.DRAFT.33 and of this provision list a part (INTPR.12). Where a project instrument names a dictionary, human-facing writing SHOULD use, of two current American spellings, the first that the dictionary lists (INTPR.12). Other than a name that a dependency, a file format, an external interface, a persisted record, or a published interface of the work fixes, each name in the source of the work SHOULD use American spelling (INTPR.1).
+Other than in a quotation, a title, a proper name, a literal, a word mentioned as a word, or a name fixed outside the prose, human-facing writing SHOULD use American spelling, punctuation, and usage, of which the tables of this provision list a part (INTPR.12). Where a project instrument names a dictionary, human-facing writing SHOULD use, of two current American spellings, the first that the dictionary lists (INTPR.12). Other than a name that a dependency, a file format, an external interface, a persisted record, or a published interface of the work fixes, each name in the source of the work SHOULD use American spelling (INTPR.1).
 
 | Not used | Used |
 | --- | --- |
@@ -130,9 +130,50 @@ Other than in a quotation, a title, a proper name, a literal, a word mentioned a
 | 22 October 2026, in prose | October 22, 2026, or 2026-10-22 |
 | a comma or period outside the closing quotation mark, in prose | the comma or period inside it |
 
+| British | American |
+| --- | --- |
+| behaviour | behavior |
+| colour | color |
+| favour | favor |
+| honour | honor |
+| labour | labor |
+| neighbour | neighbor |
+| centre | center |
+| metre | meter |
+| litre | liter |
+| fibre | fiber |
+| analyse | analyze |
+| organise | organize |
+| recognise | recognize |
+| minimise | minimize |
+| maximise | maximize |
+| optimise | optimize |
+| utilise | utilize |
+| standardise | standardize |
+| authorise | authorize |
+| initialise | initialize |
+| serialise | serialize |
+| normalise | normalize |
+| catalogue | catalog |
+| defence | defense |
+| offence | offense |
+| grey | gray |
+| programme | program |
+| artefact | artifact |
+| judgement | judgment |
+| ageing | aging |
+| modelling | modeling |
+| labelling | labeling |
+| cancelled | canceled |
+| travelling | traveling |
+| fulfil | fulfill |
+| enrol | enroll |
+| whilst | while |
+| amongst | among |
+
 #### STND.DOCS.9 Specific statements
 
-Default. Instantiates INTPR.12.
+Default, from CSQ3. Instantiates INTPR.12.
 
 Human-facing writing SHOULD state each point specifically and plainly, and name the source of each point that rests on one (INTPR.12). Other than in a term of art in its technical sense, a quotation, a label or warning that another provision requires, or a structure that governance prescribes, human-facing writing SHOULD NOT carry a pattern of the table of this provision (INTPR.12).
 
@@ -176,25 +217,25 @@ An agent SHALL write each text it writes, and each name it gives in the source o
 
 #### STND.DOCS.11 Documentation in step with the work
 
-Default. Instantiates INTPR.3, QA.4, QA.5.
+Default, from CSQ3. Instantiates INTPR.3, QA.4, QA.5.
 
 A change that alters the behavior, an interface, a default, a unit, a limit, or an output of the work SHOULD change, in the same change, each statement of the work documentation in its version history that describes what it alters (INTPR.3). Where such a statement lies outside the version history of the work, the actor making the change SHOULD record the statement in defect tracking and report it as QA.5 asks (INTPR.3, QA.4, QA.5). Each statement of the work documentation SHOULD agree with the work at the revision it describes and with each other statement of the work documentation (INTPR.3).
 
 #### STND.DOCS.12 One name per concept
 
-Default. Instantiates INTPR.1, INTPR.3, INTPR.4.
+Default, from CSQ3. Instantiates INTPR.1, INTPR.3, INTPR.4.
 
 Each concept of the work SHOULD carry one name across its code and its work documentation (INTPR.1, INTPR.3). Each name SHOULD carry one meaning (INTPR.1, INTPR.3). A symbol of a notation declared once and mapped to a name in the code MAY stand beside that name as the same name (INTPR.4).
 
 #### STND.DOCS.13 Checked examples
 
-Default. Instantiates INTPR.3, VV.8.
+Default, from CSQ3. Instantiates INTPR.3, VV.8.
 
 Each example in the work documentation that runs in the checking environment without hardware, network access, a secret, or a destructive action SHOULD be run among the checks of each change that affects it, with its shown result compared within a stated tolerance (INTPR.3, VV.8). Other than after a change to the work that an example describes, or after a reference independent of the failing run confirms another result, the shown result of a failing example SHOULD NOT be replaced by the output of the run that failed (VV.8).
 
 #### STND.DOCS.14 Documentation in change review
 
-Default. Instantiates QA.7, INTPR.3.
+Default, from CSQ3. Instantiates QA.7, INTPR.3.
 
 The review of each change SHOULD examine the human-facing writing that the change adds or alters, and each statement of the work documentation that names an element the change alters, against STND.DOCS.1, STND.DOCS.2, STND.DOCS.3, STND.DOCS.4, STND.DOCS.5, STND.DOCS.8, STND.DOCS.9, STND.DOCS.11, and STND.DOCS.12 (QA.7, INTPR.3).
 
@@ -203,3 +244,5 @@ The review of each change SHOULD examine the human-facing writing that the chang
 | Revision | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-10-23 | Adopted. |
+| 1.0.1 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields; no obligation, permission, or defined meaning changes. |
+| 1.0.2 | 2026-10-28 | Editorial amendment (GOV.41): STND.DOCS.8 holds the spelling table that STND.DRAFT.33 held, beside its own table of usage, so that the corpus keeps one spelling table; its first sentence cites the tables of this provision alone, and the Notes say which table the drafting check reads; no obligation, permission, or defined meaning changes. |

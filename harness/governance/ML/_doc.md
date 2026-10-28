@@ -5,7 +5,7 @@ kind: "profile"
 title: "Learned models"
 status: "adopted"
 adopted: "2026-10-19"
-revision: "1.0.1"
+revision: "1.0.2"
 selector: "Binds when a learned model sits on a path that affects a result the work reports or relies on, or physical hardware (ML.1)."
 parent: null
 adopted_by: "The Custodian"
@@ -59,7 +59,7 @@ ML.6 asks for detection only of what is decidable from the input, such as ranges
 
 ML owns two shared matters and addresses two that NUMER owns (ML.2): the uncertainty of a computed result and approximation disclosure, through ML.5, which cites NUMER.13 and NUMER.16.
 
-Every provision other than the selector and the shared-matters provision instantiates only VV, REPRO, DSGN, or INTPR, so it inherits their rank and waivability (GOV.17) and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, ML.3 to ML.7 apply from CSQ3. Some provisions apply at CSQ3 content of obligations that STND.CLASS.10 first asks at CSQ2 or CSQ1: validation against a real-world referent where one exists (VV.4), documentation of the limits of validity (INTPR.10), checking of postconditions and invariants (DSGN.2), and reporting of anomalies to the operator (INTPR.7). Each such provision tightens above the floor (PRIME.15), because its check runs without a person and the failure it prevents is silent at every class. No provision raises the floor (GOV.11).
+Every provision other than the selector and the shared-matters provision instantiates only VV, REPRO, DSGN, or INTPR, inherits their rank and waivability (GOV.17), and applies from the class that its field `onset` gives under STND.CLASS.10, where a field that gives CSQ3 for content that the table of STND.CLASS.10 starts at a more severe class tightens above the floor (PRIME.15), because its check runs without a person and the failure it prevents is silent at every class. No provision raises the floor (GOV.11).
 
 ## References
 
@@ -87,3 +87,4 @@ Every provision other than the selector and the shared-matters provision instant
 | --- | --- | --- |
 | 1.0 | 2026-10-19 | Adopted. |
 | 1.0.1 | 2026-10-25 | Editorial amendment (GOV.41): the informative Selector text cites AGENT and GUARD, which it names as governing the models through which agents do the work, and References lists AGENT and GUARD; no obligation, permission, or defined meaning changes. |
+| 1.0.2 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields; no obligation, permission, or defined meaning changes. |

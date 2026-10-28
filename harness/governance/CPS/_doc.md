@@ -5,7 +5,7 @@ kind: "profile"
 title: "Cyber-physical and actuation"
 status: "adopted"
 adopted: "2026-10-19"
-revision: "1.0.1"
+revision: "1.0.2"
 selector: "Binds when the work commands, configures, or powers physical hardware (CPS.1)."
 parent: null
 adopted_by: "The Custodian"
@@ -59,7 +59,7 @@ CPS.8 has each closed loop state its period or triggering event, its latencies, 
 
 CPS owns three shared matters and addresses three that other profiles own (CPS.2): the hardware contract of an execution path, through CPS.4, which cites HW.4 and HW.EMBED.4; the budgets of a constrained target, through CPS.8, which cites HW.20; and the design record of a realized design, through CPS.4, which cites HDES.3 and HDES.FPGA.3.
 
-Every provision other than the selector and the shared-matters provision instantiates only VV, REPRO, DSGN, INTPR, or QA, so it inherits their rank and waivability (GOV.17) and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, CPS.3 to CPS.9 apply from CSQ3; at every class PRIME.13 and PRIME.4 hold. Some provisions apply at CSQ3 content of obligations that STND.CLASS.10 first asks at CSQ2 or CSQ1: a contract for each external component and for hardware (DSGN.5), provenance written with each output at production (REPRO.4), verification of each assembly and of the integrated system (VV.6), checking of postconditions and invariants (DSGN.2), and reporting of anomalies to the operator (INTPR.7). Each such provision tightens above the floor (PRIME.15), because the failure each prevents reaches physical hardware at every class. No provision raises the floor (GOV.11).
+Every provision other than the selector and the shared-matters provision instantiates only VV, REPRO, DSGN, INTPR, or QA, inherits their rank and waivability (GOV.17), and applies from the class that its field `onset` gives under STND.CLASS.10, where a field that gives CSQ3 for content that the table of STND.CLASS.10 starts at a more severe class tightens above the floor (PRIME.15), because the failure that such content prevents reaches physical hardware at every class, where PRIME.13 and PRIME.4 hold. No provision raises the floor (GOV.11).
 
 ## References
 
@@ -86,3 +86,4 @@ Every provision other than the selector and the shared-matters provision instant
 | --- | --- | --- |
 | 1.0 | 2026-10-19 | Adopted. |
 | 1.0.1 | 2026-10-25 | Editorial amendment (GOV.41): the informative Selector text cites MEAS.1, the selector by which MEAS binds observations once a reported result rests on them, and References lists MEAS, whose term Observation the Terms import; no obligation, permission, or defined meaning changes. |
+| 1.0.2 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields; no obligation, permission, or defined meaning changes. |

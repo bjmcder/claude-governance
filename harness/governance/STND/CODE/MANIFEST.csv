@@ -1,28 +1,37 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.CODE,standard,LVL2,Coding standard,adopted,_doc.md,870d9e68f48fc20a9ac83bbf4092db7e36e8825313a43036d7e1fe10f39cc1c4,34202
-STND.CODE.1,provision,LVL2,Mechanical cycle check,adopted,1.md,6f0d23339a1ba66cb37a5d1f2b240a41d68c1cce72c200623e31a305d97984c9,411
-STND.CODE.2,provision,LVL2,Inputs through interfaces,adopted,2.md,40dccdc405a5f703a9b275930b07fe9465e12c55c7c2bd7983d0b34a001606b9,532
-STND.CODE.3,provision,LVL2,Contracts at declarations,adopted,3.md,19267f546fed0f99693e175851c5a2660b3e9c2062c0cdebf488b4f17a1f7590,547
-STND.CODE.4,provision,LVL2,Static checks per change,adopted,4.md,671bf896e4515d3a1c5da1c1119376552619d0c9fe3158a29f4ef9417bcc7143,707
-STND.CODE.5,provision,LVL2,Mechanical source layout,adopted,5.md,7cb0993efb730a1bf99f0c2404ad5d2fb9a2423a96319cca9b53248b3c10d8ee,523
+STND.CODE,standard,LVL2,Coding standard,adopted,_doc.md,053eb3fc2234a84d2aa552c48f1de809dce980ab3894ce1abe414f5d3391260a,45834
+STND.CODE.1,provision,LVL2,Mechanical cycle check,adopted,1.md,88859188858c96ad1413c636286fcff7f1e67719f8e11c7a29da8c1449e4a542,425
+STND.CODE.2,provision,LVL2,Inputs through interfaces,adopted,2.md,4e513c4d5d9a3affedc22e877cbbab662d5a6e9525bacf6c635a17524eb98482,546
+STND.CODE.3,provision,LVL2,Contracts at declarations,adopted,3.md,659b96bdbb8ccf312a0e7e2f5b06edd5c4cffa4c470dc71e491ce97eba257fb0,561
+STND.CODE.4,provision,LVL2,Static checks per change,adopted,4.md,f508a18c1f77d1af8536d829aa044b4eeb8fa7cad8a58996380ee1fc32022baa,721
+STND.CODE.5,provision,LVL2,Mechanical source layout,adopted,5.md,1b96237499846e7c25edddfb9296c0ec73047bdfcde000ffbb8b8af135d177e3,598
 STND.CODE.6,provision,LVL2,Unremovable input checks,adopted,6.md,2b24e6e2a02c935cb68aa1f01386e4a3b950442ef3af28eacba4fa427405d0de,434
 STND.CODE.7,provision,LVL2,Discarded failures,adopted,7.md,f4d746b78c93d4e23b2de065bd2ff8a12c398807f8c41b0cc2dfb0d5966a6bd1,356
-STND.CODE.8,provision,LVL2,Regression test per fix,adopted,8.md,38afc3c14c9844cfda5b26dbc52ff79470ebea52bb3d5568bdd424d2a1a2cf4a,428
-STND.CODE.9,provision,LVL2,Repeatable test verdicts,adopted,9.md,4bf4b865dd0d6c5315ac9dc5eaf7de6e355cf5247fa78493769fa6825d076288,553
-STND.CODE.10,provision,LVL2,Named domain constants,adopted,10.md,51de1c4fb7cbfde35e248d106c7abc278018fcd16c63cef27b202a8293603b6a,551
-STND.CODE.11,provision,LVL2,Disabled code in comments,adopted,11.md,05c2d25456299c17800e69cc305974636882ec1bc92200e36dce655f5a7fdbcf,369
-STND.CODE.12,provision,LVL2,Reasoned discards,adopted,12.md,f770d37d0a8c039be2d2f6639b80cb7767433d3cf3565945ab7e678c2a608f74,482
-STND.CODE.13,provision,LVL2,Statements grouped by step,adopted,13.md,bd0d6adf73eeee929719fdedf26d4e9c5d0aa998ee934738f8132c6d8c616936,756
-STND.CODE.14,provision,LVL2,Responses to listed failures,adopted,14.md,3a7fa388e0d6e42e87247ac1ae0a3702fed12e562b019b43ab089cda592dd49d,717
+STND.CODE.8,provision,LVL2,Regression test per fix,adopted,8.md,d398b5eeec8dfd9a011ddd58dd73d34910022e30046f02902710a0becdbd20fb,442
+STND.CODE.9,provision,LVL2,Repeatable test verdicts,adopted,9.md,ed68ad32a053027067828c788cc1c47f35d33321782ec3899040165b384cb328,567
+STND.CODE.10,provision,LVL2,Named domain constants,adopted,10.md,2345e2ff17fe4f8d1af4daa73f3cae949948f2d84ceb06cac38be795e162c9cb,565
+STND.CODE.11,provision,LVL2,Disabled code in comments,adopted,11.md,7023ca260154d0e7848de88f87bb2402731329cf02dc03cfbe36fc187ef9c124,383
+STND.CODE.12,provision,LVL2,Reasoned discards,adopted,12.md,b7b557cb0b8b8e1eb499b3baedde4f1df2cda1de32ea2ca7f1d1df5c76e378f6,496
+STND.CODE.13,provision,LVL2,Statements grouped by step,adopted,13.md,3aba0d9715a4e5031115ce44d4fb6056c9fe57b65635dc1860b59b71c7fa749b,770
+STND.CODE.14,provision,LVL2,Responses to listed failures,adopted,14.md,5e064151c7fb5eb41427715bf94bf5feedb2adcbeae13787b0ac3e2b05e884f6,813
 STND.CODE.15,provision,LVL2,Ignored failure results diagnosed,adopted,15.md,260b4da4806abd46c9d0ce54aa9a9ff1a13032e027c53c971725cc1bf3cba5be,641
 STND.CODE.16,provision,LVL2,Required checks in every build,adopted,16.md,b968e6a68bf90faa68a3a10f1993f570ccac9b4c849b6153332d4b2dac4224cb,760
-STND.CODE.17,provision,LVL2,Adopted high-assurance coding standard,adopted,17.md,31f0896f13d91d8276aaec15b9dbc53eb1c0d8e169bde0382aa5bc6404ee041e,753
+STND.CODE.17,provision,LVL2,Adopted high-assurance coding standard,adopted,17.md,b32da6d6c8fba7dfe7387c49ead829db8efc96e5f9d72197e454faf6bf6b3b07,767
 STND.CODE.18,provision,LVL2,High-assurance conformance claims,adopted,18.md,786e85ab2ad50abae3bfe11240c889bfbc4e1ec51e3ecc61ce7f4756bf18e421,591
-STND.CODE.19,provision,LVL2,High-assurance language edition,adopted,19.md,37b77caffaa084810e62a999f7ee3e70055926bd5e4342cc4cd869c3f78600a6,1214
-STND.CODE.20,provision,LVL2,Recorded high-assurance deviations,adopted,20.md,3787f0c30c69f0ebb345227aa1660ed75a9d2412046f27835869928ce58f5083,695
-STND.CODE.21,provision,LVL2,Finite-value assumptions near checks,adopted,21.md,229f0428df40c1a684692141a5d3fa56af3e44a4908d78ac0dfd96dbc1b86c7e,776
-STND.CODE.22,provision,LVL2,Data at foreign interfaces,adopted,22.md,949ddbecb6f41f84b0d81dc8bf9f5f801d595c385256e9c6222c14dadc569849,789
-STND.CODE.23,provision,LVL2,Arrays at foreign interfaces,adopted,23.md,97cf22ef3e566ba67a2a95911585cd0c789f8810f2b89f0d571bc25c4bae3e59,568
-STND.CODE.24,provision,LVL2,Failures crossing foreign interfaces,adopted,24.md,e441acfcc0d5764b8ba8b147bc7e05b72d673a8fdf35fb08d9eca6d398299e95,997
-STND.CODE.25,provision,LVL2,Ownership at foreign interfaces,adopted,25.md,44a911a1f4e7ec8ea130f04382d894b56743049cbf039f32156a310d6e166e19,734
-STND.CODE.26,provision,LVL2,Objects that foreign code keeps,adopted,26.md,9f6772c6192951ef5f04e046f5d0f10c9ad808a4ed27fd4f17d9d51248027874,534
+STND.CODE.19,provision,LVL2,High-assurance language edition,adopted,19.md,31dab0ce4f54f4413020c91f8ee0ebd889ddc889243252136913d014ea6023b8,1228
+STND.CODE.20,provision,LVL2,Recorded high-assurance deviations,adopted,20.md,be8e33989bd9c477a09ab187352f3071ac0f91775923af5ccdbd163ac8319ca9,872
+STND.CODE.21,provision,LVL2,Finite-value settings near checks,adopted,21.md,d99175b0bb6af0b7ad3e11926e16efd0b23ebfeb7ab01ca27bec9eafdf10c521,604
+STND.CODE.22,provision,LVL2,Data at foreign interfaces,adopted,22.md,3ee92fc3ef30585f4d7d5046753d16a2a42a04bd57c5af6cf16d07fab84e292a,829
+STND.CODE.23,provision,LVL2,Arrays at foreign interfaces,adopted,23.md,0d1f42e02fc1accdc7395083508d643bebb18fc5ee28dac423012c1f01eedbf0,582
+STND.CODE.24,provision,LVL2,Failures crossing foreign interfaces,adopted,24.md,01b1a24fa7272270f437ade97a7bfaa7f6a6d81f7cd0ad2c44f7db8713575f03,1011
+STND.CODE.25,provision,LVL2,Ownership at foreign interfaces,adopted,25.md,0149159349c2b933c2939e27ccc1b4427fa2e9949504a640009da97e43c8311d,748
+STND.CODE.26,provision,LVL2,Objects that foreign code keeps,adopted,26.md,d88ec51603f2edec5c9cb84351afb57cf1718418983302545b0b442b5a44c233,548
+STND.CODE.27,provision,LVL2,Finite-value annotations near checks,adopted,27.md,ef25b2483d872063c5ac9c6eaa0caeda9a4189e54d61876205ab4ecabd021bb3,613
+STND.CODE.28,provision,LVL2,Names under a stated convention,adopted,28.md,75d2a4840f2271a36b150863348c01bdd2922e54b9fc549e7d899fef61270e9c,854
+STND.CODE.29,provision,LVL2,Seeded random generators,adopted,29.md,4acae11708f5609bc5f8a733f3d8485a43479b3254167347688bddd0df80b535,957
+STND.CODE.30,provision,LVL2,Hash values outside results,adopted,30.md,05f14d837c654909477b965ab5072dbf620ac24cadd5ecb283f54234f6688f8d,784
+STND.CODE.31,provision,LVL2,Tolerances stated at comparisons,adopted,31.md,a75582a4fb1a5a69f084b67fe4a736aded1d9cd44afbefe25573f3c0c41c1423,988
+STND.CODE.32,provision,LVL2,Language provisions in static checks,adopted,32.md,2e8b2c7a3df6ae081f75c1313b63fdaf4ce3d2cb0a6232928c0bbe0c9686af77,565
+STND.CODE.33,provision,LVL2,Diagnoses from installed failure handlers,adopted,33.md,2f030669e104a95e34d0a9d9efe0c9ecb0c71ffc66fa17ad35e86e9c38879ac5,738
+STND.CODE.34,provision,LVL2,Claims of absent undefined behavior,adopted,34.md,f889a8c4aabf04ed74f6c7493d87b2e80938f45633ea7ece5de1f9abfcc55a9d,809
+STND.CODE.35,provision,LVL2,Dependency failure results diagnosed,adopted,35.md,40bd3c1a54536ae19a26a448c22f0a0f3da13a9bf77e76821f806daac2b9c1f0,685

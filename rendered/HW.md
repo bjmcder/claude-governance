@@ -1,6 +1,6 @@
-# Execution hardware (HW) 1.1.2
+# Execution hardware (HW) 1.3.1
 
-Adopted by The Custodian as revision 1.0 in ledger entry 64 (2026-10-17); revised to 1.0.1 in entry 75 (2026-10-18), 1.0.2 in entry 83 (2026-10-19), 1.1 in entry 89 (2026-10-19), 1.1.1 in entry 110 (2026-10-24), and 1.1.2 in entry 168 (2026-10-25). This reading copy is composed from the per-provision files in HW/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 64 (2026-10-17); revised to 1.0.1 in entry 75 (2026-10-18), 1.0.2 in entry 83 (2026-10-19), 1.1 in entry 89 (2026-10-19), 1.1.1 in entry 110 (2026-10-24), 1.1.2 in entry 168 (2026-10-25), 1.2 in entry 228 (2026-10-28), 1.3 in entry 252 (2026-10-28), and 1.3.1 in entry 303 (2026-10-28). This reading copy is composed from the per-provision files in HW/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -17,33 +17,28 @@ This section fixes meaning and imposes no obligation, as the Lexicon does.
 | Term | Definition |
 | --- | --- |
 | Accelerator | A processor that executes only work that a host processor offloads to it, other than a quantum processor, programmable logic, or an integrated circuit. |
-| Accelerator execution | An attribute, true when the classification records that a component of the work whose behavior affects a result the work reports or relies on executes, or is admitted to execute, on an accelerator. |
 | Alternative execution path | One of two or more execution paths of a component, each of which computes the component's results without the others. |
 | Capacity | A limit of hardware on memory, storage, buffers, queues, counters, stored energy, or supplied power beyond which an operation fails, loses data, or resets the hardware. A limit at which the hardware only slows execution is not a capacity. |
 | Boundary contract | The contract at an interface boundary between execution paths on different hardware types or hardware models. |
 | Constrained target | An execution path that has a deadline whose miss is able to change either a result that the path goes on to report or rely on or a command that the path issues to physical hardware, or on which reaching a capacity of its hardware is able to change or lose a result without a halt or visible degradation. |
 | Delivered arithmetic | The number formats, rounding, handling of subnormal and non-finite values, fusion and contraction of operations, order in which values are combined, and accuracy of elementary functions that an execution path gives the numerical operations of a component, as its modes, library defaults, options, and choices made at run time set them. |
 | Embedded controller | A processor, other than programmable logic or an integrated circuit, that executes firmware to control or monitor a device, with no operating system between the firmware and the device, or with one whose scheduling the firmware's deadlines constrain. |
-| Embedded controller execution | An attribute, true when the classification records that a component of the work whose behavior affects a result the work reports or relies on executes, or is admitted to execute, on an embedded controller. |
 | Execution path | A component together with a hardware type on which it executes, and the hardware models, firmware, drivers, runtime libraries, and settings that it admits there. |
 | General-purpose processor | A processor that executes a stored program, other than an accelerator, a quantum processor, an embedded controller, programmable logic, or an integrated circuit. |
-| General-purpose processor execution | An attribute, true when the classification records that a component of the work whose behavior affects a result the work reports or relies on executes, or is admitted to execute, on a general-purpose processor. |
+| Hardware execution | An attribute, true when the classification records that a component of the work whose behavior affects a result the work reports or relies on executes, or is admitted to execute, on a hardware type. |
 | Hardware contract | The contract of an execution path: the behavior of its hardware type, hardware models, firmware, drivers, runtime libraries, and settings that the component relies on in its regime of use. |
 | Hardware fault | A departure of hardware from its specified behavior: a changed bit in memory, storage, a register, or a link; a wrong result from a processing unit; a lost message; or a loss of power. The noise of a quantum processor that its hardware contract states is not a hardware fault. |
 | Hardware model | The design and revision of a hardware device, as its maker or its design record identifies it. |
-| Hardware type | One of the kinds of execution hardware for which the selector table of HW.1 gives an attribute. |
+| Hardware type | One of the kinds of execution hardware for which this profile holds a sub-profile: general-purpose processors, accelerators, quantum processors, embedded controllers, programmable logic, and integrated circuits. |
 | Integrated circuit | A device fabricated from a hardware description whose design record the project holds, other than programmable logic. |
-| Integrated circuit execution | An attribute, true when the classification records that a component of the work whose behavior affects a result the work reports or relies on executes, or is admitted to execute, on an integrated circuit. |
 | Programmable logic | A configuration of a device whose logic is configured after manufacture. |
-| Programmable logic execution | An attribute, true when the classification records that a component of the work whose behavior affects a result the work reports or relies on executes, or is admitted to execute, on programmable logic. |
 | Quantum processor | Hardware that computes a result by executing quantum circuits, or by evolving quantum states under controlled interactions, and returns measured outcomes; a device that measures a physical quantity through quantum states is not a quantum processor. |
-| Quantum processor execution | An attribute, true when the classification records that a component of the work whose behavior affects a result the work reports or relies on executes, or is admitted to execute, on a quantum processor. |
 | Reference path | The alternative execution path of a component on which the component's obvious implementation executes, taken with that implementation alone, against which its other alternative execution paths are verified (SIMPL.7). Where the alternative execution paths of a component execute one source, the reference path is the path whose delivered arithmetic the component's specification assumes. |
 | Runtime library | A library through which a component reaches its hardware and that sets at least one of its delivered arithmetic, its placement of data in memory, its scheduling of concurrent work, or its choice at run time among implementations. |
 
 ## Selector
 
-HW.1 states the selector: one attribute per hardware type, each defined here, which the sub-profiles each give one of (HW.CPU.1, HW.GPU.1, HW.QPU.1, HW.EMBED.1, HW.FPGA.1, HW.ASIC.1, STND.DRAFT.36). The domain items are execution paths, hardware contracts, boundary contracts, constrained targets, and claims comparing the performance of execution paths. Because each provision names as its subject an execution path, a contract, or a record or claim about one (STND.DRAFT.37, STND.DRAFT.38), a provision about an execution path on one hardware type imposes nothing on a component that has no path on that type. A component that executes only on general-purpose processors meets this profile and HW.CPU for its own path, and the boundary contracts it shares with components on other types; it meets no obligation specific to accelerators, quantum processors, or embedded controllers. Each attribute is also true where the classification records that a component whose behavior affects a result the work reports or relies on is admitted to execute on that type. Adding a hardware type otherwise revises the classification, which the human owner adopts (GOV.24, GOV.50); a classification that admits the hardware types the work plans to use lets an agent add a path on an admitted type without a further decision of the human owner, and costs nothing before the path exists. Hardware of a kind that no attribute names is governed by LVL0 and by the nearest of this profile and its sub-profiles applied by analogy, with the choice of analogue recorded (GOV.29). A processor realized in programmable logic is programmable logic. Analog and neuromorphic devices are accelerators where a host offloads work to them, and otherwise fall under GOV.29. Each sub-profile's selector restates its attribute from HW.1.
+HW.1 states the selector: one attribute, Hardware execution, defined here, which the selector of each sub-profile gives as well (HW.CPU.1, HW.GPU.1, HW.QPU.1, HW.EMBED.1, HW.FPGA.1, HW.ASIC.1, STND.DRAFT.36), so that the hardware types on which the work executes are a matter of its execution paths and not of an attribute each, and path scope alone decides which sub-profile's provisions reach a component. The domain items are execution paths, hardware contracts, boundary contracts, constrained targets, and claims comparing the performance of execution paths. Because each provision names as its subject an execution path, a contract, or a record or claim about one (STND.DRAFT.37, STND.DRAFT.38), a provision about an execution path on one hardware type imposes nothing on a component that has no path on that type. A component that executes only on general-purpose processors meets this profile and HW.CPU for its own path, and the boundary contracts it shares with components on other types; it meets no obligation specific to accelerators, quantum processors, or embedded controllers. The attribute is also true where the classification records that such a component is admitted to execute on a hardware type. No selector tests the type, so a path on a new hardware type revises no attribute; the execution paths of each component are recorded by hardware type where the section Architecture of the constitution names (STND.PROJ.1), outside the classification, so that an agent adds a path on a new type to that record without a decision of the human owner, and the provisions of the sub-profile of that type reach the path from then on. Hardware of a kind that Hardware type does not name is governed by LVL0 and by the nearest of this profile and its sub-profiles applied by analogy, with the choice of analogue recorded (GOV.29). A processor realized in programmable logic is programmable logic. Analog and neuromorphic devices are accelerators where a host offloads work to them, and otherwise fall under GOV.29. Each sub-profile's selector gives the attribute of HW.1.
 
 ## Where the rest lives
 
@@ -82,7 +77,7 @@ Computing hardware protected by its own operating system and onboard circuitry i
 
 A documented specification of hardware or its software is evidence once its stated conditions are shown to hold and its source is confirmed under VV.2 as the project's class applies it (VV.1). The per-job calibration record that the provider of a quantum processor gives is a record of the property that its hardware gives for the run, and confirms it under HW.7. A published accuracy is often a maximum found by testing rather than a proven bound. HW.6 therefore marks properties resting on documentation, and documented accuracies that are tested maxima, which tells a reviewer which properties carry measured support and which comparisons in units in the last place need a margin (STND.VVUQ.4). Evidence for a contract is not tied to the run that gathered it. Once established for a set of hardware models, firmware, drivers, runtime libraries, and settings, it holds until one of them changes, and HW.7 has each run confirm the properties it relies on, by comparing what it reads of that identity or by checking the property directly, whichever is cheaper. Only runtime libraries in the defined sense are part of a contract, so an update of a dependency that sets no delivered arithmetic, memory placement, scheduling, or implementation choice renews nothing. The kinds of hardware fault are bounded by the Term. Silent data corruption is addressed by HW.4 and HW.10: the contract states which kinds its hardware does not detect, and a path exposed to one either checks for it or says so in the record of each result. The noise of a quantum processor belongs to its noise model, in its hardware contract and its uncertainty statement, not to its faults. Limits at which hardware only slows, power and thermal throttling included, are neither capacities nor grounds for a constrained target, while a limit on supplied power that resets the hardware is a capacity; so a processor running at its power limit by design engages none of HW.8, HW.9, HW.20, or HW.21 by reason of that limit alone; a cluster's limit on wall time halts the run and engages none of them either.
 
-HW.8 states how PRIME.4 applies to detected, uncorrected hardware faults and to exhausted capacity, and binds at every class, adding nothing to the floor that PRIME.4 does not already hold. For a run of several processes that compute one result together, HW.8 is read as asking the whole run to halt, degrade visibly, or transition to a designed safe state. A process that halts while the others wait on it leaves a silent hang. STND.MPI.6 states how the halt of one process reaches the others in a program that uses the Message Passing Interface. Every other provision except HW.1 and HW.2 instantiates only VV, REPRO, INTPR, DSGN, SIMPL, or RSRC. Each such provision inherits their rank and waivability (GOV.17) and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Where a provision applies from a less severe class than one it builds on, it tightens above the floor (PRIME.15). Under STND.CLASS.10, HW.4, HW.11, HW.13, and HW.14 apply from CSQ2, and every other provision except HW.8 from CSQ3. At CSQ3 a hardware contract therefore holds what HW.5, HW.6, and HW.7 ask of it, the delivered arithmetic and the evidence for each property relied upon, and not yet the full statement of HW.4; HW.10 binds there only where a contract states an undetected fault, which at CSQ3 it is not yet asked to do. A silent fallback or an unmonitored overrun is a silent misalignment, and a fallback found only after a long run wastes the run. From CSQ3, HW.3 and HW.9 put each fallback in the record of each result it affects, HW.19 reports it to the operator at its first occurrence, and the record of the run's resource use counts fallbacks, because a fallback is a regression in resource use that RSRC.2 makes visible from the first run; HW.21 monitors budgets and reports overruns from the class at which RSRC.2 applies. Both reports therefore tighten above the class at which INTPR.7 applies, at the cost of one message each. Because nearly all computational work executes on general-purpose processors, this profile binds widely, and most of its obligations are light at the less severe classes. The type detail that a sub-profile does not hold sits in the hardware annex (STND.ANNEX).
+HW.8 states how PRIME.4 applies to detected, uncorrected hardware faults and to exhausted capacity, and binds at every class, adding nothing to the floor that PRIME.4 does not already hold. For a run of several processes that compute one result together, HW.8 is read as asking the whole run to halt, degrade visibly, or transition to a designed safe state. A process that halts while the others wait on it leaves a silent hang. STND.MPI.6 states how the halt of one process reaches the others in a program that uses the Message Passing Interface. Every other provision except HW.1 and HW.2 instantiates only VV, REPRO, INTPR, DSGN, SIMPL, or RSRC, inherits their rank and waivability (GOV.17), and applies from the class that its field `onset` gives under STND.CLASS.10, so that the hardware contract of HW.4 and the delivered arithmetic, the evidence, and the currency with which HW.5 to HW.7 fill it start together at CSQ2, with the contract that DSGN.5 asks, while the identity record of HW.3 and the variation declaration of HW.12, which cost one record each and which a later reclassification needs, start at CSQ3, and a field that gives CSQ3 for a report, a stated limit or exposure, or the verification of a path, content that the table of STND.CLASS.10 starts at a more severe class, tightens above the floor (PRIME.15) at the cost of one message, one statement, or one run, because a fallback, a limit, or an exposure that a reader does not see is a silent misalignment at every class. A silent fallback or an unmonitored overrun is a silent misalignment, and a fallback found only after a long run wastes the run. From CSQ3, HW.3 and HW.9 put each fallback in the record of each result it affects, HW.19 reports it to the operator at its first occurrence, and the record of the run's resource use counts fallbacks, because a fallback is a regression in resource use that RSRC.2 makes visible from the first run; HW.21 monitors budgets and reports overruns from the class at which RSRC.2 applies. Both reports therefore tighten above the class at which INTPR.7 applies, at the cost of one message each; each goes to the operator of a run during which one acts, and otherwise into the record of the run, since an unattended run has no operator to receive a message and its record is what a reader examines afterward. Where the classification records an expected class, STND.CLASS.21 has the design not preclude the hardware, the reference path (HW.15), the reduction order, and the bounds (HW.20) that the obligations of that class ask of the work, with the reason for each such choice in a decision record, and asks no other record of that class before the reclassification than the records of STND.CLASS.23. Because nearly all computational work executes on general-purpose processors, this profile binds widely, and most of its obligations are light at the less severe classes. The type detail that a sub-profile does not hold sits in the hardware annex (STND.ANNEX).
 
 ## References
 
@@ -109,6 +104,7 @@ HW.8 states how PRIME.4 applies to detected, uncorrected hardware faults and to 
 | STND.CLASS | Consequence-class criteria |
 | STND.DRAFT | Drafting standard |
 | STND.MPI | Message Passing Interface standard |
+| STND.PROJ | Project constitution template |
 | STND.VVUQ | Verification, validation, and uncertainty quantification methods |
 | VV | Correctness |
 
@@ -124,12 +120,7 @@ This profile SHALL bind a project whose classification makes at least one attrib
 
 | Attribute | Defined by |
 | --- | --- |
-| General-purpose processor execution | HW |
-| Accelerator execution | HW |
-| Quantum processor execution | HW |
-| Embedded controller execution | HW |
-| Programmable logic execution | HW |
-| Integrated circuit execution | HW |
+| Hardware execution | HW |
 
 #### HW.2 Hardware shared matters
 
@@ -152,7 +143,7 @@ Each matter of the table of this provision SHALL be governed in this document by
 
 #### HW.3 Execution path record
 
-. Instantiates REPRO.1, REPRO.2.
+From CSQ3. Instantiates REPRO.1, REPRO.2.
 
 Each execution path that computes a reported result SHALL be identified in the record of that result, with each item of its hardware model, firmware, drivers, runtime libraries, and settings that is able to affect the result and that the path reads without elevated privileges (REPRO.1, REPRO.2). The record of that result SHALL name each item of that kind able to affect the result that the path is unable to read without elevated privileges (REPRO.2).
 
@@ -160,25 +151,25 @@ Each execution path that computes a reported result SHALL be identified in the r
 
 #### HW.4 Hardware contract
 
-. Instantiates DSGN.5.
+From CSQ2. Instantiates DSGN.5.
 
 Each execution path whose behavior affects a reported result SHALL have a hardware contract that states, for its regime of use, each property of the path on which the component relies, and, for each of its delivered arithmetic, its memory and ordering model, and its timing, either the property relied upon or that the component relies on none (DSGN.5). The hardware contract SHALL state each limit of its hardware on capacity, timing, or power that the component is able to reach in its regime of use (DSGN.5). The hardware contract SHALL state each kind of hardware fault able to change a reported result, whether its hardware detects that kind and whether it corrects it, and the response of the path to each detected fault that is not corrected (DSGN.5).
 
 #### HW.5 Delivered arithmetic
 
-. Instantiates DSGN.5, REPRO.2.
+From CSQ2. Instantiates DSGN.5, REPRO.2.
 
 The hardware contract of each execution path that performs a numerical operation of its component SHALL state each property of its delivered arithmetic on which the working precision of a reported result depends, and its handling of non-finite values, with each mode, library default, or option that sets them (DSGN.5, REPRO.2). Where the path chooses at run time among implementations that differ in delivered arithmetic, the hardware contract SHALL state the range of delivered arithmetic over those choices, or that the range is not established (DSGN.5). Where the path admits more than one hardware model, the hardware contract SHALL state whether its delivered arithmetic is established as the same on each (REPRO.2).
 
 #### HW.6 Contract evidence
 
-. Instantiates DSGN.5, VV.1.
+From CSQ2. Instantiates DSGN.5, VV.1.
 
 Each property of a hardware contract on which a reported result relies SHALL be supported by evidence that records the property, the hardware model, firmware, drivers, runtime libraries, and settings on which it was obtained, the regime it covers, and its outcome, or by a documented specification of the hardware or its software whose stated conditions are shown to hold in the regime of use and whose confirmation meets VV.2 as the project's class applies it (DSGN.5, VV.1). The hardware contract SHALL mark each property that a documented specification alone supports as resting on documentation, and each documented accuracy that is a tested maximum rather than a proven bound as such (VV.1). The evidence for a property MAY be evidence obtained once for a hardware model, firmware, drivers, runtime libraries, and settings, and shared by each execution path, in every project, that admits them and whose regime of use the recorded regime includes (DSGN.5, VV.1).
 
 #### HW.7 Contract currency
 
-. Instantiates VV.8, DSGN.5, REPRO.2, INTPR.10.
+From CSQ2. Instantiates VV.8, DSGN.5, REPRO.2, INTPR.10.
 
 Before a claim of correctness of a result rests on a property of the hardware contract of an execution path, the path SHALL hold evidence for that property obtained under its current hardware model, firmware, drivers, runtime libraries, and settings, or a record that each difference from those under which the evidence was obtained is unable to affect that property (VV.8, DSGN.5). At the start or resumption of each run, each execution path SHALL confirm each property of its hardware contract on which its results rely, by checking the property itself, by a record of the property that its hardware gives for the run, or by comparing each item on which the property depends with the item recorded with the evidence, an item that the path is unable to read counting as a failed comparison (VV.8, REPRO.2). Where that confirmation fails for a property, the record of each result of the run that relies on that property SHALL state that the property is unconfirmed and that no claim of correctness of the result rests on it (VV.8, INTPR.10).
 
@@ -190,25 +181,25 @@ Where an execution path detects a hardware fault that its hardware does not corr
 
 #### HW.9 Results across hardware events
 
-. Instantiates INTPR.9.
+From CSQ3. Instantiates INTPR.9.
 
 Each execution path that computes a reported result across a hardware fault, an exhausted capacity, a fallback to another execution path, or a reached limit of its hardware that is able to change that result SHALL state the event and the response taken in the record of that result (INTPR.9).
 
 #### HW.10 Undetected fault exposure
 
-. Instantiates VV.1, INTPR.10.
+From CSQ3. Instantiates VV.1, INTPR.10.
 
 Where the hardware contract of an execution path states that a fault able to change a reported result goes undetected by its hardware, the path SHALL check its results by a means able to detect that fault, or state that exposure in the record of each reported result it computes (VV.1, INTPR.10).
 
 #### HW.11 Memory model verification
 
-. Instantiates DSGN.15.
+From CSQ2. Instantiates DSGN.15.
 
 Each execution path whose component's own code accesses shared state concurrently, an interrupt handler and the code it interrupts included, SHALL verify the protocol for that state under the memory and ordering model that its hardware contract states, or under that of its language or library for a protocol that uses only their synchronization (DSGN.15).
 
 #### HW.12 Path variation
 
-. Instantiates REPRO.3.
+From CSQ3. Instantiates REPRO.3.
 
 Each execution path SHALL state, in the declaration of its run-to-run variation, whether the order in which it combines values, the scheduling of its concurrent work, and its choices made at run time among implementations vary between runs on identical recorded inputs (REPRO.3).
 
@@ -216,13 +207,13 @@ Each execution path SHALL state, in the declaration of its run-to-run variation,
 
 #### HW.13 Boundary contract
 
-. Instantiates DSGN.4, DSGN.5.
+From CSQ2. Instantiates DSGN.4, DSGN.5.
 
 Where execution paths on different hardware types or hardware models exchange data or control, the boundary contract between them SHALL state the layout, byte order, precision, and ownership of what crosses the boundary, and its ordering and timing or that neither path relies on them (DSGN.4, DSGN.5). A boundary contract MAY incorporate the documented contract of the library that performs the exchange, for each property that the documented contract states under conditions shown to hold in the regime of use (DSGN.5).
 
 #### HW.14 Boundary checks
 
-. Instantiates DSGN.4.
+From CSQ2. Instantiates DSGN.4.
 
 Each property of a boundary contract that is decidable from what crosses the boundary SHALL be checked at the boundary, on each crossing, or once for each build or compilation whose record shows that property fixed for every hardware model that the joined paths admit (DSGN.4). Where the boundary contract records that a check on each crossing exceeds the budget it states for the crossing, that property SHALL be checked at the boundary in the verification of each execution path that the boundary joins (DSGN.4).
 
@@ -230,53 +221,53 @@ Each property of a boundary contract that is decidable from what crosses the bou
 
 #### HW.15 Reference path
 
-. Instantiates SIMPL.7, VV.1.
+From CSQ3. Instantiates SIMPL.7, VV.1.
 
 Each alternative execution path SHALL name the reference path of its component in the record of its verification (SIMPL.7). The verification of each alternative execution path other than the reference path SHALL cite the evidence that verifies the reference path against the component's contract (VV.1).
 
 #### HW.16 Alternative path verification
 
-. Instantiates VV.6, VV.3, VV.1, SIMPL.7.
+From CSQ3. Instantiates VV.6, VV.3, VV.1, SIMPL.7.
 
 Each alternative execution path other than the reference path of its component SHALL be verified against the component's contract, at the component's interface boundary for each property decidable there, and otherwise by comparison with the reference path in the regime of use, or in the part of it that HW.17 gives, within a tolerance recorded before the comparison (VV.6, VV.3). Where the compared output is a numerical result, that tolerance SHALL rest on a basis that NUMER.11 gives (VV.1). Where an alternative execution path differs from its reference path by a performance approximation, its verification SHALL also meet NUMER.17 (SIMPL.7, VV.1).
 
 #### HW.17 Comparison beyond reference reach
 
-. Instantiates VV.6, VV.1, VV.3, INTPR.10.
+From CSQ3. Instantiates VV.6, VV.1, VV.3, INTPR.10.
 
 Where the reference path of a component is unable to run a part of the regime of use within the time budget that the verification records before the comparison, the comparison of HW.16 SHALL cover the part of the regime that the reference path runs within that budget, as recorded before the comparison (VV.6, VV.3). Where that comparison covers only part of the regime of use, the verification SHALL also carry evidence, judged by a criterion recorded before the comparison, that the difference from the reference path, extrapolated with problem size, stays within the tolerance of HW.16 over the rest of the regime, and a check at full size of each property of the component's contract that is decidable without the reference path (VV.1, VV.3). Where that comparison covers only part of the regime of use, the record of each result computed in the rest of the regime SHALL state that its agreement with the reference path rests on extrapolation (INTPR.10).
 
 #### HW.18 Path-specific limits
 
-. Instantiates DSGN.5, VV.3, INTPR.10.
+From CSQ3. Instantiates DSGN.5, VV.3, INTPR.10.
 
 Where an alternative execution path is unable to meet a property of its component's contract, the component's contract SHALL state the path's own value of that property as a limit of the path, by a recorded decision that leaves the prior value in the record and cites evidence of that value other than the comparison that found the shortfall (DSGN.5, VV.3). The record of each reported result computed on that path SHALL state that limit beside the result's own requirement on that property (INTPR.10). A result that requires that property beyond that limit SHALL NOT be computed on that path (VV.3).
 
 #### HW.19 Execution path fallback
 
-. Instantiates INTPR.7, RSRC.2.
+From CSQ3. Instantiates INTPR.7, RSRC.2.
 
-Where an execution path falls back to another execution path during a run, the path SHALL report the fallback to the operator at its first occurrence in the run (INTPR.7). The record of the resource use of the run SHALL hold the count of fallbacks of each kind in the run (RSRC.2).
+Where an execution path falls back to another execution path during a run, the path SHALL report the fallback at its first occurrence in the run, to the operator of a run during which one acts and otherwise in the record of the run (INTPR.7). The record of the resource use of the run SHALL hold the count of fallbacks of each kind in the run (RSRC.2).
 
 ### Constrained targets
 
 #### HW.20 Constrained target budgets
 
-. Instantiates RSRC.1, VV.1, INTPR.9.
+From CSQ3. Instantiates RSRC.1, VV.1, INTPR.9.
 
 Each constrained target SHALL state each of its budgets with its margin, and evidence that it meets each budget within that margin under the power, thermal, and contention conditions of its regime of use, consisting of evidence obtained on that target before the component is first relied upon there and, for each such condition that the work is unable to produce on the target, a documented specification of the hardware whose stated conditions include it (RSRC.1, VV.1). Where the hazard analysis of PRIME.13 identifies the miss of a deadline as able to cause a hazard, the constrained target SHALL have a bound on its worst-case execution time that meets that deadline within its margin (RSRC.1, VV.1). Where the miss of another deadline is able to change a command that the target issues or a result that the work reports or relies on, the constrained target SHALL have such a bound, or detect each missed deadline at run time and state it in the record of each command or result that the miss is able to change (RSRC.1, VV.1, INTPR.9).
 
 #### HW.21 Budget monitoring
 
-. Instantiates RSRC.2, RSRC.3, INTPR.7.
+From CSQ3. Instantiates RSRC.2, RSRC.3, INTPR.7.
 
-Each constrained target SHALL monitor during runs each of its budgets for which no bound, established before the component is first relied upon there, holds for every run in its regime of use, and report each overrun to the operator (RSRC.2, RSRC.3, INTPR.7).
+Each constrained target SHALL monitor during runs each of its budgets for which no bound, established before the component is first relied upon there, holds for every run in its regime of use, and report each overrun to the operator of a run during which one acts and otherwise in the record of the run (RSRC.2, RSRC.3, INTPR.7).
 
 ### Performance claims
 
 #### HW.22 Comparative performance claims
 
-. Instantiates RSRC.4, RSRC.6, SIMPL.7.
+From CSQ3. Instantiates RSRC.4, RSRC.6, SIMPL.7.
 
 Each claim that one execution path is faster or more efficient than another, stated in a reported result or a release, SHALL rest on measurements of both at a stated problem size, under stated conditions of contention, power, and thermal state, with data movement between hardware types and dispatch counted, at an accuracy that the results of both are shown to meet (RSRC.4, RSRC.6, SIMPL.7). Where the compared results are numerical results, that accuracy SHALL be judged within a tolerance that rests on a basis that NUMER.11 gives (RSRC.4, SIMPL.7). Where the hardware of the comparator of such a claim states a peak rate for the operations or data movement that limit the comparator, the claim SHALL state the rate of the comparator, measured or counted from the operations it performs, as a fraction of that peak rate (RSRC.4, SIMPL.7).
 
@@ -290,3 +281,6 @@ Each claim that one execution path is faster or more efficient than another, sta
 | 1.1 | 2026-10-19 | Minor amendment (GOV.41): HW.20 asks for a bound on worst-case execution time only for a deadline whose miss the hazard analysis of PRIME.13 identifies as hazardous, and accepts a bound or detection of each miss, stated in the record, for every other deadline that changes a command or a result; the Notes state the same. |
 | 1.1.1 | 2026-10-24 | Editorial amendment (GOV.41): the informative Notes state that, for a run of several processes that compute one result together, HW.8 is read as asking the whole run to halt, degrade visibly, or transition to a designed safe state, citing STND.MPI.6, and References lists STND.MPI; no obligation changes. |
 | 1.1.2 | 2026-10-25 | Editorial amendment (GOV.41): the informative Selector text cites the selectors of the six sub-profiles that the Purpose names, each of which gives one attribute of HW.1 (STND.DRAFT.36), and References lists HW.ASIC, HW.CPU, HW.EMBED, HW.FPGA, HW.GPU, and HW.QPU; no obligation, permission, or defined meaning changes. |
+| 1.2 | 2026-10-28 | Minor amendment (GOV.41): HW.1 gives one attribute, Hardware execution, which the Terms define and the selector of each sub-profile gives as well, in place of one attribute per hardware type, and Hardware type names the kinds for which the profile holds a sub-profile (CS9); HW.19 and HW.21 report to the operator of a run during which one acts and otherwise in the record of the run (CS8); the Notes cite STND.CLASS.21 for the design of work with a recorded expected class. |
+| 1.3 | 2026-10-28 | Minor amendment (GOV.41): HW.5, HW.6, and HW.7 apply from CSQ2, with the contract of HW.4 that they fill, and HW.3 and HW.12 stay at CSQ3; each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields. |
+| 1.3.1 | 2026-10-28 | Editorial amendment (GOV.41): the Notes say that the execution paths are recorded by hardware type where the section Architecture names, outside the classification, as STND.PROJ.1 now has it; no obligation, permission, or defined meaning changes. |

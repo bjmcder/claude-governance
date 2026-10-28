@@ -32,7 +32,7 @@ An agent that halts, under PRIME.14 or QA.3, says so plainly, completes, within 
 
 . Instantiates .
 
-Every project has a register of reserved actions and of exempt classes (GOV.21), adopted by the human owner or, absent a project constitution, provided by the defaults (GOV.22).
+Every project has a register of reserved actions and of exempt classes (GOV.21, GOV.22).
 
 #### GUARD.5 Irrecoverable actions
 
@@ -102,7 +102,7 @@ An agent's own operating cost is implicit expenditure (PRIME.8). It is estimated
 
 . Instantiates .
 
-Spending is tracked against each limit by an enforced limit, by a mechanistic measurement or poll of the budget, or by a conservative projection made well in advance, so that work halts before a limit is exceeded and not needlessly early. Expenditure that would exceed an authorized estimate or operating envelope halts the work incurring it, and the agent refers it (PRIME.14).
+Spending is tracked against each limit by an enforced limit, by a mechanistic measurement or poll of the budget, or by a conservative projection made well in advance, so that work halts before a limit is exceeded and not needlessly early. The agent refers each line of work that PRIME.8 halts (PRIME.14).
 
 ### Security
 

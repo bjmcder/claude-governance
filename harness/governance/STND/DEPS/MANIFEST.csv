@@ -1,14 +1,16 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.DEPS,standard,LVL2,Dependency policy,adopted,_doc.md,97a0866aef75c7defd70656aa8c092bc9a616cc198df065c49b9313e8477d0c5,7895
-STND.DEPS.1,provision,LVL2,Dependency selection criteria,adopted,1.md,4596d1b8218b4e67c8a7dbed4e8cf4e64edefe24ba252893ef0826eb130834c4,1151
-STND.DEPS.2,provision,LVL2,Thinly supported dependencies,adopted,2.md,6724f67d5ae5f30b061dfed86c75594c0d1973d043553b226f42e191a717c13e,484
-STND.DEPS.3,provision,LVL2,Initial revision choice,adopted,3.md,a9357b012f8ac661171d73ab1436ff9ce61e19f79d619f344a934a130a8dc40e,528
-STND.DEPS.4,provision,LVL2,Pinned revision review,adopted,4.md,e021be4f1bd7f0a686a843235bed9ea433bad8f4c750d5ca753e103271f6f20d,578
-STND.DEPS.5,provision,LVL2,Contract tests on update,adopted,5.md,cfa0ce27f5f98ca485cab94a6e48e10195bcb12e26d2e7850bebeb1b46fba49f,478
+STND.DEPS,standard,LVL2,Dependency policy,adopted,_doc.md,ae7ee3a0a75324778a030fcee049a77279e21167264590fe6c7fe87d4e7789e6,11839
+STND.DEPS.1,provision,LVL2,Dependency selection criteria,adopted,1.md,e2f8d9b2abe67c9dc66a7459361ac61ec67c74c3d786b9d3e232313700739269,1165
+STND.DEPS.2,provision,LVL2,Thinly supported dependencies,adopted,2.md,174299ffaee4bd1d54ba45262b2313cc371a57886499637183d21a40f8fa284e,498
+STND.DEPS.3,provision,LVL2,Initial revision choice,adopted,3.md,8bd1f2f8d6d2422ac8d6ec5ae7da7c88c63d555e3353cc390ed06b25821f07c9,542
+STND.DEPS.4,provision,LVL2,Pinned revision review,adopted,4.md,8031abc5fa4b6c397b4bb2eee23b91502e7121c5d8ecf876c613340fefcf4278,660
+STND.DEPS.5,provision,LVL2,Contract tests on update,adopted,5.md,0779228fe206f389b51ec671627db04adbd2057e4565fe5f464d41cead130e0a,492
 STND.DEPS.6,provision,LVL2,Fetched component integrity,adopted,6.md,0c6391ddd43112ac11b5412cd43a69c099aa21cdf844138953e08a3fb16fde7f,708
 STND.DEPS.7,provision,LVL2,Advisories before release,adopted,7.md,22e70dd2ecaf25ecc9376f5062760aa862826456e0333192438aa1d67ad91095,780
-STND.DEPS.8,provision,LVL2,Toolchain revisions as inputs,adopted,8.md,a9259f19017a3843de39a0fc4972bb3b449c74eea5284fc6b0809774dedfac3c,497
-STND.DEPS.9,provision,LVL2,Development tool record,adopted,9.md,99ebfd5eaaf6aa8de9066dfdb82270e234c9694dca2a045786ae2567f655cbd4,479
-STND.DEPS.10,provision,LVL2,Package files as record,adopted,10.md,ad61708eba1c3e219184a5159a84f86efe71b921681a9cc73c1822385251d061,513
-STND.DEPS.11,provision,LVL2,Incorporated external material,adopted,11.md,1373e9b68ff5b4b0bed7371707e16e2670a15fa32be169c9094cf239bc51f1e8,496
-STND.DEPS.12,provision,LVL2,Lock files under version control,adopted,12.md,e104c6ab707b8c629c4a8d2a66564a7b1e90c96ea68caa5b48a23591c497b087,515
+STND.DEPS.8,provision,LVL2,Toolchain revisions as inputs,adopted,8.md,10a69e8f98242680f39dbd25d46732f5f48d9a89512c54561bb9423f19b4c38d,511
+STND.DEPS.9,provision,LVL2,Development tool record,adopted,9.md,e1522ab6884c7ebf763f7f0a3beb153df1f5077b7f2d4d50e9385df4c2409864,493
+STND.DEPS.10,provision,LVL2,Package files as record,adopted,10.md,6a0f806ed79561dc1fef0dc827833f27c7d82bd159dbfa328792bdabc723e37d,525
+STND.DEPS.11,provision,LVL2,Incorporated external material,adopted,11.md,9c486ed4e6b08ee2a8968f1434caab073e59299add71642f055a657bbdaae1a2,510
+STND.DEPS.12,provision,LVL2,Lock files under version control,adopted,12.md,e277e1da1faa73426ffb8e18837beb04c5c71f7a1696453e607658a49788607d,529
+STND.DEPS.13,provision,LVL2,Builds at locked revisions,adopted,13.md,22687f39796142bf83e5d1cb0319512e4e864fca8925e876c549b8ff897c0006,699
+STND.DEPS.14,provision,LVL2,Declared range checks,adopted,14.md,a44cdb9618e67c3db6013fb15cb895151b322350ba739d93648070deb4a94cae,1011

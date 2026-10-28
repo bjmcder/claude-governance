@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.KNOW,standard,LVL2,Knowledge base and tags,adopted,_doc.md,606787e1947290f9c1c74dea1f7b1844a12bec62691e39364fa82d597e36a240,7726
+STND.KNOW,standard,LVL2,Knowledge base and tags,adopted,_doc.md,e33dd70a28d03662e1b434a36891169888d0cd331cea4634efb1a0cd9ac627d7,8098
 STND.KNOW.1,provision,LVL2,Knowledge entry content,adopted,1.md,b1f4ccdbb0e7a1a3f27952b4aa475dad8fe8906bd1ff96e8afe2c48f2a8eadc5,619
 STND.KNOW.2,provision,LVL2,Knowledge entry kinds,adopted,2.md,19e44fb869bfaac83c6225961ffa2f109dc15a6c61804825f1e1405d826b46ce,996
 STND.KNOW.3,provision,LVL2,Knowledge entry form,adopted,3.md,311ed371f91b8309f5bca2fb3dea4159fdd092c0628fcd9448eec1fa4af828f8,716
@@ -11,6 +11,6 @@ STND.KNOW.8,provision,LVL2,Revalidation schedule,adopted,8.md,c09b01c07da3e62d7d
 STND.KNOW.9,provision,LVL2,Superseded and retracted entries,adopted,9.md,b0acf8a3c0d5343651314c6ca58c668f91863a026adb799e11db6d66d841be74,655
 STND.KNOW.10,provision,LVL2,Drawn entry sources,adopted,10.md,ab48b1582accf8bb48091c568b3b80a589561dfcc5a2a0556254fa21194bee9b,625
 STND.KNOW.11,provision,LVL2,Secrets in knowledge entries,adopted,11.md,4b109bbf9939eda81d3c157245c00126132626da285529ddc492474e0dd659ff,656
-STND.KNOW.12,provision,LVL2,Established workbench proposals,adopted,12.md,44088f5d5e605eb8ffbe266238dbe6aba935778ac80f01393568174feedc55ed,578
+STND.KNOW.12,provision,LVL2,Established workbench proposals,adopted,12.md,fa979c302b07124bb03d8d7fb194154caa1b918c310875f27841ddf9989acabc,592
 STND.KNOW.13,provision,LVL2,Tag permanence,adopted,13.md,87b3ba178fb34aec4f21d51626d11f1018e7a9c4d323ada0d3d45abe3336e057,436
-STND.KNOW.14,provision,LVL2,Tags on knowledge entries,adopted,14.md,28cae314ba464d32af57976806c7c52b1c402f9431a30e72516c92ae91465823,448
+STND.KNOW.14,provision,LVL2,Tags on knowledge entries,adopted,14.md,76e7f8660cff73d0253403a335cc52929e711c781e2097f24fa942ea4b5ad48e,462

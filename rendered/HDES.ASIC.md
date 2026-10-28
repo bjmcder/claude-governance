@@ -1,6 +1,6 @@
-# Integrated circuit design (HDES.ASIC) 1.0.2
+# Integrated circuit design (HDES.ASIC) 1.0.4
 
-Adopted by The Custodian as revision 1.0 in ledger entry 74 (2026-10-18); revised to 1.0.1 in entry 87 (2026-10-19) and 1.0.2 in entry 169 (2026-10-25). This reading copy is composed from the per-provision files in HDES/ASIC/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 74 (2026-10-18); revised to 1.0.1 in entry 87 (2026-10-19), 1.0.2 in entry 169 (2026-10-25), 1.0.3 in entry 250 (2026-10-28), and 1.0.4 in entry 300 (2026-10-28). This reading copy is composed from the per-provision files in HDES/ASIC/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -59,7 +59,7 @@ Manufacturing test is designed and its coverage established before fabrication, 
 
 HDES.ASIC addresses four matters (HDES.ASIC.2): the design record of a realized design, which HDES owns, through HDES.ASIC.3, HDES.ASIC.5, HDES.ASIC.10, HDES.ASIC.11, and HDES.ASIC.12, which cite HDES.3; and the convergence and the uncertainty of a computed result and the tolerance basis of a numerical comparison, which NUMER owns, through HDES.ASIC.5, which cites NUMER.11, NUMER.23, and NUMER.25, and HDES.ASIC.6, which cites NUMER.11.
 
-Every provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, or DSGN, so it inherits their rank and waivability (GOV.17) and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, every provision other than the selector and the shared-matters provision applies from CSQ3. Some provisions apply at CSQ3 content of obligations that STND.CLASS.10 first asks at CSQ2 or CSQ1: a contract for each external component and for hardware (DSGN.5), a schema for each data structure crossing an interface (DSGN.4), documentation of the limits of validity (INTPR.10), provenance written with each output at production (REPRO.4), and verification of each assembly and of the integrated system (VV.6). Each such provision tightens above the floor (PRIME.15), because its check runs without a person and the failure it prevents is silent at every class. Here an error found after submission also cannot be corrected on that run. No provision raises the floor (GOV.11).
+Every provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, or DSGN, inherits their rank and waivability (GOV.17), and applies from the class that its field `onset` gives under STND.CLASS.10, where a field that gives CSQ3 for content that the table of STND.CLASS.10 starts at a more severe class tightens above the floor (PRIME.15), because its check runs without a person and the failure it prevents is silent at every class, and an error found after submission cannot be corrected on that run. No provision raises the floor (GOV.11).
 
 ## References
 
@@ -113,13 +113,13 @@ Each matter of the table of this provision SHALL be governed in this document by
 
 #### HDES.ASIC.3 Sign-off checks
 
-. Instantiates VV.1, DSGN.5, VV.5, INTPR.10.
+From CSQ3. Instantiates VV.1, DSGN.5, VV.5, INTPR.10.
 
 Before a design is submitted for fabrication, its layout SHALL show no violation, other than one that its fabrication service accepts, of each sign-off check that its process design kit and its fabrication service require, run with the revision of the kit that the fabrication uses (VV.1, DSGN.5). Where the fabrication service accepts a violation of such a check, the fabrication readiness record in the design record under HDES.3 SHALL state the violation and the record of its acceptance (VV.5, INTPR.10).
 
 #### HDES.ASIC.4 Electrical limits of the process
 
-. Instantiates VV.1, DSGN.5.
+From CSQ3. Instantiates VV.1, DSGN.5.
 
 Before a design is submitted for fabrication, an analysis of its layout SHALL show each device and each conductor within each limit of voltage, current, and current density that its process design kit states for it, at the operating conditions of its regime of use (VV.1, DSGN.5).
 
@@ -127,19 +127,19 @@ Before a design is submitted for fabrication, an analysis of its layout SHALL sh
 
 #### HDES.ASIC.5 Variation across corners
 
-. Instantiates VV.1, DSGN.5, VV.5, INTPR.10.
+From CSQ3. Instantiates VV.1, DSGN.5, VV.5, INTPR.10.
 
 Each analog or mixed-signal block of a design whose circuit the design record holds SHALL be verified at each corner of its regime of use, the process extremes that its process design kit models and each end-of-life condition that its regime of use admits included, and over the variation between matched devices on which its contract relies and that its process design kit models, within tolerances that its contract states before the verification with a basis under NUMER.11 (VV.1, DSGN.5). Where that verification estimates the variation by sampling, its samples SHALL carry the evidence of NUMER.23 and its acceptance be judged by a criterion that states its probabilities as NUMER.25 asks (VV.1). Where its process design kit does not model a variation between matched devices on which its contract relies, the fabrication readiness record in the design record under HDES.3 SHALL state that variation as not verified, with no claim of correctness resting on it (VV.5, INTPR.10).
 
 #### HDES.ASIC.6 Mixed-signal verification models
 
-. Instantiates VV.6, VV.1.
+From CSQ3. Instantiates VV.6, VV.1.
 
 Where a design joins analog and digital blocks, its verification under HDES.6 SHALL exercise each connection between an analog and a digital block, with each analog block represented by its circuit or by a behavioral model (VV.6, VV.1). Each behavioral model that the verification of a design uses for a block whose circuit the design record holds SHALL be verified against the circuit-level simulation of that block at each corner of HDES.ASIC.5, within tolerances with a basis under NUMER.11 that the record of the model states before the comparison (VV.1, VV.6).
 
 #### HDES.ASIC.7 Analog start-up from power-on
 
-. Instantiates VV.1, DSGN.5.
+From CSQ3. Instantiates VV.1, DSGN.5.
 
 Each analog or mixed-signal block of a design whose circuit the design record holds and whose contract relies on a state that it reaches after power-on SHALL be verified to reach that state from a ramp of its supply at the fastest and slowest rates that its regime of use admits, from zero charge on each node, with no excitation other than that ramp, the noise of its devices or sources that represent that noise, and the inputs that its contract states for start-up, at each corner of HDES.ASIC.5 (VV.1, DSGN.5).
 
@@ -147,19 +147,19 @@ Each analog or mixed-signal block of a design whose circuit the design record ho
 
 #### HDES.ASIC.8 Extracted layout match
 
-. Instantiates VV.1, VV.6.
+From CSQ3. Instantiates VV.1, VV.6.
 
 Before a design is submitted for fabrication, the circuit extracted from the layout of each block whose layout the design record holds and that no check of HDES.ASIC.3 compares with its netlist or schematic SHALL be shown to match the netlist or schematic that its verification used (VV.1, VV.6).
 
 #### HDES.ASIC.9 Verification with parasitic elements
 
-. Instantiates VV.1.
+From CSQ3. Instantiates VV.1.
 
 Before a design is submitted for fabrication, each analog or mixed-signal block whose layout the design record holds SHALL be verified, within the tolerances of HDES.ASIC.5 at each of its corners, on the circuit extracted from its layout with its parasitic elements (VV.1).
 
 #### HDES.ASIC.10 Power domain crossings
 
-. Instantiates DSGN.4, VV.1.
+From CSQ3. Instantiates DSGN.4, VV.1.
 
 Each signal of a design that crosses between power domains at different voltages, or between a power domain able to be powered off and another power domain, SHALL pass through the level shifting or isolation that its design record under HDES.3 states (DSGN.4). Before a design is submitted for fabrication, an analysis of the netlist that HDES.8 shows, or of the circuit extracted from its layout, SHALL verify that level shifting or isolation for each such signal (VV.1).
 
@@ -167,7 +167,7 @@ Each signal of a design that crosses between power domains at different voltages
 
 #### HDES.ASIC.11 Manufacturing test coverage
 
-. Instantiates VV.1, VV.6, VV.5, INTPR.10.
+From CSQ3. Instantiates VV.1, VV.6, VV.5, INTPR.10.
 
 The design record under HDES.3 of each design SHALL state, for each block, the fault model against which its manufacturing test is measured and the test patterns or procedures that the test applies, or that the block has no manufacturing test (VV.1, VV.6). Before a design is submitted for fabrication, simulation of those patterns or procedures on the netlist that HDES.8 shows, or on the circuit extracted from its layout, SHALL show the coverage that they reach of each fault model and, by block, the faults that they leave undetected (VV.5, INTPR.10). Before a design is submitted for fabrication, each test structure of the design SHALL be shown, on the netlist that HDES.8 shows or on the circuit extracted from its layout, to leave the behavior of its contract unchanged while the structure is inactive (VV.1).
 
@@ -175,9 +175,9 @@ The design record under HDES.3 of each design SHALL state, for each block, the f
 
 #### HDES.ASIC.12 Fabrication readiness record
 
-. Instantiates VV.5, REPRO.4, REPRO.1, INTPR.10, VV.1.
+From CSQ3. Instantiates VV.5, REPRO.4, REPRO.1, INTPR.10, VV.1.
 
-Before a design is submitted for fabrication, its design record under HDES.3 SHALL hold a fabrication readiness record that identifies by content the layout to be submitted and the revision of its process design kit, and states, for each property of its contract, each check of HDES.ASIC.3, each analysis of HDES.ASIC.4, and the coverage of HDES.ASIC.11, the evidence that applies to that layout, with the checks of HDES.8, HDES.ASIC.3, and HDES.ASIC.8 that carry to that layout the evidence obtained on the hardware description or a netlist, and whether each was performed and met (VV.5, REPRO.4, REPRO.1). The fabrication readiness record SHALL list each property that HDES.6 leaves uncovered, each part and step that HDES.8 names as unverified, each rule of HDES.9, each condition that HDES.10 states as not analyzed, and each variation that HDES.ASIC.5 states as not verified, each block whose evidence rests only on the contract of an external component (VV.5, INTPR.10). Where evidence for a design comes from a realization in programmable logic, the fabrication readiness record SHALL mark each property for which that realization is the only evidence (VV.1, INTPR.10).
+Before a design is submitted for fabrication, its design record under HDES.3 SHALL hold a fabrication readiness record that identifies by content the layout to be submitted and the revision of its process design kit, and states, for each property of its contract, each check of HDES.ASIC.3, each analysis of HDES.ASIC.4, and the coverage of HDES.ASIC.11, the evidence that applies to that layout, with the checks of HDES.8, HDES.ASIC.3, and HDES.ASIC.8 that carry to that layout the evidence obtained on the hardware description or a netlist, and whether each was performed and met (VV.5, REPRO.4, REPRO.1). The fabrication readiness record SHALL list each property that HDES.6 leaves uncovered, each part and step that HDES.8 names as unverified, each rule of HDES.9, each condition that HDES.10 states as not analyzed, each variation that HDES.ASIC.5 states as not verified, and each block whose evidence rests only on the contract of an external component (VV.5, INTPR.10). Where evidence for a design comes from a realization in programmable logic, the fabrication readiness record SHALL mark each property for which that realization is the only evidence (VV.1, INTPR.10).
 
 ## Revision History
 
@@ -186,3 +186,5 @@ Before a design is submitted for fabrication, its design record under HDES.3 SHA
 | 1.0 | 2026-10-18 | Adopted. |
 | 1.0.1 | 2026-10-19 | Editorial amendment (GOV.41): the informative Selector text describes HW.ASIC and MEAS as adopted; no obligation changes. |
 | 1.0.2 | 2026-10-25 | Editorial amendment (GOV.41): the informative Selector text cites HW.6 and HW.ASIC.4, which govern the evidence obtained from fabricated devices, and MEAS.1, the selector of MEAS, and References lists HW.ASIC and MEAS; no obligation, permission, or defined meaning changes. |
+| 1.0.3 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields; no obligation, permission, or defined meaning changes. |
+| 1.0.4 | 2026-10-28 | Editorial amendment (GOV.41): the list of the second sentence of HDES.ASIC.12 places its conjunction before its last item, each block whose evidence rests only on the contract of an external component; no obligation, permission, or defined meaning changes. |

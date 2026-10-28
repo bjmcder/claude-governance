@@ -1,6 +1,6 @@
-# Application-specific integrated circuits (HW.ASIC) 1.0
+# Application-specific integrated circuits (HW.ASIC) 1.2.1
 
-Adopted by The Custodian as revision 1.0 in ledger entry 80 (2026-10-19). This reading copy is composed from the per-provision files in HW/ASIC/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 80 (2026-10-19); revised to 1.1 in entry 234 (2026-10-28), 1.2 in entry 253 (2026-10-28), and 1.2.1 in entry 304 (2026-10-28). This reading copy is composed from the per-provision files in HW/ASIC/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -20,7 +20,7 @@ This section fixes meaning and imposes no obligation, as the Lexicon does.
 
 ## Selector
 
-HW.ASIC.1 states the selector: the attribute Integrated circuit execution, which HW defines and which HW.1 also gives (STND.DRAFT.36). Each provision names an execution path on an integrated circuit, or the record of a result it computes, or evidence about one, as its subject (STND.DRAFT.38). A device fabricated from a design that the project does not hold is not an integrated circuit under HW, and this sub-profile does not bind it.
+HW.ASIC.1 states the selector: the attribute Hardware execution, which HW defines and which HW.1 gives (STND.DRAFT.36), so that the sub-profile binds with HW and its provisions reach a component through the execution paths of that component, recorded by hardware type where the section Architecture of the constitution names (STND.PROJ.1). Each provision names an execution path on an integrated circuit, or the record of a result it computes, or evidence about one, as its subject (STND.DRAFT.38). A device fabricated from a design that the project does not hold is not an integrated circuit under HW, and no provision of this sub-profile reaches it.
 
 ## Where the rest lives
 
@@ -42,7 +42,7 @@ Characterization of fabricated devices is measurement: where MEAS binds the work
 
 HW.ASIC addresses two matters (HW.ASIC.2): the hardware contract of an execution path, which HW owns, through HW.ASIC.4, which cites HW.6; and the design record of a realized design, which HDES owns, through HW.ASIC.3, which cites HDES.3, and HW.ASIC.4, which cites HDES.5.
 
-Every provision other than the selector and the shared-matters provision instantiates only VV, REPRO, or INTPR, so it inherits their rank and waivability (GOV.17) and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, HW.ASIC.3 and HW.ASIC.4 apply from CSQ3. Some provisions apply at CSQ3 content of obligations that STND.CLASS.10 first asks at CSQ2 or CSQ1: documentation of the limits of validity (INTPR.10). Each such provision tightens above the floor (PRIME.15), because its check runs without a person and the failure it prevents is silent at every class. No provision raises the floor (GOV.11).
+Every provision other than the selector and the shared-matters provision instantiates only VV, REPRO, or INTPR, inherits their rank and waivability (GOV.17), and applies from the class that its field `onset` gives under STND.CLASS.10, where a field that gives CSQ3 for content that the table of STND.CLASS.10 starts at a more severe class tightens above the floor (PRIME.15), because its check runs without a person and the failure it prevents is silent at every class. No provision raises the floor (GOV.11).
 
 ## References
 
@@ -59,6 +59,7 @@ Every provision other than the selector and the shared-matters provision instant
 | REPRO | Reproducibility |
 | STND.CLASS | Consequence-class criteria |
 | STND.DRAFT | Drafting standard |
+| STND.PROJ | Project constitution template |
 | VV | Correctness |
 
 ## Provisions
@@ -73,7 +74,7 @@ This sub-profile SHALL bind a project whose classification makes at least one at
 
 | Attribute | Defined by |
 | --- | --- |
-| Integrated circuit execution | HW |
+| Hardware execution | HW |
 
 #### HW.ASIC.2 Integrated circuit execution shared matters
 
@@ -90,7 +91,7 @@ Each matter of the table of this provision SHALL be governed in this document by
 
 #### HW.ASIC.3 Device in each result
 
-. Instantiates REPRO.1, REPRO.2.
+From CSQ3. Instantiates REPRO.1, REPRO.2.
 
 The record of each result that an execution path on an integrated circuit computes SHALL identify the design revision of the part of the device that the project designed, traced to its design record under HDES.3 (REPRO.1, REPRO.2). Where the device carries an individual identity, or its fabricator gives it one, that record SHALL also identify the device by it (REPRO.1).
 
@@ -98,7 +99,7 @@ The record of each result that an execution path on an integrated circuit comput
 
 #### HW.ASIC.4 Fabricated-device evidence
 
-. Instantiates VV.1, INTPR.10.
+From CSQ2. Instantiates VV.1, INTPR.10.
 
 Where a reported result relies on a property of the hardware contract of an execution path on an integrated circuit that its design record marks under HDES.5 as resting only on analysis or simulation, the path SHALL hold, for each part of the regime of use on which that result relies, evidence under HW.6 obtained by measurement of fabricated devices of that design revision, or a statement in the record of that result that the property rests on analysis or simulation alone in that part (VV.1, INTPR.10). Evidence obtained by measurement of fabricated devices SHALL state the number and identity of the devices measured and the spread of the property among them, or that one device was measured, kept apart from the uncertainty of each measurement (VV.1, INTPR.10).
 
@@ -107,3 +108,6 @@ Where a reported result relies on a property of the hardware contract of an exec
 | Revision | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-10-19 | Adopted. |
+| 1.1 | 2026-10-28 | Minor amendment (GOV.41): the selector of HW.ASIC.1 gives the attribute Hardware execution of HW.1 in place of its own, so that path scope alone decides which provisions reach a component, each provision naming an execution path on integrated circuits as its subject (CS9). |
+| 1.2 | 2026-10-28 | Minor amendment (GOV.41): HW.ASIC.4 applies from CSQ2, the class from which its trigger, a property that the design record marks under HDES.5, exists; each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields. |
+| 1.2.1 | 2026-10-28 | Editorial amendment (GOV.41): the Notes say that the provisions reach a component through its execution paths, recorded by hardware type where the section Architecture of the constitution names, in place of the paths that the classification lists, as STND.PROJ.1 now has it; no obligation, permission, or defined meaning changes. |

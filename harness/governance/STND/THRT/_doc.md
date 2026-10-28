@@ -4,7 +4,7 @@ level: "LVL2"
 kind: "standard"
 title: "Threat-model template"
 status: "adopted"
-revision: "1.0"
+revision: "1.1.1"
 adopted: "2026-10-20"
 adopted_by: "The Custodian"
 instantiates: ["GOV.21", "GUARD.16"]
@@ -36,7 +36,7 @@ The rows of STND.DFLT.18 are the minimum because each protected row there rests 
 
 STND.THRT.3 makes concrete the protected data that PRIME.10 and the working bounds of STND.DFLT refer to, a store of AGENT.44 and its readers included where the work keeps one, and keeps the list readable, because an agent avoids only what it is able to see. It also names whom the threat model trusts with a secret, the test that the term Secret of AGENT and STND.THRT.4 rely on. STND.THRT.4 gives the secret-report channel of PRIME.10, which the threat model states as the human owner directly where it designates no other; the channel is one that no untrusted reader sees, so that the report does not itself disclose. STND.THRT.5 asks only that the project say how alteration is detected, by chained hashes, signatures, or another means of its choice.
 
-The events of STND.THRT.6 always change exposure; GUARD.16 still asks for a review at every other change of exposure. A routine retrieval from a new site changes exposure only where the site is of a kind of source that the threat model does not name. The actor that brings an event about or learns of it records it and proposes the change it calls for; the human owner adopts the revised threat model, and every line of work that the event does not concern continues (AGENT.15). Coming to hold irreplaceable data, or an asset or source of threat that the model omits, is one of these events, the counterpart under a project constitution of STND.DFLT.19. A review before each release is recommended.
+The events of STND.THRT.6 always change exposure; GUARD.16 still asks for a review at every other change of exposure. A routine retrieval from a new site changes exposure only where the site is of a kind of source that the threat model does not name. The actor that brings an event about or learns of it records it and proposes the change it calls for as an item of its next report, not as a referral; until the human owner adopts the revised threat model, the model as adopted governs, and every line of work that the event does not concern continues (AGENT.15). Coming to hold irreplaceable data, or an asset or source of threat that the model omits, is one of these events, the counterpart under a project constitution of STND.DFLT.19. A review before each release is recommended.
 
 STND.THRT.7 keeps the sensitive part of a threat model apart, outside version control and every record and readable only by those the threat model trusts with it, so that the access controls of GUARD.18, to the extent the human owner records as practical, restrict only that part, while every actor reads the rest, which INTPR.12 needs. The part stays out of versioned records, because PRIME.10 bars secrets there; the rest cites it, and each change to it is entered in the ledger by reference (GOV.36). STND.THRT.8 is a default proportioned to class under REPRO.13, applying from CSQ3 under STND.CLASS.10.
 
@@ -64,3 +64,5 @@ STND.THRT.9 carries the two practices of the undivided draft it replaces that LV
 | Revision | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-10-20 | Adopted. |
+| 1.1 | 2026-10-28 | Minor amendment (GOV.41): STND.THRT.6 has the actor propose each change of the threat model that an event calls for as an item of its next report, and the Notes say that the model as adopted governs until the human owner adopts the change (CC22). |
+| 1.1.1 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields; no obligation, permission, or defined meaning changes. |

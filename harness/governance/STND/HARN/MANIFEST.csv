@@ -1,12 +1,12 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.HARN,standard,LVL2,Harness specification,adopted,_doc.md,18f32cc0404e08c8aa285706972b7dd05677ac87337dfc69a9057128ba0e5b35,11931
+STND.HARN,standard,LVL2,Harness specification,adopted,_doc.md,f029587b8ed7aa85d223d9fdd7a15fc525a64289f37c2171b40cb887cf5979da,15620
 STND.HARN.1,provision,LVL2,Item retrieval,adopted,1.md,9c3a39db5315f53754f7dc9433294014167ee065c81bafcbb9e5d32867c12e4f,482
 STND.HARN.2,provision,LVL2,Topic retrieval,adopted,2.md,602c57f26fddc5ba4eb8ee578fec73231cd7d821d423615acbd09970d8858614,394
 STND.HARN.3,provision,LVL2,Whole text,adopted,3.md,40fad67aefb278537805eae5668ed53403041a7bba6191545f251ef2dada61fa,365
 STND.HARN.4,provision,LVL2,Item files,adopted,4.md,19c900201efa03a22d62af5c63cf29d8f1fab44b916d56216135f0ba7dedade2,594
 STND.HARN.5,provision,LVL2,Files read as items,adopted,5.md,83aa911a299e9d3cf38666549999cd50c47ab9b4c3fa005a5a1bb3902245e457,396
-STND.HARN.6,provision,LVL2,Ledger file,adopted,6.md,70d5fa47049f491d98ca1eecc1b9c45ea7c53b64ea7d09c0f2db490d36ffec7a,502
-STND.HARN.7,provision,LVL2,Transaction fields,adopted,7.md,570feed21665640cfb455a2a40c0439273ee8e71258f6e26208bd79a5ebefbdc,1143
+STND.HARN.6,provision,LVL2,Ledger file,adopted,6.md,075d56083e27482a135977e0fda319e3da81ae167dc13ceb632292e14cb36e35,575
+STND.HARN.7,provision,LVL2,Transaction fields,adopted,7.md,cdaf64096633d1b4d05e719b4ff2058c28a1158c2a54734162af4630afb2bd95,1230
 STND.HARN.8,provision,LVL2,Chain integrity,adopted,8.md,b8ba19a18356727fd3b9d00681ca6b328ad0b9ec6f35f1895ce9567acd5079ad,457
 STND.HARN.9,provision,LVL2,Content pin,adopted,9.md,e06426fea2f12b74f31b03f38f44701e326c2f1c990b47ffbfe85767c2dd8da3,402
 STND.HARN.10,provision,LVL2,Signer register form,adopted,10.md,d4048aa3f2e182f973cc51e06d580662950e23341bf59f90220525f3e4571bad,670
@@ -17,10 +17,10 @@ STND.HARN.14,provision,LVL2,Manifest form,adopted,14.md,ecf133cc9379d82f4f08554f
 STND.HARN.15,provision,LVL2,Stale content,adopted,15.md,a6bbab6f5a45c3233cb2df069faeccdff496f03d1ecd6e22de9112a4134338fe,432
 STND.HARN.16,provision,LVL2,Stable check keys,adopted,16.md,c8c3bdf965bf2cf157e1f12815a638774b9bb1e3b83d09197fd2b420c9330a66,382
 STND.HARN.17,provision,LVL2,Failure status,adopted,17.md,2687f897a70b261c479e627668a8ddc5e22c93413ddc1e2120aade0a2a2ebea2,374
-STND.HARN.24,provision,LVL2,Rehearsal before application,adopted,24.md,b503ebd934dbd5f3278c71d9c9dfd483af7b6241b96db8fd107c61b12e24f772,426
+STND.HARN.24,provision,LVL2,Rehearsal before application,adopted,24.md,d7433f4a082361e405d780265ae17cb08652d704ee4ee4ba293b5299ded3d424,696
 STND.HARN.25,provision,LVL2,Rehearsal isolation,adopted,25.md,1f29a2ec11f6217577786854c5587bc2b869a6d44a07a79349fddd59dcf6e934,373
 STND.HARN.26,provision,LVL2,Selector attribute check,adopted,26.md,20ba9a28b1691b76ec407fe3cf8ec6f6eb161fb585bfc08c4b0479d50e2df580,514
 STND.HARN.27,provision,LVL2,Shared-matter ownership check,adopted,27.md,2edfb4dd59d8298d56490ea0ae166c08a30d1efb9edd9a5825b022b8c2892481,666
-STND.HARN.28,provision,LVL2,Conflict candidates,adopted,28.md,d286c41681ae0e4bc674a8e04d9325454c1b6fc4bf9148dbf1568499e485c861,1200
+STND.HARN.28,provision,LVL2,Conflict candidates,adopted,28.md,684f6a03fa1e171c93c5c9ef40824305ed0cd9547590a926036fe4a25c9b922c,1454
 STND.HARN.31,provision,LVL2,Unpinned files,adopted,31.md,531ef03fe4780bc15ccb8df9bf3dbdb2a38474dad295ee82f1edc50f3fd7bcd1,428
 STND.HARN.32,provision,LVL2,Known check keys,adopted,32.md,616abeab528c7e80613213f940a8e90d74c0ffe434d5b011fd654510c7779912,450

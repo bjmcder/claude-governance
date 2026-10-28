@@ -1,12 +1,12 @@
-# Verification, validation, and uncertainty quantification methods (STND.VVUQ) 1.4
+# Verification, validation, and uncertainty quantification methods (STND.VVUQ) 1.5.1
 
-Adopted by The Custodian as revision 1.0 in ledger entry 61 (2026-10-11); revised to 1.1 in entry 63 (2026-10-11), 1.2 in entry 67 (2026-10-18), 1.2.1 in entry 88 (2026-10-19), 1.3 in entry 107 (2026-10-24), and 1.4 in entry 122 (2026-10-24). This reading copy is composed from the per-provision files in STND/VVUQ/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 61 (2026-10-11); revised to 1.1 in entry 63 (2026-10-11), 1.2 in entry 67 (2026-10-18), 1.2.1 in entry 88 (2026-10-19), 1.3 in entry 107 (2026-10-24), 1.4 in entry 122 (2026-10-24), 1.5 in entry 285 (2026-10-28), and 1.5.1 in entry 297 (2026-10-28). This reading copy is composed from the per-provision files in STND/VVUQ/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
 This standard holds the default methods by which work produces the evidence that the NUMER profile requires. NUMER states each outcome and its bounds without naming a method; this standard names the methods that current practice supports, with default numbers an agent applies unattended. Its core is three instruments that set how strictly each result is judged. The section Comparison tiers ranks comparisons from bitwise identity, through units in the last place and tolerances set from rounding and numerical error, to statistical criteria and uncertainty statements, and places each tolerance within a bracket between the noise floor of its comparison and the departure it has the purpose of detecting. The section Error budget allocates the required precision among numerical, statistical, input, and model-form components and keeps aleatory and epistemic uncertainty apart. The section Assertion and tracking decides whether each quantity is asserted, tracked, or targeted. The remaining sections give methods and numbers for the evidence those instruments use. STND.VVUQ.83 instantiates GOV.11 and GOV.48 and is binding on agents at every class; every other provision, its numbers included, is a default (GOV.19) and a recommendation, whether its number comes from a source or from a convention: an actor that uses another method or number meeting the same NUMER outcome records the method and its reason as a decision (REPRO.7, PRIN.10), and asks no one. STND.VVUQ.77 and STND.VVUQ.78 rest on LVL0 directly, for claims of comparison and the timing of verification. Methods and numbers change as the field advances; a change here leaves NUMER unchanged.
 
-The provisions were synthesized from a research note of 2026-10-11, kept in the project as claude/research/vvuq-research-notes.md and proposed as a knowledge entry (GOV.32), which surveyed standards bodies, national laboratories, agencies, and the literature, and logged each retrieval. Where a default number rests on a source, the note cites it; where it is a convention that no retrieved source sets, the Notes say so.
+The provisions were synthesized from a research note of 2026-10-11, which surveyed standards bodies, national laboratories, agencies, and the literature, and logged each retrieval; the note is not kept in the project. Where a default number rests on a source, the table of sources in the Notes gives it; where it is a convention that no retrieved source sets, the Notes say so.
 
 ## Normative and informative parts
 
@@ -96,7 +96,7 @@ The methods rest on these frameworks, in the editions current on 2026-10-11 as t
 | National Research Council, Assessing the Reliability of Complex Models (2012) | Reference report |
 | JCGM GUM-1:2023, introduction to the expression of uncertainty | Published |
 | ASME VVUQ 30.1-2024, scaling for nuclear power system responses | Current |
-| MCNP 6.3.2 Theory and User Manual, LA-UR-26-23119 Rev. 1 | Current; not opened by the research |
+| MCNP Theory and User Manual | Current release; not opened by the research |
 
 No standard for verification and validation of machine-learned models had been published by ASME; the learned-surrogate provisions follow the scientific machine-learning literature that the research note cites.
 
@@ -126,7 +126,7 @@ Sources of defaults that the research traced to a source:
 | Feasibility tolerance 1e-6 | STND.VVUQ.55 | Gurobi parameter reference |
 | Four chains, 1.01, effective sample sizes above 400, rank plots | STND.VVUQ.58 | Vehtari and others, Bayesian Analysis 16 (2021) |
 | Pareto shape threshold | STND.VVUQ.60 | Vehtari and others, JMLR 25(72) (2024) |
-| Ten tally-fluctuation checks and their thresholds | STND.VVUQ.61 | MCNP4B manual and a CANTEACH chapter; the current MCNP 6.3.2 manual was not opened |
+| Ten tally-fluctuation checks and their thresholds | STND.VVUQ.61 | an earlier MCNP manual and a CANTEACH chapter; the current MCNP manual was not opened |
 | Root seed of 128 bits; spawned streams; no arithmetic seeding by worker index | STND.VVUQ.62 | NumPy random-number documentation; L'Ecuyer and others (2017) |
 | Fixed-seed and fresh-seed tests | STND.VVUQ.64 | Dutta, Arunachalam, and Misailovic, ICST (2022) |
 | Sequential rule of repetition | STND.VVUQ.65 | Gandy, JASA (2009) |
@@ -186,9 +186,11 @@ Default treatment of common quantities:
 
 Extending the chains of a run whose diagnostics failed is further sampling, not a repetition of a failed comparison under NUMER.26.
 
-The multiple of STND.VVUQ.33 is 3.29 for one comparison at a rate of 0.001, 3.89 for 10 comparisons, 4.42 for 100, and 4.89 for 1000; a fixed multiple of 3 would reject a correct result in about 0.27 percent of single comparisons, above the default suite rate. For a suite that fails when any comparison fails, the Holm procedure of STND.VVUQ.35 and the multiple of STND.VVUQ.33 fail the suite in the same cases; Holm then identifies which comparisons fail. The effective sample size of 400 makes the diagnostics of STND.VVUQ.58 reliable and gives a Monte Carlo standard error of 0.05 posterior standard deviations; it is not a precision target, which STND.VVUQ.59 sets. Bitwise identity holds only on fixed hardware and software, because parallel reductions and vendor libraries reorder arithmetic. A random number generator that passes a test battery is not thereby proven sound. Batteries differ in power: the TestU01 library holds smaller batteries beside BigCrush, the one that STND.VVUQ.63 named before this revision. A record that names the battery applied, with its revision, lets the test be repeated as it ran. Multistart from several points does not show a global optimum. Under deterministic noise no heuristic choice of a regularization strength is guaranteed to converge, which is why STND.VVUQ.54 prefers the discrepancy principle where the noise level is known. Simulation-based calibration checks the posterior computation against the inversion's own model; the coverage that NUMER.19 requires is shown separately on independently produced data (STND.VVUQ.52). A trajectory of chaotic dynamics beyond its predictability horizon is not converged, whatever its refinement (NUMER.9). NUMER.26 forbids repeating a failed stochastic comparison unless a rule of repetition was recorded before the failure; STND.VVUQ.65 gives the default form of that rule.
+The multiple of STND.VVUQ.33 is 3.29 for one comparison at a rate of 0.001, 3.89 for 10 comparisons, 4.42 for 100, and 4.89 for 1000; a fixed multiple of 3 would reject a correct result in about 0.27 percent of single comparisons, above the default suite rate. For a suite that fails when any comparison fails, the Holm procedure of STND.VVUQ.35 and the multiple of STND.VVUQ.33 fail the suite in the same cases; Holm then identifies which comparisons fail. The effective sample size of 400 makes the diagnostics of STND.VVUQ.58 reliable and gives a Monte Carlo standard error of 0.05 posterior standard deviations; it is not a precision target, which STND.VVUQ.59 sets. Bitwise identity holds only on fixed hardware and software, because parallel reductions and vendor libraries reorder arithmetic. A random number generator that passes a test battery is not thereby proven sound. Batteries differ in power: the TestU01 library holds smaller batteries beside BigCrush, the largest. A record that names the battery applied, with its revision, lets the test be repeated as it ran. Multistart from several points does not show a global optimum. Under deterministic noise no heuristic choice of a regularization strength is guaranteed to converge, which is why STND.VVUQ.54 prefers the discrepancy principle where the noise level is known. Simulation-based calibration checks the posterior computation against the inversion's own model; the coverage that NUMER.19 requires is shown separately on independently produced data (STND.VVUQ.52). A trajectory of chaotic dynamics beyond its predictability horizon is not converged, whatever its refinement (NUMER.9). NUMER.26 forbids repeating a failed stochastic comparison unless a rule of repetition was recorded before the failure; STND.VVUQ.65 gives the default form of that rule.
 
 STND.VVUQ.77 measures a comparison of a learned and a numerical method under the conditions that HW.22 states for a comparative performance claim, a matter that HW owns. Where HW.22 binds, for a claim between execution paths stated in a reported result or a release, its requirement holds in full; STND.VVUQ.77 extends its conditions as a default to methods compared on one path. STND.VVUQ.79 to STND.VVUQ.81 give the default extrapolation criterion that HW.17 asks to be recorded before a comparison that the reference path cannot complete: one fit for deterministic results, one for stochastic results, and one rule of acceptance for each. For deterministic results the prediction interval of a new observation carries the scatter of the differences; with six sizes it has four degrees of freedom, and it widens with the distance of the extrapolation, so a short trend cannot vouch for a long reach. For stochastic results the sampling noise of each estimate is known from its standard error, so the criterion extrapolates the expected difference, the bias, and judges its confidence interval against the tolerance; more samples at the compared sizes narrow it. In simulation, standard errors of a tenth of the tolerance let a correct path pass at a reach sixteen times beyond the largest compared size, while standard errors of a third of it fail at that reach. The fit against the count of operations, for a path whose contract states an error rate per operation, follows errors that compound with each operation. Choosing compared sizes below and above each size at which the hardware contract states a change of implementation choice, where the reference path reaches them, keeps that switch inside the fit. Where every observed difference is zero, the criterion rests on rounding spacing alone, and the full-size checks of HW.17 are the only guard against failures that appear only at scale. A criterion recorded under STND.VVUQ.80 and STND.VVUQ.81 states its probability of rejecting a correct result, as NUMER.25 asks; that probability depends on the standard errors and on the reach, not on the level of the interval alone, as the simulations above illustrate. The methods for learned surrogates here cover their numerical side; the ML profile owns the record, the error, and the domain of a learned model (ML.2) and leaves these methods to this standard. Methods for validation stay here; MEAS states outcomes for measured data, their acquisition, calibration, and uncertainty among them (MEAS.2), and leaves the choice of validation metric to this standard and to the project.
+
+Under STND.CLASS.10, each default applies from the class that its field `onset` gives, which work of CSQ4 may omit, and STND.VVUQ.83 binds at every class. The core that applies from CSQ3, STND.VVUQ.1, STND.VVUQ.3, STND.VVUQ.5, STND.VVUQ.7, STND.VVUQ.13, STND.VVUQ.17, STND.VVUQ.62, STND.VVUQ.64, and STND.VVUQ.82, with the basis of each tolerance that NUMER.11 asks, chooses the tier of each comparison, handles values that are not finite, states each tolerance with its relative and absolute parts within its bracket, keeps asserted checks and regression guards, and builds and tests random streams, and at CSQ3 STND.VVUQ.64 judges a test with fresh seeds by the criterion that its acceptance criterion states, since STND.VVUQ.33 to STND.VVUQ.35 start at CSQ2; the methods of high-assurance numerics, from error budgets and noise floors to multiplicity control and order tests at several levels, start at CSQ2, so that work of CSQ3 meets NUMER through the core, while the obligations of LVL0 that the other provisions serve apply to it in full. No default raises the floor (GOV.11).
 
 ## References
 
@@ -207,6 +209,7 @@ STND.VVUQ.77 measures a comparison of a learned and a numerical method under the
 | REPRO | Reproducibility |
 | RSRC | Resources |
 | SIMPL | Simplicity |
+| STND.CLASS | Consequence-class criteria |
 | VV | Correctness |
 
 ## Provisions
@@ -215,7 +218,7 @@ STND.VVUQ.77 measures a comparison of a learned and a numerical method under the
 
 #### STND.VVUQ.1 Comparison tier choice
 
-Default. Instantiates NUMER.11, REPRO.3, VV.1, VV.3.
+Default, from CSQ3. Instantiates NUMER.11, REPRO.3, VV.1, VV.3.
 
 Each comparison that judges a numerical result SHOULD use the strictest tier of the table of this provision whose admitted differences include every source of difference between the compared values (NUMER.11, REPRO.3, VV.1, VV.3).
 
@@ -230,49 +233,49 @@ Each comparison that judges a numerical result SHOULD use the strictest tier of 
 
 #### STND.VVUQ.2 Bitwise identity
 
-Default. Instantiates NUMER.11, REPRO.3, VV.1, VV.3.
+Default, from CSQ2. Instantiates NUMER.11, REPRO.3, VV.1, VV.3.
 
 Where bitwise identity across runs is an acceptance criterion, each reduction on the path of the result SHOULD use a fixed or order-independent summation (NUMER.11, REPRO.3, VV.1, VV.3). Where a computation that continues from state saved by an earlier run is judged by bitwise identity, the saved state SHOULD hold the complete state of the computation, its random number states included (REPRO.3).
 
 #### STND.VVUQ.3 Non-finite values
 
-Default. Instantiates NUMER.11, REPRO.3, VV.1, VV.3.
+Default, from CSQ3. Instantiates NUMER.11, REPRO.3, VV.1, VV.3.
 
 A NaN SHOULD agree in a comparison with a NaN only, whatever its payload and sign (NUMER.11, REPRO.3, VV.1, VV.3). An infinity SHOULD agree in a comparison with an infinity of the same sign only (NUMER.11, VV.1, VV.3, REPRO.3). Where the reference of a comparison is finite, a non-finite compared value SHOULD fail the comparison (NUMER.11, VV.1, VV.3, REPRO.3).
 
 #### STND.VVUQ.4 Bounds in last-place units
 
-Default. Instantiates NUMER.11, VV.1, VV.3, REPRO.3.
+Default, from CSQ2. Instantiates NUMER.11, VV.1, VV.3, REPRO.3.
 
 Where a documented accuracy in units in the last place is a tested maximum rather than a proven bound, a bound resting on it SHOULD add a recorded margin, by default one unit in the last place (NUMER.11, VV.1, VV.3, REPRO.3). Where the relative rounding error of a value has no bound that holds for each operand in the regime of use, the value SHOULD be judged at tier 3 or a less strict tier of STND.VVUQ.1 (NUMER.11, VV.1, VV.3, REPRO.3). Where a build flushes subnormal values to zero, a value whose magnitude is below the smallest normal number SHOULD be judged at tier 3 or a less strict tier of STND.VVUQ.1 (NUMER.11, VV.1, VV.3, REPRO.3).
 
 #### STND.VVUQ.5 Relative and absolute parts
 
-Default. Instantiates NUMER.11, VV.1, VV.3, REPRO.3.
+Default, from CSQ3. Instantiates NUMER.11, VV.1, VV.3, REPRO.3.
 
 Each tolerance of tier 3 or tier 4 of STND.VVUQ.1 SHOULD be the larger of a relative part, taken of the magnitude of the reference, and an absolute part (NUMER.11, VV.1, VV.3, REPRO.3). The absolute part SHOULD be set from the noise floor of values whose reference is zero, and at or below the relative part at the smallest magnitude of the quantity on which its intended use relies (NUMER.11, VV.1, VV.3, REPRO.3).
 
 #### STND.VVUQ.6 Noise floor estimate
 
-Default. Instantiates NUMER.11, NUMER.13, VV.1, VV.3, REPRO.3, INTPR.9, VV.5.
+Default, from CSQ2. Instantiates NUMER.11, NUMER.13, VV.1, VV.3, REPRO.3, INTPR.9, VV.5.
 
 The record of each tolerance SHOULD state the noise floor of its comparison and the evidence from which the noise floor was estimated (NUMER.11, NUMER.13, VV.1, VV.3, REPRO.3, INTPR.9, VV.5).
 
 #### STND.VVUQ.7 Tolerance bracket
 
-Default. Instantiates NUMER.11, NUMER.25, VV.5, VV.1, VV.3, REPRO.3.
+Default, from CSQ3. Instantiates NUMER.11, NUMER.25, VV.5, VV.1, VV.3, REPRO.3.
 
 Each tolerance SHOULD lie within the tolerance bracket of its comparison, by default with the required precision as the departure that the comparison has the purpose of detecting (NUMER.11, NUMER.25, VV.1, VV.3, REPRO.3). Where the tolerance bracket of a comparison is empty, the record SHOULD state that the comparison is unable to show its claim (NUMER.11, VV.1, VV.3, REPRO.3). Where the tolerance bracket of a comparison is empty, the result that it judges SHOULD be reported as unverified while its tolerance bracket stays empty (NUMER.11, VV.5, VV.1, VV.3, REPRO.3).
 
 #### STND.VVUQ.8 Tight and loose tolerances
 
-Default. Instantiates NUMER.11, VV.3, VV.1, REPRO.3.
+Default, from CSQ2. Instantiates NUMER.11, VV.3, VV.1, REPRO.3.
 
 A tolerance that checks the correctness of an implementation SHOULD be the lower end of its tolerance bracket (NUMER.11, VV.1, VV.3, REPRO.3). A tolerance that checks the fitness of a result for its intended use SHOULD be the upper end of its tolerance bracket (NUMER.11, VV.1, VV.3, REPRO.3). A tolerance SHOULD be loosened only by a recorded decision that states a noise floor estimated from evidence other than the comparison that prompted the change (NUMER.11, VV.3, VV.1, REPRO.3).
 
 #### STND.VVUQ.82 Declared variation in comparisons
 
-Default. Instantiates REPRO.3, VV.3, RSRC.4.
+Default, from CSQ3. Instantiates REPRO.3, VV.3, RSRC.4.
 
 Where every source of a difference between compared results is stated in the declaration of run-to-run variation of a compared execution path (HW.12) or in the records of the compared runs, and the difference lies within the agreement that the acceptance criterion of the comparison fixed under STND.VVUQ.1 before the comparison, the difference SHOULD NOT be treated as a defect (REPRO.3, VV.3). Other than where an acceptance criterion of the work, or a provision that applies at its consequence class, requires bitwise identity, a change SHOULD NOT be made only to remove such a difference (REPRO.3, RSRC.4). An execution path MAY offer a mode without run-to-run variation (REPRO.3).
 
@@ -286,25 +289,25 @@ Where every source of a difference between compared results is stated in the rec
 
 #### STND.VVUQ.9 Error budget
 
-Default. Instantiates NUMER.5, NUMER.13, VV.3, VV.5, DSGN.5, REPRO.2, REPRO.7, VV.1, INTPR.9.
+Default, from CSQ2. Instantiates NUMER.5, NUMER.13, VV.3, VV.5, DSGN.5, REPRO.2, REPRO.7, VV.1, INTPR.9.
 
 Each numerical specification SHOULD allocate the required precision of its quantity of interest among the components of NUMER.13, in an error budget whose allocations, or the rules that set them from estimated components, are recorded before results are seen (NUMER.13, VV.3, INTPR.9, VV.5, VV.1). Where the combined uncertainty of a reported result exceeds its required precision, the report SHOULD state that the result does not meet its required precision (NUMER.5, VV.5, DSGN.5, REPRO.2, REPRO.7, VV.1).
 
 #### STND.VVUQ.10 Controlled component allocation
 
-Default. Instantiates NUMER.9, NUMER.13, VV.1, INTPR.9, VV.5.
+Default, from CSQ2. Instantiates NUMER.9, NUMER.13, VV.1, INTPR.9, VV.5.
 
 The root sum of squares of the controlled components SHOULD be at or below one quarter of the larger of the required precision and the largest uncontrolled component that is estimated or bounded, each stated at one common probability of containment (NUMER.9, NUMER.13, VV.1, INTPR.9, VV.5).
 
 #### STND.VVUQ.11 Negligible components
 
-Default. Instantiates NUMER.13, INTPR.9, VV.5, VV.1.
+Default, from CSQ2. Instantiates NUMER.13, INTPR.9, VV.5, VV.1.
 
 Where components are combined by root sum of squares, the root sum of squares of the components omitted as negligible SHOULD be at or below one quarter of the largest component, each stated at one common probability of containment (NUMER.13, INTPR.9, VV.5, VV.1). Where components are combined by adding intervals or widening a probability box, the sum of the components omitted as negligible SHOULD be at or below one thirtieth of the largest component (NUMER.13, INTPR.9, VV.5, VV.1). Each omitted component SHOULD be listed with its estimate (NUMER.13, INTPR.9, VV.5, VV.1).
 
 #### STND.VVUQ.12 Aleatory and epistemic inputs
 
-Default. Instantiates NUMER.13, NUMER.15, INTPR.9, VV.5, VV.1, REPRO.6.
+Default, from CSQ2. Instantiates NUMER.13, NUMER.15, INTPR.9, VV.5, VV.1, REPRO.6.
 
 Each uncertain input SHOULD be classified in its numerical specification as aleatory or epistemic (NUMER.13, NUMER.15, INTPR.9, VV.5, VV.1, REPRO.6). An epistemic input without a distribution that evidence supports SHOULD be represented by an interval (NUMER.13, INTPR.9, VV.5, VV.1). A result whose inputs include both kinds SHOULD be stated so that its aleatory and epistemic parts stay distinguishable, by default as a probability box (NUMER.13, INTPR.9, VV.5, VV.1).
 
@@ -312,31 +315,31 @@ Each uncertain input SHOULD be classified in its numerical specification as alea
 
 #### STND.VVUQ.13 Asserted checks
 
-Default. Instantiates VV.1, NUMER.11, VV.3, REPRO.3.
+Default, from CSQ3. Instantiates VV.1, NUMER.11, VV.3, REPRO.3.
 
 Where a property has a reference whose tolerance bracket under STND.VVUQ.7 is not empty, the property SHOULD be judged by an asserted check (VV.1, NUMER.11, VV.3, REPRO.3).
 
 #### STND.VVUQ.14 Tracked quantities
 
-Default. Instantiates INTPR.7, REPRO.3.
+Default, from CSQ2. Instantiates INTPR.7, REPRO.3.
 
 Where a quantity that bears on reliance on a result has no reference, it SHOULD be a tracked quantity (INTPR.7, REPRO.3). The band of a tracked quantity SHOULD be set, by a rule recorded before its first comparison, from a recorded baseline of its history (INTPR.7). A value that departs beyond the band SHOULD NOT enter the baseline without a recorded decision (INTPR.7).
 
 #### STND.VVUQ.15 Targeted components
 
-Default. Instantiates NUMER.9, NUMER.22, INTPR.9, VV.1.
+Default, from CSQ2. Instantiates NUMER.9, NUMER.22, INTPR.9, VV.1.
 
 Each controlled component SHOULD be a targeted component, refined, sampled, or computed at higher precision until it meets its allocation in the error budget (NUMER.9, NUMER.22, VV.1, INTPR.9). Where a targeted component misses its allocation within the budget recorded for the work, the report SHOULD state the value reached, the shortfall, and whether the combined uncertainty meets the required precision (NUMER.9, INTPR.9, VV.1).
 
 #### STND.VVUQ.16 Epistemic components
 
-Default. Instantiates NUMER.13, VV.5, INTPR.10, INTPR.9, VV.1.
+Default, from CSQ2. Instantiates NUMER.13, VV.5, INTPR.10, INTPR.9, VV.1.
 
 An uncontrolled epistemic component that no guaranteed bound limits SHOULD be tracked rather than judged by an asserted check (NUMER.13, VV.5, INTPR.9, VV.1). Where an epistemic component is the largest in an error budget, the report SHOULD name the data, analysis, or computation that would reduce it (NUMER.13, INTPR.10, INTPR.9, VV.5, VV.1).
 
 #### STND.VVUQ.17 Regression guard failures
 
-Default. Instantiates VV.1, VV.3.
+Default, from CSQ3. Instantiates VV.1, VV.3.
 
 Where the record of a change does not state, before its regression guards run, that the change alters a guarded result, a failure of one of those guards SHOULD be treated as a defect rather than as a reason to renew its reference (VV.3, VV.1). Where a change whose record states that it alters a guarded result fails that guard, the guard's reference SHOULD be renewed only by a recorded decision that cites the correctness evidence that the changed result passed (VV.3, VV.1).
 
@@ -344,49 +347,49 @@ Where the record of a change does not state, before its regression guards run, t
 
 #### STND.VVUQ.18 Preferred reference oracles
 
-Default. Instantiates NUMER.6, VV.1, VV.6.
+Default, from CSQ2. Instantiates NUMER.6, VV.1, VV.6.
 
 Each numerical method SHOULD be verified against, in order of preference, an exact solution of its mathematical model, a manufactured solution, a benchmark solution confirmed under VV.2, or an independent implementation (NUMER.6, VV.1, VV.6).
 
 #### STND.VVUQ.19 Manufactured solution form
 
-Default. Instantiates NUMER.6, VV.1, VV.6.
+Default, from CSQ2. Instantiates NUMER.6, VV.1, VV.6.
 
 A manufactured solution SHOULD be smooth, keep every derivative and cross-derivative that the model uses nonzero, let no term of the model dominate the others, and be physically realizable (NUMER.6, VV.1, VV.6).
 
 #### STND.VVUQ.20 Order test levels
 
-Default. Instantiates NUMER.7, VV.1, VV.3, VV.5.
+Default, from CSQ2. Instantiates NUMER.7, VV.1, VV.3, VV.5.
 
 Where a method has an algebraic theoretical order, its order test SHOULD use at least four refinement levels, with a refinement ratio above 1.3 between successive levels, constant where no exact or manufactured solution is available (NUMER.7, VV.1, VV.3, VV.5).
 
 #### STND.VVUQ.21 Order acceptance
 
-Default. Instantiates NUMER.7, VV.1, VV.3, VV.5.
+Default, from CSQ2. Instantiates NUMER.7, VV.1, VV.3, VV.5.
 
 An order test SHOULD accept the theoretical order where the observed orders of the two finest pairs of levels each lie within 10 percent of it and the observed orders over the levels approach it (NUMER.7, VV.1, VV.3, VV.5).
 
 #### STND.VVUQ.22 Oscillatory convergence
 
-Default. Instantiates NUMER.7, NUMER.9, VV.1, VV.3, VV.5, INTPR.9.
+Default, from CSQ2. Instantiates NUMER.7, NUMER.9, VV.1, VV.3, VV.5, INTPR.9.
 
 Where successive differences between refinement levels change sign, the report SHOULD state oscillatory convergence with the apparent order, and claim no order of the method from it (NUMER.7, NUMER.9, VV.1, VV.3, VV.5, INTPR.9).
 
 #### STND.VVUQ.23 Discontinuous solutions
 
-Default. Instantiates NUMER.7, VV.1, VV.3, VV.5.
+Default, from CSQ2. Instantiates NUMER.7, VV.1, VV.3, VV.5.
 
 Where a reference solution has a discontinuity, the order test SHOULD measure error in a norm recorded before the test, by default the L1 norm, and expect at most first order near a shock and the order p/(p+1) near a contact discontinuity for a scheme of order p (NUMER.7, VV.1, VV.3, VV.5).
 
 #### STND.VVUQ.24 Error separation in order tests
 
-Default. Instantiates NUMER.7, NUMER.8, VV.1, VV.3, VV.5, INTPR.9.
+Default, from CSQ2. Instantiates NUMER.7, NUMER.8, VV.1, VV.3, VV.5, INTPR.9.
 
 During an order test, the rounding and stopping errors at each refinement level SHOULD be at least 100 times smaller than its discretization error (NUMER.7, NUMER.8, VV.1, VV.3, VV.5, INTPR.9).
 
 #### STND.VVUQ.25 Adaptive methods
 
-Default. Instantiates NUMER.6, NUMER.8, VV.1, VV.6, INTPR.9.
+Default, from CSQ2. Instantiates NUMER.6, NUMER.8, VV.1, VV.6, INTPR.9.
 
 Where a method adapts its discretization, its verification SHOULD refine the adaptation tolerance and report the effectivity index of its error estimator on a reference problem (NUMER.6, NUMER.8, VV.1, VV.6, INTPR.9).
 
@@ -394,43 +397,43 @@ Where a method adapts its discretization, its verification SHOULD refine the ada
 
 #### STND.VVUQ.26 Error estimators
 
-Default. Instantiates NUMER.9, VV.1, INTPR.9.
+Default, from CSQ2. Instantiates NUMER.9, VV.1, INTPR.9.
 
 The numerical error of a reported result SHOULD be estimated by Richardson extrapolation with the grid convergence index from at least three refinement levels, by the least-squares procedure from at least four levels where the levels scatter, or by an a posteriori estimator verified under STND.VVUQ.25 (NUMER.9, VV.1, INTPR.9). Each estimate SHOULD report the observed order on which it rests (NUMER.9, VV.1, INTPR.9).
 
 #### STND.VVUQ.27 Safety factor
 
-Default. Instantiates NUMER.9, VV.1, INTPR.9.
+Default, from CSQ2. Instantiates NUMER.9, VV.1, INTPR.9.
 
 A grid convergence index from three or more refinement levels SHOULD use a safety factor of 1.25 where the observed order lies within the tolerance of STND.VVUQ.21 of the theoretical order, and 3 otherwise (NUMER.9, VV.1, INTPR.9). The least-squares procedure SHOULD use a safety factor of 1.25 where the standard deviation of its fit is below its data range parameter and the observed order p lies in a band recorded before the study, by default 0.5 <= p < 2.1 for a method of theoretical order 2, and otherwise the uncertainty that the procedure gives for that case (NUMER.9, VV.1, INTPR.9).
 
 #### STND.VVUQ.28 Coverage of grid estimates
 
-Default. Instantiates NUMER.13, INTPR.9, VV.5, VV.1.
+Default, from CSQ2. Instantiates NUMER.13, INTPR.9, VV.5, VV.1.
 
 An error estimate from the grid convergence index or the least-squares procedure SHOULD be stated as an interval of 95 percent coverage (NUMER.13, INTPR.9, VV.5, VV.1). Where such an estimate is combined with standard uncertainties, it SHOULD be divided by 1.1 (NUMER.13, INTPR.9, VV.5, VV.1).
 
 #### STND.VVUQ.29 Stopping error margin
 
-Default. Instantiates NUMER.8, NUMER.10, VV.1, INTPR.9.
+Default, from CSQ2. Instantiates NUMER.8, NUMER.10, VV.1, INTPR.9.
 
 Each stopping criterion on the path of a reported result SHOULD hold the stopping error at or below the larger of one hundredth of the result's estimated discretization error and its estimated rounding error (NUMER.8, NUMER.10, VV.1, INTPR.9). Within a refinement study, each stopping criterion SHOULD hold the stopping error at or below the larger of one hundredth of the smallest difference between successive refinement levels and the estimated rounding error (NUMER.8, NUMER.10, VV.1, INTPR.9).
 
 #### STND.VVUQ.30 Scaled stopping criteria
 
-Default. Instantiates NUMER.10, INTPR.9.
+Default, from CSQ2. Instantiates NUMER.10, INTPR.9.
 
 Each stopping criterion SHOULD be stated relative to the scale of the quantity it tests (NUMER.10, INTPR.9).
 
 #### STND.VVUQ.31 Pointwise oscillation share
 
-Default. Instantiates NUMER.9, VV.1, INTPR.9.
+Default, from CSQ2. Instantiates NUMER.9, VV.1, INTPR.9.
 
 Where the error of a reported field is estimated point by point, the report SHOULD give the percentage of points that converge oscillatorily (NUMER.9, VV.1, INTPR.9).
 
 #### STND.VVUQ.32 Chaotic dynamics
 
-Default. Instantiates NUMER.9, NUMER.22, VV.1, INTPR.9.
+Default, from CSQ2. Instantiates NUMER.9, NUMER.22, VV.1, INTPR.9.
 
 Where the dynamics of a model are chaotic, each quantity of interest SHOULD be a statistic over a stated averaging window, with a sampling uncertainty that accounts for autocorrelation (NUMER.9, NUMER.22, VV.1, INTPR.9).
 
@@ -438,19 +441,19 @@ Where the dynamics of a model are chaotic, each quantity of interest SHOULD be a
 
 #### STND.VVUQ.33 Acceptance multiple
 
-Default. Instantiates NUMER.11, NUMER.25, REPRO.3, VV.1, VV.3.
+Default, from CSQ2. Instantiates NUMER.11, NUMER.25, REPRO.3, VV.1, VV.3.
 
 An acceptance criterion against a standard uncertainty SHOULD use the two-sided multiple k = z(1 - a/(2m)) for the false-rejection rate a of its suite and the number m of its comparisons, with a = 0.001 per suite run by default, or the Student-t quantile at the same probability where the standard uncertainty has fewer than 30 degrees of freedom (NUMER.11, NUMER.25, REPRO.3, VV.1, VV.3). An acceptance criterion against an interval or a bound SHOULD use a multiple of 1 only where the interval's coverage is at least 1 - a/m (NUMER.11, NUMER.25, REPRO.3, VV.1, VV.3).
 
 #### STND.VVUQ.34 Detection power
 
-Default. Instantiates NUMER.25, VV.1, VV.3.
+Default, from CSQ2. Instantiates NUMER.25, VV.1, VV.3.
 
 Each acceptance criterion of STND.VVUQ.33 SHOULD hold the standard uncertainty of its compared difference at or below d/(k + 1.28), where d is the required precision, so that a departure equal to the required precision is detected with probability 0.9 (NUMER.25, VV.1, VV.3).
 
 #### STND.VVUQ.35 Multiplicity control
 
-Default. Instantiates NUMER.25, VV.1, VV.3.
+Default, from CSQ2. Instantiates NUMER.25, VV.1, VV.3.
 
 A suite of statistical acceptance criteria SHOULD control its probability of rejecting a correct result by the Holm step-down procedure (NUMER.25, VV.1, VV.3).
 
@@ -458,19 +461,19 @@ A suite of statistical acceptance criteria SHOULD control its probability of rej
 
 #### STND.VVUQ.36 Rounding estimates
 
-Default. Instantiates NUMER.12, VV.1, INTPR.10.
+Default, from CSQ2. Instantiates NUMER.12, VV.1, INTPR.10.
 
 The rounding error of a reported result SHOULD be estimated by a condition-number estimate with a backward-error bound, by comparison with the same computation at higher precision, or by stochastic arithmetic with a stated confidence (NUMER.12, VV.1, INTPR.10).
 
 #### STND.VVUQ.37 Probabilistic rounding bound
 
-Default. Instantiates NUMER.12, VV.1, INTPR.10.
+Default, from CSQ2. Instantiates NUMER.12, VV.1, INTPR.10.
 
 Where a rounding estimate uses the probabilistic bound lambda times the square root of n times the unit roundoff, it SHOULD take lambda at or above the value for which its probabilistic error analysis gives a probability of at least 0.95 that the bound holds for that computation, by default 2.72 for a product of n rounding factors and the square root of 2 ln(40n), divided by one less the unit roundoff, for an inner product of length n, state the worst-case bound beside it, and be confined to computations whose rounding errors are independent and of zero mean (NUMER.12, VV.1, INTPR.10).
 
 #### STND.VVUQ.38 Reduced precision
 
-Default. Instantiates NUMER.5, DSGN.5, REPRO.2, REPRO.7, VV.1.
+Default, from CSQ2. Instantiates NUMER.5, DSGN.5, REPRO.2, REPRO.7, VV.1.
 
 Each computation in reduced precision on the path of a reported result SHOULD be verified against the same computation at a higher precision (NUMER.5, DSGN.5, REPRO.2, REPRO.7, VV.1).
 
@@ -478,67 +481,67 @@ Each computation in reduced precision on the path of a reported result SHOULD be
 
 #### STND.VVUQ.39 Root-sum-square combination
 
-Default. Instantiates NUMER.13, INTPR.9, VV.5, VV.1.
+Default, from CSQ2. Instantiates NUMER.13, INTPR.9, VV.5, VV.1.
 
 Where components are combined by root sum of squares, each SHOULD be stated at one common coverage and be approximately normally distributed (NUMER.13, INTPR.9, VV.5, VV.1).
 
 #### STND.VVUQ.40 Sampling propagation
 
-Default. Instantiates NUMER.13, NUMER.22, INTPR.9, VV.5, VV.1.
+Default, from CSQ2. Instantiates NUMER.13, NUMER.22, INTPR.9, VV.5, VV.1.
 
 Uncertainty propagated by sampling SHOULD use simple random sampling, at least ten replicated Latin hypercube designs, or randomized quasi-Monte Carlo with at least ten independent randomizations, with a Student-t interval across replicates for the replicated designs (NUMER.13, NUMER.22, INTPR.9, VV.5, VV.1).
 
 #### STND.VVUQ.41 Monte Carlo trial count
 
-Default. Instantiates NUMER.13, NUMER.22, INTPR.9, VV.5, VV.1.
+Default, from CSQ2. Instantiates NUMER.13, NUMER.22, INTPR.9, VV.5, VV.1.
 
 Where a fixed number of Monte Carlo trials propagates uncertainty to a coverage interval of probability p, that number SHOULD be at least 10^4/(1 - p) (NUMER.13, NUMER.22, INTPR.9, VV.5, VV.1).
 
 #### STND.VVUQ.42 Adaptive Monte Carlo stopping
 
-Default. Instantiates NUMER.13, NUMER.22, INTPR.9, VV.5, VV.1.
+Default, from CSQ2. Instantiates NUMER.13, NUMER.22, INTPR.9, VV.5, VV.1.
 
 Where the number of Monte Carlo trials is chosen as the trials run, the trials SHOULD proceed in at least two stages of at least 10^4 and at least 100/(1 - p) trials each, until twice the standard deviation of the mean of the stage values of each of the estimate, its standard uncertainty, and the two endpoints of its coverage interval is at most the numerical tolerance of the standard uncertainty reported to two digits from its first nonzero digit (NUMER.13, NUMER.22, INTPR.9, VV.5, VV.1).
 
 #### STND.VVUQ.43 Propagation methods
 
-Default. Instantiates NUMER.13, NUMER.15, INTPR.9, VV.5, VV.1, REPRO.6.
+Default, from CSQ2. Instantiates NUMER.13, NUMER.15, INTPR.9, VV.5, VV.1, REPRO.6.
 
 Uncertainty from inputs SHOULD be propagated by first-order sensitivities with the input covariances where a sampling check at recorded points gives coverage-interval endpoints within one quarter of the required precision of the first-order ones, by sampling under STND.VVUQ.40 otherwise, by interval propagation where only bounds are known, and by nested sampling, epistemic in the outer loop and aleatory in the inner, where both are present (NUMER.13, NUMER.15, INTPR.9, VV.5, VV.1, REPRO.6).
 
 #### STND.VVUQ.44 Order-statistic limits
 
-Default. Instantiates NUMER.13, INTPR.9, VV.5, VV.1.
+Default, from CSQ2. Instantiates NUMER.13, INTPR.9, VV.5, VV.1.
 
 Where a tolerance limit is stated from order statistics, its number of runs SHOULD meet the nonparametric tolerance-limit formula for its coverage and confidence, by default 59 runs for a one-sided 95/95 limit at first order, with every failed or unconverged run counted among the runs and treated as exceeding the limit (NUMER.13, INTPR.9, VV.5, VV.1).
 
 #### STND.VVUQ.45 Sensitivity indices
 
-Default. Instantiates NUMER.13, INTPR.9, VV.5, VV.1.
+Default, from CSQ2. Instantiates NUMER.13, INTPR.9, VV.5, VV.1.
 
 Global sensitivity indices SHOULD be estimated on a Saltelli design, with the Jansen estimator for total effects and the statistical uncertainty of each index stated (NUMER.13, INTPR.9, VV.5, VV.1).
 
 #### STND.VVUQ.46 Surrogate checks
 
-Default. Instantiates NUMER.6, NUMER.13, VV.1, VV.6, INTPR.9, VV.5.
+Default, from CSQ2. Instantiates NUMER.6, NUMER.13, VV.1, VV.6, INTPR.9, VV.5.
 
 Where a surrogate that states a predictive variance stands in for a model on the path of a reported result, it SHOULD be checked on a validation design held out from its construction, with each standardized error beyond 3 in absolute value investigated, the Mahalanobis distance of the errors compared with its scaled F distribution, and a new held-out design used after each rebuild (NUMER.6, NUMER.13, VV.1, VV.6, INTPR.9, VV.5). A surrogate without a predictive variance SHOULD be checked on a held-out design against the required precision of the results it serves (NUMER.6, VV.1, VV.6). A surrogate's conformal intervals SHOULD be reported as of marginal coverage, holding under exchangeability only (NUMER.13, INTPR.9, VV.5, VV.1).
 
 #### STND.VVUQ.47 Model discrepancy
 
-Default. Instantiates NUMER.13, NUMER.20, INTPR.9, VV.5, VV.1, INTPR.10.
+Default, from CSQ2. Instantiates NUMER.13, NUMER.20, INTPR.9, VV.5, VV.1, INTPR.10.
 
 Where model parameters are calibrated to measurements, the calibration SHOULD include a model-discrepancy term with a recorded prior (NUMER.13, NUMER.20, INTPR.9, VV.5, VV.1, INTPR.10). Where a calibration omits that term, its report SHOULD mark the parameter estimates as possibly biased and overconfident (NUMER.13, NUMER.20, INTPR.9, VV.5, VV.1, INTPR.10).
 
 #### STND.VVUQ.48 Validation statement
 
-Default. Instantiates NUMER.13, INTPR.10, VV.5, INTPR.9, VV.1.
+Default, from CSQ2. Instantiates NUMER.13, INTPR.10, VV.5, INTPR.9, VV.1.
 
 Model-form uncertainty SHOULD be stated as the comparison error between simulation and measurement with its validation uncertainty, as an estimate of model error at the validation conditions, with each use beyond those conditions stated as extrapolation (NUMER.13, INTPR.10, INTPR.9, VV.5, VV.1). Where the magnitude of the comparison error plus the multiple of STND.VVUQ.33 times its validation uncertainty, stated as a standard uncertainty, is at or below the required precision, the validation status that VV.5 requires SHOULD be stated as met (VV.5). Where that sum exceeds the required precision, the validation status SHOULD be stated as not met at the required precision, with whether the comparison error alone exceeds it (VV.5).
 
 #### STND.VVUQ.49 Input covariances
 
-Default. Instantiates NUMER.15, REPRO.6, INTPR.9.
+Default, from CSQ2. Instantiates NUMER.15, REPRO.6, INTPR.9.
 
 Each measured or evaluated input SHOULD carry the covariances that its evaluation or calibration record gives (NUMER.15, REPRO.6, INTPR.9). Propagation by sampling SHOULD draw inputs from those covariances (NUMER.15, REPRO.6, INTPR.9).
 
@@ -546,7 +549,7 @@ Each measured or evaluated input SHOULD carry the covariances that its evaluatio
 
 #### STND.VVUQ.50 Approximation effects
 
-Default. Instantiates NUMER.16, NUMER.17, INTPR.10, REPRO.7, RSRC.4, SIMPL.7, VV.1.
+Default, from CSQ2. Instantiates NUMER.16, NUMER.17, INTPR.10, REPRO.7, RSRC.4, SIMPL.7, VV.1.
 
 The effect of each retained performance approximation SHOULD be estimated by runs without it in the regime of each reported numerical result it affects, at the discretization of that result (NUMER.17, RSRC.4, SIMPL.7, VV.1). The effect of each other approximation listed under NUMER.16 SHOULD be estimated by a run without it at the finest affordable refinement level of each regime it serves, or bounded by analysis (NUMER.16, INTPR.10, REPRO.7).
 
@@ -554,25 +557,25 @@ The effect of each retained performance approximation SHOULD be estimated by run
 
 #### STND.VVUQ.51 Independent forward computation
 
-Default. Instantiates NUMER.19, VV.1, VV.3.
+Default, from CSQ2. Instantiates NUMER.19, VV.1, VV.3.
 
 Synthetic data for a recovery test SHOULD come from a forward computation with no connection to the inversion's own, differing from it at least in discretization or solver, with noise drawn from the recorded noise model (NUMER.19, VV.1, VV.3).
 
 #### STND.VVUQ.52 Posterior calibration
 
-Default. Instantiates NUMER.19, VV.1, VV.3.
+Default, from CSQ2. Instantiates NUMER.19, VV.1, VV.3.
 
 Where an inverse method states a posterior distribution, its posterior computation SHOULD be checked by simulation-based calibration on data simulated from the inversion's own model, with at least 1000 simulations, 100 posterior draws each after thinning, bins holding about 20 simulations, a 99 percent band, and test quantities that depend on the data as well as the parameters (NUMER.19, VV.1, VV.3). The coverage that NUMER.19 requires SHOULD then be shown on data from the forward computation of STND.VVUQ.51, by the method of STND.VVUQ.53 (NUMER.19, VV.1, VV.3).
 
 #### STND.VVUQ.53 Interval coverage test
 
-Default. Instantiates NUMER.19, VV.1, VV.3.
+Default, from CSQ2. Instantiates NUMER.19, VV.1, VV.3.
 
 Where an inverse method states a confidence interval, its coverage test SHOULD repeat the recovery over synthetic trials and state the observed coverage with a binomial interval (NUMER.19, VV.1, VV.3).
 
 #### STND.VVUQ.54 Regularization choice
 
-Default. Instantiates NUMER.20, INTPR.9, INTPR.10.
+Default, from CSQ2. Instantiates NUMER.20, INTPR.9, INTPR.10.
 
 Where the noise level is known, the regularization strength SHOULD be chosen by the discrepancy principle with a recorded factor above 1 (NUMER.20, INTPR.9, INTPR.10). Where the noise level is unknown, a heuristic choice SHOULD be reported with the statement that it carries no guarantee of convergence under deterministic noise (NUMER.20, INTPR.9, INTPR.10).
 
@@ -580,13 +583,13 @@ Where the noise level is known, the regularization strength SHOULD be chosen by 
 
 #### STND.VVUQ.55 Optimality measures
 
-Default. Instantiates NUMER.21, INTPR.9, VV.5.
+Default, from CSQ2. Instantiates NUMER.21, INTPR.9, VV.5.
 
 Each optimization result SHOULD report its scaled and unscaled first-order optimality residuals and its largest constraint violation, against a stationarity tolerance of 1e-8 scaled and a feasibility tolerance of 1e-6 by default (NUMER.21, INTPR.9, VV.5).
 
 #### STND.VVUQ.56 Optimum claims
 
-Default. Instantiates NUMER.21, INTPR.9, VV.5.
+Default, from CSQ2. Instantiates NUMER.21, INTPR.9, VV.5.
 
 A claim of a global optimum SHOULD rest on convexity or on a relaxation bound gap within a recorded tolerance (NUMER.21, INTPR.9, VV.5). A claim of a local optimum SHOULD rest on second-order sufficient conditions under a stated constraint qualification (NUMER.21, INTPR.9, VV.5).
 
@@ -594,55 +597,55 @@ A claim of a global optimum SHOULD rest on convexity or on a relaxation bound ga
 
 #### STND.VVUQ.57 Dependent samples
 
-Default. Instantiates NUMER.22, INTPR.9, VV.1.
+Default, from CSQ2. Instantiates NUMER.22, INTPR.9, VV.1.
 
 Where samples are drawn sequentially, their statistical uncertainty SHOULD come from an effective sample size or from batch means (NUMER.22, INTPR.9, VV.1).
 
 #### STND.VVUQ.58 Markov chain diagnostics
 
-Default. Instantiates NUMER.23, VV.1, INTPR.9.
+Default, from CSQ2. Instantiates NUMER.23, VV.1, INTPR.9.
 
 A Markov chain result SHOULD come from at least four chains from dispersed starts, with a rank-normalized split potential scale reduction factor below 1.01 and bulk and tail effective sample sizes above 400, inspected by rank plots (NUMER.23, VV.1, INTPR.9). Where a sampler runs its chains in groups that each share an initialization, a nested potential scale reduction factor over the groups SHOULD replace the split factor, with its threshold recorded before the run (NUMER.23, VV.1, INTPR.9).
 
 #### STND.VVUQ.59 Markov chain precision
 
-Default. Instantiates NUMER.22, NUMER.11, INTPR.9, VV.1, VV.3, REPRO.3.
+Default, from CSQ2. Instantiates NUMER.22, NUMER.11, INTPR.9, VV.1, VV.3, REPRO.3.
 
 The Monte Carlo standard error of a Markov chain result SHOULD meet the tolerance of its acceptance criterion, independently of the diagnostic thresholds of STND.VVUQ.58 (NUMER.22, NUMER.11, INTPR.9, VV.1, VV.3, REPRO.3).
 
 #### STND.VVUQ.60 Importance weights
 
-Default. Instantiates NUMER.23, VV.1, INTPR.9.
+Default, from CSQ2. Instantiates NUMER.23, VV.1, INTPR.9.
 
 Where a result uses importance weights from S draws, the Pareto shape estimate of the weights SHOULD be below the smaller of 0.7 and 1 - 1/log10(S) (NUMER.23, VV.1, INTPR.9).
 
 #### STND.VVUQ.61 Tally reliability
 
-Default. Instantiates NUMER.23, VV.1, INTPR.9.
+Default, from CSQ2. Instantiates NUMER.23, VV.1, INTPR.9.
 
 Each statistical uncertainty of a tally of a history-based Monte Carlo calculation SHOULD pass, over the last half of the histories, the ten tally-fluctuation checks: a mean without monotonic trend; a relative error below 0.10, or below 0.05 for a point-detector tally, decreasing monotonically and as the inverse square root of the number of histories; a variance of the variance below 0.10, decreasing monotonically and as the inverse of the number of histories; a figure of merit constant within its statistical fluctuation and, separately, without monotonic trend; and a fitted tail slope of the history scores above 3 (NUMER.23, VV.1, INTPR.9). Each statistical uncertainty of a reported numerical result, that of a tally included, SHOULD be shown stable by its estimates from the first half and from all of its samples, each replicate of a replicated design counted as one sample and each estimate multiplied by the square root of the number of samples from which it comes, differing by less than the fraction recorded under NUMER.23 of the scaled estimate from all of its samples (NUMER.23, VV.1, INTPR.9).
 
 #### STND.VVUQ.62 Stream construction
 
-Default. Instantiates NUMER.24, DSGN.17, REPRO.3, VV.1.
+Default, from CSQ3. Instantiates NUMER.24, DSGN.17, REPRO.3, VV.1.
 
 Random number streams SHOULD derive from a recorded root seed of at least 128 bits by spawning, by jump-ahead with unique indices, or by counter-based keys never reused (NUMER.24, DSGN.17, REPRO.3, VV.1). A stream SHOULD NOT be seeded with an arithmetic combination of a root seed and a worker index (NUMER.24, DSGN.17, REPRO.3, VV.1).
 
 #### STND.VVUQ.63 Generator testing
 
-Default. Instantiates NUMER.24, DSGN.17, REPRO.3, VV.1.
+Default, from CSQ2. Instantiates NUMER.24, DSGN.17, REPRO.3, VV.1.
 
 Each random number generator SHOULD have passed a published battery of statistical tests of randomness, at least as demanding as the use of the generator requires and named with its revision in the record of the work, applied within single streams and across interleaved streams (NUMER.24, DSGN.17, REPRO.3, VV.1).
 
 #### STND.VVUQ.64 Fixed-seed and fresh-seed tests
 
-Default. Instantiates NUMER.25, VV.1, VV.3.
+Default, from CSQ3. Instantiates NUMER.25, VV.1, VV.3.
 
 Tests of stochastic results SHOULD be of two kinds: fixed-seed tests that detect change, and tests with fresh, logged seeds that judge correctness under the criteria of STND.VVUQ.33, STND.VVUQ.34, and STND.VVUQ.35 (NUMER.25, VV.1, VV.3).
 
 #### STND.VVUQ.65 Repetition rule
 
-Default. Instantiates NUMER.25, VV.3, VV.1.
+Default, from CSQ2. Instantiates NUMER.25, VV.3, VV.1.
 
 Each fresh-seed test of STND.VVUQ.64 SHOULD carry a rule of repetition under NUMER.26, recorded before its first run, that is a sequential test whose combined false-rejection rate and detection power meet STND.VVUQ.33 and STND.VVUQ.34 (NUMER.25, VV.3, VV.1).
 
@@ -650,61 +653,61 @@ Each fresh-seed test of STND.VVUQ.64 SHOULD carry a rule of repetition under NUM
 
 #### STND.VVUQ.66 Computing derivatives
 
-Default. Instantiates NUMER.27, DSGN.11, DSGN.16.
+Default, from CSQ2. Instantiates NUMER.27, DSGN.11, DSGN.16.
 
 Derivatives SHOULD be computed by automatic differentiation, forward mode where inputs are fewer than outputs and reverse mode otherwise, by a discrete adjoint, or by implicit differentiation at a converged solution, with Hessian-vector products by forward-over-reverse differentiation (NUMER.27, DSGN.11, DSGN.16).
 
 #### STND.VVUQ.67 Derivatives through iterations
 
-Default. Instantiates NUMER.28, VV.1, VV.3.
+Default, from CSQ2. Instantiates NUMER.28, VV.1, VV.3.
 
 Where derivatives are carried through a repeated computation, its stopping criterion SHOULD also test the convergence of the derivatives (NUMER.28, VV.1, VV.3).
 
 #### STND.VVUQ.68 Implicit derivative error
 
-Default. Instantiates NUMER.29, INTPR.9, VV.1.
+Default, from CSQ2. Instantiates NUMER.29, INTPR.9, VV.1.
 
 An implicit derivative SHOULD state the forward residual at which it is evaluated, with its error bounded by a constant times that residual, the constant growing as the inverse square of the smallest singular value of the linearized system (NUMER.29, INTPR.9, VV.1).
 
 #### STND.VVUQ.69 Taylor remainder test
 
-Default. Instantiates NUMER.28, VV.1, VV.3.
+Default, from CSQ2. Instantiates NUMER.28, VV.1, VV.3.
 
 Each derivative SHOULD pass a Taylor remainder test over at least four halvings of a perturbation along a random direction, with observed rates within 0.1 of 2 for a first derivative and of 3 where a second derivative is supplied (NUMER.28, VV.1, VV.3).
 
 #### STND.VVUQ.70 Dot-product test
 
-Default. Instantiates NUMER.28, VV.1, VV.3.
+Default, from CSQ2. Instantiates NUMER.28, VV.1, VV.3.
 
 Each discrete adjoint or reverse-mode product SHOULD pass a dot-product test to a relative 100 times the machine epsilon over a short chain of operations, or to the rounding error estimated under NUMER.12 over a long one (NUMER.28, VV.1, VV.3). Each Hessian SHOULD pass the same test for symmetry (NUMER.28, VV.1, VV.3). Where the tolerance of a test of this provision is below a relative 1e-5, a relative discrepancy of 1e-5 or more SHOULD be treated as a defect, not as rounding (NUMER.28, VV.1, VV.3).
 
 #### STND.VVUQ.71 Independent derivative checks
 
-Default. Instantiates NUMER.28, VV.1, VV.3.
+Default, from CSQ2. Instantiates NUMER.28, VV.1, VV.3.
 
 A complex-step check SHOULD use a step of 1e-200 in double precision on a code path shown safe for complex arithmetic, and agree to a relative 1e-10 (NUMER.28, VV.1, VV.3). A finite-difference check SHOULD use central differences over a step-size study, and agree to a relative 1e-6 at its best step (NUMER.28, VV.1, VV.3). In a precision other than double, the complex step SHOULD be the smallest whose product with the derivative does not underflow, confirmed by a step 100 times larger that gives the same derivative within the agreement of this provision (NUMER.28, VV.1, VV.3).
 
 #### STND.VVUQ.72 Nonsmooth operations
 
-Default. Instantiates NUMER.29, INTPR.9, VV.1.
+Default, from CSQ2. Instantiates NUMER.29, INTPR.9, VV.1.
 
 At an operation that is not differentiable everywhere, the derivative used SHOULD be one-sided, a subgradient, or a smoothed surrogate, with the sensitivity of the result to that choice checked (NUMER.29, INTPR.9, VV.1).
 
 #### STND.VVUQ.73 Chaotic averages
 
-Default. Instantiates NUMER.29, INTPR.9, VV.1.
+Default, from CSQ2. Instantiates NUMER.29, INTPR.9, VV.1.
 
 Derivatives of long-time averages of chaotic dynamics SHOULD be computed by a shadowing method or reported as not computed (NUMER.29, INTPR.9, VV.1).
 
 #### STND.VVUQ.74 Derivatives of expectations
 
-Default. Instantiates NUMER.28, VV.1, VV.3.
+Default, from CSQ2. Instantiates NUMER.28, VV.1, VV.3.
 
 Derivatives of expectations SHOULD use a pathwise estimator where the sampling is differentiable and a likelihood-ratio or measure-valued estimator where the sampled path branches, each with its statistical uncertainty (NUMER.28, VV.1, VV.3).
 
 #### STND.VVUQ.75 Derivative cost
 
-Default. Instantiates NUMER.27, RSRC.4, DSGN.11, DSGN.16.
+Default, from CSQ2. Instantiates NUMER.27, RSRC.4, DSGN.11, DSGN.16.
 
 Where a reverse-mode or adjoint gradient costs more than ten times its forward computation, the cause SHOULD be investigated (NUMER.27, RSRC.4, DSGN.11, DSGN.16).
 
@@ -712,13 +715,13 @@ Where a reverse-mode or adjoint gradient costs more than ten times its forward c
 
 #### STND.VVUQ.76 Learned surrogates
 
-Default. Instantiates NUMER.6, NUMER.13, VV.1, VV.6, INTPR.9, VV.5.
+Default, from CSQ2. Instantiates NUMER.6, NUMER.13, VV.1, VV.6, INTPR.9, VV.5.
 
 A learned surrogate on the path of a reported result SHOULD be verified on problems held out from its training, with its error stated against the size of its training set and its optimizer settings, and its sensitivity to random seeds stated (NUMER.6, NUMER.13, VV.1, VV.6, INTPR.9, VV.5). Its output uncertainty SHOULD include the error of its training optimization and of its finite training set (NUMER.13, INTPR.9, VV.5, VV.1). Its validation SHOULD use data independent of its training and calibration (NUMER.6, VV.1, VV.6).
 
 #### STND.VVUQ.77 Fair comparison
 
-Default. Instantiates VV.1, RSRC.4.
+Default, from CSQ2. Instantiates VV.1, RSRC.4.
 
 A claim that a learned method outperforms a numerical method SHOULD rest on a comparison at equal accuracy or equal cost against an efficient numerical method, measured under the conditions that HW.22 states for a comparative performance claim (VV.1, RSRC.4).
 
@@ -726,7 +729,7 @@ A claim that a learned method outperforms a numerical method SHOULD rest on a co
 
 #### STND.VVUQ.78 Continuous verification
 
-Default. Instantiates VV.8, RSRC.11, RSRC.12.
+Default, from CSQ2. Instantiates VV.8, RSRC.11, RSRC.12.
 
 Each verification test of this standard whose evidence a change is able to affect SHOULD run before the change is relied upon, with its result kept with the revision it judges (VV.8, RSRC.11, RSRC.12).
 
@@ -734,19 +737,19 @@ Each verification test of this standard whose evidence a change is able to affec
 
 #### STND.VVUQ.79 Deterministic extrapolation fit
 
-Default. Instantiates VV.1, VV.3.
+Default, from CSQ2. Instantiates VV.1, VV.3.
 
 Where the comparison of an alternative execution path of deterministic results with its reference path covers only part of the regime of use (HW.17), the criterion for its extrapolation SHOULD fit by least squares the logarithm of the largest ratio of observed difference to the tolerance of HW.16, each difference measured as that tolerance measures it, against the extrapolation abscissa, at each of at least six problem sizes spanning a factor of at least sixteen (VV.1, VV.3). Where an observed difference of that fit is zero, the fit SHOULD use in its place the spacing of the less precise compared format at the largest magnitude among the compared reference values, measured as the tolerance of HW.16 measures it (VV.1).
 
 #### STND.VVUQ.80 Stochastic extrapolation fit
 
-Default. Instantiates VV.1, VV.3.
+Default, from CSQ2. Instantiates VV.1, VV.3.
 
 Where the comparison of an alternative execution path of stochastic results with its reference path covers only part of the regime of use (HW.17), the criterion for its extrapolation SHOULD fit the estimated difference of each compared quantity, measured as the tolerance of HW.16 measures it, against the extrapolation abscissa, by least squares weighted by the inverse square of the standard error of each estimate, at each of at least six problem sizes spanning a factor of at least sixteen (VV.1, VV.3).
 
 #### STND.VVUQ.81 Extrapolation acceptance
 
-Default. Instantiates VV.1, VV.3.
+Default, from CSQ2. Instantiates VV.1, VV.3.
 
 Where the upper limit of the one-sided 95 percent prediction interval of the fit of STND.VVUQ.79 at the largest problem size of the regime of use reaches zero, the criterion SHOULD reject the extrapolation (VV.1, VV.3). Where the two-sided 95 percent confidence interval of the fit of STND.VVUQ.80 at the largest problem size of the regime of use is not contained within the tolerance of HW.16, the criterion SHOULD reject the extrapolation (VV.1, VV.3).
 
@@ -760,3 +763,5 @@ Where the upper limit of the one-sided 95 percent prediction interval of the fit
 | 1.2.1 | 2026-10-19 | Editorial amendment (GOV.41): the informative Notes describe ML and MEAS as adopted; no obligation changes. |
 | 1.3 | 2026-10-24 | Minor amendment (GOV.41): new STND.VVUQ.82 treats a difference between compared results that declared run-to-run variation explains, within the agreement of its tier, as no defect; discourages changes made only to remove it unless an acceptance criterion or the consequence class requires bitwise identity; and admits a deterministic mode as an option; new STND.VVUQ.83, binding on agents (GOV.48), forbids an agent to change or extend the work on its own initiative only to remove such a difference, and has it state each difference it leaves. |
 | 1.4 | 2026-10-24 | Minor amendment (GOV.41): STND.VVUQ.63 states the outcome that a test battery decides, a published battery of statistical tests of randomness at least as demanding as the use of the generator requires, named with its revision in the record of the work, in place of naming one battery; the Notes say that batteries differ in power, name BigCrush, the battery that the provision named before, beside the smaller ones of its library, and cite ML.2 and MEAS.2 for the matters that ML and MEAS own; References lists ML and MEAS; and, as an editorial change, STND.VVUQ.2 and its row of the table of common quantities speak of a computation that continues from state saved by an earlier run, in place of a checkpoint and its restart. |
+| 1.5 | 2026-10-28 | Minor amendment (GOV.41): a core of STND.VVUQ.1, STND.VVUQ.3, STND.VVUQ.5, STND.VVUQ.7, STND.VVUQ.13, STND.VVUQ.17, STND.VVUQ.62, STND.VVUQ.64, and STND.VVUQ.82 applies from CSQ3, and every other default from CSQ2; the Notes state the onset of the standard, which they did not before. |
+| 1.5.1 | 2026-10-28 | Editorial amendment (GOV.41): the Purpose no longer names a research note that the project does not hold and a knowledge entry that was never made, and says that the table of sources in the Notes gives the source of each default number that rests on one; the Notes name the manuals of one code without their version numbers, and a sentence that narrated an earlier revision names the battery by its size; no obligation, permission, or defined meaning changes. |

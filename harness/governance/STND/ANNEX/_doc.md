@@ -4,7 +4,7 @@ level: "LVL2"
 kind: "standard"
 title: "Hardware type annex"
 status: "adopted"
-revision: "1.0"
+revision: "1.1"
 adopted: "2026-10-24"
 adopted_by: "The Custodian"
 instantiates: ["GOV.18", "GOV.19"]
@@ -43,7 +43,7 @@ The accelerator default takes the accuracy that the documentation of the compile
 
 The defaults for programmable logic and integrated circuits point to the design record, which HDES.5 already has state each property, limit, and kind of hardware fault that HW.4 and HW.5 ask for, and add only what the design record leaves open: timing that rests on the target maker's models (HDES.10), the marking of properties that rest only on analysis or simulation until device evidence or measurement supports them (HW.FPGA.4, HW.ASIC.4), the fabrication readiness record (HDES.ASIC.12), upsets of state that go undetected without a detection the design implements and HDES.15 verifies, and manufacturing defects that the test misses (HDES.ASIC.11). A configuration whose design record the project does not hold, a supplier's shell or a purchased block among them, takes its properties from the documentation of its supplier under STND.ANNEX.9. They name no device family, process, method, threshold, sample size, or tool, so they stay valid as the technology changes; the confirmations a project buys, their conditions, and their margins are matters for its own instruments (LVL3). A processor realized in programmable logic is programmable logic under HW, so the firmware that it runs belongs to the path that cites the programmable logic default, and the arithmetic of its compiler and build, which HDES.7 does not cover, is stated as for an embedded controller.
 
-Under STND.CLASS.10, each provision instantiates only DSGN.5, REPRO.2, REPRO.3, and VV.1, and the provisions HW.4, HW.5, HW.6, HW.12, and HW.EMBED.4 that instantiate them. STND.ANNEX.3 instantiates only DSGN.5 and HW.4 and applies from CSQ2, the class from which STND.CLASS.10 applies DSGN.5; every other provision applies from CSQ3; work of CSQ4 omits them. A citing contract at CSQ3 carries the rows of HW.4 by the citation alone, and their undetected kinds of fault engage HW.10, at the cost of one statement in the record of each result, which HW.10 asks at CSQ3 only of a contract that states such a fault. Every obligation of this standard arises only for a contract that cites a default, which is the project's choice; a project that writes its own contract meets HW alone. No provision raises the floor (GOV.11).
+Under STND.CLASS.10, each provision instantiates only DSGN.5, REPRO.2, REPRO.3, and VV.1, and the provisions HW.4, HW.5, HW.6, HW.12, and HW.EMBED.4 that instantiate them, and applies from the class that its field `onset` gives, which work of CSQ4 may omit: each default of a contract starts at CSQ2 with the contract of HW.4 and its arithmetic and evidence under HW.5 and HW.6, which it fills, and STND.ANNEX.1, a permission, carries the value null. Every obligation of this standard arises only for a contract that cites a default, which is the project's choice; a project that writes its own contract meets HW alone. No provision raises the floor (GOV.11).
 
 ## References
 
@@ -71,3 +71,4 @@ Under STND.CLASS.10, each provision instantiates only DSGN.5, REPRO.2, REPRO.3, 
 | Revision | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-10-24 | Adopted. |
+| 1.1 | 2026-10-28 | Minor amendment (GOV.41): each default of a contract applies from CSQ2, with the contract of HW.4 and the arithmetic and evidence of HW.5 and HW.6 that it fills, and STND.ANNEX.1, a permission, carries the value null; each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields. |

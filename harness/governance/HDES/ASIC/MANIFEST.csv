@@ -1,14 +1,14 @@
 id,kind,level,title,status,path,sha256,bytes
-HDES.ASIC,sub-profile,LVL1,Integrated circuit design,adopted,_doc.md,9d6ea235c0412828f681d8105b7d88b8f4cf2e4ff6de4e1998b7fdd4e4ff7b7c,13779
+HDES.ASIC,sub-profile,LVL1,Integrated circuit design,adopted,_doc.md,310238ca7b6418bbc15a7e45797bf156ae2b9888cc8a8e7e10851fe696df7650,13747
 HDES.ASIC.1,provision,LVL1,Integrated circuit design selector,adopted,1.md,420ef39e9246ee31fb80cd5bddbcbad7a182828472d0d90506b6f213e93c9b1a,526
 HDES.ASIC.2,provision,LVL1,Integrated circuit design shared matters,adopted,2.md,2d6166113f2dd87a7148228576b39b42410edf974be7b0809eb994506b6681e3,890
-HDES.ASIC.3,provision,LVL1,Sign-off checks,adopted,3.md,b28a250ea6afab4d9265bd15194d551b7805dfeca78e1402d3b1acb800c15446,791
-HDES.ASIC.4,provision,LVL1,Electrical limits of the process,adopted,4.md,45911ae18b843da9e7bf6803476affbbb0f310c108057b2ed7224080ecdb0910,552
-HDES.ASIC.5,provision,LVL1,Variation across corners,adopted,5.md,dfccc33411d4b5825e20fd52cd4e5db4f6c8410998345d19bdcd83db50694fc7,1321
-HDES.ASIC.6,provision,LVL1,Mixed-signal verification models,adopted,6.md,5e6ac036f75757481f6aa72654de90602cc63405936e40aca3532575f18fc942,880
-HDES.ASIC.7,provision,LVL1,Analog start-up from power-on,adopted,7.md,8bbf2b08708d2399b0b3775ad8ad88b276d6fa431f9f6e7efadf966f2fa217c3,806
-HDES.ASIC.8,provision,LVL1,Extracted layout match,adopted,8.md,871ef39b9bd85f734cd71f24816adbb2ca56358e7f9e6a5cf3bc568f42039115,575
-HDES.ASIC.9,provision,LVL1,Verification with parasitic elements,adopted,9.md,b58e2b5656aac68aabc9816131bd0f7ad00b9610b560cae488d17aff74287232,558
-HDES.ASIC.10,provision,LVL1,Power domain crossings,adopted,10.md,b818f0c5ec662c9a29003121627266c179e2563ca491e8dab1a16c6fe34d08ab,759
-HDES.ASIC.11,provision,LVL1,Manufacturing test coverage,adopted,11.md,35cb56e58a8d9ac041118596d7ab6301bce1de262e0b5b5d444e569177667879,1119
-HDES.ASIC.12,provision,LVL1,Fabrication readiness record,adopted,12.md,e6f2fa16cfe0e2829472102b61d501d57a52a23092166389988f38ba9386b593,1599
+HDES.ASIC.3,provision,LVL1,Sign-off checks,adopted,3.md,26b30a7e7f21f0b6bcf35e8f26b564daf0fd57b8c3ab293164a0e22f5093cdc6,805
+HDES.ASIC.4,provision,LVL1,Electrical limits of the process,adopted,4.md,e5b870fcafbec85994dc48030cfef44d67f977eb29100e191a357ded99c71c2e,566
+HDES.ASIC.5,provision,LVL1,Variation across corners,adopted,5.md,4d083d3c1bf207669e6a42ed25b3c295d861166bfd4bf8ce492b2d8f8f2a7c0a,1335
+HDES.ASIC.6,provision,LVL1,Mixed-signal verification models,adopted,6.md,e308c591954a2ca4b2747268005181ead1a0934a410cdff3a31b76c6ac3bee49,894
+HDES.ASIC.7,provision,LVL1,Analog start-up from power-on,adopted,7.md,d37cae5fa98cca0ebcf9589d6ceefba9cdf7b48bbfa57c83b37d9426adcfc7ef,820
+HDES.ASIC.8,provision,LVL1,Extracted layout match,adopted,8.md,a6d3d634e3bcd723aa0b9eab3a24cae995c969f1eb1921b5aa9ef74f73dab854,589
+HDES.ASIC.9,provision,LVL1,Verification with parasitic elements,adopted,9.md,d203426b2917726e3a9a6c375a99d58d87118378250ca31430ac57065b5850fd,572
+HDES.ASIC.10,provision,LVL1,Power domain crossings,adopted,10.md,c8ed62beff24610f411cf70fc0b82e606376db26c63804da0362df8ea068b1ed,773
+HDES.ASIC.11,provision,LVL1,Manufacturing test coverage,adopted,11.md,8a80d938382ca5d4d1fb8b0039876637c4a3cf6eda6e1352c100665f5d4155fc,1133
+HDES.ASIC.12,provision,LVL1,Fabrication readiness record,adopted,12.md,62584cf6a3d15ecbccb7ce3b1a125bf4ff16ad3a8ef5b4eb617cc1847842ea12,1613

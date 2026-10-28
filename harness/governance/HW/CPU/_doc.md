@@ -5,8 +5,8 @@ kind: "sub-profile"
 title: "General-purpose processors"
 status: "adopted"
 adopted: "2026-10-18"
-revision: "1.0.1"
-selector: "Binds when a component of the work executes, or is admitted to execute, on a general-purpose processor (HW.CPU.1)."
+revision: "1.2.1"
+selector: "Binds with HW, when a component of the work executes, or is admitted to execute, on a hardware type (HW.CPU.1); its provisions name execution paths on general-purpose processors."
 parent: "HW"
 adopted_by: "The Custodian"
 ---
@@ -30,7 +30,7 @@ This section fixes meaning and imposes no obligation, as the Lexicon does.
 
 ## Selector
 
-HW.CPU.1 states the selector: the attribute General-purpose processor execution, which HW defines and which HW.1 also gives (STND.DRAFT.36). Each provision names an execution path on a general-purpose processor as its subject (STND.DRAFT.38), so it imposes nothing on the paths of a component on other hardware types.
+HW.CPU.1 states the selector: the attribute Hardware execution, which HW defines and which HW.1 gives (STND.DRAFT.36), so that the sub-profile binds with HW and its provisions reach a component through the execution paths of that component, recorded by hardware type where the section Architecture of the constitution names (STND.PROJ.1). Each provision names an execution path on a general-purpose processor as its subject (STND.DRAFT.38), so it imposes nothing on the paths of a component on other hardware types.
 
 ## Where the rest lives
 
@@ -55,11 +55,11 @@ A path whose libraries choose among instruction-set extensions at run time state
 
 A protocol for shared state that relies on the ordering of one processor family can fail under the weaker ordering of another while every test on the first passes. HW already requires the hardware contract to state the memory and ordering model of each hardware model a path admits (HW.4), with evidence (HW.6), and the protocol to be verified under it (HW.11); a path that admits processors of differing ordering verifies under each. A protocol built only from the synchronization of its language or library is verified at that level and is unaffected.
 
-Concurrent work that asks for more computing threads than it may use, often by nesting a threaded library inside a pool of processes, runs many times slower without any error. In a container or under a scheduler, the threads it may use are those its affinity and quota allow, not those of the whole machine. Work placed on the slower cores of a processor with more than one core design, or whose memory is paged to storage, also slows without error. HW.CPU.4 records these in the runs that track resource use while a budget is not yet known (RSRC.2) or that measure it for an optimization (RSRC.4), which is to say during development and tuning; a production run whose budget is stated and met omits them, keeping only the record its class asks (RSRC.3). HW.CPU.5 reports oversubscription when it first occurs, in every run, because the report costs one message. Threads that wait on input and output do not count. A general-purpose processor usually hosts the reference path (HW.15), but nothing here requires it.
+Concurrent work that asks for more computing threads than it may use, often by nesting a threaded library inside a pool of processes, runs many times slower without any error. In a container or under a scheduler, the threads it may use are those its affinity and quota allow, not those of the whole machine. Work placed on the slower cores of a processor with more than one core design, or whose memory is paged to storage, also slows without error. HW.CPU.4 records these in the runs that track resource use while a budget is not yet known (RSRC.2) or that measure it for an optimization (RSRC.4), which is to say during development and tuning; a production run whose budget is stated and met omits them, keeping only the record its class asks (RSRC.3). HW.CPU.5 reports oversubscription when it first occurs, in every run, because the report costs one message; it goes to the operator of a run during which one acts, and otherwise into the record of the run. Threads that wait on input and output do not count. A general-purpose processor usually hosts the reference path (HW.15), but nothing here requires it.
 
 HW.CPU addresses one matter that HW owns, the hardware contract of an execution path (HW.CPU.2), through HW.CPU.3, which cites HW.5 and HW.7.
 
-Each provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, DSGN, or RSRC. Each such provision inherits their rank and waivability (GOV.17) and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, HW.CPU.3 to HW.CPU.5 apply from CSQ3. HW.CPU.4 adds a few quantities to the record that RSRC.2 and RSRC.4 already ask for at CSQ3, only in the runs that keep it. HW.CPU.5 tightens above CSQ1, from which STND.CLASS.10 applies INTPR.7, at the cost of one message. No provision raises the floor (GOV.11).
+Each provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, DSGN, or RSRC, inherits their rank and waivability (GOV.17), and applies from the class that its field `onset` gives under STND.CLASS.10, the confirmation of HW.CPU.3 with the delivered arithmetic of HW.5 that it confirms, HW.CPU.4 adding to the record that RSRC.2 and RSRC.4 ask only in the runs that keep it, and HW.CPU.5 tightening above CSQ1, from which STND.CLASS.10 applies INTPR.7, at the cost of one message. No provision raises the floor (GOV.11).
 
 ## References
 
@@ -75,6 +75,7 @@ Each provision other than the selector and the shared-matters provision instanti
 | RSRC | Resources |
 | STND.CLASS | Consequence-class criteria |
 | STND.DRAFT | Drafting standard |
+| STND.PROJ | Project constitution template |
 | STND.VVUQ | Verification, validation, and uncertainty quantification methods |
 | VV | Correctness |
 
@@ -84,3 +85,6 @@ Each provision other than the selector and the shared-matters provision instanti
 | --- | --- | --- |
 | 1.0 | 2026-10-18 | Adopted. |
 | 1.0.1 | 2026-10-25 | Editorial amendment (GOV.41): the informative Notes name only the Articles that the provisions other than the selector and the shared-matters provision instantiate, so that the Simplicity Article, which none of them instantiates, is no longer named; no obligation, permission, or defined meaning changes. |
+| 1.1 | 2026-10-28 | Minor amendment (GOV.41): the selector of HW.CPU.1 gives the attribute Hardware execution of HW.1 in place of its own, so that path scope alone decides which provisions reach a component, each provision naming an execution path on general-purpose processors as its subject (CS9); HW.CPU.5 reports to the operator of a run during which one acts and otherwise in the record of the run (CS8). |
+| 1.2 | 2026-10-28 | Minor amendment (GOV.41): HW.CPU.3 applies from CSQ2, with the delivered arithmetic of HW.5 that it confirms; each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields. |
+| 1.2.1 | 2026-10-28 | Editorial amendment (GOV.41): the Notes say that the provisions reach a component through its execution paths, recorded by hardware type where the section Architecture of the constitution names, in place of the paths that the classification lists, as STND.PROJ.1 now has it; no obligation, permission, or defined meaning changes. |

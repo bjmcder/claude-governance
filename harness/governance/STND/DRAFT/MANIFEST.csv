@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.DRAFT,standard,LVL2,Drafting standard,adopted,_doc.md,26817c2879436a1948bcb1637680d7d04b2b423fbb453ccc1d0b989b12fcd274,12824
+STND.DRAFT,standard,LVL2,Drafting standard,adopted,_doc.md,b9d7a88541d8092389b5a4cd5b7abae1a4d4d3b0b96c36164c0e51fc88f6c8ef,14427
 STND.DRAFT.1,provision,LVL2,Modal set,adopted,1.md,64d7bdde409caebd8294b7eba5425d3ece94eb240f6076fed5f08ff21a66713e,1023
 STND.DRAFT.2,provision,LVL2,Capital letters,adopted,2.md,1ed5fe279abd3d90aa8ce589ea5ccc79d9ce0129cf5887c4623f4f83390d1698,571
 STND.DRAFT.3,provision,LVL2,Mentioned words,adopted,3.md,bbcc54e30e032f722c76cb32692147a7c653ded982329c56ca4269cf105b57e5,670
@@ -9,30 +9,30 @@ STND.DRAFT.6,provision,LVL2,Normative extent,adopted,6.md,0ef31872f32c2aa6ed5f25
 STND.DRAFT.7,provision,LVL2,Excluded expressions,adopted,7.md,a8ab6e0aee54fa76388ac733cd6d0b3170fd53491ac1e85c049abbe2bd8993ef,1943
 STND.DRAFT.8,provision,LVL2,Reading of excluded expressions,adopted,8.md,8bf2b71705bb5a703cb3d1e6c433b8204707f3f738cba0683ed309015cb47de7,736
 STND.DRAFT.9,provision,LVL2,Substitution test,adopted,9.md,64223b9eac231ad46905017fceef11c022166036897f64fc356a0b33785985db,830
-STND.DRAFT.10,provision,LVL2,Imperative mood,adopted,10.md,705c8138ee7affe4c5dd6c8df7fffe35b6bd795eadedce468655dfa8063f0109,367
-STND.DRAFT.11,provision,LVL2,Fill-in guidance,adopted,11.md,e0a6740a6dadac161739e6a2be0e44bd14da68c91ce50407116922a9b722a291,453
-STND.DRAFT.12,provision,LVL2,Informative text,adopted,12.md,e5d2ffbc2fe9897cb64b05c9e99f37a6fa3be4ba1fdb548d1ffcdd05a8dd39a3,447
-STND.DRAFT.13,provision,LVL2,Vague qualifiers,adopted,13.md,d825301da47e8e6a8816fbac97b479b5c57477c1c7edca161e66fb7b8bde0d65,1094
-STND.DRAFT.14,provision,LVL2,Disjunction,adopted,14.md,b9db96482e7b3dee78867988fd019d6776ce9b2f9c1d2c571751bf355bae3b28,433
-STND.DRAFT.15,provision,LVL2,Negated lists,adopted,15.md,13ef7ff8e4b35fb4921d39f216ff9f23972a61a6c0e33851fcadd3463daedd60,374
-STND.DRAFT.16,provision,LVL2,Conditions,adopted,16.md,315ae085fa99cdf24661042e85ad95c8240b31fee6e61ca41ecb938f393e0a3d,382
-STND.DRAFT.17,provision,LVL2,Quantifiers,adopted,17.md,4e435908b734d61cce4e1e7d5e052d1d177cfb3c6380aa7d16523fdfd09250af,611
-STND.DRAFT.18,provision,LVL2,Numeric limits,adopted,18.md,812ea9f7212813c14698e37b3b9b8ad6f9f0deabef87e47cef48a36b50f3390a,364
+STND.DRAFT.10,provision,LVL2,Imperative mood,adopted,10.md,aac707d3dbaede918aa9035459efda3f1c52eb998b163bf8f5759a26df8a6b1f,422
+STND.DRAFT.11,provision,LVL2,Fill-in guidance,adopted,11.md,7496feb7127e02a302e76459cbbfc1c5ea3abea656eb51ac44fbf4b7028b1a28,467
+STND.DRAFT.12,provision,LVL2,Informative text,adopted,12.md,9ee9d5dcb55d23491c82530391a4a7b05a7292fddf013691d8f011539da008d5,461
+STND.DRAFT.13,provision,LVL2,Vague qualifiers,adopted,13.md,d640499400fb46972aa1307b7d07c82bfe7aa8337103471ac44218436a5d6fc3,1108
+STND.DRAFT.14,provision,LVL2,Disjunction,adopted,14.md,2cfb47cd151bc6f9ac2d4d822fd1a43ae323700340529fceeb73a2131a6c4af9,447
+STND.DRAFT.15,provision,LVL2,Negated lists,adopted,15.md,85e2bee432a40a8e57228f7001f5e1503a26cd94899af811e995dc4ed5eeb09e,388
+STND.DRAFT.16,provision,LVL2,Conditions,adopted,16.md,b3714f85af87345a1e7355de84128e0dd5f696cb7ea1eb3d614490fd43cbd840,396
+STND.DRAFT.17,provision,LVL2,Quantifiers,adopted,17.md,5e84deb1b7395e50e126d93975bde5895d4110bff81cc529d60bd0938019783e,625
+STND.DRAFT.18,provision,LVL2,Numeric limits,adopted,18.md,b8990be8976174e4d78cc1544956c75db6430fcb7137d98baf0a9510631959ef,378
 STND.DRAFT.19,provision,LVL2,Instantiated provisions,adopted,19.md,2c7096b7cb57a518b4669903d740f6e0237fa61f083d97a476be1d775683dd89,413
 STND.DRAFT.20,provision,LVL2,Citation form,adopted,20.md,4aa2ad1898c600ce5126038bd9f0faa8db34e557f8d64579fc973a20382090cb,404
 STND.DRAFT.21,provision,LVL2,Citation by position,adopted,21.md,cf18afaf031581497b59d14462b8f7b0ad7bf4fde39f0e4b2f98fcde0e551e74,352
 STND.DRAFT.22,provision,LVL2,Resolvable citations,adopted,22.md,7c2d93229f081d0a5c984fd38880ead83ff131da70f5970a496e8c01772554c0,371
 STND.DRAFT.23,provision,LVL2,Citation fit,adopted,23.md,8f371d1b23d58e82e0b50459cb7940aac936d85ecf0223cd66b1313490217702,410
-STND.DRAFT.24,provision,LVL2,Listed identifiers,adopted,24.md,eb12042e0396901fb3a14aa7dbd6cf72b05a76f2b3e8bcb777842b6a7a85cb98,420
+STND.DRAFT.24,provision,LVL2,Listed identifiers,adopted,24.md,7d7aadcbb0a8e03ec8d05f6772d0fd22e81de6e91808094925c216a60e5ca6fe,434
 STND.DRAFT.25,provision,LVL2,Binding reason,adopted,25.md,331cbca80637d30d3ebb15dfdb447c84bc7395c7a8b7f889b18001541c62a2c5,609
-STND.DRAFT.26,provision,LVL2,Title form,adopted,26.md,9ebc85497de0134f113f030c4bbadf206a479f42cd3f30c2e71f72ef20fbd08d,366
-STND.DRAFT.27,provision,LVL2,Distinct titles,adopted,27.md,4dcbaf8871007b23d901921ed969944fb9f1aa5804c04449df8c38d30dfae509,394
-STND.DRAFT.28,provision,LVL2,Atomic provision,adopted,28.md,aa35a0acb48f879cc4637f36125ceabdea0904d3a37c7d5e528203f24b8f1cf6,452
-STND.DRAFT.29,provision,LVL2,Role names,adopted,29.md,9a226a6fa195be9981faf1f6507ea3e05ff5c767ed571abce0bb8badfd221696,1346
-STND.DRAFT.30,provision,LVL2,Defined terms,adopted,30.md,43854b91da593317d93b6aa6736769851cefc863a34e2868f24a5b78c9e3934e,389
+STND.DRAFT.26,provision,LVL2,Title form,adopted,26.md,a20afa4ebc82f430c20ae60fd98bce5537cb7d4d112ea28dce7b8e8144f8010a,380
+STND.DRAFT.27,provision,LVL2,Distinct titles,adopted,27.md,706d14ed6f4734c72795d9efc3daa56f18738fbdbc3fc6ed95cbbb38545b3016,408
+STND.DRAFT.28,provision,LVL2,Atomic provision,adopted,28.md,186f85b3413b1d1465a787347df16e337393c4c9a352331f980d85cc9d5928fe,466
+STND.DRAFT.29,provision,LVL2,Role names,adopted,29.md,ddc78d89807c01489debc0b81f42be519f14f1d7291d886ec2ff73192246f54a,1360
+STND.DRAFT.30,provision,LVL2,Defined terms,adopted,30.md,3a29898b1f6ec4468f572aff4378304cb156aa219e18f742a6f623193ae6c306,403
 STND.DRAFT.31,provision,LVL2,Lexicon terms,adopted,31.md,2bb42ed7084e0a7e6e7cb2b7a785ddcf9e45f64d81497de6feb106d009f525d3,477
-STND.DRAFT.32,provision,LVL2,Person and contractions,adopted,32.md,4be201c257761e92a0ef0837b0ce95e1dad66cced590c0aa28060e17164d4117,619
-STND.DRAFT.33,provision,LVL2,Spelling,adopted,33.md,fee1998f857bec23691506d16f8e06baefec8ad4ab19187f6e2d8cb2ba129b0c,1229
+STND.DRAFT.32,provision,LVL2,Person and contractions,adopted,32.md,a5cdba2e504f649a3dff6826db900c179c2dfc535e259ac907f5c4c297bc8498,633
+STND.DRAFT.33,provision,LVL2,Spelling,adopted,33.md,063d731b06d082f69d6827a4592e6961320d5309ee7ee0028c5ee8f89b0192ac,406
 STND.DRAFT.34,provision,LVL2,References table,adopted,34.md,a5a7da760b9e28c90144a5c03b40cf7c911caeb58c62a1f1720d0e53d0364f6c,447
 STND.DRAFT.35,provision,LVL2,Selector attributes,adopted,35.md,dff1f930f03e3bcb1a39600a4ce8baae2ab1f1b5bd4a1b8d3adb139fe3e61317,1162
 STND.DRAFT.36,provision,LVL2,Sub-profile attributes,adopted,36.md,2b503d8ab21cc5200f181b2c31be1110757e62f06fa3ed5cc7b351a942d61b24,598

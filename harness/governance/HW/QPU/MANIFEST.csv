@@ -1,10 +1,10 @@
 id,kind,level,title,status,path,sha256,bytes
-HW.QPU,sub-profile,LVL1,Quantum processors,adopted,_doc.md,96ca96e1d8bbde2e251074032c058d102243cacc4f0170110a59cf378eae479e,12769
-HW.QPU.1,provision,LVL1,Quantum processor selector,adopted,1.md,88869b6706dac5f38a9636d9e11c714ed08d685c134161e443fbd50c177f8818,515
+HW.QPU,sub-profile,LVL1,Quantum processors,adopted,_doc.md,03878a795214764a48e8ea7fd522354b06493164809b7abefae09769545c4776,13778
+HW.QPU.1,provision,LVL1,Quantum processor selector,adopted,1.md,77226d017398ebb3dcd146a3c9b3f30d9462ce49f9bcb5335450d7d00ead36d8,506
 HW.QPU.2,provision,LVL1,Quantum processor shared matters,adopted,2.md,928369268a7734fd654de9f30242e952b9c91c831169773a9e991c8b25b04f25,770
-HW.QPU.3,provision,LVL1,Quantum execution record,adopted,3.md,f920ef7c75bea85c9bb678817f1753fe2cf8f1c560c477329c3a8e2abc44cc8c,806
-HW.QPU.4,provision,LVL1,Device noise in uncertainty,adopted,4.md,f8f29bb3a5334757cea47e93d7d3e2bd0866a176d74c6e64881877567f9028ab,645
-HW.QPU.5,provision,LVL1,Error mitigation,adopted,5.md,5eeeea4e808c3e56051613cdf98b5a93192273460ca937f1e711f1330e9c5fa8,809
-HW.QPU.6,provision,LVL1,Samples across calibrations,adopted,6.md,0485aafc0930372646303b05a52bebbcf738b524380b10a24f272a9b20451c68,882
-HW.QPU.7,provision,LVL1,Compiled circuit equivalence,adopted,7.md,57a63ab39c74dda1eb588b8271fee0987b3e8ccadfe9836bc7afeb2e3e6ed5b6,1212
-HW.QPU.8,provision,LVL1,Unattainable precision,adopted,8.md,1f8825b487d8999983eae30117a1671ad2e49b4d79562f152e6d2e137d63960d,960
+HW.QPU.3,provision,LVL1,Quantum execution record,adopted,3.md,c6206384ad9b3c18811751fcaec4e93cba6b2ebace74c0cb5a763158591d38e7,820
+HW.QPU.4,provision,LVL1,Device noise in uncertainty,adopted,4.md,61d6c2d2695fdd4c4acdd4ba1e271c531887851672dfeb411e3e3deace409d01,659
+HW.QPU.5,provision,LVL1,Error mitigation,adopted,5.md,74c35f0e9087feb3cb6f08fdd2b1e52daf19dad3e31c5951ba2d74542906b68a,823
+HW.QPU.6,provision,LVL1,Samples across calibrations,adopted,6.md,b039ed32518602007ed5104e7829dfb0221d1818f6d0f149fea0dc9259cab825,896
+HW.QPU.7,provision,LVL1,Compiled circuit equivalence,adopted,7.md,0a4c439155d9550d98f76364f3b6220b02ab11ddfba9ad4618bbe9cdc5187c15,1226
+HW.QPU.8,provision,LVL1,Unattainable precision,adopted,8.md,c6b42ebf97acfc7f4d87802c6b65246dce2a4d986e9b2a5b46d7110230ebffde,974

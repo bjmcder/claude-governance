@@ -1,33 +1,31 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.LEAN,standard,LVL2,Lean standard,adopted,_doc.md,677b0863533963bb5d8121251e4e92d9fcdb505be3ad88dcdde2ab083725501a,30940
-STND.LEAN.1,provision,LVL2,Pinned Lean toolchain,adopted,1.md,ffeef6199f6c7de3437b8411dbdd69b5167b49b0afc8b1665b3b37579b64c422,666
-STND.LEAN.2,provision,LVL2,Upgrades rebuilt from source,adopted,2.md,1860ba41c1d0a4ce8eb64bb79a282a2391ec0536eb69739b65a680c9f783414c,677
-STND.LEAN.3,provision,LVL2,Checker soundness defects,adopted,3.md,10f0e045b6354737f66e816beca3ca04525776029689b52c1d8d153a45a55b2f,611
-STND.LEAN.4,provision,LVL2,Relied-on theorem record,adopted,4.md,a3d7fc3ceea51c785e764797a82314439af449103f654941f22b7201001ff3f9,1884
+STND.LEAN,standard,LVL2,Lean standard,adopted,_doc.md,8d4d4c17c861c64c35a158538518b52793a1859f69fa632ea19cc184c805517e,28868
+STND.LEAN.1,provision,LVL2,Pinned Lean toolchain,adopted,1.md,715f11c9191598e88788a452aac3ae991deda7af06aeef529783650de1a97d94,680
+STND.LEAN.2,provision,LVL2,Upgrades rebuilt from source,adopted,2.md,4456ecbbd39ce92fe1297dd97ab94e498695ac04baa331c86208455da0274bd8,691
+STND.LEAN.3,provision,LVL2,Checker soundness defects,adopted,3.md,5095e1e54bc1191cccda075b72f7c4bba713ef9414e964d0e88fa61d9a6ace06,625
+STND.LEAN.4,provision,LVL2,Relied-on theorem record,adopted,4.md,e62b171e1b35d721c286f7045757ab71bd64b81cd47a05dd0e19928e66f32bb3,1961
 STND.LEAN.5,provision,LVL2,Proof status not overstated,adopted,5.md,9672ff182967c3e10d21f8a6bae8e244da4bbaeb48b0743c8f0dff9f9c9a756a,693
-STND.LEAN.6,provision,LVL2,Axiom inventory checked,adopted,6.md,9096d461c134c5956f37e1fa8f65da2548bd035465160e24fa38971e51b98e59,621
-STND.LEAN.7,provision,LVL2,Accepted axiom declarations,adopted,7.md,292131669f751df8ca2bafd2ce55cd2995e23626012ec7a028313788ca85e80d,717
-STND.LEAN.8,provision,LVL2,Statements held for later proof,adopted,8.md,c27b1cd99140d38abc7651e0c9ed58600419482dd0a5dbb55422334d1da89e1e,592
-STND.LEAN.9,provision,LVL2,Trusted statements held apart,adopted,9.md,86b144512107efb717f1c6d1d7a738ed49d18e48343972aa0633ba135cd923d1,685
-STND.LEAN.10,provision,LVL2,Statements compared after build,adopted,10.md,319f2af8d74f8b42cb4b9cf88a41485eee3825de67281dd809e1e1ae9f90ae6c,589
-STND.LEAN.11,provision,LVL2,Statement review hazards,adopted,11.md,f036393f0ef65b4d2d9caf41923218123488ea6af558ceda93bbafbbef27c992,1952
-STND.LEAN.12,provision,LVL2,Implicit variables declared,adopted,12.md,9b7abd6a66e8e4a18a83b8d4b75111785896f3b8a7dee301098afd260ad3a2e2,452
-STND.LEAN.13,provision,LVL2,Non-vacuous trusted statements,adopted,13.md,f68718b4905c7b2777548e3e8153161aaae73b9638d134449b69899e66a2ea90,719
-STND.LEAN.14,provision,LVL2,Native evaluation recorded,adopted,14.md,ead41b2eed45a0237823b90a04acf4cd9af61c3a6f8fe7cc16bd0bccaeb78005,658
-STND.LEAN.15,provision,LVL2,Environment replayed apart from build,adopted,15.md,0befc05d69aed6464b9707d0e5633ecaa4df5f4796a22b4586b0624079a2f1be,631
-STND.LEAN.16,provision,LVL2,Independent checker for safety components,adopted,16.md,b68bff8911ce047672d3c196fdec75a3310e4a0e737dde4ea1e91bf080b46702,607
-STND.LEAN.17,provision,LVL2,Total definitions under claims,adopted,17.md,e8e6ee9021fbd9ddead227a6ded9703796d3f74fd67f1ffbd1e71c01f2f3478d,636
-STND.LEAN.18,provision,LVL2,Replaced implementations stated,adopted,18.md,5af497d75c30488d8223654cf0163e53e1f4243f649cce91cee11f536edcef6e,747
-STND.LEAN.19,provision,LVL2,Link to running code,adopted,19.md,80c9af33b5dd81ebdf290bb2be6382237e6fa1b2e5a4c2b45e1b2c2b1a53e5d3,1574
-STND.LEAN.20,provision,LVL2,Model comparison tests,adopted,20.md,37029e9069bcdbc6b0bde836343e1e3d31508bc840bf36e708c03dcf2a5b9372,764
-STND.LEAN.21,provision,LVL2,Proofs from untrusted authors,adopted,21.md,d5ae1d9ea707f2290f30804b64bb753b98af09d787c5ebc8ad705e09041dd158,847
-STND.LEAN.22,provision,LVL2,Proof review by checks,adopted,22.md,385658737226bc0d024ac828271b759b8adc694c68f18292a16afa979b96d188,899
-STND.LEAN.23,provision,LVL2,Floating-point model stated,adopted,23.md,1fc32e7b254ba5bf1dc6a6b932d576f64b7d7e098285e2a7a8cb935217cc7d98,924
-STND.LEAN.24,provision,LVL2,Values substituted without failure,adopted,24.md,72a9406b9bd030a5e5e172a3a29ba4a929c1b73dc88388d413ea68ab8efd5a28,880
-STND.LEAN.25,provision,LVL2,Lean responses to listed failures,adopted,25.md,0f54759f7b03d8aca841931d7d5c83c1f1388de51f53d4dc6a232b36e27e12fe,672
-STND.LEAN.26,provision,LVL2,Unsafe and replaced code explained,adopted,26.md,7cfaf848c5a92935ca8d5ed01751806e01b604c36dd3468da48134168f39811b,518
-STND.LEAN.27,provision,LVL2,Lean naming conventions,adopted,27.md,54678cb4a7ad91f5a0e5c73fae259ad7c54dd80c21482dcc5095ae59a87abe17,589
-STND.LEAN.28,provision,LVL2,Raised elaboration limits,adopted,28.md,940e5b9929145689d3389b0642af1cb16b9cda6f19bcb4f77aeb8fcf67ed1b5e,509
-STND.LEAN.29,provision,LVL2,Tactics over library lemma sets,adopted,29.md,bf0b63a8311800465df6fde8ad09f7a85e06d005b3435de77e6afa057a95897a,497
-STND.LEAN.30,provision,LVL2,Library definitions through lemmas,adopted,30.md,bf4ff67bfb448cd672f84e916c4f7397180fa5b8f98d6dd7183b8ea786d8bd0a,542
-STND.LEAN.31,provision,LVL2,Deprecations in Lean builds,adopted,31.md,4efb94543eab8c6c2eccae8bec14ff0dd04351dc2f902333e5d2e9f24366f2d5,523
+STND.LEAN.6,provision,LVL2,Axiom inventory checked,adopted,6.md,dad62dbe05e4abaf1d592117150bfc3cccbaddcaf7d06bbabe1e041795c95d16,635
+STND.LEAN.7,provision,LVL2,Accepted axiom declarations,adopted,7.md,cee47956255e8c2fa444bb1981e1a39054f786a4b30c2ccaeb31d27dc6aeda97,731
+STND.LEAN.8,provision,LVL2,Statements held for later proof,adopted,8.md,6bee85cf8e6a208eb82ca46142f04ce4de3ede6d90be089e90356b1628d5b93a,606
+STND.LEAN.9,provision,LVL2,Trusted statements held apart,adopted,9.md,51f01cb2009acfc132411e1fd98509abea6b9c7054b35e6f76bb01c29d298aaa,699
+STND.LEAN.10,provision,LVL2,Statements compared after build,adopted,10.md,dd2d9f4068c627a81d3a629c9c6c90b0df73596d7cab74a0415ea0c302ac3468,603
+STND.LEAN.11,provision,LVL2,Statement review hazards,adopted,11.md,3d719bca751d19ba3df339b080ad4998b9412f3623f4c595cb2cac4021162d4c,1966
+STND.LEAN.12,provision,LVL2,Implicit variables declared,adopted,12.md,2745fd8bb3a58b3ec84cde755e4974781d282b80caaa3db1131e0f3e0dfd0b7a,466
+STND.LEAN.13,provision,LVL2,Non-vacuous trusted statements,adopted,13.md,a8466448e1f8af935c51553306c2ac2cb5f8b8cdc65b07231876b1e55f86ee12,733
+STND.LEAN.14,provision,LVL2,Native evaluation recorded,adopted,14.md,06342cf9bae40cecb31400df3ff58fee85c3180725b70ddb2e3c68bb9c268c36,672
+STND.LEAN.15,provision,LVL2,Environment replayed apart from build,adopted,15.md,2f35dce3951a809d0ab30d694816b77235d77add6a9265296ceddd55e26c352c,645
+STND.LEAN.16,provision,LVL2,Independent checker for safety components,adopted,16.md,c284e1edd668bbdbac3c8524ec027581ba06930fac32002d1a5b2e2868d5aaa3,621
+STND.LEAN.17,provision,LVL2,Total definitions under claims,adopted,17.md,a11e67ddc9161425dc8a1af93dd48850576b8168dc25adf286846dea18b07acd,676
+STND.LEAN.18,provision,LVL2,Replaced implementations stated,adopted,18.md,eb05301cb3a9150f888b2d60d7eccdd21839568357ea69152d2408aa51bb87ab,787
+STND.LEAN.19,provision,LVL2,Link to running code,adopted,19.md,69b6ffe9a698c35f38b278a3d8f55d0229019f44aa835014eb04f630fe2b0345,1588
+STND.LEAN.20,provision,LVL2,Model comparison tests,adopted,20.md,b327795e65358dd5e9e32fca5c62aae25fc5ee0c28a9d9501419cafbc9088ef4,778
+STND.LEAN.21,provision,LVL2,Proofs from untrusted authors,adopted,21.md,236a68e44db0ae46098c97be572e9cdd4f2a39526bede716958fb86901d9d39f,861
+STND.LEAN.22,provision,LVL2,Proof review by checks,adopted,22.md,aa62c1d78472fdc3c28eac3f6af1a3637e030015e738a0b918d8fb53d99a6a47,913
+STND.LEAN.23,provision,LVL2,Floating-point model stated,adopted,23.md,99d74d6c4cb0409c9737c3274e53ad503a1924636d9b5ee7163115d2cbb9e169,938
+STND.LEAN.24,provision,LVL2,Values substituted without failure,adopted,24.md,39d5b61e3b8701c4e1b02206eb539904fa7067106abe26c2b2ce544e3c4bf9ce,894
+STND.LEAN.26,provision,LVL2,Unsafe and replaced code explained,adopted,26.md,69f04ff7af64e598780eda834b2fc97b321c50eb940befed42a3b55c133b800b,532
+STND.LEAN.28,provision,LVL2,Raised elaboration limits,adopted,28.md,7b6f5135af579aa44d52934509b3eaa652c81586e88f942a59068d8140f5e40e,523
+STND.LEAN.29,provision,LVL2,Tactics over library lemma sets,adopted,29.md,0c7b01bbbb9b6c2ba402439151ef2f67bdf2a1d9c90cd44afb454270c2e291c2,511
+STND.LEAN.30,provision,LVL2,Library definitions through lemmas,adopted,30.md,c965ced4a5a21ab3d837917efe4c3847673a2a3874f80693ee264ff3fd9b4d29,556
+STND.LEAN.31,provision,LVL2,Deprecations in Lean builds,adopted,31.md,fba3cf1a30bacc65dcbf58adf6cedcd661e9c5a95ae93fcf28ed5d9002b15f3c,537

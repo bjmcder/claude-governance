@@ -5,8 +5,8 @@ kind: "sub-profile"
 title: "Embedded controllers"
 status: "adopted"
 adopted: "2026-10-18"
-revision: "1.0.2"
-selector: "Binds when a component of the work executes, or is admitted to execute, on an embedded controller (HW.EMBED.1)."
+revision: "1.1.2"
+selector: "Binds with HW, when a component of the work executes, or is admitted to execute, on a hardware type (HW.EMBED.1); its provisions name execution paths on embedded controllers."
 parent: "HW"
 adopted_by: "The Custodian"
 ---
@@ -30,7 +30,7 @@ This section fixes meaning and imposes no obligation, as the Lexicon does.
 
 ## Selector
 
-HW.EMBED.1 states the selector: the attribute Embedded controller execution, which HW defines and which HW.1 also gives (STND.DRAFT.36). Each provision names an execution path on an embedded controller as its subject (STND.DRAFT.38). The host that receives a controller's data is a path on another hardware type, joined to the controller's path by a boundary contract (HW.13). The checks by which the host confirms the controller's image and contract properties, and detects its resets and stalls, belong to the controller's execution path.
+HW.EMBED.1 states the selector: the attribute Hardware execution, which HW defines and which HW.1 gives (STND.DRAFT.36), so that the sub-profile binds with HW and its provisions reach a component through the execution paths of that component, recorded by hardware type where the section Architecture of the constitution names (STND.PROJ.1). Each provision names an execution path on an embedded controller as its subject (STND.DRAFT.38). The host that receives a controller's data is a path on another hardware type, joined to the controller's path by a boundary contract (HW.13). The checks by which the host confirms the controller's image and contract properties, and detects its resets and stalls, belong to the controller's execution path.
 
 ## Where the rest lives
 
@@ -61,7 +61,7 @@ Each provision has a route that costs the target at most one reported identity a
 
 HW.EMBED addresses two matters that HW owns (HW.EMBED.2): the hardware contract of an execution path, through HW.EMBED.3, which cites HW.8, HW.EMBED.4, which cites HW.4 and HW.8, and HW.EMBED.6, which cites HW.9; and the budgets of a constrained target, through HW.EMBED.3 and HW.EMBED.6, which cite HW.20.
 
-Each provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, DSGN, or RSRC. Each such provision inherits their rank and waivability (GOV.17) and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, HW.EMBED.3 to HW.EMBED.6 apply from CSQ3; HW.EMBED.6 instantiates INTPR.10, which STND.CLASS.10 applies from CSQ2, and so tightens above the floor at the cost of one statement in a record. HW.EMBED.4 applies from CSQ3 although HW.4 applies from CSQ2, and so tightens above the floor (PRIME.15) for outputs that drive physical hardware. At every class, PRIME.13 holds for outputs that drive physical hardware. No provision raises the floor (GOV.11).
+Each provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, DSGN, or RSRC, inherits their rank and waivability (GOV.17), and applies from the class that its field `onset` gives under STND.CLASS.10, where a field that gives CSQ3 for content that the table of STND.CLASS.10 starts at a more severe class tightens above the floor (PRIME.15) for outputs that drive physical hardware, at the cost of one statement in a record for HW.EMBED.6 and of the stated outputs at reset and halt for HW.EMBED.4. At every class, PRIME.13 holds for outputs that drive physical hardware. No provision raises the floor (GOV.11).
 
 ## References
 
@@ -77,6 +77,7 @@ Each provision other than the selector and the shared-matters provision instanti
 | RSRC | Resources |
 | STND.CLASS | Consequence-class criteria |
 | STND.DRAFT | Drafting standard |
+| STND.PROJ | Project constitution template |
 | VV | Correctness |
 
 ## Revision History
@@ -86,3 +87,6 @@ Each provision other than the selector and the shared-matters provision instanti
 | 1.0 | 2026-10-18 | Adopted. |
 | 1.0.1 | 2026-10-19 | Editorial amendment (GOV.41): the informative Notes describe CPS as adopted, citing CPS.4; no obligation changes. |
 | 1.0.2 | 2026-10-25 | Editorial amendment (GOV.41): the informative Notes name only the Articles that the provisions other than the selector and the shared-matters provision instantiate, so that the Simplicity Article, which none of them instantiates, is no longer named; no obligation, permission, or defined meaning changes. |
+| 1.1 | 2026-10-28 | Minor amendment (GOV.41): the selector of HW.EMBED.1 gives the attribute Hardware execution of HW.1 in place of its own, so that path scope alone decides which provisions reach a component, each provision naming an execution path on embedded controllers as its subject (CS9). |
+| 1.1.1 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields; no obligation, permission, or defined meaning changes. |
+| 1.1.2 | 2026-10-28 | Editorial amendment (GOV.41): the Notes say that the provisions reach a component through its execution paths, recorded by hardware type where the section Architecture of the constitution names, in place of the paths that the classification lists, as STND.PROJ.1 now has it; no obligation, permission, or defined meaning changes. |

@@ -1,6 +1,6 @@
-# Workflow and long-run resilience standard (STND.WFLOW) 1.0
+# Workflow and long-run resilience standard (STND.WFLOW) 1.2
 
-Adopted by The Custodian as revision 1.0 in ledger entry 126 (2026-10-24). This reading copy is composed from the per-provision files in STND/WFLOW/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 126 (2026-10-24); revised to 1.1 in entry 286 (2026-10-28) and 1.2 in entry 293 (2026-10-28). This reading copy is composed from the per-provision files in STND/WFLOW/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -8,7 +8,7 @@ This standard holds the practice that makes a run of a computational workflow co
 
 Every provision is a default (GOV.19), which a project replaces by a recorded decision with an alternative that meets the same higher-level outcome (REPRO.7). The observation of the completion of each job and each step, the reach of a failure of one set member or process to the others, and the loud answer to an exhausted resource, storage included, bind at every class through STND.CONC.1, STND.CONC.2, STND.MPI.6, HW.8, and PRIME.4, and this standard adds nothing to that floor. The standard is agnostic of workflow engine, scheduler, file system, platform, and tool: its provisions name no engine, scheduler, file system, format, or revision of a specification (GOV.18).
 
-A step that a person or an agent performs by hand has its inputs and outputs declared (STND.WFLOW.1), its outputs checked before it counts as completed (STND.WFLOW.3), its effects stated (the first sentence of STND.WFLOW.4), and its state in the resumption record (STND.WFLOW.36); the provisions on retries, notices of end, and restart state concern the steps that software runs. The steps that build software are governed by STND.BUILD, and this standard governs the publication, retry, restart, storage, and resumption around them. Concurrency inside one program belongs to STND.CONC, the work process of agents and people to STND.WPROC, and the halt of a job of several processes that communicate by message passing to STND.MPI; this standard cites them and does not restate them.
+The record that an agent keeps of its own actions under REPRO.11 is no workflow run under this standard: an action of an agent or a person is a step only where a workflow description declares it. A step of a workflow description that a person or an agent performs by hand has its inputs and outputs declared (STND.WFLOW.1), its outputs checked before it counts as completed (STND.WFLOW.3), its effects stated (the first sentence of STND.WFLOW.4), and its state in the resumption record (STND.WFLOW.36); the provisions on retries, notices of end, and restart state concern the steps that software runs. The steps that build software are governed by STND.BUILD, and this standard governs the publication, retry, restart, storage, and resumption around them. Concurrency inside one program belongs to STND.CONC, the work process of agents and people to STND.WPROC, and the halt of a job of several processes that communicate by message passing to STND.MPI; this standard cites them and does not restate them.
 
 ## Normative and informative parts
 
@@ -20,7 +20,7 @@ This section fixes meaning and imposes no obligation, as the Lexicon does. Workf
 
 | Term | Definition |
 | --- | --- |
-| Step | A part of a workflow that runs as one unit from its declared inputs to its declared outputs: a command, a script, a job, or a task that a workflow engine starts, or a step that a person or an agent performs. |
+| Step | A part of a workflow that runs as one unit from its declared inputs to its declared outputs: a command, a script, a job, or a task that a workflow engine starts, or a step that a person or an agent performs and that a workflow description declares. |
 | Workflow description | The versioned text from which a workflow engine runs a workflow: its steps, their declarations, and its rules of staleness, reuse, and retry. |
 | Declaration | Of a step: the part of the workflow description that names the inputs, outputs, checks, and effects of that step. |
 | Workflow engine | The software that runs the steps of a workflow from its workflow description, decides which steps to run, and records their attempts; a script that runs steps in a fixed order is one. |
@@ -53,7 +53,7 @@ STND.WPROC governs the work process of agents and people, from the unit record o
 
 A step that reads a file or a tool that it does not declare reruns on no change there and behaves differently on another host, and the declaration of each step is what incremental execution, caching, and cleanup trust (w1, W15) (STND.WFLOW.1). The declared inputs of a set member do not include the order in which the members of its set start, so STND.WFLOW.1 also keeps a set member from relying on that order, which one scheduler does not guarantee (w1, W24). A step whose output depends on the time, on random draws, on the network, on the order of a directory listing, or on the order in which parallel work completes declares it under REPRO.3; a workflow that reruns such a step, finds an output that differs, and keeps the stored outputs of its consumers combines outputs of two attempts that disagree (w1, answer 6) (STND.WFLOW.2). A declared variation within the agreement of the acceptance criterion is no defect, so STND.WFLOW.2 asks for a rule of reuse and not for determinism. A step that exits with a status of zero and writes an empty or wrong output is accepted by an engine that judges by exit status alone, and the error appears steps later; two published workflow languages let a declaration state checks of outputs that fail the step (w1, W2 and W4) (STND.WFLOW.3). A step whose check of an output fails and that still reports success continues silently past a detected error, which PRIME.4 forbids at every class; STND.WFLOW.3 adds which checks run, which lies above the floor. Engines run a task more than once by default: one retries on the death of a worker, another runs four attempts and optional speculative copies, and a scheduler that requeues a job starts its script again from the beginning (c3, S5, S6, and S14) (STND.WFLOW.4 and STND.WFLOW.5). A key that a caller supplies and that the receiving system stores atomically with the result returns the first outcome on a retry (c3, S15); one orchestration framework asks for tasks that give the same outcome on every rerun and writes by partition in place of appending (w1, W5). A key that is the same for each attempt of a step survives a resumption, which starts a new workflow run, and a key drawn from the workflow run does not. That a task of one controller of containers runs more than once when it is evicted after it finishes and before its completion is recorded is unverified (w1, W37). DSGN.16 confines effects to declared places, and STND.WFLOW.4 names the place of each effect of a step that is able to run again. PRIME.7 governs a write to a remote system by an agent.
 
-Build systems that use the times at which files were modified as the mark of a stale file require that those times only move forward, which backup software violates, and they are minimal only where no one changes a time without changing content; a build system with early cutoff stops where a rebuilt intermediate is unchanged (w1, W14, read as full text). One engine keys a task on the path, time, and size of its inputs, its script, and its environment, and shared file systems are able to report times that differ between reads; another does not invalidate a cached value when its code changes (w1, W3; c3, S10 and S11) (STND.WFLOW.6). A key over inputs recomputes every dependent of a changed input, and a key over the content of each output stops at an unchanged one (w1, W47, a search extract, unverified); STND.WFLOW.6 has the description state which the workflow uses, and RSRC.7 admits reuse only where it preserves correctness and reproducibility. A time is able to serve as a first filter before a comparison of content. QA.14 asks, from CSQ2, for a mechanism that identifies the dependents of a result, so that propagation does not rely on memory; the second sentence of STND.WFLOW.2 and the first sentence of STND.WFLOW.6, which decide the steps that depend on a changed or unchanged output, are that mechanism within one workflow and apply from CSQ2.
+Build systems that use the times at which files were modified as the mark of a stale file require that those times only move forward, which backup software violates, and they are minimal only where no one changes a time without changing content; a build system with early cutoff stops where a rebuilt intermediate is unchanged (w1, W14, read as full text). One engine keys a task on the path, time, and size of its inputs, its script, and its environment, and shared file systems are able to report times that differ between reads; another does not invalidate a cached value when its code changes (w1, W3; c3, S10 and S11) (STND.WFLOW.6). A key over inputs recomputes every dependent of a changed input, and a key over the content of each output stops at an unchanged one (w1, W47, a search extract, unverified); STND.WFLOW.6 has the description state which the workflow uses, and RSRC.7 admits reuse only where it preserves correctness and reproducibility. A time is able to serve as a first filter before a comparison of content. QA.14 asks, from CSQ2, for a mechanism that identifies the dependents of a result, so that propagation does not rely on memory; the second sentence of STND.WFLOW.2 and the first sentence of STND.WFLOW.6, which decide the steps that depend on a changed or unchanged output, are that mechanism within one workflow.
 
 A rename replaces its target atomically only within one mounted file system, and fails across two, even for one file system mounted twice; a step that then copies the file leaves it visible while half written (w1, W10) (STND.WFLOW.7). On the systems that w1 read, a temporary name in the directory of the final name gives the atomic operation of STND.WFLOW.7, and a copy made after a failed rename does not; on storage that offers no atomic operation that names an object, the marker of completion is the means that remains. A sync of a file does not make the entry of its name in a directory durable, which needs a sync of the directory as well, and one study found 60 vulnerabilities to a crash in 11 applications, the fixes of several of which added a missing sync of a directory (w1, W9; c3, S37 and S42) (third sentence of STND.WFLOW.7). The three sentences of STND.WFLOW.7 are the steps of one publication and apply together. A step that a forced end interrupts leaves a file under its final name that a later run takes for a result, or leaves a private directory that fills the disk; one engine keeps logs on error, and whether a common build tool deletes a target after a failed recipe by default is unverified (w1, W2) (STND.WFLOW.8). In one engine, the task that finishes last overwrites a published file of the same name (w1, W3), and STND.WFLOW.9 gives each final name one step. Two attempts of one step that both run, one of them an attempt of a halted run that has not ended, give one final name two writers; STND.WFLOW.5 has each later attempt give the outputs of a single attempt, and STND.WFLOW.36 records each job that is not known to have ended, so that a resumption knows of the earlier attempt. The removal of a partial output by the workflow engine is an act of the software. Its removal by an agent is an action that GUARD.5 and GUARD.6 govern; it is exempt under STND.DFLT.15 where the item is a temporary item or belongs to another exempt class of that provision, content regenerable from recorded inputs among them, and GUARD.6 prevails over every exemption for a removal whose scope is not enumerated and verified first.
 
@@ -67,11 +67,11 @@ In one scheduler, a dependency on a whole array waits for every task to succeed,
 
 One computing center blocks every write by an account whose usage exceeds its quota of storage, while it still accepts submissions; a separate quota counts files and directories; and its scratch storage makes each file not accessed within 8 weeks subject to deletion (w1, W26 to W28) (STND.WFLOW.30 and STND.WFLOW.31). By the reasoning of w1, a workflow of a million tasks in an engine that makes one directory for each task exhausts the count of files before the space (w1, W28 and W3). In the design of one parallel file system, quota is granted to storage targets in portions, so that a write fails for quota while the account is below its limit (w1, W44, from material of 2008 and 2009, unverified for current releases). A quota is a limit of policy and not a capacity in the sense that HW gives the term, so PRIME.4 governs its exhaustion directly and HW.8 governs a full device; INTPR.7 already has a trend of storage toward either reported while intervention is still possible, and STND.WFLOW.30 adds the budget and the check at the start. A shared network file system gives consistency from close to open only, its locks are advisory and able to be lost, concurrent appends through it are able to corrupt files, one embedded database states that one of its modes does not work over a network file system, and one mode of a scientific file format requires storage that orders writes as POSIX does, which excludes network file systems by a search extract (unverified) (c3, S36, S39, S40, and S44 to S48) (STND.WFLOW.32); STND.MPI.21 is the form of STND.WFLOW.32 for the parallel input and output of MPI. An input updated between reruns changes the outputs without notice (w1, W5), so STND.WFLOW.1 and STND.WFLOW.6 apply to a step that stages data, its source being one of its inputs, and STND.WFLOW.33 checks the copy. One engine resumes only where its cache of tasks and its work directories are both kept (w1, W45), so a cleanup of a work directory, by a person, an agent, or a purge, breaks a resumption or makes it compute everything again (STND.WFLOW.34). The records of completed steps and the resumption record cite the final outputs and the restart state of a workflow run, so those are not temporary items; the work area of a step, where it is created as a temporary location in the sense of STND.DFLT, holds temporary items that no record cites. GUARD.5 and GUARD.6 govern the removal by an agent of what a work directory holds, and STND.DFLT.14 and STND.DFLT.24 govern the scope of such a removal.
 
-A shared vocabulary of provenance names the entities, activities, and people that produce data, and published profiles record the run of a process and of a workflow in a form that several engines implement (w1, W29 and W30; c3, S3) (STND.WFLOW.35). REPRO.1 already lists the inputs, the revision of the code, the parameters, and the identity of the computational environment that the provenance of an output gives, and STND.WFLOW.35 adds only what a workflow makes necessary; for a step that offloads work to an accelerator, STND.OFFLD.25 gives the items of the record of its results. Its second sentence rests on REPRO.12 and INTPR.9, which apply from CSQ3, and qualifies the provenance of its first sentence, so the two sentences apply together from CSQ2. The resumption of a halted workflow by a person rests on the record of STND.WFLOW.36, which w1 reasons from INTPR.12 and INTPR.13 and supports with no source (w1, section on resumption by a person): a resumption that runs the same command again finds a cache, a restart state, and a staging area that each are able to have changed, and a job of the halted run that has not ended still writes. A resumption after a change of its code, parameters, or environment is a new workflow run under REPRO.1, and the reuse key of STND.WFLOW.6 decides which outputs of the halted run it reuses. STND.WFLOW.36 asks for no decision of the human owner (STND.DRAFT.42); where the halt is that of a unit of work at its bound, STND.DFLT.9 already has continuation begin on a recorded decision of the human owner.
+A shared vocabulary of provenance names the entities, activities, and people that produce data, and published profiles record the run of a process and of a workflow in a form that several engines implement (w1, W29 and W30; c3, S3) (STND.WFLOW.35). REPRO.1 already lists the inputs, the revision of the code, the parameters, and the identity of the computational environment that the provenance of an output gives, and STND.WFLOW.35 adds only what a workflow makes necessary; for a step that offloads work to an accelerator, STND.OFFLD.25 gives the items of the record of its results. Its second sentence qualifies the provenance of its first sentence, so the two sentences share one onset. The resumption of a halted workflow by a person rests on the record of STND.WFLOW.36, which w1 reasons from INTPR.12 and INTPR.13 and supports with no source (w1, section on resumption by a person): a resumption that runs the same command again finds a cache, a restart state, and a staging area that each are able to have changed, and a job of the halted run that has not ended still writes. A resumption after a change of its code, parameters, or environment is a new workflow run under REPRO.1, and the reuse key of STND.WFLOW.6 decides which outputs of the halted run it reuses. STND.WFLOW.36 asks for no decision of the human owner (STND.DRAFT.42); where the halt is that of a unit of work at its bound, STND.DFLT.9 already has continuation begin on a recorded decision of the human owner.
 
 In one study, 74 percent of the R files in about 2,000 replication datasets failed on their first run again in a clean environment, and 56 percent after automatic cleaning (w1, W32); the figures of a study of notebooks differ between its summaries and are unverified (w1, W33). STND.WFLOW.37 runs a workflow from its declared inputs alone, which finds an undeclared input, and QA.9 still has results regenerated by another actor from CSQ1. Tests of climate models require a run restarted from its restart state to match a run without the interruption bit for bit, also at halved numbers of processes and threads (c3, S23) (STND.WFLOW.39); STND.VVUQ.1 gives the tier of each comparison of STND.WFLOW.38 to STND.WFLOW.40 from the differences between the two runs. Idempotence is tested by running a step twice, once after a forced end at a varied point (w1, answer 22) (STND.WFLOW.38), and a resumption by halting a workflow run and resuming it (STND.WFLOW.40). RSRC.12 governs the deferral of a costly test, the test of a workflow of weeks among them, to the point at which its result is needed.
 
-Under STND.CLASS.10, each provision instantiates only DSGN, SIMPL, REPRO, RSRC, INTPR, VV, or QA, and applies from CSQ3; work of CSQ4 may omit it. The part of a provision that rests on a row of the table of STND.CLASS.10 applies from the class of that row. The first sentence of STND.WFLOW.16 and STND.WFLOW.32 rest on DSGN.5, the second sentence of STND.WFLOW.24 and the first sentence of STND.WFLOW.35 on REPRO.4, and the second sentence of STND.WFLOW.2 and the first sentence of STND.WFLOW.6 on QA.14, and they apply from CSQ2. The second sentence of STND.WFLOW.35 rests on REPRO.12 and INTPR.9, whose parts that it uses rest on no row and would apply from CSQ3; it qualifies the provenance of the first sentence and applies with that sentence from CSQ2, as one bundle. That is a departure from the reading of the rows used elsewhere, which starts a part that rests on no row at CSQ3, so that the provenance of an output and the form in which a person reads it start at one class. The second sentence of STND.WFLOW.3, the second sentence of STND.WFLOW.21, STND.WFLOW.22, and STND.WFLOW.33 have a step or a job check its own output or write, the checking of postconditions that the second sentence of DSGN.2 asks, and apply from CSQ1. The second sentence of STND.WFLOW.14 rests on INTPR.7, and STND.WFLOW.15 on INTPR.8, and they apply from CSQ1. STND.WFLOW.25 and STND.WFLOW.27 check data where it enters the run from storage, the checking of preconditions that the first sentence of DSGN.2 asks in full from CSQ3, and apply from CSQ3. STND.WFLOW.7, STND.WFLOW.18, and the second sentence of STND.WFLOW.17 state what a protocol of shared state uses, and not how its invariants are verified, so they apply from CSQ3. The tests of STND.WFLOW.37 to STND.WFLOW.40 are tests under VV.1 and VV.3, and none of them compares with a reference oracle produced without the implementation that it judges, so they apply from CSQ3. STND.WFLOW.36 rests on INTPR.12 and INTPR.13 and applies from CSQ3, although INTPR.12 is the CSQ0 row of STND.CLASS.10: that row starts a recorded exercise in which a person resumes the work from its artifacts without the automation, and STND.WFLOW.36 asks no exercise, only the record from which a resumption begins, a part of INTPR.12 that applies in full from CSQ3. No provision instantiates DSGN.3; the mechanical checking of each contract of a safety-related component, which STND.CLASS.10 starts at CSQ0, stays with that row, and the checks of outputs of STND.WFLOW.3 are checks of postconditions under DSGN.2. Every other provision and sentence rests on DSGN.1, DSGN.6, DSGN.14, DSGN.16, SIMPL.6, REPRO.1, REPRO.3, REPRO.12, RSRC.1, RSRC.2, RSRC.7, INTPR.9, or INTPR.13 and on no row, and applies from CSQ3. No provision raises the floor (GOV.11): the completion of jobs and steps, the failures of set members and processes, the exhaustion of resources, and discarded failures are governed by STND.CONC.1, STND.CONC.2, STND.MPI.6, HW.8, STND.CODE.7, and PRIME.4, which already bind at every class.
+Under STND.CLASS.10, each provision instantiates only DSGN, SIMPL, REPRO, RSRC, INTPR, VV, or QA, and applies from the class that its field `onset` gives, which work of CSQ4 may omit; the machinery of a long campaign of runs, the staleness rule, the engine records valid after a forced end, the storage budget, the state of work directories, the resumption record, and the tests of a clean area and of a resumption, starts at CSQ2 with the provenance of STND.WFLOW.35, and the attempt records of STND.WFLOW.15 at CSQ1, so that a workflow of CSQ3 owes its declarations, the checks of its outputs, its retries, and its restart state. No provision raises the floor (GOV.11): the completion of jobs and steps, the failures of set members and processes, the exhaustion of resources, and discarded failures are governed by STND.CONC.1, STND.CONC.2, STND.MPI.6, HW.8, STND.CODE.7, and PRIME.4, which already bind at every class.
 
 ## References
 
@@ -108,31 +108,31 @@ Under STND.CLASS.10, each provision instantiates only DSGN, SIMPL, REPRO, RSRC, 
 
 #### STND.WFLOW.1 Step inputs and outputs declared
 
-Default. Instantiates DSGN.1, DSGN.16.
+Default, from CSQ3. Instantiates DSGN.1, DSGN.16.
 
 The declaration of each step SHOULD name each file, dataset, parameter, and tool that the step reads, the computational environment in which it runs, and each output that it writes, by its name or by a stated rule that derives its name (DSGN.1, DSGN.16). Each step SHOULD read and write only what its declaration names and the work area that the workflow gives it (DSGN.16).
 
 #### STND.WFLOW.2 Varying steps under reuse
 
-Default. Instantiates REPRO.3, RSRC.7, QA.14.
+Default, from CSQ3; sentence 2 from CSQ2. Instantiates REPRO.3, RSRC.7, QA.14.
 
 Where the declaration of variation that REPRO.3 asks shows that an output of a step varies between attempts on identical inputs, the workflow description SHOULD state the rule under which the workflow reuses a stored output of that step (REPRO.3, RSRC.7). Where an output of such a step that a workflow runs again differs from the stored output, the workflow SHOULD also run again each step that depends on that output, directly or through other steps (REPRO.3, QA.14).
 
 #### STND.WFLOW.3 Step completion checks
 
-Default. Instantiates DSGN.1, DSGN.2.
+Default, from CSQ3; sentence 2 from CSQ1. Instantiates DSGN.1, DSGN.2.
 
 The declaration of each step SHOULD state the checks by which the workflow judges each of its outputs complete: its presence at least, and each property of its size, type, or schema on which a consumer relies (DSGN.1). A workflow SHOULD count a step as completed by the passing of those checks by each output that the step declares, and not by the exit status of its last attempt alone (DSGN.2).
 
 #### STND.WFLOW.4 Effects beyond declared outputs
 
-Default. Instantiates DSGN.16, DSGN.1.
+Default, from CSQ3. Instantiates DSGN.16, DSGN.1.
 
 The declaration of each step SHOULD state each effect that the step makes beyond its declared outputs, among them a write to a database or to a remote system, a message, and a submission of further work (DSGN.16). Where a step that makes such an effect is able to run more than once, its declaration SHOULD state how the effect is made once over all attempts: by a key that identifies the step and its inputs, is the same for each attempt, and is checked by the receiving system, or by not running the step again after an attempt that made the effect (DSGN.1).
 
 #### STND.WFLOW.5 Steps repeatable after interruption
 
-Default. Instantiates DSGN.1, REPRO.3.
+Default, from CSQ3. Instantiates DSGN.1, REPRO.3.
 
 After an attempt of a step ends at an arbitrary point, each later attempt of that step SHOULD give the outputs, within the variation that REPRO.3 declares for them, and the effects that a single attempt run to completion gives (DSGN.1, REPRO.3).
 
@@ -140,7 +140,7 @@ After an attempt of a step ends at an arbitrary point, each later attempt of tha
 
 #### STND.WFLOW.6 Staleness rule stated
 
-Default. Instantiates SIMPL.6, RSRC.7, QA.14, REPRO.1.
+Default, from CSQ2. Instantiates SIMPL.6, RSRC.7, QA.14, REPRO.1.
 
 The workflow description SHOULD state the rule by which the workflow decides whether a stored output of a step is current, and whether an output that a step produces again unchanged leaves current the steps that consume it (SIMPL.6, RSRC.7, QA.14). That rule SHOULD decide from a reuse key over the content of each input that the step declares, the code and the parameters of the step, and the identity of its computational environment, and not from the times at which files were modified alone (RSRC.7, REPRO.1).
 
@@ -148,19 +148,19 @@ The workflow description SHOULD state the rule by which the workflow decides whe
 
 #### STND.WFLOW.7 Outputs published atomically
 
-Default. Instantiates DSGN.15, DSGN.1.
+Default, from CSQ3. Instantiates DSGN.15, DSGN.1.
 
 Each step SHOULD write each output under a name that no consumer reads (DSGN.15). After an output passes the checks of its step, the step or the workflow SHOULD give it its final name by one operation that its storage makes atomic, or mark it complete with a marker that the step writes last (DSGN.1, DSGN.15). Before a step counts as completed, each of its outputs that a later workflow run reads SHOULD be durable on its storage, with its final name or its marker (DSGN.1).
 
 #### STND.WFLOW.8 Partial outputs distinguished
 
-Default. Instantiates DSGN.1.
+Default, from CSQ3. Instantiates DSGN.1.
 
 The workflow description SHOULD state how a workflow run tells a partial output from a completed output: by the absence of its final name, by a marker of completion that the step writes last, or by the record of completed steps (DSGN.1). Where a file under a final name lacks the evidence of completion that the workflow description states, the workflow SHOULD treat it as a partial output (DSGN.1).
 
 #### STND.WFLOW.9 Distinct output names
 
-Default. Instantiates DSGN.14.
+Default, from CSQ3. Instantiates DSGN.14.
 
 Each final name that a workflow run writes SHOULD belong to exactly one of its steps (DSGN.14). Before the first member of a step set starts, the workflow SHOULD confirm that the rule from which the names of the outputs of its members derive gives distinct names to distinct members (DSGN.14).
 
@@ -168,37 +168,37 @@ Each final name that a workflow run writes SHOULD belong to exactly one of its s
 
 #### STND.WFLOW.10 Retryable failures classified
 
-Default. Instantiates DSGN.1.
+Default, from CSQ3. Instantiates DSGN.1.
 
 The declaration of each step that a workflow retries SHOULD classify the failures of its attempts, by exit status, signal, or reported cause, into those that a retry is able to clear and those that it is not (DSGN.1). After a failure that its declaration classifies as one that a retry is not able to clear, a workflow SHOULD NOT retry the step (DSGN.1).
 
 #### STND.WFLOW.11 Bounded retries and backoff
 
-Default. Instantiates DSGN.1.
+Default, from CSQ3. Instantiates DSGN.1.
 
 Each step that a workflow retries SHOULD have a stated bound on the number of its attempts in one workflow run (DSGN.1). Where the attempts of more than one step reach one shared service, the delay before each retry SHOULD grow with the number of the attempt up to a stated cap, and carry a random portion (DSGN.1).
 
 #### STND.WFLOW.12 One retrying layer
 
-Default. Instantiates SIMPL.6.
+Default, from CSQ3. Instantiates SIMPL.6.
 
 The retries of each step SHOULD be made by exactly one of the layers that run the step, among them the workflow engine, the scheduler, and the step itself, as the workflow description states (SIMPL.6).
 
 #### STND.WFLOW.13 Exhaustion not retried unchanged
 
-Default. Instantiates RSRC.1, INTPR.9.
+Default, from CSQ3. Instantiates RSRC.1, INTPR.9.
 
 Where an attempt ends on the exhaustion of a resource that its request bounds, each retry of that step SHOULD change the request or the amount of work of the attempt (RSRC.1). Where a retry changes the amount of work, the record of each result that it computes SHOULD state the change (INTPR.9).
 
 #### STND.WFLOW.14 Retries counted and followed
 
-Default. Instantiates RSRC.2, INTPR.7.
+Default, from CSQ3; sentence 2 from CSQ1. Instantiates RSRC.2, INTPR.7.
 
 The record of the resource use of each workflow run SHOULD hold the count of retries of each step, by the class of failure that occasioned them (RSRC.2). Each failure of an attempt that a later attempt of the same step clears SHOULD count as an anomaly, reported by step and by class of failure (INTPR.7).
 
 #### STND.WFLOW.15 Attempt records kept
 
-Default. Instantiates INTPR.8.
+Default, from CSQ1. Instantiates INTPR.8.
 
 The record of each workflow run SHOULD hold, for each attempt of each step, its number, its start and end times, a sequence number or a dependence between steps that orders its events against those of attempts on other nodes, the node on which it ran, its resource request, its exit status or the signal that ended it, the event that ended it, and its log (INTPR.8). Each attempt SHOULD write its record and its log under a name that identifies the attempt, beside those of earlier attempts (INTPR.8).
 
@@ -206,25 +206,25 @@ The record of each workflow run SHOULD hold, for each attempt of each step, its 
 
 #### STND.WFLOW.16 Notice and grace stated
 
-Default. Instantiates DSGN.5, RSRC.1.
+Default, from CSQ3; sentence 1 from CSQ2. Instantiates DSGN.5, RSRC.1.
 
 For each job that a scheduler or a platform is able to end before its work completes, the workflow description SHOULD state the notice of end that the job receives, the processes of the job that receive it, and the grace period, from the configuration of the computing system or from a measurement (DSGN.5). Where a job answers a notice of end by writing restart state, the time that the write takes in the regime of use SHOULD be less than the grace period (RSRC.1).
 
 #### STND.WFLOW.17 Response to notice of end
 
-Default. Instantiates DSGN.1, DSGN.15.
+Default, from CSQ3. Instantiates DSGN.1, DSGN.15.
 
 Where a notice of end reaches a process of a job, that process SHOULD end at its next safe point with a status that states the notice as the cause (DSGN.1). Where a notice of end reaches only a portion of the processes that write one generation of restart state together, those processes SHOULD pass the notice to the others (DSGN.15).
 
 #### STND.WFLOW.18 Signal handlers that defer
 
-Default. Instantiates DSGN.15.
+Default, from CSQ3. Instantiates DSGN.15.
 
 Each handler of a signal or of a notice of end SHOULD only record the notice for the main code of its process to act on at a safe point, or call only functions that the platform documents as safe in a handler (DSGN.15).
 
 #### STND.WFLOW.19 Engine records valid after forced end
 
-Default. Instantiates DSGN.14.
+Default, from CSQ2. Instantiates DSGN.14.
 
 After a forced end at each point at which a workflow run writes them, each record of completed steps, resumption record, cache, and index that a later workflow run reads SHOULD be valid without code that runs at that end (DSGN.14).
 
@@ -232,49 +232,49 @@ After a forced end at each point at which a workflow run writes them, each recor
 
 #### STND.WFLOW.20 Restart state interval
 
-Default. Instantiates RSRC.7.
+Default, from CSQ3. Instantiates RSRC.7.
 
 Each job that writes restart state SHOULD write it at a stated interval, chosen from the measured cost of a write and the rate at which the computing system ends jobs before their work completes (RSRC.7). Where the scheduler or the platform of a job gives notice of end, the job SHOULD still write restart state at that interval (RSRC.7).
 
 #### STND.WFLOW.21 Restart state generations
 
-Default. Instantiates DSGN.1, DSGN.2.
+Default, from CSQ3; sentence 2 from CSQ1. Instantiates DSGN.1, DSGN.2.
 
 Each job SHOULD write each generation of its restart state as STND.WFLOW.7 asks of an output, under a name distinct from that of each earlier generation (DSGN.1). Before a job has checked the integrity and the completeness of a newer generation, it SHOULD NOT remove its last valid generation (DSGN.2).
 
 #### STND.WFLOW.22 Restart state across processes
 
-Default. Instantiates DSGN.2, DSGN.15.
+Default, from CSQ1. Instantiates DSGN.2, DSGN.15.
 
 Before every process that writes a portion of a generation of restart state has written and checked its portion, that generation SHOULD NOT count as valid (DSGN.2, DSGN.15).
 
 #### STND.WFLOW.23 Restart state contents stated
 
-Default. Instantiates DSGN.14, REPRO.3.
+Default, from CSQ3. Instantiates DSGN.14, REPRO.3.
 
 The documentation of each job that writes restart state SHOULD state the state of the computation that the restart state holds, the states of its random streams included, each portion of that state that it omits, among them open connections, the contents of accelerator memory, and sessions with external systems, and how a restart restores or reestablishes each omitted portion (DSGN.14). That documentation SHOULD state whether a restart at another number of processes or with another division of the computation is admitted (REPRO.3).
 
 #### STND.WFLOW.24 Restart state identity recorded
 
-Default. Instantiates DSGN.1, REPRO.4, REPRO.1.
+Default, from CSQ3; sentence 2 from CSQ2. Instantiates DSGN.1, REPRO.4, REPRO.1.
 
 Each generation of restart state SHOULD carry a checksum of its content (DSGN.1). Each generation SHOULD record the identity of the run that wrote it: its inputs, its parameters, the revision of its code, the identity of its computational environment, and its number of processes (REPRO.4, REPRO.1).
 
 #### STND.WFLOW.25 Restart state checked before use
 
-Default. Instantiates DSGN.2.
+Default, from CSQ3. Instantiates DSGN.2.
 
 Before a job continues from a generation of restart state, it SHOULD check the integrity, the completeness, and the format version of that generation, and that the identity that the generation records matches the present run in each item on which the continued computation depends (DSGN.2). Where at least one of those checks fails, the job SHOULD NOT continue from that generation (DSGN.2).
 
 #### STND.WFLOW.26 Restart state format versions
 
-Default. Instantiates DSGN.6.
+Default, from CSQ3. Instantiates DSGN.6.
 
 Each generation of restart state SHOULD carry the version of its format (DSGN.6). Each revision of the code of a job SHOULD read each format version written by a run that is still able to be resumed, or refuse it with a report that names the version (DSGN.6).
 
 #### STND.WFLOW.27 Restart state that executes code
 
-Default. Instantiates DSGN.2.
+Default, from CSQ3. Instantiates DSGN.2.
 
 Where loading restart state executes code that the restart state holds, the job SHOULD load only restart state that lies on storage that the run controls and whose content matches a digest that the run recorded apart from it (DSGN.2).
 
@@ -282,13 +282,13 @@ Where loading restart state executes code that the restart state holds, the job 
 
 #### STND.WFLOW.28 Completed members from checked outputs
 
-Default. Instantiates DSGN.1, RSRC.7.
+Default, from CSQ3. Instantiates DSGN.1, RSRC.7.
 
 A workflow SHOULD decide the completed members of each step set from their checked outputs, and not from the records of the scheduler alone (DSGN.1). After a failure of set members, a rerun of the step set SHOULD run only the members that are not completed or not current under the rule of STND.WFLOW.6 (RSRC.7).
 
 #### STND.WFLOW.29 Consumers of step sets state needs
 
-Default. Instantiates DSGN.1, INTPR.9.
+Default, from CSQ3. Instantiates DSGN.1, INTPR.9.
 
 The declaration of each step that consumes the outputs of a step set SHOULD state whether it requires every member, a stated number of members, or a stated subset (DSGN.1). Where such a step proceeds without every member, the record of its result SHOULD name each missing member (INTPR.9).
 
@@ -296,31 +296,31 @@ The declaration of each step that consumes the outputs of a step set SHOULD stat
 
 #### STND.WFLOW.30 Storage in the run budget
 
-Default. Instantiates RSRC.1.
+Default, from CSQ2. Instantiates RSRC.1.
 
 The budget of each workflow SHOULD state, for each file system on which a workflow run writes, the space and the number of files and directories that the run occupies at its largest, at the problem size of the budget (RSRC.1). Before a workflow run starts its first step, it SHOULD check that the free space and the quotas of space and of files that each such file system reports meet that budget (RSRC.1).
 
 #### STND.WFLOW.31 Storage purged by policy
 
-Default. Instantiates REPRO.12.
+Default, from CSQ3. Instantiates REPRO.12.
 
 Where a file system removes files by age or by another policy of its site, each result, record, and restart state that a later run or a relying party needs beyond the period of that policy SHOULD be kept on other storage (REPRO.12).
 
 #### STND.WFLOW.32 File system guarantees relied upon
 
-Default. Instantiates DSGN.5.
+Default, from CSQ2. Instantiates DSGN.5.
 
 Where steps or processes of a workflow share a file or a directory, the workflow description SHOULD state each guarantee of the file system on which that sharing relies, among them the consistency of reads on one node after writes on another, the enforcement of locks, atomic appends, and atomic renames, and the evidence that the file system in use provides each such guarantee (DSGN.5). Where a file system in use does not give a guarantee on which a sharing relies, the workflow SHOULD move that sharing to storage that gives it, or to a protocol that does not rely on it (DSGN.5).
 
 #### STND.WFLOW.33 Staged copies verified
 
-Default. Instantiates DSGN.2.
+Default, from CSQ1. Instantiates DSGN.2.
 
 Before a consumer reads a copy of data that a step makes from one storage system to another, the step SHOULD confirm the copy against its source by a checksum, or by a check of the transfer that covers its content (DSGN.2).
 
 #### STND.WFLOW.34 Work directory state stated
 
-Default. Instantiates DSGN.14.
+Default, from CSQ2. Instantiates DSGN.14.
 
 The workflow description SHOULD state each location in which the workflow keeps state on which a later workflow run relies, among them its caches, its records of completed steps, its restart state, and the work areas of its steps, with the lifetime of that state and the items of it that are temporary items (DSGN.14). Each cleanup that the workflow engine or a scheduled task makes in such a location SHOULD remove only the items that the workflow description states as temporary items (DSGN.14).
 
@@ -328,13 +328,13 @@ The workflow description SHOULD state each location in which the workflow keeps 
 
 #### STND.WFLOW.35 Provenance of step outputs
 
-Default. Instantiates REPRO.4, REPRO.12, INTPR.9.
+Default, from CSQ2. Instantiates REPRO.4, REPRO.12, INTPR.9.
 
 Beyond the items that REPRO.1 and REPRO.4 ask of the provenance of each output of a step, that provenance SHOULD also give the reuse key of the step, its resource request, the attempt that wrote the output, its start and end times, and the generation of restart state from which the attempt continued (REPRO.4). That provenance SHOULD be readable by a human without the workflow engine (REPRO.12, INTPR.9).
 
 #### STND.WFLOW.36 Resumption record
 
-Default. Instantiates INTPR.12, INTPR.13, REPRO.1.
+Default, from CSQ2. Instantiates INTPR.12, INTPR.13, REPRO.1.
 
 The record of each workflow run SHOULD state, in a form that an actor reads without the workflow engine, each step completed with its checked outputs, each failed step with its attempts and their causes, each job submitted and not known to have ended, the latest generation of restart state on durable storage, each effect beyond declared outputs already made, each manual action on its outputs, restart state, or work directory, and the steps that a resumption runs again (INTPR.12, INTPR.13). Where the code, the parameters, or the computational environment of a workflow changes between a halt and a resumption, the record of the resumed workflow run SHOULD state each change and cite the halted workflow run (REPRO.1).
 
@@ -342,25 +342,25 @@ The record of each workflow run SHOULD state, in a form that an actor reads with
 
 #### STND.WFLOW.37 Workflow run from a clean area
 
-Default. Instantiates VV.1.
+Default, from CSQ2. Instantiates VV.1.
 
 The tests of each workflow SHOULD include a workflow run from its declared inputs alone, on a work directory that holds nothing from an earlier workflow run (VV.1).
 
 #### STND.WFLOW.38 Interrupted attempts under test
 
-Default. Instantiates VV.1, VV.3.
+Default, from CSQ3. Instantiates VV.1, VV.3.
 
 The tests of each step that a workflow retries, or that a scheduler is able to start again, SHOULD run it after an attempt ended by a forced end at a point that the tests vary, and compare its outputs and effects with those of a single attempt run to completion, within the agreement that the acceptance criterion fixed and at the tier that STND.VVUQ.1 gives (VV.1, VV.3).
 
 #### STND.WFLOW.39 Restarts under test
 
-Default. Instantiates VV.1, REPRO.3.
+Default, from CSQ3. Instantiates VV.1, REPRO.3.
 
 The tests of each job that writes restart state SHOULD end a run after a generation is written, continue it from that generation, and compare its results with those of a run without the interruption at the tier that STND.VVUQ.1 gives for the differences between the two runs (VV.1, REPRO.3). Where the job admits a restart at another number of processes, its tests SHOULD also continue a run at such a number (VV.1).
 
 #### STND.WFLOW.40 Resumption under test
 
-Default. Instantiates VV.1, VV.3.
+Default, from CSQ2. Instantiates VV.1, VV.3.
 
 The tests of each workflow SHOULD include a workflow run that halts after a stated set of its steps and a resumption of it, and show that the resumption runs again only the steps that its staleness rule finds not current, and that its results agree with those of a workflow run without the halt within the agreement that the acceptance criterion fixed and at the tier that STND.VVUQ.1 gives (VV.1, VV.3).
 
@@ -369,3 +369,5 @@ The tests of each workflow SHOULD include a workflow run that halts after a stat
 | Revision | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-10-24 | Adopted. |
+| 1.1 | 2026-10-28 | Minor amendment (GOV.41): the run machinery starts at CSQ2: the second sentence of STND.WFLOW.6, with its first, and STND.WFLOW.19, STND.WFLOW.30, STND.WFLOW.34, STND.WFLOW.36, STND.WFLOW.37, and STND.WFLOW.40, while STND.WFLOW.15 stays at CSQ1 and the two sentences of STND.WFLOW.35 stand together at CSQ2; each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields. |
+| 1.2 | 2026-10-28 | Minor amendment (GOV.41): the term Step reaches a step that a person or an agent performs only where a workflow description declares it, and the Purpose states that the record that an agent keeps of its own actions under REPRO.11 is no workflow run under this standard, so that STND.WFLOW.1, STND.WFLOW.3, STND.WFLOW.4, and STND.WFLOW.36 no longer reach each session of an agent, which AGENT and STND.WPROC govern. |

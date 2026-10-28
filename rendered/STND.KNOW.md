@@ -1,10 +1,10 @@
-# Knowledge base and tags (STND.KNOW) 1.0.1
+# Knowledge base and tags (STND.KNOW) 1.0.2
 
-Adopted by The Custodian as revision 1.0 in ledger entry 94 (2026-10-20); revised to 1.0.1 in entry 160 (2026-10-25). This reading copy is composed from the per-provision files in STND/KNOW/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 94 (2026-10-20); revised to 1.0.1 in entry 160 (2026-10-25) and 1.0.2 in entry 272 (2026-10-28). This reading copy is composed from the per-provision files in STND/KNOW/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
-This standard fixes what a knowledge entry states, its kinds and form, the evidence levels and the reliance ceiling of each, how an entry is established, revalidated, superseded, and retracted, how an entry drawn from a project's workbench is made and reconciled, and the permanence and use of tags (GOV.32 to GOV.34, GOV.37). GOV.33 assigns the ceiling of each evidence level to a LVL2 standard; STND.KNOW.5 sets it. Every provision but STND.KNOW.12 and STND.KNOW.14 is binding, because it instantiates GOV, which the floor holds (GOV.10), or a prime directive, and a knowledge base shared across projects is read the same way by each of them; STND.KNOW.12 and STND.KNOW.14 are defaults (GOV.19) that apply from CSQ3. A provision imposes nothing on work that keeps and consults no knowledge entry. No provision names a tool (GOV.18).
+This standard fixes what a knowledge entry states, its kinds and form, the evidence levels and the reliance ceiling of each, how an entry is established, revalidated, superseded, and retracted, how an entry drawn from a project's workbench is made and reconciled, and the permanence and use of tags (GOV.32 to GOV.34, GOV.37). GOV.33 assigns the ceiling of each evidence level to a LVL2 standard; STND.KNOW.5 sets it. Every provision but STND.KNOW.12 and STND.KNOW.14 is binding, because it instantiates GOV, which the floor holds (GOV.10), or a prime directive, and a knowledge base shared across projects is read the same way by each of them; STND.KNOW.12 and STND.KNOW.14 are defaults (GOV.19) that apply from the class that their field `onset` gives under STND.CLASS.10. A provision imposes nothing on work that keeps and consults no knowledge entry. No provision names a tool (GOV.18).
 
 ## Normative and informative parts
 
@@ -161,7 +161,7 @@ A knowledge entry SHALL NOT contain a secret (PRIME.10). A knowledge entry SHALL
 
 #### STND.KNOW.12 Established workbench proposals
 
-Default. Instantiates AGENT.30, INTPR.13.
+Default, from CSQ3. Instantiates AGENT.30, INTPR.13.
 
 Where an agent of a project learns that a knowledge base has established an entry that the project's workbench holds under AGENT.30, the agent SHOULD record in that workbench a new entry that cites the identifier of the established entry (AGENT.30, INTPR.13).
 
@@ -175,7 +175,7 @@ A tag SHALL NOT be removed from the tag vocabulary (GOV.37). A deprecated tag SH
 
 #### STND.KNOW.14 Tags on knowledge entries
 
-Default. Instantiates AGENT.28, QA.2.
+Default, from CSQ3. Instantiates AGENT.28, QA.2.
 
 Each knowledge entry SHOULD carry the tags of the tag vocabulary that name its subject, its method, and each hardware type it concerns (AGENT.28, QA.2).
 
@@ -185,3 +185,4 @@ Each knowledge entry SHOULD carry the tags of the tag vocabulary that name its s
 | --- | --- | --- |
 | 1.0 | 2026-10-20 | Adopted. |
 | 1.0.1 | 2026-10-25 | Editorial amendment (GOV.41): the informative Notes cite the knowledge space KNOW, the tag vocabulary TAG, and the facet TAG.COMP of the governance corpus, which they named, and References lists KNOW, TAG, and TAG.COMP; no obligation, permission, or defined meaning changes. |
+| 1.0.2 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields; no obligation, permission, or defined meaning changes. |
