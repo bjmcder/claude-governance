@@ -59,7 +59,7 @@ The rest depends on the class:
 
 | Class | Review of each change (STND.CLASS.18) | Compliance audit (STND.CLASS.19) | Further acts of the human owner |
 | --- | --- | --- | --- |
-| CSQ4 | No row of the table applies | When the project is retired, by an actor who did not author the work; an agent is eligible | Recording the class. Promoting a result before it is reported (QA.11) |
+| CSQ4 | No row of the table applies | When the project is retired, by an actor who did not author the work; an agent is eligible | Recording the class. Promoting a result before anyone relies on it, which ends CSQ4 (STND.CLASS.1, GOV.50) |
 | CSQ3 | By an actor other than the author; an agent is eligible | At most 36 months after the classification or the previous audit, and at retirement; an agent is eligible | As for CSQ4. Each result relied upon beyond the author and the unit of work is promoted first (QA.11) |
 | CSQ2 | As for CSQ3, and by an actor not directed by the author: a human, or an agent of a different configuration from an authoring agent | Before a result is first relied upon, and at most 24 months after the previous audit; an agent of a different configuration from every authoring agent is eligible | As for CSQ3. The release decision (QA.10) |
 | CSQ1 | As for CSQ2, and a human reviews, before each promotion or release, the changes since the previous such review that affect a contract or a reported result | Before the first release, and at most 12 months after the previous audit; an agent of a different configuration is eligible | As for CSQ2. Under the defaults, the work is assured: each of your entries is signed and verified against the signer register (STND.DFLT.23) |
@@ -67,30 +67,40 @@ The rest depends on the class:
 
 ## Known limitations
 
-The deep review of 2026-10-28 found places where the corpus, read as written, asks more of the human owner than intended or stops an agent outright. Proposed corrections go to the custodian for ratification; until they are ratified and entered in the ledger, the text below describes the corpus as it stands. The findings, with the exact text and the proposed fixes, are in the review's reports: [corpus-core.md](../review-records/deep-review-2026-10-28/corpus-core.md) for those numbered CC and [anthropic-docs.md](../review-records/deep-review-2026-10-28/anthropic-docs.md) for those numbered AD.
+In the places below, the corpus, read as written, asks more of the human owner than its authors intended, or stops an agent outright. The custodian is considering a change to each. Until a change is entered in the ledger, the corpus stands as described here, and each section says what to do in the meantime.
 
-### An agent's own operating cost needs an authorized estimate (CC1)
+### An agent's own operating cost needs an authorized estimate
 
-An agent's operating cost is implicit expenditure (GUARD.14), and implicit expenditure proceeds only on an estimate that the human owner authorizes (PRIME.8). No default authorizes one (GOV.22). Read literally, an agent under the defaults holds no authorized estimate for its own cost before any unit of work, at every class. Within the corpus as it stands, you can authorize an estimate for the work, or set the discipline that governs agent cost and record it (GUARD.14); STND.DFLT.26 covers an enforced spending cap.
+An agent's operating cost is implicit expenditure (GUARD.14), and implicit expenditure proceeds only on an estimate that the human owner authorizes (PRIME.8). No default authorizes one (GOV.22). Read literally, an agent under the defaults may not begin any unit of work, at any class, until you authorize an estimate of its cost.
 
-### Builds and test runs count as bulk actions (CC2)
+Meanwhile, authorize an estimate for the work, or set the discipline that governs agent cost and record it (GUARD.14). STND.DFLT.26 covers an enforced spending cap.
 
-A destructive action is one that removes or overwrites an item, or alters it other than by appending (the term in STND.DFLT). Before one, an agent lists each item it affects by path (STND.DFLT.24), and a destructive action whose scope is not listed and verified beforehand is a bulk action, reserved to the human owner (GUARD.6, PRIME.6). A build, a test run, a formatter, a code generator, or a package installation overwrites outputs that no one lists in advance. Read literally, each such run is reserved to you at every class. No route around this exists in the corpus short of listing every output before each run.
+### Builds and test runs count as bulk actions
 
-### Tools that write outside the work halt the agent (CC3)
+A destructive action is one that removes or overwrites an item, or alters it other than by appending (the term in STND.DFLT). Before one, an agent lists each item it affects by path (STND.DFLT.24), and a destructive action whose scope is not listed and verified beforehand is a bulk action, reserved to the human owner (GUARD.6, PRIME.6). A build, a test run, a formatter, a code generator, or a package installation overwrites outputs that no one lists in advance, so, read literally, each such run is reserved to you at every class.
 
-By default an agent writes only within the top directory of the work (the term Working bounds in STND.DFLT), and a write outside the bounds halts that line of work and refers it (STND.DFLT.25). Compilers, package managers, version control, and interpreters keep caches and configuration under the home directory, and scratch files go to the system's temporary directory. The first build or install halts, and the halt recurs for each new location. The term lets an entry that STND.DFLT.23 accepts open further locations, so you can record one entry that names the cache and temporary locations your tools use.
+Meanwhile, an agent either lists every output of a run by path before it starts the run, or refers the run to you.
 
-### Recording CSQ1 or CSQ0 cannot be undone without a signer register (AD2)
+### Tools that write outside the work halt the agent
 
-Under the defaults, an entry of the human owner that records CSQ1 or CSQ0 makes the work assured, signed or not, and only a signed entry ends that. For assured work, STND.DFLT.23 accepts only entries that you sign and that a verifier confirms against a key in the signer register. No signer register is founded, and the signature feature is not adopted. So once an unsigned entry records CSQ1 or CSQ0, no later entry of yours is accepted: no revision of the class, no lowering, and no lasting authorization. Promotion works up to CSQ2. Record CSQ1 or CSQ0 only after a signer register exists for your ledger.
+By default an agent writes only within the top directory of the work (the term Working bounds in STND.DFLT), and a write outside the bounds halts that line of work and refers it (STND.DFLT.25). Compilers, package managers, version control, and interpreters keep caches and configuration under the home directory, and scratch files go to the system's temporary directory. The first build or install halts, and the halt recurs for each new location.
 
-### The classification is a ledger line that only you can write (AD3)
+Meanwhile, record one entry that names the cache and temporary locations your tools use. The term Working bounds lets an entry that STND.DFLT.23 accepts open further locations.
 
-Under the defaults, the classification is a ledger transaction that you adopt (STND.DFLT.13), and an agent may not append an entry in your name (STND.DFLT.5). An authorization does not need this step, because an agent records the grant you give it (STND.DFLT.17); the classification and each later revision of it do. Until the class is recorded, an agent that needs it halts and refers (GOV.13). With the harness, the entry is the one command in step 4 above; without it, you write and hash a line of JSON by hand.
+### Recording CSQ1 or CSQ0 cannot be undone without a signer register
 
-### Also reported
+Under the defaults, an entry of the human owner that records CSQ1 or CSQ0 makes the work assured, signed or not, and only a signed entry ends that. For assured work, STND.DFLT.23 accepts only entries that you sign and that a verifier confirms against a key in the signer register. No signer register is founded, and the signature feature is not adopted. So once an unsigned entry records CSQ1 or CSQ0, no later entry of yours is accepted: no revision of the class, no lowering, and no lasting authorization.
 
-- No provision lets a classification record an expected class, or asks the design to anticipate one (CC32).
-- At CSQ3, each result that a teammate or a second agent builds on is relied upon beyond its author and needs its own recorded promotion (QA.11, CC5).
-- What a promotion owes for changes made at the lower class is not settled: read literally, each change is reviewed again at the new independence (GOV.14, STND.CLASS.18, CC7).
+Meanwhile, classify up to CSQ2 as usual, and record CSQ1 or CSQ0 only after a signer register exists for your ledger.
+
+### The classification is a ledger line that only you can write
+
+Under the defaults, the classification is a ledger transaction that you adopt (STND.DFLT.13), and an agent may not append an entry in your name (STND.DFLT.5). An authorization does not need this step, because an agent records the grant you give it (STND.DFLT.17); the classification and each later revision of it do. Until the class is recorded, an agent that needs it halts and refers (GOV.13).
+
+Meanwhile, write the entry yourself. With the harness, it is the one command in step 4 above; without the harness, you write and hash a line of JSON by hand.
+
+### Smaller points
+
+- A classification cannot record the class the work is expected to reach, and no provision asks the design to anticipate one. Meanwhile, state the expected class in the rationale of the entry, as in [Recording an expected class](#recording-an-expected-class).
+- At CSQ3, each result that a teammate or a second agent builds on is relied upon beyond its author, and needs its own recorded promotion first (QA.11). Meanwhile, promote such a result before anyone else builds on it.
+- What a promotion owes for changes made at the lower class is not settled. Read literally, each earlier change is reviewed again at the independence of the new class (GOV.14, STND.CLASS.18). Meanwhile, plan for that review when you raise the class.

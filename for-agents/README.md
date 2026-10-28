@@ -1,6 +1,6 @@
 # Material for agents working on this repository
 
-This directory holds the material for agents that draft, review, or apply amendments to the corpus in this repository. It is not part of the Claude Code plugin, which is rooted at `harness/` and holds what an adopting project installs. People start at [docs/](../docs/README.md).
+This directory holds the material for agents that draft, review, or apply amendments to the corpus in this repository. It is not part of the Claude Code plugin, which is rooted at `harness/`: the plugin holds the corpus, the harness, and its skills, which an adopting project uses, and also the harness's own records and tests, kept with it because the ledger cites the records. People start at [docs/](../docs/README.md).
 
 | File | What it is for |
 | --- | --- |

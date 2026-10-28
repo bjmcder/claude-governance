@@ -63,10 +63,23 @@ govharness verify
 | Installation | How to see the revision |
 | --- | --- |
 | Plugin | `claude plugin list`: the version is the commit it was installed from |
-| Harness alone or vendored copy | `git -C <clone> log -1 --format='%H %d'` |
+| Harness alone, or vendored copy as a submodule | `git -C <clone> log -1 --format='%H %d'` |
+| Vendored copy as a subtree | The `git-subtree-split` line of the squash commit, as [installation.md](installation.md#verify-update-and-remove-1) shows |
 | Committed project settings | The `ref` or `sha` in `.claude/settings.json` |
 
-The last line of `harness/governance/ledger.jsonl` is the newest governance transaction in that revision; its `seq` is the entry number that the headers of the reading copies cite, and that a tag such as `ledger-202` names.
+The last line of `harness/governance/ledger.jsonl` is the newest governance transaction in that revision; its `seq` is the entry number that the headers of the reading copies cite.
+
+The custodian tags each published state of the corpus `ledger-N`, where N is the `seq` of the last ledger entry it includes: `ledger-202` is the state whose ledger ends at entry 202. A project pins by such a tag, or by a full commit hash wherever the mechanism accepts one:
+
+| Installation | Accepts |
+| --- | --- |
+| Plugin, through a marketplace source | A tag or branch, in `#ref` or `ref` |
+| Plugin, through a plugin source in `.claude/settings.json` | A full 40-character commit hash, in `sha` |
+| Harness alone, from a clone | A tag or a commit hash, given to `git checkout` |
+| Vendored copy as a submodule | A tag or a commit hash, checked out inside the submodule |
+| Vendored copy as a subtree | A tag or branch |
+
+[installation.md](installation.md#before-you-start) shows each form. Here and below, `<clone>` is a clone of this repository, and `<new tag>` is the tag of the revision to move to.
 
 ## Moving to a new revision
 
@@ -81,8 +94,9 @@ Each added line names its type (`adopt`, `amend`, and so on), its targets, and i
 Then move the pin:
 
 - Plugin from a marketplace that follows a branch: `claude plugin marketplace update governance-harness`, then `claude plugin update governance@governance-harness`, then `/reload-plugins` or a new session.
-- Plugin pinned in `.claude/settings.json`: change `ref` or `sha`, commit, and have members start a new session.
-- Harness alone or vendored copy: check out the new tag in the clone or submodule and commit, as [installation.md](installation.md#4-a-vendored-copy) shows.
+- Plugin pinned in `.claude/settings.json`: change `ref` to the new tag, or `sha` to its commit hash (`git -C <clone> rev-parse '<new tag>^{commit}'`), commit, and have members start a new session.
+- Harness alone or submodule: fetch, check out the new tag or its commit hash in the clone or submodule, and, for a submodule, commit the change.
+- Subtree: run `git subtree pull` with the new tag, as [installation.md](installation.md#verify-update-and-remove-1) shows.
 
 A project's own records, class, and constitution stay as they are; a new revision of the corpus does not change them.
 

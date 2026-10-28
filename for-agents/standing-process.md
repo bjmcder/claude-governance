@@ -8,7 +8,9 @@ This file records how the custodian has the governance corpus worked on, and the
 2. Self-check against STND.DRAFT:
    - one modal per sentence, and at most three per provision;
    - each condition before its clause, one per sentence;
-   - none of the banned body words ("such as", "for example", "can", "will", "must", "is to", "need not", "significant", "any");
+   - no expression of class exact in STND.DRAFT.7, and none of its review expressions ("can", "will", "is to", and the rest) where the substitution test of STND.DRAFT.9 finds it excluded;
+   - the qualifiers of STND.DRAFT.13 and the quantifiers of STND.DRAFT.17 only as those provisions allow;
+   - by the custodian's direction, neither "such as" nor "for example";
    - titles of six words or fewer, not verb-initial, distinct across the corpus;
    - body IDs equal `instantiates` plus `refers_to`;
    - every document named in the text listed in References.
@@ -17,7 +19,7 @@ This file records how the custodian has the governance corpus worked on, and the
 5. Review with agents of another configuration: a cold review, and a STND.HARN.28 pair review. Then fixes, and a cold verification.
 6. Where a round spans several documents, run a reconciliation review across them before ratification.
 7. Present for ratification. Apply only after ratification.
-8. Then rebuild the reading copies in `rendered/` and update `harness/README.md` and `OPEN-ITEMS.md`.
+8. Then rebuild the reading copies in `rendered/`, update `OPEN-ITEMS.md`, and update `harness/README.md` where a command or a check that it describes changed.
 
 ## Standing directions
 

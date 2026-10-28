@@ -66,4 +66,4 @@ A project that follows a branch receives every commit; one that pins a tag moves
 
 ## Working with agents in this repository
 
-Agents that work on this repository find their material through the root `CLAUDE.md` and `AGENTS.md`, which point to [for-agents/](../for-agents/README.md). The Claude Code plugin, rooted at `harness/`, is a separate thing: it is what an adopting project installs, and it carries none of this repository's process material.
+Agents that work on this repository find their material through the root `CLAUDE.md` and `AGENTS.md`, which point to [for-agents/](../for-agents/README.md). The Claude Code plugin, rooted at `harness/`, is a separate thing: it is what an adopting project installs. It carries none of the material in `for-agents/`, but it does carry the harness's own records and tests, because entries of the ledger cite the records by path.

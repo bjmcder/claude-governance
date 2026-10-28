@@ -4,10 +4,10 @@ A project can take up the governance in five ways. Each gives agents and people 
 
 | Option | Suits | Network at install | Pins a revision by |
 | --- | --- | --- | --- |
-| [1. Claude Code plugin](#1-the-claude-code-plugin) | One person, or a trial, using Claude Code | Yes | Tag or branch in the marketplace source |
-| [2. Plugin in a project's committed settings](#2-the-plugin-in-a-projects-committed-settings) | A team using Claude Code | Yes, on each machine | Tag, branch, or commit in `.claude/settings.json` |
-| [3. Harness alone](#3-the-harness-alone) | Any agent or person, with Claude Code or without | Yes, for the clone | The checked-out commit of the clone |
-| [4. Vendored copy](#4-a-vendored-copy) | An offline or air-gapped project | No, once the copy is made | The commit of the submodule or subtree |
+| [1. Claude Code plugin](#1-the-claude-code-plugin) | One person, or a trial, using Claude Code | Yes | A tag or branch after `#` in the marketplace source |
+| [2. Plugin in a project's committed settings](#2-the-plugin-in-a-projects-committed-settings) | A team using Claude Code | Yes, on each machine | A tag or branch in `ref`, or a full commit hash in `sha`, in `.claude/settings.json` |
+| [3. Harness alone](#3-the-harness-alone) | Any agent or person, with Claude Code or without | Yes, for the clone, and for `setuptools` if you install the package | A tag or commit hash checked out in the clone |
+| [4. Vendored copy](#4-a-vendored-copy) | An offline or air-gapped project | No, once the copy is made, when the harness runs without installing | A submodule: a tag or commit hash. A subtree: a tag or branch |
 | [5. No software](#5-no-software) | Reading and auditing by hand | No | The copy you read |
 
 ## Before you start
@@ -20,18 +20,30 @@ The commands on this page use these names:
 | `governance-harness` | The name of the marketplace, from `.claude-plugin/marketplace.json` |
 | `governance` | The name of the plugin; its skills appear as `/governance:<skill>` |
 | `governance@governance-harness` | The plugin's identifier in Claude Code settings and commands |
-| `ledger-202` | An example tag. A tag names a commit of this repository; `git ls-remote --tags REPO` lists the tags that exist |
+| `ledger-202` | A tag of a published state of the corpus, as described below |
+
+`REPO` and the URL `https://git.example.org/governance-harness.git` stand for the address you clone this repository from; replace them with that address.
+
+The custodian tags each published state of the corpus `ledger-N`, where N is the number of the last ledger entry it includes: `ledger-202` is the state whose ledger, `harness/governance/ledger.jsonl`, ends at entry 202. A project pins the governance by such a tag, or by a full commit hash wherever the mechanism accepts one. `git ls-remote --tags REPO` lists the tags that exist. What each option accepts:
+
+| Option | Pinned by |
+| --- | --- |
+| 1 and 2, a marketplace source | A tag or branch, in `#ref` or `ref` |
+| 2, a plugin source in settings | A full 40-character commit hash, in `sha` ([Pin an exact commit](#pin-an-exact-commit)) |
+| 3, a clone | A tag or a commit hash, given to `git checkout` |
+| 4, a submodule | A tag or a commit hash, checked out inside the submodule |
+| 4, a subtree | A tag or branch, as a ref of the remote |
 
 Requirements:
 
 - git, for every option except the fifth.
 - Python 3.11 or later for the harness. It uses the standard library only. If the `z3` solver package is importable, `verify` uses it; otherwise it uses its own solver, with the same results.
 - Claude Code with the `claude plugin` commands, for options 1 and 2.
-- `pip` or `pipx`, for option 3.
+- `pip` or `pipx`, to install the harness package in option 3, with access to the Python Package Index or a locally installed `setuptools`. Without the package, the harness runs from its directory.
 
 ## 1. The Claude Code plugin
 
-The plugin is the directory `harness/` of this repository. It holds the corpus (`harness/governance/`), the harness package, and three skills. It adds no hooks, no commands, no permission rules, and no agent definitions. Its skills are read-only: they give an agent the commands that retrieve provisions, describe where a project keeps its records, and draft a classification for the human owner. They write nothing.
+The plugin is the directory `harness/` of this repository. It holds the corpus (`harness/governance/`), the harness package, and three skills. It also carries the harness's own records (`harness/records/`) and tests (`harness/tests/`), which a project does not use; the records stay with the plugin because entries of the ledger cite them by path. The plugin takes about 3.7 MB in all. It adds no hooks, no commands, no permission rules, and no agent definitions. Its skills are read-only: they give an agent the commands that retrieve provisions, describe where a project keeps its records, and draft a classification for the human owner. They write nothing.
 
 ### Add the marketplace
 
@@ -53,7 +65,7 @@ To follow a tag or branch rather than the default branch, append it with `#`:
 claude plugin marketplace add https://git.example.org/governance-harness.git#ledger-202
 ```
 
-The repository's files take about 19 MB, most of them review records that a project does not need. From a shell, `--sparse` checks out only the two directories the plugin uses:
+The repository's files take about 19 MB, most of them review records that a project does not need. For a marketplace added from a git URL, `--sparse` checks out only the two directories the plugin uses; for a local path it has no effect:
 
 ```bash
 claude plugin marketplace add REPO --sparse .claude-plugin harness
@@ -184,7 +196,7 @@ A tag or branch can move. To pin one commit, declare the marketplace inline with
 }
 ```
 
-`git rev-parse ledger-202` in a clone prints the hash of a tag. With this source, each member runs `claude plugin install governance@governance-pinned --scope project` once, since Claude Code does not fetch a plugin with an external source from project settings alone.
+`git rev-parse 'ledger-202^{commit}'` in a clone prints the commit hash of a tag; without `^{commit}`, it prints the hash of the tag object instead. With this source, each member runs `claude plugin install governance@governance-pinned --scope project` once, since Claude Code does not fetch a plugin with an external source from project settings alone.
 
 ### Verify, update, and remove
 
@@ -208,6 +220,12 @@ python3 -m venv .venv
 .venv/bin/pip install ./governance-harness/harness
 ```
 
+Both installs build the package with `setuptools` 68 or later, which `pip` and `pipx` download from the Python Package Index. Without network access, run the harness without installing it, in the `PYTHONPATH` form below. Where `setuptools` is already installed in the virtual environment, `--no-build-isolation` builds with that copy and reaches no index:
+
+```bash
+.venv/bin/pip install --no-build-isolation --no-index ./governance-harness/harness
+```
+
 To work on the harness code itself, an editable install from the root of the clone picks up each change without reinstalling: `pip install --no-deps -e harness`, inside a virtual environment.
 
 `GOVHARNESS_ROOT` names the corpus that `show`, `find`, `context`, `pairs`, and `verify` read when no corpus is named on the command line. Set it in your shell profile, or, for Claude Code, under `env` in a settings file:
@@ -216,7 +234,7 @@ To work on the harness code itself, an editable install from the root of the clo
 {"env": {"GOVHARNESS_ROOT": "/home/me/src/governance-harness/harness/governance"}}
 ```
 
-Without installing anything, every command also runs from the clone:
+Without installing anything, every command also runs from the clone, with no network access:
 
 ```bash
 PYTHONPATH=governance-harness/harness python3 -B -m govharness show governance-harness/harness/governance GOV.38
@@ -251,13 +269,19 @@ The last command matters only when the harness code changed. To uninstall, run `
 
 A project that works offline, or that wants the governance revision in its own history, keeps a copy of this repository inside its own.
 
-As a git submodule:
+As a git submodule, from the repository's URL:
 
 ```bash
-git submodule add REPO vendor/governance-harness
+git submodule add https://git.example.org/governance-harness.git vendor/governance-harness
 git -C vendor/governance-harness checkout ledger-202
 git add .gitmodules vendor/governance-harness
 git commit -m "Vendor the governance at ledger-202"
+```
+
+In place of `ledger-202`, the `checkout` takes a full commit hash. Git refuses a submodule from a path on your machine by default, because a repository could otherwise use one to copy local files into a clone. For a clone that you trust, allow it for the one command:
+
+```bash
+git -c protocol.file.allow=always submodule add /path/to/governance-harness vendor/governance-harness
 ```
 
 As a subtree, which copies the files into the project's history:
@@ -265,6 +289,8 @@ As a subtree, which copies the files into the project's history:
 ```bash
 git subtree add --prefix vendor/governance-harness REPO ledger-202 --squash
 ```
+
+`git subtree` takes a ref of the remote, so give it a tag or branch. It refuses an abbreviated commit hash, and a full one works only where the server allows fetching by hash.
 
 For an air-gapped machine, make a bundle on a connected one and carry it across:
 
@@ -275,7 +301,13 @@ git -C governance-harness.git bundle create ../governance-harness.bundle --all
 
 On the air-gapped machine, `git clone governance-harness.bundle vendor/governance-harness` makes the copy.
 
-The vendored copy is used through the harness, as in option 3, with `GOVHARNESS_ROOT` set to `vendor/governance-harness/harness/governance` or the `PYTHONPATH` form. With Claude Code, the plugin loads from the copy without network access, either for one session:
+The vendored copy is used through the harness without installing it, which needs no network access:
+
+```bash
+PYTHONPATH=vendor/governance-harness/harness python3 -B -m govharness show vendor/governance-harness/harness/governance GOV.38
+```
+
+With `GOVHARNESS_ROOT` set to the absolute path of `vendor/governance-harness/harness/governance`, the corpus argument can be left out. To install the package instead, use `--no-build-isolation` with a locally installed `setuptools`, as in [option 3](#3-the-harness-alone). With Claude Code, the plugin loads from the copy without network access, either for one session:
 
 ```bash
 claude --plugin-dir vendor/governance-harness/harness
@@ -295,7 +327,13 @@ git -C vendor/governance-harness log -1 --format='%H %d'
 PYTHONPATH=vendor/governance-harness/harness python3 -B -m govharness verify vendor/governance-harness/harness/governance
 ```
 
-The first prints the vendored commit; the second passes with the g.18 warning. To update a submodule, check out another tag inside it and commit the change; for a subtree, run `git subtree pull --prefix vendor/governance-harness REPO <new tag> --squash`. To remove a submodule, run `git rm vendor/governance-harness` and commit; for a subtree, delete the directory and commit.
+For a submodule, the first prints the vendored commit. For a subtree it prints the project's own commit; the message of the squash commit names the vendored one:
+
+```bash
+git log -1 --grep='git-subtree-dir: vendor/governance-harness' --format=%B | grep git-subtree-split
+```
+
+The `verify` command passes with the g.18 warning. To update a submodule, fetch and check out another tag inside it and commit the change; for a subtree, run `git subtree pull --prefix vendor/governance-harness REPO <new tag> --squash`. To remove a submodule, run `git rm vendor/governance-harness` and commit; for a subtree, delete the directory and commit.
 
 ## 5. No software
 
