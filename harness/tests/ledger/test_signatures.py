@@ -33,7 +33,11 @@ from govharness.ledger.register import (
     with_signer,
     with_signer_closed,
 )
-from govharness.ledger.signatures import _valid_for, check_signatures
+from govharness.ledger.signatures import (
+    _valid_for,
+    check_signatures,
+    required_of,
+)
 from govharness.workflows.signers import (
     add_signer,
     close_signer,
@@ -495,60 +499,103 @@ class SignerRows(unittest.TestCase):
             self.valid(self.register(("governance", "none")), 6, "governance")
         )
 
-    def test_open_all_row_accepts(self) -> None:
-        """Behavior: an open ``all`` row accepts the key on every
-        ledger, whatever row of one ledger is closed, as the term
-        Accepted signature of STND.HARN reads.
+    def test_signer_row_names_its_ledger(self) -> None:
+        """Behavior: a signer row accepts its key on its own ledger
+        only, and a row closed on one ledger leaves the key open only
+        where another row of it is open, as the term Accepted signature
+        of STND.HARN reads.
 
-        Reference: rows ``all | none`` and ``governance | 5``, the
-        register of QA.8 part B, M1, written by hand; the helpers now
-        refuse to write it (``test_no_row_beside_an_all_row``).
+        Reference: rows ``governance | 5`` and ``work-a | none``; QA.8
+        part B, M1, where a closing row of one ledger seemed to retire
+        a key that an ``all`` row kept open.
         """
-        register = self.register(("all", "none"), ("governance", "5"))
-        self.assertTrue(self.valid(register, 10, "governance"))
+        register = self.register(("governance", "5"), ("work-a", "none"))
+        self.assertTrue(self.valid(register, 5, "governance"))
+        self.assertFalse(self.valid(register, 10, "governance"))
         self.assertTrue(self.valid(register, 10, "work-a"))
-        self.assertEqual(active_signers(register), [self.KEY])
+        self.assertFalse(self.valid(register, 1, "work-b"))
+        stranger = {"actor": "The Human Owner", "seq": 1}
+        self.assertFalse(_valid_for(register, self.KEY, stranger, "work-a"))
+        self.assertEqual(active_signers(register), [])
+        self.assertEqual(
+            active_signers(self.register(("governance", "none"))), [self.KEY]
+        )
 
-    def test_no_row_beside_an_all_row(self) -> None:
-        """Behavior: the register helpers refuse a row of one ledger, or
-        its closing, for a key and role label that an open ``all`` row
-        names, and an ``all`` row beside a row of one ledger, citing
-        STND.HARN.10; another role label, and a key registered per
-        ledger, are accepted and close.
+    def test_required_row_for_all(self) -> None:
+        """Behavior: a row of required signatures for ``all`` applies
+        on every ledger from entry 1 and is no register problem; a row
+        of one ledger applies on that ledger only.
 
-        Reference: a skeleton register with one key, and QA.8 part B,
-        M1, where such a closing row seemed to retire the key.
+        Reference: STND.HARN.10 as revision 1.5 reads, which keeps the
+        row for ``all`` among required signatures.
         """
+        text = (
+            "| Ledger | Actor | From entry |\n| --- | --- | --- |\n"
+            "| all | The Human Owner | 1 |\n"
+            "| work-a | The Custodian | 3 |\n"
+        )
+        register = read_register(text)
+        self.assertEqual(register.problems, [])
+        owner = {"actor": "The Human Owner", "seq": 1}
+        custodian = {"actor": "The Custodian", "seq": 3}
+        for ledger in ("governance", "work-a"):
+            self.assertEqual(required_of(register, owner, ledger), ["1"])
+        self.assertEqual(required_of(register, custodian, "work-a"), ["3"])
+        self.assertEqual(required_of(register, custodian, "governance"), [])
+
+    def test_no_signer_row_for_all(self) -> None:
+        """Behavior: a signer row for ``all`` is a register problem and
+        accepts nothing; the helpers refuse to add or close one, citing
+        STND.HARN.10, and a key registered on each of two ledgers closes
+        on one and stays open on the other.
+
+        Reference: a skeleton register with one key; an ``all`` row
+        written by hand, as the helpers wrote it before unit 0021.
+        """
+        everywhere = self.register(("all", "none"))
+        self.assertFalse(self.valid(everywhere, 1, "governance"))
+        self.assertEqual(active_signers(everywhere), [])
+        hand = (
+            "| Ledger | Role label | Name | Fingerprint | Last entry |\n"
+            "| --- | --- | --- | --- | --- |\n"
+            f"| all | The Custodian | O | {self.KEY} | none |\n"
+        )
+        self.assertIn(
+            "names one ledger (STND.HARN.10)",
+            "\n".join(read_register(hand).problems),
+        )
         text = skeleton("2026-10-10")
-        everywhere = with_signer(
-            text, "all", "The Custodian", "O", "KEY", self.KEY
-        )
         with self.assertRaisesRegex(ValueError, "STND.HARN.10"):
-            with_signer(
-                everywhere, "governance", "The Custodian", "O", "KEY", self.KEY
+            with_signer(text, "all", "The Custodian", "O", "KEY", self.KEY)
+        for ledger in ("all", "All"):
+            with self.assertRaisesRegex(ValueError, "STND.HARN.10"):
+                with_signer(
+                    text, ledger, "The Custodian", "O", "KEY", self.KEY
+                )
+            with self.assertRaisesRegex(ValueError, "STND.HARN.10"):
+                with_signer_closed(hand, ledger, self.KEY, 5)
+        self.assertIn(
+            "names one ledger (STND.HARN.10)",
+            "\n".join(read_register(hand.replace("| all", "| All")).problems),
+        )
+        armored = (
+            "-----BEGIN PGP PUBLIC KEY BLOCK-----\nx\n"
+            "-----END PGP PUBLIC KEY BLOCK-----"
+        )
+        both = text
+        for ledger in ("governance", "work-a"):
+            both = with_signer(
+                both, ledger, "The Custodian", "O", armored, self.KEY
             )
-        with self.assertRaisesRegex(ValueError, "STND.HARN.10"):
-            with_signer_closed(everywhere, "all", self.KEY, 5)
-        other = with_signer(
-            everywhere, "governance", "The Human Owner", "O", "KEY", self.KEY
-        )
-        self.assertIn("| governance | The Human Owner |", other)
-        both = everywhere.replace(
-            "| all | The Custodian | O |",
-            "| governance | The Custodian | O | "
-            f"{self.KEY} | none |\n| all | The Custodian | O |",
-        )
-        with self.assertRaisesRegex(ValueError, "STND.HARN.10"):
-            with_signer_closed(both, "governance", self.KEY, 5)
-        per_ledger = with_signer(
-            text, "governance", "The Custodian", "O", "KEY", self.KEY
-        )
-        with self.assertRaisesRegex(ValueError, "STND.HARN.10"):
+        self.assertEqual(both.count(f"### {self.KEY}"), 1)
+        with self.assertRaisesRegex(ValueError, "another armor"):
             with_signer(
-                per_ledger, "all", "The Custodian", "O", "KEY", self.KEY
+                both, "work-b", "The Custodian", "O", "other", self.KEY
             )
-        closed = with_signer_closed(per_ledger, "governance", self.KEY, 5)
-        self.assertIn(f"| {self.KEY} | 5 |", closed)
+        closed = with_signer_closed(both, "governance", self.KEY, 5)
+        row = f"| The Custodian | O | {self.KEY} |"
+        self.assertIn(f"| governance {row} 5 |", closed)
+        self.assertIn(f"| work-a {row} none |", closed)
 
 
 class SignerConfigFile(unittest.TestCase):

@@ -99,7 +99,7 @@ harness/
 
 ## Current state
 
-As of ledger entry 201 (2026-10-27). `show governance ID` prints the current text and revision of any document.
+As of ledger entry 202 (2026-10-28). `show governance ID` prints the current text and revision of any document.
 
 | Level | Contents | Status |
 | --- | --- | --- |
@@ -123,7 +123,7 @@ As of ledger entry 201 (2026-10-27). `show governance ID` prints the current tex
 | STND.CLASS | 1.3.1 | 12 | Consequence-class criteria (identifiers 8, 9, and 11 to 16 withdrawn) |
 | STND.DFLT | 1.5.3 | 31 | Defaults |
 | STND.INSTR | 1.4 | 10 | Agent instructions |
-| STND.HARN | 1.4 | 24 | Harness specification (identifiers 18 to 23, 29, and 30 withdrawn) |
+| STND.HARN | 1.5 | 24 | Harness specification (identifiers 18 to 23, 29, and 30 withdrawn) |
 | STND.VVUQ | 1.4 | 83 | Verification, validation, and uncertainty quantification methods |
 | STND.CODE | 1.3 | 26 | Coding standard |
 | STND.THRT | 1.0 | 9 | Threat-model template |
@@ -151,7 +151,7 @@ As of ledger entry 201 (2026-10-27). `show governance ID` prints the current tex
 | STND.PERF | 1.0.1 | 26 | Performance evaluation standard |
 | STND.TEST | 1.0 | 19 | Testing methods standard |
 
-The ledger holds 201 transactions: 48 `adopt`, 122 `amend`, 17 `register`, 3 `review`, 3 `rule`, and 8 `annotate`. The mnemonic register `governance/MNEM/_doc.md` (STND.IDENT.19) holds every mnemonic in use; a new mnemonic, including that of a project or of a kind of LVL3 instrument, is registered by the custodians (STND.IDENT.23).
+The ledger holds 202 transactions: 48 `adopt`, 123 `amend`, 17 `register`, 3 `review`, 3 `rule`, and 8 `annotate`. The mnemonic register `governance/MNEM/_doc.md` (STND.IDENT.19) holds every mnemonic in use; a new mnemonic, including that of a project or of a kind of LVL3 instrument, is registered by the custodians (STND.IDENT.23).
 
 ## Commands
 
@@ -191,7 +191,7 @@ python -B -m unittest discover -s tests -t .         # every test
 | `ledger append ROOT --type ... --rationale ...` | Check the existing chain (sequence numbers, links, hashes), refuse a broken one, and append one hash-chained transaction, synced to disk, under an exclusive lock of the ledger file; `--sign KEY [--gnupg-home DIR]` signs it; `--ledger-file PATH --ledger-id ID` appends to a work ledger. An entry that would fail `verify` for good is refused, and nothing is written: an unsigned entry whose actor the signer register requires to sign it (use `--sign`), an unsigned transaction whose scope names `SIGNR` while the register exists (the anchor key signs the founding and a listed signer every later change), a register transaction while the register has problems, a scope other than that of an older pin whose content it shares (STND.HARN.9 keeps that pin in force; record the change with its scope), a file name with a control character under the scope, and a line that does not read back as the entry (unit 0016) |
 | `sign found ROOT --date ... --role ... --name ... --key-file ...` | Found the signer register SIGNR with its first key |
 | `sign add-signer REGISTER --ledger ... --role ... --name ... --key-file ...` | Add a signer and its public key |
-| `sign close-signer REGISTER --ledger ... --fingerprint ... --last-entry N` | Set the last entry a key may sign |
+| `sign close-signer REGISTER --ledger ... --fingerprint ... --last-entry N` | Set the last entry a key may sign on a ledger, closing each open row of that key and ledger |
 | `sign require REGISTER --ledger ... --actor ... --from-entry N` | Require an actor's signature from an entry on |
 | `sign check LEDGER --ledger-id ID --corpus ROOT [--signer-config PATH]` | Check the chain and verify the signatures of the corpus ledger and, for a work ledger, of that ledger; fail if the corpus has no signer register, or if the corpus ledger lacks the entry that the head pin of the signer configuration names (below) |
 | `pairs ROOT ID [--amends LVL0_ID ...]` | List, as a Markdown table, each pair of provisions that STND.HARN.28 puts to review before a change of the document `ID`: one provision on the changed side (the document, and for a change of LVL0 every provision instantiating a provision named by `--amends`), the other in another document in force, at least one in a profile or sub-profile, given for one matter by the shared-matters tables or instantiating one LVL0 provision outside GOV and PRIN; exit 2 when `ID` is not in the corpus |
@@ -227,7 +227,7 @@ Nothing in `govharness/` is needed to read, apply, or audit the governance (GOV.
    done | head -c -1 | sha256sum
    ```
 
-6. Signatures (STND.HARN.11 to STND.HARN.13). A signature covers the entry digest, the output of step 4 with the second `sed` replaced by `sed 's/"hash":"[0-9a-f]*",//; s/"signature":"[^"]*"/"signature":""/'`. Write that 64-character digest, with no line feed, to a file; write the `signature` value, with each `\n` read as a line feed, to `sig.asc`; import the public keys under the headings of the signer register `SIGNR`; then run `gpg --verify sig.asc digest`. Whether the key may sign that entry is the term Accepted signature of STND.HARN: an open row for `all` accepts the key on every ledger, even where its row for that ledger is closed, so a key meant to be closable is registered per ledger, and `sign add-signer` and `sign close-signer` refuse a row beside an `all` row of the same key and role label (unit 0016). The founding key is the `anchor` fingerprint in `/etc/governance/signer.json`. If that file names a `head`, line `seq` of the ledger must have that `hash`.
+6. Signatures (STND.HARN.11 to STND.HARN.13). A signature covers the entry digest, the output of step 4 with the second `sed` replaced by `sed 's/"hash":"[0-9a-f]*",//; s/"signature":"[^"]*"/"signature":""/'`. Write that 64-character digest, with no line feed, to a file; write the `signature` value, with each `\n` read as a line feed, to `sig.asc`; import the public keys under the headings of the signer register `SIGNR`; then run `gpg --verify sig.asc digest`. Whether the key may sign that entry is the term Accepted signature of STND.HARN: the key's row for that ledger and role label is open, or closed at that entry or after it. A signer row names one ledger, never `all` (STND.HARN.10), so that every key can be closed; a key that signs on several ledgers has a row for each, and `sign add-signer` and `sign close-signer` refuse `--ledger all`, in any case (unit 0021). A row of required signatures may still name `all`, from entry 1. The `signers` of a transaction of the register are the keys open on the governance ledger (STND.HARN.7, STND.HARN.13). The founding key is the `anchor` fingerprint in `/etc/governance/signer.json`. If that file names a `head`, line `seq` of the ledger must have that `hash`.
 7. Configuration (STND.DFLT.22 and STND.DFLT.15). A configuration that a `configure` entry records displaces a provision only for assured work (CSQ0 or CSQ1), and only while operative: confirmed in the current session by a verifier that the agent is unable to alter, such as the human owner. Each file the entry names is present with the SHA-256 it records, and no part of its path is writable by the agent's account. For other work, a configuration displaces nothing. A checkpoint mechanism counts while found installed as the entry states, for assured work by such a verifier. Otherwise the provisions apply.
 8. To change the governance, follow GOV.40 and GOV.41: a change is a ledger transaction by the human owner or the custodians, never an edit alone. By hand, edit a copy, check it as above, copy it back, and append a line with the fields of STND.HARN.7, computing `corpus_hash` and `hash` as in steps 5 and 4.
 
@@ -312,7 +312,7 @@ A revision number is `major.minor` or `major.minor.editorial`, as in 1.0 or 1.0.
 - Trigger and tag fields are empty, and the knowledge base and tag vocabulary are planned.
 - There is no agent context manifest (agent brief) or action-class index.
 - `find` and `context` match words, not meanings: "push" finds the items that say "push", not the definition of remote write, and a question in full sentences matches its common words; give the corpus's own terms.
-- No signer register is founded yet, so every `signature` field is blank.
+- No signer register is founded yet, so every `signature` field is blank; the signature feature stays unadopted (2026-10-28).
 - Authority tiers are classified per sentence by wording. Cross-provision action classes (the same action named in two provisions) are not compared.
 - Imperative sentences are found by a verb list, not a parse (g.8, review); a listed verb alone without terminal punctuation, a label in a table cell, is not one.
 - Whether a quoted expression is mentioned or used, whether a qualifier has a criterion, and whether a citation names something the provision really makes more specific are left to a reader (`checked_by: review`).

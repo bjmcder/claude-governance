@@ -12,7 +12,7 @@ STND.DFLT,standard,LVL2,Defaults,adopted,DFLT/,8369b691e594b6f02f3bb6634d51a0e3e
 STND.DOCS,standard,LVL2,Documentation standard,adopted,DOCS/,7dbc2a31eb2a45aaa4bc6deb99d21421b7f508a1e13bafc9fcc75b5ba75774c7,30177
 STND.DRAFT,standard,LVL2,Drafting standard,adopted,DRAFT/,5bcb8b4bc53f5edb37b2b71a63a9cc754b6ae6fd3b470b9869bf0fd86831a21d,40647
 STND.FTN,standard,LVL2,Fortran standard,adopted,FTN/,c65a4fa7c8e4a85719ff90f1a06b0e271143dc46ac821a5a633b4cab4d9f5df2,65780
-STND.HARN,standard,LVL2,Harness specification,adopted,HARN/,1cfd7b674617e071eefb956db3791a3e9ebfaa808ff0ee13385bf048e3cc0bc7,23086
+STND.HARN,standard,LVL2,Harness specification,adopted,HARN/,c1247d6da6282b551b51a19b02a22b173142ff09ab3d8923bb151e375456250c,24833
 STND.IDENT,standard,LVL2,Identifier scheme and mnemonic register,adopted,IDENT/,deea3ef3cacfc20fc7cd956173b5601764261091fdfd6c53ac40bb789607f78f,22791
 STND.INSTR,standard,LVL2,Agent instructions,adopted,INSTR/,a071027c0454b76ddcb6b880ece28325ada2241376f48191c367e0bc612d7cdf,9625
 STND.JL,standard,LVL2,Julia standard,adopted,JL/,229edbceadf59ed86570420089c2c1a93cea943eec64286c7e762898ec88f876,62465

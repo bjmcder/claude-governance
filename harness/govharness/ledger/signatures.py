@@ -73,14 +73,12 @@ def _valid_for(
     Returns
     -------
     bool
-        Whether a row grants that key this ledger, actor, and entry:
-        a row of the ledger or ``all``, as the term Accepted signature
-        of STND.HARN reads, so an open ``all`` row accepts the key
-        whatever row of the ledger is closed.
+        Whether a row of that ledger grants that key this actor and
+        entry, as the term Accepted signature of STND.HARN reads.
     """
     return any(
         row["Fingerprint"] == fpr
-        and applies(row, ledger)
+        and row["Ledger"] == ledger
         and row["Role label"] == entry.get("actor")
         and (
             row["Last entry"] == "none"

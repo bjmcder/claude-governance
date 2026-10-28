@@ -58,8 +58,7 @@ def add_signer(
     path : Path
         Register file.
     ledger : str
-        Ledger the key signs for: ``governance``, a work ledger, or
-        ``all``.
+        Ledger the key signs for: ``governance`` or a work ledger.
     role : str
         Role label the key signs as.
     name : str
@@ -75,8 +74,8 @@ def add_signer(
     Raises
     ------
     ValueError
-        If the text holds no public key, or an ``all`` row of the key
-        conflicts with the row (``register.with_signer``).
+        If the text holds no public key, or the ledger is ``all``
+        (``register.with_signer``).
     """
     fpr = key_fingerprint(armored.strip())
     if fpr is None:
@@ -96,8 +95,7 @@ def close_signer(
     path : Path
         Register file.
     ledger : str
-        Ledger of the row to close; an ``all`` row stays open
-        (STND.HARN.10) and cannot be closed.
+        Ledger of the row to close.
     fingerprint : str
         Fingerprint of the key.
     last_entry : int
@@ -106,8 +104,7 @@ def close_signer(
     Raises
     ------
     ValueError
-        If the fingerprint is malformed or names no open row, or the
-        row cannot be closed beside an ``all`` row
+        If the fingerprint is malformed or names no open row
         (``register.with_signer_closed``).
     """
     if not FINGERPRINT_RE.match(fingerprint):
