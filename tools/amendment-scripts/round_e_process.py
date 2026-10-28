@@ -321,13 +321,14 @@ def apply_stnd(root: Path, at: str) -> None:
 
 # ---------------------------------------------------------------------------------------------------- STND.PROJ
 
-PROJ_COVERED = ("Work process, Defects, Review and release, Correction, Incidents, Dependencies, Records, Working "
-                "notes, Workbench, Secret store, Access descriptors, Threat model, Reserved actions, Agent "
-                "instructions, and Configuration")
+PROJ_COVERED = ("Work process, Defects, Dependencies, Working notes, Workbench, Secret store, Access descriptors, "
+                "Threat model, Reserved actions, Agent instructions, and Configuration")
+PROJ_PARTLY = "Review and release, Correction, Incidents, and Records"
 PROJ2_ADD = (
-    f" A project constitution MAY adopt STND.DFLT by one citation as the content of its sections {PROJ_COVERED}, and "
-    "state in full only its other sections and each of these whose content departs from STND.DFLT (GOV.21, "
-    "GOV.22).")
+    f" A project constitution MAY adopt STND.DFLT by one citation as the content of its sections {PROJ_COVERED}, "
+    f"and, for {PROJ_PARTLY}, as the content of the items of their rows that STND.DFLT provides, and state in "
+    "full only its other sections, each of these whose content departs from STND.DFLT, and the items that "
+    "STND.DFLT does not provide (GOV.21, GOV.22).")
 PROJ1 = [
     ("the components that hold domain items of each selected profile, with the execution paths of each by hardware "
      "type;",
@@ -340,12 +341,18 @@ PROJ_DOC = [(
     "A section that adopts a provision of STND.DFLT by citation adopts its content as the project's own;",
     "A section that adopts a provision of STND.DFLT by citation adopts its content as the project's own, and one "
     "citation of STND.DFLT adopts it for each section that STND.PROJ.2 names, whose mechanism STND.DFLT provides: "
-    "Work process (STND.DFLT.7 to STND.DFLT.9), Defects (STND.DFLT.10), Review and release and Correction, whose "
-    "records STND.DFLT.8 gives, Incidents (STND.DFLT.12), Dependencies (STND.DFLT.11), Records (STND.DFLT.2 to "
-    "STND.DFLT.5), Working notes (STND.DFLT.6), Workbench (STND.DFLT.28), Secret store (STND.DFLT.29 to "
+    "Work process (STND.DFLT.7 to STND.DFLT.9), Defects (STND.DFLT.10), Dependencies (STND.DFLT.11), Working notes "
+    "(STND.DFLT.6), Workbench (STND.DFLT.28), Secret store (STND.DFLT.29 to "
     "STND.DFLT.31), Access descriptors (STND.DFLT.27), Threat model (STND.DFLT.18 and STND.DFLT.19), Reserved "
     "actions (STND.DFLT.14, STND.DFLT.15, and STND.DFLT.24), Agent instructions (STND.DFLT.20 and STND.DFLT.21), "
-    "and Configuration (STND.DFLT.22 and STND.DFLT.35); the other sections, Identity, Classification, Knowledge "
+    "and Configuration (STND.DFLT.22 and STND.DFLT.35); four sections it provides in part, so that the items "
+    "named here remain for the constitution to state, or to mark as not applying under the second sentence of "
+    "STND.PROJ.1: Review and release, whose review record STND.DFLT.8 gives, leaving who reviews and with what "
+    "independence (QA.7, QA.8), regeneration before reliance (QA.9), promotion (QA.11), and the release decision "
+    "and its gate (QA.10); Correction, whose record STND.DFLT.8 gives, leaving the mechanism of correction "
+    "propagation (QA.13); Incidents, whose governance failure report STND.DFLT.12 gives, leaving the mechanism of "
+    "incident handling (QA.15); and Records (STND.DFLT.2 to STND.DFLT.5), leaving the independent copy of "
+    "irreplaceable data (REPRO.13); the other sections, Identity, Classification, Knowledge "
     "base, Authorizations, Architecture, Physical hardware, and Exceptions, hold what only the project states, "
     "though the defaults say where the classification is recorded (STND.DFLT.13) and how an authorization is "
     "recorded and entered (STND.DFLT.16, STND.DFLT.17); the execution paths of each component, by hardware type, "
@@ -367,8 +374,10 @@ def edit_proj(root: Path) -> None:
 PROJ = E.Step(
     "STND.PROJ", edit_proj, True,
     f"STND.PROJ.2 lets a project constitution adopt STND.DFLT by one citation as the content of its sections "
-    f"{PROJ_COVERED}, whose mechanisms STND.DFLT provides, and state in full only its other sections and those whose "
-    "content departs from it, the Notes giving the provisions of STND.DFLT for each; the section Architecture of "
+    f"{PROJ_COVERED}, whose mechanisms STND.DFLT provides, and, for {PROJ_PARTLY}, of the items of their rows that "
+    "STND.DFLT provides, and state in full only its other sections, those whose content departs from it, and the "
+    "items that STND.DFLT does not provide, the Notes giving the provisions of STND.DFLT for each and the items "
+    "left; the section Architecture of "
     "STND.PROJ.1 names where the execution paths of each component are recorded by "
     "hardware type, in place of the section Classification listing them, so that a path on a new hardware type "
     "changes no record that the human owner "
