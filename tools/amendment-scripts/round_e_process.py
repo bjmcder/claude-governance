@@ -446,8 +446,9 @@ SUBPROFILES = [subprofile_step(n) for n in ("ASIC", "CPU", "EMBED", "FPGA", "GPU
 # ---------------------------------------------------------------------------------------------------- STND.CLASS
 
 CLASS_DOC = [(
-    "and the records of STND.CLASS.23 where the classification records an expected class.",
-    "and the records of STND.CLASS.23 where the classification records an expected class. A mechanism of GOV.21 "
+    "where the classification records an expected class, STND.CLASS.21 and the records of STND.CLASS.23.",
+    "where the classification records an expected class, STND.CLASS.21 and the records of STND.CLASS.23. A "
+    "mechanism of GOV.21 "
     "whose obligation work of CSQ4 may omit, review (QA.7), incident handling (QA.15), and retention (REPRO.12) "
     "among them, costs that work no more than one citation of the defaults (STND.PROJ.2), and the obligation that "
     "it serves applies from the class that STND.CLASS.10 gives.")]

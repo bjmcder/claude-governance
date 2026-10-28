@@ -40,7 +40,7 @@ CODE_DOC = [
      "that STND.CODE.17, STND.CODE.19, and STND.DEPS.1 ask at that class, with the reason for each such choice in a "
      "decision record, and asks no other record of that class before the reclassification than the records of "
      "STND.CLASS.23; the marker of STND.CODE.20 is the one thing of this standard kept earlier, so that the "
-     "reclassification finds each deviation by a search and the record that STND.CLASS.22 then owes is written "
+     "reclassification finds each deviation by a search and the record that STND.CODE.20 then owes is written "
      "once."),
     ("These onsets depart from STND.CLASS.10. STND.CODE.17 and STND.CODE.19 apply from CSQ1, earlier than the CSQ0 "
      "rows of DSGN.3 and VV.1 that they tighten, and STND.CODE.20 applies wherever a high-assurance coding standard "
@@ -367,7 +367,8 @@ def apply_conc(root: Path, at: str) -> None:
 
 AGENT39 = [
     ("and, from a measured baseline or a recorded decision of the human owner, that running the units together",
-     "and, from a measured baseline, an effort estimate under AGENT.6 that states its basis, or a recorded decision "
+     "and, from a measured baseline, an effort estimate in the form of AGENT.6 that states its basis, or a recorded "
+     "decision "
      "of the human owner, that running the units together"),
     ('refers_to: ["QA.2"]', 'refers_to: ["QA.2", "AGENT.6"]'),
 ]
@@ -394,8 +395,9 @@ AGENT_DOC = [
      "started on a shared machine as soon as, and only while, it is able to serve them.",
      "AGENT.39 and AGENT.40 make parallel work safe and efficient: an assessment before it begins, and units "
      "started on a shared machine as soon as, and only while, it is able to serve them. The first parallel "
-     "delegation of a project has no measured baseline, so AGENT.39 accepts an effort estimate under AGENT.6 that "
-     "states its basis, which the agent roles standard grounds in the records of comparable units or in stated "
+     "delegation of a project has no measured baseline, so AGENT.39 accepts an effort estimate in the form of "
+     "AGENT.6 that states its basis, which the agent roles standard grounds in the records of comparable units or "
+     "in stated "
      "reasoning, and asks no decision of the human owner for it."),
     ("a reading resting on GOV.9 and GOV.17 and recorded as a judgment (PRIN.10) until the custodians interpret "
      "GOV.11 for such provisions.",
@@ -406,8 +408,8 @@ AGENT_DOC = [
 ]
 
 AGENT_READING = (
-    "AGENT.39 accepts an effort estimate under AGENT.6 that states its basis, beside a measured baseline and a "
-    "recorded decision of the human owner, as the basis of the assessment that running units together costs less "
+    "AGENT.39 accepts an effort estimate in the form of AGENT.6 that states its basis, beside a measured baseline "
+    "and a recorded decision of the human owner, as the basis of the assessment that running units together costs less "
     "than running them in sequence (CP8); AGENT.23 accepts a transcript of the session that the agent did not edit "
     "in place of the record of each access it shows, an item the transcript lacks stated once for the session or "
     "beside the access (CC19); the Notes say so, and that the question left to the custodians on GOV.11 no longer "

@@ -22,7 +22,7 @@ Settled: STND.ANNEX.2 and .4 to .10 move to CSQ2 with HW.4 to HW.6 (STND.ANNEX 1
 
 ## Readings
 
-Points 1, 2, 3, and 7 remain, each a true choice; the rest are settled.
+Points 1, 2, 3, and 4 (point 7 of the first draft) remain, each a true choice; the rest are settled.
 
 ## Findings
 

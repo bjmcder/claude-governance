@@ -117,9 +117,11 @@ DEPS_DOC = [
      "brings is seen before a release relies on it. The checks across the range run at release, the latest point "
      "at which their result is needed, since dependents rely on a declared range through a release (RSRC.12). Work "
      "that declares no range, as an application whose environment a lock file fixes, owes nothing under "
-     "STND.DEPS.14. STND.PY, STND.JL, and STND.RUST keep only what their languages add: the declaration of the "
-     "oldest releases of a Python package, the reference version and the newest prerelease of Julia, and the "
-     "edition and the oldest supported toolchain that the metadata of a Rust crate states."),
+     "STND.DEPS.14. A revision that a declared range admits is one the configuration names, so a check of "
+     "STND.DEPS.14 installs it under STND.DFLT.34 and adds nothing that STND.DFLT.35 halts. STND.PY, STND.JL, and "
+     "STND.RUST keep only what their languages add: the declaration of the oldest releases of a Python package, "
+     "the reference version and the newest prerelease of Julia, and the edition and the oldest supported "
+     "toolchain that the metadata of a Rust crate states."),
     ("the checks that a language standard runs at other revisions, on the oldest declared releases of STND.PY.14 and "
      "STND.RUST.1 and on the newer revisions that STND.RUST.1 and STND.JL.3 ask, leave the lock file.",
      "the checks of STND.DEPS.14, on the oldest and the newest revisions that a declared range admits, and those "
@@ -209,8 +211,8 @@ def edit_build(root: Path) -> None:
 BUILD = E.Step(
     "STND.BUILD", edit_build, False,
     "the Notes say that STND.CODE.21 forbids, in every language, a setting that lets the compiler assume finite "
-    "values for code that holds a required check, in place of naming STND.CXX.18 and STND.STDC.40, which a later "
-    "transaction of this round withdraws, and cite STND.DEPS.14 for the oldest and newest revisions of a declared "
+    "values for code that holds a required check, in place of naming STND.CXX.18 and STND.STDC.40, which STND.CXX "
+    "1.5 and STND.STDC 1.5 withdraw, and cite STND.DEPS.14 for the oldest and newest revisions of a declared "
     "range in place of STND.PY.14",
     "only informative text changes", "No floor is raised or lowered (GOV.11): only informative text changes",
     "unchanged", NONE, f"{F1}; {ROUND_D} decisions 1b, 16, and 20")

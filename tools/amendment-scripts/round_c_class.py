@@ -291,7 +291,7 @@ CLASS_DOC = [
     # Reading the standard, second paragraph.
     ("Work of CSQ4 meets only the floor, which includes the mechanisms of GOV.21, because GOV belongs to the floor.",
      "Work of CSQ4 meets only the floor, which includes the mechanisms of GOV.21, because GOV belongs to the floor, "
-     "and the records of STND.CLASS.23 where the classification records an expected class."),
+     "and, where the classification records an expected class, STND.CLASS.21 and the records of STND.CLASS.23."),
     # Reading the standard, last paragraph.
     ("Promotion (QA.11) governs every report of a result at every class, as Normative Language requires; work of "
      "CSQ4 needs no review until it is promoted or released, because it leaves CSQ4 when another actor relies on it.",
@@ -306,7 +306,10 @@ CLASS_DOC = [
      "carry, examines the change cold; a reset of the author's context inside the authoring run is not such a "
      "session, so an author never reviews its own work. The CSQ2 row asks a different model or a different "
      "instruction revision, since a difference of tools alone leaves the same model reasoning under the same "
-     "instructions. STND.CLASS.3 asks the money threshold once the class is CSQ2 or a more severe one, where a "
+     "instructions. The auditor of the rows CSQ1 and CSQ2 of STND.CLASS.19 is read as the CSQ2 row of "
+     "STND.CLASS.18 reads the reviewer: an agent whose model or instruction revision differs from that of every "
+     "authoring agent, or a human who is not an author of the audited work. STND.CLASS.3 asks the money threshold "
+     "once the class is CSQ2 or a more severe one, where a "
      "reclassification to CSQ1 first comes within reach; below CSQ2 the cost limb of the consequence test of CSQ1 "
      "has no stated amount to exceed, so it is not met, and STND.CLASS.2 does not count it met, because the doubt "
      "that provision resolves is doubt about the work and not the absence of an amount that the classification is "

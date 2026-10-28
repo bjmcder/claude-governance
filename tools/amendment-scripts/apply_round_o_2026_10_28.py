@@ -46,7 +46,8 @@ PROTOCOL_FLOOR = (
     "under which a part applies from the row whose named item it asks for: the row of DSGN.15 names the verification "
     "of the invariants of a protocol, which these parts do not ask; the burden is proportionate, since each asks the "
     "order of merges that a team of agents follows anyway, at the cost of no record, and work of CSQ4 may still omit "
-    "it; the moves are put to the custodian, since the lists of the review do not name them")
+    f"it; the lists of the review do not name the moves, each of which is of reading 2 of {RECORD}, ratified by the "
+    "custodian")
 LIGHTER_FLOOR = ("Each move to CSQ2 removes an obligation from work of CSQ3 and leaves work of CSQ4 as it was, while "
                  "the obligations of LVL0 that the moved provisions serve apply at CSQ3 in full")
 
@@ -98,16 +99,16 @@ MINOR = {
         "of the form of code and the catch at a foreign frame, and the comparison of layouts stays at CSQ2; the "
         "marker of STND.CODE.20 is stated from CSQ3, which STND.CLASS.10 already let work of CSQ4 omit; "
         f"{FIELDS}",
-        f"No floor is raised (GOV.11). {CODE_FORM_FLOOR}; STND.CODE.35, a rule of the same kind that the lists of the "
-        "review do not name, is put to the custodian",
+        f"No floor is raised (GOV.11). {CODE_FORM_FLOOR}; the move of STND.CODE.35, a rule of the same kind that the "
+        f"lists of the review do not name, is of reading 2 of {RECORD}, ratified by the custodian",
         "the first sentence of STND.CODE.22, STND.CODE.23, STND.CODE.24, and STND.CODE.35 from CSQ3, where they "
         "applied from CSQ2; the others as before",
         "existing source conforms at the next change that touches it (STND.CLASS.22)",
         "CS1, CL1, CL2"),
     "STND.CONC": (
         f"STND.CONC.19 applies from CSQ3, as a rule of the form of code; {FIELDS}",
-        f"No floor is raised (GOV.11). {CODE_FORM_FLOOR}; the move is put to the custodian, since the lists of the "
-        "review do not name it",
+        f"No floor is raised (GOV.11). {CODE_FORM_FLOOR}; the lists of the review do not name the move, which is of "
+        f"reading 2 of {RECORD}, ratified by the custodian",
         "STND.CONC.19 from CSQ3, where it applied from CSQ2; the others as before",
         "existing source conforms at the next change that touches it (STND.CLASS.22)",
         "CS1, CS5"),
@@ -131,7 +132,8 @@ MINOR = {
         f"while the tests under the check of deadlock stay at CSQ2; {FIELDS}",
         f"No floor is raised (GOV.11). {CODE_FORM_FLOOR}; the argument of completion costs one argument for each "
         "message protocol, which STND.CONC.11 already asks of every protocol by which concurrent tasks wait at CSQ3; "
-        "the three moves are put to the custodian, since the lists of the review do not name them",
+        "the lists of the review do not name the three moves: those of the form of code are of reading 2 of "
+        f"{RECORD}, and that of the argument of completion of its reading 3, each ratified by the custodian",
         "STND.MPI.14, the second sentence of STND.MPI.12, and the second sentence of STND.MPI.17 from CSQ3, where "
         "they applied from CSQ2; the others as before",
         "existing source conforms at the next change that touches it, and an existing protocol carries its argument "
@@ -140,8 +142,8 @@ MINOR = {
     "STND.OFFLD": (
         "STND.OFFLD.7, the first sentence of STND.OFFLD.12, and the second sentence of STND.OFFLD.17 apply from CSQ3, "
         f"as rules of the form of code, and STND.OFFLD.14 stays at CSQ2, now with HW.5; {FIELDS}",
-        f"No floor is raised (GOV.11). {CODE_FORM_FLOOR}; the three moves are put to the custodian, since the lists "
-        "of the review do not name them",
+        f"No floor is raised (GOV.11). {CODE_FORM_FLOOR}; the lists of the review do not name the three moves, which "
+        f"are of reading 2 of {RECORD}, ratified by the custodian",
         "STND.OFFLD.7, the first sentence of STND.OFFLD.12, and the second sentence of STND.OFFLD.17 from CSQ3, "
         "where they applied from CSQ2; the others as before",
         "existing source conforms at the next change that touches it (STND.CLASS.22)",
@@ -149,8 +151,8 @@ MINOR = {
     "STND.OMP": (
         "the first sentence of STND.OMP.2 and STND.OMP.28 apply from CSQ3, as rules of the form of code, the second "
         f"with HW.19; {FIELDS}",
-        f"No floor is raised (GOV.11). {CODE_FORM_FLOOR}; the moves are put to the custodian, since the lists of the "
-        "review do not name them",
+        f"No floor is raised (GOV.11). {CODE_FORM_FLOOR}; the lists of the review do not name the moves, which are of "
+        f"reading 2 of {RECORD}, ratified by the custodian",
         "the first sentence of STND.OMP.2 and STND.OMP.28 from CSQ3, where they applied from CSQ2; STND.OMP.30 stays "
         "at CSQ2, now with HW.5; the others as before",
         "existing source conforms at the next change that touches it (STND.CLASS.22)",

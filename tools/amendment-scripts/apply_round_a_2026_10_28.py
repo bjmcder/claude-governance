@@ -1,6 +1,6 @@
 """Round a of 2026-10-28: the defaults and the agent instructions (rulings A1 to A5, B1, B2; R1.4 to R1.7, AD5, R5.4).
 
-Five transactions, in citation order:
+Six transactions, in citation order:
 - STND.DFLT 1.6 (minor): the human owner's direction of work authorizes the operating cost of the units it covers
   (A1, new STND.DFLT.33); a build, an install, or a test run against the configuration the work records is
   permitted and that configuration is the list of STND.DFLT.24 (A2, new STND.DFLT.34); the first exempt class
@@ -10,6 +10,9 @@ Five transactions, in citation order:
   tool locations for writing (A5); the term Tool memory store, admitted beside STND.DFLT.6 (B2); the first
   referral proposes the standing authorizations of STND.PROJ.3 (R1.4, new STND.DFLT.32); STND.DFLT.19 limited
   (R1.5); STND.DFLT.11 reviews the dependency the unit changes (R1.6); STND.DFLT.5 cites PRIME.2 (R1.7).
+- A transaction of type rule, authority GOV.3, target PRIME.7: the interpretation of PRIME.7 on which STND.DFLT.34
+  rests (A2; reading 1 of the round record). It applies only if the custodian ratifies that reading as drafted;
+  under the alternative it is removed with STND.DFLT.34's reach to installs.
 - STND.INSTR 1.5 (minor): an adopted instruction file is part of the agent instructions (B1, new STND.INSTR.11);
   STND.INSTR.6 reaches content met in the course of the work; STND.INSTR.8 admits a tool memory store (B2); the
   stale Note on derived means (R5.4).
@@ -31,10 +34,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import rounds_common as F  # noqa: E402
-from govharness.workflows.amend import replace_text  # noqa: E402
+from govharness.workflows.amend import Change, record_transaction, replace_text  # noqa: E402
 
 AT = "2026-10-28T20:00:00+00:00"
-TRANSACTIONS = 5
+TRANSACTIONS = 6
 RULINGS = F.RECORD
 RECORD = "review-records/rounds-2026-10-28/round-a/decisions.md"
 
@@ -120,9 +123,11 @@ DFLT_NOTES = [
      "directory counting as its contents, with the locations in which the run's tools keep their caches and "
      "state, each with symbolic links resolved; version control keeps the configuration reviewed and readable "
      "before the run, and regenerable outputs fall in the third exempt class (GUARD.7). The custodian ruled on "
-     "2026-10-28 that a build, an install, or a test run in the course of the work is permitted against the "
-     "recorded configuration or where otherwise authorized, and that the installation of a package the "
-     "configuration does not name, or a build or test run beyond the working bounds, halts and is referred. A "
+     "2026-10-28 that \"builds, installs, and tests in the context of the project development\" are permitted "
+     "\"if done against the stated configuration or otherwise authorized\", and that \"installation of new "
+     "packages or any builds/tests beyond the project bounds\" halts and is referred; the stated configuration is "
+     "read as the configuration that the work records under version control, and the project bounds as the "
+     "working bounds. A "
      "change to the recorded configuration that adds a package or a source, or changes the pinned revision of a "
      "package, is itself the installation of a "
      "package the configuration did not name, so STND.DFLT.35 halts and refers the addition unless an "
@@ -341,6 +346,31 @@ DFLT_RATIONALE = (
     "keeps its effect, and a project that recorded CSQ0 or CSQ1 without a signer register is no longer assured "
     "until the register lists a key of its owner, its class standing as recorded. Rulings A1 to A5 and B2 of "
     f"{RULINGS}; entries R1.1 to R1.7 of the register; {RECORD}." + F.AUTHOR)
+
+
+# ----------------------------------------------------------------------------------------------------------------
+# The interpretation of PRIME.7 under GOV.3 (reading 1 of the round record)
+# ----------------------------------------------------------------------------------------------------------------
+
+RULE_RATIONALE = (
+    f"Interpretation of the custodian under GOV.3, adopted {F.DATE}: for PRIME.7, an agent installs software or "
+    "dependencies where it adds software to its provisioned environment or a dependency to the work, and not where, "
+    "within the working bounds, it reproduces the set of packages that the configuration recorded for the work under "
+    "version control already names. Ruling A2 of the custodian, in "
+    f"{RULINGS}, reads: \"Agree. builds, installs, and tests in the context of the project development is assumed "
+    "to be permitted if done against the stated configuration or otherwise authorized. Installation of new packages "
+    "or any builds/tests beyond the project bounds are a halt and refer.\" STND.DFLT.34 permits such a reproduction, "
+    "and STND.DFLT.35 keeps under PRIME.7 the addition of a package, a revision of a package, or a source of "
+    f"packages. Reading 1 of {RECORD}. Text authored by an agent, Claude (Anthropic), at the custodian's direction "
+    "(REPRO.5).")
+
+
+def record_rule(root: Path, at: str) -> None:
+    """Record the interpretation as a transaction of type rule, in the form of ledger entries 47 and 48."""
+    rec = record_transaction(root, Change(kind="rule", actor="The Custodian", role="custodians", at=at,
+                                          authority=["GOV.3"], targets=["PRIME.7"], scope=[],
+                                          rationale=RULE_RATIONALE))
+    print("seq", rec.entry["seq"], "rule", "PRIME.7")
 
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -605,6 +635,9 @@ def apply(root: Path) -> None:
                           "STND.DFLT.34", "STND.DFLT.35"], binding=True)
     F.finish(root, "STND/DFLT", "STND.DFLT", "1.5.3", "1.6", DFLT_ROW, DFLT_RATIONALE, start.isoformat())
 
+    # The interpretation of PRIME.7, after STND.DFLT.34 and STND.DFLT.35, which its rationale cites
+    record_rule(root, (start + timedelta(seconds=1)).isoformat())
+
     # STND.INSTR 1.5
     replace_text(root, "STND/INSTR/_doc.md", INSTR_DOC)
     replace_text(root, "STND/INSTR/6.md", INSTR6)
@@ -612,7 +645,7 @@ def apply(root: Path) -> None:
     (root / "STND/INSTR/11.md").write_text(INSTR11, encoding="utf-8")
     F.check_fields(root, ["STND.INSTR.11"], binding=True)
     F.finish(root, "STND/INSTR", "STND.INSTR", "1.4", "1.5", INSTR_ROW, INSTR_RATIONALE,
-             (start + timedelta(seconds=1)).isoformat())
+             (start + timedelta(seconds=2)).isoformat())
 
     # AGENT 1.2
     replace_text(root, "AGENT/6.md", AGENT6)
@@ -620,17 +653,17 @@ def apply(root: Path) -> None:
     replace_text(root, "AGENT/_doc.md", AGENT_DOC)
     F.check_fields(root, ["AGENT.6", "AGENT.11"], binding=True)
     F.finish(root, "AGENT", "AGENT", "1.1", "1.2", AGENT_ROW, AGENT_RATIONALE,
-             (start + timedelta(seconds=2)).isoformat())
+             (start + timedelta(seconds=3)).isoformat())
 
     # STND.PROJ 1.3
     replace_text(root, "STND/PROJ/3.md", PROJ3)
     replace_text(root, "STND/PROJ/_doc.md", PROJ_DOC)
     F.finish(root, "STND/PROJ", "STND.PROJ", "1.2.1", "1.3", PROJ_ROW, PROJ_RATIONALE,
-             (start + timedelta(seconds=3)).isoformat())
+             (start + timedelta(seconds=4)).isoformat())
 
     # STND.HARN 1.6
     replace_text(root, "STND/HARN/6.md", HARN6)
     replace_text(root, "STND/HARN/7.md", HARN7)
     replace_text(root, "STND/HARN/_doc.md", HARN_DOC)
     F.finish(root, "STND/HARN", "STND.HARN", "1.5", "1.6", HARN_ROW, HARN_RATIONALE,
-             (start + timedelta(seconds=4)).isoformat())
+             (start + timedelta(seconds=5)).isoformat())

@@ -3,8 +3,9 @@
 Run from harness/, so that govharness imports:
     python3 -B -m govharness rehearse governance ../tools/amendment-scripts/apply_rounds_2026_10_28.py
 
-The rounds run in the order of ruling F2: the defaults and instruction authority, then the language and systems
-standards, then classes and promotion, then the onset rule, then the harness's place in the corpus and the rest.
+The rounds run in the order a, d, c, o, e: ruling F2's order, except that the language and systems standards (D1)
+come before classes and promotion (C1 to C6), because round c's edits to STND.CODE and the language standards are
+anchored on round d's text. The custodian is told of the departure at ratification.
 Each module sets TRANSACTIONS, the number of ledger transactions it records; the lead gives each its time of
 application, a second apart.
 
