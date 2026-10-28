@@ -72,7 +72,7 @@ govharness verify
 
 The last line of `harness/governance/ledger.jsonl` is the newest governance transaction in that revision; its `seq` is the entry number that the headers of the reading copies cite.
 
-The custodian tags each published state of the corpus `ledger-N`, where N is the `seq` of the last ledger entry it includes: `ledger-202` is the state whose ledger ends at entry 202. A project pins by such a tag, or by a full commit hash wherever the mechanism accepts one:
+The custodian tags each published state of the corpus `ledger-N`, where N is the `seq` of the last ledger entry it includes: `ledger-322` is the state whose ledger ends at entry 322. A project pins by such a tag, or by a full commit hash wherever the mechanism accepts one:
 
 | Installation | Accepts |
 | --- | --- |
@@ -89,10 +89,10 @@ The custodian tags each published state of the corpus `ledger-N`, where N is the
 Every change to the corpus is a ledger transaction with a stated rationale, so the ledger is the change log. Before moving a pinned project forward, list what changed between the two revisions:
 
 ```bash
-git -C <clone> diff ledger-202 <new tag> -- harness/governance/ledger.jsonl
+git -C <clone> diff ledger-322 <new tag> -- harness/governance/ledger.jsonl
 ```
 
-Each added line names its type (`adopt`, `amend`, and so on), its targets, and its rationale. `git -C <clone> diff --stat ledger-202 <new tag> -- harness/governance` lists the files that changed.
+Each added line names its type (`adopt`, `amend`, and so on), its targets, and its rationale. `git -C <clone> diff --stat ledger-322 <new tag> -- harness/governance` lists the files that changed.
 
 Then move the pin:
 

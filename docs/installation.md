@@ -20,11 +20,11 @@ The commands on this page use these names:
 | `governance-harness` | The name of the marketplace, from `.claude-plugin/marketplace.json` |
 | `governance` | The name of the plugin; its skills appear as `/governance:<skill>` |
 | `governance@governance-harness` | The plugin's identifier in Claude Code settings and commands |
-| `ledger-202` | A tag of a published state of the corpus, as described below |
+| `ledger-322` | A tag of a published state of the corpus, as described below |
 
 `REPO` and the URL `https://git.example.org/governance-harness.git` stand for the address you clone this repository from; replace them with that address.
 
-The custodian tags each published state of the corpus `ledger-N`, where N is the number of the last ledger entry it includes: `ledger-202` is the state whose ledger, `harness/governance/ledger.jsonl`, ends at entry 202. A project pins the governance by such a tag, or by a full commit hash wherever the mechanism accepts one. `git ls-remote --tags REPO` lists the tags that exist. What each option accepts:
+The custodian tags each published state of the corpus `ledger-N`, where N is the number of the last ledger entry it includes: `ledger-322` is the state whose ledger, `harness/governance/ledger.jsonl`, ends at entry 322. A project pins the governance by such a tag, or by a full commit hash wherever the mechanism accepts one. `git ls-remote --tags REPO` lists the tags that exist. What each option accepts:
 
 | Option | Pinned by |
 | --- | --- |
@@ -43,7 +43,7 @@ Requirements:
 
 ## 1. The Claude Code plugin
 
-The plugin is the directory `harness/` of this repository. It holds the corpus (`harness/governance/`), the harness package, and three skills. It also carries the harness's own records (`harness/records/`) and tests (`harness/tests/`), which a project does not use; the records stay with the plugin because entries of the ledger cite them by path. The plugin takes about 3.7 MB in all. It adds no hooks, no commands, no permission rules, and no agent definitions. Its skills are read-only: they give an agent the commands that retrieve provisions, describe where a project keeps its records, and draft a classification for the human owner. They write nothing.
+The plugin is the directory `harness/` of this repository. It holds the corpus (`harness/governance/`), the harness package, and three skills. It also carries the harness's own records (`harness/records/`) and tests (`harness/tests/`), which a project does not use; the records stay with the plugin because entries of the ledger cite them by path. The plugin takes about 4 MB in all. It adds no hooks, no commands, no permission rules, and no agent definitions. Its skills are read-only: they give an agent the commands that retrieve provisions, describe where a project keeps its records, and draft a classification for the human owner. They write nothing.
 
 ### Add the marketplace
 
@@ -62,10 +62,10 @@ claude plugin marketplace add REPO
 To follow a tag or branch rather than the default branch, append it with `#`:
 
 ```bash
-claude plugin marketplace add https://git.example.org/governance-harness.git#ledger-202
+claude plugin marketplace add https://git.example.org/governance-harness.git#ledger-322
 ```
 
-The repository's files take about 19 MB, most of them review records that a project does not need. For a marketplace added from a git URL, `--sparse` checks out only the two directories the plugin uses; for a local path it has no effect:
+The repository's files take about 20 MB, most of them review records that a project does not need. For a marketplace added from a git URL, `--sparse` checks out only the two directories the plugin uses; for a local path it has no effect:
 
 ```bash
 claude plugin marketplace add REPO --sparse .claude-plugin harness
@@ -130,7 +130,7 @@ Use the scope the plugin was installed at. Removing the marketplace also uninsta
 A project can commit the marketplace and the plugin to its `.claude/settings.json`, so that every member who opens the repository in Claude Code gets the same revision. Either run the two commands of option 1 with `--scope project`:
 
 ```bash
-claude plugin marketplace add REPO#ledger-202 --scope project
+claude plugin marketplace add REPO#ledger-322 --scope project
 claude plugin install governance@governance-harness --scope project
 ```
 
@@ -143,7 +143,7 @@ or write the settings directly:
       "source": {
         "source": "git",
         "url": "https://git.example.org/governance-harness.git",
-        "ref": "ledger-202",
+        "ref": "ledger-322",
         "sparsePaths": [".claude-plugin", "harness"]
       }
     }
@@ -154,7 +154,7 @@ or write the settings directly:
 }
 ```
 
-For a repository on GitHub, the source is `{"source": "github", "repo": "<owner>/<name>", "ref": "ledger-202"}`. Commit the file.
+For a repository on GitHub, the source is `{"source": "github", "repo": "<owner>/<name>", "ref": "ledger-322"}`. Commit the file.
 
 When a member opens the repository and accepts the workspace trust dialog, Claude Code clones the declared marketplace in the background, and the plugin loads from it. If the Errors tab of `/plugin` says the plugin "is enabled in project settings but isn't installed here", the member runs, once:
 
@@ -196,7 +196,7 @@ A tag or branch can move. To pin one commit, declare the marketplace inline with
 }
 ```
 
-`git rev-parse 'ledger-202^{commit}'` in a clone prints the commit hash of a tag; without `^{commit}`, it prints the hash of the tag object instead. With this source, each member runs `claude plugin install governance@governance-pinned --scope project` once, since Claude Code does not fetch a plugin with an external source from project settings alone.
+`git rev-parse 'ledger-322^{commit}'` in a clone prints the commit hash of a tag; without `^{commit}`, it prints the hash of the tag object instead. With this source, each member runs `claude plugin install governance@governance-pinned --scope project` once, since Claude Code does not fetch a plugin with an external source from project settings alone.
 
 ### Verify, update, and remove
 
@@ -208,7 +208,7 @@ The harness is a Python package, `govharness`, with a console script of the same
 
 ```bash
 git clone REPO governance-harness
-git -C governance-harness checkout ledger-202
+git -C governance-harness checkout ledger-322
 pipx install ./governance-harness/harness
 export GOVHARNESS_ROOT="$PWD/governance-harness/harness/governance"
 ```
@@ -273,12 +273,12 @@ As a git submodule, from the repository's URL:
 
 ```bash
 git submodule add https://git.example.org/governance-harness.git vendor/governance-harness
-git -C vendor/governance-harness checkout ledger-202
+git -C vendor/governance-harness checkout ledger-322
 git add .gitmodules vendor/governance-harness
-git commit -m "Vendor the governance at ledger-202"
+git commit -m "Vendor the governance at ledger-322"
 ```
 
-In place of `ledger-202`, the `checkout` takes a full commit hash. Git refuses a submodule from a path on your machine by default, because a repository could otherwise use one to copy local files into a clone. For a clone that you trust, allow it for the one command:
+In place of `ledger-322`, the `checkout` takes a full commit hash. Git refuses a submodule from a path on your machine by default, because a repository could otherwise use one to copy local files into a clone. For a clone that you trust, allow it for the one command:
 
 ```bash
 git -c protocol.file.allow=always submodule add /path/to/governance-harness vendor/governance-harness
@@ -287,7 +287,7 @@ git -c protocol.file.allow=always submodule add /path/to/governance-harness vend
 As a subtree, which copies the files into the project's history:
 
 ```bash
-git subtree add --prefix vendor/governance-harness REPO ledger-202 --squash
+git subtree add --prefix vendor/governance-harness REPO ledger-322 --squash
 ```
 
 `git subtree` takes a ref of the remote, so give it a tag or branch. It refuses an abbreviated commit hash, and a full one works only where the server allows fetching by hash.
@@ -383,6 +383,8 @@ repository is a reading copy. `govharness show ID`, `govharness find WORDS`, and
 ```
 
 Adjust the path to the option the project uses. For a project on the plugin alone, name the plugin instead of a path.
+
+The file directs the project's agents only once the human owner adopts it, by a ledger transaction that names its path and its content (STND.INSTR.11); [adoption.md](adoption.md#adopting), step 5, describes the adoption.
 
 ## Troubleshooting
 

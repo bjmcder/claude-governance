@@ -55,12 +55,13 @@ In this table, ROOT is `"${CLAUDE_PLUGIN_ROOT}/governance"`, or nothing where `G
 | Which actions need a recorded authorization? | `show ROOT PRIME.7`, `show ROOT GUARD.10`, `show ROOT GUARD.13` |
 | Before a remote write or a push | `context ROOT remote write --in-force`, `show ROOT LEX.remote-write` |
 | Before a destructive action | `context ROOT destructive action --in-force`, `show ROOT STND.DFLT.24` |
+| Before a build, an install, or a test run | `show ROOT STND.DFLT.34`, `show ROOT STND.DFLT.35`, `show ROOT STND.DFLT.25` |
 | When a line of work halts | `show ROOT PRIME.14`, `show ROOT STND.DFLT.20`, `show ROOT AGENT.15` |
 | Before a delegation | `show ROOT AGENT.11`, `show ROOT GUARD.12` |
 | What the agent instructions are | `show ROOT STND.INSTR --all` |
 | Under the defaults, where records go | `show ROOT STND.DFLT --all` |
 | What a class requires, and from which class | `show ROOT STND.CLASS.10`, `show ROOT STND.CLASS.18`, `show ROOT STND.CLASS.19` |
-| What a promotion to a more severe class owes | `show ROOT GOV.14`, `show ROOT STND.CLASS.10`, then `find ROOT CSQ2 --in-force` |
+| What a reclassification to a more severe class owes | `show ROOT GOV.14`, `show ROOT STND.CLASS.22`, `show ROOT STND.CLASS.19` |
 | What does reclassification to CSQn add? | `onset ROOT CSQn`, then `show ROOT ID` for each provision relied on |
 | Before a promotion or a release | `show ROOT QA.11`, `show ROOT QA.10`, `show ROOT GOV.50` |
 
