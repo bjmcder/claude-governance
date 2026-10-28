@@ -133,10 +133,10 @@ STND.PY.32 and STND.CXX.32 are withdrawn. STND.CXX.33 (default) stays, as C++ co
 
 > STND.CODE.34 (default; INTPR.10, VV.1), *Claims of absent undefined behavior*: "Each claim, in a report, in the record of a result or of a release, or in a review, that code of the work is free of undefined behavior or of a kind of it, or that no use of an interface of the work is able to cause undefined behavior, SHOULD state each means by which that was checked and the code, the code of dependencies included, that each means covered (INTPR.10, VV.1). Such a claim SHOULD NOT extend beyond the code and the executions that those means covered (INTPR.10, VV.1)."
 
-> STND.RUST.34 (binding; PRIME.2), *Claims of soundness*, reworded: "Each claim that STND.CODE.34 governs and that concerns Rust code of the work SHALL meet STND.CODE.34 (PRIME.2)."
+> STND.RUST.34 (binding; PRIME.2), *Claims of soundness*, reworded: "Each claim that STND.CODE.34 governs and that concerns Rust code of the work SHALL meet each sentence of STND.CODE.34 at every class, whether or not a recorded decision replaces that default (PRIME.2)."
 
 Each language keeps the strength it had:
-- Rust stays bound, through STND.RUST.34, in one sentence that cites STND.CODE.34 and does not restate it.
+- Rust stays bound at every class, CSQ4 included, through STND.RUST.34, in one sentence that cites STND.CODE.34 and does not restate it. The onset of the default and a decision that replaces it do not reach Rust code, and the class paragraph of STND.RUST says so (verification finding 1).
 - C keeps a default from CSQ2: STND.CODE.34 rests on INTPR.10, as STND.STDC.38 did. STND.STDC.38 keeps only whether the documentation of each means states that means as sound, and the Notes of STND.STDC read the record of a verification as a record of a result under STND.CODE.34 (review finding 9).
 - The other languages had no such rule. They gain a default from CSQ2, the "one provision per outcome, for every language" of D1.
 
@@ -295,3 +295,12 @@ The cold review is `review.md` in this folder. Every Defect and Should-fix is fi
 The review's verdicts on the readings put to the custodian:
 - It resolves these: 1a (first reading), 4a, 6a, 7a, 7b, 10a, 13a, 14a, and 17a. I agree with each, and they stay in this record as readings for ratification, with the reviewer's agreement noted.
 - It keeps three open: 8a, now moot (finding 7), CL7's cadence, and CL24's modes.
+
+The cold verification is `verify.md` in this folder. It confirms findings 1 to 4 and 6 to 10 closed, and finding 5 kept by ruling. It adds two findings:
+
+| # | Kind | Finding | Disposition |
+| --- | --- | --- | --- |
+| V1 | Should-fix | STND.RUST.34 bound by reference to a default that CSQ3 and CSQ4 may omit and a decision may replace | Fixed with the verifier's text: "SHALL meet each sentence of STND.CODE.34 at every class, whether or not a recorded decision replaces that default (PRIME.2)". The class paragraph of STND.RUST states this, and the rationale of STND.RUST 1.3 follows. |
+| V2 | Optional | Capital letter after a semicolon in the Notes of STND.STDC | Taken: the sentence now ends at "(c1, S33)." and "The record of a verification …" starts a new one. |
+
+After these fixes, the checks were rerun with `ROUNDS=apply_round_a_2026_10_28,apply_round_d_2026_10_28`, with the results stated under Checks.

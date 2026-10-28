@@ -342,9 +342,10 @@ STDC_DOC = [
      "the second sentence of STND.STDC.22 ask their diagnosis",
      "A compiler or analyzer that knows the library functions meets STND.CODE.35 without a wrapper. STND.CODE.35 and "
      "the second sentence of STND.STDC.22 ask their diagnosis"),
-    ("STND.STDC.38 has the record say which a verification is, and for data races one record meets it and "
+    ("proves contracts (c1, S33); STND.STDC.38 has the record say which a verification is, and for data races one "
+     "record meets it and "
      "STND.CONC.27.",
-     "The record of a verification is a record of a result under STND.CODE.34, which has a claim that rests on a "
+     "proves contracts (c1, S33). The record of a verification is a record of a result under STND.CODE.34, which has a claim that rests on a "
      "verification name its means; STND.STDC.38 has the record say which a "
      "verification is, and for data races one record meets STND.STDC.38 and STND.CONC.27."),
     ("and the binding form stays for C by the ratification of 2026-10-24, while STND.CODE.21 is the default for "
@@ -657,8 +658,9 @@ def apply_py(root: Path, at: str) -> None:
 
 # ---------------------------------------------------------------- STND.RUST 1.3
 
-RUST34_BODY = ("Each claim that STND.CODE.34 governs and that concerns Rust code of the work SHALL meet "
-               "STND.CODE.34 (PRIME.2).")
+RUST34_BODY = ("Each claim that STND.CODE.34 governs and that concerns Rust code of the work SHALL meet each "
+               "sentence of STND.CODE.34 at every class, whether or not a recorded decision replaces that default "
+               "(PRIME.2).")
 RUST31 = [(" Those static checks SHOULD also decide each provision of this standard whose compliance a static check "
            "of Rust source is able to decide (DSGN.3).", "")]
 RUST_DOC = [
@@ -708,6 +710,10 @@ RUST_DOC = [
      "suppressed at its location with its reason under STND.CODE.4, and this standard adds no table."),
     ("STND.RUST.27, STND.RUST.28, STND.RUST.30, STND.RUST.35, and the first sentence of STND.RUST.5",
      "STND.RUST.27, STND.RUST.28, and the first sentence of STND.RUST.5"),
+    ("and the first sentence of STND.RUST.5 rest on no row and apply from CSQ3.",
+     "and the first sentence of STND.RUST.5 rest on no row and apply from CSQ3. STND.RUST.34 binds for Rust code, at "
+     "every class, CSQ4 included, each sentence of STND.CODE.34, whatever the onset of that default and whether or "
+     "not a recorded decision replaces it, so the claims of Rust code bind as before the round."),
     (" STND.RUST.13 holds three modals on the responses to one failure and applies as one; it is binding, so no "
      "decision replaces it, and a project instrument only tightens it (GOV.19).", ""),
     ("STND.RUST.13 asks for the responses that PRIME.4 already requires: its second sentence reaches only a panic "
@@ -735,8 +741,8 @@ RUST_RATIONALE = (
     "second sentence keeps a record of library code from being the only visible degradation, STND.CODE.33 asks of "
     "a replaced panic hook or a defined panic handler the diagnosis that the second sentence of STND.RUST.13 asked, "
     "STND.RUST.34 binds for Rust code STND.CODE.34, which states the claims that STND.RUST.34 stated in the same "
-    "words, soundness being the claim that no use of an interface is able to cause undefined behavior, so the claims "
-    "bind in Rust as before, at the cost of one sentence for each claim (PRIME.2), STND.DEPS.13 has builds use the locked revisions, and "
+    "words, soundness being the claim that no use of an interface is able to cause undefined behavior, at every "
+    "class and whether or not a decision replaces that default, so the claims bind in Rust as before, at the cost of one sentence for each claim (PRIME.2), STND.DEPS.13 has builds use the locked revisions, and "
     "STND.CODE.28 holds the rule of names. STND.CODE.32 has the static checks decide each provision that a static "
     "check among the means of the work is able to decide, where the withdrawn sentence named each that a static "
     "check of Rust source is able to decide, a narrowing of a default. STND.RUST.6, STND.RUST.15, and STND.RUST.34 stay binding, "
