@@ -18,7 +18,7 @@ from dataclasses import dataclass
 from pathlib import PurePosixPath
 
 from govharness.core.corpus import Corpus
-from govharness.core.entry import Entry
+from govharness.core.entry import DOC_FILE, Entry
 from govharness.core.tables import HISTORY_HEADING
 from govharness.ledger.transactions import Transaction, revision_named
 
@@ -279,6 +279,35 @@ def compose(
         out = out.rstrip() + f"\n\n## The register {ident}\n\n"
         out += corpus.by_id[ident].body
     return out.rstrip() + "\n"
+
+
+def all_reading_copies(
+    corpus: Corpus, ledger: list[Transaction]
+) -> dict[PurePosixPath, str]:
+    """Compose a reading copy ``<ID>.md`` of every document (unit 0022).
+
+    Parameters
+    ----------
+    corpus : Corpus
+        Indexed corpus.
+    ledger : list[Transaction]
+        Ledger entries in order.
+
+    Returns
+    -------
+    dict[PurePosixPath, str]
+        Text by file name, one per ``_doc.md`` of the corpus, with no
+        appendix; the set the custodian's process rebuilds in the
+        repository's ``rendered/``.
+    """
+    return {
+        PurePosixPath(f"{ident}.md"): compose(
+            corpus, ledger, ReadingCopy(ident, f"{ident}.md")
+        )
+        for e in corpus.entries
+        if e.path.name == DOC_FILE
+        for ident in [str(e.meta["id"])]
+    }
 
 
 def reading_copies(

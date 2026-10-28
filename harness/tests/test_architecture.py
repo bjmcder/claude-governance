@@ -51,6 +51,7 @@ SIGNATURES = "govharness.ledger.signatures"
 LEDGER_CHECK = "govharness.checks.ledger"
 REHEARSE = "govharness.workflows.rehearse"
 SOLVE_STORE = "govharness.workflows.solve_store"
+ARGUMENTS = "govharness.cli.arguments"
 # Each effect, the calls or names that perform it, and where it may
 # happen. A prefix ending in "." admits every module of a package.
 READ_CALLS = {
@@ -101,8 +102,10 @@ EFFECTS: dict[str, tuple[str, ...]] = {
     # passed to them, and the files the cli writes.
     "write": (CHAIN, GPG, WORKFLOWS, CLI),
     "process": (GPG,),
-    # The solve cache reads the variables that name or disable it.
-    "environment": (GPG, SOLVE_STORE),
+    # The solve cache reads the variable that names it; the default
+    # corpus root is read from GOVHARNESS_ROOT in cli/arguments.py
+    # alone (unit 0022).
+    "environment": (GPG, SOLVE_STORE, ARGUMENTS),
     "temporary": (GPG, WORKFLOWS),
     "copy": (WORKFLOWS,),
     "print": (CLI, MAIN),
@@ -132,6 +135,9 @@ TRANSITIVE: dict[str, tuple[str, ...]] = {
     **{kind: (*places, MAIN) for kind, places in EFFECTS.items()},
     "read": (*EFFECTS["read"], *CALLERS),
     "write": (*EFFECTS["write"], *CALLERS),
+    # A command that takes the default root reads it through
+    # cli/arguments.py; the workflows take a root as a parameter.
+    "environment": (*EFFECTS["environment"], CLI, MAIN),
     "temporary": (*EFFECTS["temporary"], *CALLERS),
     "copy": (*EFFECTS["copy"], *CALLERS),
     "execute": (*EFFECTS["execute"], CLI, MAIN),

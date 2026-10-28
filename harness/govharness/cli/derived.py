@@ -6,7 +6,10 @@ section of named documents (``--write``) or reports every adopted
 document below LVL0 whose table differs from the derived one
 (``--check``). ``compose`` writes the reading copies of the divided
 standards into ``rendered/`` beside the corpus root (``--write``) or
-lists the stale ones (``--check``).
+lists the stale ones (``--check``); with ``--all DIR`` it writes, or
+with ``--check`` checks, a reading copy ``<ID>.md`` of every document
+in that directory, and names a Markdown file there that no document
+produces as an orphan (unit 0022).
 """
 
 from __future__ import annotations
@@ -24,7 +27,7 @@ from govharness.core.corpus import (
 )
 from govharness.core.entry import DOC_FILE
 from govharness.derive.manifests import stale_manifests
-from govharness.derive.reading_copy import reading_copies
+from govharness.derive.reading_copy import all_reading_copies, reading_copies
 from govharness.derive.references import rewrite_sections
 from govharness.ledger.chain import read_ledger
 
@@ -105,22 +108,48 @@ def run_references(args: argparse.Namespace) -> int:
     return 1 if problems else 0
 
 
-def run_compose(args: argparse.Namespace) -> int:
+def run_compose(
+    args: argparse.Namespace, parser: argparse.ArgumentParser
+) -> int:
     """Run ``compose``: write or check the reading copies.
 
     Parameters
     ----------
     args : argparse.Namespace
-        ``root`` and ``check`` (else ``write``).
+        ``root``, ``all`` (a directory, or ``None`` for the six copies
+        of ``READING_COPIES`` in ``rendered/`` beside the root), and
+        ``check`` (else write).
+    parser : argparse.ArgumentParser
+        The parser of ``compose``, for a usage error.
 
     Returns
     -------
     int
-        1 when checking finds a stale copy, else 0.
+        1 when checking finds a stale copy or, under ``--all``, an
+        orphan: a Markdown file of DIR that no document produces, named
+        in both modes and never removed; else 0. A usage error, exit 2,
+        without ``--all``, ``--check``, or ``--write``.
     """
-    copies = reading_copies(read_corpus(args.root), read_ledger(args.root))
-    # Resolved, so that a root given as "." still writes beside it.
-    folder = args.root.resolve().parent / RENDERED
+    if args.all is None and not (args.check or args.write):
+        parser.error("one of --check, --write, or --all DIR is required")
+    corpus, ledger = read_corpus(args.root), read_ledger(args.root)
+    orphans: list[str] = []
+    if args.all is not None:
+        copies, folder, shown = (
+            all_reading_copies(corpus, ledger),
+            args.all,
+            "",
+        )
+        if folder.is_dir():
+            orphans = sorted(
+                p.name
+                for p in folder.glob("*.md")
+                if PurePosixPath(p.name) not in copies
+            )
+    else:
+        copies = reading_copies(corpus, ledger)
+        # Resolved, so that a root given as "." still writes beside it.
+        folder, shown = args.root.resolve().parent / RENDERED, f"{RENDERED}/"
     stale = {
         name: text
         for name, text in copies.items()
@@ -128,9 +157,11 @@ def run_compose(args: argparse.Namespace) -> int:
     }
     if args.check:
         for name in stale:
-            print(f"stale: {RENDERED}/{name}")
+            print(f"stale: {shown}{name}")
     else:
         folder.mkdir(exist_ok=True)
         write_files(folder, stale)
+    for name in orphans:
+        print(f"orphan: {name}")
     print(f"{'stale' if args.check else 'written'}: {len(stale)}")
-    return 1 if args.check and stale else 0
+    return 1 if args.check and (stale or orphans) else 0

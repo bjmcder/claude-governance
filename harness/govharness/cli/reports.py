@@ -5,9 +5,11 @@ logic checks; only a ``FAIL`` fails the run, and ``WARN`` results are
 printed. ``check`` runs the logic checks, prints one line per check,
 and with ``--out-dir`` writes ``logic_report.md``, ``logic_facts.json``,
 and ``drafting_punch_list.md`` there; nothing is written inside the
-corpus. Both reuse checked solver results from the solve cache unless
-given ``--no-cache`` (unit 0011); what they print is the same either
-way, and an entry the cache refused is named on the standard error.
+corpus. Both reuse checked solver results from the solve cache where
+``--cache DIR`` or ``GOVHARNESS_CACHE`` names one (units 0011 and
+0022); what they print is the same either way, and an entry the cache
+refused is named on the standard error. Without a cache, ``verify``
+writes nothing anywhere.
 """
 
 from __future__ import annotations
@@ -22,6 +24,7 @@ from govharness.checks.drafting.family import all_findings, punch_list
 from govharness.checks.logic.facts import facts_of
 from govharness.checks.logic.proofs import solver_backend
 from govharness.checks.verification import Verification
+from govharness.cli.arguments import default_root
 from govharness.core.corpus import read_corpus
 from govharness.core.report import Report
 from govharness.ledger.chain import read_ledger
@@ -59,14 +62,15 @@ def _store(args: argparse.Namespace) -> SolveStore | None:
     Parameters
     ----------
     args : argparse.Namespace
-        ``no_cache`` and ``cache_dir``.
+        ``cache``.
 
     Returns
     -------
     SolveStore | None
-        The store, or ``None`` when the cache is off.
+        The store, or ``None`` when neither the option nor the
+        environment names one.
     """
-    return open_store(not args.no_cache, args.cache_dir)
+    return open_store(args.cache)
 
 
 def _report_refused(store: SolveStore | None) -> None:
@@ -143,22 +147,23 @@ def run_verify(args: argparse.Namespace) -> int:
     Parameters
     ----------
     args : argparse.Namespace
-        ``root``, ``no_logic``, ``no_z3``, ``no_cache``, and
-        ``cache_dir``.
+        ``root`` (``None`` for the default root), ``no_logic``,
+        ``no_z3``, and ``cache``.
 
     Returns
     -------
     int
-        1 if any check failed, 2 if the cache cannot be used (inside
-        the corpus, or a relative ``GOVHARNESS_CACHE_DIR``) or a file
-        cannot be read (front matter or a ledger line that does not
-        parse; the message names the file), else 0.
+        1 if any check failed, 2 if no root is known, the cache cannot
+        be used (inside the corpus, or a relative ``GOVHARNESS_CACHE``)
+        or a file cannot be read (front matter or a ledger line that
+        does not parse; the message names the file), else 0.
     """
     try:
+        root = args.root if args.root is not None else default_root()
         # Without the logic check nothing is solved, so no cache is opened.
         store = None if args.no_logic else _store(args)
         found = verify_corpus(
-            args.root,
+            root,
             logic=not args.no_logic,
             use_z3=not args.no_z3,
             cache=store or False,
@@ -206,14 +211,13 @@ def run_check(args: argparse.Namespace) -> int:
     Parameters
     ----------
     args : argparse.Namespace
-        ``root``, ``out_dir``, ``no_z3``, ``no_cache``, and
-        ``cache_dir``.
+        ``root``, ``out_dir``, ``no_z3``, and ``cache``.
 
     Returns
     -------
     int
         1 if any check failed, 2 if the cache cannot be used (inside
-        the corpus, or a relative ``GOVHARNESS_CACHE_DIR``), else 0.
+        the corpus, or a relative ``GOVHARNESS_CACHE``), else 0.
     """
     try:
         store = usable_store(args.root, _store(args) or False)

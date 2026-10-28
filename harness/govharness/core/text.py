@@ -95,25 +95,6 @@ def prose_lines(body: str) -> list[str]:
     return lines
 
 
-def sentences_of(body: str) -> list[str]:
-    """Return the sentences of a body, quoted spans left in place.
-
-    Parameters
-    ----------
-    body : str
-        Markdown body.
-
-    Returns
-    -------
-    list[str]
-        Sentences of its prose lines, in order.
-    """
-    found: list[str] = []
-    for line in prose_lines(body):
-        found.extend(split_sentences(line))
-    return found
-
-
 def unquoted(sentence: str) -> str:
     """Remove quoted spans: a quoted expression is mentioned, not used.
 
