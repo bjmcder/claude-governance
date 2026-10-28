@@ -201,12 +201,14 @@ pipx install ./governance-harness/harness
 export GOVHARNESS_ROOT="$PWD/governance-harness/harness/governance"
 ```
 
-In place of `pipx`, a virtual environment works too:
+The argument of `pipx install` is the path of the directory that holds `pyproject.toml`; a bare name, such as `pipx install harness`, asks the Python Package Index instead. In place of `pipx`, a virtual environment works too:
 
 ```bash
 python3 -m venv .venv
 .venv/bin/pip install ./governance-harness/harness
 ```
+
+To work on the harness code itself, an editable install from the root of the clone picks up each change without reinstalling: `pip install --no-deps -e harness`, inside a virtual environment.
 
 `GOVHARNESS_ROOT` names the corpus that `show`, `find`, `context`, `pairs`, and `verify` read when no corpus is named on the command line. Set it in your shell profile, or, for Claude Code, under `env` in a settings file:
 
@@ -227,10 +229,10 @@ govharness show GOV.38
 govharness verify
 ```
 
-`show` prints GOV.38. `verify` runs every check of the corpus and passes, printing one warning, g.18, on three provisions of STND.DRAFT whose three modals the custodian reviewed. By default `verify` keeps a cache of solver results under `~/.cache/govharness/`; `--no-cache` runs without it. A two-second subset of the tests runs from `governance-harness/harness`:
+`show` prints GOV.38. `verify` runs every check of the corpus and passes, printing one warning, g.18, on three provisions of STND.DRAFT whose three modals the custodian reviewed. It writes nothing unless a cache of solver results is named, by `--cache DIR` or by `GOVHARNESS_CACHE`, which must be an absolute path outside the corpus; with a cache, later runs are about a second faster. [operating.md](operating.md#checking-the-corpus) says more about both commands. A subset of the tests runs in under ten seconds from `governance-harness/harness`:
 
 ```bash
-python3 -B -m unittest tests.query.test_retrieval tests.cli.test_main
+python3 -B -m unittest tests.query.test_retrieval tests.cli.test_main tests.test_architecture tests.test_conventions
 ```
 
 ### Update and uninstall
@@ -243,7 +245,7 @@ git -C governance-harness checkout <new tag>
 pipx install --force ./governance-harness/harness
 ```
 
-The last command matters only when the harness code changed. To uninstall, run `pipx uninstall` with the name that `pipx list` shows, unset `GOVHARNESS_ROOT`, and delete the clone.
+The last command matters only when the harness code changed. To uninstall, run `pipx uninstall govharness`, unset `GOVHARNESS_ROOT`, and delete the clone.
 
 ## 4. A vendored copy
 
@@ -301,7 +303,7 @@ The corpus is plain Markdown and needs no program to read. A copy of this reposi
 
 - [`rendered/`](../rendered/LVL0.md) holds a reading copy of every document, named by identifier. Start with `LVL0.md`.
 - [`harness/governance/README.md`](../harness/governance/README.md) maps each identifier to its file: `GOV.38` is `harness/governance/GOV/38.md`.
-- [`harness/README.md`](../harness/README.md), in its section on reading and applying the corpus without software, gives each check by hand with `sha256sum`, `sed`, and `gpg`.
+- [`harness/README.md`](../harness/README.md#reading-and-applying-the-corpus-without-software), in its section on reading and applying the corpus without software, gives each check by hand with `sha256sum`, `sed`, and `gpg`.
 
 To confirm that a file is unchanged, compare its hash with its row in the manifest of its directory:
 
@@ -350,9 +352,12 @@ Adjust the path to the option the project uses. For a project on the plugin alon
 | --- | --- |
 | `No module named govharness` | `PYTHONPATH` must name the `harness` directory, the one that contains `govharness/`, not the corpus |
 | A syntax error on start | Python is older than 3.11; `python3 --version` shows which |
-| `error: argument root: ... no such directory`, exit status 2 | The corpus path is wrong, or `GOVHARNESS_ROOT` is unset where no root is given |
+| `error: argument root: ... no such directory`, exit status 2 | The corpus path on the command line is wrong |
+| `no corpus root: give ROOT, set GOVHARNESS_ROOT, or run where ./governance exists`, exit status 2 | No corpus is named, `GOVHARNESS_ROOT` is unset, and the working directory has no `governance/` |
+| `GOVHARNESS_ROOT=...: no such directory`, exit status 2 | `GOVHARNESS_ROOT` names a directory that does not exist |
 | `find` prints "no item holds a word of", exit status 1 | No item uses those words; the corpus's own terms match best, such as "remote write" rather than "push" |
 | The `/governance:` skills do not appear | Open the Errors tab of `/plugin`, then run `/reload-plugins`. A project-scope plugin loads only after the workspace trust dialog is accepted |
 | "enabled in project settings but isn't installed here" | Run `claude plugin install governance@governance-harness --scope project` once |
 | An update changes nothing | Run `claude plugin marketplace update governance-harness` first. With a `#ref` or `ref` pin, only commits on that ref arrive |
-| `verify` writes under `~/.cache/govharness/` | That is its solver cache; `--no-cache` turns it off, and deleting the directory costs only time |
+| `refused: GOVHARNESS_CACHE must be an absolute path` | Give the cache directory as an absolute path, or unset the variable to run without a cache |
+| `refused: the solve cache ... lies inside the corpus` | Name a cache directory outside the corpus, or none |

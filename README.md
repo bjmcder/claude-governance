@@ -10,6 +10,7 @@ A governance corpus for computational and cyber-physical systems whose outputs o
 | The human owner of a project | [docs/adoption.md](docs/adoption.md) |
 | Working day to day in a project | [docs/operating.md](docs/operating.md) |
 | The custodian of the corpus | [docs/custodian-guide.md](docs/custodian-guide.md) |
+| Maintaining the repository or the harness | [docs/architecture.md](docs/architecture.md), then [harness/README.md](harness/README.md) |
 | An agent working on this repository | [for-agents/README.md](for-agents/README.md) |
 | Reading the governance itself | [rendered/LVL0.md](rendered/LVL0.md), then the other reading copies in `rendered/` |
 
@@ -17,18 +18,7 @@ A governance corpus for computational and cyber-physical systems whose outputs o
 
 ## Layout
 
-| Path | What it is |
-| --- | --- |
-| `harness/` | The Claude Code plugin and the harness: the corpus in `governance/`, the Python package `govharness/`, its tests, its skills, and the records of its development ([harness/README.md](harness/README.md)) |
-| `.claude-plugin/marketplace.json` | The marketplace that lists the plugin |
-| `rendered/` | A reading copy of every document, named by identifier |
-| `docs/` | Documentation for people |
-| `for-agents/` | Material for agents working on this repository; not part of the plugin |
-| `CLAUDE.md`, `AGENTS.md`, `CUSTODIAN.md` | Short pointers to `for-agents/`; `CUSTODIAN.md` keeps the path that earlier records cite |
-| `review-records/` | The records of each round of review |
-| `research/` | Research notes that the Notes of the standards cite |
-| `tools/` | The amendment scripts that produced the ledger entries, and two checking scripts |
-| `OPEN-ITEMS.md` | Work the custodian has directed, and items that ratified rounds left open |
+`harness/` holds the corpus, the harness package, and the Claude Code plugin; `docs/` holds the documentation for people, and `for-agents/` the material for agents working on this repository. [docs/architecture.md](docs/architecture.md) describes each part of the repository and of the harness package.
 
 ## Quick check
 

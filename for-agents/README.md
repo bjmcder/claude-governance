@@ -13,7 +13,8 @@ Other places an agent in this repository reads:
 | --- | --- |
 | `harness/governance/` | The corpus, the system of record, with its ledger `ledger.jsonl` |
 | `rendered/` | A reading copy of every document, named by identifier |
-| `harness/README.md` | The harness commands and the checks of `verify` |
+| `harness/README.md` | The harness commands, the checks of `verify`, the checks by hand, and the tests |
+| `docs/architecture.md` | The layout of the repository and of the harness package |
 | `OPEN-ITEMS.md` | Work the custodian has directed, and items left open |
 | `review-records/<round>/` | The records of each round: its decisions, briefs, drafts, reviews, and verifications |
 | `tools/amendment-scripts/` | The scripts that produced the ledger entries, and their helpers |

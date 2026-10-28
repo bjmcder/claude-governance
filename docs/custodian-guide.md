@@ -17,7 +17,7 @@ A round is one set of related amendments, from your direction to the applied led
 3. Agents of another configuration from the author review the draft cold, and review the pairs of provisions that STND.HARN.28 lists for the changed documents.
 4. The author fixes what the reviews find, and a further agent verifies the fixes cold. A round that spans several documents gets a review across them.
 5. The round comes to you for ratification, with the questions that only you can answer.
-6. After you ratify, the script is applied to the live corpus, the reading copies are rebuilt, and `harness/README.md` and `OPEN-ITEMS.md` are brought up to date.
+6. After you ratify, the script is applied to the live corpus, the reading copies are rebuilt, and `OPEN-ITEMS.md` is brought up to date, as is `harness/README.md` where a command or a check that it describes changed.
 
 The full process, with the drafting checks and the rule for when a provision binds, is in [for-agents/standing-process.md](../for-agents/standing-process.md).
 

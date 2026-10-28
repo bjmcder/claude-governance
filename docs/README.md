@@ -12,6 +12,7 @@ The corpus in `harness/governance/` is the system of record. Every adoption and 
 | [adoption.md](adoption.md) | The human owner of a project | Setting and raising the consequence class, what the human is asked to do at each class, and the known limitations of the corpus as it stands |
 | [operating.md](operating.md) | People and agents working in a project | Querying the corpus, updating the plugin, and pinning a revision |
 | [custodian-guide.md](custodian-guide.md) | The custodian | How the corpus is amended and how a round of review runs |
+| [architecture.md](architecture.md) | Maintainers of the repository or the harness | The layout of the repository and of the harness package |
 
 ## Reading copies
 
@@ -24,7 +25,7 @@ Two sets of reading copies sit beside the corpus. Both are composed from it, and
 
 | Path | What it is |
 | --- | --- |
-| [`harness/README.md`](../harness/README.md) | The harness: its commands, the checks that `verify` runs, and how to read and check the corpus by hand |
+| [`harness/README.md`](../harness/README.md) | The reference for the harness: every command, the checks that `verify` runs, how to read and check the corpus by hand, and the tests |
 | [`harness/governance/README.md`](../harness/governance/README.md) | How to find any provision by its identifier, without software |
 | [`for-agents/`](../for-agents/README.md) | Material for agents that work on this repository |
 | `review-records/`, `harness/records/` | The records of each round of review and of each unit of work on the harness |

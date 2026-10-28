@@ -20,7 +20,7 @@ This guide is for the human owner of a project: the person accountable for the w
        --rationale "Classification: CSQ3. Credible consequence: ... Reliance: ... Row of STND.CLASS.1: CSQ3."
    ```
 
-   The first argument is the corpus, which the command reads and leaves unchanged. With the plugin alone, the same command runs as `PYTHONPATH="<installPath>" python3 -B -m govharness ledger append "<installPath>/governance" ...`, with `installPath` from `claude plugin list --json`. Without the harness, the entry is one line of JSON with the fields of STND.HARN.7, and [`harness/README.md`](../harness/README.md) shows how to compute its hash by hand. Until a class is recorded, an agent that needs it halts that line of work and refers it to you (GOV.13).
+   The first argument is the corpus, which the command reads and leaves unchanged. With the plugin alone, the same command runs as `PYTHONPATH="<installPath>" python3 -B -m govharness ledger append "<installPath>/governance" ...`, with `installPath` from `claude plugin list --json`. Without the harness, the entry is one line of JSON with the fields of STND.HARN.7, and [`harness/README.md`](../harness/README.md#reading-and-applying-the-corpus-without-software) shows how to compute its hash by hand. Until a class is recorded, an agent that needs it halts that line of work and refers it to you (GOV.13).
 
 5. Tell the project's agents where the governance is. Under the defaults, the agent instructions are the provisions of STND.INSTR (STND.DFLT.21). A few lines in the project's `AGENTS.md` or `CLAUDE.md` name the corpus and the records; [installation.md](installation.md#pointing-other-agents-at-the-governance) has an example.
 
