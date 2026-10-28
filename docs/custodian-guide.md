@@ -59,7 +59,7 @@ Projects pin a revision of this repository by tag, branch, or commit ([installat
 
 ```bash
 tail -n 1 harness/governance/ledger.jsonl | python3 -c 'import json,sys; print(json.load(sys.stdin)["seq"])'
-git tag -a ledger-322 -m "Governance at ledger entry 322"
+git tag -a ledger-324 -m "Governance at ledger entry 324"
 ```
 
 A project that follows a branch receives every commit; one that pins a tag moves only when it changes the tag.
