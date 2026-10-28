@@ -10,6 +10,7 @@ import unittest
 from pathlib import Path
 
 from govharness.cli.main import main
+from govharness.core.corpus import read_corpus
 from govharness.derive.reading_copy import (
     READING_COPIES,
     ReadingCopy,
@@ -172,6 +173,79 @@ class ReadingCopies(unittest.TestCase):
         """
         root = Path(__file__).resolve().parents[2] / "governance"
         self.assertEqual(run("compose", str(root), "--check")[0], 0)
+
+    def test_compose_all_writes_every_document(self) -> None:
+        """Behavior: ``compose ROOT --all DIR`` writes a reading copy
+        ``<ID>.md`` of every document into DIR, ``--check`` then
+        passes, an edited provision makes its copy stale and the check
+        names it, a Markdown file of DIR that no document produces is
+        named as an orphan and fails the check without being removed,
+        and ``compose`` without ``--all``, ``--check``, or ``--write``
+        is a usage error.
+
+        Reference: a copy of the corpus, whose documents are its
+        ``_doc.md`` files; an injected edit of STND/DFLT/1.md; a stray
+        ``NOPE.md`` (unit 0022, HR-6).
+        """
+        with corpus_copy() as root:
+            out_dir = root.parent / "all"
+            documents = sorted(
+                str(e.meta["id"])
+                for e in read_corpus(root).entries
+                if e.path.name == "_doc.md"
+            )
+            self.assertGreater(len(documents), 70)
+            code, out = run("compose", str(root), "--all", str(out_dir))
+            self.assertEqual((code, out), (0, f"written: {len(documents)}\n"))
+            written = sorted(p.name for p in out_dir.iterdir())
+            self.assertEqual(written, sorted(f"{d}.md" for d in documents))
+            self.assertEqual(
+                run("compose", str(root), "--all", str(out_dir), "--check"),
+                (0, "stale: 0\n"),
+            )
+            provision = root / "STND" / "DFLT" / "1.md"
+            provision.write_text(provision.read_text() + " Edited.")
+            code, out = run(
+                "compose", str(root), "--all", str(out_dir), "--check"
+            )
+            self.assertEqual(
+                (code, out), (1, "stale: STND.DFLT.md\nstale: 1\n")
+            )
+            code, _ = run("compose", str(root), "--all", str(out_dir))
+            self.assertEqual(code, 0)
+            (out_dir / "NOPE.md").write_text("stray\n", encoding="utf-8")
+            code, out = run(
+                "compose", str(root), "--all", str(out_dir), "--check"
+            )
+            self.assertEqual((code, out), (1, "orphan: NOPE.md\nstale: 0\n"))
+            self.assertTrue((out_dir / "NOPE.md").exists())
+            err = io.StringIO()
+            with (
+                contextlib.redirect_stderr(err),
+                self.assertRaises(SystemExit) as stop,
+            ):
+                main(["compose", str(root)])
+            self.assertEqual(stop.exception.code, 2)
+            self.assertIn("--all DIR", err.getvalue())
+
+    def test_repository_rendered_copies_are_current(self) -> None:
+        """Behavior: ``compose --all`` of the live corpus against the
+        repository's ``rendered/`` reports no stale copy and no orphan,
+        so the committed set is exactly one copy per document.
+
+        Reference: ``REPO/rendered/``, the reading copies the
+        custodian's process rebuilds (CUSTODIAN.md step 8; unit 0022,
+        HR-6); regression guard.
+        """
+        repo = Path(__file__).resolve().parents[3]
+        code, out = run(
+            "compose",
+            str(repo / "harness" / "governance"),
+            "--all",
+            str(repo / "rendered"),
+            "--check",
+        )
+        self.assertEqual((code, out), (0, "stale: 0\n"))
 
 
 if __name__ == "__main__":

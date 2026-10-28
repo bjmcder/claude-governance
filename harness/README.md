@@ -2,26 +2,30 @@
 
 A plain directory tree holds the governance. One small package, `govharness`, serves it: it fetches what applies to a question, an item with its cross references or the governance on a topic, so that a reader, human or agent, loads only that, and it keeps the corpus consistent. The code is a convenience, not the governance, and no work depends on it. If it is lost, `governance/` remains complete and readable (GOV.38, INTPR.12); the section below on reading without software says how.
 
-The harness enforces nothing on an agent: it derives no environment configuration and installs no hook (unit 0018). STND.HARN.18 to STND.HARN.23 and STND.HARN.29 govern a configuration that a harness derives, so none of them applies to this one, and the provisions of STND.DFLT that such a configuration would displace apply in full.
+The harness enforces nothing on an agent: it derives no environment configuration and installs no hook (unit 0018), and the provisions of STND.DFLT apply in full.
 
 ## Fetching governance
 
 ```bash
-python -B -m govharness show governance STND.INSTR.4              # text, what governs it, what it cites, what cites it
-python -B -m govharness show governance LVL0#normative-language   # one section of a document
-python -B -m govharness show governance STND.DFLT                 # a document: its sections and items, named
-python -B -m govharness find governance destructive action        # ranked items and sections, one line each
-python -B -m govharness context governance remote write --budget 6000 --in-force
-                                                                  # the governance on a topic, within a budget
+python3 -B -m govharness show governance STND.INSTR.4              # text, what governs it, what it cites, what cites it
+python3 -B -m govharness show governance LVL0#normative-language   # one section of a document
+python3 -B -m govharness show governance STND.DFLT                 # a document: its sections and items, named
+python3 -B -m govharness show governance STND.PY --all             # a document with each of its provisions, whole
+python3 -B -m govharness find governance destructive action        # ranked items and sections, one line each
+python3 -B -m govharness context governance remote write --budget 6000 --in-force
+                                                                   # the governance on a topic, within a budget
 ```
 
-`find` and `context` take keywords: each word matches its other forms ("deleting" finds "deletion"), the items holding every word come first, and where none holds every word, those holding the most. `show --expand` adds the text of what an item cites. Texts are returned whole or named (STND.HARN.1 to STND.HARN.3). An agent uses these commands instead of reading or searching the corpus files; they change nothing.
+`find` and `context` take keywords: each word matches its other forms ("deleting" finds "deletion"), the items holding every word come first, and where none holds every word, those holding the most; provisions, terms, and Terms sections rank above Notes and other prose, and a document identifier also matches the provisions and sections below it (unit 0022). `show --expand` adds the text of what an item cites. Texts are returned whole or named (STND.HARN.1 to STND.HARN.3), except that `context` cuts a Notes or other prose section larger than its whole budget and marks the cut. An agent uses these commands instead of reading or searching the corpus files; they change nothing and write nothing.
+
+Installed (`pip install --no-deps -e harness`, or `pipx install harness`; `harness/pyproject.toml`, standard library only, Python 3.11 or later), the same commands are `govharness show STND.INSTR.4`, `govharness find destructive action`, and `govharness context remote write --in-force`: the root is omitted on `show`, `find`, `context`, `pairs`, and `verify`, and is then `$GOVHARNESS_ROOT`, else `./governance` where it exists; with neither, the command exits 2 with one line naming the variable. The positional root still works, and for `find` and `context` the first argument is the root only where a directory of that name exists. One rule of exit codes holds across `show`, `find`, `context`, and `pairs`: 0 when something was found, 1 when nothing was, with the message on the standard error, and 2 for a usage error; `show` resolves an identifier in the wrong case. After installation, the fast test subset, under 10 s from `harness/`, is `python3 -B -m unittest tests.query.test_retrieval tests.cli.test_main tests.test_architecture tests.test_conventions`; the full suite takes about six minutes.
 
 ## Layout
 
 ```text
 harness/
 ├── README.md                 this file
+├── pyproject.toml            installs the package and the command govharness (unit 0022)
 ├── governance/               the corpus (see governance/README.md)
 │   ├── MANIFEST.csv          root manifest (lists top-level mnemonics)
 │   ├── ledger.jsonl          append-only, hash-chained transactions
@@ -36,7 +40,8 @@ harness/
 │   ├── MNEM/                 the mnemonic register
 │   ├── KNOW/  TAG/{FIELD,PROB,METH,HW,QTY,ACTV,COMP}/
 │   └── _PROJECT/NAME/        LVL3 project template
-├── rendered/                 reading copies of six standards (compose --write)
+├── rendered/                 reading copies of six standards (compose --write); the
+│                             copy of every document is REPO/rendered/ (compose --all)
 ├── govharness/               the harness code, one layered package (decision 0001)
 │   ├── __main__.py           python -m govharness <command>
 │   ├── core/                 layer 0
@@ -78,7 +83,7 @@ harness/
 │   ├── derive/               layer 2, returns {path: text}, writes nothing
 │   │   ├── manifests.py      every MANIFEST.csv
 │   │   ├── references.py     each document's References table
-│   │   └── reading_copy.py   the reading copy of each divided standard
+│   │   └── reading_copy.py   the reading copy of each divided standard, or of every document
 │   ├── workflows/            layer 3
 │   │   ├── amend.py          amendment primitives: replace text, raise a
 │   │   │                     revision, record a transaction and verify
@@ -155,49 +160,51 @@ The ledger holds 202 transactions: 48 `adopt`, 123 `amend`, 17 `register`, 3 `re
 
 ## Commands
 
-Python 3.11+, standard library only. Run from this directory:
+Python 3.11+, standard library only. Run from this directory, or installed as `govharness` from anywhere (above):
 
 ```bash
-python -B -m govharness verify governance            # every check; exit 1 on failure
-python -B -m govharness verify --no-logic governance # structural checks only
-python -B -m govharness check governance --out-dir <scratch>   # logic report
-python -B -m govharness verify --no-cache governance # solve every claim afresh
-python -B -m govharness manifests governance --check # list stale manifests
-python -B -m govharness manifests governance --write # regenerate manifests
-python -B -m govharness references governance --check          # References tables
-python -B -m govharness references governance --write STND.DRAFT   # write one
-python -B -m govharness ledger append governance --type adopt --actor NAME \
+python3 -B -m govharness verify governance            # every check; exit 1 on failure
+python3 -B -m govharness verify --no-logic governance # structural checks only
+python3 -B -m govharness check governance --out-dir <scratch>   # logic report
+python3 -B -m govharness verify governance --cache <dir>  # reuse checked solver results
+python3 -B -m govharness manifests governance --check # list stale manifests
+python3 -B -m govharness manifests governance --write # regenerate manifests
+python3 -B -m govharness references governance --check          # References tables
+python3 -B -m govharness references governance --write STND.DRAFT   # write one
+python3 -B -m govharness ledger append governance --type adopt --actor NAME \
     --role custodians --authority GOV.41 --targets STND.DRAFT --scope STND/DRAFT \
     --rationale "Adoption of STND.DRAFT, revision 1.0, ..."
-python -B -m govharness sign check governance/ledger.jsonl --ledger-id governance \
+python3 -B -m govharness sign check governance/ledger.jsonl --ledger-id governance \
     --corpus governance                              # verify signatures
-python -B -m govharness compose governance --check   # stale reading copies
-python -B -m govharness compose governance --write   # regenerate rendered/
-python -B -m govharness rehearse governance amendment.py  # dry run on a copy
-python -B -m govharness pairs governance NUMER       # pairs to review before a change (STND.HARN.28)
-python -B -m unittest discover -s tests -t .         # every test
+python3 -B -m govharness compose governance --check   # stale reading copies
+python3 -B -m govharness compose governance --write   # regenerate rendered/
+python3 -B -m govharness compose governance --all ../rendered --check  # every document's copy
+python3 -B -m govharness rehearse governance amendment.py  # dry run on a copy
+python3 -B -m govharness pairs governance NUMER       # pairs to review before a change (STND.HARN.28)
+python3 -B -m unittest discover -s tests -t .         # every test: 200 tests, about 340 s
 ```
 
 | Command | Purpose |
 | --- | --- |
-| `show ROOT ID [--expand]` | Print an item or section (`ID` is an identifier or a locator) with what governs it, what it cites, and what cites it; a document is shown as its lead text and the names of its sections and items |
-| `find ROOT WORD... [--limit N] [--in-force]` | List the items and sections holding the most of the words, best first, one line each; exit 1 when none holds any |
-| `context ROOT WORD... [--budget N] [--in-force]` | Print the best matches and the items they cite, each whole while the budget of characters lasts, and name the rest |
-| `verify [--no-logic] [--no-z3] [--no-cache \| --cache-dir DIR] ROOT` | Run the structural checks and the logic checks; print a summary; exit 1 on a failure; exit 2 when the cache cannot be used, or a file's front matter or a ledger line cannot be read, naming the file; reuse checked solver results from the solve cache unless `--no-cache` (below) |
-| `check ROOT [--out-dir DIR] [--no-z3] [--no-cache \| --cache-dir DIR]` | Run the logic checks, one line each; with `--out-dir`, write `logic_report.md`, `logic_facts.json`, and `drafting_punch_list.md` there; the solve cache as for `verify` |
+| `show [ROOT] ID [--expand] [--all]` | Print an item or section (`ID` is an identifier or a locator, in any case) with what governs it, what it cites, and what cites it, each citing provision, term, entry, and tag on its own line and the citing sections folded into one line per document; a document is shown as its lead text and the names of its sections and items, and with `--all` each item it holds follows, whole, in id order, under its own heading; exit 1 when no item has the identifier |
+| `find [ROOT] WORD... [--limit N] [--in-force]` | List the items and sections holding the most of the words, best first, one line each: provisions, terms, entries, and tags before Terms sections, before Notes and other prose; a document identifier among the words matches what lies below it; exit 1 when none holds any |
+| `context [ROOT] WORD... [--budget N] [--in-force]` | Print the best matches and the items they cite, each whole while the budget of characters lasts, and name the rest; a prose section larger than the whole budget is cut to what is left, with a marker; exit 1 when no item holds a word |
+| `verify [--no-logic] [--no-z3] [--cache DIR] [ROOT]` | Run the structural checks and the logic checks; print a summary; exit 1 on a failure; exit 2 when no root is known, the cache cannot be used, or a file's front matter or a ledger line cannot be read, naming the file; reuse checked solver results from the solve cache only where `--cache DIR` or `GOVHARNESS_CACHE` names one (below), and otherwise write nothing |
+| `check ROOT [--out-dir DIR] [--no-z3] [--cache DIR]` | Run the logic checks, one line each; with `--out-dir`, write `logic_report.md`, `logic_facts.json`, and `drafting_punch_list.md` there; the solve cache as for `verify` |
 | `manifests ROOT (--check \| --write)` | List the stale manifests, or regenerate them |
 | `references ROOT (--check \| --write ID ...)` | Report each adopted document whose References table is wrong (g.25), or write the tables of the named documents (STND.DRAFT.34). The table holds a row for each cited document, a document that the text names by its bare identifier included (the term Cited document of STND.DRAFT), and a citation of a withdrawn provision counts for the document that withdrew it |
 | `compose ROOT (--check \| --write)` | List the stale reading copies of STND.DFLT, STND.INSTR, STND.DRAFT, STND.IDENT (with the register MNEM), STND.CLASS, and STND.HARN, or write them into `rendered/` beside ROOT; each header names every revision and its ledger entry |
+| `compose ROOT --all DIR [--check]` | Write a reading copy `<ID>.md` of every document into DIR, or with `--check` list the stale ones; a Markdown file of DIR that no document produces is named as an orphan, never removed, and fails the check; the repository's `rendered/` is this set, rebuilt after each round (CUSTODIAN.md step 8) |
 | `ledger append ROOT --type ... --rationale ...` | Check the existing chain (sequence numbers, links, hashes), refuse a broken one, and append one hash-chained transaction, synced to disk, under an exclusive lock of the ledger file; `--sign KEY [--gnupg-home DIR]` signs it; `--ledger-file PATH --ledger-id ID` appends to a work ledger. An entry that would fail `verify` for good is refused, and nothing is written: an unsigned entry whose actor the signer register requires to sign it (use `--sign`), an unsigned transaction whose scope names `SIGNR` while the register exists (the anchor key signs the founding and a listed signer every later change), a register transaction while the register has problems, a scope other than that of an older pin whose content it shares (STND.HARN.9 keeps that pin in force; record the change with its scope), a file name with a control character under the scope, and a line that does not read back as the entry (unit 0016) |
 | `sign found ROOT --date ... --role ... --name ... --key-file ...` | Found the signer register SIGNR with its first key |
 | `sign add-signer REGISTER --ledger ... --role ... --name ... --key-file ...` | Add a signer and its public key |
 | `sign close-signer REGISTER --ledger ... --fingerprint ... --last-entry N` | Set the last entry a key may sign on a ledger, closing each open row of that key and ledger |
 | `sign require REGISTER --ledger ... --actor ... --from-entry N` | Require an actor's signature from an entry on |
 | `sign check LEDGER --ledger-id ID --corpus ROOT [--signer-config PATH]` | Check the chain and verify the signatures of the corpus ledger and, for a work ledger, of that ledger; fail if the corpus has no signer register, or if the corpus ledger lacks the entry that the head pin of the signer configuration names (below) |
-| `pairs ROOT ID [--amends LVL0_ID ...]` | List, as a Markdown table, each pair of provisions that STND.HARN.28 puts to review before a change of the document `ID`: one provision on the changed side (the document, and for a change of LVL0 every provision instantiating a provision named by `--amends`), the other in another document in force, at least one in a profile or sub-profile, given for one matter by the shared-matters tables or instantiating one LVL0 provision outside GOV and PRIN; exit 2 when `ID` is not in the corpus |
+| `pairs [ROOT] ID [--amends LVL0_ID ...]` | List, as a Markdown table, each pair of provisions that STND.HARN.28 puts to review before a change of the document `ID`: one provision on the changed side (the document, and for a change of LVL0 every provision instantiating a provision named by `--amends`), the other in another document in force, at least one in a profile or sub-profile, given for one matter by the shared-matters tables or instantiating one LVL0 provision outside GOV and PRIN; exit 1 when `ID` is not in the corpus |
 | `rehearse ROOT SCRIPT` | Copy the corpus into a new temporary directory, run the script's `apply(root)` on the copy, verify the copy, print the entries the script appended and the verify summary, and fail if any file or directory of the source changed (the root is resolved first, so a script that changes the working directory cannot redirect the comparison) |
 
-Every `ROOT` (and `--corpus`) must be an existing directory; any other path is a usage error, exit 2.
+Every `ROOT` (and `--corpus`) must be an existing directory; any other path is a usage error, exit 2. Where `ROOT` is optional, an omitted one is `$GOVHARNESS_ROOT`, else `./governance`.
 
 The regression guard `tests/equivalence/run_equivalence.py` compares the package with the pre-package scripts in `archive/tools-flat/`. That directory is not part of this repository, so the guard stops with an error here; the unit tests do not depend on it.
 
@@ -272,7 +279,7 @@ Facts are read from the provision text and front matter, never from a hand-kept 
 
 The built-in DPLL solver needs no installation. Its unit propagation watches two literals of each clause, so it visits only the clauses that an assignment can make unit or false, and it splits in a fixed order: the first unassigned variable of the first clause not yet satisfied, in the order the clauses are built, false before true. Propagation reaches the same assignment, or a conflict, in whatever order it visits the clauses, so the solver gives the same statuses, models, and cores as the solver it replaced, which rescanned every clause on each pass (unit 0009); `tests/checks/test_satlib.py` compares it with brute force and with that solver on 3000 seeded random formulas. With it, `verify` of the corpus takes about 3 s where it took about 11 s on the same machine (unit 0009). `z3` is used only if it is already importable; both give the same statuses.
 
-The solve cache (unit 0011) keeps the result of each solve under a SHA-256 key of everything the result depends on: every clause in order, with its name and its literals in order (the claim enters as the clause of its negation), the backend and z3's version, and a digest of the source of `satlib.py`, `solvecache.py`, and `core/hashing.py`. A change of any of them is a new key and a full solve, so a transaction that leaves the authority-tier statements and LVL0's precedence and waivers as they were reuses every result, across rehearsal copies too. An entry holds the status, the backend, the model as bits, and the core as positions in the clause set, and no corpus text. It is reused only after a check against the clause set, so a planted or damaged entry can change no verdict: a model must satisfy every clause, and a core must be exactly the one the built-in solver's minimisation finds, which takes one search per core fact instead of one per fact. A core found by z3 is neither saved nor reused: it cannot be checked to be the one a fresh z3 run would list, and z3 finds it again quickly; a z3 model is reused after the same check as any model. An entry that fails, or a file that is no plain entry (a link, a pipe, too large), is named on the standard error and recomputed; the standard output is the same with a cold cache, a warm one, or none. The cache lies in `--cache-dir DIR`, else `$GOVHARNESS_CACHE_DIR`, else `govharness/solves` under `$XDG_CACHE_HOME` or `~/.cache`; `--no-cache` or `GOVHARNESS_NO_CACHE=1` (which also reaches `rehearse` and amendment scripts) turns it off. A directory inside the corpus, through `..` or a link too, and a relative `GOVHARNESS_CACHE_DIR` are refused, by `record_transaction` and `rehearse` before they write anything; a relative `--cache-dir` is taken from the working directory. `verify`, `check`, `rehearse`, and `record_transaction` use the cache; a library call of `verify_corpus` does not unless passed `cache=True`. Deleting it costs only time. With a warm cache, `verify` of the corpus takes about 2.0 s where it takes about 3.0 s without (unit 0011). `tests/checks/test_logic.py` damages an in-memory copy of the corpus in 21 ways and asserts the named check fails, so a passing run means the checks can fail; its class `HeldBehavior` also holds the details of b.3 and c.4, the d checks that only list, and the proofs f.2 to f.8, each shown to fail once the clause that forces it is removed (unit 0017).
+The solve cache (unit 0011) keeps the result of each solve under a SHA-256 key of everything the result depends on: every clause in order, with its name and its literals in order (the claim enters as the clause of its negation), the backend and z3's version, and a digest of the source of `satlib.py`, `solvecache.py`, and `core/hashing.py`. A change of any of them is a new key and a full solve, so a transaction that leaves the authority-tier statements and LVL0's precedence and waivers as they were reuses every result, across rehearsal copies too. An entry holds the status, the backend, the model as bits, and the core as positions in the clause set, and no corpus text. It is reused only after a check against the clause set, so a planted or damaged entry can change no verdict: a model must satisfy every clause, and a core must be exactly the one the built-in solver's minimisation finds, which takes one search per core fact instead of one per fact. A core found by z3 is neither saved nor reused: it cannot be checked to be the one a fresh z3 run would list, and z3 finds it again quickly; a z3 model is reused after the same check as any model. An entry that fails, or a file that is no plain entry (a link, a pipe, too large), is named on the standard error and recomputed; the standard output is the same with a cold cache, a warm one, or none. The cache is opt-in (unit 0022): it lies in `--cache DIR`, else `$GOVHARNESS_CACHE` (which also reaches `rehearse` and amendment scripts), and where neither names a directory there is none, so a read-only command writes nothing anywhere, whatever the home directory holds. A directory inside the corpus, through `..` or a link too, and a relative `GOVHARNESS_CACHE` are refused, by `record_transaction` and `rehearse` before they write anything; a relative `--cache` is taken from the working directory. `verify`, `check`, `rehearse`, and `record_transaction` use the cache; a library call of `verify_corpus` does not unless passed `cache=True`. Deleting it costs only time. With a warm cache, `verify` of the corpus takes about 2.0 s where it takes about 3.0 s without (unit 0011). `tests/checks/test_logic.py` damages an in-memory copy of the corpus in 21 ways and asserts the named check fails, so a passing run means the checks can fail; its class `HeldBehavior` also holds the details of b.3 and c.4, the d checks that only list, and the proofs f.2 to f.8, each shown to fail once the clause that forces it is removed (unit 0017).
 
 ### Provisions below LVL0
 
@@ -285,7 +292,7 @@ A provision below LVL0 is one file with these fields besides the common ones:
 | `rank`, `waivable` | Derived, not chosen: the highest rank among the LVL0 provisions reached, and waivable only when every one reached is waivable; a section, a document, or a Lexicon term is not waivable (GOV.5, GOV.17). The harness verifies the stored values |
 | `mode` (LVL2) | `binding` or `default` (GOV.19). A provision whose derived waivability is false is binding |
 | `binding_reason` (LVL2) | Required for a binding provision that reaches no prime directive, GUARD provision, GOV provision, or floor obligation (GOV.10 places PRIME, GUARD, and GOV in the floor; this part list is the one hand-kept list) |
-| `defines` | Name of a table the provision holds; the harness reads each table it uses by this name and its column headings, as for the drafting standard tables, `revision-classes`, `environment-outcomes`, `selector`, and `shared-matters` |
+| `defines` | Name of a table the provision holds; the harness reads each table it uses by this name and its column headings, as for the drafting standard tables, `revision-classes`, `selector`, and `shared-matters` |
 | `checked_by` | Check keys that verify it; `review` means a reader decides |
 
 Text identifiers must equal `instantiates` plus `refers_to` (g.16).

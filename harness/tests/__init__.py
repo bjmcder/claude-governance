@@ -1,8 +1,14 @@
 """Tests of the governance harness, laid out like the package.
 
-Run from the repository root::
+Run from ``harness/``, the directory that holds ``govharness/`` and
+``tests/``::
 
-    python -B -m unittest discover -s tests -t .
+    python3 -B -m unittest discover -s tests -t .
+
+The fast subset, under 10 s, for an installer::
+
+    python3 -B -m unittest tests.query.test_retrieval tests.cli.test_main \\
+        tests.test_architecture tests.test_conventions
 
 A mutation test damages an in-memory or temporary copy of the corpus in
 one known way and asserts that the named check reports it: evidence of
@@ -16,8 +22,9 @@ import shutil
 import tempfile
 
 # The solve cache of every test run lies in a fresh directory, removed
-# at exit, so that tests neither read nor fill the account's own cache
-# (unit 0011); the tests of the cache name their own directories.
+# at exit, so that the tests that verify share solver results (unit
+# 0011); without the variable there is no cache (unit 0022), and the
+# tests of the cache name their own directories.
 _SOLVE_CACHE = tempfile.mkdtemp(prefix="govharness-test-cache-")
-os.environ["GOVHARNESS_CACHE_DIR"] = _SOLVE_CACHE
+os.environ["GOVHARNESS_CACHE"] = _SOLVE_CACHE
 atexit.register(shutil.rmtree, _SOLVE_CACHE, True)

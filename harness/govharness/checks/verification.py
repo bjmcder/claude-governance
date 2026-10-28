@@ -1,11 +1,11 @@
 """Verify a corpus: the structural checks, then the logic checks.
 
-This is what ``verify`` runs, as data, on a snapshot of the corpus and
-its ledger; ``workflows.verification`` loads them from a root. The
-command line renders the result, and the workflows run it after a
-change. Only a ``FAIL`` fails the verification; ``WARN`` results, of
-the structural checks and of the logic checks, are carried for a
-reader.
+The structural checks run here, as data, on a snapshot of the corpus
+and its ledger; ``workflows.verification`` loads them from a root and
+runs the logic checks after them, with the solve cache. The command
+line renders the result, and the workflows run it after a change. Only
+a ``FAIL`` fails the verification; ``WARN`` results, of the structural
+checks and of the logic checks, are carried for a reader.
 """
 
 from __future__ import annotations
@@ -13,7 +13,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from govharness.checks.base import CheckContext
-from govharness.checks.registry import LOGIC, STRUCTURE, run_checks
+from govharness.checks.registry import STRUCTURE, run_checks
 from govharness.core.corpus import Corpus, Tree, load_entries
 from govharness.core.report import Report
 from govharness.ledger.gpg import SignerConfig
@@ -123,37 +123,3 @@ def verify_structure(
         CheckContext(corpus, ledger, tree=tree, signer_config=signer_config),
     )
     return corpus, Verification(len(corpus.entries), structure)
-
-
-def verify_snapshot(
-    tree: Tree,
-    ledger: list[Transaction],
-    logic: bool = True,
-    use_z3: bool = True,
-    signer_config: SignerConfig | None = None,
-) -> Verification:
-    """Run the structural and, optionally, the logic checks on a corpus.
-
-    Parameters
-    ----------
-    tree : Tree
-        Snapshot of every file under the corpus root.
-    ledger : list[Transaction]
-        The corpus ledger, in order.
-    logic : bool
-        Whether to run the logic checks.
-    use_z3 : bool
-        Whether the proofs may use z3 when it is importable.
-    signer_config : SignerConfig | None
-        Signer anchor and ``gpg`` path; ``None`` means no anchor.
-
-    Returns
-    -------
-    Verification
-        The results; every solve is made afresh.
-    """
-    corpus, found = verify_structure(tree, ledger, signer_config)
-    if logic:
-        ctx = CheckContext(corpus, ledger, use_z3=use_z3)
-        found.logic = run_checks(LOGIC, ctx)
-    return found

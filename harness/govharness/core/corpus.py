@@ -313,24 +313,6 @@ def inside_root(rel: str) -> bool:
     return not pure.is_absolute() and ".." not in pure.parts
 
 
-def is_directory(root: Path, rel: str) -> bool:
-    """Return True when a path under the root names a directory.
-
-    Parameters
-    ----------
-    root : Path
-        Corpus root.
-    rel : str
-        Path relative to the root, such as a ledger scope ``STND/DRAFT``.
-
-    Returns
-    -------
-    bool
-        Whether the path lies inside the root and the directory exists.
-    """
-    return inside_root(rel) and (root / rel).is_dir()
-
-
 def is_scope_path(root: Path, rel: str) -> bool:
     """Return True when a path under the root can be a ledger scope.
 
@@ -380,24 +362,6 @@ def has_scope_path(tree: Tree, rel: str) -> bool:
     return pure in tree.directories or (
         pure in tree.files and pure.name.endswith(".md")
     )
-
-
-def has_directory(tree: Tree, rel: str) -> bool:
-    """Return True when a snapshot holds a directory at a relative path.
-
-    Parameters
-    ----------
-    tree : Tree
-        Snapshot of the corpus.
-    rel : str
-        Path relative to the root, such as a ledger scope ``STND/DRAFT``.
-
-    Returns
-    -------
-    bool
-        Whether the path lies inside the root and names a directory.
-    """
-    return inside_root(rel) and PurePosixPath(rel) in tree.directories
 
 
 def scope_hash(tree: Tree, prefixes: list[str]) -> str:
