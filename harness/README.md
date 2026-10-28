@@ -145,7 +145,7 @@ A provision with exactly three modals is a review finding of g.18, so `verify` w
 
 ## Tests
 
-From this directory, the fast subset runs in under ten seconds:
+From this directory, the fast subset runs in about ten seconds:
 
 ```bash
 python3 -B -m unittest tests.query.test_retrieval tests.cli.test_main tests.test_architecture tests.test_conventions

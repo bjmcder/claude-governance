@@ -247,7 +247,7 @@ govharness show GOV.38
 govharness verify
 ```
 
-`show` prints GOV.38. `verify` runs every check of the corpus and passes, printing one warning, g.18, on three provisions of STND.DRAFT whose three modals the custodian reviewed. It writes nothing unless a cache of solver results is named, by `--cache DIR` or by `GOVHARNESS_CACHE`, which must be an absolute path outside the corpus; with a cache, later runs are about a second faster. [operating.md](operating.md#checking-the-corpus) says more about both commands. A subset of the tests runs in under ten seconds from `governance-harness/harness`:
+`show` prints GOV.38. `verify` runs every check of the corpus and passes, printing one warning, g.18, on three provisions of STND.DRAFT whose three modals the custodian reviewed. It writes nothing unless a cache of solver results is named, by `--cache DIR` or by `GOVHARNESS_CACHE`, which must be an absolute path outside the corpus; with a cache, later runs are about a second faster. [operating.md](operating.md#checking-the-corpus) says more about both commands. A subset of the tests runs in about ten seconds from `governance-harness/harness`:
 
 ```bash
 python3 -B -m unittest tests.query.test_retrieval tests.cli.test_main tests.test_architecture tests.test_conventions
