@@ -11,6 +11,8 @@ The sources are seven reviews and a consolidated register in this folder, at [re
 - where a promotion is known in advance, design takes it into account;
 - the human is asked for interaction only on request or at CSQ1 and CSQ0.
 
+[reflection.md](reflection.md) records where the corpus would have stopped this cycle's own work. That record is first-hand evidence for A1, A2, A3, A5, and B1.
+
 Nothing here is in force. After you rule, each round is drafted, rehearsed, reviewed, and brought back to you for ratification, as the standing process requires.
 
 The items are in order of how much they hold up ordinary CSQ3 and CSQ4 work.
