@@ -19,16 +19,19 @@ At a terminal, with `GOVHARNESS_ROOT` set as in [installation.md](installation.m
 | What governs this topic, within a size limit? | `govharness context remote write --in-force --budget 6000` |
 | What does a term mean? | `govharness find remote write`, then `govharness show LEX.remote-write` |
 | What applies from a given class? | `govharness show STND.CLASS.10` |
+| What does reclassification to CSQ2 add? | `govharness onset CSQ2` |
 
 The skill `consulting-governance` lists more questions with the commands that answer them: before a destructive action, a remote write, a delegation, a promotion, or a release, and when a line of work halts.
 
 ### What the commands return
 
-`show` takes an identifier (`PRIME.6`, `LEX.remote-write`) or a section locator (`LVL0#normative-language`), in any case. For an item or a section it prints the full text and status, what governs it, what it cites, and what cites it. For a document it prints the lead text and the names of its sections and items; `--all` adds each provision in full, in order. `--expand` adds the full text of each item the shown item cites.
+`show` takes an identifier (`PRIME.6`, `LEX.remote-write`) or a section locator (`LVL0#normative-language`), in any case. For an item or a section it prints the full text and status, for a provision the class from which it applies beside its mode, what governs it, what it cites, and what cites it. For a document it prints the lead text and the names of its sections and items; `--all` adds each provision in full, in order. `--expand` adds the full text of each item the shown item cites.
 
 `find` prints one line per matching item, best first, and `context` prints the best matches and the items they cite, each in full while the budget of characters lasts, then lists the rest under "Also relevant, not shown". Each text is printed whole or not at all, so a section larger than the remaining budget is listed by name. Both commands match words and their inflected forms, not meanings: "deleting" finds "deletion", but "push" finds only the passages that use that word. The corpus's own terms work best, "remote write" rather than "push" and "destructive action" rather than "delete". Items that hold every word come first. Provisions, Lexicon terms, and Terms sections rank above Notes and other prose, and a document identifier among the words matches the provisions and sections of that document. `--in-force` keeps only adopted and ratified items.
 
-`show`, `find`, `context`, and `pairs` exit with status 0 when something was found, 1 when nothing was, with the message on the standard error, and 2 for a usage error.
+`onset CSQ2` lists each provision, and each named part of a provision, that applies from CSQ2 by its field `onset`, so the list is what a reclassification to CSQ2 adds to work of CSQ3; a provision whose other parts start at a more severe class is shown with its whole onset, as in `from CSQ3; sentence 2 from CSQ2`. A provision that binds, or that applies at every class, carries no field and is in no list.
+
+`show`, `find`, `context`, `pairs`, and `onset` exit with status 0 when something was found, 1 when nothing was, with the message on the standard error, and 2 for a usage error.
 
 With no corpus on the command line, a command reads the corpus that `GOVHARNESS_ROOT` names, or else `./governance` where that directory exists. With neither, it exits with status 2 and a line naming the variable. A corpus can also be named as the first argument, as in `govharness show path/to/governance GOV.38`; for `find` and `context`, the first argument is taken as the corpus only where it is a directory that holds `LVL0/_doc.md`, so a query word that happens to name a directory of the project stays a word.
 

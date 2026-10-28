@@ -1,4 +1,5 @@
-"""The read-only commands ``show``, ``find``, ``context``, and ``pairs``.
+"""The read-only commands ``show``, ``find``, ``context``, ``pairs``, and
+``onset``.
 
 They load the corpus, answer one question, and write nothing, so that a
 reader fetches the governance it needs without searching the files. The
@@ -15,6 +16,7 @@ from pathlib import Path
 
 from govharness.cli.arguments import corpus_root, default_root, split_root
 from govharness.core.corpus import Corpus, read_corpus
+from govharness.core.onset import STARTS, applying_from, describe, onset_of
 from govharness.query.combination import review_pairs
 from govharness.query.graph import build_graph
 from govharness.query.retrieval import (
@@ -30,7 +32,8 @@ ROOT_HELP = "corpus root; else $GOVHARNESS_ROOT, else ./governance"
 
 
 def add_query(sub: argparse._SubParsersAction) -> None:
-    """Add the ``show``, ``find``, ``context``, and ``pairs`` commands.
+    """Add the ``show``, ``find``, ``context``, ``pairs``, and ``onset``
+    commands.
 
     Parameters
     ----------
@@ -78,6 +81,15 @@ def add_query(sub: argparse._SubParsersAction) -> None:
         help="LVL0 provisions the change amends",
     )
     pairs.set_defaults(run=lambda a, _: run_pairs(a))
+    onset = sub.add_parser(
+        "onset",
+        help="the provisions and parts that apply from a class (unit 0023)",
+    )
+    onset.add_argument("root", nargs="?", type=corpus_root, help=ROOT_HELP)
+    onset.add_argument(
+        "cls", metavar="CSQn", choices=STARTS, help="CSQ0 to CSQ3"
+    )
+    onset.set_defaults(run=lambda a, _: run_onset(a))
 
 
 def load(command: str, root: Path | None) -> Corpus | None:
@@ -224,4 +236,42 @@ def run_pairs(args: argparse.Namespace) -> int:
     for number, pair in enumerate(found, start=1):
         bases = ", ".join(pair.bases)
         print(f"| {number} | {pair.first} | {pair.second} | {bases} |")
+    return 0
+
+
+def run_onset(args: argparse.Namespace) -> int:
+    """Run ``onset``: list what a reclassification to a class adds.
+
+    Parameters
+    ----------
+    args : argparse.Namespace
+        ``root`` and ``cls``.
+
+    Returns
+    -------
+    int
+        1 when no provision or part applies from the class, 2 when no
+        root is known, else 0. Each line names a provision, or a part of
+        one, with its title; a provision whose field gives other parts a
+        more severe class names them after its title.
+    """
+    corpus = load("onset", args.root)
+    if corpus is None:
+        return 2
+    found = applying_from(corpus.provisions(), args.cls)
+    if not found:
+        print(f"onset: no provision applies from {args.cls}", file=sys.stderr)
+        return 1
+    print(f"# Provisions and parts that apply from {args.cls}")
+    print()
+    print(f"{len(found)} item(s).")
+    print()
+    for entry, part in found:
+        ident = entry.meta["id"]
+        name = ident if part is None else f"{ident}, {part}"
+        line = f"- {name} — {entry.meta.get('title', '')}"
+        onset = onset_of(entry)
+        if part is None and onset is not None and onset.parts:
+            line += f" ({describe(onset)})"
+        print(line)
     return 0

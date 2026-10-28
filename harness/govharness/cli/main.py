@@ -10,6 +10,8 @@ Commands::
     pairs [ROOT] ID [--amends LVL0_ID ...]
                                           provision pairs to review before a
                                           change (STND.HARN.28)
+    onset [ROOT] CSQn                     provisions and parts that apply
+                                          from a class (unit 0023)
     verify [--no-logic] [--no-z3] [--cache DIR] [ROOT]
                                           every check; exit 1 on failure
     check ROOT [--out-dir DIR] [--no-z3] [--cache DIR]

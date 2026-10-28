@@ -19,6 +19,7 @@ from pathlib import PurePosixPath
 
 from govharness.core.corpus import Corpus
 from govharness.core.entry import DOC_FILE, Entry
+from govharness.core.onset import describe, onset_of
 from govharness.core.tables import HISTORY_HEADING
 from govharness.ledger.transactions import Transaction, revision_named
 
@@ -222,10 +223,16 @@ def _provision_block(entry: Entry, level: str) -> str:
     Returns
     -------
     str
-        Heading, mode line, and body, ending in a blank line.
+        Heading, mode line with the onset beside the mode where the
+        provision carries one (unit 0023), and body, ending in a blank
+        line.
     """
     meta = entry.meta
     mode = str(meta.get("mode", "")).capitalize()
+    onset = onset_of(entry)
+    if onset is not None:
+        said = describe(onset)
+        mode = f"{mode}, {said}" if mode else said[0].upper() + said[1:]
     instantiated = ", ".join(meta.get("instantiates") or [])
     return (
         f"{level} {meta['id']} {meta.get('title', '')}\n\n"

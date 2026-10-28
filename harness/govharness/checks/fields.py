@@ -7,7 +7,9 @@ document in its directory, and an entry of an adopted or ratified
 document carries an adoption date, so that adopting a document cannot
 leave its provisions at draft. checked-by: every key in a field
 ``checked_by`` is ``review`` or the key of a registered check
-(STND.HARN.32).
+(STND.HARN.32). onset: every field ``onset`` is well formed, sits on a
+waivable provision below LVL0, and names parts that its body holds
+(STND.CLASS.10, unit 0023).
 """
 
 from __future__ import annotations
@@ -26,6 +28,7 @@ from govharness.core.entry import (
     in_template,
     parse_entry,
 )
+from govharness.core.onset import onset_problems
 
 FAMILY = "structure"
 
@@ -152,6 +155,30 @@ def check_keys_known(ctx: CheckContext) -> Verdict | None:
     )
 
 
+def onsets_valid(ctx: CheckContext) -> Verdict:
+    """Check onset: every field ``onset`` is one the field allows.
+
+    Parameters
+    ----------
+    ctx : CheckContext
+        Context of the run.
+
+    Returns
+    -------
+    Verdict
+        FAIL with one line per malformed field, per field on an item
+        that is not a waivable provision below LVL0, and per named part
+        that the body does not hold.
+    """
+    return failing(
+        [
+            line
+            for entry in ctx.corpus.entries
+            for line in onset_problems(entry)
+        ]
+    )
+
+
 CHECKS: tuple[Check, ...] = (
     Check(
         "templates",
@@ -173,5 +200,12 @@ CHECKS: tuple[Check, ...] = (
         "Every checked_by key names a registered check or review",
         ("STND.HARN.32",),
         check_keys_known,
+    ),
+    Check(
+        "onset",
+        FAMILY,
+        "Every onset field is well formed and on a proportioned provision",
+        ("STND.CLASS.10",),
+        onsets_valid,
     ),
 )

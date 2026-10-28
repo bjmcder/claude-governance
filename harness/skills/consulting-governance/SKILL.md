@@ -19,7 +19,7 @@ Without installation, each command runs as:
 PYTHONPATH="${CLAUDE_PLUGIN_ROOT}" python3 -B -m govharness show "${CLAUDE_PLUGIN_ROOT}/governance" GOV.38
 ```
 
-Where the package is installed, `govharness` is on the `PATH`, and where `GOVHARNESS_ROOT` names a corpus, `show`, `find`, `context`, and `pairs` take that corpus when no root is given:
+Where the package is installed, `govharness` is on the `PATH`, and where `GOVHARNESS_ROOT` names a corpus, `show`, `find`, `context`, `pairs`, and `onset` take that corpus when no root is given:
 
 ```bash
 govharness show GOV.38
@@ -40,6 +40,7 @@ In this table, ROOT is `"${CLAUDE_PLUGIN_ROOT}/governance"`, or nothing where `G
 | `find ROOT WORD... [--in-force]` | One line per matching item, best first: provisions and terms rank above Notes. Exit status 1 when no item holds a word |
 | `context ROOT WORD... [--budget N] [--in-force]` | The best matches and the items they cite, each whole while the budget of characters lasts, then the names of the rest |
 | `pairs ROOT DOC` | The pairs of provisions that STND.HARN.28 puts to review before a change of `DOC` |
+| `onset ROOT CSQn` | One line per provision, or named part of a provision, that applies from the class CSQn by its field `onset`. `show` prints the same onset beside the mode of each provision |
 
 `find` and `context` match words and their inflected forms, not meanings. The corpus's own terms match best: "remote write" finds the provisions on pushing, where "push" finds only the provisions that use that word. `--in-force` keeps only adopted and ratified items.
 
@@ -60,6 +61,7 @@ In this table, ROOT is `"${CLAUDE_PLUGIN_ROOT}/governance"`, or nothing where `G
 | Under the defaults, where records go | `show ROOT STND.DFLT --all` |
 | What a class requires, and from which class | `show ROOT STND.CLASS.10`, `show ROOT STND.CLASS.18`, `show ROOT STND.CLASS.19` |
 | What a promotion to a more severe class owes | `show ROOT GOV.14`, `show ROOT STND.CLASS.10`, then `find ROOT CSQ2 --in-force` |
+| What does reclassification to CSQn add? | `onset ROOT CSQn`, then `show ROOT ID` for each provision relied on; `show ROOT STND.CLASS.22` for what the reclassification owes for past work |
 | Before a promotion or a release | `show ROOT QA.11`, `show ROOT QA.10`, `show ROOT GOV.50` |
 
 GOV.39 asks that a provision be read in full before it is relied on; `show` prints the full text, and a line of `find` names an item without its text.
