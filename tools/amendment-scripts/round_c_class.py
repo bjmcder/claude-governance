@@ -183,6 +183,9 @@ CLASS19 = [
      "(GOV.47).",
      "Before work moved to CSQ2 or a more severe class is first relied upon at that class, the project SHALL be "
      "audited by the auditor of that class (GOV.47)."),
+    ("an agent auditor has an agent configuration different from that of every authoring agent",
+     "an agent auditor differs from every authoring agent in its model or in its instruction revision, whatever "
+     "its tools"),
 ]
 
 CLASS21 = provision(
@@ -306,9 +309,8 @@ CLASS_DOC = [
      "carry, examines the change cold; a reset of the author's context inside the authoring run is not such a "
      "session, so an author never reviews its own work. The CSQ2 row asks a different model or a different "
      "instruction revision, since a difference of tools alone leaves the same model reasoning under the same "
-     "instructions. The auditor of the rows CSQ1 and CSQ2 of STND.CLASS.19 is read as the CSQ2 row of "
-     "STND.CLASS.18 reads the reviewer: an agent whose model or instruction revision differs from that of every "
-     "authoring agent, or a human who is not an author of the audited work. STND.CLASS.3 asks the money threshold "
+     "instructions. The rows CSQ1 and CSQ2 of STND.CLASS.19 ask the same difference of an agent auditor, for the "
+     "same reason. STND.CLASS.3 asks the money threshold "
      "once the class is CSQ2 or a more severe one, where a "
      "reclassification to CSQ1 first comes within reach; below CSQ2 the cost limb of the consequence test of CSQ1 "
      "has no stated amount to exceed, so it is not met, and STND.CLASS.2 does not count it met, because the doubt "
@@ -341,7 +343,7 @@ CLASS_READING = (
     "a session other than each of the author's, whose context holds nothing of those sessions beyond the records "
     "of the work, as another actor, of the author's configuration or not, Session in the meaning of AGENT, and the "
     "CSQ2 row asks an agent configuration that differs in its model or its instruction revision, whatever its "
-    "tools (ruling C6); STND.CLASS.7 has the human owner reassess before a result of the work is next promoted, or "
+    "tools (ruling C6), as the CSQ1 and CSQ2 rows of STND.CLASS.19 now ask of an agent auditor; STND.CLASS.7 has the human owner reassess before a result of the work is next promoted, or "
     "the work is next released or relied upon at a more severe class (CC15)")
 CLASS_ROW = f"| 1.4 | {F.DATE} | Minor amendment (GOV.41): {CLASS_READING}. |"
 CLASS_RATIONALE = (
@@ -356,7 +358,10 @@ CLASS_RATIONALE = (
     "human owner adopts anyway, in the same act (GOV.50); STND.CLASS.21 and STND.CLASS.23 reach work of CSQ4 only "
     "where the classification records an expected class, and the human owner's entry of that class is the recorded "
     "project decision naming the consequence that GOV.11 asks before the floor is raised, so work with no expected "
-    "class stays as light as before; every other change narrows an obligation or widens who counts as a reviewer. "
+    "class stays as light as before; the CSQ1 and CSQ2 rows of STND.CLASS.19 ask of an agent auditor the "
+    "difference that ruling C6 asks of a CSQ2 reviewer, reach no work of CSQ3 or CSQ4, and rest on the custodian's "
+    "ratification of that reading as the recorded decision that GOV.11 asks; every other change narrows an "
+    "obligation or widens who counts as a reviewer. "
     "Class onsets: STND.CLASS.21 and STND.CLASS.23 apply from CSQ4 where an expected class is recorded, and "
     "STND.CLASS.22 at every reclassification. Transition (GOV.42): a classification adopted before this revision "
     "stands, with no expected class until the human owner adopts one; a project that moved to a more severe class "
