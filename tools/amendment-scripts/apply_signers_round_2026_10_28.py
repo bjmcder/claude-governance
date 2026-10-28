@@ -25,6 +25,14 @@ HARN10 = [(
     "The Ledger of each row among signers SHALL name one ledger, not \"all\". A row for \"all\" ledgers among "
     "required signatures SHALL have From entry \"1\" (GOV.36).")]
 
+HARN7 = [(
+    "the keys the register then leaves open, by fingerprint)",
+    "the keys the register then leaves open on the governance ledger, by fingerprint)")]
+
+HARN13 = [(
+    "or the keys it leaves open differ from the last one's \"signers\"",
+    "or the keys it leaves open on the governance ledger differ from the last one's \"signers\"")]
+
 TERM = [(
     "by a key whose row among signers has Ledger its ledger or \"all\", Role label its actor,",
     "by a key whose row among signers has Ledger its ledger, Role label its actor,")]
@@ -33,9 +41,9 @@ NOTE = (
     "A harness reads the signer register as it stands, so a key leaves only by the closing of its row: a row "
     "removed would leave each signature that the key made without an accepted signature. Each ledger numbers its "
     "own entries, so a Last entry closes a key on one ledger, and a row for \"all\" ledgers would stay open on each "
-    "ledger begun after its closing; STND.HARN.10 therefore has each row among signers name one ledger, and a key "
-    "that signs on several ledgers has a row for each. A row of required signatures for \"all\" ledgers closes "
-    "nothing and stays. STND.HARN.10 binds, because it instantiates GOV.36, and raises no floor (GOV.11): it asks "
+    "ledger begun after its closing; STND.HARN.10 therefore has each row among signers name one ledger. A row of required signatures for \"all\" ledgers closes "
+    "nothing and stays. The keys that the register leaves open, for the field \"signers\" and STND.HARN.13, are "
+    "those open on the governance ledger, which alone records a change of the register. STND.HARN.10 binds, because it instantiates GOV.36, and raises no floor (GOV.11): it asks "
     "nothing of a project that has founded no signer register, and of one that founds it only a row for each ledger "
     "that a key signs, in place of one row for all; it asks no decision of the human owner.")
 
@@ -49,8 +57,10 @@ READING = (
     "STND.HARN.10 has the Ledger of each row among signers name one ledger, not \"all\", where it had a row for "
     "\"all\" ledgers among signers keep Last entry \"none\", and keeps From entry \"1\" for a row of required "
     "signatures for \"all\" ledgers; the term Accepted signature accepts a key only by its row for the ledger of the "
-    "transaction; the Notes state that a key leaves only by the closing of its row, why a row for \"all\" ledgers "
-    "is never closed, and the floor argument")
+    "transaction; the field \"signers\" of STND.HARN.7 and the second sentence of STND.HARN.13 read the keys that "
+    "the register leaves open on the governance ledger; the Notes state that a key leaves only by the closing of its "
+    "row, why a row for \"all\" ledgers is never closed, which keys the register leaves open, and the floor "
+    "argument")
 ROW = f"| 1.5 | {DATE} | Minor amendment (GOV.41): {READING}. Transition (GOV.42): none. |"
 
 RATIONALE = (
@@ -60,7 +70,10 @@ RATIONALE = (
     "kept it open, so that such a key was never retired short of removing its row, which would leave each signature "
     "it had made unaccepted (unit 0016, M1). A row of one ledger overriding the row for \"all\" ledgers would close "
     "the key on each ledger already begun and leave it open on each later one, so the custodian decided that each "
-    "row among signers names one ledger (decision 1). STND.HARN.10 binds, because it instantiates GOV.36, and "
+    "row among signers names one ledger (decision 1). Since a key may then be open on one ledger and closed on "
+    "another, STND.HARN.7 and STND.HARN.13 say that the keys that the register leaves open are those open on the "
+    "governance ledger, the only keys able to sign the next transaction of the register; the harness already read "
+    "them so. STND.HARN.10 binds, because it instantiates GOV.36, and "
     "raises no floor (GOV.11), as the Notes argue. No signer register is founded and this amendment founds none; "
     "signatures stay unadopted, as the custodian directed on 2026-10-26 and again on 2026-10-28. Transition "
     f"(GOV.42): none, since no signer register exists. Decision 1 of {RECORD}; the open item of unit 0016, "
@@ -70,6 +83,8 @@ RATIONALE = (
 def apply(root: Path) -> None:
     root = Path(root)
     replace_text(root, "STND/HARN/10.md", HARN10)
+    replace_text(root, "STND/HARN/7.md", HARN7)
+    replace_text(root, "STND/HARN/13.md", HARN13)
     if F.B.derive_fields(root, ["STND.HARN.10"])["STND.HARN.10"].unresolved:
         raise ValueError("STND.HARN.10: unresolved identifiers")
     replace_text(root, "STND/HARN/_doc.md", TERM + NOTES)

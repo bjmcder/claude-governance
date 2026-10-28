@@ -33,7 +33,11 @@ from govharness.ledger.register import (
     with_signer,
     with_signer_closed,
 )
-from govharness.ledger.signatures import _valid_for, check_signatures
+from govharness.ledger.signatures import (
+    _valid_for,
+    check_signatures,
+    required_of,
+)
 from govharness.workflows.signers import (
     add_signer,
     close_signer,
@@ -510,10 +514,34 @@ class SignerRows(unittest.TestCase):
         self.assertFalse(self.valid(register, 10, "governance"))
         self.assertTrue(self.valid(register, 10, "work-a"))
         self.assertFalse(self.valid(register, 1, "work-b"))
+        stranger = {"actor": "The Human Owner", "seq": 1}
+        self.assertFalse(_valid_for(register, self.KEY, stranger, "work-a"))
         self.assertEqual(active_signers(register), [])
         self.assertEqual(
             active_signers(self.register(("governance", "none"))), [self.KEY]
         )
+
+    def test_required_row_for_all(self) -> None:
+        """Behavior: a row of required signatures for ``all`` applies
+        on every ledger from entry 1 and is no register problem; a row
+        of one ledger applies on that ledger only.
+
+        Reference: STND.HARN.10 as revision 1.5 reads, which keeps the
+        row for ``all`` among required signatures.
+        """
+        text = (
+            "| Ledger | Actor | From entry |\n| --- | --- | --- |\n"
+            "| all | The Human Owner | 1 |\n"
+            "| work-a | The Custodian | 3 |\n"
+        )
+        register = read_register(text)
+        self.assertEqual(register.problems, [])
+        owner = {"actor": "The Human Owner", "seq": 1}
+        custodian = {"actor": "The Custodian", "seq": 3}
+        for ledger in ("governance", "work-a"):
+            self.assertEqual(required_of(register, owner, ledger), ["1"])
+        self.assertEqual(required_of(register, custodian, "work-a"), ["3"])
+        self.assertEqual(required_of(register, custodian, "governance"), [])
 
     def test_no_signer_row_for_all(self) -> None:
         """Behavior: a signer row for ``all`` is a register problem and
@@ -539,8 +567,17 @@ class SignerRows(unittest.TestCase):
         text = skeleton("2026-10-10")
         with self.assertRaisesRegex(ValueError, "STND.HARN.10"):
             with_signer(text, "all", "The Custodian", "O", "KEY", self.KEY)
-        with self.assertRaisesRegex(ValueError, "no open row"):
-            with_signer_closed(text, "all", self.KEY, 5)
+        for ledger in ("all", "All"):
+            with self.assertRaisesRegex(ValueError, "STND.HARN.10"):
+                with_signer(
+                    text, ledger, "The Custodian", "O", "KEY", self.KEY
+                )
+            with self.assertRaisesRegex(ValueError, "STND.HARN.10"):
+                with_signer_closed(hand, ledger, self.KEY, 5)
+        self.assertIn(
+            "names one ledger (STND.HARN.10)",
+            "\n".join(read_register(hand.replace("| all", "| All")).problems),
+        )
         armored = (
             "-----BEGIN PGP PUBLIC KEY BLOCK-----\nx\n"
             "-----END PGP PUBLIC KEY BLOCK-----"
@@ -551,6 +588,10 @@ class SignerRows(unittest.TestCase):
                 both, ledger, "The Custodian", "O", armored, self.KEY
             )
         self.assertEqual(both.count(f"### {self.KEY}"), 1)
+        with self.assertRaisesRegex(ValueError, "another armor"):
+            with_signer(
+                both, "work-b", "The Custodian", "O", "other", self.KEY
+            )
         closed = with_signer_closed(both, "governance", self.KEY, 5)
         row = f"| The Custodian | O | {self.KEY} |"
         self.assertIn(f"| governance {row} 5 |", closed)

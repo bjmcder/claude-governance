@@ -118,7 +118,7 @@ def read_register(text: str, gpg: str = DEFAULT_GPG) -> SignerRegister:
         if row.get("Ledger") == ALL_LEDGERS and row.get("From entry") != "1":
             register.problems.append(f"- `{row}`: an `all` row starts at 1")
     for row in register.signers:
-        if row.get("Ledger") == ALL_LEDGERS:
+        if row.get("Ledger", "").casefold() == ALL_LEDGERS:
             register.problems.append(
                 f"- `{row}`: a signer row names one ledger (STND.HARN.10)"
             )
@@ -210,12 +210,33 @@ def skeleton(date: str) -> str:
     return SKELETON.format(date=date)
 
 
+def _refuse_all(ledger: str) -> None:
+    """Refuse a signer row for the ledger ``all``.
+
+    Parameters
+    ----------
+    ledger : str
+        Ledger of the row.
+
+    Raises
+    ------
+    ValueError
+        If the ledger is ``all``, in any case.
+    """
+    if ledger.casefold() == ALL_LEDGERS:
+        raise ValueError(
+            "a signer row names one ledger (STND.HARN.10); add a row for "
+            "each ledger the key signs"
+        )
+
+
 def with_signer(
     text: str, ledger: str, role: str, name: str, armored: str, fpr: str
 ) -> str:
     """Return register text with a signer row and its public key added.
 
-    The key is added once: a key already under its heading is kept.
+    The key is added once: a key already under its heading is kept,
+    and must be the armor given.
 
     Parameters
     ----------
@@ -240,17 +261,17 @@ def with_signer(
     Raises
     ------
     ValueError
-        If the ledger is ``all``: a signer row names one ledger
-        (STND.HARN.10).
+        If the ledger is ``all``, in any case: a signer row names one
+        ledger (STND.HARN.10); or the register holds the key under its
+        heading with another armor.
     """
-    if ledger == ALL_LEDGERS:
-        raise ValueError(
-            "a signer row names one ledger (STND.HARN.10); add a row for "
-            "each ledger the key signs"
-        )
+    _refuse_all(ledger)
+    kept = [m[2] for m in KEY_RE.finditer(text) if m[1] == fpr]
+    if kept and kept[0].strip() != armored.strip():
+        raise ValueError(f"the register holds {fpr} with another armor")
     row = f"| {ledger} | {role} | {name} | {fpr} | none |"
     text = append_row(text, SIGNER_HEADER, row)
-    if any(m[1] == fpr for m in KEY_RE.finditer(text)):
+    if kept:
         return text
     block = f"\n### {fpr}\n\n```\n{armored.strip()}\n```\n"
     return text.rstrip("\n") + "\n" + block
@@ -259,7 +280,10 @@ def with_signer(
 def with_signer_closed(
     text: str, ledger: str, fingerprint: str, last_entry: int
 ) -> str:
-    """Return register text with the open row of a key closed.
+    """Return register text with the open rows of a key on a ledger closed.
+
+    Each open row of that ledger and key is closed, whatever its role
+    label.
 
     Parameters
     ----------
@@ -280,8 +304,10 @@ def with_signer_closed(
     Raises
     ------
     ValueError
-        If no open row of that ledger names the key.
+        If the ledger is ``all``, in any case (STND.HARN.10), or no open
+        row of that ledger names the key.
     """
+    _refuse_all(ledger)
     cell = r"\|[^|\n]*"
     pattern = (
         rf"^(\| {re.escape(ledger)} {cell}{cell}"
