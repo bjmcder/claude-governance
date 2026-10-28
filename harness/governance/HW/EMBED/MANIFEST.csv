@@ -1,8 +1,8 @@
 id,kind,level,title,status,path,sha256,bytes
-HW.EMBED,sub-profile,LVL1,Embedded controllers,adopted,_doc.md,4647fe4aa847e3eca51a893a5c662abb0315d59b6cb8483d030992fbf0f1e220,9503
-HW.EMBED.1,provision,LVL1,Embedded controller selector,adopted,1.md,9568454fc69521cd3e0199404b0e47aaf4559532daa18aa807ff22d541f62aaf,521
+HW.EMBED,sub-profile,LVL1,Embedded controllers,adopted,_doc.md,83b3a33eb25be18566af5425068e0e2e4abf7b45b562c94c6650dcada5e72989,10533
+HW.EMBED.1,provision,LVL1,Embedded controller selector,adopted,1.md,7d0a240f61d65d3fb069985294d518c54c700bde3a7959fa82112e5670171235,510
 HW.EMBED.2,provision,LVL1,Embedded controller shared matters,adopted,2.md,b96df195d3c1b45026f4fc363ba493603fdd4b2853398b380cda9d5ebb780be9,669
-HW.EMBED.3,provision,LVL1,Bounded controller memory,adopted,3.md,a869aec3ddeb3a2c18385d89016c20f9ba2cc7411a34fbb6eee301b6debf2c19,905
-HW.EMBED.4,provision,LVL1,Outputs at reset and halt,adopted,4.md,358ccc45d3811d9aedaacceca13e27f766a64f34e9da1cc45271e41bfdeb9f27,767
-HW.EMBED.5,provision,LVL1,Image on the target,adopted,5.md,645193ed78c46aeb55194d736adb461981521e9ac1f700c22d3176a6ff27b941,606
-HW.EMBED.6,provision,LVL1,Resets and stalls in results,adopted,6.md,6ef54dff22b49515ae1b0194375cc1f4a187af1c75841df0d4df0e8e5a4ebeac,921
+HW.EMBED.3,provision,LVL1,Bounded controller memory,adopted,3.md,983b5dd2bbb5ba1068f66c6a117cff606ba3f7d5c1aaf43f6b145f66d52cea65,919
+HW.EMBED.4,provision,LVL1,Outputs at reset and halt,adopted,4.md,8db24c893f5989ca31c2c510f251e1f09f8b79ca0b61da1d7b9222f0c2daa4bb,781
+HW.EMBED.5,provision,LVL1,Image on the target,adopted,5.md,56d7a87671c31ebd620a69da11b9e7f0bb0b9c70e4310af20d74e0261e7d7c51,620
+HW.EMBED.6,provision,LVL1,Resets and stalls in results,adopted,6.md,b2a52b3de4d3b5fda5ee6245cedba43a1d31525a143564d8e593d3e42dc0cb4a,935

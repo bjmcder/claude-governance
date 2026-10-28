@@ -19,7 +19,7 @@ A directing agent copies this template into the round's directory, `review-recor
 ## Rules
 
 - STND.DRAFT governs every provision, title, and Note. The self-check is step 2 of the standing process.
-- Class onset follows STND.CLASS.10, and no change raises the floor (GOV.11); the standing process, step 3, says how a binding provision is argued.
+- Class onset follows STND.CLASS.10: each waivable provision below LVL0 that the change adds or alters carries the field `onset`, set by the rule that the Notes of STND.CLASS state. No change raises the floor (GOV.11); the standing process, step 3, says how a binding provision is argued.
 - The directions of the standing process on agnosticism, restatement, and documentation hold for the text and for the Notes.
 - No provision asks a decision of the human owner that LVL0 does not assign (STND.DRAFT.42).
 

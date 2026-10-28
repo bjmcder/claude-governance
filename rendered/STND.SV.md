@@ -1,10 +1,10 @@
-# Verilog and SystemVerilog standard (STND.SV) 1.1
+# Verilog and SystemVerilog standard (STND.SV) 1.2
 
-Adopted by The Custodian as revision 1.0 in ledger entry 136 (2026-10-24); revised to 1.1 in entry 152 (2026-10-25). This reading copy is composed from the per-provision files in STND/SV/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 136 (2026-10-24); revised to 1.1 in entry 152 (2026-10-25), 1.1.1 in entry 282 (2026-10-28), and 1.2 in entry 316 (2026-10-28). This reading copy is composed from the per-provision files in STND/SV/ of the governance harness; the harness files are the system of record. Withdrawn identifiers, never reused: STND.SV.28.
 
 ## Purpose and scope
 
-This standard holds the practice of Verilog and SystemVerilog, in hardware descriptions that are realized and in their verification, that HDES leaves to the language. It adds to HDES, STND.CODE, STND.CONC, STND.VVUQ, and STND.DEPS only what these languages make necessary. It covers the edition of the language and the constructs in use, the settings of simulation, and the separation of the code that is synthesized from the code that only verifies (STND.SV.1 to STND.SV.4); freedom from races by construction under the order of evaluation that the language leaves unspecified (STND.SV.5 to STND.SV.8); agreement of simulation and synthesis in sensitivity, inferred storage, selection, simulation-only constructs, width and sign, and initial values (STND.SV.9 to STND.SV.15); unknown values and the mode of a check of equivalence (STND.SV.16, STND.SV.17, and STND.SV.18); assertions and coverage (STND.SV.19 to STND.SV.22); seeds of random stimulus (STND.SV.23); the classes of finding that the static checks report, a second route for the check of the netlist and for the verdicts of simulation, and comparisons between simulators (STND.SV.24 to STND.SV.27); and the conventions of names (STND.SV.28).
+This standard holds the practice of Verilog and SystemVerilog, in hardware descriptions that are realized and in their verification, that HDES leaves to the language. It adds to HDES, STND.CODE, STND.CONC, STND.VVUQ, and STND.DEPS only what these languages make necessary. It covers the edition of the language and the constructs in use, the settings of simulation, and the separation of the code that is synthesized from the code that only verifies (STND.SV.1 to STND.SV.4); freedom from races by construction under the order of evaluation that the language leaves unspecified (STND.SV.5 to STND.SV.8); agreement of simulation and synthesis in sensitivity, inferred storage, selection, simulation-only constructs, width and sign, and initial values (STND.SV.9 to STND.SV.15); unknown values and the mode of a check of equivalence (STND.SV.16, STND.SV.17, and STND.SV.18); assertions and coverage (STND.SV.19 to STND.SV.22); seeds of random stimulus (STND.SV.23); and the classes of finding that the static checks report, a second route for the check of the netlist and for the verdicts of simulation, and comparisons between simulators (STND.SV.24 to STND.SV.27).
 
 Every provision is a default (GOV.19), which a project replaces by a recorded decision with an alternative that meets the same higher-level outcome (REPRO.7). Silent saturation and wrap-around bind at every class through HDES.14 and PRIME.4, and the observed completion and failure of each concurrent task of a testbench bind at every class through STND.CONC.1 and STND.CONC.2, as the responses to a failure that PRIME.4 lists bind through STND.CODE.14 and the checks that CPS.5 or CPS.9 requires are not removable by an execution setting through STND.CODE.16; this standard adds nothing to that floor. The standard is agnostic of simulator, synthesis tool, checker, vendor, and target: its provisions name no tool, no product, and no revision of the language definition, and the repository configuration and the design record choose them (GOV.18). Clock-domain crossings, asynchronous inputs, and the release of asynchronous resets are governed by HDES.11 alone.
 
@@ -59,11 +59,11 @@ Checks and second routes. A structural analysis "cannot determine if a real issu
 
 Tools have defects. A random-program tester, run for 18,000 CPU hours on five synthesis tools, found seven programs synthesized wrong and three crashes, with sign handling and width among the causes, and a defect in a simulator used to check; a later tester reported 15 defects in five months, nine confirmed as new (h1, S11 and S12). A defect that synthesis and the check of equivalence share, by reading the description the same way, is hidden from that check (h1, S11). STND.SV.25 adds a second route to the check of HDES.8 when it is a check of equivalence and a simulator reads the netlist: a simulation of the netlist judged against the verdicts of the description, a reference produced without the netlist. A difference that comes from pessimism on the netlist is a finding of its own kind, which S16 classifies apart and removes by initializing the state that holds real unknowns (h1, S16). STND.SV.26 has another simulator, where the work has one, decide again from the record the properties that a realization relies on before that reliance, because one simulator's verdict carries its defects, and admits a proof in its place; counts of defects in simulators beyond S11 rest on slides and a summary and are unverified (h1, S24). A second simulator that is two-state, or that lacks a construct of the design, decides only the properties that rest neither on four-state values nor on that construct, which STND.SV.3 and STND.SV.2 record. A second tool that costs money is an expenditure under PRIME.8, and a work with no second simulator available is outside the first sentence of STND.SV.26.
 
-Names. The research note retrieved no convention of names that the language definition fixes, and that none exists is unverified, so STND.SV.28 leaves the convention to the repository configuration, as STND.STDC.39 and STND.LEAN.27 do, keeps the names that the notation of NUMER.4 fixes, as STND.DOCS.12 permits, and adds no table.
+Names. The research note retrieved no convention of names that the language definition fixes, and that none exists is unverified, so STND.CODE.28 leaves the convention of Verilog and SystemVerilog source to the repository configuration and keeps the names that the notation of NUMER.4 fixes, and this standard adds no table.
 
 The research note retrieved no primary text on the coding of state machines, on interfaces and packages, on the checking of parameters and the semantics of generate constructs, on the styles of reset, or on vacuity, and the standard holds no provision on them. HDES.12 and HDES.15 govern the initial state and the mitigation of faults of a state machine, HDES.11 the release of a reset, and HDES.6 and HDES.12 the verification of reset.
 
-Class onset. Under STND.CLASS.10, each provision instantiates only VV, REPRO, INTPR, DSGN, SIMPL, QA, or a provision of HDES or NUMER, and applies from CSQ3; work of CSQ4 may omit it. The part of a provision that rests on a row of the table of STND.CLASS.10 applies from the class of that row, with the departures that follow. STND.SV.1, STND.SV.4, the first sentence of STND.SV.2, and the second sentence of STND.SV.3 rest on REPRO.2, SIMPL.6, and DSGN.3 and on no row, and apply from CSQ3. The second sentence of STND.SV.2 states the known defects of a tool on which a verdict relies, the content of DSGN.5 and INTPR.10 that no provision of HDES carries, and applies from CSQ2. STND.SV.5, STND.SV.6, STND.SV.7, STND.SV.8, and the first sentence of STND.SV.19 instantiate DSGN.15 and state what a protocol of scheduling uses, not how its invariants are verified, so they apply from CSQ3, as the protection rules of STND.CONC.3 do. STND.SV.9 to STND.SV.17, the second sentence of STND.SV.19, and STND.SV.22 instantiate SIMPL.6, DSGN.3, VV.1, or HDES.6 or HDES.12, and none compares evidence with a reference produced without the implementation that it judges, so they apply from CSQ3. The first sentence of STND.SV.3 records settings under REPRO.2 and applies from CSQ3. The first sentence of STND.SV.18, both sentences of STND.SV.20, and both sentences of STND.SV.21 add, under INTPR.10, what a reader needs to read a verdict or a coverage figure that HDES.6 or HDES.8 already asks at CSQ3: the mode of a check of equivalence, whether an assertion decided in simulation or in proof, the assumptions of a proof, and what a figure counts and excludes. A verdict or a figure without them is not readable at CSQ3 either, so they apply from CSQ3, as the Notes of HDES apply the same content of INTPR.10 to HDES.6 and HDES.8, a tightening above the floor (PRIME.15). That departs from the row of STND.CLASS.10 for INTPR.10 for these five sentences alone, so that each record to which they add keeps one onset; the second sentence of STND.SV.2 and the second sentence of STND.SV.24 document the limits of tools and follow the row. The second sentence of STND.SV.18 instantiates VV.1 and HDES.8 and applies from CSQ3. The third sentence of STND.SV.18 resolves a failure of the check of HDES.8, which applies from CSQ3, and adds no second route to it, so it applies from CSQ3; STND.SV.25 differs in adding a comparison with a reference produced without the netlist, which follows the row for VV.1 at CSQ2. STND.SV.23 instantiates REPRO.1, REPRO.3, VV.3, and NUMER.24, rests on no row, and applies from CSQ3. The first sentence of STND.SV.24 instantiates DSGN.3 and applies from CSQ3; its second sentence documents a limit of validity of the checks (INTPR.10) and applies from CSQ2. STND.SV.25 compares the netlist against the verdicts of the description, a reference produced without the netlist, which is the row of STND.CLASS.10 for VV.1, and applies from CSQ2. The first sentence of STND.SV.26 is a regeneration of a verdict from its record by another system before reliance, the row for QA.9, and applies from CSQ1 where a second simulator is available to the work; its second sentence admits a proof in place of that regeneration and applies with the first. STND.SV.27 instantiates REPRO.3 and applies from CSQ3. STND.SV.28 instantiates INTPR.1 and INTPR.4, rests on no row, and applies from CSQ3. No provision binds, and no provision raises the floor (GOV.11).
+Class onset. Under STND.CLASS.10, each provision instantiates only VV, REPRO, INTPR, DSGN, SIMPL, QA, or a provision of HDES or NUMER, and applies from the class that its field `onset` gives, which work of CSQ4 may omit, where a field that gives CSQ3 for what a reader needs to read a verdict or a coverage figure that HDES.6 or HDES.8 already asks at CSQ3, content that the row of INTPR.10 starts at CSQ2, tightens above the floor (PRIME.15), so that each record to which those sentences add keeps one onset. No provision binds, and no provision raises the floor (GOV.11).
 
 ## References
 
@@ -87,8 +87,6 @@ Class onset. Under STND.CLASS.10, each provision instantiates only VV, REPRO, IN
 | STND.CXX | C++ standard |
 | STND.DEPS | Dependency policy |
 | STND.DOCS | Documentation standard |
-| STND.LEAN | Lean standard |
-| STND.STDC | C standard |
 | STND.VVUQ | Verification, validation, and uncertainty quantification methods |
 | VV | Correctness |
 
@@ -98,25 +96,25 @@ Class onset. Under STND.CLASS.10, each provision instantiates only VV, REPRO, IN
 
 #### STND.SV.1 Language edition stated
 
-Default. Instantiates REPRO.2, SIMPL.6.
+Default, from CSQ3. Instantiates REPRO.2, SIMPL.6.
 
 The repository configuration SHOULD state the language edition of each source file of a design and of its verification set (REPRO.2, SIMPL.6). Where a tool that reads such a file offers a setting that selects a revision of the language definition, the repository configuration SHOULD run that tool on the file under the setting for its language edition (REPRO.2, SIMPL.6).
 
 #### STND.SV.2 Construct subset stated
 
-Default. Instantiates REPRO.2, HDES.3, DSGN.5, INTPR.10.
+Default, from CSQ3; sentence 2 from CSQ2. Instantiates REPRO.2, HDES.3, DSGN.5, INTPR.10.
 
 The design record under HDES.3 SHOULD state the construct subset of each design (REPRO.2, HDES.3). For each tool on whose output a verdict of HDES.6 or a check of HDES.8 relies, the design record SHOULD state each construct of the design or of its verification set that the documentation of that tool states as unsupported, or as read differently from the language definition (DSGN.5, INTPR.10).
 
 #### STND.SV.3 Simulation settings stated
 
-Default. Instantiates REPRO.2, HDES.6.
+Default, from CSQ3. Instantiates REPRO.2, HDES.6.
 
 The record of each verification under HDES.6 SHOULD state, for each simulator that it uses, whether that simulator runs four-state or two-state simulation, and, for two-state simulation, the value that it gives a bit assigned the unknown or the high-impedance value (REPRO.2, HDES.6). That record SHOULD state the time precision of each simulation, and each setting of a simulator that changes how it evaluates unknown values (REPRO.2).
 
 #### STND.SV.4 Verification constructs kept apart
 
-Default. Instantiates SIMPL.6, DSGN.3.
+Default, from CSQ3. Instantiates SIMPL.6, DSGN.3.
 
 The repository configuration SHOULD list the synthesized set of each design (SIMPL.6). Classes, randomization, data types whose size changes during simulation, program blocks, and hierarchical references SHOULD appear only in the verification set (SIMPL.6, DSGN.3).
 
@@ -124,25 +122,25 @@ The repository configuration SHOULD list the synthesized set of each design (SIM
 
 #### STND.SV.5 Assignment kind by process
 
-Default. Instantiates DSGN.15.
+Default, from CSQ3. Instantiates DSGN.15.
 
 Each variable that a clocked process writes and that another simulation process reads SHOULD be written by nonblocking assignment (DSGN.15, STND.CONC.3). Each variable that a combinational process writes SHOULD be written by blocking assignment (DSGN.15). A variable SHOULD NOT be written by both blocking and nonblocking assignment (DSGN.15).
 
 #### STND.SV.6 Writing processes and reads
 
-Default. Instantiates DSGN.15, DSGN.14.
+Default, from CSQ3. Instantiates DSGN.15, DSGN.14.
 
 Each variable of the synthesized set SHOULD be written by one simulation process alone (DSGN.15, DSGN.14). Each combinational procedure SHOULD assign each variable that it writes before it reads that variable (DSGN.15).
 
 #### STND.SV.7 Order from scheduling regions
 
-Default. Instantiates DSGN.15.
+Default, from CSQ3. Instantiates DSGN.15.
 
 Each order between simulation processes on which a design or its verification set relies SHOULD come from the kinds of assignment and the scheduling regions that the language definition gives, and not from a delay (DSGN.15, STND.CONC.3). A testbench SHOULD drive the inputs of a design, and sample its outputs, through a facility that the language definition at its language edition orders against the evaluation of the design, a nonblocking assignment, a clocking construct, or the scheduling regions reserved for testbench code among them (DSGN.15).
 
 #### STND.SV.8 Start-up after time zero
 
-Default. Instantiates DSGN.15, REPRO.3.
+Default, from CSQ3. Instantiates DSGN.15, REPRO.3.
 
 Other than a reported value whose dependence the record of the simulation declares as STND.VVUQ.82 provides, the values and verdicts of a simulation SHOULD NOT depend on the order in which the simulator starts procedures, continuous assignments, and declaration initializers at time zero (DSGN.15, REPRO.3). The first transition of each clock and each reset that a testbench drives, to which a simulation process of the design is sensitive, SHOULD occur after time zero (DSGN.15).
 
@@ -150,43 +148,43 @@ Other than a reported value whose dependence the record of the simulation declar
 
 #### STND.SV.9 Process intent declared
 
-Default. Instantiates SIMPL.6, DSGN.3.
+Default, from CSQ3. Instantiates SIMPL.6, DSGN.3.
 
 Where the language edition provides constructs that state that a procedure describes combinational logic, a latch, or clocked storage, each procedure of the synthesized set SHOULD use the construct that states what it describes (SIMPL.6, DSGN.3). Where a combinational procedure of the synthesized set uses no such construct, it SHOULD be made sensitive by a form of sensitivity that includes each variable that the procedure reads (SIMPL.6, DSGN.3).
 
 #### STND.SV.10 Storage only by decision
 
-Default. Instantiates SIMPL.6, VV.1.
+Default, from CSQ3. Instantiates SIMPL.6, VV.1.
 
 In each combinational procedure of the synthesized set, each variable that the procedure writes SHOULD be assigned on every path through it, by an assignment before its selection statements or by an assignment in each branch (SIMPL.6, VV.1). Each latch that the synthesized set describes SHOULD be stated in the design record with the procedure that describes it, or by a rule of HDES.9 that names that procedure (SIMPL.6).
 
 #### STND.SV.11 Selection qualifiers checked
 
-Default. Instantiates SIMPL.6, VV.1.
+Default, from CSQ3. Instantiates SIMPL.6, VV.1.
 
 Where the language edition provides qualifiers that state that the items of a selection statement are mutually exclusive or tested in order of priority, each selection statement whose items are meant to be so SHOULD state it by the qualifier that simulation checks (SIMPL.6, VV.1). Each violation of such a qualifier that a simulation under HDES.6 reports SHOULD fail the test that ran it (VV.1).
 
 #### STND.SV.12 Wildcard selection limited
 
-Default. Instantiates VV.1, SIMPL.6.
+Default, from CSQ3. Instantiates VV.1, SIMPL.6.
 
 The synthesized set SHOULD hold no selection statement that matches an unknown value of its selection expression as a wildcard (VV.1). Where the language edition provides the qualifier of STND.SV.11, each selection statement of the synthesized set whose items hold wildcard bits and overlap SHOULD state their priority by that qualifier (SIMPL.6).
 
 #### STND.SV.13 Simulation-only constructs
 
-Default. Instantiates VV.1, SIMPL.6.
+Default, from CSQ3. Instantiates VV.1, SIMPL.6.
 
 Each behavior that the contract of a design under HDES.4 states SHOULD be independent of each delay, each forced value, and each test for an unknown value in the source (VV.1). The synthesized set SHOULD hold no synthesis directive that changes the logic that a transformation step produces from a selection statement (SIMPL.6, VV.1).
 
 #### STND.SV.14 Explicit width and sign
 
-Default. Instantiates SIMPL.6.
+Default, from CSQ3. Instantiates SIMPL.6.
 
 Where an assignment or an operation of the synthesized set extends, truncates, or changes the sign of a value, the source SHOULD state that extension, truncation, or change explicitly (SIMPL.6).
 
 #### STND.SV.15 Initial values as evidence
 
-Default. Instantiates VV.1, HDES.12.
+Default, from CSQ3. Instantiates VV.1, HDES.12.
 
 Where the design record does not state that the target gives a state element at power-on the value that a declaration initializer or an initial procedure of the synthesized set gives it in simulation, the verification of HDES.12 SHOULD NOT rely on that value (VV.1, HDES.12). The verification of HDES.12 SHOULD NOT count a value that a simulator gives a state element at the start of a simulation as a value that the design sets (VV.1, HDES.12).
 
@@ -194,19 +192,19 @@ Where the design record does not state that the target gives a state element at 
 
 #### STND.SV.16 Intended unknown values
 
-Default. Instantiates SIMPL.6, VV.1.
+Default, from CSQ3. Instantiates SIMPL.6, VV.1.
 
 Each assignment of an unknown value in the synthesized set SHOULD be stated, at its location or in the design record, as the assignment of a value on which the design does not rely (SIMPL.6). The verification of HDES.6 SHOULD show, for each such assignment, that it is unreachable, or that the value it assigns reaches no output or state element on which a behavior of the contract relies (VV.1).
 
 #### STND.SV.17 Masked unknown values detected
 
-Default. Instantiates VV.1, HDES.6.
+Default, from CSQ3. Instantiates VV.1, HDES.6.
 
 Where the means of the work include a check, by proof or by simulation under a setting that evaluates both values of an unknown control, that reports each condition and selection of the synthesized set whose simulation turns an unknown value of its control into a known result, the verification of HDES.6 SHOULD include that check (VV.1, HDES.6). A simulation from randomized initial values, or under two-state simulation, SHOULD NOT be counted as that check (VV.1).
 
 #### STND.SV.18 Equivalence mode stated
 
-Default. Instantiates VV.5, INTPR.10, VV.1, HDES.8.
+Default, from CSQ3. Instantiates VV.5, INTPR.10, VV.1, HDES.8.
 
 The record of each check of equivalence under HDES.8 SHOULD state its equivalence mode (VV.5, INTPR.10). Where the tool of such a check provides a mode that matches an unknown value only with an unknown value, the check SHOULD run in that mode (VV.1, HDES.8). Where such a check fails in that mode, each output and state element on which it fails SHOULD be resolved, or shown by a simulation of the netlist or by a proof to behave as the verification of HDES.6 shows the hardware description to behave (VV.1, HDES.8).
 
@@ -214,25 +212,25 @@ The record of each check of equivalence under HDES.8 SHOULD state its equivalenc
 
 #### STND.SV.19 Sampled assertions
 
-Default. Instantiates DSGN.15, VV.1.
+Default, from CSQ3. Instantiates DSGN.15, VV.1.
 
 Where the language edition provides concurrent assertions, each assertion that decides in simulation a property relating values that change at a clock event SHOULD be a concurrent assertion on that clock (DSGN.15, VV.1). The action of an assertion SHOULD NOT write a variable of the design (VV.1).
 
 #### STND.SV.20 Assertion and assumption records
 
-Default. Instantiates VV.5, INTPR.10, HDES.6, VV.1.
+Default, from CSQ3. Instantiates VV.5, INTPR.10, HDES.6, VV.1.
 
 The record of the verification of HDES.6 SHOULD state, for each assertion that decides a verdict, whether it decides that verdict in simulation, in proof, or in both (VV.5, INTPR.10, HDES.6). Each assumption on the inputs of a design under which a proof of HDES.6 holds SHOULD be stated in the record of that proof, with the limit or property of the contract under HDES.4 that admits it (VV.1, INTPR.10).
 
 #### STND.SV.21 Coverage counting stated
 
-Default. Instantiates VV.5, INTPR.10, HDES.6.
+Default, from CSQ3. Instantiates VV.5, INTPR.10, HDES.6.
 
 Each coverage figure that the record of HDES.6 states SHOULD state whether its measure counts a branch taken on an unknown value of its condition, and whether it counts items that no reachable state of the design reaches (VV.5, INTPR.10, HDES.6). Each item that a coverage figure excludes SHOULD be listed in that record with its reason (VV.5, INTPR.10).
 
 #### STND.SV.22 Functional coverage from the contract
 
-Default. Instantiates VV.1, HDES.6.
+Default, from CSQ3. Instantiates VV.1, HDES.6.
 
 Each item of functional coverage that the record of HDES.6 counts SHOULD be defined from a property or a limit of the contract under HDES.4, apart from the code that generates stimulus (VV.1, HDES.6).
 
@@ -240,7 +238,7 @@ Each item of functional coverage that the record of HDES.6 counts SHOULD be defi
 
 #### STND.SV.23 Seeded random stimulus
 
-Default. Instantiates REPRO.1, REPRO.3, NUMER.24, VV.3.
+Default, from CSQ3. Instantiates REPRO.1, REPRO.3, NUMER.24, VV.3.
 
 Each stream of random values that a testbench draws SHOULD be keyed to the part of the stimulus that it generates, as STND.CONC.23 asks, and derived from the seed that the record of the run states, by the hierarchical seeding of the language definition or by a derivation that STND.VVUQ.62 recommends (REPRO.1, REPRO.3, NUMER.24). Where a change alters the stimulus that a recorded seed generates in a test that runs at that seed, the record of that change SHOULD state it (REPRO.3, VV.3).
 
@@ -248,7 +246,7 @@ Each stream of random values that a testbench draws SHOULD be keyed to the part 
 
 #### STND.SV.24 Static check classes
 
-Default. Instantiates DSGN.3, INTPR.10.
+Default, from CSQ3; sentence 2 from CSQ2. Instantiates DSGN.3, INTPR.10.
 
 The static checks that the repository configuration names for each hardware description and its verification set SHOULD report each finding of each class of the table of this provision that a tool available to the work reports (DSGN.3). The repository configuration SHOULD name each class of the table that no tool available to the work reports (INTPR.10).
 
@@ -262,29 +260,21 @@ The static checks that the repository configuration names for each hardware desc
 
 #### STND.SV.25 Netlist simulated after equivalence
 
-Default. Instantiates VV.1.
+Default, from CSQ2. Instantiates VV.1.
 
 Where a simulator available to the work reads the netlist that a check of equivalence under HDES.8 compares, a simulation of that netlist SHOULD run a set of tests of the verification of HDES.6 that the record of that verification lists, and give each of them the verdict that the test gives on the hardware description (VV.1).
 
 #### STND.SV.26 Second simulator for reliance
 
-Default. Instantiates VV.1, QA.9.
+Default, from CSQ1. Instantiates VV.1, QA.9.
 
 Where a simulator other than the one that decided a property of the contract of a design by simulation alone in the verification of HDES.6 is available to the work, that simulator SHOULD decide the property again from the record of that verification, with the same verdict, before a realization of the design is first relied upon or submitted for fabrication (VV.1, QA.9). A proof of such a property MAY take the place of its decision by that other simulator (VV.1).
 
 #### STND.SV.27 Simulator comparisons and seeds
 
-Default. Instantiates REPRO.3.
+Default, from CSQ3. Instantiates REPRO.3.
 
 A comparison of the results of two simulators SHOULD NOT rely on their drawing the same random values from the same seed (REPRO.3).
-
-### Names
-
-#### STND.SV.28 Verilog and SystemVerilog naming conventions
-
-Default. Instantiates INTPR.1, INTPR.4.
-
-Each name that the source files of a design and of its verification set declare SHOULD follow the naming convention that the repository configuration names (INTPR.1). A name that the notation documented under NUMER.4 fixes MAY keep the case and the form of its symbol, as STND.DOCS.12 permits (INTPR.4).
 
 ## Revision History
 
@@ -292,3 +282,5 @@ Each name that the source files of a design and of its verification set declare 
 | --- | --- | --- |
 | 1.0 | 2026-10-24 | Adopted. |
 | 1.1 | 2026-10-25 | Minor amendment (GOV.41): new STND.SV.28 (default, from CSQ3) leaves the convention of names in the source files of a design and of its verification set to the repository configuration and keeps the names that the notation of NUMER.4 fixes, the rule of decision 9 of 2026-10-24; the Purpose lists it and names STND.CODE.14 and STND.CODE.16 among the provisions that bind at every class; Terms import High-assurance code from STND.CODE; the Notes cite STND.CODE.17 to STND.CODE.20 for high-assurance code and give the reason for the naming rule and its class onset. |
+| 1.1.1 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields, and the tightening of the five sentences that add to a verdict or a figure is kept; no obligation, permission, or defined meaning changes. |
+| 1.2 | 2026-10-28 | Minor amendment (GOV.41): STND.SV.28 is withdrawn, STND.CODE.28 holding the convention of names for Verilog and SystemVerilog source as for every language, and the front matter lists it as withdrawn; the Purpose and the Notes cite STND.CODE.28. |

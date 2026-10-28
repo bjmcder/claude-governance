@@ -1,38 +1,36 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.FTN,standard,LVL2,Fortran standard,adopted,_doc.md,45b6d955caae3e4c79436ebc6c4c45868883af802e5adff0122e802981eafc94,39366
-STND.FTN.1,provision,LVL2,Revision in force,adopted,1.md,63ac3b2bd6611a8703ede61f5e95aa91bf1d08e7cdb491d388f4e914e2844033,814
-STND.FTN.2,provision,LVL2,Fortran compiler options,adopted,2.md,b22114b850c668dbc0c2239778d63f031be72a499020f6d96d9e102dcbcedbbf,836
-STND.FTN.3,provision,LVL2,Deleted and obsolescent forms,adopted,3.md,fca3c5ed09ffcc3e285e009443542926f46da61b20f52eb8c7ca50bb4526b65b,748
-STND.FTN.4,provision,LVL2,Explicit interfaces,adopted,4.md,7a800621998c9029b676ae1be8c96f530553af92e718fd1e7dcf49026f01c7aa,809
-STND.FTN.5,provision,LVL2,Implicit typing and argument intent,adopted,5.md,cee350967761bc7330e56d7f79cd3d4985a3442689e7725228f9eade4a8ba25c,693
-STND.FTN.6,provision,LVL2,Assumed-size dummy arrays,adopted,6.md,db7e20b860677718f645498aba399364a78b453aac816e4853bcb6b9ef61e042,471
-STND.FTN.7,provision,LVL2,Argument aliasing,adopted,7.md,74344c2259a917df5e50779e677bc74f7997e00a7283599960546957134f1f82,545
-STND.FTN.8,provision,LVL2,Pointers to dummy arguments,adopted,8.md,33bc4e4b79a10f7227b17fc9d454fba8ba1715718cf2c516dc90aa2d1abde49e,655
-STND.FTN.9,provision,LVL2,Values defined before reference,adopted,9.md,d382becca3509af0cf539f9c426a9803c19b59d184f565454f0be3e20d397bfd,544
-STND.FTN.10,provision,LVL2,Explicit SAVE of initialized locals,adopted,10.md,0e0fbfc85993c32756ea92f4e69342fd41a22a8f1531c32ce9a7084d33f56f5f,766
-STND.FTN.11,provision,LVL2,Saved state in concurrent calls,adopted,11.md,946c73111a7b3ef2b2925fc71381d6f3d09588da91555fb8409ed68aca383867,608
-STND.FTN.12,provision,LVL2,Common block declarations,adopted,12.md,8abbd28a6a7ad96e088d66e986b180f41c95c4dbc0e757de746856ac07a244b7,665
-STND.FTN.13,provision,LVL2,Named kind parameters,adopted,13.md,b38c40ae6692af21106dfe09e9ff7761d3ceb607c95f4df4365fd67a17c7cbf2,725
-STND.FTN.14,provision,LVL2,Kinds in literals and operations,adopted,14.md,402220008e6cdd004ac0c7b3aee89fdcdd3bb0293b7e2148bbbf56d37a1f5182,751
-STND.FTN.15,provision,LVL2,Integer range checks,adopted,15.md,382b3f6aec7788dbf6e8eb46b27b4a1c405f3dbf5358245c6ff2239ccd9d37fa,475
-STND.FTN.16,provision,LVL2,Halting modes and IEEE support,adopted,16.md,16d6ed1ad803b62f6bd2f57b0be19f1d71f8fdcdaa8a0a0e97eea75a032a5712,881
-STND.FTN.17,provision,LVL2,Non-finite tests and comparisons,adopted,17.md,5ca64368df9a19b220f0bf095ed75637f0cb16074584c6412fe5e470126bff85,730
-STND.FTN.19,provision,LVL2,DO CONCURRENT locality,adopted,19.md,004489d13234807e5021405f89dfbdc3162b8e7f5ec5b76f7eebcb3a428340d8,698
-STND.FTN.20,provision,LVL2,Common blocks in OpenMP,adopted,20.md,3790971f3c96f7af35c1ff776978c7a1ed7c371cbcb651c17edac856f9a33ea5,509
-STND.FTN.21,provision,LVL2,Fortran binding of MPI,adopted,21.md,6be3ea3e43afb023c0f11e9737812a8ee266a16120ecc38f99c97d6001367fd5,843
-STND.FTN.22,provision,LVL2,Asynchronous MPI buffers,adopted,22.md,a4991adfe1d1155d3e7b3d0380d973b1cdc4f99cbd7dbd4dac4d030d883b5fb8,876
-STND.FTN.23,provision,LVL2,Array sections in nonblocking operations,adopted,23.md,39a0589ac90c285b61515aae7e0ced62a0fba932504cb831b2be08c5f2d6e5a3,527
-STND.FTN.24,provision,LVL2,MPI datatypes of Fortran kinds,adopted,24.md,05e1304386ae6569f826040cb8166fb09c1481beeb5cdd1391f4c98eaaaf708d,480
-STND.FTN.25,provision,LVL2,Unit numbers of connections,adopted,25.md,3fcfe340c0af4e7171f621c62c5f22f705e4d011de5876cc3d39c9d6aabc5fe5,667
-STND.FTN.26,provision,LVL2,Order of parallel output records,adopted,26.md,139c73df4831c650896313e1cdcff69b45e828b6ab33a792babf60842b4ce62b,638
-STND.FTN.27,provision,LVL2,C interoperable interfaces,adopted,27.md,4e01fea3fb527eac7aa9b460847d53cd39263dadd484757310ca5f6476c6e122,803
-STND.FTN.28,provision,LVL2,Descriptors across the C boundary,adopted,28.md,8e10eae9b56825566a5acedf82ba55c4253da983953ec10bf96b3c5c4e9c639a,484
-STND.FTN.29,provision,LVL2,Fortran responses to listed failures,adopted,29.md,d69292bed31394adb9efe3fd0ba78ff468da9d54f4a4bcb2cc75019027b36ce4,615
-STND.FTN.30,provision,LVL2,Status specifiers answered,adopted,30.md,45c480c8434a8d192a5af096ba30719308fa7518a60a9663689663b5a6204f28,593
+STND.FTN,standard,LVL2,Fortran standard,adopted,_doc.md,d94992f9a827753d90d143ec0fc323ea6c93b553ba4aadf631ceeab64758c519,40105
+STND.FTN.1,provision,LVL2,Revision in force,adopted,1.md,5d852aa9b1a8282b4261d119b3f3d36d2cd36366b831f69d13a11f609c08631b,828
+STND.FTN.2,provision,LVL2,Fortran compiler options,adopted,2.md,77fe1306574fd5987170c128187278e29a9656f6dfb6a4189c96dea271a205db,850
+STND.FTN.3,provision,LVL2,Deleted and obsolescent forms,adopted,3.md,0ecd5eeaedb625c996889d370ad0644baee864f68fea0d35bfaf8d3bf1f7b966,762
+STND.FTN.4,provision,LVL2,Explicit interfaces,adopted,4.md,5a488d2d7b26e898bb86ddb841ac37589f4ec67550d3d20871acda1faf9496f8,879
+STND.FTN.5,provision,LVL2,Implicit typing and argument intent,adopted,5.md,8daaecaecaaad57e1d8ebc73b4c93013cbc1681cda879bcfc94df0214819a216,707
+STND.FTN.6,provision,LVL2,Assumed-size dummy arrays,adopted,6.md,31e27882f779ec340f68ef3fe9ae70a8b2bee7982f7d06f96c95d82e21a41c20,485
+STND.FTN.7,provision,LVL2,Argument aliasing,adopted,7.md,92f6e672f4dd4080d824a2cff16f3d8be63159123cee7e84c5dc152f26144193,559
+STND.FTN.8,provision,LVL2,Pointers to dummy arguments,adopted,8.md,954f85fd3a96d7853da5993984e9f18c6eb0399e55284c1a656ab2947c4b568d,669
+STND.FTN.9,provision,LVL2,Values defined before reference,adopted,9.md,2252dcdf6c76a7b99585b8d32fff4efcdbf30d946db16bec9007b9625bf26aa9,558
+STND.FTN.10,provision,LVL2,Explicit SAVE of initialized locals,adopted,10.md,364d4064cad946564ea0d5311f881536d65daddcac17c337feaf812401554a9e,780
+STND.FTN.11,provision,LVL2,Saved state in concurrent calls,adopted,11.md,3274096ab81c34c5a5ed806f6d11887b53c969a65aabdf89d72fefad5f9c6f7c,622
+STND.FTN.12,provision,LVL2,Common block declarations,adopted,12.md,493589a88790888e02b0f0ac83cc8925484d4e72e027c8bcc57d0fe7f9c9021e,679
+STND.FTN.13,provision,LVL2,Named kind parameters,adopted,13.md,9e62c1784f55a7a5e9d829ba9d7e6841e206d64d2ab08216d7d3465e3449696e,739
+STND.FTN.14,provision,LVL2,Kinds in literals and operations,adopted,14.md,3a01aa797607bce369aadb54928c7f08f503c6f0c54526b01ef0ec0b6711ed47,765
+STND.FTN.15,provision,LVL2,Integer range checks,adopted,15.md,5a7602c6bf29d4c0751410e1379390a563ac8affff8bc32a778c8ff4f91adaef,489
+STND.FTN.16,provision,LVL2,Halting modes and IEEE support,adopted,16.md,93c1b0cef20337ec377051d9e6089ab7ee5cba9ff006f5cb8b1a330447cfa5ba,897
+STND.FTN.17,provision,LVL2,Non-finite tests and comparisons,adopted,17.md,2f08a7e96e732c162c2f989a69e20c04de61503b89be9517ad3601450bf5302a,744
+STND.FTN.19,provision,LVL2,DO CONCURRENT locality,adopted,19.md,41e4b3971914b679d68ce8fbcd9238b9f9362b4c944db7f99174d58fbc95cac1,712
+STND.FTN.20,provision,LVL2,Common blocks in OpenMP,adopted,20.md,df7c56f73f4ac39e32e43f085650cb52035be97a1d317d61c454318344fd427b,523
+STND.FTN.21,provision,LVL2,Fortran binding of MPI,adopted,21.md,599ed469c26247c8acb34a2bced1595d46d58a589f0621e273d49501a437d9a5,857
+STND.FTN.22,provision,LVL2,Asynchronous MPI buffers,adopted,22.md,c47678081e686e0a0f27c5dd27a5927bfcd2821cb151f9afe04e14abc8e09793,890
+STND.FTN.23,provision,LVL2,Array sections in nonblocking operations,adopted,23.md,2d90752489aed579c12e591e30366ce8c8f6ad14ef4c9101402e538b3696a226,541
+STND.FTN.24,provision,LVL2,MPI datatypes of Fortran kinds,adopted,24.md,61727a5bf6f53c5128ce847aaf9e04caf2c7105db5997813620e4fa5887be38b,494
+STND.FTN.25,provision,LVL2,Unit numbers of connections,adopted,25.md,d103913e25b4538a630c034be5af808637fa208638a5e84732d8c6e1d1dbf1dc,681
+STND.FTN.26,provision,LVL2,Order of parallel output records,adopted,26.md,5f4b1b6517e793a24b70e3a231fb07ce3d734312e929bd51cf62dd6c971b7fa8,652
+STND.FTN.27,provision,LVL2,C interoperable interfaces,adopted,27.md,fcafab21b7105f0c9d0614efc5baa9d2bb34095926c4c278ab87d3ed9c6c22e8,817
+STND.FTN.28,provision,LVL2,Descriptors across the C boundary,adopted,28.md,e2bb70f5db97616c8b4d50dd98d05d4387d50f8bc7f1c4dfdf73fae3dfdb9ba4,498
+STND.FTN.30,provision,LVL2,Status specifiers answered,adopted,30.md,cf66e966441d3cd5a5569efd81bee31bd6b5dfd06416ceceaf0fa08b5889b567,595
 STND.FTN.31,provision,LVL2,Unremovable Fortran input checks,adopted,31.md,4ea5e9a05374e84ea329bf608f330a1bd42087b3966853c6368eacfeaa48cbe7,708
-STND.FTN.32,provision,LVL2,Halts by ERROR STOP,adopted,32.md,08a063020509391038a4e4cd40f5d4fc9f172272ddb7dbd746ea4a04b3eeaf7b,561
-STND.FTN.33,provision,LVL2,Legacy source list,adopted,33.md,d57587eefa26f1d0a1e2dc6e9bcff5d126fc2f834a5139f91565015afe866c92,1096
-STND.FTN.34,provision,LVL2,Modernizing changes,adopted,34.md,ee39a47e67cfb8120b8379a78521e87362b3c097779e1c056df2bbcb70cf67d4,2562
-STND.FTN.35,provision,LVL2,Run-time Fortran checks,adopted,35.md,51f535ad510c370d5de7e9672165112b07898cc3c1918c52d8106187ed35f00b,838
-STND.FTN.36,provision,LVL2,Floating-point exceptions under test,adopted,36.md,3883d7be8225c8fda1c792ee9d0d2d2db3f57ca6a49f6bcfdd26495aab3c084c,598
-STND.FTN.37,provision,LVL2,Fortran naming conventions,adopted,37.md,7c384e0282066d2fffd9ccb2489b277e6b4c8e6e34ccb8ce4dd9198b5398e084,602
+STND.FTN.32,provision,LVL2,Halts by ERROR STOP,adopted,32.md,b4567fc6345c54caa7b11a17d148dd8395c791aee41a09d4533e55aada86db4a,575
+STND.FTN.33,provision,LVL2,Legacy source list,adopted,33.md,f227ec8f498d73ce1009be4f43fddd9d834d5336ef61c4cc405d859201ca17bd,1197
+STND.FTN.34,provision,LVL2,Modernizing changes,adopted,34.md,d7c71ba1f65d82e967ada4a772d852def90aae0a4a7f2e7fc9a665b87b9baae0,2576
+STND.FTN.35,provision,LVL2,Run-time Fortran checks,adopted,35.md,eb234a7d69c12768786a4594576593500d9670ca5a9577c9f20b563a1abbd715,852
+STND.FTN.36,provision,LVL2,Floating-point exceptions under test,adopted,36.md,63872c526e1cfdb2520584e9dd96d55288c54abb79ef6af87f8096aed696dbae,612

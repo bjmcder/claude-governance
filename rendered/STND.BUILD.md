@@ -1,6 +1,6 @@
-# Build standard (STND.BUILD) 1.0.2
+# Build standard (STND.BUILD) 1.0.5
 
-Adopted by The Custodian as revision 1.0 in ledger entry 124 (2026-10-24); revised to 1.0.1 in entry 127 (2026-10-24) and 1.0.2 in entry 171 (2026-10-25). This reading copy is composed from the per-provision files in STND/BUILD/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 124 (2026-10-24); revised to 1.0.1 in entry 127 (2026-10-24), 1.0.2 in entry 171 (2026-10-25), 1.0.3 in entry 210 (2026-10-28), 1.0.4 in entry 263 (2026-10-28), and 1.0.5 in entry 315 (2026-10-28). This reading copy is composed from the per-provision files in STND/BUILD/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -46,7 +46,7 @@ The provisions rest on what the research note finds to hold across build tools: 
 
 A build is a sequence of steps that produces a result, and REPRO.10 governs it at LVL0 as it governs every such sequence. Between this standard and STND.WFLOW the rule is this: the steps that build software are governed by STND.BUILD, and STND.WFLOW governs the publication, retry, restart, storage, and resumption around them. A build that runs as one step of a larger workflow is a step of that workflow under STND.WFLOW, and its own build steps are governed here. STND.BUILD.23 is the build form of STND.WFLOW.6: it keys a stored output on the content of the inputs of its step, as STND.WFLOW.6 keys a stored output of a workflow step, and adds the revision of each tool and the variables of the environment that a build step reads, which a build cache that keys only on files leaves out.
 
-The standard adds build content to provisions that already hold the outcome, and does not restate them (GOV.31). REPRO.1 has every result regenerable from recorded inputs, REPRO.2 the properties of the computational environment that affect results recorded, which is where a project states what the environment of its builds holds, REPRO.3 undeclared variation a defect, REPRO.4 provenance written at production, REPRO.9 each dependency enumerated at its exact revision, and REPRO.10 the build description versioned and reviewed; QA.7 has each change to it reviewed. STND.DEPS.6 verifies each fetched component against its integrity digest before use, at every class; STND.DEPS.8 records the revision of each compiler and interpreter with each result; STND.DEPS.10 lets lock files serve as the dependency record. STND.CODE.6 keeps each check of untrusted input in every build, so no build configuration removes one, and STND.CODE.21 advises against compiling code that holds a check of a floating-point value that STND.CODE.6 or STND.CODE.16 governs under a setting that lets the compiler assume finite values, which STND.CXX.18 binds for C++ and STND.STDC.40 for C. HW.3 identifies the execution path of each result, HW.5 has the hardware contract state each option that sets its delivered arithmetic, and STND.ANNEX.5 lists among what the citing contract states each build setting that admits approximation, changes rounding, flushes subnormal values, or enables traps; one statement serves HW.5 and STND.BUILD.11 where the contract cites the repository configuration. HW.7 has the evidence current for the settings and libraries in use, and has each run confirm at its start the properties on which its results rely. STND.OFFLD.24 records the hardware models for which a build holds device code, and STND.OMP.4 has a component that uses OpenMP built and tested without it where its documentation says that it works so. STND.VVUQ.82 has a difference whose every source is stated, and that lies within the agreement fixed before a comparison, not treated as a defect, and admits a mode without run-to-run variation as an option; STND.VVUQ.83 keeps an agent from changing the work on its own initiative only to remove such a difference.
+The standard adds build content to provisions that already hold the outcome, and does not restate them (GOV.31). REPRO.1 has every result regenerable from recorded inputs, REPRO.2 the properties of the computational environment that affect results recorded, which is where a project states what the environment of its builds holds, REPRO.3 undeclared variation a defect, REPRO.4 provenance written at production, REPRO.9 each dependency enumerated at its exact revision, and REPRO.10 the build description versioned and reviewed; QA.7 has each change to it reviewed. STND.DEPS.6 verifies each fetched component against its integrity digest before use, at every class; STND.DEPS.8 records the revision of each compiler and interpreter with each result; STND.DEPS.10 lets lock files serve as the dependency record. STND.CODE.6 keeps each check of untrusted input in every build, so no build configuration removes one, and STND.CODE.21 forbids compiling code that holds a check of a floating-point value that STND.CODE.6 or STND.CODE.16 governs under a setting that lets the compiler assume finite values, in every language, C and C++ included. HW.3 identifies the execution path of each result, HW.5 has the hardware contract state each option that sets its delivered arithmetic, and STND.ANNEX.5 lists among what the citing contract states each build setting that admits approximation, changes rounding, flushes subnormal values, or enables traps; one statement serves HW.5 and STND.BUILD.11 where the contract cites the repository configuration. HW.7 has the evidence current for the settings and libraries in use, and has each run confirm at its start the properties on which its results rely. STND.OFFLD.24 records the hardware models for which a build holds device code, and STND.OMP.4 has a component that uses OpenMP built and tested without it where its documentation says that it works so. STND.VVUQ.82 has a difference whose every source is stated, and that lies within the agreement fixed before a comparison, not treated as a defect, and admits a mode without run-to-run variation as an option; STND.VVUQ.83 keeps an agent from changing the work on its own initiative only to remove such a difference.
 
 The forms of these rules for one language belong to the standard of that language, which cites this standard for the general rule. STND.CXX.4 and STND.CXX.25 are the C++ forms of STND.BUILD.11 and of the first sentence of STND.BUILD.12. The rules here are the wider: STND.BUILD.11 also asks the values that the toolchain takes by default, in one place, and the settings of each link step, and STND.BUILD.12 reaches each tool of the toolchain and not only the compilers. STND.CXX.26 runs the tests of C++ code in checking builds, and STND.CXX.27 keeps the library's production checks in reporting builds; a verdict of a test that a checking build runs is a result of the checks of a change, and the term Reporting build leaves it out. The outcomes hold for a language whose source names its units by a module or a crate and not by a file (STND.BUILD.2), for code that a compiler loads and runs during compilation (STND.BUILD.9 and STND.BUILD.21), and for a build script written by hand (STND.BUILD.1, STND.BUILD.7, and STND.BUILD.21). Where an interpreter runs source that nothing compiles ahead of the run, the settings of the run belong to the standard of the language, as STND.JL.5 holds them for Julia, and STND.BUILD.11 reaches each step that compiles or translates. A translation unit of STND.CXX is a compilation unit in the sense of this standard.
 
@@ -56,7 +56,7 @@ A fetch inside a build step makes the outputs depend on what a remote system ret
 
 A configure step that detects a library, a header, or a feature of the host makes the same source build differently on two hosts, and a property found absent removes a feature silently (S23, S19) (STND.BUILD.8). Required or recorded, and settable by an option, the property becomes a declared input. A configure step that runs a test program on the build host learns nothing of a target platform that the build host does not run, so in a cross build each such property has a declared value or a test that compiles and does not run; a tool that the build compiles and then runs during the build is code for the build host, and compiled for the target platform it does not run there (b1, section 4, S9). Code that a compiler loads and runs during compilation, a macro that runs as code or a plug-in of the compiler among it, is code for the build host in the same way (STND.BUILD.9). One build tool treats a build of device code that names no hardware model as an error, and accepts a value that takes the set from the accelerators present on the build host, so that a build on a host without accelerators fails or builds for none; a build of device code holds compiled code for each named hardware model and, optionally, intermediate code that a runtime library compiles at load (S9d, S24) (STND.BUILD.10). A target of device code often names a family of hardware models, and the statement of STND.BUILD.10 gives the targets in the form that the compiler takes. A rule that takes the set from the accelerators of the build host meets STND.BUILD.10, and the record of STND.OFFLD.24 and the Hosts row of STND.BUILD.25 then show what was built and where. A build without code for the accelerator installed where it runs is found at the start of a run by the confirmation of HW.7.
 
-The default of an option that changes results belongs to a compiler and a language mode: one compiler leaves multiply and add uncontracted in a standards-conforming mode of C and contracts them otherwise, and another documents one default of contraction for each of two accelerator languages and a third for its other languages (S5, S13). One option lets the compiler assume that no argument or result is a not-a-number or an infinity (S5), which is why STND.CODE.21 advises against it for code that holds a required check of such a value, and STND.CXX.18 and STND.STDC.40 keep it from such C++ and C code; an option bundle that relaxes floating-point semantics is set by its own name or by one optimization level, which that compiler documents as disregarding strict compliance with the language standard (S5). In one study, compilations of one library and its examples across compilers and options gave 1,086 instances of differing results, and in five examples a vendor's link step introduced variation whatever the optimization level (S28) (STND.BUILD.11). A setting left to the default of the toolchain is a setting whose value the repository configuration does not show and a change of toolchain changes silently, so the first sentence of STND.BUILD.11 states its value. The link step is among the places where a setting changes results: in one compiler, the option bundle that relaxes floating-point semantics links startup code that flushes subnormal values for every library in the process, and another documents that its option for unsafe mathematics, given at link time, may include startup files that change the default floating-point control word (S13, S5) (the second sentence of STND.BUILD.11). The name of a build configuration does not say what it holds, and one build tool's default build type is often an empty string (S12b), which is why the build record gives the values of the settings.
+The default of an option that changes results belongs to a compiler and a language mode: one compiler leaves multiply and add uncontracted in a standards-conforming mode of C and contracts them otherwise, and another documents one default of contraction for each of two accelerator languages and a third for its other languages (S5, S13). One option lets the compiler assume that no argument or result is a not-a-number or an infinity (S5), which is why STND.CODE.21 forbids it, in every language, for code that holds a required check of such a value; an option bundle that relaxes floating-point semantics is set by its own name or by one optimization level, which that compiler documents as disregarding strict compliance with the language standard (S5). In one study, compilations of one library and its examples across compilers and options gave 1,086 instances of differing results, and in five examples a vendor's link step introduced variation whatever the optimization level (S28) (STND.BUILD.11). A setting left to the default of the toolchain is a setting whose value the repository configuration does not show and a change of toolchain changes silently, so the first sentence of STND.BUILD.11 states its value. The link step is among the places where a setting changes results: in one compiler, the option bundle that relaxes floating-point semantics links startup code that flushes subnormal values for every library in the process, and another documents that its option for unsafe mathematics, given at link time, may include startup files that change the default floating-point control word (S13, S5) (the second sentence of STND.BUILD.11). The name of a build configuration does not say what it holds, and one build tool's default build type is often an empty string (S12b), which is why the build record gives the values of the settings.
 
 A warning that fails the checks of a change costs its author one fix where the toolchain is fixed and known. A release archive whose build fails on warnings by default fails for each party that builds it with a compiler newer than the release that adds a warning, and one compiler's documentation advises against enabling every warning that it offers, since newer warnings vary in quality (S13); the maintainers of two projects decided against failing on warnings by default in their release archives for that reason, which are opinions and not studies (S25, a secondary source) (STND.BUILD.12). The second sentence of STND.BUILD.12 limits the failure of a build on a warning to the toolchains on which the checks of the release ran, so that the build description makes that behavior explicit for each toolchain (SIMPL.6). A finding that STND.CODE.4 suppresses at its location, with its reason, is not reported, and so fails no check under STND.BUILD.12. A detector of invalid memory accesses needs its option at compilation and at link, and slows a run about twofold; a detector of data races generally needs every part of the program compiled with it, and code compiled without it gives missed races or false reports (S10b, S11) (STND.BUILD.13). Outputs of a checking build mixed with those of a reporting build give a result from a build configuration that nobody measured, which is why a checking build keeps its own build tree. STND.CONC.25 runs concurrency checks at run time, and STND.CONC.27 has the record of a verification state what its method does not cover, which the second sentence of STND.BUILD.13 makes specific for the parts of the work linked without a check. Whether two detectors are able to run in one build is marked unverified in the research note, and no provision depends on it.
 
@@ -66,9 +66,9 @@ In the compromise of a compression library disclosed in 2024, the first stage of
 
 A remote cache that does not track a tool installed outside the build's own inputs lets two machines give different outputs under the same key, and a variable of the environment counts only where it is listed; the same documentation advises that only the system that runs the checks write to the cache (S18b, S26) (STND.BUILD.23 and STND.BUILD.24). RSRC.7 admits reuse only where it preserves correctness and reproducibility, which a key that holds every declared input and a store that only checked builds write give. A key that holds every input of a step that reads a secret holds that secret or a digest of it, which a store shared between hosts discloses, so the second sentence of STND.BUILD.23 keeps the outputs of such a step out of the cache, stored and served (PRIME.10). An output that a build cache outside the provisioned environment serves is transferred into it from outside; STND.BUILD.23 and STND.BUILD.24 hold the build's part, and the term Fetched component of STND.DEPS decides whether STND.DEPS.6 also applies to it. A cache that served a wrong output is not able to show which other entries are wrong, so the second sentence of STND.BUILD.24 stops all reads from it; the cache stays as the evidence from which QA.13 identifies what relied on it, and its later disposal, after an archive of it, is an irrecoverable action under GUARD.5, reserved to the human owner (PRIME.6), unless an exempt class of STND.DFLT.15 applies to it.
 
-The build record gathers in one record what REPRO.1, REPRO.2, STND.DEPS.8, and STND.OFFLD.24 ask of a build, and adds the items that the sources show to change the outputs of a build: the linker and the other tools of the toolchain, the system root, the build host, the detected properties, the settings, the environment, and the digests of the outputs. One distribution's record of a build gives the architecture of the build machine, the installed packages that might affect the build, the environment variables known to affect it, and digests of all files that make up the build, and a framework of supply-chain levels adds the external parameters and the resolved dependencies (S6, S19) (STND.BUILD.25). PRIME.10 keeps every secret out of a record and out of an environment capture, so the Environment row names a variable that holds a secret without its value. The integrity digest of an output links it to its build record, and a result whose record gives that digest, or the identity of its computational environment as REPRO.1 asks, traces through the build record to each input of the build. For a realization of a hardware design, the design record of HDES.3 is the record of its transformation steps, and a second record of the same step does not arise. A record that lists each item and names no tool is the form that holds across build tools. A matrix of build configurations is a declared set with a rule for each failure, and the axes that change results are the toolchains, the build configurations, the checking builds, the target platforms, the hardware models of device code, and the optional features, of which a build without OpenMP (STND.OMP.4) and the oldest and newest declared releases (STND.PY.14) are two instances (S29) (STND.BUILD.26). A combination left out for its cost is a regime that the checks do not cover, and the second sentence of STND.BUILD.26 states it as INTPR.10 asks; a release inside a declared range whose oldest and newest members a build configuration builds is stated by stating that range once, as the same sentence admits.
+The build record gathers in one record what REPRO.1, REPRO.2, STND.DEPS.8, and STND.OFFLD.24 ask of a build, and adds the items that the sources show to change the outputs of a build: the linker and the other tools of the toolchain, the system root, the build host, the detected properties, the settings, the environment, and the digests of the outputs. One distribution's record of a build gives the architecture of the build machine, the installed packages that might affect the build, the environment variables known to affect it, and digests of all files that make up the build, and a framework of supply-chain levels adds the external parameters and the resolved dependencies (S6, S19) (STND.BUILD.25). PRIME.10 keeps every secret out of a record and out of an environment capture, so the Environment row names a variable that holds a secret without its value. The integrity digest of an output links it to its build record, and a result whose record gives that digest, or the identity of its computational environment as REPRO.1 asks, traces through the build record to each input of the build. For a realization of a hardware design, the design record of HDES.3 is the record of its transformation steps, and a second record of the same step does not arise. A record that lists each item and names no tool is the form that holds across build tools. A matrix of build configurations is a declared set with a rule for each failure, and the axes that change results are the toolchains, the build configurations, the checking builds, the target platforms, the hardware models of device code, and the optional features, of which a build without OpenMP (STND.OMP.4) and the oldest and newest revisions that a declared range admits (STND.DEPS.14) are two instances (S29) (STND.BUILD.26). A combination left out for its cost is a regime that the checks do not cover, and the second sentence of STND.BUILD.26 states it as INTPR.10 asks; a release inside a declared range whose oldest and newest members a build configuration builds is stated by stating that range once, as the same sentence admits.
 
-Under STND.CLASS.10, each provision instantiates only DSGN, SIMPL, REPRO, RSRC, INTPR, VV, QA, or HW.5, and applies from CSQ3; work of CSQ4 may omit it. The part of a provision that rests on a row of the table of STND.CLASS.10 applies from the class of that row. STND.BUILD.21 rests on REPRO.10, the versioning and review of each workflow, and applies from CSQ2. The second sentence of STND.BUILD.25 rests on REPRO.4 and applies from CSQ2. The second sentence of STND.BUILD.26 documents a limit of what the checks cover, rests on INTPR.10, and applies from CSQ2. The comparisons of STND.BUILD.3, STND.BUILD.5, STND.BUILD.19, and STND.BUILD.20 compare outputs of the work with other outputs of the work, and not with a reference oracle, and ask for no regeneration by another actor under QA.9, so they rest on no row and apply from CSQ3. The second sentence of STND.BUILD.24 rebuilds the outputs that a found fault reaches, as QA.13 asks, and asks for no mechanism that tracks dependencies between results, which the row of QA.14 covers, so it applies from CSQ3. STND.BUILD.10 declares the targets for which a build compiles, under SIMPL.6, and states no behavior of hardware that a result relies on, which a contract of DSGN.5 states, so it applies from CSQ3. The first sentence of STND.BUILD.12 asks for a mechanical check (DSGN.3) and applies from CSQ3; the mechanical checking of each contract of a safety-related component, which STND.CLASS.10 starts at CSQ0, stays with that row. The second sentence of STND.BUILD.12 declares behavior under SIMPL.6 and applies from CSQ3. The second sentence of STND.BUILD.13 states what the checks of a checking build do not cover, a limit of validity of a verification (INTPR.10), and applies from CSQ2, as STND.CONC.27 does; it asks for neither a reference oracle nor a proof, which the rows of VV.1 cover. STND.BUILD.11 instantiates HW.5, which the Notes of HW apply from CSQ3. Every other provision and sentence rests on no row and applies from CSQ3. No provision binds, and none raises the floor (GOV.11): each is a default that asks only what REPRO, DSGN, SIMPL, RSRC, INTPR, VV, QA, or HW.5 already ask, at the cost of wording, a setting, a check, or one record, and the verification of fetched components, the authorization of network access, and the exclusion of secrets from records already bind through STND.DEPS.6, PRIME.7, and PRIME.10.
+Under STND.CLASS.10, each provision instantiates only DSGN, SIMPL, REPRO, RSRC, INTPR, VV, QA, or HW.5, and applies from the class that its field `onset` gives, which work of CSQ4 may omit, and the settings of STND.BUILD.11 apply from CSQ3 through the provisions of LVL0 that they also instantiate, a tightening above the floor (PRIME.15) for work that HW binds, since each asks a statement, a setting, a check, or a test that needs no hardware contract. No provision binds, and none raises the floor (GOV.11): each is a default that asks only what REPRO, DSGN, SIMPL, RSRC, INTPR, VV, QA, or HW.5 already ask, at the cost of wording, a setting, a check, or one record, and the verification of fetched components, the authorization of network access, and the exclusion of secrets from records already bind through STND.DEPS.6, PRIME.7, and PRIME.10.
 
 ## References
 
@@ -109,43 +109,43 @@ Under STND.CLASS.10, each provision instantiates only DSGN, SIMPL, REPRO, RSRC, 
 
 #### STND.BUILD.1 Declared inputs of build steps
 
-Default. Instantiates REPRO.1, SIMPL.6.
+Default, from CSQ3. Instantiates REPRO.1, SIMPL.6.
 
 The declared inputs of each build step SHOULD include each file, tool, execution setting, and variable of the environment that the step reads and that is able to change one of its outputs (REPRO.1, SIMPL.6).
 
 #### STND.BUILD.2 Inputs derived from the source
 
-Default. Instantiates REPRO.1, SIMPL.6.
+Default, from CSQ3. Instantiates REPRO.1, SIMPL.6.
 
 Where a build step reads files, modules, or other units that its source names, the declaration of what it reads as inputs of that step SHOULD be derived from the source at each run of the step, by the tool that reads it or by a tool that scans it (REPRO.1, SIMPL.6).
 
 #### STND.BUILD.3 Schedule-independent build outputs
 
-Default. Instantiates REPRO.3, QA.4.
+Default, from CSQ3. Instantiates REPRO.3, QA.4.
 
 The outputs of an incremental build, and of a build that runs its steps in parallel, SHOULD be the same as those of a clean build that runs its steps one at a time from the same declared inputs, within the variation that the build record declares (REPRO.3). Each difference beyond that variation SHOULD be recorded in defect tracking as a defect of the build (REPRO.3, QA.4).
 
 #### STND.BUILD.4 Generated files and generators
 
-Default. Instantiates REPRO.1.
+Default, from CSQ3. Instantiates REPRO.1.
 
 Each generated file SHOULD be the output of a build step whose declared inputs include its generator and each input of that generator (REPRO.1). A generated file SHOULD be changed only by running its generator again (REPRO.1).
 
 #### STND.BUILD.5 Generated files under version control
 
-Default. Instantiates VV.8, REPRO.3.
+Default, from CSQ3. Instantiates VV.8, REPRO.3.
 
 Where the version history of the work holds a generated file, the checks of each change SHOULD generate that file again from its declared inputs and fail on each difference from the file held that the build record does not declare as variation (VV.8, REPRO.3).
 
 #### STND.BUILD.6 Builds outside the source tree
 
-Default. Instantiates REPRO.1, DSGN.16.
+Default, from CSQ3. Instantiates REPRO.1, DSGN.16.
 
 Other than the update of a generated file that the version history holds, made by running its generator, each build SHOULD write its outputs and its generated files only into its build tree, apart from the source tree (REPRO.1, DSGN.16).
 
 #### STND.BUILD.7 Fetching apart from building
 
-Default. Instantiates REPRO.1, SIMPL.6.
+Default, from CSQ3. Instantiates REPRO.1, SIMPL.6.
 
 Each fetched component that a build reads SHOULD be fetched before the build begins, by a step apart from the build (REPRO.1). Where a declared input of a build step is absent, the build SHOULD stop with a diagnostic that names that input (SIMPL.6).
 
@@ -153,19 +153,19 @@ Each fetched component that a build reads SHOULD be fetched before the build beg
 
 #### STND.BUILD.8 Detected configuration properties
 
-Default. Instantiates SIMPL.6, REPRO.2.
+Default, from CSQ3. Instantiates SIMPL.6, REPRO.2.
 
 Each property of the build host or of the target platform that a configure step detects, and that is able to change a result, SHOULD be either required by the build description, so that its absence stops the build, or recorded as absent in the build record (SIMPL.6, REPRO.2). The build description SHOULD let an option of the build set each such property in place of its detection (SIMPL.6).
 
 #### STND.BUILD.9 Configuration of cross builds
 
-Default. Instantiates SIMPL.6.
+Default, from CSQ3. Instantiates SIMPL.6.
 
 Where the build host does not run code of the target platform, each property of the target platform that a configure step uses SHOULD come from a value that the build description or an option of the build declares, or from a test that runs no code of the target platform (SIMPL.6). Where a build compiles a tool that a later build step runs on the build host, or code that a compiler loads and runs during compilation, the build description SHOULD state the toolchain and the execution settings of that code apart from those of the code for the target platform (SIMPL.6).
 
 #### STND.BUILD.10 Stated device code targets
 
-Default. Instantiates SIMPL.6.
+Default, from CSQ3. Instantiates SIMPL.6.
 
 The repository configuration SHOULD state, for each build of device code, each hardware model of accelerator for which the build compiles code, and whether the build adds code for a runtime library to compile at load (SIMPL.6). Where the repository configuration states, for a build of device code, neither such a hardware model nor a rule that takes the hardware models from the accelerators of the build host, that build SHOULD stop with a diagnostic (SIMPL.6).
 
@@ -173,19 +173,19 @@ The repository configuration SHOULD state, for each build of device code, each h
 
 #### STND.BUILD.11 Result-affecting build settings
 
-Default. Instantiates SIMPL.6, REPRO.2, HW.5.
+Default, from CSQ3. Instantiates SIMPL.6, REPRO.2, HW.5.
 
 The repository configuration SHOULD state, in one place for each compilation unit, each execution setting of the compilation of that unit that is able to change a result, with its value, a value that the toolchain takes by default included (SIMPL.6, REPRO.2, HW.5). The repository configuration SHOULD state, in one place for each link step, each execution setting of that step that is able to change a result, a setting that changes the floating-point control state of the whole process included (SIMPL.6, HW.5).
 
 #### STND.BUILD.12 Warnings in checks and releases
 
-Default. Instantiates DSGN.3, SIMPL.6.
+Default, from CSQ3. Instantiates DSGN.3, SIMPL.6.
 
 The checks of each change SHOULD fail on each warning that a tool of the toolchain reports on the work's own source, at a set of warnings that the repository configuration records (DSGN.3). The build description that a release archive holds SHOULD make a warning fail a build only under a toolchain on which the checks of that release ran (SIMPL.6).
 
 #### STND.BUILD.13 Checking builds kept apart
 
-Default. Instantiates SIMPL.6, VV.1, INTPR.10.
+Default, from CSQ3; sentence 2 from CSQ2. Instantiates SIMPL.6, VV.1, INTPR.10.
 
 Each checking build SHOULD be a build configuration that is named apart from the build configuration of each reporting build, and that writes into a build tree of its own (SIMPL.6). The record of each checking build SHOULD state each check that it adds, and each part of the work that it links without that check (VV.1, INTPR.10).
 
@@ -193,37 +193,37 @@ Each checking build SHOULD be a build configuration that is named apart from the
 
 #### STND.BUILD.14 Embedded build instant
 
-Default. Instantiates REPRO.1, REPRO.3.
+Default, from CSQ3. Instantiates REPRO.1, REPRO.3.
 
 Each date or time that a build step embeds in an output SHOULD either be an instant that the build takes from its source revision or from a declared input, or be declared in the build record as a variation of that output (REPRO.1, REPRO.3).
 
 #### STND.BUILD.15 Fixed order of inputs
 
-Default. Instantiates REPRO.3.
+Default, from CSQ3. Instantiates REPRO.3.
 
 Each output of a build step that depends on the order of the inputs of that step SHOULD either take that order from an explicit list or a sort under a collation that the build description states, or be declared in the build record as varying with that order (REPRO.3).
 
 #### STND.BUILD.16 Locale and time zone of builds
 
-Default. Instantiates REPRO.2, REPRO.3.
+Default, from CSQ3. Instantiates REPRO.2, REPRO.3.
 
 Each build step whose output depends on the locale or the time zone SHOULD either run under a locale and a time zone that the build description sets, or have that output declared in the build record as varying with them (REPRO.2, REPRO.3).
 
 #### STND.BUILD.17 Build paths in outputs
 
-Default. Instantiates REPRO.2, REPRO.3.
+Default, from CSQ3. Instantiates REPRO.2, REPRO.3.
 
 Each path of the build tree or of the source tree that a build step embeds in an output SHOULD be a path at which the build record states that the build ran, a path to which the build description maps it in the outputs, or a variation of that output that the build record declares (REPRO.2, REPRO.3).
 
 #### STND.BUILD.18 Randomness in build steps
 
-Default. Instantiates DSGN.17, REPRO.3.
+Default, from CSQ3. Instantiates DSGN.17, REPRO.3.
 
 Where a build step uses randomness that is able to change an output, that randomness SHOULD either be fixed by a seed among its declared inputs, or be declared in the build record as a variation of that output (DSGN.17, REPRO.3).
 
 #### STND.BUILD.19 Build comparisons at release
 
-Default. Instantiates REPRO.3, VV.8, QA.4.
+Default, from CSQ3. Instantiates REPRO.3, VV.8, QA.4.
 
 The checks of each release SHOULD compare the outputs of two clean builds made from the same declared inputs at different times, and compare the outputs of an incremental build and of a parallel build with those of a clean build that runs its steps one at a time (REPRO.3, VV.8). Each difference between the outputs of the two clean builds SHOULD be stated in the build record with its source, or recorded in defect tracking as a defect (REPRO.3, QA.4).
 
@@ -231,19 +231,19 @@ The checks of each release SHOULD compare the outputs of two clean builds made f
 
 #### STND.BUILD.20 Release archives from the revision
 
-Default. Instantiates REPRO.1, VV.8, REPRO.3.
+Default, from CSQ3. Instantiates REPRO.1, VV.8, REPRO.3.
 
 Each release archive SHOULD be produced by a build step of the build description from the revision that its release names (REPRO.1). The checks of each release SHOULD produce again, from that revision, each file of its release archives that the revision does not hold, and fail on each difference from the file in the archive that the build record does not declare as variation (VV.8, REPRO.3).
 
 #### STND.BUILD.21 Build scripts as code
 
-Default. Instantiates REPRO.10, QA.7.
+Default, from CSQ2. Instantiates REPRO.10, QA.7.
 
 Each build script of the work SHOULD either be held under version control and reviewed as code of the work at each change to it, or be generated by a build step from inputs that are so held and reviewed (REPRO.10, QA.7).
 
 #### STND.BUILD.22 Exclusion of test data
 
-Default. Instantiates DSGN.8.
+Default, from CSQ3. Instantiates DSGN.8.
 
 A build step that produces an output that the work delivers SHOULD NOT read a file that the repository configuration marks as test data (DSGN.8).
 
@@ -251,13 +251,13 @@ A build step that produces an output that the work delivers SHOULD NOT read a fi
 
 #### STND.BUILD.23 Build cache keys
 
-Default. Instantiates RSRC.7, REPRO.1.
+Default, from CSQ3. Instantiates RSRC.7, REPRO.1.
 
 A build cache SHOULD serve an output only under a key that holds the identity and revision of each tool of the build step that produced it, the execution settings of that step, a digest of the value of each variable of the environment that the step reads and that is able to change its outputs, and the integrity digest of each of its other declared inputs (RSRC.7, REPRO.1). Where a build step reads a secret, the outputs of that step SHOULD be kept out of each build cache, neither stored in it nor served from it (RSRC.7, PRIME.10).
 
 #### STND.BUILD.24 Shared build cache writers
 
-Default. Instantiates RSRC.7, QA.13.
+Default, from CSQ3. Instantiates RSRC.7, QA.13.
 
 Each build cache that more than one host reads SHOULD accept outputs only from the builds that the checks of the work run (RSRC.7). Where an output that a build cache served is found wrong, the work SHOULD stop taking outputs from that cache, keep the cache until each output that relied on it is identified, and build again each output that it served and on which a result still relies (RSRC.7, QA.13).
 
@@ -265,7 +265,7 @@ Each build cache that more than one host reads SHOULD accept outputs only from t
 
 #### STND.BUILD.25 Build record
 
-Default. Instantiates REPRO.1, REPRO.2, REPRO.4.
+Default, from CSQ3; sentence 2 from CSQ2. Instantiates REPRO.1, REPRO.2, REPRO.4.
 
 Each reporting build SHOULD have one build record with the content of the table of this provision (REPRO.1, REPRO.2). The build SHOULD write that record with its outputs, at their production (REPRO.4).
 
@@ -285,7 +285,7 @@ Each reporting build SHOULD have one build record with the content of the table 
 
 #### STND.BUILD.26 Build configurations under check
 
-Default. Instantiates VV.8, INTPR.10.
+Default, from CSQ3; sentence 2 from CSQ2. Instantiates VV.8, INTPR.10.
 
 The repository configuration SHOULD state each build configuration that the checks of the work build and test (VV.8). Where the work admits a toolchain, a target platform, a hardware model of device code, or an optional feature that no such build configuration builds, the repository configuration SHOULD state it as unchecked, or state the declared range that holds it and whose oldest and newest members a build configuration builds (INTPR.10).
 
@@ -296,3 +296,6 @@ The repository configuration SHOULD state each build configuration that the chec
 | 1.0 | 2026-10-24 | Adopted. |
 | 1.0.1 | 2026-10-24 | Editorial amendment (GOV.41): the Purpose and the Notes cite STND.WFLOW where they named the standard for computational workflows in words, the Notes name STND.BUILD.23 as the build form of STND.WFLOW.6, and References lists STND.WFLOW; no obligation changes. |
 | 1.0.2 | 2026-10-25 | Editorial amendment (GOV.41): the informative Notes cite STND.CODE.21, the rule for every language on settings that let the compiler assume finite floating-point values near a required check, and STND.CODE.16, beside STND.CXX.18, which binds that rule for C++ and which they cited alone, and STND.STDC.40, which binds it for C; References lists STND.STDC; no obligation, permission, or defined meaning changes. |
+| 1.0.3 | 2026-10-28 | Editorial amendment (GOV.41): the informative Notes say that STND.CODE.21 forbids, in place of advises against, a setting that lets the compiler assume finite values for code that holds a required check of a floating-point value, and that STND.CXX.18 and STND.STDC.40 state the same for C++ and C, in place of binding it alone; no obligation, permission, or defined meaning changes. |
+| 1.0.4 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields; no obligation, permission, or defined meaning changes. |
+| 1.0.5 | 2026-10-28 | Editorial amendment (GOV.41): the Notes say that STND.CODE.21 forbids, in every language, a setting that lets the compiler assume finite values for code that holds a required check, in place of naming STND.CXX.18 and STND.STDC.40, which STND.CXX 1.5 and STND.STDC 1.5 withdraw, and cite STND.DEPS.14 for the oldest and newest revisions of a declared range in place of STND.PY.14; no obligation, permission, or defined meaning changes. |

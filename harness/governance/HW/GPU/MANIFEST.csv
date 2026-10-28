@@ -1,6 +1,6 @@
 id,kind,level,title,status,path,sha256,bytes
-HW.GPU,sub-profile,LVL1,Accelerators,adopted,_doc.md,470ed3b71e49a5e5e137e8b8f553b182b808ce4e37bbd123f01b66bdd2d95006,8410
-HW.GPU.1,provision,LVL1,Accelerator selector,adopted,1.md,577f54f31cfdf65563c9cbbf76895dd61c37778dfd8754eb8e75e5100a83a77e,503
+HW.GPU,sub-profile,LVL1,Accelerators,adopted,_doc.md,080d713655835734cba4f879c34a3c9cf0e771cab1d18437602471f8215573b1,9458
+HW.GPU.1,provision,LVL1,Accelerator selector,adopted,1.md,68895c2eeac456c04a28d5a58c6cf4aff7907fdceb2c48f3bbbed2528b7c35ee,500
 HW.GPU.2,provision,LVL1,Accelerator shared matters,adopted,2.md,1c77327c622d1595caaefd311c6e25550d0c2a1eca1a8242bba3cf1129fbf764,537
 HW.GPU.3,provision,LVL1,Completion of offloaded work,adopted,3.md,6afd91dc500327258c3eacf01aa2154e187dbfdca7dfc5e330191c2b1cac778d,567
-HW.GPU.4,provision,LVL1,Offload resource record,adopted,4.md,7d63a75dcadedcda39b4001bda09ef9c870e4a15555685f7125b44fc00892a78,831
+HW.GPU.4,provision,LVL1,Offload resource record,adopted,4.md,9893a8bbd1de0fc4baa9192e471796d0a42da8538dab1858557e0891ca54482a,845

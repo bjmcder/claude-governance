@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.IDENT,standard,LVL2,Identifier scheme and mnemonic register,adopted,_doc.md,8e84fe003edb2f26136b3351b7e6d3cab337d0a377fc282460a9e650405376a8,8247
+STND.IDENT,standard,LVL2,Identifier scheme and mnemonic register,adopted,_doc.md,eab9099ee7456a28d9f3b757fc178de166a58d0263e0223b9447234cf970b22d,8418
 STND.IDENT.1,provision,LVL2,Revision number,adopted,1.md,af83e6845936f1e8472dc125d867d8b730ef04a1e3d6f9d9353d77ccf651aa40,679
 STND.IDENT.2,provision,LVL2,Zero editorial segment,adopted,2.md,23e655738dbe90fe787343af24d6608f2cc860bb69ff348b488f9915f76a3ba3,477
 STND.IDENT.3,provision,LVL2,Revision classes,adopted,3.md,3483c9109c48157eae85d83440b031839d2a1cd72a134abdb473dd7152711d68,1396
@@ -12,7 +12,7 @@ STND.IDENT.9,provision,LVL2,No revision reuse,adopted,9.md,68db1119ea3bc8055bb50
 STND.IDENT.10,provision,LVL2,Revisions before adoption,adopted,10.md,b0b8deef8f115a6b11f86185d3c72b022f5b935ed500cd4ac30ee7fc75eedccb,604
 STND.IDENT.11,provision,LVL2,First adoption,adopted,11.md,63b0ba7453c4f04accd1ffe11c8dd73de362c5ef1c46ef04f2826fc3623b509b,525
 STND.IDENT.12,provision,LVL2,Adopter label,adopted,12.md,2cb9adaf226707e268b23d034cc78cb4c6c8f2947c90aad61c20d85bef601a78,635
-STND.IDENT.13,provision,LVL2,Recorded review,adopted,13.md,59bcdcf532d025c9218157965c19e81832bd42d8eb73bb05be42b8132c6b2813,605
+STND.IDENT.13,provision,LVL2,Recorded review,adopted,13.md,10f837a74241d2ad2d90a82efd1899e9ccfee95472d2603164c16914ce3998a8,637
 STND.IDENT.14,provision,LVL2,Withdrawn identifiers,adopted,14.md,d3a4daae53bd6dcc2040871902103ca6f00bbf00f3931dd22f58797c577ef882,547
 STND.IDENT.15,provision,LVL2,Identifier form,adopted,15.md,c708b786ab9ed0379ff570a8112ebb3b0b0a5d4819fc0fef3b2f7d9e928e38db,1046
 STND.IDENT.16,provision,LVL2,Slug,adopted,16.md,6271f0abbae5426606dec0aca00576602462325713ed762d1b3636d32243fdc5,506

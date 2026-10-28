@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-PRIME,part,LVL0,Prime Directives,ratified,_doc.md,095559b729ac82a6aa1c48e7159fea6109d630263215ba622056d756857a5dc4,904
+PRIME,part,LVL0,Prime Directives,ratified,_doc.md,2d9299d399275c90adaed84c8d328d776c7d5f76d8f997a25b0554e32a2ba9cd,890
 PRIME.1,provision,LVL0,Accountable owner,ratified,1.md,b4d79097659fd9d941adb46a70bdb2bc48f05a508f2433e6191e648d4fc87f81,676
 PRIME.2,provision,LVL0,Honest evidence,ratified,2.md,f80cd4f71bb7348d657f69d51307f696040ee5c4b852443553961c06ba383b91,561
 PRIME.3,provision,LVL0,Labeled results,ratified,3.md,8313e4ad0ed5dffded9b01b4981311a4a26e55079a7fa34e54d50766c0613052,491

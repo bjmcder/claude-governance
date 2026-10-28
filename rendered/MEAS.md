@@ -1,6 +1,6 @@
-# Measurement and instrumentation (MEAS) 1.0
+# Measurement and instrumentation (MEAS) 1.0.1
 
-Adopted by The Custodian as revision 1.0 in ledger entry 78 (2026-10-19). This reading copy is composed from the per-provision files in MEAS/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 78 (2026-10-19); revised to 1.0.1 in entry 259 (2026-10-28). This reading copy is composed from the per-provision files in MEAS/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -56,7 +56,7 @@ Observations by human observers are measurements under MEAS. Observations that i
 
 MEAS owns four shared matters (MEAS.2): observations and their acquisition, calibration of a measurement, measurement uncertainty of a measured quantity, and selection of observations for analysis. NUMER.15 addresses the measurement-uncertainty matter, and NUMER.2 lists it (STND.DRAFT.39).
 
-Every provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, or QA, so it inherits their rank and waivability (GOV.17) and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, MEAS.3 to MEAS.7 apply from CSQ3. Some provisions apply at CSQ3 content of obligations that STND.CLASS.10 first asks at CSQ2 or CSQ1: provenance written with each output at production (REPRO.4) and documentation of the limits of validity (INTPR.10). Each such provision tightens above the floor (PRIME.15), because each costs a record and the failure it prevents is silent at every class. No provision raises the floor (GOV.11).
+Every provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, or QA, inherits their rank and waivability (GOV.17), and applies from the class that its field `onset` gives under STND.CLASS.10, where a field that gives CSQ3 for content that the table of STND.CLASS.10 starts at a more severe class tightens above the floor (PRIME.15), because each costs a record and the failure it prevents is silent at every class. No provision raises the floor (GOV.11).
 
 ## References
 
@@ -106,13 +106,13 @@ Each matter of the table of this provision SHALL be governed in this document by
 
 #### MEAS.3 Raw observations
 
-. Instantiates REPRO.4, REPRO.6.
+From CSQ3. Instantiates REPRO.4, REPRO.6.
 
 Each observation SHALL be kept as acquired or as received from its source, with each reduction, correction, or calibration applied before it was kept recorded with its parameters, or stated as unrecorded where its source does not record it (REPRO.4, REPRO.6). Each measured quantity SHALL be traceable to the observations from which it comes and to each correction and calibration that the work applies to them (REPRO.4, REPRO.6).
 
 #### MEAS.4 Acquisition record
 
-. Instantiates REPRO.1, REPRO.4.
+From CSQ3. Instantiates REPRO.1, REPRO.4.
 
 The record of each observation, or of the acquisition that produced it, SHALL identify, as far as the source of the observation records them, the instrument, sensor, or observer, its settings, the time of acquisition, and each condition that the measurement model states as affecting the observation, and state each of them that the source does not record (REPRO.1, REPRO.4).
 
@@ -120,7 +120,7 @@ The record of each observation, or of the acquisition that produced it, SHALL id
 
 #### MEAS.5 Calibration validity
 
-. Instantiates REPRO.6, INTPR.10.
+From CSQ3. Instantiates REPRO.6, INTPR.10.
 
 Each calibration and each measurement model SHALL state the conditions and the interval of time over which it holds, or that no limit of that kind is established (REPRO.6, INTPR.10). Each observation acquired outside those conditions or that interval SHALL be marked as such in its record (INTPR.10).
 
@@ -128,7 +128,7 @@ Each calibration and each measurement model SHALL state the conditions and the i
 
 #### MEAS.6 Measurement uncertainty
 
-. Instantiates INTPR.9, INTPR.10.
+From CSQ3. Instantiates INTPR.9, INTPR.10.
 
 Each measured quantity that the work reports or passes to a computation SHALL state its measurement uncertainty with the basis of that statement, or that its uncertainty is not evaluated (INTPR.9, INTPR.10). Where that uncertainty has components that repeated observation reduces and components that it does not, the statement SHALL keep them separate, or state that its basis does not separate them (INTPR.9). Where a component of that uncertainty is shared with another measured quantity, the statement SHALL identify it as shared (INTPR.9).
 
@@ -136,7 +136,7 @@ Each measured quantity that the work reports or passes to a computation SHALL st
 
 #### MEAS.7 Selection of observations
 
-. Instantiates VV.3, QA.12, REPRO.6.
+From CSQ3. Instantiates VV.3, QA.12, REPRO.6.
 
 Each exclusion of observations from an analysis SHALL follow a criterion recorded before the result of that analysis was seen, or be recorded, with its criterion and when it was set, as a criterion set after that result was seen (VV.3, QA.12). Each excluded observation SHALL remain recoverable from the record that MEAS.3 keeps, or its exclusion be a reduction at acquisition recorded with its parameters (REPRO.6).
 
@@ -145,3 +145,4 @@ Each exclusion of observations from an analysis SHALL follow a criterion recorde
 | Revision | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-10-19 | Adopted. |
+| 1.0.1 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields; no obligation, permission, or defined meaning changes. |

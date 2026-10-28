@@ -5,7 +5,7 @@ kind: "profile"
 title: "Measurement and instrumentation"
 status: "adopted"
 adopted: "2026-10-19"
-revision: "1.0"
+revision: "1.0.1"
 selector: "Binds when a result that the work reports or relies on rests on data measured by instruments, sensors, or human observers (MEAS.1)."
 parent: null
 adopted_by: "The Custodian"
@@ -65,7 +65,7 @@ Observations by human observers are measurements under MEAS. Observations that i
 
 MEAS owns four shared matters (MEAS.2): observations and their acquisition, calibration of a measurement, measurement uncertainty of a measured quantity, and selection of observations for analysis. NUMER.15 addresses the measurement-uncertainty matter, and NUMER.2 lists it (STND.DRAFT.39).
 
-Every provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, or QA, so it inherits their rank and waivability (GOV.17) and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, MEAS.3 to MEAS.7 apply from CSQ3. Some provisions apply at CSQ3 content of obligations that STND.CLASS.10 first asks at CSQ2 or CSQ1: provenance written with each output at production (REPRO.4) and documentation of the limits of validity (INTPR.10). Each such provision tightens above the floor (PRIME.15), because each costs a record and the failure it prevents is silent at every class. No provision raises the floor (GOV.11).
+Every provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, or QA, inherits their rank and waivability (GOV.17), and applies from the class that its field `onset` gives under STND.CLASS.10, where a field that gives CSQ3 for content that the table of STND.CLASS.10 starts at a more severe class tightens above the floor (PRIME.15), because each costs a record and the failure it prevents is silent at every class. No provision raises the floor (GOV.11).
 
 ## References
 
@@ -89,3 +89,4 @@ Every provision other than the selector and the shared-matters provision instant
 | Revision | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-10-19 | Adopted. |
+| 1.0.1 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields; no obligation, permission, or defined meaning changes. |

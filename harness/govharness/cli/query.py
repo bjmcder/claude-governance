@@ -1,4 +1,5 @@
-"""The read-only commands ``show``, ``find``, ``context``, and ``pairs``.
+"""The read-only commands ``show``, ``find``, ``context``, ``pairs``, and
+``onset``.
 
 They load the corpus, answer one question, and write nothing, so that a
 reader fetches the governance it needs without searching the files. The
@@ -15,7 +16,8 @@ from pathlib import Path
 
 from govharness.cli.arguments import corpus_root, default_root, split_root
 from govharness.core.corpus import Corpus, read_corpus
-from govharness.query.combination import review_pairs
+from govharness.core.onset import STARTS, applying_from, describe, onset_of
+from govharness.query.combination import document_id, review_pairs
 from govharness.query.graph import build_graph
 from govharness.query.retrieval import (
     context,
@@ -30,7 +32,8 @@ ROOT_HELP = "corpus root; else $GOVHARNESS_ROOT, else ./governance"
 
 
 def add_query(sub: argparse._SubParsersAction) -> None:
-    """Add the ``show``, ``find``, ``context``, and ``pairs`` commands.
+    """Add the ``show``, ``find``, ``context``, ``pairs``, and ``onset``
+    commands.
 
     Parameters
     ----------
@@ -69,15 +72,36 @@ def add_query(sub: argparse._SubParsersAction) -> None:
         help="provision pairs to review before a change (STND.HARN.28)",
     )
     pairs.add_argument("root", nargs="?", type=corpus_root, help=ROOT_HELP)
-    pairs.add_argument("ident", metavar="ID", help="the changed document")
+    pairs.add_argument(
+        "ident", metavar="ID", help="a changed document or provision"
+    )
     pairs.add_argument(
         "--amends",
-        nargs="*",
+        nargs="+",
+        action="extend",
         default=[],
         metavar="LVL0_ID",
         help="LVL0 provisions the change amends",
     )
+    pairs.add_argument(
+        "--with",
+        dest="also",
+        nargs="+",
+        action="extend",
+        default=[],
+        metavar="ID",
+        help="other documents or provisions that the change adopts or amends",
+    )
     pairs.set_defaults(run=lambda a, _: run_pairs(a))
+    onset = sub.add_parser(
+        "onset",
+        help="the provisions and parts that apply from a class (unit 0023)",
+    )
+    onset.add_argument("root", nargs="?", type=corpus_root, help=ROOT_HELP)
+    onset.add_argument(
+        "cls", metavar="CSQn", choices=STARTS, help="CSQ0 to CSQ3"
+    )
+    onset.set_defaults(run=lambda a, _: run_onset(a))
 
 
 def load(command: str, root: Path | None) -> Corpus | None:
@@ -195,27 +219,82 @@ def run_context(args: argparse.Namespace) -> int:
 def run_pairs(args: argparse.Namespace) -> int:
     """Run ``pairs``: list the provision pairs a change puts to review.
 
+    Each ``ID`` names a document below LVL0 or a provision below LVL0;
+    a LVL0 document, such as an article, is admitted as ``ID`` only with
+    ``--amends``, which names LVL0 provisions alone.
+
     Parameters
     ----------
     args : argparse.Namespace
-        ``root``, ``ident``, and ``amends``.
+        ``root``, ``ident``, ``amends``, and ``also``, the other
+        documents or provisions of the same change.
 
     Returns
     -------
     int
-        1 when the changed document is not in the corpus, 2 when no
-        root is known, else 0. An identifier in the wrong case names
-        its document, as it does for ``show``.
+        1 when an identifier names nothing that the command takes, or
+        when the change puts no pair to review, with the message on the
+        standard error; 2 when no root is known; else 0. An identifier
+        in the wrong case names its item, as it does for ``show``.
     """
     corpus = load("pairs", args.root)
     if corpus is None:
         return 2
-    ident = resolve_ref(corpus, build_graph(corpus), args.ident)
-    if ident is None or ident not in corpus.by_id:
-        print(f"pairs: no document {args.ident}", file=sys.stderr)
+    graph = build_graph(corpus)
+    lower_docs = {
+        document_id(corpus, p)
+        for p in corpus.provisions()
+        if p.meta.get("level") not in (None, "LVL0")
+    }
+    amends: list[str] = []
+    for given in args.amends:
+        ident = resolve_ref(corpus, graph, given)
+        entry = corpus.by_id.get(ident or "")
+        if entry is None or not (
+            entry.meta.get("kind") == "provision"
+            and entry.meta.get("level") == "LVL0"
+        ):
+            print(
+                f"pairs: --amends {given} is not a LVL0 provision",
+                file=sys.stderr,
+            )
+            return 1
+        amends.append(str(ident))
+    named: list[str] = []
+    for given in [args.ident, *args.also]:
+        ident = resolve_ref(corpus, graph, given)
+        entry = corpus.by_id.get(ident or "")
+        lower = entry is not None and (
+            ident in lower_docs
+            or (
+                entry.meta.get("kind") == "provision"
+                and entry.meta.get("level") not in (None, "LVL0")
+            )
+        )
+        lvl0_doc = (
+            entry is not None
+            and entry.meta.get("level") == "LVL0"
+            and entry.meta.get("kind") != "provision"
+        )
+        if not lower and not (lvl0_doc and amends):
+            what = (
+                "a LVL0 document, given without --amends"
+                if lvl0_doc
+                else "not a document or provision below LVL0"
+            )
+            print(f"pairs: {given} is {what}", file=sys.stderr)
+            return 1
+        if ident not in named:
+            named.append(str(ident))
+    found = review_pairs(corpus, tuple(named), tuple(amends))
+    names = ", ".join(named)
+    if not found:
+        print(
+            f"pairs: no pair to review before a change of {names}",
+            file=sys.stderr,
+        )
         return 1
-    found = review_pairs(corpus, ident, tuple(args.amends))
-    print(f"# Pairs for review before a change of {ident} (STND.HARN.28)")
+    print(f"# Pairs for review before a change of {names} (STND.HARN.28)")
     print()
     print(f"{len(found)} pair(s).")
     print()
@@ -224,4 +303,42 @@ def run_pairs(args: argparse.Namespace) -> int:
     for number, pair in enumerate(found, start=1):
         bases = ", ".join(pair.bases)
         print(f"| {number} | {pair.first} | {pair.second} | {bases} |")
+    return 0
+
+
+def run_onset(args: argparse.Namespace) -> int:
+    """Run ``onset``: list what a reclassification to a class adds.
+
+    Parameters
+    ----------
+    args : argparse.Namespace
+        ``root`` and ``cls``.
+
+    Returns
+    -------
+    int
+        1 when no provision or part applies from the class, 2 when no
+        root is known, else 0. Each line names a provision, or a part of
+        one, with its title; a provision whose field gives other parts a
+        more severe class names them after its title.
+    """
+    corpus = load("onset", args.root)
+    if corpus is None:
+        return 2
+    found = applying_from(corpus.provisions(), args.cls)
+    if not found:
+        print(f"onset: no provision applies from {args.cls}", file=sys.stderr)
+        return 1
+    print(f"# Provisions and parts that apply from {args.cls}")
+    print()
+    print(f"{len(found)} item(s).")
+    print()
+    for entry, part in found:
+        ident = entry.meta["id"]
+        name = ident if part is None else f"{ident}, {part}"
+        line = f"- {name} — {entry.meta.get('title', '')}"
+        onset = onset_of(entry)
+        if part is None and onset is not None and onset.parts:
+            line += f" ({describe(onset)})"
+        print(line)
     return 0

@@ -20,9 +20,10 @@ A project either has a project constitution, a LVL3 instrument that its human ow
 | --- | --- | --- |
 | Records of every mechanism of GOV.21 | `records/` at the top of the work, or a path that a file in it names | STND.DFLT.2 |
 | Ledger of the work | `records/ledger.jsonl`, one hash-chained entry per line | STND.DFLT.5 |
-| Classification and consequence class | An entry of that ledger that the human owner adopts | STND.DFLT.13, STND.CLASS.5 |
-| Authorizations | Entries of that ledger, with the content of STND.DFLT.16 | STND.DFLT.16, STND.DFLT.17 |
-| Working notes | `notes/` at the top of the work | STND.DFLT.6 |
+| Classification, consequence class, and any expected class | An entry of that ledger that the human owner adopts, appended by the owner or entered by an agent from the owner's direct act | STND.DFLT.13, STND.DFLT.17, STND.CLASS.5 |
+| Authorizations, the direction that authorizes operating cost among them | Entries of that ledger, with the content of STND.DFLT.16 | STND.DFLT.16, STND.DFLT.17, STND.DFLT.33 |
+| Adopted instruction files | Entries of that ledger that name each file's path and content | STND.INSTR.11 |
+| Working notes | `notes/` at the top of the work, with each tool memory store | STND.DFLT.6 |
 | Workbench | `records/workbench/`, with its tools in `records/workbench/tools/` | STND.DFLT.28 |
 | Store of non-credential secrets, where provided | `secrets/` at the top of the work, within the working bounds only as an authorization allows | STND.DFLT.29, STND.DFLT.30 |
 
@@ -30,7 +31,7 @@ STND.DFLT.23 states which entries of the ledger are accepted, and the term Assur
 
 ## Reading the ledger
 
-Each line of `records/ledger.jsonl` is one JSON object with the fields of STND.HARN.7: `seq`, `type`, `actor`, `role`, `authority`, `rationale`, `at`, and the hash fields. These commands list the entries that record a class and the entries that record or end an authorization:
+Each entry states what STND.DFLT.5 lists. In a ledger that the harness reads or appends to, each line of `records/ledger.jsonl` is one JSON object with the fields of STND.HARN.7: `seq`, `type`, `actor`, `role`, `authority`, `rationale`, `at`, and the hash fields. An entry that an agent entered from an act of the human owner names the agent as its actor and the human owner as the actor of the act (STND.DFLT.17). These commands list the entries that record a class and the entries that record or end an authorization:
 
 ```bash
 grep -E '"type": ?"(classify|set-class)"' records/ledger.jsonl

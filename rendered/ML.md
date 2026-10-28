@@ -1,6 +1,6 @@
-# Learned models (ML) 1.0.1
+# Learned models (ML) 1.0.2
 
-Adopted by The Custodian as revision 1.0 in ledger entry 81 (2026-10-19); revised to 1.0.1 in entry 161 (2026-10-25). This reading copy is composed from the per-provision files in ML/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 81 (2026-10-19); revised to 1.0.1 in entry 161 (2026-10-25) and 1.0.2 in entry 260 (2026-10-28). This reading copy is composed from the per-provision files in ML/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -50,7 +50,7 @@ ML.6 asks for detection only of what is decidable from the input, such as ranges
 
 ML owns two shared matters and addresses two that NUMER owns (ML.2): the uncertainty of a computed result and approximation disclosure, through ML.5, which cites NUMER.13 and NUMER.16.
 
-Every provision other than the selector and the shared-matters provision instantiates only VV, REPRO, DSGN, or INTPR, so it inherits their rank and waivability (GOV.17) and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, ML.3 to ML.7 apply from CSQ3. Some provisions apply at CSQ3 content of obligations that STND.CLASS.10 first asks at CSQ2 or CSQ1: validation against a real-world referent where one exists (VV.4), documentation of the limits of validity (INTPR.10), checking of postconditions and invariants (DSGN.2), and reporting of anomalies to the operator (INTPR.7). Each such provision tightens above the floor (PRIME.15), because its check runs without a person and the failure it prevents is silent at every class. No provision raises the floor (GOV.11).
+Every provision other than the selector and the shared-matters provision instantiates only VV, REPRO, DSGN, or INTPR, inherits their rank and waivability (GOV.17), and applies from the class that its field `onset` gives under STND.CLASS.10, where a field that gives CSQ3 for content that the table of STND.CLASS.10 starts at a more severe class tightens above the floor (PRIME.15), because its check runs without a person and the failure it prevents is silent at every class. No provision raises the floor (GOV.11).
 
 ## References
 
@@ -103,7 +103,7 @@ Each matter of the table of this provision SHALL be governed in this document by
 
 #### ML.3 Learned model record
 
-. Instantiates REPRO.1, REPRO.9, REPRO.3.
+From CSQ3. Instantiates REPRO.1, REPRO.9, REPRO.3.
 
 Each learned model SHALL have a record that identifies its training data by content, its fitting procedure with its settings and seeds, and each pretrained model from which it starts with its revision, or, for a model that the project did not fit, its source, its revision, and its training data as its source documents them (REPRO.1, REPRO.9). Each learned model SHALL be regenerable from that record within a variation that the record declares, or be identified by the content of its parameters in each result that relies on it, or be stated in each such result as not regenerable (REPRO.1, REPRO.3).
 
@@ -111,13 +111,13 @@ Each learned model SHALL have a record that identifies its training data by cont
 
 #### ML.4 Evaluation independence
 
-. Instantiates VV.1, VV.5.
+From CSQ3. Instantiates VV.1, VV.5.
 
 Each estimate of the error of a learned model SHALL rest on evaluation data disjoint from its training data at the level at which their samples are correlated, or be labeled as not independent of its training (VV.1, VV.5).
 
 #### ML.5 Learned model error
 
-. Instantiates VV.1, VV.4, INTPR.9, INTPR.10.
+From CSQ3. Instantiates VV.1, VV.4, INTPR.9, INTPR.10.
 
 Each learned model SHALL carry an estimate of its error against the reference it approximates or against measurements independent of its training, with the uncertainty of that estimate, over evaluation data whose coverage of its regime of use the record states, or a statement in each result that relies on it that its error is not estimated (VV.1, VV.4, INTPR.9). Where an output of a learned model enters a reported numerical result that NUMER governs, its error against a computed reference SHALL enter that result as an approximation listed under NUMER.16, and its error against a real-world referent as model-form uncertainty under NUMER.13 (INTPR.9, INTPR.10).
 
@@ -125,13 +125,13 @@ Each learned model SHALL carry an estimate of its error against the reference it
 
 #### ML.6 Out-of-domain inputs
 
-. Instantiates INTPR.10, DSGN.2, INTPR.7.
+From CSQ3. Instantiates INTPR.10, DSGN.2, INTPR.7.
 
 Each learned model SHALL state its domain of validity (INTPR.10). Each input to a learned model that falls outside the part of that domain decidable from the input SHALL be detected at run time and reported, or the output computed from it marked as outside that domain (DSGN.2, INTPR.7). Where an output of a learned model commands physical hardware, each input of that kind SHALL be detected at run time, with the response that PRIME.4 requires (DSGN.2, INTPR.7).
 
 #### ML.7 Learned model updates
 
-. Instantiates VV.8, INTPR.7.
+From CSQ3. Instantiates VV.8, INTPR.7.
 
 Each learned model whose parameters change, by refitting, by fine-tuning, or by learning during operation, SHALL be verified under ML.5 before a result relies on the changed parameters, or keep its changes within bounds that its record states and monitor a stated indicator of its error while it operates (VV.8, INTPR.7).
 
@@ -141,3 +141,4 @@ Each learned model whose parameters change, by refitting, by fine-tuning, or by 
 | --- | --- | --- |
 | 1.0 | 2026-10-19 | Adopted. |
 | 1.0.1 | 2026-10-25 | Editorial amendment (GOV.41): the informative Selector text cites AGENT and GUARD, which it names as governing the models through which agents do the work, and References lists AGENT and GUARD; no obligation, permission, or defined meaning changes. |
+| 1.0.2 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields; no obligation, permission, or defined meaning changes. |

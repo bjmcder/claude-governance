@@ -1,6 +1,6 @@
 id,kind,level,title,status,path,sha256,bytes
-HW.ASIC,sub-profile,LVL1,Application-specific integrated circuits,adopted,_doc.md,4e843648bdd8ed607ed9de25d7a2d753cd427ece7cd7a81078160c64a61f5fe2,5693
-HW.ASIC.1,provision,LVL1,Integrated circuit execution selector,adopted,1.md,c9a3d811df58a1c7184a6706b816263d2e526972534deda49b2d4ea8d41a472e,528
+HW.ASIC,sub-profile,LVL1,Application-specific integrated circuits,adopted,_doc.md,415c5afcffa3859734114e0d1e775a8a5eebfe78d5e59203768090e601bd3e0d,6786
+HW.ASIC.1,provision,LVL1,Integrated circuit execution selector,adopted,1.md,ccf8243bde539fb44bd03d46eadf301e443330adaed83553408d697913a15068,518
 HW.ASIC.2,provision,LVL1,Integrated circuit execution shared matters,adopted,2.md,9a467cd759c4c269501e319dc810bf6c4995bf47ca5b49bbbfcce955b3298195,639
-HW.ASIC.3,provision,LVL1,Device in each result,adopted,3.md,03bbdcfe9a9e342ad2beb0b81846733a0700a8bc70bbcf9d597fec29f235600e,638
-HW.ASIC.4,provision,LVL1,Fabricated-device evidence,adopted,4.md,a7f04cc87e90df2a7e87162fec83fb797aa666328b9e174be13d6511b2d30a57,1045
+HW.ASIC.3,provision,LVL1,Device in each result,adopted,3.md,098f4743f81f58d1c50eec77a8ce69de6a03099045c4555eedc740aadddb5863,652
+HW.ASIC.4,provision,LVL1,Fabricated-device evidence,adopted,4.md,c2ef008a561a3def46760cc33ffa20458784f90ec57b9d03dadbe507b40e78ee,1059

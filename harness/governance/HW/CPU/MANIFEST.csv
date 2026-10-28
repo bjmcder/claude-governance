@@ -1,7 +1,7 @@
 id,kind,level,title,status,path,sha256,bytes
-HW.CPU,sub-profile,LVL1,General-purpose processors,adopted,_doc.md,ef5fccc2b91cdff2d32edce62f931fd07f0059915b3a09adc0c1c826ebdccba1,7444
-HW.CPU.1,provision,LVL1,General-purpose processor selector,adopted,1.md,fd80422ff706c2ad82ba0ea95051bb8c3516e0000fcf604c363e2c4db7ec1d03,531
+HW.CPU,sub-profile,LVL1,General-purpose processors,adopted,_doc.md,4c18923b8cbc7ae9903c009e19c0981696b6880a678486e3836a8b70019d0bf7,8759
+HW.CPU.1,provision,LVL1,General-purpose processor selector,adopted,1.md,f28144021811da9830539653f30dbcc7522345736c4f6bb0ed8b899fb1a05643,514
 HW.CPU.2,provision,LVL1,General-purpose processor shared matters,adopted,2.md,1c08901af670d883824f9d232da515b7655fa989c381c94df76b7ddfb20a0f85,551
-HW.CPU.3,provision,LVL1,Floating-point control state,adopted,3.md,322c2a46aca1f2b924b6e6b67d4112707596a8429fa58ead4375f05cd22f7e4f,1093
-HW.CPU.4,provision,LVL1,Processor thread record,adopted,4.md,56381e76d0310182ddd30b740ba818313b8de453d4fb1698ea0942b17c81dd75,830
-HW.CPU.5,provision,LVL1,Oversubscription report,adopted,5.md,dadb31cd4573a289223cc2e262751ce17cb6016edf61aed316bb85ac0d9f33d9,553
+HW.CPU.3,provision,LVL1,Floating-point control state,adopted,3.md,fb185ea4da5eefe515da129a463f1931176fd7d5a46188848ddcdd07e5306796,1107
+HW.CPU.4,provision,LVL1,Processor thread record,adopted,4.md,a767015aba0ee6444d2cf41e6e7c116a62851ce1337293dcf76a36aaa31e252c,844
+HW.CPU.5,provision,LVL1,Oversubscription report,adopted,5.md,267478d12c3ab2bdfc14f830132302934e60c7432aa8d34b17a7663a0cfc53ec,638

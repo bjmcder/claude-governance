@@ -1,6 +1,6 @@
-# Drafting standard (STND.DRAFT) 1.6
+# Drafting standard (STND.DRAFT) 1.7
 
-Adopted by The Custodian as revision 1.0 in ledger entry 9 (2026-10-09); revised to 1.0.1 in entry 11 (2026-10-09), 1.0.2 in entry 20 (2026-10-10), 1.0.3 in entry 26 (2026-10-10), 1.1 in entry 29 (2026-10-10), 1.2 in entry 34 (2026-10-10), 1.2.1 in entry 44 (2026-10-10), 1.3 in entry 52 (2026-10-11), 1.4 in entry 66 (2026-10-18), 1.5 in entry 181 (2026-10-26), and 1.6 in entry 201 (2026-10-27). This reading copy is composed from the per-provision files in STND/DRAFT/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 9 (2026-10-09); revised to 1.0.1 in entry 11 (2026-10-09), 1.0.2 in entry 20 (2026-10-10), 1.0.3 in entry 26 (2026-10-10), 1.1 in entry 29 (2026-10-10), 1.2 in entry 34 (2026-10-10), 1.2.1 in entry 44 (2026-10-10), 1.3 in entry 52 (2026-10-11), 1.4 in entry 66 (2026-10-18), 1.5 in entry 181 (2026-10-26), 1.6 in entry 201 (2026-10-27), 1.6.1 in entry 245 (2026-10-28), and 1.7 in entry 292 (2026-10-28). This reading copy is composed from the per-provision files in STND/DRAFT/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -46,6 +46,7 @@ Each provision is one file, `STND/DRAFT/<n>.md`, whose identifier is `STND.DRAFT
 - `rank` and `waivable`: derived from the closure of `instantiates` (GOV.5, GOV.17); the harness verifies them and does not choose them.
 - `defines`: the name of a table that the provision holds. The harness reads each table by this name and by its column headings, so rewording a sentence cannot empty a list. The drafting checks read each cell of a table in a provision as prose, other than a cell of a mention column, which the harness finds by its heading: Modal, Normative Language entry, Expression, Read as, Qualifier, Word, British, American, Not used, Used, and Opening words. A table with a mention column under another heading adds that heading to the harness. A column whose entries are mentioned in part is no mention column, and its mentioned entries are quoted.
 - `checked_by`: the checks that verify the provision. The value `review` means a reader decides.
+- `onset`: the class from which the provision applies under STND.CLASS.10, written as one class, `"CSQ3"`, or, where a part starts at a more severe class than the rest, as a list of the class of the provision followed by one pair of a part and its class for each such part, `["CSQ3", ["sentence 2", "CSQ2"]]`. A part is `sentence N`, the Nth sentence of the body outside its tables, counted at terminal punctuation, or `row CELL`, the one row of a table of the body whose first cell is CELL. Each class is CSQ0 to CSQ3. The value `null` marks a waivable provision that applies at every class, or a permission. A binding provision and a provision of LVL0 carry no field. The harness fails a malformed value, a field on another item, a part that names no sentence or no one row of the body, and, once one provision carries the field, a waivable provision below LVL0 without it.
 
 A profile's tables named selector and shared-matters are read by the harness by their column headings: Attribute and Defined by; Matter, Owning profile, and Provisions. The Provisions column gives each provision by its full identifier, separated by commas. A selector provision states, for example, that the profile binds a project whose classification makes at least one attribute of its table true; a shared-matters provision states that each matter of its table is governed in the document by the provisions that the table gives for it.
 
@@ -65,6 +66,8 @@ The harness reports the lineage checks (family l) and the drafting checks (famil
 | LVL0 | Constitution for Computational and Cyber-Physical Systems |
 | PRIME | Prime Directives |
 | REPRO | Reproducibility |
+| STND.CLASS | Consequence-class criteria |
+| STND.DOCS | Documentation standard |
 | STND.IDENT | Identifier scheme and mnemonic register |
 
 ## Provisions
@@ -176,19 +179,19 @@ Where replacing an expression of class review in the table of STND.DRAFT.7 with 
 
 #### STND.DRAFT.10 Imperative mood
 
-Default. Instantiates INTPR.12.
+Default, from CSQ3. Instantiates INTPR.12.
 
-A sentence of a document SHALL NOT be written in the imperative mood (INTPR.12).
+A sentence of a document of governance or of a project instrument SHALL NOT be written in the imperative mood (INTPR.12).
 
 #### STND.DRAFT.11 Fill-in guidance
 
-Default. Instantiates INTPR.12.
+Default, from CSQ3. Instantiates INTPR.12.
 
 Text that guides the person completing a template SHALL begin with the label "Fill-in guidance:". An instantiated instrument SHALL NOT contain that label (INTPR.12).
 
 #### STND.DRAFT.12 Informative text
 
-Default. Instantiates INTPR.12.
+Default, from CSQ3. Instantiates INTPR.12.
 
 Explanations, notes, and examples SHALL be placed in the informative parts of a document. They SHALL NOT appear in the body of a numbered provision (INTPR.12).
 
@@ -196,7 +199,7 @@ Explanations, notes, and examples SHALL be placed in the informative parts of a 
 
 #### STND.DRAFT.13 Vague qualifiers
 
-Default. Instantiates INTPR.12.
+Default, from CSQ3. Instantiates INTPR.12.
 
 A sentence that uses a qualifier of class review in the table of this provision SHALL state its criterion or name the decider and the record of the decision. A numbered provision SHALL NOT use a qualifier of class exact in the table of this provision (INTPR.12).
 
@@ -225,25 +228,25 @@ A sentence that uses a qualifier of class review in the table of this provision 
 
 #### STND.DRAFT.14 Disjunction
 
-Default. Instantiates INTPR.12.
+Default, from CSQ3. Instantiates INTPR.12.
 
 The word "or" in a provision SHALL be read as inclusive. A choice of exactly one alternative SHALL be written with the words "exactly one of" (INTPR.12).
 
 #### STND.DRAFT.15 Negated lists
 
-Default. Instantiates INTPR.12.
+Default, from CSQ3. Instantiates INTPR.12.
 
 A prohibition on more than one item SHALL be written as one sentence for each item (INTPR.12).
 
 #### STND.DRAFT.16 Conditions
 
-Default. Instantiates INTPR.12.
+Default, from CSQ3. Instantiates INTPR.12.
 
 A condition SHALL precede the clause it governs. A sentence SHALL carry at most one condition (INTPR.12).
 
 #### STND.DRAFT.17 Quantifiers
 
-Default. Instantiates INTPR.12.
+Default, from CSQ3. Instantiates INTPR.12.
 
 A provision SHALL NOT use a word of the table of this provision (INTPR.12).
 
@@ -259,7 +262,7 @@ A provision SHALL NOT use a word of the table of this provision (INTPR.12).
 
 #### STND.DRAFT.18 Numeric limits
 
-Default. Instantiates INTPR.12.
+Default, from CSQ3. Instantiates INTPR.12.
 
 A numeric limit SHALL state its unit and whether its bound is inclusive (INTPR.12).
 
@@ -297,7 +300,7 @@ A provision SHALL list as instantiated only a higher provision that it makes mor
 
 #### STND.DRAFT.24 Listed identifiers
 
-Default. Instantiates INTPR.3.
+Default, from CSQ3. Instantiates INTPR.3.
 
 The identifiers and locators in the text of a provision SHALL be exactly those that it lists as instantiated or as referred to (INTPR.3).
 
@@ -317,19 +320,19 @@ Each document below LVL0 SHALL hold, before its revision history, a section Refe
 
 #### STND.DRAFT.26 Title form
 
-Default. Instantiates INTPR.12.
+Default, from CSQ3. Instantiates INTPR.12.
 
 The title of a numbered provision SHALL be a noun phrase of at most six words (INTPR.12).
 
 #### STND.DRAFT.27 Distinct titles
 
-Default. Instantiates INTPR.12.
+Default, from CSQ3. Instantiates INTPR.12.
 
 The title of a numbered provision SHALL differ from the title of every other provision of the corpus (INTPR.12).
 
 #### STND.DRAFT.28 Atomic provision
 
-Default. Instantiates INTPR.12.
+Default, from CSQ3. Instantiates INTPR.12.
 
 A numbered provision SHALL state one obligation, prohibition, recommendation, or permission, or a bundle of at most three whose parts are never applied apart (INTPR.12).
 
@@ -337,7 +340,7 @@ A numbered provision SHALL state one obligation, prohibition, recommendation, or
 
 #### STND.DRAFT.29 Role names
 
-Default. Instantiates INTPR.12.
+Default, from CSQ3. Instantiates INTPR.12.
 
 A provision SHALL name an actor by a role that the Lexicon or the Terms section of its document defines. A provision SHALL NOT use a word of class retired in the table of this provision, except in a compound that the table allows (INTPR.12).
 
@@ -359,7 +362,7 @@ A provision SHALL name an actor by a role that the Lexicon or the Terms section 
 
 #### STND.DRAFT.30 Defined terms
 
-Default. Instantiates INTPR.12.
+Default, from CSQ3. Instantiates INTPR.12.
 
 A term that a document defines SHALL be defined once, in the Terms section of that document (INTPR.12).
 
@@ -373,7 +376,7 @@ A document SHALL NOT define a term that the Lexicon defines (LEX).
 
 #### STND.DRAFT.32 Person and contractions
 
-Default. Instantiates INTPR.12.
+Default, from CSQ3. Instantiates INTPR.12.
 
 A provision SHALL be written in the third person and without contractions (INTPR.12).
 
@@ -390,50 +393,9 @@ A provision SHALL be written in the third person and without contractions (INTPR
 
 #### STND.DRAFT.33 Spelling
 
-Default. Instantiates INTPR.12.
+Default, from CSQ3. Instantiates INTPR.12.
 
-A provision SHALL use American spelling (INTPR.12).
-
-| British | American |
-| --- | --- |
-| behaviour | behavior |
-| colour | color |
-| favour | favor |
-| honour | honor |
-| labour | labor |
-| neighbour | neighbor |
-| centre | center |
-| metre | meter |
-| litre | liter |
-| fibre | fiber |
-| analyse | analyze |
-| organise | organize |
-| recognise | recognize |
-| minimise | minimize |
-| maximise | maximize |
-| optimise | optimize |
-| utilise | utilize |
-| standardise | standardize |
-| authorise | authorize |
-| initialise | initialize |
-| serialise | serialize |
-| normalise | normalize |
-| catalogue | catalog |
-| defence | defense |
-| offence | offense |
-| grey | gray |
-| programme | program |
-| artefact | artifact |
-| judgement | judgment |
-| ageing | aging |
-| modelling | modeling |
-| labelling | labeling |
-| cancelled | canceled |
-| travelling | traveling |
-| fulfil | fulfill |
-| enrol | enroll |
-| whilst | while |
-| amongst | among |
+A provision SHALL use American spelling, of which the spelling table of STND.DOCS.8 lists a part (INTPR.12).
 
 ### Profiles
 
@@ -502,3 +464,5 @@ A provision at LVL1 or LVL2 SHALL NOT require a decision of the human owner othe
 | 1.4 | 2026-10-18 | Minor amendment (GOV.41), conforming on the adoption of HW: the term Execution path takes the definition that HW gives, which adds the hardware models, firmware, drivers, runtime libraries, and settings that a path admits, by reference to HW. |
 | 1.5 | 2026-10-26 | Minor amendment (GOV.41): the term Cited document also covers a document named in the text by its identifier alone, outside quotation marks, code spans, tables with a column headed Example, the section References, and the revision history, and never by the identifier LVL0 alone; new term Sentence; STND.DRAFT.3 asks for no quotation marks in a column whose entries are modals or excluded expressions; STND.DRAFT.22 names v.8 among its checks; the section Checks says that a finding in another document fails where a binding provision of this standard names the check, and that a document named by its identifier alone has its row derived, so that g.25 fails where the table lacks it. Transition (GOV.42): none. |
 | 1.6 | 2026-10-27 | Minor amendment (GOV.41): Terms define Mention column, a column of a table in a provision whose entries are the words, expressions, spellings, forms, or patterns that the provision names rather than uses; STND.DRAFT.3 uses the term in place of a column whose entries are modals or excluded expressions, so that a modal or an excluded expression that a column of words, spellings, forms, or patterns mentions is also left unquoted; the section Representation in the harness says that the drafting checks read each other cell of a table in a provision, and names the headings by which the harness finds a mention column. |
+| 1.6.1 | 2026-10-28 | Editorial amendment (GOV.41): the section Representation in the harness defines the field onset, and each waivable provision carries it with CSQ3, the onset that STND.CLASS.10 gave it; no obligation, permission, or defined meaning changes. |
+| 1.7 | 2026-10-28 | Minor amendment (GOV.41): STND.DRAFT.33 keeps its rule and cites the spelling table of STND.DOCS.8, which now holds the table that it held, so that the corpus keeps one spelling table; STND.DRAFT.10 reaches a sentence of a document of governance or of a project instrument, the documents that this standard governs, in place of a sentence of any document. |

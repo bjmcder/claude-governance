@@ -13,10 +13,11 @@ This file records how the custodian has the governance corpus worked on, and the
    - by the custodian's direction, neither "such as" nor "for example";
    - titles of six words or fewer, not verb-initial, distinct across the corpus;
    - body IDs equal `instantiates` plus `refers_to`;
+   - each waivable provision below LVL0 carries the field `onset` (STND.DRAFT#representation-in-the-harness), set by the rule that the Notes of STND.CLASS state;
    - every document named in the text listed in References.
-3. Class onset follows STND.CLASS.10. Never raise the floor (GOV.11). A provision becomes binding when its `instantiates` closure reaches PRIME, GUARD, GOV, or a floor ID; argue why it raises no floor and put that argument to the custodian. Never write that the custodian has ruled something the custodian has not ruled.
+3. Class onset follows STND.CLASS.10 and the field `onset`. Never raise the floor (GOV.11). A provision becomes binding when its `instantiates` closure reaches PRIME, GUARD, GOV, or a floor ID; argue why it raises no floor and put that argument to the custodian. Never write that the custodian has ruled something the custodian has not ruled.
 4. Rehearse on a scratch copy, one transaction per document, in citation order.
-5. Review with agents of another configuration: a cold review, and a STND.HARN.28 pair review. Then fixes, and a cold verification.
+5. Review with agents of another configuration: a cold review, and a STND.HARN.28 pair review of the pairs that `pairs` lists, with `--with` for the other documents of the change and `--amends` for each LVL0 provision it amends. Then fixes, and a cold verification.
 6. Where a round spans several documents, run a reconciliation review across them before ratification.
 7. Present for ratification. Apply only after ratification.
 8. Then rebuild the reading copies in `rendered/`, update `OPEN-ITEMS.md`, and update `harness/README.md` where a command or a check that it describes changed.
@@ -31,7 +32,7 @@ This file records how the custodian has the governance corpus worked on, and the
 - **Harness.** The harness is an optional, lightweight, read-only interface through which an agent queries the corpus in a code project, and a check that the corpus stays consistent. It has no enforcement layer: no blocking hook, no permission rules, and no write commands exposed to an agent, and it derives no environment configuration (2026-10-26). No work depends on it (GOV.38). The Claude Code plugin rooted at `harness/` follows the same rule.
 - **Offload.** The offload standard stays agnostic and timeless, with no annexes for particular frameworks (2026-10-24).
 - **Determinism (STND.VVUQ.82, .83).** Strict determinism is an option where feasible. It is not a requirement unless the acceptance criterion or the consequence class demands it. Known, declared variation within the agreed tolerance is not a defect, and agents do not churn over it. A true race condition is a correctness defect.
-- **High-assurance code.** Any coding standard a decision record adopts. The edition follows the toolchain's validation status (2026-10-24, for C++). Since the closing round of 2026-10-25, STND.CODE.17 to .20 hold these rules for high-assurance code in every language, as defaults from CSQ1, and STND.CODE.18 binds every claim of conformance. Outside high-assurance code, the newest-edition rule remains a C++ rule (STND.CXX.2); it was not extended to C, Fortran, Rust, or Lean.
+- **High-assurance code.** Any coding standard a decision record adopts. The edition follows the toolchain's validation status (2026-10-24, for C++). Since the closing round of 2026-10-25, STND.CODE.17 to .20 hold these rules for high-assurance code in every language, as defaults from CSQ1, except the marker of each deviation in STND.CODE.20, which applies from CSQ3; STND.CODE.18 binds every claim of conformance. Outside high-assurance code, the newest-edition rule remains a C++ rule (STND.CXX.2); it was not extended to C, Fortran, Rust, or Lean.
 - **No restatement (GOV.31).** Cite the provision that holds an outcome, and add only what the document makes necessary.
 - **Documentation (STND.DOCS).**
   - Written for human readers only, with no agent notes, governance, or process records in work documentation.

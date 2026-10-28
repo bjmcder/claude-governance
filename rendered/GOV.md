@@ -76,7 +76,7 @@ Every piece of work, at every consequence class, meets a floor: the prime direct
 
 . Instantiates .
 
-Above the floor, every obligation of VV, REPRO, INTPR, DSGN, SIMPL, RSRC, and QA, and of every lower provision that instantiates one, is proportioned to the consequence class of the work and the reliance placed on it, NEVER to the setting or hardware of the work (PRIN.9). The proportionality judgment, which states the consequence class and the reliance placed on the work, is recorded and adopted by the human owner. Exploratory overhead is kept as low as the floor allows, and lower governance SHALL NOT raise the floor except by a recorded project decision naming the consequence that warrants it.
+Above the floor, every obligation of VV, REPRO, INTPR, DSGN, SIMPL, RSRC, and QA, and of every lower provision that instantiates one, is proportioned to the consequence class of the work and the reliance placed on it, both of which the proportionality judgment states (GOV.50), NEVER to the setting or hardware of the work (PRIN.9). Exploratory overhead is kept as low as the floor allows, and lower governance SHALL NOT raise the floor except by a recorded project decision naming the consequence that warrants it.
 
 #### GOV.12 Consequence classes
 
@@ -95,7 +95,7 @@ Detailed criteria for each class are LVL2 standards. A profile MAY require work 
 
 . Instantiates .
 
-The human owner sets the project's consequence class at inception, as the most severe class of its intended uses, and MAY revise it throughout the project's life. The human owner MAY record a less severe class for a component shown to be isolated from the more severe outputs. No class is assumed by default: where none is recorded, an agent that needs it halts that line of work and refers (PRIME.14).
+The human owner sets the project's consequence class at inception, as the most severe class of the uses then made of its outputs, and MAY revise it throughout the project's life. Where a more severe use is planned, the classification records the class of that use as the expected class, adopted with the classification (GOV.24) and setting no class before that use begins (GOV.14). The human owner MAY record a less severe class for a component shown to be isolated from the more severe outputs. No class is assumed by default: where none is recorded, the work meets the floor (GOV.10), and an agent that needs the class to promote, release, deploy, or drive physical hardware halts that line of work and refers (PRIME.14).
 
 #### GOV.14 Class follows use
 
@@ -165,7 +165,7 @@ The prime directives and General Articles are stated as outcomes that every doma
 
 . Instantiates .
 
-Each project's classification records its consequence class and the attributes of its work that profile selectors test. The classification is adopted by the human owner (GOV.50) and revised whenever the work changes in a way a selector tests.
+Each project's classification records its consequence class and the attributes of its work that profile selectors test. The classification (GOV.50) is revised whenever the work changes in a way a selector tests.
 
 #### GOV.25 Profile selection
 
@@ -317,7 +317,7 @@ Each project's compliance with this document and its lower governance is audited
 
 . Instantiates .
 
-Agents acting on covered work are governed by agent instructions derived under PRIME.15, and are held to the prime directives, GUARD, and INTPR.11 for every action. They SHALL NOT grant themselves waivers (GOV.44).
+Agents acting on covered work are governed by agent instructions derived under PRIME.15, and are held to the prime directives, GUARD, and INTPR.11 for every action.
 
 #### GOV.49 No self-adoption
 

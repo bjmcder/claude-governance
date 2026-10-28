@@ -88,7 +88,8 @@ class Pair:
         changed side.
     bases : tuple[str, ...]
         Why the pair is listed: ``matter: NAME`` for a shared matter,
-        or a LVL0 identifier both instantiate.
+        or a LVL0 identifier both instantiate where both provisions lie
+        in documents that the change touches.
     """
 
     first: str
@@ -331,24 +332,37 @@ def lvl0_bases(corpus: Corpus, entry: Entry) -> set[str]:
 
 
 def review_pairs(
-    corpus: Corpus, changed: str, amends: tuple[str, ...] = ()
+    corpus: Corpus,
+    changed: str | tuple[str, ...],
+    amends: tuple[str, ...] = (),
 ) -> list[Pair]:
     """Return the pairs STND.HARN.28 lists before a change.
 
-    The changed side holds the provisions of the changed document, and
-    every provision below LVL0 that instantiates a LVL0 provision the
-    change amends. The other side holds the provisions below LVL0 of
-    every other document in force. A pair is listed when at least one
-    of its provisions belongs to a profile or sub-profile and either a
-    shared-matters table gives both for one matter or both instantiate
-    one LVL0 provision outside GOV and the Governing Principles.
+    The changed side holds the provisions that the change adopts or
+    amends: each provision of a document named whole, each provision
+    named, and every provision below LVL0 that instantiates a LVL0
+    provision the change amends. The other side holds the provisions
+    below LVL0 of every document in force or touched by the change. A
+    pair joins provisions of two documents, at least one of them a
+    profile or sub-profile, and is listed on a shared matter when a
+    shared-matters table gives both for one matter, and on a common
+    instantiation when both provisions lie in documents that the change
+    touches, each a document named whole or the document of a provision
+    named, and both instantiate one LVL0 provision outside GOV and the
+    Governing Principles. A provision on the changed side only because
+    it instantiates an amended LVL0 provision pairs on shared matters
+    alone, so a change of LVL0 alone lists only such pairs.
 
     Parameters
     ----------
     corpus : Corpus
-        The corpus, holding the changed document at its new text.
-    changed : str
-        Identifier of the changed document.
+        The corpus, holding each changed document at its new text.
+    changed : str | tuple[str, ...]
+        Identifier of the changed document, or of each document or
+        provision that one change adopts or amends. A provision's
+        identifier puts that provision alone on the changed side, and
+        its document among those that the change touches, for a change
+        that amends some provisions of a document and not the others.
     amends : tuple[str, ...]
         LVL0 provisions the change amends, for a change of LVL0.
 
@@ -357,6 +371,7 @@ def review_pairs(
     list[Pair]
         Pairs sorted by their two identifiers.
     """
+    named = {changed} if isinstance(changed, str) else set(changed)
     lower = [
         p
         for p in corpus.provisions()
@@ -364,21 +379,24 @@ def review_pairs(
     ]
     doc_of = {str(p.meta["id"]): document_id(corpus, p) for p in lower}
     by_id = {str(p.meta["id"]): p for p in lower}
+    provisions = named & set(by_id)
+    docs = (named - provisions) | {doc_of[pid] for pid in provisions}
     amended = set(amends)
     side = {
         pid
         for pid, p in by_id.items()
-        if doc_of[pid] == changed
+        if pid in provisions
+        or doc_of[pid] in named
         or amended & {str(x) for x in p.meta.get("instantiates") or []}
     }
     others = {
         pid
         for pid in by_id
-        if in_force(corpus.by_id.get(doc_of[pid])) or doc_of[pid] == changed
+        if in_force(corpus.by_id.get(doc_of[pid])) or doc_of[pid] in docs
     }
     matters: dict[str, set[str]] = {}
     for row in matter_rows(corpus, adopted_only=False):
-        if in_force(corpus.by_id.get(row.document)) or row.document == changed:
+        if in_force(corpus.by_id.get(row.document)) or row.document in docs:
             matters.setdefault(matter_key(row.matter), set()).update(
                 row.provisions
             )
@@ -397,7 +415,9 @@ def review_pairs(
                 f"matter: {name}"
                 for name, members in matters.items()
                 if first in members and second in members
-            } | (bases[first] & bases[second])
+            }
+            if doc_of[first] in docs and doc_of[second] in docs:
+                why |= bases[first] & bases[second]
             if why:
                 key = (
                     (min(first, second), max(first, second))

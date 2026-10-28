@@ -1,11 +1,11 @@
 id,kind,level,title,status,path,sha256,bytes
-CPS,profile,LVL1,Cyber-physical and actuation,adopted,_doc.md,4976f8506c004d2ed7cc4edab43da8e5c0604838e6bea770810fc8b4c46dd97a,8277
+CPS,profile,LVL1,Cyber-physical and actuation,adopted,_doc.md,f245a1ee40992a7ccea09ce56406133e89195700d8448c6f0fb4be7ea19f169c,8048
 CPS.1,provision,LVL1,Physical hardware control selector,adopted,1.md,fed4fbcc4f74dcd5635605b2c13637393334e5e1d4b8d230c3ab09ccbb2e549d,497
 CPS.2,provision,LVL1,Physical hardware control shared matters,adopted,2.md,2ceb36dff9acb237564a7cfa62eb2f07e894aaf9f4a6d116dabaccef7268d51a,892
-CPS.3,provision,LVL1,Hazard analysis coverage,adopted,3.md,b14727ba0990f9bc67baf7d331d4c1258a1dc28911092aae0b628a490f3dec22,755
-CPS.4,provision,LVL1,Safe state coverage,adopted,4.md,73e05d9de0c164267b184cfaf552bdfae43efe608d96df45332c7190d2f6ce2c,1037
-CPS.5,provision,LVL1,Independent command limits,adopted,5.md,7cbadfad7c98fa7391f4c4ef6b49ea11d1bc6fc9373dfc79e0978c74284d7353,581
-CPS.6,provision,LVL1,Staged first operation,adopted,6.md,963113bc65d40ee115d50c67cda6714f96a5277f2c79a959322f9f505bf39188,546
-CPS.7,provision,LVL1,Command record,adopted,7.md,ed303a13f1f0742d00b43cee7553e9b841c76356e77f2318f141b3d78e57f6a0,484
-CPS.8,provision,LVL1,Control loop behavior,adopted,8.md,78a5c94059e416877d2c15216fb919a589ed240cb495b6dda42f82c6cdf9b418,853
-CPS.9,provision,LVL1,Plausible and current observations,adopted,9.md,17259da2d06d69daba4270378dcef434a4ad8ecd27a9ce50eec138bb5e5148a1,536
+CPS.3,provision,LVL1,Hazard analysis coverage,adopted,3.md,6330f29d2b3b9c9cdcffd1a1dba335af102882bb628cd8de09629791599157a0,769
+CPS.4,provision,LVL1,Safe state coverage,adopted,4.md,71093ac0238ba856bc79a16ca76d8e1d57b6a31207a39f8c4c599e308e9a4aad,1051
+CPS.5,provision,LVL1,Independent command limits,adopted,5.md,f05603a42fb4a0c9f823bb9772e91c7ba0cbdeb61aa8846b91768e0defa37e11,595
+CPS.6,provision,LVL1,Staged first operation,adopted,6.md,052c78b57ad7ab1d94b29b07b402dbe8b38b0a51bbd73613c8002a23e2bfc08e,560
+CPS.7,provision,LVL1,Command record,adopted,7.md,8795c7aaae04611f1500e0a8c480f5f70e5ae6ceebdb47f01a4340be793ee35d,498
+CPS.8,provision,LVL1,Control loop behavior,adopted,8.md,16e1dff3917b67b588d534c8a0e49ffd06e77d2132865b8c841de9868b9bec28,867
+CPS.9,provision,LVL1,Plausible and current observations,adopted,9.md,74a6ed132694e6f90d0545a20fb5bc9a42a2bd0444c5e78c31006e4ad504dd8c,550

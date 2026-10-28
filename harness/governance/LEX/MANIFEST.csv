@@ -48,6 +48,7 @@ LEX.essential-complexity,term,LVL0,Essential complexity,ratified,essential-compl
 LEX.evidence,term,LVL0,Evidence,ratified,evidence.md,72ebfe549aff51f501f473af601630302ab0fa66df5169935e8f7fdf25dc6880,410
 LEX.evidence-level,term,LVL0,Evidence level,ratified,evidence-level.md,95cb2e49c6b7b9e59c04f324722982dcb9a45b23b653ab176706d03d53a33eea,311
 LEX.exception,term,LVL0,Exception,ratified,exception.md,13660fb3b1859071ee3f99d8742746fa4f84562f7b90bff841d08d771c15f6e8,288
+LEX.expected-class,term,LVL0,Expected class,ratified,expected-class.md,3a6b064001e5f7fc5b568d94b962101cd3880cd62acdee222a488b7e4f1397e5,373
 LEX.explicit-monetary-transaction,term,LVL0,Explicit monetary transaction,ratified,explicit-monetary-transaction.md,a3683f16bc80840634d439c829810a13f4f1b51340a604ab6e7183113d22d160,427
 LEX.extension-point,term,LVL0,Extension point,ratified,extension-point.md,d43a34a99e56137f138ead110c09055bcaf3f4ff319513bfafbdccab409ed279,286
 LEX.external-component,term,LVL0,External component,ratified,external-component.md,390a7f6ac58fd23975667834699b660cd44da67a726b687c86d2d53d7a9f7dab,313
@@ -102,6 +103,7 @@ LEX.proportionality-judgment,term,LVL0,Proportionality judgment,ratified,proport
 LEX.provenance,term,LVL0,Provenance,ratified,provenance.md,324a3aaa85a1df38e3b0d0ecdfffd7b7ae7e391e5927a2d9bc8e3d8864d197f9,230
 LEX.provision,term,LVL0,Provision,ratified,provision.md,f026f3b6d3e2e9e21ce62e610b03192a6b802dce043b7019fd85c0daeefb68ab,269
 LEX.provisioned-environment,term,LVL0,Provisioned environment,ratified,provisioned-environment.md,9a46ad2e42982b0948ae8bf47971b813c7de11c19f543b66cf7eb8b4765352e5,318
+LEX.reclassification,term,LVL0,Reclassification,ratified,reclassification.md,b076da397798f4c15d606ad16f170296a1dce603ea025daa6e3680edaad75316,324
 LEX.record,term,LVL0,Record,ratified,record.md,b5465accefc0bacd93c0c1b04b09a99abe3fa281bd22411c16072c16da16f8e2,307
 LEX.reference-oracle,term,LVL0,"Reference, oracle",ratified,reference-oracle.md,2a556df49d5b9680d7d03ac3c6a89cf679ddf48e32b62840f180c8fec083db5a,285
 LEX.regeneration,term,LVL0,Regeneration,ratified,regeneration.md,62ba5652dbf5809748abcbc931f419474f0c24fd9665a876838ba24f78f45497,254

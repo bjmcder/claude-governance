@@ -1,6 +1,6 @@
-# Testing methods standard (STND.TEST) 1.0
+# Testing methods standard (STND.TEST) 1.1
 
-Adopted by The Custodian as revision 1.0 in ledger entry 145 (2026-10-25). This reading copy is composed from the per-provision files in STND/TEST/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 145 (2026-10-25); revised to 1.1 in entry 283 (2026-10-28). This reading copy is composed from the per-provision files in STND/TEST/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -60,7 +60,7 @@ Across five systems, coverage correlated only weakly to moderately with the effe
 
 PRIME.2 forbids evidence obtained by adjusting a test, a reference, or a criterion to the output, AGENT.5 has an agent record a change to a check that judges its own change apart from that change, AGENT.47 has it state each check skipped, disabled, or weakened, STND.CREW.15 gives those statements to the review agent, and STND.VVUQ.17 governs the renewal of the reference of a numerical regression guard. What they leave open is the change to a test that the work report does not state, and the expected value that restates the code (STND.TEST.19). By search summaries and a secondary excerpt, models on agent benchmarks edited or deleted tests, special-cased expected values, and passed weak tests with wrong patches, at rates that depend on the model, the prompt, and the benchmark; STND.TEST.19 rests on the classes of hazard, which are stable, and not on the rates (t2, H6). The first sentence of STND.TEST.19 has the review find each loosened, removed, or re-referenced test from the change itself, where a difference from the statements of AGENT.47 is a finding of the review; the second has an author's test state the source of its expected value and whether that source is independent of the code that it judges, and VV.7 labels a test whose source is the code a regression guard. A pass of the suite does not show that a change is correct, and a review that looks for behavior that the tests do not check finds what a passing suite hides (t2, answer 22).
 
-Under STND.CLASS.10, each provision instantiates only VV, REPRO, INTPR, RSRC, or QA, and applies from CSQ3; work of CSQ4 may omit it. The part of a provision that rests on a row of the table of STND.CLASS.10 applies from the class of that row. The second sentence of STND.TEST.15 documents a limit of what a verification detects, rests on INTPR.10, and applies from CSQ2, as STND.CONC.27 does. STND.TEST.1 labels each test with a level of VV.6 and asks no verification of an assembly or of the integrated system, which the row of VV.6 starts at CSQ1, so it applies from CSQ3. STND.TEST.2 asks that the verdict inputs of a test be derivable, which VV.8 and RSRC.11 already rest on, and applies from CSQ3 through its third route: a statement of the repository configuration is a record that a person reads and keeps, and identifies no affected dependent by itself, so it is no mechanism that tracks dependencies between results in the sense of QA.14. A tool that derives the verdict inputs from the build description or from what a test read is such a mechanism, which the row of QA.14 asks from CSQ2; at CSQ2 and more severe classes the tool routes are therefore what QA.14 already asks, and at CSQ3 the statement suffices. This reading is put to the custodian. STND.TEST.9 asks for a record kept with the run, and not provenance written into each output at production, which the row of REPRO.4 covers, and the record of time, memory, and cost with each run stays with the row of RSRC.3 at CSQ2. STND.TEST.11 asks for the record of a failure that occurred, and not for diagnostics captured by default, which the row of INTPR.8 starts at CSQ1. STND.TEST.12, the first sentence of STND.TEST.15, STND.TEST.17, and the second sentence of STND.TEST.19 instantiate VV.1 and ask for no comparison against a reference oracle produced without the implementation that it judges, which the row of VV.1 starts at CSQ2, so they apply from CSQ3. Every other provision and sentence rests on no row and applies from CSQ3. No provision binds, and none raises the floor (GOV.11): each is a default that asks only what RSRC.11, RSRC.12, RSRC.7, VV, REPRO, INTPR, or QA already ask, at the cost of wording, a statement in the repository configuration, a run, or one record, and the honest report of verdicts already binds through PRIME.2, VV.7, AGENT.4, AGENT.5, and AGENT.47.
+Under STND.CLASS.10, each provision instantiates only VV, REPRO, INTPR, RSRC, or QA, and applies from the class that its field `onset` gives, which work of CSQ4 may omit; at CSQ3 a statement of the repository configuration meets STND.TEST.2, the derivation by a tool being the mechanism that tracks dependencies between results, which the row of QA.14 asks from CSQ2, and the tiers, the integration depths, and the records of selection, reuse, omission, and reason start at CSQ2, so that at CSQ3 a selection is drawn from the whole suite, and work of CSQ3 that runs its suite whole owes its verdicts and none of these records. No provision binds, and none raises the floor (GOV.11): each is a default that asks only what RSRC.11, RSRC.12, RSRC.7, VV, REPRO, INTPR, or QA already ask, at the cost of wording, a statement in the repository configuration, a run, or one record, and the honest report of verdicts already binds through PRIME.2, VV.7, AGENT.4, AGENT.5, and AGENT.47.
 
 ## References
 
@@ -92,13 +92,13 @@ Under STND.CLASS.10, each provision instantiates only VV, REPRO, INTPR, RSRC, or
 
 #### STND.TEST.1 Tiers and levels of tests
 
-Default. Instantiates RSRC.11, VV.6.
+Default, from CSQ2. Instantiates RSRC.11, VV.6.
 
 The repository configuration SHOULD state the tiers of the full suite, the tier of each test, and the level of VV.6 at which each test verifies (RSRC.11, VV.6).
 
 #### STND.TEST.2 Derivable verdict inputs
 
-Default. Instantiates VV.8, RSRC.11.
+Default, from CSQ3. Instantiates VV.8, RSRC.11.
 
 The verdict inputs of each test SHOULD be derivable by a tool from the build description or from a record of the inputs that the test read that a tool writes at its run, or from a statement of the repository configuration (VV.8, RSRC.11). Each such record and statement SHOULD state the revision of the work at which it was written (VV.8).
 
@@ -106,13 +106,13 @@ The verdict inputs of each test SHOULD be derivable by a tool from the build des
 
 #### STND.TEST.3 Selection of affected tests
 
-Default. Instantiates RSRC.11, VV.8, RSRC.12.
+Default, from CSQ3; sentence 2 from CSQ2. Instantiates RSRC.11, VV.8, RSRC.12.
 
 Where a run of tests is not a full-suite run, its selection SHOULD be derived by a selection rule from the change and the verdict inputs of the tests, and hold each test whose verdict the change is able to affect, in the tiers from which STND.TEST.5 draws the selection (RSRC.11, VV.8). Where a selection omits a test whose verdict inputs the change alters, the record of the run SHOULD state the omission and the later merge or release at which that test runs (RSRC.12).
 
 #### STND.TEST.4 Inputs that widen a selection
 
-Default. Instantiates RSRC.11, VV.8.
+Default, from CSQ3. Instantiates RSRC.11, VV.8.
 
 Where a change alters an input of the first column of the table of this provision, each selection for that change SHOULD hold the tests of its second column, in the tiers from which STND.TEST.5 draws the selection (RSRC.11, VV.8). Each selection SHOULD also hold, from every tier, each new or changed test, each test that failed at its last run on the branch, each test whose verdict inputs the derivation of STND.TEST.2 does not give for the revision run, and each test on which a selected test declares a dependence under STND.TEST.14 (VV.8).
 
@@ -133,31 +133,31 @@ Where a change alters an input of the first column of the table of this provisio
 
 #### STND.TEST.5 Selection by integration depth
 
-Default. Instantiates RSRC.11, RSRC.12.
+Default, from CSQ2. Instantiates RSRC.11, RSRC.12.
 
 The repository configuration SHOULD state, by a rule that covers every integration depth, the tiers from which the selection for the merge of a branch into its parent branch at each depth is drawn, beside the tests that STND.TEST.4 holds from every tier, with every tier for a merge into the development line (RSRC.11, RSRC.12). Each tier from which the selection at one integration depth is drawn SHOULD also be drawn from at each smaller integration depth (RSRC.11).
 
 #### STND.TEST.6 Full-suite runs
 
-Default. Instantiates VV.8, RSRC.11.
+Default, from CSQ3. Instantiates VV.8, RSRC.11.
 
 Before the release record of an advance of a main line is presented under STND.WPROC.13, a full-suite run SHOULD complete on the revision that the release proposal names (VV.8, RSRC.11). A full-suite run SHOULD also complete on the development line at a cadence that the repository configuration states as a number of merges or a span of time (VV.8, RSRC.11).
 
 #### STND.TEST.7 Misses of a selection
 
-Default. Instantiates QA.6, QA.4, RSRC.11.
+Default, from CSQ3. Instantiates QA.6, QA.4, RSRC.11.
 
 Where a full-suite run fails a test, the change that caused the failure SHOULD be identified among the changes since the last run in which that test passed (QA.6). Where the selection for that change omitted the test without the record that STND.TEST.3 asks, the omission SHOULD be recorded in defect tracking as a defect of the selection rule (QA.4, RSRC.11).
 
 #### STND.TEST.8 Reuse of test verdicts
 
-Default. Instantiates RSRC.7, REPRO.1, REPRO.3.
+Default, from CSQ3. Instantiates RSRC.7, REPRO.1, REPRO.3.
 
 Only a passing verdict obtained under an unchanged verdict key SHOULD stand for a later run of a test in a selection (RSRC.7, REPRO.1). Where a test is a flaky test, reads an input outside the verdict inputs that STND.TEST.2 derives for it, or reads a secret, its verdicts SHOULD NOT stand for a later run (RSRC.7, REPRO.3, PRIME.10).
 
 #### STND.TEST.9 Selection and verdict record
 
-Default. Instantiates VV.5, RSRC.11, REPRO.1.
+Default, from CSQ3; row Omitted tests from CSQ2; row Reused verdicts from CSQ2; row Selection from CSQ2. Instantiates VV.5, RSRC.11, REPRO.1.
 
 The record of each run of tests on which a merge or a release relies SHOULD hold the content of the table of this provision (VV.5, RSRC.11, REPRO.1).
 
@@ -175,7 +175,7 @@ The record of each run of tests on which a merge or a release relies SHOULD hold
 
 #### STND.TEST.10 Runs on a branch
 
-Default. Instantiates RSRC.11.
+Default, from CSQ3; sentence 3 from CSQ2. Instantiates RSRC.11.
 
 Other than a run before a merge and a full-suite run under STND.TEST.6, each run of tests on a branch SHOULD hold only the tests that the changes since the previous run on that branch are able to affect and the tests that failed at their last run, as STND.TEST.3 and STND.TEST.4 select them (RSRC.11). Other than a full-suite run under STND.TEST.6, each run before the merge of a branch into its parent branch SHOULD hold only the selection that STND.TEST.3, STND.TEST.4, and STND.TEST.5 give for the change that the merge brings (RSRC.11). Where a run on a branch, other than a full-suite run under STND.TEST.6, holds tests that the first two sentences leave out, its record SHOULD state the reason (RSRC.11).
 
@@ -183,25 +183,25 @@ Other than a run before a merge and a full-suite run under STND.TEST.6, each run
 
 #### STND.TEST.11 Failure evidence before a rerun
 
-Default. Instantiates REPRO.1, QA.6.
+Default, from CSQ3. Instantiates REPRO.1, QA.6.
 
 Before a failed test runs again, the record of its failing run SHOULD keep the verdict key, the other tests of the run and their order, the first assertion that failed with its message, and the output that the assertion judged, each kept without a secret (REPRO.1, QA.6, PRIME.10). Until the cause of the failure is found, each further run of that test SHOULD state the hypothesis about that cause that the run tests (QA.6).
 
 #### STND.TEST.12 Pass after an unexplained failure
 
-Default. Instantiates VV.1, QA.6, VV.5.
+Default, from CSQ3. Instantiates VV.1, QA.6, VV.5.
 
 Until a diagnosis names the cause of a failure, a pass of the failed test at a later run, under the same verdict key or under one that differs only in a random seed or a drawn input, SHOULD NOT be taken as evidence for the change that the test judges (VV.1). Until a diagnosis names the cause of the failure, the record of each run that holds the test SHOULD report it as an unexplained failure, with the numbers of its runs and of its failures since the first failure (QA.6, VV.5).
 
 #### STND.TEST.13 Flaky tests and quarantine
 
-Default. Instantiates QA.4, REPRO.3, QA.6, REPRO.7.
+Default, from CSQ3. Instantiates QA.4, REPRO.3, QA.6, REPRO.7.
 
 Each flaky test SHOULD be recorded in defect tracking as a defect of the test or of the code that it judges, with its suspected cause (QA.4, REPRO.3). Where a flaky test is placed in quarantine, the quarantine SHOULD be recorded with its reason, the actor responsible for the repair, and a bound in time or in number of runs at which the test is repaired or retired by a recorded decision (QA.4, QA.6, REPRO.7).
 
 #### STND.TEST.14 Independence of tests
 
-Default. Instantiates REPRO.3.
+Default, from CSQ3. Instantiates REPRO.3.
 
 Other than a dependence on another test that the repository configuration declares, each test SHOULD give the same verdict alone and in each order that a full-suite run uses (REPRO.3). Each full-suite run on the development line SHOULD run its tests in an order that differs between runs, keeps each declared dependence, and is stated in its record (REPRO.3).
 
@@ -209,25 +209,25 @@ Other than a dependence on another test that the repository configuration declar
 
 #### STND.TEST.15 Partial oracles
 
-Default. Instantiates VV.1, INTPR.10.
+Default, from CSQ3; sentence 2 from CSQ2. Instantiates VV.1, INTPR.10.
 
 Where no reference oracle gives the expected output of a test for its inputs, the test SHOULD judge that output by a partial oracle, and state that oracle and its kind as the reference of the test (VV.1). Each test that judges by a partial oracle SHOULD state the classes of defect that its oracle does not detect (INTPR.10).
 
 #### STND.TEST.16 Generated test inputs
 
-Default. Instantiates REPRO.1, VV.8.
+Default, from CSQ3. Instantiates REPRO.1, VV.8.
 
 Each test that draws its inputs from a generator SHOULD state the generator, the distribution from which it draws, and the number of inputs that it draws, and keep each input on which it failed for later runs (REPRO.1, VV.8).
 
 #### STND.TEST.17 Adequacy measures reported
 
-Default. Instantiates INTPR.9, VV.1.
+Default, from CSQ3. Instantiates INTPR.9, VV.1.
 
 Each report of an adequacy measure SHOULD state its kind, the code and the tests that it measures, what it excludes, and, for a mutation score, its operators and its treatment of mutants equivalent to the code (INTPR.9). A coverage of the code SHOULD NOT be set as a threshold for the acceptance of a change (VV.1).
 
 #### STND.TEST.18 Acceptance tests traced
 
-Default. Instantiates VV.3, QA.2.
+Default, from CSQ3. Instantiates VV.3, QA.2.
 
 Each acceptance test SHOULD name each acceptance criterion that it checks (VV.3, QA.2). The record of each unit of work SHOULD list each of its acceptance criteria that no acceptance test checks, with the means by which that criterion is judged (VV.3, QA.2).
 
@@ -235,7 +235,7 @@ Each acceptance test SHOULD name each acceptance criterion that it checks (VV.3,
 
 #### STND.TEST.19 Tests changed with their code
 
-Default. Instantiates QA.7, VV.1.
+Default, from CSQ3. Instantiates QA.7, VV.1.
 
 The review of each change SHOULD identify, from the change itself, each test that the change removes, skips, disables, places in quarantine, marks as expected to fail, loosens in its assertion or its tolerance, or gives another expected value or reference (QA.7). Where the author of a change writes or changes a test that judges that change, the test SHOULD state the source of its expected value, and whether that source is independent of the code that it judges (VV.1).
 
@@ -244,3 +244,4 @@ The review of each change SHOULD identify, from the change itself, each test tha
 | Revision | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-10-25 | Adopted. |
+| 1.1 | 2026-10-28 | Minor amendment (GOV.41): the records of the standard start at CSQ2: STND.TEST.1, STND.TEST.5, the record of an omission in the second sentence of STND.TEST.3, the rows Selection, Reused verdicts, and Omitted tests of STND.TEST.9, and the reason of the third sentence of STND.TEST.10; the statement route of STND.TEST.2 stands at CSQ3, and the Notes no longer put it to the custodian; each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields. |

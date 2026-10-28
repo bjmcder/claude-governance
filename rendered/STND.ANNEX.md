@@ -1,6 +1,6 @@
-# Hardware type annex (STND.ANNEX) 1.0
+# Hardware type annex (STND.ANNEX) 1.1
 
-Adopted by The Custodian as revision 1.0 in ledger entry 106 (2026-10-24). This reading copy is composed from the per-provision files in STND/ANNEX/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 106 (2026-10-24); revised to 1.1 in entry 262 (2026-10-28). This reading copy is composed from the per-provision files in STND/ANNEX/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -33,7 +33,7 @@ The accelerator default takes the accuracy that the documentation of the compile
 
 The defaults for programmable logic and integrated circuits point to the design record, which HDES.5 already has state each property, limit, and kind of hardware fault that HW.4 and HW.5 ask for, and add only what the design record leaves open: timing that rests on the target maker's models (HDES.10), the marking of properties that rest only on analysis or simulation until device evidence or measurement supports them (HW.FPGA.4, HW.ASIC.4), the fabrication readiness record (HDES.ASIC.12), upsets of state that go undetected without a detection the design implements and HDES.15 verifies, and manufacturing defects that the test misses (HDES.ASIC.11). A configuration whose design record the project does not hold, a supplier's shell or a purchased block among them, takes its properties from the documentation of its supplier under STND.ANNEX.9. They name no device family, process, method, threshold, sample size, or tool, so they stay valid as the technology changes; the confirmations a project buys, their conditions, and their margins are matters for its own instruments (LVL3). A processor realized in programmable logic is programmable logic under HW, so the firmware that it runs belongs to the path that cites the programmable logic default, and the arithmetic of its compiler and build, which HDES.7 does not cover, is stated as for an embedded controller.
 
-Under STND.CLASS.10, each provision instantiates only DSGN.5, REPRO.2, REPRO.3, and VV.1, and the provisions HW.4, HW.5, HW.6, HW.12, and HW.EMBED.4 that instantiate them. STND.ANNEX.3 instantiates only DSGN.5 and HW.4 and applies from CSQ2, the class from which STND.CLASS.10 applies DSGN.5; every other provision applies from CSQ3; work of CSQ4 omits them. A citing contract at CSQ3 carries the rows of HW.4 by the citation alone, and their undetected kinds of fault engage HW.10, at the cost of one statement in the record of each result, which HW.10 asks at CSQ3 only of a contract that states such a fault. Every obligation of this standard arises only for a contract that cites a default, which is the project's choice; a project that writes its own contract meets HW alone. No provision raises the floor (GOV.11).
+Under STND.CLASS.10, each provision instantiates only DSGN.5, REPRO.2, REPRO.3, and VV.1, and the provisions HW.4, HW.5, HW.6, HW.12, and HW.EMBED.4 that instantiate them, and applies from the class that its field `onset` gives, which work of CSQ4 may omit: each default of a contract starts at CSQ2 with the contract of HW.4 and its arithmetic and evidence under HW.5 and HW.6, which it fills, and STND.ANNEX.1, a permission, carries the value null. Every obligation of this standard arises only for a contract that cites a default, which is the project's choice; a project that writes its own contract meets HW alone. No provision raises the floor (GOV.11).
 
 ## References
 
@@ -62,25 +62,25 @@ Under STND.CLASS.10, each provision instantiates only DSGN.5, REPRO.2, REPRO.3, 
 
 #### STND.ANNEX.1 Adoption by citation
 
-Default. Instantiates DSGN.5, REPRO.2, HW.4, HW.5.
+Default, at every class. Instantiates DSGN.5, REPRO.2, HW.4, HW.5.
 
 The hardware contract of an execution path MAY state the properties that the default contract for its hardware type gives by a citation of that default contract that names the revision of this standard that it cites (DSGN.5, REPRO.2, HW.4, HW.5).
 
 #### STND.ANNEX.2 Arithmetic, variation, and output statements
 
-Default. Instantiates DSGN.5, REPRO.2, REPRO.3, VV.1, HW.5, HW.12, HW.EMBED.4.
+Default, from CSQ2. Instantiates DSGN.5, REPRO.2, REPRO.3, VV.1, HW.5, HW.12, HW.EMBED.4.
 
 A citing contract SHALL state each property of its execution path that differs from the default of a row whose basis is HW.5, HW.12, or HW.EMBED.4, in place of that default, and each item that its default contract gives in the column Stated by the citing contract of such a row (DSGN.5, REPRO.2, REPRO.3, VV.1, HW.5, HW.12, HW.EMBED.4). Where the component of a citing contract relies on a property of delivered arithmetic or of run-to-run variation that the default contract does not state, the citing contract SHALL state that property (DSGN.5, REPRO.2, REPRO.3, HW.5, HW.12).
 
 #### STND.ANNEX.3 Other statements of citing contracts
 
-Default. Instantiates DSGN.5, HW.4.
+Default, from CSQ2. Instantiates DSGN.5, HW.4.
 
 A citing contract SHALL state each property of its execution path that differs from the default of a row whose basis is HW.4, in place of that default, and each item that its default contract gives in the column Stated by the citing contract of such a row (DSGN.5, HW.4). Where the component of a citing contract relies on a property of its execution path, other than one of delivered arithmetic or of run-to-run variation, that the default contract does not state, the citing contract SHALL state that property (DSGN.5, HW.4).
 
 #### STND.ANNEX.4 Evidence for default properties
 
-Default. Instantiates DSGN.5, VV.1, HW.6.
+Default, from CSQ2. Instantiates DSGN.5, VV.1, HW.6.
 
 The citation of a default contract SHALL NOT be the evidence that HW.6 asks for a property of a citing contract (DSGN.5, VV.1, HW.6). Where the documentation that supports an accuracy that a citing contract takes from its default contract states no proven bound, the citing contract SHALL mark that accuracy as a tested maximum (VV.1, HW.6).
 
@@ -88,7 +88,7 @@ The citation of a default contract SHALL NOT be the evidence that HW.6 asks for 
 
 #### STND.ANNEX.5 General-purpose processor default contract
 
-Default. Instantiates DSGN.5, REPRO.2, REPRO.3, HW.4, HW.5, HW.12.
+Default, from CSQ2. Instantiates DSGN.5, REPRO.2, REPRO.3, HW.4, HW.5, HW.12.
 
 The default contract for execution paths on general-purpose processors SHALL be the table of this provision (DSGN.5, REPRO.2, REPRO.3, HW.4, HW.5, HW.12).
 
@@ -106,7 +106,7 @@ The default contract for execution paths on general-purpose processors SHALL be 
 
 #### STND.ANNEX.6 Accelerator default contract
 
-Default. Instantiates DSGN.5, REPRO.2, REPRO.3, HW.4, HW.5, HW.12.
+Default, from CSQ2. Instantiates DSGN.5, REPRO.2, REPRO.3, HW.4, HW.5, HW.12.
 
 The default contract for execution paths on accelerators SHALL be the table of this provision (DSGN.5, REPRO.2, REPRO.3, HW.4, HW.5, HW.12).
 
@@ -124,7 +124,7 @@ The default contract for execution paths on accelerators SHALL be the table of t
 
 #### STND.ANNEX.7 Quantum processor default contract
 
-Default. Instantiates DSGN.5, REPRO.2, REPRO.3, HW.4, HW.5, HW.12.
+Default, from CSQ2. Instantiates DSGN.5, REPRO.2, REPRO.3, HW.4, HW.5, HW.12.
 
 The default contract for execution paths on quantum processors SHALL be the table of this provision (DSGN.5, REPRO.2, REPRO.3, HW.4, HW.5, HW.12).
 
@@ -144,7 +144,7 @@ The default contract for execution paths on quantum processors SHALL be the tabl
 
 #### STND.ANNEX.8 Embedded controller default contract
 
-Default. Instantiates DSGN.5, REPRO.2, REPRO.3, HW.4, HW.5, HW.12.
+Default, from CSQ2. Instantiates DSGN.5, REPRO.2, REPRO.3, HW.4, HW.5, HW.12.
 
 The default contract for execution paths on embedded controllers SHALL be the table of this provision (DSGN.5, REPRO.2, REPRO.3, HW.4, HW.5, HW.12).
 
@@ -163,7 +163,7 @@ The default contract for execution paths on embedded controllers SHALL be the ta
 
 #### STND.ANNEX.9 Programmable logic default contract
 
-Default. Instantiates DSGN.5, REPRO.2, REPRO.3, VV.1, HW.4, HW.5, HW.6, HW.12.
+Default, from CSQ2. Instantiates DSGN.5, REPRO.2, REPRO.3, VV.1, HW.4, HW.5, HW.6, HW.12.
 
 The default contract for execution paths on programmable logic SHALL be the table of this provision (DSGN.5, REPRO.2, REPRO.3, VV.1, HW.4, HW.5, HW.6, HW.12). For a configuration whose design record the project does not hold, each entry of that table that rests on the design record SHALL be read as resting on the documentation that the supplier of the configuration gives, and each other property that this documentation does not state, other than a kind of hardware fault, as not established (DSGN.5, VV.1, HW.4, HW.5, HW.6).
 
@@ -182,7 +182,7 @@ The default contract for execution paths on programmable logic SHALL be the tabl
 
 #### STND.ANNEX.10 Integrated circuit default contract
 
-Default. Instantiates DSGN.5, REPRO.2, REPRO.3, VV.1, HW.4, HW.5, HW.6, HW.12.
+Default, from CSQ2. Instantiates DSGN.5, REPRO.2, REPRO.3, VV.1, HW.4, HW.5, HW.6, HW.12.
 
 The default contract for execution paths on integrated circuits SHALL be the table of this provision (DSGN.5, REPRO.2, REPRO.3, VV.1, HW.4, HW.5, HW.6, HW.12).
 
@@ -205,3 +205,4 @@ The default contract for execution paths on integrated circuits SHALL be the tab
 | Revision | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-10-24 | Adopted. |
+| 1.1 | 2026-10-28 | Minor amendment (GOV.41): each default of a contract applies from CSQ2, with the contract of HW.4 and the arithmetic and evidence of HW.5 and HW.6 that it fills, and STND.ANNEX.1, a permission, carries the value null; each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields. |

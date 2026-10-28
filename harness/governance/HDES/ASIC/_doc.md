@@ -5,7 +5,7 @@ kind: "sub-profile"
 title: "Integrated circuit design"
 status: "adopted"
 adopted: "2026-10-18"
-revision: "1.0.2"
+revision: "1.0.4"
 selector: "Binds when the work produces, or is admitted to produce, a hardware description to be realized as an integrated circuit (HDES.ASIC.1)."
 parent: "HDES"
 adopted_by: "The Custodian"
@@ -68,7 +68,7 @@ Manufacturing test is designed and its coverage established before fabrication, 
 
 HDES.ASIC addresses four matters (HDES.ASIC.2): the design record of a realized design, which HDES owns, through HDES.ASIC.3, HDES.ASIC.5, HDES.ASIC.10, HDES.ASIC.11, and HDES.ASIC.12, which cite HDES.3; and the convergence and the uncertainty of a computed result and the tolerance basis of a numerical comparison, which NUMER owns, through HDES.ASIC.5, which cites NUMER.11, NUMER.23, and NUMER.25, and HDES.ASIC.6, which cites NUMER.11.
 
-Every provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, or DSGN, so it inherits their rank and waivability (GOV.17) and is proportioned to class (GOV.11): under the project's class criteria, such as STND.CLASS.10, it applies from the least severe class at which those criteria require an LVL0 obligation it instantiates, and under STND.CLASS.10 work of CSQ4 omits it. Under STND.CLASS.10, every provision other than the selector and the shared-matters provision applies from CSQ3. Some provisions apply at CSQ3 content of obligations that STND.CLASS.10 first asks at CSQ2 or CSQ1: a contract for each external component and for hardware (DSGN.5), a schema for each data structure crossing an interface (DSGN.4), documentation of the limits of validity (INTPR.10), provenance written with each output at production (REPRO.4), and verification of each assembly and of the integrated system (VV.6). Each such provision tightens above the floor (PRIME.15), because its check runs without a person and the failure it prevents is silent at every class. Here an error found after submission also cannot be corrected on that run. No provision raises the floor (GOV.11).
+Every provision other than the selector and the shared-matters provision instantiates only VV, REPRO, INTPR, or DSGN, inherits their rank and waivability (GOV.17), and applies from the class that its field `onset` gives under STND.CLASS.10, where a field that gives CSQ3 for content that the table of STND.CLASS.10 starts at a more severe class tightens above the floor (PRIME.15), because its check runs without a person and the failure it prevents is silent at every class, and an error found after submission cannot be corrected on that run. No provision raises the floor (GOV.11).
 
 ## References
 
@@ -98,3 +98,5 @@ Every provision other than the selector and the shared-matters provision instant
 | 1.0 | 2026-10-18 | Adopted. |
 | 1.0.1 | 2026-10-19 | Editorial amendment (GOV.41): the informative Selector text describes HW.ASIC and MEAS as adopted; no obligation changes. |
 | 1.0.2 | 2026-10-25 | Editorial amendment (GOV.41): the informative Selector text cites HW.6 and HW.ASIC.4, which govern the evidence obtained from fabricated devices, and MEAS.1, the selector of MEAS, and References lists HW.ASIC and MEAS; no obligation, permission, or defined meaning changes. |
+| 1.0.3 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields; no obligation, permission, or defined meaning changes. |
+| 1.0.4 | 2026-10-28 | Editorial amendment (GOV.41): the list of the second sentence of HDES.ASIC.12 places its conjunction before its last item, each block whose evidence rests only on the contract of an external component; no obligation, permission, or defined meaning changes. |

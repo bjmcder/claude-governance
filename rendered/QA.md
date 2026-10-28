@@ -76,7 +76,7 @@ A release proceeds only on the decision of the human owner, with no open blockin
 
 . Instantiates .
 
-A result SHALL NOT be reported before promotion: a recorded act by which the human owner adopts the proportionality judgment for its intended use (GOV.11) and confirms that the result, regenerated where that judgment requires, meets the acceptance criteria recorded before it was seen (VV.3), under VV and REPRO at the level the judgment sets; or, where the evidence VV requires is absent, confirms that the result is labeled unverified (PRIME.3) and that the gap is recorded. An agent MAY propose a promotion. Reporting an unpromoted result, or relying on one beyond its author, is a blocking defect.
+A result SHALL NOT be reported before promotion: a recorded act by which the human owner adopts the proportionality judgment for its intended use (GOV.11) and confirms that the result, regenerated where that judgment requires, meets the acceptance criteria recorded before it was seen (VV.3), under VV and REPRO at the level the judgment sets; or, where the evidence VV requires is absent, confirms that the result is labeled unverified (PRIME.3) and that the gap is recorded. For work of CSQ3 or CSQ4, the adopted classification is the promotion of each result that meets its acceptance criteria (QA.1), for reliance by its author or immediate team alone, feeding work that is verified later (GOV.12). An agent MAY propose a promotion. Reporting an unpromoted result, or relying on one beyond its author, is a blocking defect.
 
 #### QA.12 Post-hoc criteria
 

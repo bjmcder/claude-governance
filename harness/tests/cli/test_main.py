@@ -14,7 +14,7 @@ from unittest import mock
 
 from govharness.cli.arguments import ENV_ROOT, split_root
 from govharness.cli.main import entry, main
-from tests.support import ROOT, corpus_copy
+from tests.support import ROOT, corpus_copy, live_index
 
 ROOT_COMMANDS = (
     ["verify"],
@@ -229,6 +229,58 @@ class ExitCodes(unittest.TestCase):
         self.assertEqual(lower, run(["pairs", str(ROOT), "NUMER"]))
         self.assertIn("change of NUMER (STND.HARN.28)", lower[1])
 
+    def test_pairs_with_other_documents_of_the_change(self) -> None:
+        """Behavior: ``pairs ROOT NUMER --with HW`` lists the pairs of a
+        change of both documents, more than of NUMER alone, under a
+        heading that names both; an unknown document after ``--with``
+        exits 1.
+
+        Reference: STND.HARN.28 (unit 0024): pairs of common
+        instantiation are listed where both provisions are in documents
+        that the change adopts or amends.
+        """
+        alone = run(["pairs", str(ROOT), "NUMER"])
+        both = run(["pairs", str(ROOT), "NUMER", "--with", "hw"])
+        self.assertEqual(both[0], 0)
+        self.assertIn("change of NUMER, HW (STND.HARN.28)", both[1])
+        self.assertGreater(len(both[1]), len(alone[1]))
+        code, out, err = run(["pairs", str(ROOT), "NUMER", "--with", "NOPE"])
+        self.assertEqual((code, out), (1, ""))
+        self.assertIn("pairs: NOPE is not a document or provision", err)
+
+    def test_pairs_refuses_what_it_does_not_take(self) -> None:
+        """Behavior: ``pairs`` exits 1 with one line on the standard
+        error, and nothing on the standard output, for a LVL0 provision
+        given as ``ID``, a LVL0 article given without ``--amends``, an
+        ``--amends`` identifier that names no LVL0 provision, and a
+        change that puts no pair to review; a LVL0 article with
+        ``--amends`` and options before ``ID`` are taken.
+
+        Reference: unit 0024, review Should-fix 2 and 3 and Optional 4;
+        docs/operating.md: exit 1 when nothing is found.
+        """
+        refused = (
+            (["VV.1"], "VV.1 is not a document or provision below LVL0"),
+            (["GOV"], "GOV is a LVL0 document, given without --amends"),
+            (["NUMER", "--amends", "NOPE"], "--amends NOPE is not a LVL0"),
+            (["NUMER", "--amends", "NUMER.11"], "--amends NUMER.11 is not"),
+            (["STND.VVUQ"], "no pair to review before a change of STND.VVUQ"),
+            (["QA", "--amends", "QA.11"], "no pair to review"),
+        )
+        for argv, message in refused:
+            with self.subTest(argv):
+                code, out, err = run(["pairs", str(ROOT), *argv])
+                self.assertEqual((code, out), (1, ""))
+                self.assertEqual(len(err.splitlines()), 1)
+                self.assertIn(message, err)
+        code, out, _ = run(["pairs", str(ROOT), "LVL0", "--amends", "VV.1"])
+        self.assertEqual(code, 0)
+        self.assertIn("339 pair(s).", out)
+        first = run(["pairs", "--with", "HW", "--", str(ROOT), "NUMER"])
+        last = run(["pairs", str(ROOT), "NUMER", "--with", "HW"])
+        self.assertEqual(first[0], 0)
+        self.assertEqual(first, last)
+
     def test_best_hold_is_the_most_any_match_holds(self) -> None:
         """Behavior: where no item holds every word, ``find`` reports
         the most words any match holds, which may exceed what the
@@ -272,11 +324,13 @@ class ExitCodes(unittest.TestCase):
         """Behavior: ``show DOC --all`` prints each provision of the
         document whole, under its heading, after the document's lists.
 
-        Reference: STND.PY, 33 provisions (unit 0022, HR-2).
+        Reference: STND.PY and its provisions (unit 0022, HR-2).
         """
+        provisions = [k for k in live_index() if k.startswith("STND.PY.")]
         code, out, _ = run(["show", str(ROOT), "STND.PY", "--all"])
         self.assertEqual(code, 0)
-        self.assertGreaterEqual(out.count("\n## STND.PY."), 33)
+        self.assertGreater(len(provisions), 1)
+        self.assertEqual(out.count("\n## STND.PY."), len(provisions))
         self.assertIn("\n## STND.PY.1 — ", out.split("Holds:")[1])
 
     def test_given_root_must_be_a_directory(self) -> None:

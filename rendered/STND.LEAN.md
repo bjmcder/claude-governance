@@ -1,12 +1,12 @@
-# Lean standard (STND.LEAN) 1.0.1
+# Lean standard (STND.LEAN) 1.2
 
-Adopted by The Custodian as revision 1.0 in ledger entry 138 (2026-10-24); revised to 1.0.1 in entry 153 (2026-10-25). This reading copy is composed from the per-provision files in STND/LEAN/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 138 (2026-10-24); revised to 1.0.1 in entry 153 (2026-10-25), 1.1 in entry 218 (2026-10-28), 1.1.1 in entry 273 (2026-10-28), and 1.2 in entry 318 (2026-10-28). This reading copy is composed from the per-provision files in STND/LEAN/ of the governance harness; the harness files are the system of record. Withdrawn identifiers, never reused: STND.LEAN.25 and STND.LEAN.27.
 
 ## Purpose and scope
 
-This standard holds the practice of work in Lean, both as a proof assistant whose checked proofs the work relies on as evidence and as a programming language. It adds to VV, DSGN, AGENT, STND.CODE, STND.DEPS, STND.DOCS, and STND.VVUQ only what Lean makes necessary. It covers the Lean toolchain, the Lean packages, and their upgrades (STND.LEAN.1, STND.LEAN.2, and STND.LEAN.3); the record of a claim that rests on a proof, the status of a proof, the axiom declarations of each relied-on theorem, and statements held for a later proof (STND.LEAN.4 to STND.LEAN.8); trusted statements, held apart from their proofs, compared after the build, reviewed, and shown not to be vacuous (STND.LEAN.9 to STND.LEAN.13); native evaluation and the checkers of a proof (STND.LEAN.14, STND.LEAN.15, and STND.LEAN.16); definitions and the code that runs (STND.LEAN.17 to STND.LEAN.20); proofs from untrusted authors and their review (STND.LEAN.21 and STND.LEAN.22); arithmetic (STND.LEAN.23 and STND.LEAN.24); Lean programs (STND.LEAN.25, STND.LEAN.26, and STND.LEAN.27); and the maintenance of proofs (STND.LEAN.28 to STND.LEAN.31). The Notes give this standard's reading of how a Lean proof meets the rows of STND.CLASS.10 that ask for proof at CSQ0, and of the statement of correspondence that STND.CONC.28 asks of a model.
+This standard holds the practice of work in Lean, both as a proof assistant whose checked proofs the work relies on as evidence and as a programming language. It adds to VV, DSGN, AGENT, STND.CODE, STND.DEPS, STND.DOCS, and STND.VVUQ only what Lean makes necessary. It covers the Lean toolchain, the Lean packages, and their upgrades (STND.LEAN.1, STND.LEAN.2, and STND.LEAN.3); the record of a claim that rests on a proof, the status of a proof, the axiom declarations of each relied-on theorem, and statements held for a later proof (STND.LEAN.4 to STND.LEAN.8); trusted statements, held apart from their proofs, compared after the build, reviewed, and shown not to be vacuous (STND.LEAN.9 to STND.LEAN.13); native evaluation and the checkers of a proof (STND.LEAN.14, STND.LEAN.15, and STND.LEAN.16); definitions and the code that runs (STND.LEAN.17 to STND.LEAN.20); proofs from untrusted authors and their review (STND.LEAN.21 and STND.LEAN.22); arithmetic (STND.LEAN.23 and STND.LEAN.24); Lean programs (STND.LEAN.26); and the maintenance of proofs (STND.LEAN.28 to STND.LEAN.31). The Notes give this standard's reading of how a Lean proof meets the rows of STND.CLASS.10 that ask for proof at CSQ0, and of the statement of correspondence that STND.CONC.28 asks of a model.
 
-STND.LEAN.5 instantiates PRIME.2 and STND.LEAN.25 instantiates PRIME.4, so these two are binding and apply at every class. Every other provision is a default (GOV.19), which a project replaces by a recorded decision with an alternative that meets the same higher-level outcome (REPRO.7). The standard names the constructs of the Lean language and no release of the Lean toolchain, library, checker, tactic, option, or other tool (GOV.18); the repository configuration of each work selects them.
+STND.LEAN.5 instantiates PRIME.2, so it is binding and applies at every class, and STND.CODE.14 holds for Lean the responses to a condition that PRIME.4 lists, in the Lean forms that its Notes give. Every other provision is a default (GOV.19), which a project replaces by a recorded decision with an alternative that meets the same higher-level outcome (REPRO.7). The standard names the constructs of the Lean language and no release of the Lean toolchain, library, checker, tactic, option, or other tool (GOV.18); the repository configuration of each work selects them.
 
 ## Normative and informative parts
 
@@ -58,13 +58,13 @@ Untrusted authors and agents. The reference manual counts un-reviewed machine-ge
 
 Lean toolchain and upgrades. Build products of one Lean toolchain do not serve another, the manifest gives the exact revision of each Lean package, and an automatic update of the Lean toolchain changes the file that names the Lean toolchain unless it is turned off (l1, S7), which is the hazard of the second sentence of STND.LEAN.1. The release notes of one recent release list renamed lemmas, a removed parameter, a changed simplification set, a changed reducibility, and a stricter kernel (l1, S18), so an upgrade is a change under VV.8, and STND.LEAN.2 is the form of STND.DEPS.5 for Lean. A clean build meets the first sentence of STND.LEAN.2, and the build of Lean source is otherwise a build under STND.BUILD, whose STND.BUILD.1 counts each tool of the Lean toolchain among the declared inputs of each build step and whose STND.BUILD.23 keys each output that a build cache serves on the revision of each tool that produced it. A Lean package fixes the Lean toolchain with which it builds, so the clause of STND.DEPS.3 on consistency with the rest of the computational environment sets the Lean toolchain of a work that imports it. Fixes of soundness defects arrive in point releases (l1, S18, S19, S20), so a pin also keeps the work on a revision with a published defect, which STND.LEAN.3 answers. No measured cost of an upgrade per line of proof was found (l1, unverified).
 
-Arithmetic and programs. The floating-point type of Lean is binary64, and its model in the logic reduces only part of its operations, so that even the value of the sine of zero is not provable by reduction; equality is not reflexive for a NaN and not a congruence for signed zeros; and foreign code that changes the floating-point environment breaks the match between the runtime and the model (l1, S6) (STND.LEAN.23). A proof over the reals with a separate rounding bound is the other route, whose estimate STND.VVUQ.36 and STND.VVUQ.37 govern. In programs, the subtraction, division, and remainder of natural numbers give the values that they give in statements (l1, S6a), and a clamp at zero that no check reports is the silent clamping that PRIME.4 forbids where it hides invalid input (STND.LEAN.24). In this standard a panic is the Lean operation of that name, which, in the kernel defect that l1 reports, continues with a default value and does not end the computation (l1, S5); that the default value is one of the result type, that compiled code also prints a message, and that a setting of the runtime ends the run at the first panic are from the manual as recalled (unverified). Indexing by the form that panics on an invalid index, and the alternatives of a form that returns an optional value and a form that takes a proof of the bound, are likewise unverified in l1. The second sentence of STND.LEAN.24 names a function that chooses its own value in place of its result on a failure, and not a construct, so it holds whatever a panic does; a default that the caller supplies is outside it. STND.LEAN.25 states by their outcome the forms by which Lean code gives each response that PRIME.4 admits, the Lean form of STND.CODE.14, whose pass of the condition to the caller in its result, in an argument that the caller passes to receive it, or by a mechanism of the language that propagates it takes in Lean two forms, as STND.PY.22 and STND.JL.15 give the forms of their languages: a result of a type that carries the condition, and an error raised in a monad whose caller receives it. The core library of Lean names such types `Except` and `Option`, and such an operation `throw`; l1 does not discuss them (unverified), so the provision names none of them. STND.CODE.7 keeps the caller that receives such a result from discarding it. STND.LEAN.25 adds the forms of Lean to PRIME.4 at the cost of its wording, the argument that the Notes of STND.JL give for STND.JL.15; the custodian's ruling of 2026-10-23 on that argument was made for STND.JL, and the ratification of 2026-10-24 accepted it for STND.LEAN.25. STND.LEAN.26 is the form for Lean of STND.JL.18. The foreign code behind an `extern` attribute is governed by the standard of its language, and the manual calls the foreign interface unstable (l1, S6c). A test that the kernel decides by reduction on a closed instance is a proof about that instance, and one that compiled code evaluates exercises the compiler as well; both are tests under VV.7. The convention of the large mathematics library forms the name of a theorem from its statement, so that a reader predicts the names of lemmas (as recalled; unverified in l1); STND.LEAN.27 leaves the convention to the repository configuration, where STND.CXX.14, STND.PY.1, and STND.JL.6 fix one, and keeps the names that the notation of NUMER.4 fixes, as they do.
+Arithmetic and programs. The floating-point type of Lean is binary64, and its model in the logic reduces only part of its operations, so that even the value of the sine of zero is not provable by reduction; equality is not reflexive for a NaN and not a congruence for signed zeros; and foreign code that changes the floating-point environment breaks the match between the runtime and the model (l1, S6) (STND.LEAN.23). A proof over the reals with a separate rounding bound is the other route, whose estimate STND.VVUQ.36 and STND.VVUQ.37 govern. In programs, the subtraction, division, and remainder of natural numbers give the values that they give in statements (l1, S6a), and a clamp at zero that no check reports is the silent clamping that PRIME.4 forbids where it hides invalid input (STND.LEAN.24). In this standard a panic is the Lean operation of that name, which, in the kernel defect that l1 reports, continues with a default value and does not end the computation (l1, S5); that the default value is one of the result type, that compiled code also prints a message, and that a setting of the runtime ends the run at the first panic are from the manual as recalled (unverified). Indexing by the form that panics on an invalid index, and the alternatives of a form that returns an optional value and a form that takes a proof of the bound, are likewise unverified in l1. The second sentence of STND.LEAN.24 names a function that chooses its own value in place of its result on a failure, and not a construct, so it holds whatever a panic does; a default that the caller supplies is outside it. STND.CODE.14 holds for Lean code the responses that PRIME.4 admits, and its pass of the condition to the caller in its result, in an argument that the caller passes to receive it, or by a mechanism of the language that propagates it takes in Lean two forms, which the Notes of STND.CODE name: a result of a type that carries the condition, and an error raised in a monad whose caller receives it. The core library of Lean names such types `Except` and `Option`, and such an operation `throw`; l1 does not discuss them (unverified), so no provision names them. STND.CODE.7 keeps the caller that receives such a result from discarding it. The two forms ask nothing that PRIME.4 does not, so STND.CODE.14 raises no floor for Lean (GOV.11), the argument that the ratification of 2026-10-24 accepted for the Lean forms. STND.LEAN.26 is the form for Lean of STND.JL.18. The foreign code behind an `extern` attribute is governed by the standard of its language, and the manual calls the foreign interface unstable (l1, S6c). A test that the kernel decides by reduction on a closed instance is a proof about that instance, and one that compiled code evaluates exercises the compiler as well; both are tests under VV.7. The convention of the large mathematics library forms the name of a theorem from its statement, so that a reader predicts the names of lemmas (as recalled; unverified in l1); STND.CODE.28 leaves the convention of Lean source to the repository configuration and keeps the names that the notation of NUMER.4 fixes.
 
 Maintenance. In the industrial case of l1, the model had 1,673 lines, the proofs 5,714, and the production code 15,693, and the proofs and the model checked in about 3 minutes (l1, S8); the ratio of 13 lines of proof to 1 of model in practice 19 of l1 does not follow from those figures, which give about 3.4 to 1. A tactic that rewrites by a set of lemmas that a library selects by attribute changes its effect when the library changes that set; one that closes its goal fails visibly, and one that names its lemmas does not change (STND.LEAN.29). A proof that reaches a library definition through its stated lemmas depends on the stated contract that DSGN.7 asks (STND.LEAN.30). The limits of elaboration count small allocations, not elapsed time, so a proof that passes only at a raised limit passes on every machine and fails after a library change that makes it slower (l1, S23) (STND.LEAN.28); a variation of build time is no defect under STND.VVUQ.82. Libraries keep aliases of renamed declarations with warnings for a period (l1, S16, S18), and STND.LEAN.31 is the form for builds of STND.JL.35.
 
 Proof at CSQ0. From CSQ0, STND.CLASS.10 asks the verification of each safety-related component by proof or by exhaustive checking of its state space, and the mechanical checking of each contract of a safety-related component (VV.1, DSGN.3). This standard's default for meeting the first with a Lean proof is a relied-on theorem whose trusted statement is the contract or specification of the component, under STND.LEAN.9 to STND.LEAN.13; whose axiom inventory passes STND.LEAN.6 with no native evaluation; that, where the means of the work include one, an independent checker accepts (STND.LEAN.16); and whose link of STND.LEAN.19 is one of its first three rows, with what it trusts in the record of STND.LEAN.4. That is a reading and a default, not a narrowing of VV.1: where no independent checker is among the means of the work, the first sentence of STND.LEAN.16 does not apply, and the record of STND.LEAN.4 states, in its rows Assumptions and Checkers, how the Lean proofs of the work meet VV.1. An exhaustive check by a decision procedure that the kernel checks is a proof on this reading, and exhaustive checking outside Lean meets the row equally. A separate implementation compared with a Lean model is evidence by comparison, which the row admits only where the human owner records that neither proof nor exhaustive checking is feasible. The same theorem, accepted by a checker, is the mechanical checking of the DSGN.3 row. The regeneration of QA.9 from CSQ1 is, for a proof, a build and check from its records on another system, a different check from the replay of STND.LEAN.15.
 
-Class onset. Under STND.CLASS.10, each default instantiates only VV, REPRO, INTPR, DSGN, or SIMPL, and applies from CSQ3; work of CSQ4 may omit it. The part of a default that rests on a row of the table of STND.CLASS.10 applies from the class of that row, sentence by sentence as follows. STND.LEAN.1 to STND.LEAN.3 rest on no row and apply from CSQ3. STND.LEAN.4 applies from CSQ3, except its row Not covered, which documents limits of validity (INTPR.10) and applies from CSQ2, and its row Code that runs as to the definitions of STND.LEAN.17, which takes the onset of the second sentence of STND.LEAN.17; the memory and ordering model of that row records an assumption of the evidence (VV.1) from CSQ3, while the verification of the invariants of a protocol (DSGN.15) stays with its row at CSQ2 and the proof of STND.CONC.28 with the CSQ0 row. STND.LEAN.6 to STND.LEAN.10 and STND.LEAN.12 apply from CSQ3; the mechanical checking of each contract of a safety-related component stays with the CSQ0 row of DSGN.3. STND.LEAN.11 and STND.LEAN.13 apply from CSQ3; where the claim has a real-world referent, the validation against it follows the CSQ2 row of VV.4. The first sentence of STND.LEAN.14 and the record of its second apply from CSQ3; the evidence of that second sentence that does not rest on the compiler is a comparison with a reference produced without the compiled code, and applies from CSQ2 by the row of the reference oracle. Both sentences of STND.LEAN.15 apply from CSQ3; the regeneration of QA.9 stays with its row at CSQ1. STND.LEAN.16 applies only to a safety-related component, and so from CSQ0. The first sentence of STND.LEAN.17 applies from CSQ3, and its second, which states limits of validity (INTPR.10), from CSQ2. The first sentence of STND.LEAN.18 applies from CSQ3; its second compares code with a reference oracle produced without using it and applies from CSQ2. Both sentences of STND.LEAN.19 verify a component against its contract and apply from CSQ3; the verification of assemblies stays with the CSQ1 row of VV.6. Both sentences of STND.LEAN.20 apply from CSQ2, the first by the row of the reference oracle and the second by the row of INTPR.10. The three sentences of STND.LEAN.21 share the onset CSQ3. Both sentences of STND.LEAN.22 apply from CSQ3. Both sentences of STND.LEAN.23 state limits of validity and apply from CSQ2. The first sentence of STND.LEAN.24 is met by a check of the operands before each operation, a check of a precondition, or by a proof or a stated reason, and applies from CSQ3; it does not ask the checking of results after an operation, which the CSQ1 row of DSGN.2 starts. The second sentence of STND.LEAN.24 keeps a function that chooses its own value in place of its result off the path of a result, whether or not that choice is visible, and applies from CSQ3. STND.LEAN.26 states the condition that each construct assumes, as STND.JL.18 does, and applies from CSQ3. STND.LEAN.27 to STND.LEAN.31 rest on no row and apply from CSQ3. STND.LEAN.5 instantiates PRIME.2 and STND.LEAN.25 instantiates PRIME.4, and both apply at every class, CSQ4 included. No default instantiates a prime directive, GUARD, GOV, or a floor obligation, and no provision raises the floor (GOV.11), by the arguments above for STND.LEAN.5 and STND.LEAN.25.
+Class onset. Under STND.CLASS.10, each default instantiates only VV, REPRO, INTPR, DSGN, or SIMPL, and applies from the class that its field `onset` gives, which work of CSQ4 may omit, while STND.LEAN.5 instantiates PRIME.2 and binds at every class, CSQ4 included. No default instantiates a prime directive, GUARD, GOV, or a floor obligation, and no provision raises the floor (GOV.11), by the argument above for STND.LEAN.5.
 
 ## References
 
@@ -89,7 +89,6 @@ Class onset. Under STND.CLASS.10, each default instantiates only VV, REPRO, INTP
 | STND.DEPS | Dependency policy |
 | STND.DOCS | Documentation standard |
 | STND.JL | Julia standard |
-| STND.PY | Python standard |
 | STND.VVUQ | Verification, validation, and uncertainty quantification methods |
 | VV | Correctness |
 
@@ -99,19 +98,19 @@ Class onset. Under STND.CLASS.10, each default instantiates only VV, REPRO, INTP
 
 #### STND.LEAN.1 Pinned Lean toolchain
 
-Default. Instantiates REPRO.1, REPRO.2, REPRO.9.
+Default, from CSQ3. Instantiates REPRO.1, REPRO.2, REPRO.9.
 
 The repository configuration, with a manifest under version control, SHOULD give the exact revision of the Lean toolchain, of each checker, and of each Lean package that the work imports, directly or through another Lean package (REPRO.1, REPRO.2, REPRO.9). Each build and each check of the work SHOULD use those revisions unchanged (REPRO.1).
 
 #### STND.LEAN.2 Upgrades rebuilt from source
 
-Default. Instantiates VV.8.
+Default, from CSQ3. Instantiates VV.8.
 
 Where a change alters the revision of the Lean toolchain or of a Lean package, the checks of that change SHOULD build each relied-on theorem from source, without build products of an earlier revision (VV.8). Those checks SHOULD repeat for each relied-on theorem the checks of STND.LEAN.6, STND.LEAN.10, and STND.LEAN.15 (VV.8).
 
 #### STND.LEAN.3 Checker soundness defects
 
-Default. Instantiates VV.8.
+Default, from CSQ3. Instantiates VV.8.
 
 Where an advisory or a release note of the Lean toolchain states a defect of soundness in a checker that accepted a relied-on theorem, the next release that relies on that theorem SHOULD rest on its acceptance by a checker free of that defect, or state in its record that no such checker was available (VV.8).
 
@@ -119,7 +118,7 @@ Where an advisory or a release note of the Lean toolchain states a defect of sou
 
 #### STND.LEAN.4 Relied-on theorem record
 
-Default. Instantiates VV.1, VV.5, INTPR.10.
+Default, from CSQ3; row Code that runs from CSQ2; row Not covered from CSQ2. Instantiates VV.1, VV.5, INTPR.10.
 
 The record of each claim that rests on a relied-on theorem SHOULD give each item of the table of this provision (VV.1, VV.5, INTPR.10).
 
@@ -143,19 +142,19 @@ A theorem whose axiom inventory holds the axiom declaration of a placeholder SHA
 
 #### STND.LEAN.6 Axiom inventory checked
 
-Default. Instantiates VV.1, DSGN.3.
+Default, from CSQ3. Instantiates VV.1, DSGN.3.
 
 The checks of each change that affects a relied-on theorem SHOULD obtain the axiom inventory of that theorem from the Lean environment that the build of that change produced (VV.1, DSGN.3). Where that inventory holds an axiom declaration that the accepted axiom list does not hold, those checks SHOULD fail (VV.1, DSGN.3).
 
 #### STND.LEAN.7 Accepted axiom declarations
 
-Default. Instantiates VV.9, VV.1.
+Default, from CSQ3. Instantiates VV.9, VV.1.
 
 The accepted axiom list SHOULD hold only logical axiom declarations, axiom declarations that state an axiom that the human owner declared under VV.9, and the axiom declarations of native evaluation that a record of STND.LEAN.14 covers (VV.9, VV.1). Each axiom declaration of the work that the accepted axiom list holds SHOULD carry, at its declaration, the identifier of the record of its axiom (VV.9).
 
 #### STND.LEAN.8 Statements held for later proof
 
-Default. Instantiates VV.1.
+Default, from CSQ3. Instantiates VV.1.
 
 Each proposition that the work holds for a later proof SHOULD be held as a definition of that proposition, and not as a theorem that a placeholder proves or as an axiom declaration (VV.1). Each placeholder that the source of a release holds SHOULD be stated in the record of that release (VV.1).
 
@@ -163,19 +162,19 @@ Each proposition that the work holds for a later proof SHOULD be held as a defin
 
 #### STND.LEAN.9 Trusted statements held apart
 
-Default. Instantiates VV.4, DSGN.8, VV.3.
+Default, from CSQ3. Instantiates VV.4, DSGN.8, VV.3.
 
 The trusted statement of each relied-on theorem, and each declaration of the work that it uses other than the definitions whose behavior the theorem verifies, SHOULD be held in source files that hold no proof of that theorem (VV.4, DSGN.8). Each change to those files or to the accepted axiom list SHOULD be recorded apart from each change to a proof that they judge (VV.3).
 
 #### STND.LEAN.10 Statements compared after build
 
-Default. Instantiates VV.1, DSGN.3.
+Default, from CSQ3. Instantiates VV.1, DSGN.3.
 
 The checks of each change SHOULD confirm, in a process apart from the build, that the type of each relied-on theorem in the built Lean environment is its trusted statement, with each declaration that the files of STND.LEAN.9 hold as those files define it (VV.1, DSGN.3).
 
 #### STND.LEAN.11 Statement review hazards
 
-Default. Instantiates VV.4.
+Default, from CSQ3. Instantiates VV.4.
 
 Each review of a trusted statement SHOULD read the statement as elaborated, with its notation, coercions, and implicit arguments shown, against the claim that it serves (VV.4). That review SHOULD confirm, for each hazard of the table of this provision that the statement holds, what the row of that hazard gives (VV.4).
 
@@ -193,13 +192,13 @@ Each review of a trusted statement SHOULD read the statement as elaborated, with
 
 #### STND.LEAN.12 Implicit variables declared
 
-Default. Instantiates SIMPL.6.
+Default, from CSQ3. Instantiates SIMPL.6.
 
 The source of each trusted statement SHOULD be elaborated under a setting that rejects each variable that the statement uses without a declaration (SIMPL.6).
 
 #### STND.LEAN.13 Non-vacuous trusted statements
 
-Default. Instantiates VV.4, VV.1.
+Default, from CSQ3. Instantiates VV.4, VV.1.
 
 Where a relied-on theorem has hypotheses, the work SHOULD hold a checked proof that at least one instance satisfies them together, or a record of why they hold together in the regime of use (VV.4, VV.1). Where the trusted statement of a relied-on theorem states a property of an implementation, the work SHOULD hold a checked proof that at least one implementation that the claim excludes lacks that property (VV.4).
 
@@ -207,19 +206,19 @@ Where a relied-on theorem has hypotheses, the work SHOULD hold a checked proof t
 
 #### STND.LEAN.14 Native evaluation recorded
 
-Default. Instantiates VV.1, REPRO.7.
+Default, from CSQ3. Instantiates VV.1, REPRO.7.
 
 A relied-on theorem SHOULD NOT depend on native evaluation (VV.1). Where a relied-on theorem depends on native evaluation, the record of STND.LEAN.4 SHOULD give, for each use, the evaluated term, why the kernel did not check it, and evidence for its result that does not rest on the compiler of the Lean toolchain (VV.1, REPRO.7).
 
 #### STND.LEAN.15 Environment replayed apart from build
 
-Default. Instantiates VV.1.
+Default, from CSQ3. Instantiates VV.1.
 
 Before a claim relies on a relied-on theorem, a checker SHOULD accept, in a process apart from the build that produced it, the Lean environment that holds that theorem (VV.1). That check SHOULD cover each declaration on which the theorem depends, those of Lean packages and of fetched build products included (VV.1).
 
 #### STND.LEAN.16 Independent checker for safety components
 
-Default. Instantiates VV.1.
+Default, from CSQ0. Instantiates VV.1.
 
 Where the means of the work include an independent checker, it SHOULD accept the Lean environment that holds each relied-on theorem that verifies a safety-related component (VV.1). A relied-on theorem that verifies a safety-related component SHOULD NOT depend on native evaluation (VV.1).
 
@@ -227,19 +226,19 @@ Where the means of the work include an independent checker, it SHOULD accept the
 
 #### STND.LEAN.17 Total definitions under claims
 
-Default. Instantiates VV.1, INTPR.10.
+Default, from CSQ3; sentence 2 from CSQ2. Instantiates VV.1, INTPR.10.
 
 Each definition whose behavior a relied-on theorem states SHOULD be a total definition (VV.1). Where code that a claim covers calls a definition that is not a total definition, the record of STND.LEAN.4 SHOULD name that definition and state what the claim does not establish of it (VV.1, INTPR.10).
 
 #### STND.LEAN.18 Replaced implementations stated
 
-Default. Instantiates VV.1, DSGN.1.
+Default, from CSQ3; sentence 2 from CSQ2. Instantiates VV.1, DSGN.1.
 
 Where code that a claim covers runs a replaced implementation, the record of STND.LEAN.4 SHOULD name it and give the evidence that it computes what the definition that it replaces computes in the regime of use (VV.1, DSGN.1). The tests of each change to a replaced implementation SHOULD compare its results with those of the definition that it replaces, reduced by the kernel, on a stated set of inputs (VV.1).
 
 #### STND.LEAN.19 Link to running code
 
-Default. Instantiates VV.1, VV.6.
+Default, from CSQ3. Instantiates VV.1, VV.6.
 
 The record of each claim that a relied-on theorem makes about code that runs SHOULD state which link of the table of this provision joins the definitions of the theorem to that code, and what that link trusts beyond the checkers (VV.1, VV.6). Where the link is a separate implementation, the claim SHOULD state that the code is verified by the comparison of STND.LEAN.20 with its Lean model, and not by proof (VV.1).
 
@@ -252,7 +251,7 @@ The record of each claim that a relied-on theorem makes about code that runs SHO
 
 #### STND.LEAN.20 Model comparison tests
 
-Default. Instantiates VV.1, VV.8, INTPR.10.
+Default, from CSQ2. Instantiates VV.1, VV.8, INTPR.10.
 
 Where the link of STND.LEAN.19 of a claim is a separate implementation, the tests of each change to the code or to its Lean model SHOULD compare the results of the code with those of the compiled Lean model on generated inputs (VV.1, VV.8). The record of those tests SHOULD state the generator of their inputs, the number of inputs, and the part of the domain of the inputs that the generator does not reach (VV.1, INTPR.10).
 
@@ -260,13 +259,13 @@ Where the link of STND.LEAN.19 of a claim is a separate implementation, the test
 
 #### STND.LEAN.21 Proofs from untrusted authors
 
-Default. Instantiates VV.3, VV.1, REPRO.1.
+Default, from CSQ3. Instantiates VV.3, VV.1, REPRO.1.
 
 Before an untrusted author begins the proof of a relied-on theorem, its trusted statement and the accepted axiom list SHOULD be fixed, in files that the author does not change (VV.3). The verdict on a proof that an untrusted author wrote SHOULD come from a process that runs no code of the source that the author wrote and that checks the exported Lean environment against the trusted statement and the accepted axiom list (VV.1). The record of that verdict SHOULD identify the checked source by its integrity digest (REPRO.1).
 
 #### STND.LEAN.22 Proof review by checks
 
-Default. Instantiates VV.1, VV.4.
+Default, from CSQ3. Instantiates VV.1, VV.4.
 
 Where a change alters neither the accepted axiom list nor the checks of STND.LEAN.6, STND.LEAN.10, and STND.LEAN.15 that the repository configuration set before the change, the review of the correctness of each proof of a relied-on theorem that the change makes MAY rest, without a reading of that proof, on a run of those checks on the reviewed revision that the reviewer makes or confirms (VV.1). Such a review SHOULD include the review of STND.LEAN.11 of the trusted statement and the evidence of STND.LEAN.13 (VV.4).
 
@@ -274,59 +273,47 @@ Where a change alters neither the accepted axiom list nor the checks of STND.LEA
 
 #### STND.LEAN.23 Floating-point model stated
 
-Default. Instantiates VV.1, INTPR.10.
+Default, from CSQ2. Instantiates VV.1, INTPR.10.
 
 Where a relied-on theorem concerns code that computes in floating point, the record of STND.LEAN.4 SHOULD state the model of floating-point arithmetic that the definitions of the theorem use, and each operation of that code that the model leaves opaque or models otherwise than the hardware that runs the code computes it (VV.1, INTPR.10). Where a relied-on theorem states a property of a computation over the reals that floating-point code carries out, that record SHOULD give a bound of the rounding error between the two, or state that the theorem does not cover the floating-point code (VV.1, INTPR.10).
 
 #### STND.LEAN.24 Values substituted without failure
 
-Default. Instantiates DSGN.2, SIMPL.6.
+Default, from CSQ3. Instantiates DSGN.2, SIMPL.6.
 
 Where code of the work, on the path of a result, subtracts natural numbers, divides or takes a remainder by a divisor that is able to be zero, or computes in a fixed-width integer type, it SHOULD establish by a check or a proof that each such operation gives the value of the arithmetic that the result needs, or state at that location why the value that it gives is correct (DSGN.2, SIMPL.6). On the path of a result, code SHOULD NOT call a function that, on a failure that it detects, returns a value that the function itself chooses in place of its result (DSGN.2).
 
 ### Programs
 
-#### STND.LEAN.25 Lean responses to listed failures
-
-Binding. Instantiates PRIME.4.
-
-Where code detects a condition that PRIME.4 lists, it SHALL return the condition in a result of a type that carries it, raise it as the error of a monad whose caller receives that error, halt with a diagnosis, enter the designed safe state of PRIME.13 of the hardware that it commands, or degrade visibly with a diagnosis (PRIME.4, STND.CODE.14).
-
 #### STND.LEAN.26 Unsafe and replaced code explained
 
-Default. Instantiates REPRO.7, DSGN.2.
+Default, from CSQ3. Instantiates REPRO.7, DSGN.2.
 
 Each `unsafe` declaration, each `implemented_by` attribute, and each `extern` attribute of the work SHOULD state, at its location, the condition that it assumes and why that condition holds (REPRO.7, DSGN.2).
-
-#### STND.LEAN.27 Lean naming conventions
-
-Default. Instantiates INTPR.1, INTPR.4.
-
-Each name of the Lean source of the work SHOULD follow the naming convention that the repository configuration names (INTPR.1). A name that the notation documented under NUMER.4 fixes MAY keep the case and the form of its symbol, as STND.DOCS.12 permits (INTPR.4).
 
 ### Maintenance
 
 #### STND.LEAN.28 Raised elaboration limits
 
-Default. Instantiates REPRO.7, SIMPL.6.
+Default, from CSQ3. Instantiates REPRO.7, SIMPL.6.
 
 Each setting that raises a limit of elaboration or of the kernel SHOULD apply only to the declarations that exceed the default limit, and state at its location its value and its reason (REPRO.7, SIMPL.6).
 
 #### STND.LEAN.29 Tactics over library lemma sets
 
-Default. Instantiates SIMPL.6, VV.8.
+Default, from CSQ3. Instantiates SIMPL.6, VV.8.
 
 A tactic whose effect depends on a set of lemmas that an imported library selects by attribute SHOULD close the goal to which it is applied, or name the lemmas that it uses (SIMPL.6, VV.8).
 
 #### STND.LEAN.30 Library definitions through lemmas
 
-Default. Instantiates DSGN.7.
+Default, from CSQ3. Instantiates DSGN.7.
 
 Each proof of a relied-on theorem SHOULD reach the definitions of an imported library through the lemmas that the library states about them (DSGN.7). A proof MAY unfold a definition whose documentation states that proofs unfold it (DSGN.7).
 
 #### STND.LEAN.31 Deprecations in Lean builds
 
-Default. Instantiates DSGN.6, REPRO.7.
+Default, from CSQ3. Instantiates DSGN.6, REPRO.7.
 
 Other than a deprecation warning raised inside a Lean package that the repository configuration lists with its reason, each deprecation warning that a build of the work raises SHOULD fail that build (DSGN.6, REPRO.7).
 
@@ -336,3 +323,6 @@ Other than a deprecation warning raised inside a Lean package that the repositor
 | --- | --- | --- |
 | 1.0 | 2026-10-24 | Adopted. |
 | 1.0.1 | 2026-10-25 | Editorial amendment (GOV.41): STND.LEAN.25 cites STND.CODE.14, of which it is the Lean form, with its text otherwise unchanged; the Notes cite STND.CODE.14 in place of STND.CXX.16, which STND.CXX 1.2 withdraws, record that the ratification of 2026-10-24 accepted the floor argument for STND.LEAN.25, and say that proofs that a machine generates come from an untrusted author, the term of this standard, in place of calling them untrusted input, a term of STND.CODE that this standard does not use. |
+| 1.1 | 2026-10-28 | Minor amendment (GOV.41): STND.LEAN.25 is withdrawn, STND.CODE.14 holding the Lean responses, a result of a type that carries the condition and an error raised in a monad among them, and the front matter lists it as withdrawn; the Purpose, the Notes on programs, and the class paragraph drop it and cite STND.CODE.14; the Notes cite STND.CODE.28 for the rule that STND.LEAN.27 states; References drop STND.PY. |
+| 1.1.1 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields; no obligation, permission, or defined meaning changes. |
+| 1.2 | 2026-10-28 | Minor amendment (GOV.41): STND.LEAN.27 is withdrawn, STND.CODE.28 holding the convention of names for Lean source as for every language, and the front matter lists it as withdrawn; the Purpose and the Notes cite STND.CODE.28. |

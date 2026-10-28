@@ -12,4 +12,4 @@ sections: ["Accountability and evidence", "Authority over actions", "Physical sa
 
 The prime directives protect what no later evidence repairs: accountability, honest evidence, preserved history, and the safety of data, systems, money, and people. Each holds in every domain, and compliance with each is decidable from the record or the environment. This part implements PRIN.1, PRIN.2, PRIN.4, and PRIN.8.
 
-The prime directives carry constitutional force, bind every project at every consequence class, outrank every other provision (GOV.5), and SHALL NOT be waived (GOV.45). Each binds the actor it names. Where two prime directives pull apart, the more restrictive reading governs, and an agent halts and refers (GOV.6, PRIME.14).
+The prime directives carry constitutional force, bind every project at every consequence class, outrank every other provision (GOV.5), and SHALL NOT be waived (GOV.45). Each binds the actor it names. Where two prime directives pull apart, GOV.6 and GOV.9 decide which governs and when an agent halts and refers.

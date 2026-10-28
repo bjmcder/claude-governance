@@ -1,9 +1,9 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.PROJ,standard,LVL2,Project constitution template,adopted,_doc.md,9426eaf37eed552b0156c1b291d238aecf3206124d47494687580b75ac2c8400,12433
-STND.PROJ.1,provision,LVL2,Constitution sections,adopted,1.md,f8b7bdbc0f5ab64dc54c3439dccfd4f007ae372c01b0d5005c92285b983dd444,5016
-STND.PROJ.2,provision,LVL2,Sections adopted by citation,adopted,2.md,dd7eb27bbe5516320717c00eaea9e45617cdf01604e8a317781878af74642fe2,426
-STND.PROJ.3,provision,LVL2,Proposed standing authorizations,adopted,3.md,d5ab909f429dd7fe3117944534c8852db843e35aa356ce6cf89507843da2fe0f,2250
-STND.PROJ.4,provision,LVL2,Constitution files,adopted,4.md,d9286c2f9df1d5040598371f27a3bddb61f4154807d6265378b6d9de14f4deea,575
+STND.PROJ,standard,LVL2,Project constitution template,adopted,_doc.md,9ef8d044efca851828117adb2455aeba5fc7e47143d7fbf36ad1dedb1c389bd2,17216
+STND.PROJ.1,provision,LVL2,Constitution sections,adopted,1.md,c3a11a9edf78f15b45dbd76864ebeeca3e7f82925d221031080b4947b4d2a76e,5144
+STND.PROJ.2,provision,LVL2,Sections adopted by citation,adopted,2.md,51eb25d164da953347e2566896b01b819932c37e9c9dcf56849e1263b33e9302,985
+STND.PROJ.3,provision,LVL2,Proposed standing authorizations,adopted,3.md,a30fe8447e477f4e5f15547971e1c24e0e1df1bf725ffe9580878f5cfac66d96,2699
+STND.PROJ.4,provision,LVL2,Constitution files,adopted,4.md,a45d50d9c24243fdf25e0d254cc9074c04409e71cb781deda8da87d32334b04f,589
 STND.PROJ.5,provision,LVL2,Proposed cost discipline,adopted,5.md,f188906510059d791134b6929fdd0cb10417e13ac8df320f5595cfcc118d34bb,734
-STND.PROJ.6,provision,LVL2,Remote-write authorization fields,adopted,6.md,b6a7c92bd9e094f351002b7e2402da44a0dd5244c439e72f864f9b4845de787d,1763
-STND.PROJ.7,provision,LVL2,Kinds of remote write,adopted,7.md,f828b77d4412cadc107933b1a5120aea35d5d9ca85783c715e88f32643ef8ad7,1360
+STND.PROJ.6,provision,LVL2,Remote-write authorization fields,adopted,6.md,cd72e6967030e0fb6a1e664a9718d1b07246c126be7208d3af8cc15467645b3b,1777
+STND.PROJ.7,provision,LVL2,Kinds of remote write,adopted,7.md,88caf0b4320c3d60dd8071e08a1e100330f5b9960c7eb276e7cbf1328b824eb8,1374

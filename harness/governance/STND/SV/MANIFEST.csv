@@ -1,30 +1,29 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.SV,standard,LVL2,Verilog and SystemVerilog standard,adopted,_doc.md,86110db7cad09b28745552628ec24ac03de7a506b661e9268162ebb13082a002,34805
-STND.SV.1,provision,LVL2,Language edition stated,adopted,1.md,2a24632b91254adf9ba47e7a111087983c878d4584badc3c629ce4911bc45d7d,681
-STND.SV.2,provision,LVL2,Construct subset stated,adopted,2.md,f78f6697841c58082f2c6e859afd02b8476aaa1a0e73bd364a0a66306cda0373,743
-STND.SV.3,provision,LVL2,Simulation settings stated,adopted,3.md,02621ea0ddac747a388b683437d86726409adee771bac87baf2eac7294d80c26,747
-STND.SV.4,provision,LVL2,Verification constructs kept apart,adopted,4.md,c19c1f2c95086f04e0eb4380f34ba854ca4acaaba41569280198218eb06c6c25,584
-STND.SV.5,provision,LVL2,Assignment kind by process,adopted,5.md,353da1c5b489e9270e342997ce9f24483a7b0786eb400ddb47ed088372bc5e01,647
-STND.SV.6,provision,LVL2,Writing processes and reads,adopted,6.md,d3af99a0dd6d8197b2d3401e87785d78e6a681bea03609310fcd104e175cfb90,522
-STND.SV.7,provision,LVL2,Order from scheduling regions,adopted,7.md,f1afa90b9bc0110a98195bd2e3b569ae4ac5c55a94130f60fc1cf6313d5171b4,858
-STND.SV.8,provision,LVL2,Start-up after time zero,adopted,8.md,b04b258e1df380bf4f29caa1c83ac8dd365f8efa1e6b3461c8aecc0f0152fee8,794
-STND.SV.9,provision,LVL2,Process intent declared,adopted,9.md,bb17e107d68871a6001146c852576043b4f8b6fe410126e63088d4420f407a70,762
-STND.SV.10,provision,LVL2,Storage only by decision,adopted,10.md,d9060d96697bf4b072a3c961f27012b96a1fbf1e71d6c12a431addefada8661f,743
-STND.SV.11,provision,LVL2,Selection qualifiers checked,adopted,11.md,2c948b66e3443c2b539b88a2d1c7f332e2fb4a80242dbafd22fc041a90d98cb1,720
-STND.SV.12,provision,LVL2,Wildcard selection limited,adopted,12.md,2cf0cb5d53997f5165915bea2d05426726cc23205de1c59ae584f4e1d83b8251,673
-STND.SV.13,provision,LVL2,Simulation-only constructs,adopted,13.md,9af2e87c8adf56cad945d631755f4024437a0d6a2b74095f4414b4ab989121fc,656
-STND.SV.14,provision,LVL2,Explicit width and sign,adopted,14.md,c85547818dbbc346e3e630cbe6d1728e1031040eb3bd39e269a4bb4a0d4d19aa,497
-STND.SV.15,provision,LVL2,Initial values as evidence,adopted,15.md,8c4bea410964cc2ead6ed35990ffe9e572317ec0d78c19234b714dc55d033001,759
-STND.SV.16,provision,LVL2,Intended unknown values,adopted,16.md,f99c19eba9f6656b551b66dd6d037b153e50963f6b50737282a5170559c284bc,705
-STND.SV.17,provision,LVL2,Masked unknown values detected,adopted,17.md,160c2c2b894be316e8c10c8cf4e3522bc3d6faeda6af4d9fcfee30ef8f16b58b,773
-STND.SV.18,provision,LVL2,Equivalence mode stated,adopted,18.md,0ae2b190c581ed509db16345bafe7fe9cbe653150fa894ebc8c0a0ed078731fe,845
-STND.SV.19,provision,LVL2,Sampled assertions,adopted,19.md,fbb8c1e0109bfa8efd4634ef9265b233e0414a0e1704b50ab89cd1fb3a0a31cb,602
-STND.SV.20,provision,LVL2,Assertion and assumption records,adopted,20.md,eae51f1ad93baf0e56735d55466d99a8b4ca211244fca2a4fa2c759c6aa5a575,750
-STND.SV.21,provision,LVL2,Coverage counting stated,adopted,21.md,30e005c27f401a30796b36155ae3d3372f94fe8d90119ede2ae761f2a409d924,676
-STND.SV.22,provision,LVL2,Functional coverage from the contract,adopted,22.md,8cdf7cfdfdd60fbdca339cfe9ab7081b01a0337f05bcaf9c48e13a9988624fd9,531
-STND.SV.23,provision,LVL2,Seeded random stimulus,adopted,23.md,13f13eaf6acbce5bcd783f8e8078e911d1fdc53bcf356d60edf53a92646d74f9,843
-STND.SV.24,provision,LVL2,Static check classes,adopted,24.md,a0fd81507d11950e32214e66f6c24bf9b3ee3b060a0ccc99aedae84adb41678e,1898
-STND.SV.25,provision,LVL2,Netlist simulated after equivalence,adopted,25.md,c0e996cb3f585643fe85024fa5f881116b37c6f3d10b76870f02ab8e84668230,657
-STND.SV.26,provision,LVL2,Second simulator for reliance,adopted,26.md,d5173c4ad41ffa35727decb5b3a1fe884a4ad224975a874abfaef605247ae942,788
-STND.SV.27,provision,LVL2,Simulator comparisons and seeds,adopted,27.md,19fbb7732f7460f27c8513d7e5c011828e4e0f61a5af3b01fb93948d80ac5b86,442
-STND.SV.28,provision,LVL2,Verilog and SystemVerilog naming conventions,adopted,28.md,ab69bfa0f9b49f13836f1193bb57cb20613784ea057ecd9659769ce227b87012,644
+STND.SV,standard,LVL2,Verilog and SystemVerilog standard,adopted,_doc.md,813432b1826a643eecf167a83bdcfa03a0d7d6255bf63c900e3b38cd6c032ac9,32511
+STND.SV.1,provision,LVL2,Language edition stated,adopted,1.md,39cea500a49930998ee016449f6731e11f7d0e13b6bc052b02cdc8f40141cb64,695
+STND.SV.2,provision,LVL2,Construct subset stated,adopted,2.md,8912b7f3dbe24d7a6c967670b997d44427647135501f453f5e18e7d9bb3dafb4,783
+STND.SV.3,provision,LVL2,Simulation settings stated,adopted,3.md,49ff02abb454f13a8e4d7e6bc06ae9c31ca79f9ca24c25a9630d2f5c41cddad2,761
+STND.SV.4,provision,LVL2,Verification constructs kept apart,adopted,4.md,99f61f43efb2eff16605eef27849338a29556b403fd92f823f962bdf88ad196a,598
+STND.SV.5,provision,LVL2,Assignment kind by process,adopted,5.md,4ca58002dde13da206289bf751e21d7c2c7cd88a4264194715bfacf327e808d2,661
+STND.SV.6,provision,LVL2,Writing processes and reads,adopted,6.md,03c6ddd56e603a4934b5ffbcb9452698a499970f4699147f366ec030a778c6bc,536
+STND.SV.7,provision,LVL2,Order from scheduling regions,adopted,7.md,4e20885de63a40848d6244faf7f702228fa73dc45b165b81884a84bbce19435f,872
+STND.SV.8,provision,LVL2,Start-up after time zero,adopted,8.md,7d6e747d728d3375b950f07c04d086d08f2ac2253a39e091afa6112fbbcea73d,808
+STND.SV.9,provision,LVL2,Process intent declared,adopted,9.md,ddb5a92232bb3f564ec33e399f8772e51b8525724ae1c6ad5dada6f3efac8c59,776
+STND.SV.10,provision,LVL2,Storage only by decision,adopted,10.md,173510dc82198413edd6d4c10d1cd1d349929a4849ee4f1c2284e775c7d4424a,757
+STND.SV.11,provision,LVL2,Selection qualifiers checked,adopted,11.md,0518159d79f30621990bed79bea41730d7ebee4da614484f2ee859034f59f459,734
+STND.SV.12,provision,LVL2,Wildcard selection limited,adopted,12.md,bb51516373d8f83ca5b271fcc8b9cd836fb316d24414e44b23fe45161ae47be2,687
+STND.SV.13,provision,LVL2,Simulation-only constructs,adopted,13.md,be7e41311e544e66d12198a0cbd41019b5742df32a78bf600afb0d488b49eb2e,670
+STND.SV.14,provision,LVL2,Explicit width and sign,adopted,14.md,6dacc82dbba3d189903959422f970f31127202684fd5063c4c6564aeadc5ec34,511
+STND.SV.15,provision,LVL2,Initial values as evidence,adopted,15.md,cd6f0faa45f85a7021b33c6553f4a58e6bb88fadd1d98cc40e8eb0cd763851ef,773
+STND.SV.16,provision,LVL2,Intended unknown values,adopted,16.md,19669b3f9f1826626a8ee10e672fb01531e474a102e3f8f88aa93564ec673892,719
+STND.SV.17,provision,LVL2,Masked unknown values detected,adopted,17.md,41ca13c82f27fb7a33347c68f73244f6f93de535b6624bae48bb845a5b6034ba,787
+STND.SV.18,provision,LVL2,Equivalence mode stated,adopted,18.md,f00a62930b724a0de2c858c95cfc5dd38faa98da4829d3b998c8c387843c0b95,859
+STND.SV.19,provision,LVL2,Sampled assertions,adopted,19.md,96b2e63816edff4a04239ca8dc8641f94905205701801898b32772bc4c1347f4,616
+STND.SV.20,provision,LVL2,Assertion and assumption records,adopted,20.md,542a32cff685b400dceb23d7bfca8ba48159bec4ba245c65d8dcea1c23a8f5a8,764
+STND.SV.21,provision,LVL2,Coverage counting stated,adopted,21.md,c9254a2411469e3510f8cf46239728cfe21a9232a89b9ecd738d5fec676aaa9a,690
+STND.SV.22,provision,LVL2,Functional coverage from the contract,adopted,22.md,3aff20c07d648954b5e15d0fb39cb59c03ab0c9fcdce70ddd4574ddb0e33c146,545
+STND.SV.23,provision,LVL2,Seeded random stimulus,adopted,23.md,7a2239c904f53c6c70f4ecd80a8f77b4dffebb8689b098fb1f5de8956b13bf0c,857
+STND.SV.24,provision,LVL2,Static check classes,adopted,24.md,ee219f0afc24c14370162602fa48835aabf2e21a18b5643b8664f0d7a1cf6656,1938
+STND.SV.25,provision,LVL2,Netlist simulated after equivalence,adopted,25.md,90969fc19a56b55767a79002fa23ef2fb3c9664a696c5868d820c68ce5e4c6f3,671
+STND.SV.26,provision,LVL2,Second simulator for reliance,adopted,26.md,85f7c3dc4eac570783afbc960e0d432cfe67728977d8331250007ff4774e9877,802
+STND.SV.27,provision,LVL2,Simulator comparisons and seeds,adopted,27.md,23c1386b044606a92593e5f5989f93bec560197aa2d1f8d0dd0dfe2b28c6eca1,456

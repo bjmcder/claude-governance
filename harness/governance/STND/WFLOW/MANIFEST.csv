@@ -1,42 +1,42 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.WFLOW,standard,LVL2,Workflow and long-run resilience standard,adopted,_doc.md,38624c634a27599fc827aeaf7253825bcd829335c3765a0912908f43f71f1ca7,36545
-STND.WFLOW.1,provision,LVL2,Step inputs and outputs declared,adopted,1.md,438d2563e62b1ee8dc427c285e6d383ea328b5dc99dd0ff29e4f74dfd5b6d104,679
-STND.WFLOW.2,provision,LVL2,Varying steps under reuse,adopted,2.md,c78faeaf833036cdd233a4a3edd697651ed6bd47c9e2973bb7610b762998e5dc,776
-STND.WFLOW.3,provision,LVL2,Step completion checks,adopted,3.md,5f38f3d912aa6795e9ed84ee8aad2035f95c2fae53f4cc622784cabae5e722bb,689
-STND.WFLOW.4,provision,LVL2,Effects beyond declared outputs,adopted,4.md,145a5ad7d1361c79255dd14f97a5c5129455801e6ef86171b544a6720212abaf,864
-STND.WFLOW.5,provision,LVL2,Steps repeatable after interruption,adopted,5.md,4f57a60803bd3ed3b37a2968c95b86f508ca13ec2a125019e5fb90233b6812d1,553
-STND.WFLOW.6,provision,LVL2,Staleness rule stated,adopted,6.md,f68559e4711f0019f2b28d91805aee3a609719a767a39580bf1a94c07ba2a4f1,841
-STND.WFLOW.7,provision,LVL2,Outputs published atomically,adopted,7.md,25fc73e4e75f7971a2facff30cc4ea8e5e6af614afee13e66ab0f71ba0302c8c,802
-STND.WFLOW.8,provision,LVL2,Partial outputs distinguished,adopted,8.md,19eac5823ca51a495aedb29956cdd8f1c33daab07a6467295542ded6b6a95b55,716
-STND.WFLOW.9,provision,LVL2,Distinct output names,adopted,9.md,c46ba4d54fe8d0afe8c1a45e1486bec2570d6b412409ab049dbef6dd65b9b778,603
-STND.WFLOW.10,provision,LVL2,Retryable failures classified,adopted,10.md,d67eb1f13d39913001eb7a1a90210232597152e0f21855bf5bd72b21110e9600,661
-STND.WFLOW.11,provision,LVL2,Bounded retries and backoff,adopted,11.md,ef9b160ea4875e127d963e2492814c2e8bcabf99a0c69085745af1cb1cd4888e,620
-STND.WFLOW.12,provision,LVL2,One retrying layer,adopted,12.md,aad7269cf9cb78b5d1324123a803d7ba43df4fe9451200b85d4d04282bba38c2,498
-STND.WFLOW.13,provision,LVL2,Exhaustion not retried unchanged,adopted,13.md,f24271b4f0087e8bdb2fdbcfb124d753b57bd5be8083b24fa7d69d9cfc29f9ce,616
-STND.WFLOW.14,provision,LVL2,Retries counted and followed,adopted,14.md,5a0244e84a47395e0470fd18203e34886c6d00edd03ac4a9bffac71bc154a10b,622
-STND.WFLOW.15,provision,LVL2,Attempt records kept,adopted,15.md,b752b27bf5e39ee1010d24bb8c0c692f535fe5e07dccbd87ba992e7cd7e170e2,800
-STND.WFLOW.16,provision,LVL2,Notice and grace stated,adopted,16.md,6db03eac189e0c8016c93b460702564c9ef37e50cb34a73aad32667cd26592a6,770
-STND.WFLOW.17,provision,LVL2,Response to notice of end,adopted,17.md,024f89d156ebd8fad56c8017ac5fb9f8b11618dfe9f20be234f95cb1904f6078,641
-STND.WFLOW.18,provision,LVL2,Signal handlers that defer,adopted,18.md,d6fe564c3b91c29a20b58792bd1846a0d4cce57de5d2218a1b0bbfbd939e78e6,516
-STND.WFLOW.19,provision,LVL2,Engine records valid after forced end,adopted,19.md,7e0771dda4e60f95aecce154cdf9fe31765e8fc81d8d1c748691b8bc4c971bee,539
-STND.WFLOW.20,provision,LVL2,Restart state interval,adopted,20.md,d27924dfd72baa9c758910eb25273820c55736d6e4a4bcad3ccaff2c983751bf,631
-STND.WFLOW.21,provision,LVL2,Restart state generations,adopted,21.md,25f7baaf24af60267c7a536242616e53ec0b35fad0b3d5219f085ba9b33aebbf,622
-STND.WFLOW.22,provision,LVL2,Restart state across processes,adopted,22.md,8d50dedf63f7ff02dc929a6e084401f87e623416a3b5e88861a5e844f0e18466,485
-STND.WFLOW.23,provision,LVL2,Restart state contents stated,adopted,23.md,a2be081c699f8adae4a254ab933647cc8c0246835621c908ec5e6ddfe6e50de9,849
-STND.WFLOW.24,provision,LVL2,Restart state identity recorded,adopted,24.md,f02279c16e92c4028cb8eeeadb5f8ca0c6acbb1351695a42228a55d841f78c33,623
-STND.WFLOW.25,provision,LVL2,Restart state checked before use,adopted,25.md,0c1b8a02fdd5a3f85871c20e15afb0ee7d03105319e0dd4c223e095ace05a8fb,694
-STND.WFLOW.26,provision,LVL2,Restart state format versions,adopted,26.md,ad0e3acc1f1de6aaf5f500e4f95f07f8b918bb65a81b5f5601b761266ded12bc,559
-STND.WFLOW.27,provision,LVL2,Restart state that executes code,adopted,27.md,d47cfc456ddf01354ae216917e91b178adf1758c8f26ea8bd9531a69e6d9413d,537
-STND.WFLOW.28,provision,LVL2,Completed members from checked outputs,adopted,28.md,22d8f78dd523430dd6770c10770edc74a26f4d311b47a5d666ad257e9f092e6a,641
-STND.WFLOW.29,provision,LVL2,Consumers of step sets state needs,adopted,29.md,c2d3e932587b8a3df096ccb509f6cab3e1d8710d3e88b284659c3cd0c9a343fe,601
-STND.WFLOW.30,provision,LVL2,Storage in the run budget,adopted,30.md,2fef1d69007544a2ca57db947c6588d066134c84bb96a6de0a74b2d700b4bbb7,717
-STND.WFLOW.31,provision,LVL2,Storage purged by policy,adopted,31.md,47c48edfb255fcb448e8fd6025531d397a2aafd61b3f05bc464d48024c7cf667,544
-STND.WFLOW.32,provision,LVL2,File system guarantees relied upon,adopted,32.md,0def40d904834a205e6c2322cd96065405a0070ea247a42c2dc254ca24247e00,904
-STND.WFLOW.33,provision,LVL2,Staged copies verified,adopted,33.md,49a69f1c21c18b22cc313d83828bc65c99eda2d78f97144b17f5e23478acd758,531
-STND.WFLOW.34,provision,LVL2,Work directory state stated,adopted,34.md,db68be5b26ea4e86bd51d5e632888cc763f50ce2560fe1dd1d29e5311ba5c45e,811
-STND.WFLOW.35,provision,LVL2,Provenance of step outputs,adopted,35.md,2a44f999462109859b2d802c7b7f24a72a1676c2e21dc96ed1bcdcb71c399338,745
-STND.WFLOW.36,provision,LVL2,Resumption record,adopted,36.md,135f6e632b6986151c2dc40991ab60edc6867d812cf43e66652d497a896ed9af,1044
-STND.WFLOW.37,provision,LVL2,Workflow run from a clean area,adopted,37.md,564f4fed80f033b4ab19e00c1ba5958c9fb48b39484860b2a06bdd9d71b64089,455
-STND.WFLOW.38,provision,LVL2,Interrupted attempts under test,adopted,38.md,ed3776de17ebc5809da814a1f3965e0534dd6a3f50e272f7e1b659d62539ccd1,685
-STND.WFLOW.39,provision,LVL2,Restarts under test,adopted,39.md,22827f79ef4ba8e67d4fcbc43441fa4cded5aa1e1f1372feb8fbbe0f8f306a99,720
-STND.WFLOW.40,provision,LVL2,Resumption under test,adopted,40.md,65693a5772259901815d431ec485c8b3801e231b35ef0430c8fedef8f83ac400,707
+STND.WFLOW,standard,LVL2,Workflow and long-run resilience standard,adopted,_doc.md,ed8258f9d74c7be2edfed400b7f6062f03668500ed3af2e97811e8aa48bae54a,35593
+STND.WFLOW.1,provision,LVL2,Step inputs and outputs declared,adopted,1.md,c5249d9bb1fe7970e6086b5e64b8d72563dbeaa5f5071065940e1bffc3ae8938,693
+STND.WFLOW.2,provision,LVL2,Varying steps under reuse,adopted,2.md,74e543c49c5202f42b4b543c206ec3f0c57856190169b2162944d1d0e69fed29,816
+STND.WFLOW.3,provision,LVL2,Step completion checks,adopted,3.md,12e550eefdef136961c6bc01f175a88cf2b8328bd2c748c7323859edca0a2455,729
+STND.WFLOW.4,provision,LVL2,Effects beyond declared outputs,adopted,4.md,0a7471b30b863b881a50b50ddeda0c3c46f19aadbb7aa0ec822680b600567e41,878
+STND.WFLOW.5,provision,LVL2,Steps repeatable after interruption,adopted,5.md,943a58f28751134067fb900cbe5b4d3273dd4b1352d5c55f484d1c104a339143,567
+STND.WFLOW.6,provision,LVL2,Staleness rule stated,adopted,6.md,c4034ff2fe718fb9fd5b83b530176ef64bb06d2a2977b673f98c40bf7a29d049,855
+STND.WFLOW.7,provision,LVL2,Outputs published atomically,adopted,7.md,964d0aed5e95b3356cc52489b678228363d4903f717e433754f1f545c0c9f8a9,816
+STND.WFLOW.8,provision,LVL2,Partial outputs distinguished,adopted,8.md,50727d066bef7b17c9a82414a48249732be88189e46db51d0f5acc94e1f6fc53,730
+STND.WFLOW.9,provision,LVL2,Distinct output names,adopted,9.md,50ab44ddb8b5556d1d9dfe3a0b7e28f2866db2d8aa9da5bc1480478d373f6f89,617
+STND.WFLOW.10,provision,LVL2,Retryable failures classified,adopted,10.md,c846c58d1c1209a25dba946c5e0d95f4a7bfb965d576faa207b00550b4a62689,675
+STND.WFLOW.11,provision,LVL2,Bounded retries and backoff,adopted,11.md,6e8172e12c32100d8a281d5279b3639390efe0dc6f2f8c90617a7035743f8341,634
+STND.WFLOW.12,provision,LVL2,One retrying layer,adopted,12.md,55850b0b1e7513f144c35c0f2bb4988c1c582da1cd45aa826b9f5a5566a8fe13,512
+STND.WFLOW.13,provision,LVL2,Exhaustion not retried unchanged,adopted,13.md,48f04824170b07bbd0e6c96836f50ec77b44bf6a6f54255bb128be9cfc17640c,630
+STND.WFLOW.14,provision,LVL2,Retries counted and followed,adopted,14.md,27f1a52e36209df120ee42d753a74b06814cd00e0514887d6a9d85378838510d,662
+STND.WFLOW.15,provision,LVL2,Attempt records kept,adopted,15.md,c7f70550e9b3fbedcbc4084f8a897b3830ce5fbb54b7c934eb2269fcd4047643,814
+STND.WFLOW.16,provision,LVL2,Notice and grace stated,adopted,16.md,cbc537007843fd71d323e7dce8f1cfcb3bc17cae0476a512020d03c5d77334eb,810
+STND.WFLOW.17,provision,LVL2,Response to notice of end,adopted,17.md,9da8a358c5f82d9ae54c55d91d66e5a53bf2f4b737ae345a8ac04c3269eb6d75,655
+STND.WFLOW.18,provision,LVL2,Signal handlers that defer,adopted,18.md,076424bcd842c38b0c0c18f4bcd3f9ee9e24c72f1947034c99a09e18cb42c5be,530
+STND.WFLOW.19,provision,LVL2,Engine records valid after forced end,adopted,19.md,67680ccdc213ea001e32cbdff80383fd1dbb214abd30f01b9971b163a0b7be02,553
+STND.WFLOW.20,provision,LVL2,Restart state interval,adopted,20.md,f0fab6b4ceedd299566a04df5716cba0769b214593454e1d2445570a61d1d779,645
+STND.WFLOW.21,provision,LVL2,Restart state generations,adopted,21.md,a56fe5c2998daa93baf612b8ad7db1503dafdbd8768caee28ec24954fab178e2,662
+STND.WFLOW.22,provision,LVL2,Restart state across processes,adopted,22.md,4adcd7ce56bc98ec346037965cd574718c3341a3f6ec11053224e8661fef1aaa,499
+STND.WFLOW.23,provision,LVL2,Restart state contents stated,adopted,23.md,2642600fe7c88a171f620da5271b8c57305202c70d81e8560af95d230be328d5,863
+STND.WFLOW.24,provision,LVL2,Restart state identity recorded,adopted,24.md,77db285daab05a788b22d8038a34f8f626cdca5cd77663e3844c8d88bebfa194,663
+STND.WFLOW.25,provision,LVL2,Restart state checked before use,adopted,25.md,8048974d80e4b6c74e94c5edf442d45b6ef30e8847278d373602d40f1249392e,708
+STND.WFLOW.26,provision,LVL2,Restart state format versions,adopted,26.md,6a55ab3579384b79be0b23cde7992eb9b50f6b7782c2359cbe361f6a5cd10ab2,573
+STND.WFLOW.27,provision,LVL2,Restart state that executes code,adopted,27.md,0f3a2ce8b36fec9c53a7c910a9155eec0a53bda19719f488587292340b31e64c,551
+STND.WFLOW.28,provision,LVL2,Completed members from checked outputs,adopted,28.md,b47303857afe95dffa05f807d089399b7d4e752e7db28c6941e1ba80a775cdd6,655
+STND.WFLOW.29,provision,LVL2,Consumers of step sets state needs,adopted,29.md,a814a0fbcaa5ceba62df7d8ad46ee98dc9bf176dda1eeeeef03ccc69d436b5bd,615
+STND.WFLOW.30,provision,LVL2,Storage in the run budget,adopted,30.md,b1748d81ce9ecad402167c48bec9e109513920606256179acea62b6e2a701022,731
+STND.WFLOW.31,provision,LVL2,Storage purged by policy,adopted,31.md,af6ae47cb86f83bcd10c03d26bf8ce74700b3c6aca95476845cb725f75357d41,558
+STND.WFLOW.32,provision,LVL2,File system guarantees relied upon,adopted,32.md,448e8a469703abd6bff9ab4f948ab25f9158f9ea11b2840028d536604fb1bb2b,918
+STND.WFLOW.33,provision,LVL2,Staged copies verified,adopted,33.md,f03d57ade90fa3bed3c1e18aaf7d441e3f1aa1e7d28c58aadd6c8f702903b089,545
+STND.WFLOW.34,provision,LVL2,Work directory state stated,adopted,34.md,cc6c6b602b82b5127a1b981c0e96a320dd053cfcb4442382ed53e7dc993e4385,825
+STND.WFLOW.35,provision,LVL2,Provenance of step outputs,adopted,35.md,305a9d84a4ea9b7b1817fadd174d97a4eca17d98b2c636a9abd11aa6e5edaabd,759
+STND.WFLOW.36,provision,LVL2,Resumption record,adopted,36.md,fe10e4a23682a0abf0f4c7eeca7f10bb6dde503f2288886208ca51f6c9e1b852,1058
+STND.WFLOW.37,provision,LVL2,Workflow run from a clean area,adopted,37.md,baffe2599fcae5d389bb4da4feb97b1dd6ab000aecbae234a475781f4439a2d5,469
+STND.WFLOW.38,provision,LVL2,Interrupted attempts under test,adopted,38.md,aab79353bf54decdf74cb1b2bca6bf099aef4aea9b24fac6d0fa8d91abcfd5a7,699
+STND.WFLOW.39,provision,LVL2,Restarts under test,adopted,39.md,bb533e8e6488537362110e697ce4f4e65c12ce2193cc67565c71573ca85c45fe,734
+STND.WFLOW.40,provision,LVL2,Resumption under test,adopted,40.md,c1bfe52f7db7a5992511fc53e6f2202e9a4287a8125ecb2d61734d61cc81dd8c,721

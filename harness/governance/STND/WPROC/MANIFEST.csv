@@ -1,17 +1,18 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.WPROC,standard,LVL2,Work process standard,adopted,_doc.md,f354789d8efce60041a5971d7254d60de09cbdd05a631c8d229736b81504fdca,12741
-STND.WPROC.1,provision,LVL2,Unit records in history,adopted,1.md,6c0dbdc072c933f1cd81d9ea6481823a370081008a9103c8f42e08aec041c0a7,736
-STND.WPROC.2,provision,LVL2,Attribution of commits,adopted,2.md,c16002c0858f3afa423e1f8bb1c91a64132f77a91a5af3e8a8a6cb1e465141ed,488
-STND.WPROC.3,provision,LVL2,Main and development lines,adopted,3.md,4a92ccf304d02f5c1ae538d5224e03b2c24ce12f3109c131f05893303cb80ace,388
-STND.WPROC.4,provision,LVL2,Location of records,adopted,4.md,50fbc768fcf3d39b0d54cd45b321322e7b159a75fa86bd248fda39beb33b790d,742
-STND.WPROC.5,provision,LVL2,Unit branches,adopted,5.md,abb1902915c8bf41bfd6b99f5ba6642e303bff3cce87572e3687db351140b3c9,620
-STND.WPROC.6,provision,LVL2,Branches for fixes,adopted,6.md,11b4ddab4a8fe18ee7156e75d82155b03f0f8c93aa09fc35bfcfbcc180e45fd5,594
-STND.WPROC.7,provision,LVL2,Hierarchical integration,adopted,7.md,5505d862b4abd633e882345225b39124e10b6c3103d9f0255aa222177b9ab3ca,553
-STND.WPROC.8,provision,LVL2,Parent update before merge,adopted,8.md,306a11241b65a2cb8e3f05980df5cd9ccbab30da1c90127134b49cb1921603b4,703
-STND.WPROC.9,provision,LVL2,Checks before merge,adopted,9.md,caef504851eb4a11a41cf8b4fba7d506720da893babed32aeff06c5ff55b71a3,768
-STND.WPROC.10,provision,LVL2,Recorded review at merge,adopted,10.md,1bfd22220f637572954f2979780aaeef79475c732d958ec4160a56b9781021f2,907
-STND.WPROC.11,provision,LVL2,Merges below the release,adopted,11.md,0ddfe6ab94b00df64321d0ecc1029266e8326b8c5e57eb1dbf172427885d1770,522
+STND.WPROC,standard,LVL2,Work process standard,adopted,_doc.md,97b0bc1c4d3f9ba14f3a162be5a71224eb197ae3c263587ef717ed01aab3a1b1,14502
+STND.WPROC.1,provision,LVL2,Unit records in history,adopted,1.md,dd47eb3709a955c0a7966e715da25de2145aa3cb9e27c16eb8bad01a57b06ff2,750
+STND.WPROC.2,provision,LVL2,Attribution of commits,adopted,2.md,f24a4c354a778fc06c04775eeabe0a109a85d4a234e9cd225453cbd686a7e697,502
+STND.WPROC.3,provision,LVL2,Main and development lines,adopted,3.md,3a8ebb637294efd18913bb4616845f16badd7ee8393132cc08753ab14c215e1e,402
+STND.WPROC.4,provision,LVL2,Location of records,adopted,4.md,250c7d2ba5b1d81ac3de284da3242eb28ab30355370d5014dc8771e10bdf6737,756
+STND.WPROC.5,provision,LVL2,Unit branches,adopted,5.md,0cb0be4795272bc63da4823597332cc1b8fbb08bca50558951de6bc6a9980e81,634
+STND.WPROC.6,provision,LVL2,Branches for fixes,adopted,6.md,413d98390d84700dab6c01a4ec499685df00307858d60fbdfd5e248f58c07975,608
+STND.WPROC.7,provision,LVL2,Hierarchical integration,adopted,7.md,420e4b93482d663f214c9c47b4040788271216f7d7830e38182eadb0871e0e70,567
+STND.WPROC.8,provision,LVL2,Parent update before merge,adopted,8.md,678b87740ca881a9f41c38cd04074b8c698bc99a2695c60b2558e9f526203b04,717
+STND.WPROC.9,provision,LVL2,Checks before merge,adopted,9.md,ba3cd70be2a7abd25b15aed0b96f019ccf4177093b32d9e0ebc6428cc732f962,782
+STND.WPROC.10,provision,LVL2,Recorded review at merge,adopted,10.md,ab788845fa45572533115775a243f9b64274a1386946c94c1d059eaf815c8a2d,921
+STND.WPROC.11,provision,LVL2,Merges below the release,adopted,11.md,c3102e4492d95e9786978fae9857daafbfc89b763e838067cf38a4ed96ae14d9,534
 STND.WPROC.12,provision,LVL2,Main-line changes,adopted,12.md,65b9461f8da04f3730d49941046ef91f7af632bd8cca14749f57f52e6f25abcb,1069
-STND.WPROC.13,provision,LVL2,Basis of a release proposal,adopted,13.md,2e30fc85d3d965365a9030942cb0a3bba05eba63996ffe7c828c3528c9e149c6,571
-STND.WPROC.14,provision,LVL2,Release record content,adopted,14.md,b66ef063b2e8b21f0210dbac14cb9910568c49845e161280db55656106f548f4,761
-STND.WPROC.15,provision,LVL2,Permanent release names,adopted,15.md,e0788fd2fdd20df1182ea5090dfa6a4496b1c025d52b7a7cd3f3e58da70b0993,426
+STND.WPROC.13,provision,LVL2,Basis of a release proposal,adopted,13.md,9d8e07813d9ea381434296b64a259e203f63dfe01cfa4ae756249acb06839e02,497
+STND.WPROC.14,provision,LVL2,Release record content,adopted,14.md,15e900ca4c6c47d12a7e43efedac48b4cc64c5cc9db32d743c6f7fbeb8396d3f,775
+STND.WPROC.15,provision,LVL2,Permanent release names,adopted,15.md,36c09ed64396da5a4ad078f9bc93861f41ea9b2bb6ed8cd181981de52eb04b8f,440
+STND.WPROC.16,provision,LVL2,Shared records on the development line,adopted,16.md,8cbf909e44bc224ab977aca4b9374a0bc142954c116719273702531d92fa310b,566

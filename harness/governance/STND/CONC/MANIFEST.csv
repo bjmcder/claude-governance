@@ -1,32 +1,32 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.CONC,standard,LVL2,Concurrency standard,adopted,_doc.md,661f6e7831130cf760d106efd2fef5eb8a5e3ec51269ae933f238740da7c8f33,27904
+STND.CONC,standard,LVL2,Concurrency standard,adopted,_doc.md,3dd2b577babd7fd9c2add91bf23c13e4b20b963c0cc6e66eb7c3dfb767ce1ccf,28321
 STND.CONC.1,provision,LVL2,Asynchronous completion observed,adopted,1.md,0e20723eb47627a101e05b99b32d174e11760f36a1ed47df03cfbefa1ce3760b,553
 STND.CONC.2,provision,LVL2,Failures across concurrent tasks,adopted,2.md,0f8eb5947d7bfc230b15e51cc94181aa110019df545ef2df245e90524a1195d8,777
-STND.CONC.3,provision,LVL2,Declared protection of shared objects,adopted,3.md,83e43a8f3066882c05d232957bafffefb45b232519126b1598c74229ae4c8d23,888
-STND.CONC.4,provision,LVL2,Atomic ordering justified,adopted,4.md,3cbf4272a9d37885f49d7a5e8ad44224a6125343f9f3357b11c0687041069dcb,569
-STND.CONC.5,provision,LVL2,Publication and object lifetimes,adopted,5.md,c7dbebce213fe3fb10126a1d73f4d0d6431c8c51cf8b663d517ae76c0d14693c,763
-STND.CONC.6,provision,LVL2,Concurrent calls in contracts,adopted,6.md,6d6845fa210eb1ebf35f26a8ee7dfd2ea4c27741f839c0db209ececeddc6aa5a,519
-STND.CONC.7,provision,LVL2,Acyclic lock order,adopted,7.md,6656e51423e66ec4e39c0f736f4498cd0e9711e544b702314b63b7f6e0dc7d8d,645
-STND.CONC.8,provision,LVL2,Conduct while holding locks,adopted,8.md,aae9f8ed12d11c442af8070374d7ebd2d40d886c5160a783480092686572b710,751
-STND.CONC.9,provision,LVL2,Condition waits retested,adopted,9.md,07d548e88a1d3a50940ce979fc4a717cdd8467a085d08aac3eb4da0fff11e7c1,637
-STND.CONC.10,provision,LVL2,Bounded waits,adopted,10.md,c4af99862be313a2d02facd25fdc84bd0ea09da8d8a92fd03ff2f0a849db658f,618
-STND.CONC.11,provision,LVL2,Stated completion argument,adopted,11.md,12c0ced2e86daf67cfd69ddb71e47779452ac0574eeb3dce7408bad95e133c00,731
-STND.CONC.12,provision,LVL2,Parent-owned tasks,adopted,12.md,401a717ef048fbf7f4c631a2b6b9e63b2f957b7cbeed8d9eb504bbba2aee3c79,588
-STND.CONC.13,provision,LVL2,Cancellation propagation,adopted,13.md,0f9660bbe5992d219b05c72b6a49c121cffc91393e9342434b5f8e801723d98a,672
-STND.CONC.14,provision,LVL2,Bounded queues and pools,adopted,14.md,d54fb69c79d08764214d8262617448127a7993ca94db180e3b28dca69b84705d,636
-STND.CONC.15,provision,LVL2,Event loop conduct,adopted,15.md,2819753b6cec86dadc6dd2dc8a57b148bd849baa2773a268a4b76011f0f78b62,619
-STND.CONC.16,provision,LVL2,Task migration and thread identity,adopted,16.md,ee4ca1725d3284e3ca0b2ff70122b1abd865527613b26742f4cb3906aa047d63,608
-STND.CONC.17,provision,LVL2,Caller-owned pools,adopted,17.md,becbc998ade689043792de5860016323df1c54c0a7d4f23b200d651a4c90780b,743
-STND.CONC.18,provision,LVL2,Pools composed on one node,adopted,18.md,ab00a0cb2bbfd94de28423e2270ae8ac1c77b93e9037312e9e8f2551461cd3af,611
-STND.CONC.19,provision,LVL2,Child processes of threaded programs,adopted,19.md,ab9eb947eacf7625d8891d01df7a44449c53504da62234db3e8225d2d1dfa506,556
-STND.CONC.20,provision,LVL2,Worst-case blocking time,adopted,20.md,230e4e0b9380ff42458a866d0430d98efeac1c2ede8506ebc219ae39226b9358,574
-STND.CONC.21,provision,LVL2,Task-count dependence declared,adopted,21.md,6e0a2230929b0f27a11ac0291f7b3a120f1f8782a0829a2847f4f032d0139995,665
-STND.CONC.22,provision,LVL2,Fixed-order combination across counts,adopted,22.md,5bb7c20cfd7e2cd7524663cd9ed3d961bbfbbc5ac5f0e791374f4b8ee391b492,859
-STND.CONC.23,provision,LVL2,Random streams keyed to parts,adopted,23.md,263b75a4f89ddb405d3a0c23d92f7952b750fe9a721f6a5e9f1a83f7ac481e11,596
-STND.CONC.24,provision,LVL2,Tests across task counts,adopted,24.md,959dd605036bc10efbbb442f98d6229f596e46172a8e33d58fe2eb46348df650,909
-STND.CONC.25,provision,LVL2,Run-time concurrency checks,adopted,25.md,084311d60dce9fbbf83df3bd17d2e93230ebc5b6950293f3751e6b7dc69504f4,669
-STND.CONC.26,provision,LVL2,Varied schedules in tests,adopted,26.md,da81f70b8acee247210c250aa76e86c76e10f48237a4a7aed535e63e43f35efc,601
-STND.CONC.27,provision,LVL2,Stated verification limits,adopted,27.md,c1e35190a837d070a01921a7c2c283cf3d0b6661470c8d9d7db4d0e504343bdb,624
-STND.CONC.28,provision,LVL2,Checked design of critical protocols,adopted,28.md,77fec3a3555437b248fc0e9cb3a80b3b61750c7ee4458e44edb612f9f1e39fc6,632
-STND.CONC.29,provision,LVL2,Pending operations recorded,adopted,29.md,7fbc47af7a65dfec63cc514bb01abcf6a922ae721d19bf44d142a5b8541ecf2c,436
-STND.CONC.30,provision,LVL2,Output order of concurrent tasks,adopted,30.md,2972b285dc892b082785d4c1336a07110b0672b9f989abc66fb31a184970cf66,555
+STND.CONC.3,provision,LVL2,Declared protection of shared objects,adopted,3.md,8bcd6003f3944255dd10a2d4b6b39341827d38ec049bd1fc2cc74129a54063b9,902
+STND.CONC.4,provision,LVL2,Atomic ordering justified,adopted,4.md,ff11b83fd5160ab1003c3774cb4be0bc08d91ed21fb87dd0b7edd0d136479cef,583
+STND.CONC.5,provision,LVL2,Publication and object lifetimes,adopted,5.md,14b94bd7007c0e4d68c5cc8af00e561f91fe68d2c48f973d7d30c50c4f6cab61,777
+STND.CONC.6,provision,LVL2,Concurrent calls in contracts,adopted,6.md,293e76a4008e28c00b2504d9e687a5205c9459b21ed73a6df03b3f98f1eefce1,533
+STND.CONC.7,provision,LVL2,Acyclic lock order,adopted,7.md,e851c84caa04685abb034edcf6fed661c0ea02933b652cebc3979d33e0ee92cf,659
+STND.CONC.8,provision,LVL2,Conduct while holding locks,adopted,8.md,6525d3c060334f3f92172276ec92a3457a891f7aa3259ef02fa6fc1e79ce68bb,765
+STND.CONC.9,provision,LVL2,Condition waits retested,adopted,9.md,a6c307a7f6fa4a04900a75d6c52f4b599d54a9ce303a5750cc35c481c283bf9f,651
+STND.CONC.10,provision,LVL2,Bounded waits,adopted,10.md,d179e9072e816794afbfd8e401753d93d6d16d4582ae437322b11f456090d2e6,658
+STND.CONC.11,provision,LVL2,Stated completion argument,adopted,11.md,397b71c28fe477c57046fb51e5fc75ef92649e0324d089d53f60dd2090f4134a,745
+STND.CONC.12,provision,LVL2,Parent-owned tasks,adopted,12.md,39f5d3c8ecece7eadac0a5323b8813864232444a4da33ef03cfe041864ebcca9,602
+STND.CONC.13,provision,LVL2,Cancellation propagation,adopted,13.md,f076899fbe29aec5a725f8c349d5e61f6ff8b31e4d1061ecc117ac766486c6a7,686
+STND.CONC.14,provision,LVL2,Bounded queues and pools,adopted,14.md,02a7455009b794a473452a49b7e26a3e04fcfe35ccd96aa67023bbf16e41711d,650
+STND.CONC.15,provision,LVL2,Event loop conduct,adopted,15.md,02b1aa4944f1b2556b3691add6a829cd02d8e7590a33a1ac4f09fea0dc39deff,633
+STND.CONC.16,provision,LVL2,Task migration and thread identity,adopted,16.md,48b2607f2fb52161f591f178df2bc82e6a5988e9ccda9cc652bb9707c5fa3600,622
+STND.CONC.17,provision,LVL2,Caller-owned pools,adopted,17.md,a7ddf284bc991c095f8636ddf227859949e301c392706bd0fa0339c3c4d106aa,757
+STND.CONC.18,provision,LVL2,Pools composed on one node,adopted,18.md,2ec5de6e869ab884e3ffb08a4e81b8335728279c900dfc950a847c9f62065554,625
+STND.CONC.19,provision,LVL2,Child processes of threaded programs,adopted,19.md,c732f53e571852d307a475069e402216f501f70610ca3607a790ac44095bf391,570
+STND.CONC.20,provision,LVL2,Worst-case blocking time,adopted,20.md,50444e1e9e507713306c458a8c44092a8aad5a1e58fd8d91f6eb13fe8dcd2375,588
+STND.CONC.21,provision,LVL2,Task-count dependence declared,adopted,21.md,26815260b6ed9c77e21a3ce1e6e2f20b5059e68cba12ebf99d186564abf46bdc,679
+STND.CONC.22,provision,LVL2,Fixed-order combination across counts,adopted,22.md,72272887301395d73e61e5196df5c9a8390d678314e62c7778f4cf1811cb525f,873
+STND.CONC.23,provision,LVL2,Random streams keyed to parts,adopted,23.md,0411567e18e356a387caee03218e3dbd36fd283477c33f9c084c68353c9b4039,610
+STND.CONC.24,provision,LVL2,Tests across task counts,adopted,24.md,f30d50336f2947e077f4409e51138b1ef3d1cc792a1d5e870ea0856b8253403d,923
+STND.CONC.25,provision,LVL2,Run-time concurrency checks,adopted,25.md,7c59b31790e59ca7aac14c9da0636b7193229dea5c6b0a62be2603ec50833d98,683
+STND.CONC.26,provision,LVL2,Varied schedules in tests,adopted,26.md,128770c462e61201454d17c80f0531d4f98db2e80aefe71b66d378e80c8d32d6,615
+STND.CONC.27,provision,LVL2,Stated verification limits,adopted,27.md,8d3792712461d28ed470ce1c884d2be6a3d0e07a164f850c7d815eca93ed987f,638
+STND.CONC.28,provision,LVL2,Checked design of critical protocols,adopted,28.md,7cca05a6ebe54f052a16172a9946b559b431d225c09cd3a56e8c38e1951a2fcf,646
+STND.CONC.29,provision,LVL2,Pending operations recorded,adopted,29.md,6d2e76e536bda4323645a45126bee8f1c8044a4281bd745cb0fa20c9952ff8d8,450
+STND.CONC.30,provision,LVL2,Output order of concurrent tasks,adopted,30.md,f3401e40d1d31850990f400983d57a9e4a375dfa174f45ba07d06af4cc22f979,569

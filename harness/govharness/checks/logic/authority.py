@@ -304,27 +304,38 @@ def self_grant(ctx: CheckContext) -> Verdict:
     Returns
     -------
     Verdict
-        FAIL when a prohibition is missing, cites an identifier that
-        does not resolve, or omits the waiver clause.
+        FAIL when a prohibition is missing from each of its homes, cites
+        an identifier that does not resolve, or, in GOV.48, omits the
+        waiver clause.
     """
     roles = facts_of(ctx)["roles"]
     corpus = ctx.corpus
-    probes = [
-        (
-            roles["agents_bound"]["id"],
-            r"grant themselves",
-            roles["waiver"]["id"],
-        ),
-        (roles["authorization"]["id"], r"for itself", None),
+    # Each prohibition is read from the first of its homes that states
+    # it: an agent's grant of a waiver to itself from GOV.48, citing the
+    # waiver clause, or else from the reservation of PRIME.1, which
+    # names waivers among the acts an agent never performs (unit 0024).
+    groups = [
+        [
+            (
+                roles["agents_bound"]["id"],
+                r"grant themselves",
+                roles["waiver"]["id"],
+            ),
+            (roles["owner"]["id"], r"\bwaivers\b", None),
+        ],
+        [(roles["authorization"]["id"], r"for itself", None)],
     ]
     lines: list[str] = []
     ok = True
-    for pid, pattern, target in probes:
-        sentences = [
-            s
-            for s in re.split(r"(?<=\.)\s", corpus.body(pid))
-            if re.search(pattern, s)
-        ]
+    for homes in groups:
+        for pid, pattern, target in homes:
+            sentences = [
+                s
+                for s in re.split(r"(?<=\.)\s", corpus.body(pid))
+                if re.search(pattern, s)
+            ]
+            if sentences:
+                break
         refs = [r for s in sentences for r in ids_in(s)]
         resolved = all(r in corpus.by_id for r in refs)
         if not sentences or not resolved or (target and target not in refs):

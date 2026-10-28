@@ -74,6 +74,8 @@ govharness/
 │   ├── locators.py       identifiers, section locators, resolution
 │   ├── text.py           sentences, quoted mentions, identifiers in text
 │   ├── tables.py         Markdown tables and sections by heading
+│   ├── onset.py          the field onset: its parts, and what applies
+│   │                     from a class
 │   └── report.py         CheckResult and Report, the result model
 ├── ledger/               layer 1
 │   ├── transactions.py   transaction types, chain links, signature digest
@@ -89,7 +91,8 @@ govharness/
 │   ├── structure.py      ids, mnemonics, references
 │   ├── manifests.py      manifests are current
 │   ├── ledger.py         chain, pins, signatures, unpinned files
-│   ├── fields.py         template owner fields, entry status
+│   ├── fields.py         template owner fields, entry status, checked_by
+│   │                     keys, onset fields
 │   ├── logic/            checks 0 and a to f: facts, tiers, wording,
 │   │                     authority, language, proofs, satlib (DPLL, optional z3),
 │   │                     solvecache (keys and checks of reused solves)
@@ -115,7 +118,8 @@ govharness/
 │   └── signers.py        found the signer register, add, close, require
 └── cli/                  layer 4: main.py (parser), reports.py (verify,
                           check), derived.py (manifests, references,
-                          compose), query.py (show, find, context, pairs),
+                          compose), query.py (show, find, context, pairs,
+                          onset),
                           records.py (ledger append, sign, rehearse),
                           arguments.py
 ```

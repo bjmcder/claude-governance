@@ -23,6 +23,7 @@ from govharness.checks.drafting.context import (
     is_imperative,
 )
 from govharness.checks.drafting.family import Finder
+from govharness.checks.drafting.tables import cited_tables
 from govharness.checks.lineage import family as lineage
 from govharness.checks.registry import run_checks
 from govharness.core.entry import Entry
@@ -786,6 +787,32 @@ class HeldBehavior(unittest.TestCase):
         self.assertEqual(quoted["g.5"], "PASS")
         defined = statuses(row("STND.DRAFT.17", "The code may not run."))
         self.assertEqual(defined["g.5"], "FAIL")
+
+    def test_spelling_table_in_a_cited_provision(self) -> None:
+        """Behavior: where STND.DRAFT.33 keeps its rule and cites
+        STND.DOCS.8 for the spelling table, g.22 reads the table there
+        and still finds a British spelling, and no table goes missing.
+
+        Reference: round e of 2026-10-28 merges the spelling table of
+        STND.DRAFT.33 into STND.DOCS.8 (CP26, unit 0024).
+        """
+        index = live_index()
+        self.assertEqual(index["STND.DRAFT.33"].meta["defines"], [])
+        self.assertIn("STND.DOCS.8", index["STND.DRAFT.33"].meta["refers_to"])
+        self.assertIn("\n| British | American |\n", index["STND.DOCS.8"].body)
+        clean = statuses(lambda e: None)
+        self.assertEqual(clean["g.1"], "PASS")
+        self.assertEqual(clean["g.22"], "PASS")
+        self.assertEqual(
+            cited_tables(corpus_of(index), "STND.DRAFT."),
+            {("STND.DOCS.8", "spelling")},
+        )
+        uncited = statuses(_meta("STND.DRAFT.33", refers_to=[]))
+        self.assertEqual(uncited["g.1"], "FAIL")
+        misspelt = statuses(
+            _append("STND.DRAFT.2", "The behaviour SHALL be recorded.")
+        )
+        self.assertEqual(misspelt["g.22"], "FAIL")
 
     def test_mention_columns(self) -> None:
         """Behavior: in a table that a provision names in ``defines``,

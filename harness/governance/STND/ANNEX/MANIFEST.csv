@@ -1,12 +1,12 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.ANNEX,standard,LVL2,Hardware type annex,adopted,_doc.md,853bd3b2a162675e04310ccf7a46710c0d1faeda4c38e3dab817fcb92ca9ee13,11393
-STND.ANNEX.1,provision,LVL2,Adoption by citation,adopted,1.md,c42abb811c51f806bd9264699281fecf6b5c9709937130901464e317e32467dc,558
-STND.ANNEX.2,provision,LVL2,"Arithmetic, variation, and output statements",adopted,2.md,851d9221ed1adda9de813d94f4a1c8e12fb3fd4c67eaff11127fbc344ec491d5,948
-STND.ANNEX.3,provision,LVL2,Other statements of citing contracts,adopted,3.md,9d5b6d3c512e4ba9412765cd2b875b75a0e390061772c4ab067299c62e78d3e9,836
-STND.ANNEX.4,provision,LVL2,Evidence for default properties,adopted,4.md,8ba45965d1390fe4da12fd877a88c3c030e0b8af321c08b48dc2974b3a1cd116,653
-STND.ANNEX.5,provision,LVL2,General-purpose processor default contract,adopted,5.md,be35b81cf49b2bcde396a077b845714278fb5276668da4da641baa5ae3bcd32b,3200
-STND.ANNEX.6,provision,LVL2,Accelerator default contract,adopted,6.md,6747386fcebc5f18e148aa8fce23d1b65b4afd22d817b902e428aae24ef78fe7,3541
-STND.ANNEX.7,provision,LVL2,Quantum processor default contract,adopted,7.md,20162352596e1d71d1b0fb49cc0425d59e01d3869596d8ccf99b07b9d696adb6,3366
-STND.ANNEX.8,provision,LVL2,Embedded controller default contract,adopted,8.md,3c8b5153d34ae59e13a0401873ef406a1bc189eecdd01b29eaf8cfe6a33d2f96,3247
-STND.ANNEX.9,provision,LVL2,Programmable logic default contract,adopted,9.md,057de37485d1a2406952cac35f31b30f1c420c27e1ad0276afcd44fec0c3ea64,3778
-STND.ANNEX.10,provision,LVL2,Integrated circuit default contract,adopted,10.md,8940f0b02cebb1277ae14d28add469a0fa33f47f5bd1ab2a1e919bdd17b830df,3142
+STND.ANNEX,standard,LVL2,Hardware type annex,adopted,_doc.md,7d72f71db2e1fcabb530950d5bf38fad2be2798ef95b7c96df3f6823e8eec18d,11679
+STND.ANNEX.1,provision,LVL2,Adoption by citation,adopted,1.md,3f09927e75304ddd3685f3ce38661705a5016211cb17724b1428442883f9b5a3,570
+STND.ANNEX.2,provision,LVL2,"Arithmetic, variation, and output statements",adopted,2.md,a11ba5494b1b494eb7e081b7df1d49e19e1dc01071a3f25895ed1bcc06865178,962
+STND.ANNEX.3,provision,LVL2,Other statements of citing contracts,adopted,3.md,67cc34b2d028077b6727ef81b0d181c627b10abb4e32e147df20238e48c374b3,850
+STND.ANNEX.4,provision,LVL2,Evidence for default properties,adopted,4.md,e2d6183eb74936232e0318d21c547fd93c871455475e87c6e438074dd3b3f1f1,667
+STND.ANNEX.5,provision,LVL2,General-purpose processor default contract,adopted,5.md,83c929538f415ff0fd5d8c0a808376c2acefdafe665d425a4c2da0108f52e2d1,3214
+STND.ANNEX.6,provision,LVL2,Accelerator default contract,adopted,6.md,f07a97696be5cef39ae8c688c41ecd2cfd3b79c82828aa8a7356bbec0506bd7f,3555
+STND.ANNEX.7,provision,LVL2,Quantum processor default contract,adopted,7.md,f953bfca9032ecd77b74878ec95a4d4861df3c777b73d049db67cf604ea7bda4,3380
+STND.ANNEX.8,provision,LVL2,Embedded controller default contract,adopted,8.md,e218da4137ba1973eab5f7a86cd3733b156548ba094b6365d52f36309fd13685,3261
+STND.ANNEX.9,provision,LVL2,Programmable logic default contract,adopted,9.md,8de75782ac01ded12448f3db170de5714a9f0bcc33e4bbb04d38fd1180d52e99,3792
+STND.ANNEX.10,provision,LVL2,Integrated circuit default contract,adopted,10.md,8bc32225978f058dfdb627ee63fd0d5a689f45a47d248dbd0e95413c948c1c4d,3156

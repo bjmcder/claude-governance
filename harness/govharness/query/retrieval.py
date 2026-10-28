@@ -21,6 +21,7 @@ import re
 from dataclasses import dataclass
 
 from govharness.core.corpus import Corpus
+from govharness.core.onset import describe, onset_of
 from govharness.query.graph import (
     UNCITING,
     Graph,
@@ -249,10 +250,14 @@ def block(corpus: Corpus, graph: Graph, node: str) -> str:
     Returns
     -------
     str
-        Markdown: a heading, then status, level, mode, and rank.
+        Markdown: a heading, then status, level, mode, the onset of a
+        provision that carries one (unit 0023), and rank.
     """
     meta = corpus.by_id[node.partition("#")[0]].meta
     facts = [str(meta[k]) for k in ("status", "level", "mode") if meta.get(k)]
+    onset = onset_of(corpus.by_id[node.partition("#")[0]])
+    if onset is not None and "#" not in node:
+        facts.append(describe(onset))
     if meta.get("rank") is not None and "#" not in node:
         facts.append(f"rank {meta['rank']}")
     title = title_of(corpus, graph, node)

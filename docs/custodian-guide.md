@@ -14,7 +14,7 @@ A round is one set of related amendments, from your direction to the applied led
 
 1. You direct a change, or ratify an open item. The direction goes into the round's `decisions.md`.
 2. An agent drafts the text and an amendment script, a short Python program that makes the text changes and appends the transaction, and rehearses it on a copy of the corpus.
-3. Agents of another configuration from the author review the draft cold, and review the pairs of provisions that STND.HARN.28 lists for the changed documents.
+3. Agents of another configuration from the author review the draft cold. The review record states, for each pair of provisions that STND.HARN.28 puts to review, whether the two conflict; `govharness pairs`, with `--with` for the other documents of the change and `--amends` for each LVL0 provision it amends, lists the pairs.
 4. The author fixes what the reviews find, and a further agent verifies the fixes cold. A round that spans several documents gets a review across them.
 5. The round comes to you for ratification, with the questions that only you can answer.
 6. After you ratify, the script is applied to the live corpus, the reading copies are rebuilt, and `OPEN-ITEMS.md` is brought up to date, as is `harness/README.md` where a command or a check that it describes changed.
@@ -59,7 +59,7 @@ Projects pin a revision of this repository by tag, branch, or commit ([installat
 
 ```bash
 tail -n 1 harness/governance/ledger.jsonl | python3 -c 'import json,sys; print(json.load(sys.stdin)["seq"])'
-git tag -a ledger-202 -m "Governance at ledger entry 202"
+git tag -a ledger-322 -m "Governance at ledger entry 322"
 ```
 
 A project that follows a branch receives every commit; one that pins a tag moves only when it changes the tag.
