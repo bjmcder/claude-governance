@@ -8,7 +8,7 @@ STND.CONC,standard,LVL2,Concurrency standard,adopted,CONC/,7f70baa0750d9166e4abf
 STND.CREW,standard,LVL2,Agent roles standard,adopted,CREW/,488e2d0bd77268cafc34681070ed7c03f35c188dd43a00b350a6016399cd186a,42121
 STND.CXX,standard,LVL2,C++ standard,adopted,CXX/,913159eca8b10e9605ece8b2035a51f4b99b72cd7b816ea11b626bf4c4082683,54677
 STND.DEPS,standard,LVL2,Dependency policy,adopted,DEPS/,bd1fbfa64a4abf8068e037ef39e8b4b9a68a3e52a72a837b5dc4cb6f34b7f34e,20962
-STND.DFLT,standard,LVL2,Defaults,adopted,DFLT/,e14f4716f9b6d443b0abdf1ba152aaddcb36944396849f6b3dd57e4893d5ade4,46913
+STND.DFLT,standard,LVL2,Defaults,adopted,DFLT/,1a28f44f8a0f6c9dcbb46871ab2e545f6ba568b97e8061a48bcd3e239c5466e2,47662
 STND.DOCS,standard,LVL2,Documentation standard,adopted,DOCS/,aa801ebee01c9a5b486729382f665ee79c7e240aeeed91c3a11c862704bcf020,31861
 STND.DRAFT,standard,LVL2,Drafting standard,adopted,DRAFT/,704c85db1bbbbe75e31b8a65739ac5c3aaa4597082b744fe618dd0ad84f091c7,41692
 STND.FTN,standard,LVL2,Fortran standard,adopted,FTN/,21da459d01710e26482c479a874c24cf75719a4b8d8183fab8b2f76ada7b1eef,65897

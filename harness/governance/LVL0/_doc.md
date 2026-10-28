@@ -3,7 +3,7 @@ id: "LVL0"
 level: "LVL0"
 kind: "constitution"
 title: "Constitution for Computational and Cyber-Physical Systems"
-revision: "1.7.1"
+revision: "1.8"
 status: "ratified"
 adopted: "2026-10-08"
 ratified_by: "The Custodian"
@@ -66,3 +66,4 @@ An expression not in the table carries no normative force. For example, "may not
 | 1.6 | 2026-10-11 | Minor amendment (GOV.40): GOV.18 reserves to LVL3 any limit, beyond those of LVL0, on the number of agents an agent directs, the depth of delegation, and network access made to retrieve information for research. |
 | 1.7 | 2026-10-28 | Minor amendment (GOV.40): GOV.13 sets the class at inception as the most severe class of the uses then made of the project's outputs, records a planned more severe use as the expected class, adopted with the classification and setting no class before the use begins, and has unclassified work meet the floor until an agent needs the class to promote, release, deploy, or drive physical hardware; QA.11 makes the adopted classification the promotion, for work of CSQ3 or CSQ4, of each result that meets its acceptance criteria, for reliance by its author or immediate team alone, feeding work that is verified later; the Lexicon defines Expected class and Reclassification. |
 | 1.7.1 | 2026-10-28 | Editorial amendment (GOV.40): LVL0 keeps each rule once and cites it elsewhere: GOV.11 cites GOV.50 for the adoption of the proportionality judgment, which the Lexicon defines, in place of restating it; GOV.24 cites GOV.50 for the adoption of the classification; GOV.48 drops its sentence on waivers that agents grant themselves, which PRIME.1 holds; GUARD.4 drops the adoption and the defaults of the register, which GOV.50 and GOV.22 hold; GUARD.15 cites the halt of PRIME.8 in place of restating it; and the opening of PRIME cites GOV.6 and GOV.9 for prime directives that pull apart; no obligation changes. |
+| 1.8 | 2026-10-28 | Minor amendment (GOV.40): GOV.20 gives a project constitution to every project that promotes a result other than through its adopted classification, releases software, or drives physical hardware, so that the adopted classification, which QA.11 makes the promotion of each result of work of CSQ3 or CSQ4 that meets its acceptance criteria, asks no project constitution. |

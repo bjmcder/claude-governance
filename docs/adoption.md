@@ -6,7 +6,7 @@ This guide is for the human owner of a project: the person accountable for the w
 
 1. Install the governance in one of the ways in [installation.md](installation.md). A project that installs nothing can still adopt it by reading the corpus.
 
-2. Decide whether the project needs a project constitution yet. A project that promotes a result, releases software, or drives physical hardware has one (GOV.20). Until then the defaults of STND.DFLT apply (GOV.22, STND.DFLT.1). A constitution starts as a copy of `harness/governance/_PROJECT/NAME/`, and STND.PROJ says what each of its sections holds. A constitution may adopt STND.DFLT by one citation for most of its sections and state in full only the rest (STND.PROJ.2). [Known limitations](#known-limitations) explains how GOV.20 reads for work of CSQ3 and CSQ4.
+2. Decide whether the project needs a project constitution yet. A project that promotes a result other than through its adopted classification, releases software, or drives physical hardware has one (GOV.20). At CSQ3 or CSQ4, the adopted classification promotes each result that meets its acceptance criteria for reliance by its author or immediate team (QA.11), so that reliance needs no constitution. Until then the defaults of STND.DFLT apply (GOV.22, STND.DFLT.1). A constitution starts as a copy of `harness/governance/_PROJECT/NAME/`, and STND.PROJ says what each of its sections holds. A constitution may adopt STND.DFLT by one citation for most of its sections and state in full only the rest (STND.PROJ.2).
 
 3. Set the consequence class. The human owner sets it at inception, as the most severe class of the uses then made of the work's outputs (GOV.13), and adopts the classification (GOV.24, GOV.50). STND.CLASS.1 gives the test of each class, and STND.CLASS.5 what the record states. Where a more severe use is already planned, the record also states the expected class; see [Recording an expected class](#recording-an-expected-class). In Claude Code, `/governance:classifying-work CSQ3` drafts the record for you to review; it writes nothing.
 
@@ -56,7 +56,7 @@ To raise the class:
 2. Record it as a new entry of the project's ledger, as in step 4 above.
 3. Check what the new class adds. `govharness onset CSQ2` lists each provision, and each part of a provision, that applies from CSQ2 by its field `onset`, and the table of STND.CLASS.10 lists the parts of LVL0 that apply only from CSQ2, CSQ1, or CSQ0. STND.CLASS.18 gives the reviewer of each class, and STND.CLASS.19 the auditor.
 4. Before the work is relied upon at the new class, bring the work done at the lower class up to it (GOV.14). STND.CLASS.22 lists the steps, from regenerating each result whose record lacks an input to the audit of STND.CLASS.19 and the repeat of each check tied to an earlier event, and says when existing source takes up a default of form or style.
-5. Write a project constitution if the project now promotes results, releases software, or drives hardware (GOV.20).
+5. Write a project constitution if the project now promotes a result other than through its adopted classification, releases software, or drives hardware (GOV.20).
 
 The audit falls once, before work moved to CSQ2 or a more severe class is first relied upon at that class, and then at the interval of the new class (STND.CLASS.19). A move from CSQ4 to CSQ3 needs no audit of its own.
 
@@ -85,13 +85,3 @@ The rest depends on the class:
 | CSQ2 | As for CSQ3, and by an actor the author does not direct: a human, or, where the author is an agent, an agent whose configuration differs from the author's in its model or its instruction revision; a difference of tools alone does not count | Before a result is first relied upon, and at most 24 months after the previous audit, by an actor who did not author the work; an agent auditor differs from every authoring agent in its model or its instruction revision | As for CSQ3. Promoting each result relied upon beyond your team, or other than through verified work (QA.11). Stating in the classification the amount above which a loss counts as a cost (STND.CLASS.3) |
 | CSQ1 | As for CSQ2, and a human reviews, before each promotion or release, the changes since the previous such review that affect a contract or a reported result | Before the first release, and at most 12 months after the previous audit, by an auditor as for CSQ2 | As for CSQ2. Under the defaults, each referral names founding a signer register as a recommended next step (STND.DFLT.20). Once the register lists your key for the work's ledger, the work is assured: only entries that name you as actor and carry your verified signature are accepted, so you append them yourself (STND.DFLT.23) |
 | CSQ0 | As for CSQ1, and a human who did not author the change reviews each change to a safety-related component | Before each release, and at most 6 months after the previous audit, by a human who did not author the work | As for CSQ1. Adopting the hazard analysis (PRIME.13); recording where proof or exhaustive checking is not feasible (STND.CLASS.10); a recorded exercise in which a person resumes the work without the automation (STND.CLASS.10, INTPR.12) |
-
-## Known limitations
-
-In the case below, the corpus, read as written, asks more of a project than the rest of its text assumes. Until a ledger entry changes it, the corpus stands as described here.
-
-### A classification at CSQ3 or CSQ4 is a promotion
-
-For work of CSQ3 or CSQ4, the adopted classification is the promotion of each result that meets its acceptance criteria, for reliance by its author or immediate team (QA.11). Every project that promotes a result has a project constitution (GOV.20). Read together, these give a constitution to every project of CSQ3 or CSQ4 whose work has a result that meets its acceptance criteria, while the Notes of STND.DFLT describe work without a constitution as relied upon by no one beyond its author.
-
-Where this matters to you, a constitution may adopt STND.DFLT by one citation for most of its sections and state in full only the rest (STND.PROJ.2).
