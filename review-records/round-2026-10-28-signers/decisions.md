@@ -44,3 +44,7 @@ As STND.HARN 1.4 reads, an open row for "all" ledgers accepts its key on every l
 ## Verification
 
 `verify.md`, by an agent of another configuration: no defect and no should-fix. Its two optional notes need no change: the rationale's ratification is true because the script is applied only after ratification (S2), and the mutation run of unit 0021 checked each reverted guard, of which the verifier repeated four.
+
+## Ratification of 2026-10-28
+
+The custodian ratified STND.HARN 1.5, with the reading of STND.HARN.7 and STND.HARN.13 on the governance ledger, and unit 0021, as drafted. Signatures stay unadopted: no signer register is founded.

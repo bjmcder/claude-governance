@@ -116,3 +116,7 @@ This section supersedes the statements above where they differ.
 - Tests, from `harness/` with `TMPDIR` in scratch, the same set as above: 139 tests, OK (75 s). `tests.derive.test_authorizations` now has 38. Without it the set the brief names ran 101, against 75 before this unit.
 - `python3 -B -m govharness verify governance`: every check PASS, `logic: PASS`, the g.18 warning as before. `harness/governance/` is unchanged.
 - Ruff 0.16.10 on the files changed in this revision reports nothing new: the two earlier ISC004 lines of `signatures.py`, which is not changed here. With `--line-length 79 --select E501` it reports the earlier lines of `authorizations.py` (1) and of its test file (6), and none that this revision wrote. `tests/derive/test_authorizations.py` was not ruff-formatted before, and it was not reformatted.
+
+## Closed
+
+- The corpus item on the term Accepted signature, with STND.HARN.10 (M1), was closed by the round of 2026-10-28 in another form than the draft above: each signer row names one ledger (STND.HARN 1.5, ledger entry 202; unit 0021).

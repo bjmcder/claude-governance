@@ -1,18 +1,18 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.HARN,standard,LVL2,Harness specification,adopted,_doc.md,41a8b849003232ab1c2968e965f3622b92ae1aa88d4a9d7bd20fa3448aee1a7d,10269
+STND.HARN,standard,LVL2,Harness specification,adopted,_doc.md,18f32cc0404e08c8aa285706972b7dd05677ac87337dfc69a9057128ba0e5b35,11931
 STND.HARN.1,provision,LVL2,Item retrieval,adopted,1.md,9c3a39db5315f53754f7dc9433294014167ee065c81bafcbb9e5d32867c12e4f,482
 STND.HARN.2,provision,LVL2,Topic retrieval,adopted,2.md,602c57f26fddc5ba4eb8ee578fec73231cd7d821d423615acbd09970d8858614,394
 STND.HARN.3,provision,LVL2,Whole text,adopted,3.md,40fad67aefb278537805eae5668ed53403041a7bba6191545f251ef2dada61fa,365
 STND.HARN.4,provision,LVL2,Item files,adopted,4.md,19c900201efa03a22d62af5c63cf29d8f1fab44b916d56216135f0ba7dedade2,594
 STND.HARN.5,provision,LVL2,Files read as items,adopted,5.md,83aa911a299e9d3cf38666549999cd50c47ab9b4c3fa005a5a1bb3902245e457,396
 STND.HARN.6,provision,LVL2,Ledger file,adopted,6.md,70d5fa47049f491d98ca1eecc1b9c45ea7c53b64ea7d09c0f2db490d36ffec7a,502
-STND.HARN.7,provision,LVL2,Transaction fields,adopted,7.md,b7b239889429520b322ea0f1592a363ceeeac7d948baa5c2253b90a714d278af,1118
+STND.HARN.7,provision,LVL2,Transaction fields,adopted,7.md,570feed21665640cfb455a2a40c0439273ee8e71258f6e26208bd79a5ebefbdc,1143
 STND.HARN.8,provision,LVL2,Chain integrity,adopted,8.md,b8ba19a18356727fd3b9d00681ca6b328ad0b9ec6f35f1895ce9567acd5079ad,457
 STND.HARN.9,provision,LVL2,Content pin,adopted,9.md,e06426fea2f12b74f31b03f38f44701e326c2f1c990b47ffbfe85767c2dd8da3,402
-STND.HARN.10,provision,LVL2,Signer register form,adopted,10.md,022141029fbc64892a007aef6596f7c9afc38f3f3a5050582d813f48c86bc50b,635
+STND.HARN.10,provision,LVL2,Signer register form,adopted,10.md,d4048aa3f2e182f973cc51e06d580662950e23341bf59f90220525f3e4571bad,670
 STND.HARN.11,provision,LVL2,Signature acceptance,adopted,11.md,25add779a6d1c873e615959de79a5ce53f7e83584106bcc8da64a5e19a5e0456,524
 STND.HARN.12,provision,LVL2,Look-alike actors,adopted,12.md,fcd071e1901dd6c35e41fec399f4d802e302eaba587a868a351ddd491f633a80,532
-STND.HARN.13,provision,LVL2,Register chain,adopted,13.md,54e726df803cb0ee5c26e693e8f1d9ab59789d0e9b736721d9372f8e22adc198,670
+STND.HARN.13,provision,LVL2,Register chain,adopted,13.md,88f830c50802d5675ba72a2c6833a28a3f5a9b58fa1ec84410d296d30ef5e8d3,695
 STND.HARN.14,provision,LVL2,Manifest form,adopted,14.md,ecf133cc9379d82f4f08554f1c218e1645b55fb3aaf1b2264416f1b43604f03c,501
 STND.HARN.15,provision,LVL2,Stale content,adopted,15.md,a6bbab6f5a45c3233cb2df069faeccdff496f03d1ecd6e22de9112a4134338fe,432
 STND.HARN.16,provision,LVL2,Stable check keys,adopted,16.md,c8c3bdf965bf2cf157e1f12815a638774b9bb1e3b83d09197fd2b420c9330a66,382
