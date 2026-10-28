@@ -43,7 +43,7 @@ CONC_DOC = [
 CONC_READING = (
     "the Notes cite STND.CONC.21, STND.CONC.22, and STND.CONC.24 for the processes of a parallel execution in place "
     "of STND.MPI.18, STND.MPI.19, and STND.MPI.24, which STND.MPI 1.1 withdraws, and STND.CODE.29 in place of "
-    "STND.PY.17 and STND.JL.24, which STND.PY 1.3 and STND.JL 1.4 withdraw")
+    "STND.PY.17 and STND.JL.24, which STND.PY 1.3 and STND.JL 1.4 withdraw; References list STND.CODE")
 
 
 def apply_conc(root: Path, at: str) -> None:
@@ -88,7 +88,7 @@ PERF_READING = (
     "included, in place of leaving offloaded work to STND.OFFLD.31, whose second sentence STND.OFFLD 1.2 withdraws; "
     "STND.PERF.18 has an exclusion that follows no criterion recorded before the summary was seen recorded, with "
     "its criterion and when it was set, as a criterion set after the summary was seen, citing QA.12, in the words "
-    "of MEAS.7, in place of a decision under VV.3; the Notes follow")
+    "of MEAS.7, in place of a decision under VV.3; the Notes follow; References list QA")
 PERF_RATIONALE = (
     f"Minor amendment of STND.PERF, revision 1.1, ratified by the custodian on {F.DATE}: {PERF_READING}. The change "
     "is minor under STND.IDENT.3 because it widens the reach of a default to offloaded work and states the "
@@ -121,8 +121,8 @@ OFFLD31_BODY = ("Each measurement of the time of offloaded work SHOULD end at an
 OFFLD27 = [(
     "Where device code admits more than one size of group, its tests SHOULD run at more than one (VV.1).",
     "Where device code admits more than one size of group, its tests SHOULD run at more than one (VV.1). Tests that "
-    "meet the two sentences above MAY serve, for device code, as the tests at more than one number of tasks "
-    "that STND.CONC.24 asks (VV.1).")]
+    "meet the two sentences above MAY serve, for device code, as the tests across numbers of tasks that "
+    "STND.CONC.24 asks (VV.1).")]
 OFFLD_DOC = [
     ("These provisions remove none of STND.CONC: its bounded waits (STND.CONC.10), observed cancellation "
      "(STND.CONC.13), and tests at three or more numbers of tasks (STND.CONC.24) still apply to device code, and a "
@@ -158,7 +158,7 @@ OFFLD_READING = (
     "STND.OFFLD.31 keeps its first sentence, the end of each measurement of the time of offloaded work at an "
     "observed completion, and drops its second, the costs of first use, which the second sentence of STND.PERF.12 "
     "now holds for each measurement in a performance evaluation, offloaded work included; STND.OFFLD.27 lets its "
-    "tests of device code serve as the tests at more than one number of tasks of STND.CONC.24 for that code; the Notes "
+    "tests of device code serve as the tests across numbers of tasks of STND.CONC.24 for that code; the Notes "
     "state that STND.OFFLD.27 is the form of STND.CONC.24 for device code, and cite STND.PERF.12 for the costs of "
     "first use")
 OFFLD_RATIONALE = (
@@ -292,3 +292,33 @@ def apply_omp(root: Path, at: str) -> None:
         "each fact stays as the research recorded it, and only the way of naming a revision changes",
         f"Ruling D1 of {F.RECORD}; register entry R7.1 (CS15) of {REG}; decision 15 of {REC}.")
     F.finish(root, "STND/OMP", "STND.OMP", "1.0.3", "1.0.4", row, rat, at)
+
+
+# ---------------------------------------------------------------- STND.BUILD 1.0.3
+
+BUILD_DOC = [
+    ("and STND.CODE.21 advises against compiling code that holds a check of a floating-point value that STND.CODE.6 "
+     "or STND.CODE.16 governs under a setting that lets the compiler assume finite values, which STND.CXX.18 binds "
+     "for C++ and STND.STDC.40 for C.",
+     "and STND.CODE.21 forbids compiling code that holds a check of a floating-point value that STND.CODE.6 or "
+     "STND.CODE.16 governs under a setting that lets the compiler assume finite values, which STND.CXX.18 states "
+     "for C++ and STND.STDC.40 for C."),
+    ("which is why STND.CODE.21 advises against it for code that holds a required check of such a value, and "
+     "STND.CXX.18 and STND.STDC.40 keep it from such C++ and C code;",
+     "which is why STND.CODE.21 forbids it for code that holds a required check of such a value, and STND.CXX.18 "
+     "and STND.STDC.40 state the same for C++ and C code;"),
+]
+BUILD_READING = (
+    "the informative Notes say that STND.CODE.21 forbids, in place of advises against, a setting that lets the "
+    "compiler assume finite values for code that holds a required check of a floating-point value, and that "
+    "STND.CXX.18 and STND.STDC.40 state the same for C++ and C, in place of binding it alone")
+
+
+def apply_build(root: Path, at: str) -> None:
+    replace_text(Path(root), "STND/BUILD/_doc.md", BUILD_DOC)
+    row, rat = editorial(
+        "STND.BUILD", "1.0.3", BUILD_READING,
+        "the Notes describe STND.CODE.21 as STND.CODE 1.4 makes it, binding in every language, a change of that "
+        "standard and not of this one",
+        f"Ruling D1 of {F.RECORD}; register entry R6.2 (CL3) of {REG}; decisions 1 and 20 of {REC}.")
+    F.finish(root, "STND/BUILD", "STND.BUILD", "1.0.2", "1.0.3", row, rat, at)

@@ -92,7 +92,8 @@ FTN_READING = (
     "STND.FTN.37 is withdrawn, its outcome being STND.CODE.28 for every language, and the front matter lists both "
     "as withdrawn; STND.FTN.16 and STND.FTN.30 cite STND.CODE.14 in place of STND.FTN.29; the Purpose, the Notes on "
     "failures, comparisons, names, and the binding provisions follow; the Notes name the revisions of the Fortran "
-    "standard by their order in place of their numbers, which ruling D1 takes out of the Notes")
+    "standard by their order in place of their numbers, which ruling D1 takes out of the Notes; References drop "
+    "STND.LEAN and STND.STDC")
 FTN_RATIONALE = (
     f"Minor amendment of STND.FTN, revision 1.2, ratified by the custodian on {F.DATE}: {FTN_READING}. The change is "
     "minor under STND.IDENT.3 because it removes two provisions. STND.FTN.29 admitted no response that STND.CODE.14 "
@@ -159,7 +160,7 @@ LEAN_READING = (
     "STND.LEAN.25 is withdrawn, STND.CODE.14 holding the Lean responses, a result of a type that carries the "
     "condition and an error raised in a monad among them, and the front matter lists it as withdrawn; the Purpose, "
     "the Notes on programs, and the class paragraph drop it and cite STND.CODE.14; the Notes cite STND.CODE.28 for "
-    "the rule that STND.LEAN.27 states")
+    "the rule that STND.LEAN.27 states; References drop STND.PY")
 LEAN_RATIONALE = (
     f"Minor amendment of STND.LEAN, revision 1.1, ratified by the custodian on {F.DATE}: {LEAN_READING}. The change "
     "is minor under STND.IDENT.3 because it removes one provision. STND.LEAN.25 admitted no response that "
@@ -343,7 +344,8 @@ STDC_DOC = [
      "the second sentence of STND.STDC.22 ask their diagnosis"),
     ("STND.STDC.38 has the record say which a verification is, and for data races one record meets it and "
      "STND.CONC.27.",
-     "STND.CODE.34 has a claim that rests on a verification name its means, STND.STDC.38 has the record say which a "
+     "The record of a verification is a record of a result under STND.CODE.34, which has a claim that rests on a "
+     "verification name its means; STND.STDC.38 has the record say which a "
      "verification is, and for data races one record meets STND.STDC.38 and STND.CONC.27."),
     ("and the binding form stays for C by the ratification of 2026-10-24, while STND.CODE.21 is the default for "
      "every other language.",
@@ -351,8 +353,8 @@ STDC_DOC = [
      "language."),
     ("STND.CODE.6, STND.CODE.7, STND.CODE.14, STND.CODE.15, STND.CODE.16, and STND.CODE.18, carry the floor "
      "arguments",
-     "STND.CODE.6, STND.CODE.7, STND.CODE.14, STND.CODE.15, STND.CODE.16, STND.CODE.18, STND.CODE.21, and "
-     "STND.CODE.34, carry the floor arguments"),
+     "STND.CODE.6, STND.CODE.7, STND.CODE.14, STND.CODE.15, STND.CODE.16, STND.CODE.18, and STND.CODE.21, carry "
+     "the floor arguments"),
     ("STND.STDC.7 rests on DSGN.4 and the first sentence of STND.STDC.29 on DSGN.5, and apply from CSQ2, as "
      "STND.CXX.6 and STND.CXX.21 do; the second sentence of STND.STDC.29 rests on REPRO.7 and STND.CODE.4 and "
      "applies from CSQ3.",
@@ -364,19 +366,19 @@ STDC_READING = (
     "through a declaration that diagnoses an ignored result, which STND.CODE.35 holds for every language, keeps the "
     "suppression at a call whose failure the test of STND.STDC.28 or an error handler that ends the run receives, "
     "and is retitled Suppressions where tests receive failures; STND.STDC.38 drops the statement of the means, "
-    "which STND.CODE.34 binds for every language, and keeps whether the documentation of each means states it as "
+    "which STND.CODE.34 states for every language, and keeps whether the documentation of each means states it as "
     "sound; the row of STND.CXX.25 in the table of STND.STDC.1 names the guide of STND.CXX.1 in place of the Core "
     "Guidelines; the Purpose and the Notes follow, the Notes cite the sources of the facts of C without the numbers "
     "of the drafts of the ISO C standard, which ruling D1 takes out of the Notes, and the class paragraph drops the "
-    "onset of the first sentence of STND.STDC.29")
+    "onset of the first sentence of STND.STDC.29; References drop STND.LEAN")
 STDC_RATIONALE = (
     f"Minor amendment of STND.STDC, revision 1.3, ratified by the custodian on {F.DATE}: {STDC_READING}. The change "
     "is minor under STND.IDENT.3 because it removes the parts of two defaults whose outcomes STND.CODE now holds. "
     "The custodian ruled under D1 that one provision holds each outcome for every language. C code keeps each "
-    "outcome: STND.CODE.35 asks the declaration of STND.STDC.29 in the same words, and STND.CODE.34 binds the "
-    "statement of the means of a claim that C code is free of a kind of undefined behavior, which STND.STDC.38 "
-    "asked as a default from CSQ2; that binding rests on PRIME.2 at the cost of one sentence for each claim, the "
-    "floor argument in the Notes of STND.CODE. STND.STDC.39 and STND.STDC.40 stay, since the Notes of STND.SV and "
+    "outcome: STND.CODE.35 asks the declaration of STND.STDC.29 in the same words, and STND.CODE.34 asks, as a "
+    "default from CSQ2 as STND.STDC.38 did, the statement of the means of a claim that C code is free of a kind of "
+    "undefined behavior; the Notes read the record of a verification as a record of a result under STND.CODE.34, "
+    "so that the record that STND.STDC.38 reached stays reached. STND.STDC.39 and STND.STDC.40 stay, since the Notes of STND.SV and "
     "STND.BUILD cite them; a later round withdraws them. Class onsets: STND.STDC.29 now applies from CSQ3, its "
     "first sentence having moved with the onset of CSQ2 to STND.CODE.35; STND.STDC.38 stays at CSQ2."
     + tail(f"Ruling D1 of {F.RECORD}; register entries R6.2 (CL3, CL10, CL13, CL14, CL17) and R7.1 of {REG}; decisions 1, 7, 8, 9, 10, "
@@ -655,6 +657,8 @@ def apply_py(root: Path, at: str) -> None:
 
 # ---------------------------------------------------------------- STND.RUST 1.3
 
+RUST34_BODY = ("Each claim that STND.CODE.34 governs and that concerns Rust code of the work SHALL meet "
+               "STND.CODE.34 (PRIME.2).")
 RUST31 = [(" Those static checks SHOULD also decide each provision of this standard whose compliance a static check "
            "of Rust source is able to decide (DSGN.3).", "")]
 RUST_DOC = [
@@ -664,11 +668,11 @@ RUST_DOC = [
      "(STND.RUST.28, STND.RUST.29, and STND.RUST.30); the checks of Rust code, unsafe code among it, with the claims "
      "that rest on them (STND.RUST.31 to STND.RUST.34); and the conventions of names (STND.RUST.35).",
      "build scripts of dependencies and crate features (STND.RUST.28 and STND.RUST.29); and the checks of Rust "
-     "code, unsafe code among it (STND.RUST.31, STND.RUST.32, and STND.RUST.33)."),
+     "code, unsafe code among it, with the claims that rest on them (STND.RUST.31 to STND.RUST.34)."),
     ("STND.RUST.13 and STND.RUST.15 instantiate PRIME.4, STND.RUST.34 instantiates PRIME.2, and STND.RUST.6 "
      "instantiates GOV.48 and binds agents alone; these four are binding at every class.",
-     "STND.RUST.15 instantiates PRIME.4, and STND.RUST.6 instantiates GOV.48 and binds agents alone; these two are "
-     "binding at every class."),
+     "STND.RUST.15 instantiates PRIME.4, STND.RUST.34 instantiates PRIME.2, and STND.RUST.6 instantiates GOV.48 and "
+     "binds agents alone; these three are binding at every class."),
     ("in STND.CODE (STND.CODE.14 to STND.CODE.21);", "in STND.CODE (STND.CODE.14 to STND.CODE.35);"),
     ("hence the dependencies in STND.RUST.34.", "hence the dependencies in STND.CODE.34."),
     ("STND.RUST.13 lists the responses that PRIME.4 admits in Rust, and the other provisions refer to it; its first "
@@ -693,8 +697,8 @@ RUST_DOC = [
      "and the warnings of the compiler fail the checks under STND.BUILD.12; STND.CODE.32 has those checks decide "
      "each provision of this standard that a static check among the means of the work is able to decide."),
     ("STND.RUST.34 reaches the claims in a report, in the record of a result or of a release, and in a review;",
-     "STND.CODE.34 reaches the claims in a report, in the record of a result or of a release, and in a review, a "
-     "claim that a module is a sound module among them;"),
+     "STND.CODE.34, which STND.RUST.34 binds for Rust code, reaches the claims in a report, in the record of a "
+     "result or of a release, and in a review, a claim that a module is a sound module among them;"),
     ("STND.RUST.35 leaves the convention to the repository configuration, as STND.STDC.39 and STND.LEAN.27 do.",
      "STND.CODE.28 leaves the convention of Rust source to the repository configuration, since this standard gives "
      "none."),
@@ -710,28 +714,32 @@ RUST_DOC = [
      "that answers a listed condition and that no other response answers, and asks only for the actionable "
      "diagnosis that PRIME.4 names; its third keeps a record that no person sees from counting as visible, as "
      "STND.PY.22 does. ", ""),
-    (" STND.RUST.34 asks of a claim of soundness in a report, a record, or a review that it state the means that "
-     "checked it and not extend beyond what they covered; PRIME.2 already forbids misrepresenting the status of "
-     "evidence, and the cost is one sentence for each such claim.", ""),
+    ("STND.RUST.34 asks of a claim of soundness in a report, a record, or a review that it state the means that "
+     "checked it and not extend beyond what they covered;",
+     "STND.RUST.34 binds for Rust code the claims of STND.CODE.34, that each state the means that checked it and "
+     "not extend beyond what they covered;"),
 ]
 RUST_READING = (
-    "STND.RUST.13, STND.RUST.30, STND.RUST.34, and STND.RUST.35 are withdrawn, their outcomes being STND.CODE.14, "
-    "STND.CODE.33, STND.DEPS.13, STND.CODE.34, and STND.CODE.28 for every language, and the front matter lists them "
-    "as withdrawn; STND.RUST.11 cites STND.CODE.14 in place of STND.RUST.13; STND.RUST.31 drops its second "
+    "STND.RUST.13, STND.RUST.30, and STND.RUST.35 are withdrawn, their outcomes being STND.CODE.14, STND.CODE.33, "
+    "STND.DEPS.13, and STND.CODE.28 for every language, and the front matter lists them as withdrawn; STND.RUST.34 "
+    "keeps the claims of soundness binding for Rust by binding STND.CODE.34, which states them for every language "
+    "as a default; STND.RUST.11 cites STND.CODE.14 in place of STND.RUST.13; STND.RUST.31 drops its second "
     "sentence, which STND.CODE.32 holds; the Purpose, the Notes on failures, packages, checking, names, and the "
-    "floor, and the class paragraph drop the withdrawn provisions and cite those that hold their outcomes")
+    "floor, and the class paragraph drop the withdrawn provisions and cite those that hold their outcomes; "
+    "References drop STND.LEAN and STND.STDC")
 RUST_RATIONALE = (
     f"Minor amendment of STND.RUST, revision 1.3, ratified by the custodian on {F.DATE}: {RUST_READING}. The change "
-    "is minor under STND.IDENT.3 because it removes four provisions and one sentence. The custodian ruled under D1 "
+    "is minor under STND.IDENT.3 because it removes three provisions and one sentence and rewords one binding provision. The custodian ruled under D1 "
     "that one provision holds each outcome for every language and that STND.CODE.14 carries the forms of each "
     "language. Rust code keeps each outcome: the panic and the returned condition are forms of STND.CODE.14, its "
     "second sentence keeps a record of library code from being the only visible degradation, STND.CODE.33 asks of "
     "a replaced panic hook or a defined panic handler the diagnosis that the second sentence of STND.RUST.13 asked, "
-    "STND.CODE.34 binds the claims of STND.RUST.34 in the same words with soundness as the claim that no use of an "
-    "interface is able to cause undefined behavior, STND.DEPS.13 has builds use the locked revisions, and "
+    "STND.RUST.34 binds for Rust code STND.CODE.34, which states the claims that STND.RUST.34 stated in the same "
+    "words, soundness being the claim that no use of an interface is able to cause undefined behavior, so the claims "
+    "bind in Rust as before, at the cost of one sentence for each claim (PRIME.2), STND.DEPS.13 has builds use the locked revisions, and "
     "STND.CODE.28 holds the rule of names. STND.CODE.32 has the static checks decide each provision that a static "
     "check among the means of the work is able to decide, where the withdrawn sentence named each that a static "
-    "check of Rust source is able to decide, a narrowing of a default. STND.RUST.6 and STND.RUST.15 stay binding, "
+    "check of Rust source is able to decide, a narrowing of a default. STND.RUST.6, STND.RUST.15, and STND.RUST.34 stay binding, "
     "and nothing binds that did not, so no floor is raised (GOV.11). Class onsets: unchanged. The withdrawn "
     "identifiers are listed in the field withdrawn and are never given to another provision (STND.IDENT.14)."
     + tail(f"Ruling D1 of {F.RECORD}; register entry R6.2 (CL4, CL5, CL8, CL10, CL18, CL23, CL25) of {REG}; "
@@ -743,9 +751,11 @@ def apply_rust(root: Path, at: str) -> None:
     edit(root, "STND/RUST/11.md", [("by a response of STND.RUST.13 other than a panic",
                                     "by a response of STND.CODE.14 other than a panic")],
          refers_to=["STND.CODE.14", "STND.CODE.12"])
-    F.withdraw(root, "STND/RUST", "STND.RUST", [13, 30, 34, 35])
+    F.withdraw(root, "STND/RUST", "STND.RUST", [13, 30, 35])
+    F.set_body(root, "STND/RUST/34.md", RUST34_BODY, refers_to=["STND.CODE.34"])
     replace_text(root, "STND/RUST/31.md", RUST31)
     F.check_fields(root, ["STND.RUST.11", "STND.RUST.31"])
+    F.check_fields(root, ["STND.RUST.34"], binding=True)
     replace_text(root, "STND/RUST/_doc.md", RUST_DOC)
     row = f"| 1.3 | {F.DATE} | Minor amendment (GOV.41): {RUST_READING}. |"
     F.finish(root, "STND/RUST", "STND.RUST", "1.2", "1.3", row, RUST_RATIONALE, at)

@@ -1,6 +1,6 @@
 # Round d: pairs whose changed side is a provision that round d changes
 
-Listed by `govharness pairs` on a kept copy of the corpus after round d, for each of the fourteen documents that the round changes (STND.HARN.28). Only the pairs whose changed side is a provision that round d adds or amends are kept here; a pair that several documents list appears once. 334 pairs, none a conflict. Each section gives the changed provision, the reason that holds for each of its pairs, and the pairs with their verdicts.
+Listed by `govharness pairs` on a kept copy of the corpus after rounds a and d (`ROUNDS=apply_round_a_2026_10_28,apply_round_d_2026_10_28`), for each of the fifteen documents that round d changes (STND.HARN.28). Only the pairs whose changed side is a provision that round d adds or amends are kept; a pair that several documents list appears once. 403 pairs, none a conflict. Each section gives the changed provision, the reason that holds for each of its pairs, and the pairs with their verdicts.
 
 ## STND.CODE.14
 
@@ -114,15 +114,79 @@ Asks the diagnosis of a listed condition from a hook or handler that the work in
 
 ## STND.CODE.34
 
-Limits a claim of freedom from undefined behavior to its means; AGENT.3, AGENT.4, AGENT.5, AGENT.47, and NUMER.26 forbid misstated evidence in other forms, and none admits a wider claim.
+A default that limits a claim of freedom from undefined behavior to its means, as the limits of the evidence (INTPR.10, VV.1); the paired provisions ask evidence and stated limits of validity of other kinds, which the statement serves, and none admits a wider claim.
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 55 | AGENT.3 | PRIME.2 | none |
-| 56 | AGENT.4 | PRIME.2 | none |
-| 57 | AGENT.47 | PRIME.2 | none |
-| 58 | AGENT.5 | PRIME.2 | none |
-| 59 | NUMER.26 | PRIME.2 | none |
+| 55 | AGENT.12 | VV.1 | none |
+| 56 | AGENT.41 | INTPR.10 | none |
+| 57 | CPS.4 | VV.1 | none |
+| 58 | CPS.6 | VV.1 | none |
+| 59 | CPS.8 | VV.1 | none |
+| 60 | HDES.10 | INTPR.10, VV.1 | none |
+| 61 | HDES.11 | VV.1 | none |
+| 62 | HDES.12 | VV.1 | none |
+| 63 | HDES.15 | VV.1 | none |
+| 64 | HDES.5 | INTPR.10 | none |
+| 65 | HDES.6 | INTPR.10, VV.1 | none |
+| 66 | HDES.7 | VV.1 | none |
+| 67 | HDES.8 | INTPR.10, VV.1 | none |
+| 68 | HDES.9 | INTPR.10, VV.1 | none |
+| 69 | HDES.ASIC.10 | VV.1 | none |
+| 70 | HDES.ASIC.11 | INTPR.10, VV.1 | none |
+| 71 | HDES.ASIC.12 | INTPR.10, VV.1 | none |
+| 72 | HDES.ASIC.3 | INTPR.10, VV.1 | none |
+| 73 | HDES.ASIC.4 | VV.1 | none |
+| 74 | HDES.ASIC.5 | INTPR.10, VV.1 | none |
+| 75 | HDES.ASIC.6 | VV.1 | none |
+| 76 | HDES.ASIC.7 | VV.1 | none |
+| 77 | HDES.ASIC.8 | VV.1 | none |
+| 78 | HDES.ASIC.9 | VV.1 | none |
+| 79 | HDES.FPGA.3 | VV.1 | none |
+| 80 | HDES.FPGA.5 | VV.1 | none |
+| 81 | HW.10 | INTPR.10, VV.1 | none |
+| 82 | HW.15 | VV.1 | none |
+| 83 | HW.16 | VV.1 | none |
+| 84 | HW.17 | INTPR.10, VV.1 | none |
+| 85 | HW.18 | INTPR.10 | none |
+| 86 | HW.20 | VV.1 | none |
+| 87 | HW.6 | VV.1 | none |
+| 88 | HW.7 | INTPR.10 | none |
+| 89 | HW.ASIC.4 | INTPR.10, VV.1 | none |
+| 90 | HW.CPU.3 | INTPR.10 | none |
+| 91 | HW.EMBED.3 | VV.1 | none |
+| 92 | HW.EMBED.4 | VV.1 | none |
+| 93 | HW.EMBED.6 | INTPR.10 | none |
+| 94 | HW.FPGA.4 | INTPR.10, VV.1 | none |
+| 95 | HW.QPU.5 | INTPR.10, VV.1 | none |
+| 96 | HW.QPU.6 | VV.1 | none |
+| 97 | HW.QPU.7 | INTPR.10, VV.1 | none |
+| 98 | HW.QPU.8 | INTPR.10 | none |
+| 99 | MEAS.5 | INTPR.10 | none |
+| 100 | MEAS.6 | INTPR.10 | none |
+| 101 | ML.4 | VV.1 | none |
+| 102 | ML.5 | INTPR.10, VV.1 | none |
+| 103 | ML.6 | INTPR.10 | none |
+| 104 | NUMER.11 | VV.1 | none |
+| 105 | NUMER.12 | INTPR.10, VV.1 | none |
+| 106 | NUMER.13 | VV.1 | none |
+| 107 | NUMER.14 | VV.1 | none |
+| 108 | NUMER.16 | INTPR.10 | none |
+| 109 | NUMER.17 | VV.1 | none |
+| 110 | NUMER.18 | INTPR.10 | none |
+| 111 | NUMER.19 | VV.1 | none |
+| 112 | NUMER.20 | INTPR.10 | none |
+| 113 | NUMER.22 | VV.1 | none |
+| 114 | NUMER.23 | VV.1 | none |
+| 115 | NUMER.24 | VV.1 | none |
+| 116 | NUMER.25 | VV.1 | none |
+| 117 | NUMER.28 | VV.1 | none |
+| 118 | NUMER.29 | VV.1 | none |
+| 119 | NUMER.5 | VV.1 | none |
+| 120 | NUMER.6 | VV.1 | none |
+| 121 | NUMER.7 | VV.1 | none |
+| 122 | NUMER.8 | VV.1 | none |
+| 123 | NUMER.9 | VV.1 | none |
 
 ## STND.CODE.35
 
@@ -130,30 +194,30 @@ A declaration that diagnoses an ignored failure result of a dependency is one mo
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 60 | CPS.3 | DSGN.5 | none |
-| 61 | CPS.4 | DSGN.5 | none |
-| 62 | CPS.8 | DSGN.5 | none |
-| 63 | HDES.10 | DSGN.5 | none |
-| 64 | HDES.12 | DSGN.5 | none |
-| 65 | HDES.15 | DSGN.5 | none |
-| 66 | HDES.4 | DSGN.5 | none |
-| 67 | HDES.5 | DSGN.5 | none |
-| 68 | HDES.7 | DSGN.5 | none |
-| 69 | HDES.ASIC.3 | DSGN.5 | none |
-| 70 | HDES.ASIC.4 | DSGN.5 | none |
-| 71 | HDES.ASIC.5 | DSGN.5 | none |
-| 72 | HDES.ASIC.7 | DSGN.5 | none |
-| 73 | HDES.FPGA.3 | DSGN.5 | none |
-| 74 | HDES.FPGA.5 | DSGN.5 | none |
-| 75 | HW.13 | DSGN.5 | none |
-| 76 | HW.18 | DSGN.5 | none |
-| 77 | HW.4 | DSGN.5 | none |
-| 78 | HW.5 | DSGN.5 | none |
-| 79 | HW.6 | DSGN.5 | none |
-| 80 | HW.7 | DSGN.5 | none |
-| 81 | HW.CPU.3 | DSGN.5 | none |
-| 82 | HW.EMBED.4 | DSGN.5 | none |
-| 83 | NUMER.5 | DSGN.5 | none |
+| 124 | CPS.3 | DSGN.5 | none |
+| 125 | CPS.4 | DSGN.5 | none |
+| 126 | CPS.8 | DSGN.5 | none |
+| 127 | HDES.10 | DSGN.5 | none |
+| 128 | HDES.12 | DSGN.5 | none |
+| 129 | HDES.15 | DSGN.5 | none |
+| 130 | HDES.4 | DSGN.5 | none |
+| 131 | HDES.5 | DSGN.5 | none |
+| 132 | HDES.7 | DSGN.5 | none |
+| 133 | HDES.ASIC.3 | DSGN.5 | none |
+| 134 | HDES.ASIC.4 | DSGN.5 | none |
+| 135 | HDES.ASIC.5 | DSGN.5 | none |
+| 136 | HDES.ASIC.7 | DSGN.5 | none |
+| 137 | HDES.FPGA.3 | DSGN.5 | none |
+| 138 | HDES.FPGA.5 | DSGN.5 | none |
+| 139 | HW.13 | DSGN.5 | none |
+| 140 | HW.18 | DSGN.5 | none |
+| 141 | HW.4 | DSGN.5 | none |
+| 142 | HW.5 | DSGN.5 | none |
+| 143 | HW.6 | DSGN.5 | none |
+| 144 | HW.7 | DSGN.5 | none |
+| 145 | HW.CPU.3 | DSGN.5 | none |
+| 146 | HW.EMBED.4 | DSGN.5 | none |
+| 147 | NUMER.5 | DSGN.5 | none |
 
 ## STND.CXX.1
 
@@ -161,11 +225,11 @@ The named guide moves to the repository configuration; the paired NUMER and AGEN
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 84 | AGENT.22 | REPRO.7 | none |
-| 85 | NUMER.16 | REPRO.7 | none |
-| 86 | NUMER.3 | REPRO.7 | none |
-| 87 | NUMER.4 | INTPR.1 | none |
-| 88 | NUMER.5 | REPRO.7 | none |
+| 148 | AGENT.22 | REPRO.7 | none |
+| 149 | NUMER.16 | REPRO.7 | none |
+| 150 | NUMER.3 | REPRO.7 | none |
+| 151 | NUMER.4 | INTPR.1 | none |
+| 152 | NUMER.5 | REPRO.7 | none |
 
 ## STND.CXX.14
 
@@ -173,7 +237,7 @@ The exemption for names from notation moves to STND.CODE.28, which NUMER.4 is se
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 89 | NUMER.4 | INTPR.1 | none |
+| 153 | NUMER.4 | INTPR.1 | none |
 
 ## STND.DEPS.13
 
@@ -181,16 +245,16 @@ Builds at locked revisions reproduce the environment that HW.3, HDES.3, ML.3, ME
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 90 | HDES.3 | REPRO.1 | none |
-| 91 | HDES.ASIC.12 | REPRO.1 | none |
-| 92 | HDES.FPGA.4 | REPRO.1 | none |
-| 93 | HW.3 | REPRO.1 | none |
-| 94 | HW.ASIC.3 | REPRO.1 | none |
-| 95 | HW.EMBED.5 | REPRO.1 | none |
-| 96 | HW.FPGA.3 | REPRO.1 | none |
-| 97 | HW.QPU.3 | REPRO.1 | none |
-| 98 | MEAS.4 | REPRO.1 | none |
-| 99 | ML.3 | REPRO.1 | none |
+| 154 | HDES.3 | REPRO.1 | none |
+| 155 | HDES.ASIC.12 | REPRO.1 | none |
+| 156 | HDES.FPGA.4 | REPRO.1 | none |
+| 157 | HW.3 | REPRO.1 | none |
+| 158 | HW.ASIC.3 | REPRO.1 | none |
+| 159 | HW.EMBED.5 | REPRO.1 | none |
+| 160 | HW.FPGA.3 | REPRO.1 | none |
+| 161 | HW.QPU.3 | REPRO.1 | none |
+| 162 | MEAS.4 | REPRO.1 | none |
+| 163 | ML.3 | REPRO.1 | none |
 
 ## STND.FTN.30
 
@@ -198,9 +262,9 @@ Citation of STND.CODE.14 in place of STND.FTN.29, the same responses; HW.8, HDES
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 100 | HDES.14 | PRIME.4 | none |
-| 101 | HW.8 | PRIME.4 | none |
-| 102 | HW.GPU.3 | PRIME.4 | none |
+| 164 | HDES.14 | PRIME.4 | none |
+| 165 | HW.8 | PRIME.4 | none |
+| 166 | HW.GPU.3 | PRIME.4 | none |
 
 ## STND.JL.14
 
@@ -208,9 +272,9 @@ Citation of STND.CODE.14 in place of STND.JL.15, the same responses; no conflict
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 103 | HDES.14 | PRIME.4 | none |
-| 104 | HW.8 | PRIME.4 | none |
-| 105 | HW.GPU.3 | PRIME.4 | none |
+| 167 | HDES.14 | PRIME.4 | none |
+| 168 | HW.8 | PRIME.4 | none |
+| 169 | HW.GPU.3 | PRIME.4 | none |
 
 ## STND.JL.15
 
@@ -218,9 +282,9 @@ Keeps only the levels of a logged degradation; narrower than before, and consist
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 106 | HDES.14 | PRIME.4 | none |
-| 107 | HW.8 | PRIME.4 | none |
-| 108 | HW.GPU.3 | PRIME.4 | none |
+| 170 | HDES.14 | PRIME.4 | none |
+| 171 | HW.8 | PRIME.4 | none |
+| 172 | HW.GPU.3 | PRIME.4 | none |
 
 ## STND.JL.31
 
@@ -228,12 +292,12 @@ Drops a sentence that STND.DOCS.13 holds; the paired VV.8 provisions ask regress
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 109 | CPS.3 | VV.8 | none |
-| 110 | HDES.6 | VV.8 | none |
-| 111 | HW.7 | VV.8 | none |
-| 112 | HW.CPU.3 | VV.8 | none |
-| 113 | HW.EMBED.5 | VV.8 | none |
-| 114 | ML.7 | VV.8 | none |
+| 173 | CPS.3 | VV.8 | none |
+| 174 | HDES.6 | VV.8 | none |
+| 175 | HW.7 | VV.8 | none |
+| 176 | HW.CPU.3 | VV.8 | none |
+| 177 | HW.EMBED.5 | VV.8 | none |
+| 178 | ML.7 | VV.8 | none |
 
 ## STND.OFFLD.27
 
@@ -241,62 +305,62 @@ The permission lets device-code tests serve as those of STND.CONC.24; the paired
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 115 | AGENT.12 | VV.1 | none |
-| 116 | CPS.4 | VV.1 | none |
-| 117 | CPS.6 | VV.1 | none |
-| 118 | CPS.8 | VV.1 | none |
-| 119 | HDES.10 | VV.1 | none |
-| 120 | HDES.11 | VV.1 | none |
-| 121 | HDES.12 | VV.1 | none |
-| 122 | HDES.15 | VV.1 | none |
-| 123 | HDES.6 | VV.1 | none |
-| 124 | HDES.7 | VV.1 | none |
-| 125 | HDES.8 | VV.1 | none |
-| 126 | HDES.9 | VV.1 | none |
-| 127 | HDES.ASIC.10 | VV.1 | none |
-| 128 | HDES.ASIC.11 | VV.1 | none |
-| 129 | HDES.ASIC.12 | VV.1 | none |
-| 130 | HDES.ASIC.3 | VV.1 | none |
-| 131 | HDES.ASIC.4 | VV.1 | none |
-| 132 | HDES.ASIC.5 | VV.1 | none |
-| 133 | HDES.ASIC.6 | VV.1 | none |
-| 134 | HDES.ASIC.7 | VV.1 | none |
-| 135 | HDES.ASIC.8 | VV.1 | none |
-| 136 | HDES.ASIC.9 | VV.1 | none |
-| 137 | HDES.FPGA.3 | VV.1 | none |
-| 138 | HDES.FPGA.5 | VV.1 | none |
-| 139 | HW.10 | VV.1 | none |
-| 140 | HW.15 | VV.1 | none |
-| 141 | HW.16 | VV.1 | none |
-| 142 | HW.17 | VV.1 | none |
-| 143 | HW.20 | VV.1 | none |
-| 144 | HW.6 | VV.1 | none |
-| 145 | HW.ASIC.4 | VV.1 | none |
-| 146 | HW.EMBED.3 | VV.1 | none |
-| 147 | HW.EMBED.4 | VV.1 | none |
-| 148 | HW.FPGA.4 | VV.1 | none |
-| 149 | HW.QPU.5 | VV.1 | none |
-| 150 | HW.QPU.6 | VV.1 | none |
-| 151 | HW.QPU.7 | VV.1 | none |
-| 152 | ML.4 | VV.1 | none |
-| 153 | ML.5 | VV.1 | none |
-| 154 | NUMER.11 | VV.1 | none |
-| 155 | NUMER.12 | VV.1 | none |
-| 156 | NUMER.13 | VV.1 | none |
-| 157 | NUMER.14 | VV.1 | none |
-| 158 | NUMER.17 | VV.1 | none |
-| 159 | NUMER.19 | VV.1 | none |
-| 160 | NUMER.22 | VV.1 | none |
-| 161 | NUMER.23 | VV.1 | none |
-| 162 | NUMER.24 | VV.1 | none |
-| 163 | NUMER.25 | VV.1 | none |
-| 164 | NUMER.28 | VV.1 | none |
-| 165 | NUMER.29 | VV.1 | none |
-| 166 | NUMER.5 | VV.1 | none |
-| 167 | NUMER.6 | VV.1 | none |
-| 168 | NUMER.7 | VV.1 | none |
-| 169 | NUMER.8 | VV.1 | none |
-| 170 | NUMER.9 | VV.1 | none |
+| 179 | AGENT.12 | VV.1 | none |
+| 180 | CPS.4 | VV.1 | none |
+| 181 | CPS.6 | VV.1 | none |
+| 182 | CPS.8 | VV.1 | none |
+| 183 | HDES.10 | VV.1 | none |
+| 184 | HDES.11 | VV.1 | none |
+| 185 | HDES.12 | VV.1 | none |
+| 186 | HDES.15 | VV.1 | none |
+| 187 | HDES.6 | VV.1 | none |
+| 188 | HDES.7 | VV.1 | none |
+| 189 | HDES.8 | VV.1 | none |
+| 190 | HDES.9 | VV.1 | none |
+| 191 | HDES.ASIC.10 | VV.1 | none |
+| 192 | HDES.ASIC.11 | VV.1 | none |
+| 193 | HDES.ASIC.12 | VV.1 | none |
+| 194 | HDES.ASIC.3 | VV.1 | none |
+| 195 | HDES.ASIC.4 | VV.1 | none |
+| 196 | HDES.ASIC.5 | VV.1 | none |
+| 197 | HDES.ASIC.6 | VV.1 | none |
+| 198 | HDES.ASIC.7 | VV.1 | none |
+| 199 | HDES.ASIC.8 | VV.1 | none |
+| 200 | HDES.ASIC.9 | VV.1 | none |
+| 201 | HDES.FPGA.3 | VV.1 | none |
+| 202 | HDES.FPGA.5 | VV.1 | none |
+| 203 | HW.10 | VV.1 | none |
+| 204 | HW.15 | VV.1 | none |
+| 205 | HW.16 | VV.1 | none |
+| 206 | HW.17 | VV.1 | none |
+| 207 | HW.20 | VV.1 | none |
+| 208 | HW.6 | VV.1 | none |
+| 209 | HW.ASIC.4 | VV.1 | none |
+| 210 | HW.EMBED.3 | VV.1 | none |
+| 211 | HW.EMBED.4 | VV.1 | none |
+| 212 | HW.FPGA.4 | VV.1 | none |
+| 213 | HW.QPU.5 | VV.1 | none |
+| 214 | HW.QPU.6 | VV.1 | none |
+| 215 | HW.QPU.7 | VV.1 | none |
+| 216 | ML.4 | VV.1 | none |
+| 217 | ML.5 | VV.1 | none |
+| 218 | NUMER.11 | VV.1 | none |
+| 219 | NUMER.12 | VV.1 | none |
+| 220 | NUMER.13 | VV.1 | none |
+| 221 | NUMER.14 | VV.1 | none |
+| 222 | NUMER.17 | VV.1 | none |
+| 223 | NUMER.19 | VV.1 | none |
+| 224 | NUMER.22 | VV.1 | none |
+| 225 | NUMER.23 | VV.1 | none |
+| 226 | NUMER.24 | VV.1 | none |
+| 227 | NUMER.25 | VV.1 | none |
+| 228 | NUMER.28 | VV.1 | none |
+| 229 | NUMER.29 | VV.1 | none |
+| 230 | NUMER.5 | VV.1 | none |
+| 231 | NUMER.6 | VV.1 | none |
+| 232 | NUMER.7 | VV.1 | none |
+| 233 | NUMER.8 | VV.1 | none |
+| 234 | NUMER.9 | VV.1 | none |
 
 ## STND.OFFLD.31
 
@@ -304,11 +368,11 @@ Keeps only the end of a timing at observed completion; HW.22, HW.CPU.4, HW.GPU.4
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 171 | HW.22 | RSRC.4 | none |
-| 172 | HW.CPU.4 | RSRC.4 | none |
-| 173 | HW.GPU.4 | RSRC.4 | none |
-| 174 | HW.QPU.8 | RSRC.4 | none |
-| 175 | NUMER.17 | RSRC.4 | none |
+| 235 | HW.22 | RSRC.4 | none |
+| 236 | HW.CPU.4 | RSRC.4 | none |
+| 237 | HW.GPU.4 | RSRC.4 | none |
+| 238 | HW.QPU.8 | RSRC.4 | none |
+| 239 | NUMER.17 | RSRC.4 | none |
 
 ## STND.PERF.12
 
@@ -316,24 +380,24 @@ Now reaches offloaded work in a performance evaluation; the paired RSRC.4 and VV
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 176 | AGENT.5 | VV.3 | none |
-| 177 | HDES.4 | VV.3 | none |
-| 178 | HW.16 | VV.3 | none |
-| 179 | HW.17 | VV.3 | none |
-| 180 | HW.18 | VV.3 | none |
-| 181 | HW.22 | RSRC.4 | none |
-| 182 | HW.CPU.4 | RSRC.4 | none |
-| 183 | HW.GPU.4 | RSRC.4 | none |
-| 184 | HW.QPU.8 | RSRC.4 | none |
-| 185 | MEAS.7 | VV.3 | none |
-| 186 | NUMER.11 | VV.3 | none |
-| 187 | NUMER.17 | RSRC.4 | none |
-| 188 | NUMER.19 | VV.3 | none |
-| 189 | NUMER.25 | VV.3 | none |
-| 190 | NUMER.26 | VV.3 | none |
-| 191 | NUMER.28 | VV.3 | none |
-| 192 | NUMER.3 | VV.3 | none |
-| 193 | NUMER.7 | VV.3 | none |
+| 240 | AGENT.5 | VV.3 | none |
+| 241 | HDES.4 | VV.3 | none |
+| 242 | HW.16 | VV.3 | none |
+| 243 | HW.17 | VV.3 | none |
+| 244 | HW.18 | VV.3 | none |
+| 245 | HW.22 | RSRC.4 | none |
+| 246 | HW.CPU.4 | RSRC.4 | none |
+| 247 | HW.GPU.4 | RSRC.4 | none |
+| 248 | HW.QPU.8 | RSRC.4 | none |
+| 249 | MEAS.7 | VV.3 | none |
+| 250 | NUMER.11 | VV.3 | none |
+| 251 | NUMER.17 | RSRC.4 | none |
+| 252 | NUMER.19 | VV.3 | none |
+| 253 | NUMER.25 | VV.3 | none |
+| 254 | NUMER.26 | VV.3 | none |
+| 255 | NUMER.28 | VV.3 | none |
+| 256 | NUMER.3 | VV.3 | none |
+| 257 | NUMER.7 | VV.3 | none |
 
 ## STND.PERF.18
 
@@ -341,22 +405,22 @@ Now records a post-hoc exclusion as MEAS.7 does, with QA.12 cited; it agrees wit
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 194 | AGENT.5 | VV.3 | none |
-| 195 | HDES.4 | VV.3 | none |
-| 196 | HW.16 | VV.3 | none |
-| 197 | HW.17 | VV.3 | none |
-| 198 | HW.18 | VV.3 | none |
-| 199 | MEAS.3 | REPRO.6 | none |
-| 200 | MEAS.5 | REPRO.6 | none |
-| 201 | MEAS.7 | REPRO.6, VV.3 | none |
-| 202 | NUMER.11 | VV.3 | none |
-| 203 | NUMER.15 | REPRO.6 | none |
-| 204 | NUMER.19 | VV.3 | none |
-| 205 | NUMER.25 | VV.3 | none |
-| 206 | NUMER.26 | VV.3 | none |
-| 207 | NUMER.28 | VV.3 | none |
-| 208 | NUMER.3 | VV.3 | none |
-| 209 | NUMER.7 | VV.3 | none |
+| 258 | AGENT.5 | VV.3 | none |
+| 259 | HDES.4 | VV.3 | none |
+| 260 | HW.16 | VV.3 | none |
+| 261 | HW.17 | VV.3 | none |
+| 262 | HW.18 | VV.3 | none |
+| 263 | MEAS.3 | REPRO.6 | none |
+| 264 | MEAS.5 | REPRO.6 | none |
+| 265 | MEAS.7 | REPRO.6, VV.3 | none |
+| 266 | NUMER.11 | VV.3 | none |
+| 267 | NUMER.15 | REPRO.6 | none |
+| 268 | NUMER.19 | VV.3 | none |
+| 269 | NUMER.25 | VV.3 | none |
+| 270 | NUMER.26 | VV.3 | none |
+| 271 | NUMER.28 | VV.3 | none |
+| 272 | NUMER.3 | VV.3 | none |
+| 273 | NUMER.7 | VV.3 | none |
 
 ## STND.PY.1
 
@@ -364,7 +428,7 @@ The named style guide moves to the repository configuration and the exemption fo
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 210 | NUMER.4 | INTPR.1 | none |
+| 274 | NUMER.4 | INTPR.1 | none |
 
 ## STND.PY.10
 
@@ -372,7 +436,7 @@ The docstring format is the configured one; NUMER.4's documentation of equations
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 211 | NUMER.4 | INTPR.1 | none |
+| 275 | NUMER.4 | INTPR.1 | none |
 
 ## STND.PY.12
 
@@ -380,12 +444,12 @@ Drops a sentence that STND.DOCS.13 holds; the paired VV.8 provisions are served 
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 212 | CPS.3 | VV.8 | none |
-| 213 | HDES.6 | VV.8 | none |
-| 214 | HW.7 | VV.8 | none |
-| 215 | HW.CPU.3 | VV.8 | none |
-| 216 | HW.EMBED.5 | VV.8 | none |
-| 217 | ML.7 | VV.8 | none |
+| 276 | CPS.3 | VV.8 | none |
+| 277 | HDES.6 | VV.8 | none |
+| 278 | HW.7 | VV.8 | none |
+| 279 | HW.CPU.3 | VV.8 | none |
+| 280 | HW.EMBED.5 | VV.8 | none |
+| 281 | ML.7 | VV.8 | none |
 
 ## STND.PY.2
 
@@ -393,7 +457,7 @@ The linter checks the configured style guide and docstring format; no change of 
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 218 | NUMER.4 | INTPR.1 | none |
+| 282 | NUMER.4 | INTPR.1 | none |
 
 ## STND.PY.22
 
@@ -401,9 +465,9 @@ Keeps only the warning categories; narrower than before and consistent with HW.8
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 219 | HDES.14 | PRIME.4 | none |
-| 220 | HW.8 | PRIME.4 | none |
-| 221 | HW.GPU.3 | PRIME.4 | none |
+| 283 | HDES.14 | PRIME.4 | none |
+| 284 | HW.8 | PRIME.4 | none |
+| 285 | HW.GPU.3 | PRIME.4 | none |
 
 ## STND.PY.27
 
@@ -411,9 +475,9 @@ Citation of STND.CODE.14 in place of STND.PY.22, the same responses.
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 222 | HDES.14 | PRIME.4 | none |
-| 223 | HW.8 | PRIME.4 | none |
-| 224 | HW.GPU.3 | PRIME.4 | none |
+| 286 | HDES.14 | PRIME.4 | none |
+| 287 | HW.8 | PRIME.4 | none |
+| 288 | HW.GPU.3 | PRIME.4 | none |
 
 ## STND.PY.30
 
@@ -421,9 +485,21 @@ Citation of STND.CODE.14 in place of STND.PY.22, the same responses.
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 225 | HDES.14 | PRIME.4 | none |
-| 226 | HW.8 | PRIME.4 | none |
-| 227 | HW.GPU.3 | PRIME.4 | none |
+| 289 | HDES.14 | PRIME.4 | none |
+| 290 | HW.8 | PRIME.4 | none |
+| 291 | HW.GPU.3 | PRIME.4 | none |
+
+## STND.RUST.34
+
+Binds STND.CODE.34 for Rust code; the paired provisions forbid misstated evidence in other forms, and none admits a wider claim.
+
+| # | Other provision | Bases | Verdict |
+| --- | --- | --- | --- |
+| 292 | AGENT.3 | PRIME.2 | none |
+| 293 | AGENT.4 | PRIME.2 | none |
+| 294 | AGENT.47 | PRIME.2 | none |
+| 295 | AGENT.5 | PRIME.2 | none |
+| 296 | NUMER.26 | PRIME.2 | none |
 
 ## STND.STDC.1
 
@@ -431,40 +507,40 @@ One cell names the guide of STND.CXX.1 in place of the Core Guidelines; nothing 
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 228 | AGENT.22 | REPRO.7 | none |
-| 229 | AGENT.39 | DSGN.15 | none |
-| 230 | CPS.5 | DSGN.16, DSGN.2 | none |
-| 231 | CPS.9 | DSGN.2 | none |
-| 232 | HDES.11 | DSGN.15, DSGN.4 | none |
-| 233 | HDES.3 | REPRO.2, REPRO.3 | none |
-| 234 | HDES.7 | REPRO.2 | none |
-| 235 | HDES.ASIC.10 | DSGN.4 | none |
-| 236 | HDES.FPGA.3 | DSGN.4 | none |
-| 237 | HW.11 | DSGN.15 | none |
-| 238 | HW.12 | REPRO.3 | none |
-| 239 | HW.13 | DSGN.4 | none |
-| 240 | HW.14 | DSGN.4 | none |
-| 241 | HW.22 | RSRC.4 | none |
-| 242 | HW.3 | REPRO.2 | none |
-| 243 | HW.5 | REPRO.2 | none |
-| 244 | HW.7 | REPRO.2 | none |
-| 245 | HW.ASIC.3 | REPRO.2 | none |
-| 246 | HW.CPU.3 | REPRO.2 | none |
-| 247 | HW.CPU.4 | RSRC.4 | none |
-| 248 | HW.FPGA.3 | REPRO.2 | none |
-| 249 | HW.GPU.4 | RSRC.4 | none |
-| 250 | HW.QPU.3 | REPRO.2 | none |
-| 251 | HW.QPU.8 | RSRC.4 | none |
-| 252 | ML.3 | REPRO.3 | none |
-| 253 | ML.6 | DSGN.2 | none |
-| 254 | NUMER.11 | REPRO.3 | none |
-| 255 | NUMER.16 | REPRO.7 | none |
-| 256 | NUMER.17 | RSRC.4 | none |
-| 257 | NUMER.24 | REPRO.3 | none |
-| 258 | NUMER.27 | DSGN.16 | none |
-| 259 | NUMER.3 | REPRO.7 | none |
-| 260 | NUMER.4 | INTPR.1 | none |
-| 261 | NUMER.5 | REPRO.2, REPRO.7 | none |
+| 297 | AGENT.22 | REPRO.7 | none |
+| 298 | AGENT.39 | DSGN.15 | none |
+| 299 | CPS.5 | DSGN.16, DSGN.2 | none |
+| 300 | CPS.9 | DSGN.2 | none |
+| 301 | HDES.11 | DSGN.15, DSGN.4 | none |
+| 302 | HDES.3 | REPRO.2, REPRO.3 | none |
+| 303 | HDES.7 | REPRO.2 | none |
+| 304 | HDES.ASIC.10 | DSGN.4 | none |
+| 305 | HDES.FPGA.3 | DSGN.4 | none |
+| 306 | HW.11 | DSGN.15 | none |
+| 307 | HW.12 | REPRO.3 | none |
+| 308 | HW.13 | DSGN.4 | none |
+| 309 | HW.14 | DSGN.4 | none |
+| 310 | HW.22 | RSRC.4 | none |
+| 311 | HW.3 | REPRO.2 | none |
+| 312 | HW.5 | REPRO.2 | none |
+| 313 | HW.7 | REPRO.2 | none |
+| 314 | HW.ASIC.3 | REPRO.2 | none |
+| 315 | HW.CPU.3 | REPRO.2 | none |
+| 316 | HW.CPU.4 | RSRC.4 | none |
+| 317 | HW.FPGA.3 | REPRO.2 | none |
+| 318 | HW.GPU.4 | RSRC.4 | none |
+| 319 | HW.QPU.3 | REPRO.2 | none |
+| 320 | HW.QPU.8 | RSRC.4 | none |
+| 321 | ML.3 | REPRO.3 | none |
+| 322 | ML.6 | DSGN.2 | none |
+| 323 | NUMER.11 | REPRO.3 | none |
+| 324 | NUMER.16 | REPRO.7 | none |
+| 325 | NUMER.17 | RSRC.4 | none |
+| 326 | NUMER.24 | REPRO.3 | none |
+| 327 | NUMER.27 | DSGN.16 | none |
+| 328 | NUMER.3 | REPRO.7 | none |
+| 329 | NUMER.4 | INTPR.1 | none |
+| 330 | NUMER.5 | REPRO.2, REPRO.7 | none |
 
 ## STND.STDC.29
 
@@ -472,10 +548,10 @@ Keeps only the suppression with its reason at a call whose failure a test or han
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 262 | AGENT.22 | REPRO.7 | none |
-| 263 | NUMER.16 | REPRO.7 | none |
-| 264 | NUMER.3 | REPRO.7 | none |
-| 265 | NUMER.5 | REPRO.7 | none |
+| 331 | AGENT.22 | REPRO.7 | none |
+| 332 | NUMER.16 | REPRO.7 | none |
+| 333 | NUMER.3 | REPRO.7 | none |
+| 334 | NUMER.5 | REPRO.7 | none |
 
 ## STND.STDC.38
 
@@ -483,72 +559,72 @@ Keeps only the soundness statement of each means, the statement of means moving 
 
 | # | Other provision | Bases | Verdict |
 | --- | --- | --- | --- |
-| 266 | AGENT.12 | VV.1 | none |
-| 267 | AGENT.41 | INTPR.10 | none |
-| 268 | CPS.4 | VV.1 | none |
-| 269 | CPS.6 | VV.1 | none |
-| 270 | CPS.8 | VV.1 | none |
-| 271 | HDES.10 | INTPR.10, VV.1 | none |
-| 272 | HDES.11 | VV.1 | none |
-| 273 | HDES.12 | VV.1 | none |
-| 274 | HDES.15 | VV.1 | none |
-| 275 | HDES.5 | INTPR.10 | none |
-| 276 | HDES.6 | INTPR.10, VV.1 | none |
-| 277 | HDES.7 | VV.1 | none |
-| 278 | HDES.8 | INTPR.10, VV.1 | none |
-| 279 | HDES.9 | INTPR.10, VV.1 | none |
-| 280 | HDES.ASIC.10 | VV.1 | none |
-| 281 | HDES.ASIC.11 | INTPR.10, VV.1 | none |
-| 282 | HDES.ASIC.12 | INTPR.10, VV.1 | none |
-| 283 | HDES.ASIC.3 | INTPR.10, VV.1 | none |
-| 284 | HDES.ASIC.4 | VV.1 | none |
-| 285 | HDES.ASIC.5 | INTPR.10, VV.1 | none |
-| 286 | HDES.ASIC.6 | VV.1 | none |
-| 287 | HDES.ASIC.7 | VV.1 | none |
-| 288 | HDES.ASIC.8 | VV.1 | none |
-| 289 | HDES.ASIC.9 | VV.1 | none |
-| 290 | HDES.FPGA.3 | VV.1 | none |
-| 291 | HDES.FPGA.5 | VV.1 | none |
-| 292 | HW.10 | INTPR.10, VV.1 | none |
-| 293 | HW.15 | VV.1 | none |
-| 294 | HW.16 | VV.1 | none |
-| 295 | HW.17 | INTPR.10, VV.1 | none |
-| 296 | HW.18 | INTPR.10 | none |
-| 297 | HW.20 | VV.1 | none |
-| 298 | HW.6 | VV.1 | none |
-| 299 | HW.7 | INTPR.10 | none |
-| 300 | HW.ASIC.4 | INTPR.10, VV.1 | none |
-| 301 | HW.CPU.3 | INTPR.10 | none |
-| 302 | HW.EMBED.3 | VV.1 | none |
-| 303 | HW.EMBED.4 | VV.1 | none |
-| 304 | HW.EMBED.6 | INTPR.10 | none |
-| 305 | HW.FPGA.4 | INTPR.10, VV.1 | none |
-| 306 | HW.QPU.5 | INTPR.10, VV.1 | none |
-| 307 | HW.QPU.6 | VV.1 | none |
-| 308 | HW.QPU.7 | INTPR.10, VV.1 | none |
-| 309 | HW.QPU.8 | INTPR.10 | none |
-| 310 | MEAS.5 | INTPR.10 | none |
-| 311 | MEAS.6 | INTPR.10 | none |
-| 312 | ML.4 | VV.1 | none |
-| 313 | ML.5 | INTPR.10, VV.1 | none |
-| 314 | ML.6 | INTPR.10 | none |
-| 315 | NUMER.11 | VV.1 | none |
-| 316 | NUMER.12 | INTPR.10, VV.1 | none |
-| 317 | NUMER.13 | VV.1 | none |
-| 318 | NUMER.14 | VV.1 | none |
-| 319 | NUMER.16 | INTPR.10 | none |
-| 320 | NUMER.17 | VV.1 | none |
-| 321 | NUMER.18 | INTPR.10 | none |
-| 322 | NUMER.19 | VV.1 | none |
-| 323 | NUMER.20 | INTPR.10 | none |
-| 324 | NUMER.22 | VV.1 | none |
-| 325 | NUMER.23 | VV.1 | none |
-| 326 | NUMER.24 | VV.1 | none |
-| 327 | NUMER.25 | VV.1 | none |
-| 328 | NUMER.28 | VV.1 | none |
-| 329 | NUMER.29 | VV.1 | none |
-| 330 | NUMER.5 | VV.1 | none |
-| 331 | NUMER.6 | VV.1 | none |
-| 332 | NUMER.7 | VV.1 | none |
-| 333 | NUMER.8 | VV.1 | none |
-| 334 | NUMER.9 | VV.1 | none |
+| 335 | AGENT.12 | VV.1 | none |
+| 336 | AGENT.41 | INTPR.10 | none |
+| 337 | CPS.4 | VV.1 | none |
+| 338 | CPS.6 | VV.1 | none |
+| 339 | CPS.8 | VV.1 | none |
+| 340 | HDES.10 | INTPR.10, VV.1 | none |
+| 341 | HDES.11 | VV.1 | none |
+| 342 | HDES.12 | VV.1 | none |
+| 343 | HDES.15 | VV.1 | none |
+| 344 | HDES.5 | INTPR.10 | none |
+| 345 | HDES.6 | INTPR.10, VV.1 | none |
+| 346 | HDES.7 | VV.1 | none |
+| 347 | HDES.8 | INTPR.10, VV.1 | none |
+| 348 | HDES.9 | INTPR.10, VV.1 | none |
+| 349 | HDES.ASIC.10 | VV.1 | none |
+| 350 | HDES.ASIC.11 | INTPR.10, VV.1 | none |
+| 351 | HDES.ASIC.12 | INTPR.10, VV.1 | none |
+| 352 | HDES.ASIC.3 | INTPR.10, VV.1 | none |
+| 353 | HDES.ASIC.4 | VV.1 | none |
+| 354 | HDES.ASIC.5 | INTPR.10, VV.1 | none |
+| 355 | HDES.ASIC.6 | VV.1 | none |
+| 356 | HDES.ASIC.7 | VV.1 | none |
+| 357 | HDES.ASIC.8 | VV.1 | none |
+| 358 | HDES.ASIC.9 | VV.1 | none |
+| 359 | HDES.FPGA.3 | VV.1 | none |
+| 360 | HDES.FPGA.5 | VV.1 | none |
+| 361 | HW.10 | INTPR.10, VV.1 | none |
+| 362 | HW.15 | VV.1 | none |
+| 363 | HW.16 | VV.1 | none |
+| 364 | HW.17 | INTPR.10, VV.1 | none |
+| 365 | HW.18 | INTPR.10 | none |
+| 366 | HW.20 | VV.1 | none |
+| 367 | HW.6 | VV.1 | none |
+| 368 | HW.7 | INTPR.10 | none |
+| 369 | HW.ASIC.4 | INTPR.10, VV.1 | none |
+| 370 | HW.CPU.3 | INTPR.10 | none |
+| 371 | HW.EMBED.3 | VV.1 | none |
+| 372 | HW.EMBED.4 | VV.1 | none |
+| 373 | HW.EMBED.6 | INTPR.10 | none |
+| 374 | HW.FPGA.4 | INTPR.10, VV.1 | none |
+| 375 | HW.QPU.5 | INTPR.10, VV.1 | none |
+| 376 | HW.QPU.6 | VV.1 | none |
+| 377 | HW.QPU.7 | INTPR.10, VV.1 | none |
+| 378 | HW.QPU.8 | INTPR.10 | none |
+| 379 | MEAS.5 | INTPR.10 | none |
+| 380 | MEAS.6 | INTPR.10 | none |
+| 381 | ML.4 | VV.1 | none |
+| 382 | ML.5 | INTPR.10, VV.1 | none |
+| 383 | ML.6 | INTPR.10 | none |
+| 384 | NUMER.11 | VV.1 | none |
+| 385 | NUMER.12 | INTPR.10, VV.1 | none |
+| 386 | NUMER.13 | VV.1 | none |
+| 387 | NUMER.14 | VV.1 | none |
+| 388 | NUMER.16 | INTPR.10 | none |
+| 389 | NUMER.17 | VV.1 | none |
+| 390 | NUMER.18 | INTPR.10 | none |
+| 391 | NUMER.19 | VV.1 | none |
+| 392 | NUMER.20 | INTPR.10 | none |
+| 393 | NUMER.22 | VV.1 | none |
+| 394 | NUMER.23 | VV.1 | none |
+| 395 | NUMER.24 | VV.1 | none |
+| 396 | NUMER.25 | VV.1 | none |
+| 397 | NUMER.28 | VV.1 | none |
+| 398 | NUMER.29 | VV.1 | none |
+| 399 | NUMER.5 | VV.1 | none |
+| 400 | NUMER.6 | VV.1 | none |
+| 401 | NUMER.7 | VV.1 | none |
+| 402 | NUMER.8 | VV.1 | none |
+| 403 | NUMER.9 | VV.1 | none |

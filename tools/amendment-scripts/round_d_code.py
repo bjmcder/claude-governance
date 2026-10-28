@@ -31,19 +31,19 @@ Where the documentation of a hash function leaves the values that it returns fre
 Each comparison of floating-point values within a tolerance, by a function or by an expression, SHOULD state the parameters of its tier of STND.VVUQ.1, the relative and the absolute part of STND.VVUQ.5 for the rounding and numerical-error tiers, and its treatment of a NaN under STND.VVUQ.3 (NUMER.11, VV.3, SIMPL.6). Each such tolerance SHOULD be a named constant that carries its basis under NUMER.11, as STND.CODE.10 recommends (NUMER.11, REPRO.7). A comparison of exact values, or one that the bitwise tier of STND.VVUQ.1 admits, MAY use the equality operators of its language (VV.3).
 """, ["NUMER.11", "VV.3", "SIMPL.6", "REPRO.7"], refs=["STND.VVUQ.1", "STND.VVUQ.5", "STND.VVUQ.3", "STND.CODE.10"]),
     P(32, "Language provisions in static checks", "Checking", """
-The static checks that the repository configuration names under STND.CODE.4 SHOULD decide each provision of this standard and of the standard of each language of the work whose compliance a static check among the means of the work is able to decide (DSGN.3).
+The static checks that the repository configuration names under STND.CODE.4 SHOULD decide each provision of the standard of each language of the work whose compliance a static check among the means of the work is able to decide (DSGN.3).
 """, ["DSGN.3"], refs=["STND.CODE.4"]),
     P(33, "Diagnoses from installed failure handlers", "Failures", """
 Where the work replaces or installs a hook or a handler that its language or runtime runs on a failure that a mechanism of the language propagates, or is unable to propagate, that hook or handler SHALL deliver to the operator, or to the record of the run, a diagnosis of each condition that PRIME.4 lists, that such a failure carries to it, and that no other response of STND.CODE.14 answers (PRIME.4, STND.CODE.14).
 """, ["PRIME.4"], refs=["STND.CODE.14"], mode="binding"),
     P(34, "Claims of absent undefined behavior", "Checking", """
-Each claim, in a report, in the record of a result or of a release, or in a review, that code of the work is free of undefined behavior or of a kind of it, or that no use of an interface of the work is able to cause undefined behavior, SHALL state each means by which that was checked and the code, the code of dependencies included, that each means covered (PRIME.2). Such a claim SHALL NOT extend beyond the code and the executions that those means covered (PRIME.2).
-""", ["PRIME.2"], mode="binding"),
+Each claim, in a report, in the record of a result or of a release, or in a review, that code of the work is free of undefined behavior or of a kind of it, or that no use of an interface of the work is able to cause undefined behavior, SHOULD state each means by which that was checked and the code, the code of dependencies included, that each means covered (INTPR.10, VV.1). Such a claim SHOULD NOT extend beyond the code and the executions that those means covered (INTPR.10, VV.1).
+""", ["INTPR.10", "VV.1"]),
     P(35, "Dependency failure results diagnosed", "Failures", """
 Where the language, or a compiler or a static check among the means of the work, provides a form of declaration of STND.CODE.15, each function of a dependency that reports in its result a failure of a kind that PRIME.4 lists SHOULD be called through a declaration in such a form, its own or that of a function of the work that wraps it (DSGN.5).
 """, ["DSGN.5"], refs=["STND.CODE.15", "PRIME.4"]),
 ]
-CODE_BINDING = {33, 34}
+CODE_BINDING = {33}
 
 CODE14 = [(
     "or by a mechanism of its language, an exception among them, that propagates the condition to the caller "
@@ -78,8 +78,7 @@ CODE_DOC = [
     ("STND.CODE.6, STND.CODE.7, STND.CODE.14, STND.CODE.15, and STND.CODE.16 instantiate PRIME.4, and STND.CODE.18 "
      "instantiates PRIME.2, so these six are binding and apply at every class;",
      "STND.CODE.6, STND.CODE.7, STND.CODE.14, STND.CODE.15, STND.CODE.16, STND.CODE.21, and STND.CODE.33 instantiate "
-     "PRIME.4, and STND.CODE.18 and STND.CODE.34 instantiate PRIME.2, so these nine are binding and apply at every "
-     "class;"),
+     "PRIME.4, and STND.CODE.18 instantiates PRIME.2, so these eight are binding and apply at every class;"),
     ("| Owned resource | Memory, a file, a lock, a handle that a foreign interface issues, or another facility that "
      "code acquires and has to release. |\n",
      "| Owned resource | Memory, a file, a lock, a handle that a foreign interface issues, or another facility that "
@@ -106,11 +105,11 @@ CODE_DOC = [
      "STND.CODE.22, STND.CODE.23, and STND.CODE.24 instantiates only DSGN, SIMPL, INTPR, REPRO, VV, or QA and applies "
      "from CSQ3; work of CSQ4 omits it. The onsets of STND.CODE.17, STND.CODE.19, STND.CODE.20, STND.CODE.21, "
      "STND.CODE.22, STND.CODE.23, and STND.CODE.24 are stated above.",
-     "Under STND.CLASS.10, each default provision other than STND.CODE.17, STND.CODE.19, STND.CODE.20, STND.CODE.21, "
-     "STND.CODE.22, STND.CODE.23, STND.CODE.24, STND.CODE.31, and STND.CODE.35 instantiates only DSGN, SIMPL, INTPR, "
+     "Under STND.CLASS.10, each default provision other than STND.CODE.17, STND.CODE.19, STND.CODE.20, STND.CODE.22, "
+     "STND.CODE.23, STND.CODE.24, STND.CODE.31, STND.CODE.34, and STND.CODE.35 instantiates only DSGN, SIMPL, INTPR, "
      "REPRO, VV, or QA and applies from CSQ3; work of CSQ4 omits it. The onsets of STND.CODE.17, STND.CODE.19, "
-     "STND.CODE.20, STND.CODE.21, STND.CODE.22, STND.CODE.23, STND.CODE.24, STND.CODE.31, and STND.CODE.35 are "
-     "stated above."),
+     "STND.CODE.20, STND.CODE.22, STND.CODE.23, STND.CODE.24, STND.CODE.31, STND.CODE.34, and STND.CODE.35 are "
+     "stated above, and STND.CODE.21 binds at every class."),
 ]
 
 CODE_RESPONSES = (
@@ -141,7 +140,9 @@ CODE_RESPONSES = (
     "degradation carries its diagnosis through that response, and a Rust build without the standard library "
     "defines the handler of a panic, which STND.CODE.33 reaches. A language in which the work installs no "
     "replaceable hook or handler for that end gives STND.CODE.33 no subject: Julia, for which the research notes "
-    "of the corpus hold no source on such a hook (unverified), and C, Fortran, Lean, and SystemVerilog. "
+    "of the corpus hold no source on such a hook (unverified), and Fortran, Lean, and SystemVerilog; in C, a "
+    "handler that the work installs for the signal that abort raises is reached where that signal carries a listed "
+    "condition. "
     "STND.CODE.14 asks only the responses that PRIME.4 already requires, in the forms that each language gives, and "
     "its second sentence only keeps out a form that leaves the condition unseen, so it raises no floor in any "
     "language (GOV.11); the custodian's rulings of 2026-10-23 that the same list raises no floor were made for C++, "
@@ -213,12 +214,11 @@ CODE_SHARED = (
     "module among them, to what its means checked: a detector observes only the executions that it runs, an "
     "analyzer is documented as sound for a kind of undefined behavior or not, and code of a dependency in the call "
     "chain is code that a claim covers or leaves out (the Notes of STND.RUST and STND.STDC). STND.RUST.33 and "
-    "STND.STDC.38 add what the record of such a check states. A soundness argument at an unsafe construct is not "
-    "such a claim. PRIME.2 already forbids misrepresenting the status of evidence, and the cost is one sentence for "
-    "each such claim, so STND.CODE.34 raises no floor (GOV.11), the argument on which STND.RUST was adopted with "
-    "the same rule for Rust on 2026-10-24; it concerns claims and not the constructs of a language, so the argument "
-    "holds in every language, and work that makes no such claim owes nothing. It binds at every class, CSQ4 "
-    "included.")
+    "STND.STDC.38 add what the record of such a check states, and STND.RUST.34 binds STND.CODE.34 for Rust code "
+    "(PRIME.2). A soundness argument at an unsafe construct is not such a claim. STND.CODE.34 states the limits of "
+    "the evidence for a claim (INTPR.10, VV.1), the row of INTPR.10 that STND.CLASS.10 applies from CSQ2, and "
+    "applies from CSQ2, as STND.STDC.38 and STND.CONC.27 do; it is a default, a tightening above the floor that a "
+    "recorded decision replaces (PRIME.15, GOV.19), so it raises no floor (GOV.11).")
 
 CODE_READING = (
     "STND.CODE.14 adds that a record that library code writes to a log is never the only visible degradation, and "
@@ -230,14 +230,15 @@ CODE_READING = (
     "convention of names and the names that the notation of NUMER.4 fixes, seeded generators and the streams of "
     "parts, hash values and iteration orders outside results, the tolerances of comparisons, and the static checks "
     "of the provisions of the language standards; new STND.CODE.33 (binding, PRIME.4) has a hook or a handler that "
-    "the work installs deliver the diagnosis of each listed condition that reaches it; new STND.CODE.34 (binding, "
-    "PRIME.2) limits each claim that code is free of undefined behavior, or sound, to the means that checked it and "
+    "the work installs deliver the diagnosis of each listed condition that reaches it; new STND.CODE.34 (default, from "
+    "CSQ2) limits each claim that code is free of undefined behavior, or sound, to the means that checked it and "
     "what they covered; new STND.CODE.35 (default, from CSQ2) has each function of a dependency that reports a "
     "listed failure in its result called through a declaration under which an ignored result is diagnosed; the "
     "Purpose lists the new provisions and the binding ones and names NUMER.11; the Notes give the forms of "
     "STND.CODE.14 in each language, and the reasons, the floor arguments, and the onsets of the changed and new "
-    "provisions, and the class paragraph adds STND.CODE.31 and STND.CODE.35 to the provisions whose onsets the "
-    "Notes state")
+    "provisions, and the class paragraph adds STND.CODE.31, STND.CODE.34, and STND.CODE.35 to the provisions whose "
+    "onsets the Notes state and no longer counts STND.CODE.21 among the defaults; References list NUMER and "
+    "STND.VVUQ and drop STND.LEAN")
 
 CODE_RATIONALE = (
     f"Minor amendment of STND.CODE, revision 1.4, ratified by the custodian on {F.DATE}: {CODE_READING}. The change "
@@ -249,15 +250,16 @@ CODE_RATIONALE = (
     "of STND.CODE.14 asks no response beyond PRIME.4 and keeps out one form that leaves the condition unseen; "
     "STND.CODE.21 costs one choice of compiler option for code that holds a check that the floor already requires; "
     "STND.CODE.33 asks only the diagnosis that PRIME.4 names, of a hook or a handler that the work installs; "
-    "STND.CODE.34 asks one sentence for each claim, where PRIME.2 already forbids misrepresenting the status of "
-    "evidence; so none raises the floor, and these four bind at every class. The new defaults ask, against the "
+    "so none raises the floor, and these three bind at every class. STND.CODE.34 is a default, as STND.STDC.38 "
+    "was for C, and STND.RUST.34 keeps it binding for Rust, so no language changes mode. The new defaults ask, against the "
     "language provisions that they replace, these things more: the convention of names, the generators, the hash "
-    "values, the tolerances, and the static checks in each language that had no such provision, and the "
+    "values, the tolerances, the static checks, and the claims of STND.CODE.34 in each language that had no such "
+    "provision, and the "
     "declaration of a function of a dependency in C++ through the declaration of the dependency or a wrapper in "
-    "place of a wrapper alone; and this less: the static checks decide the provisions that a static check among "
-    "the means of the work decides, where STND.RUST.31 named each that a static check of Rust source is able to "
-    "decide. Each is a tightening above the floor that a recorded decision replaces (PRIME.15, GOV.19). Class "
-    "onsets: STND.CODE.27 to STND.CODE.32 apply from CSQ3 and STND.CODE.35 from CSQ2. Transition (GOV.42): "
+    "place of a wrapper alone; and this less: the static checks decide the provisions of the language standards that a "
+    "static check among the means of the work is able to decide, where STND.RUST.31 named each that a static check "
+    "of Rust source is able to decide. Each is a tightening above the floor that a recorded decision replaces (PRIME.15, GOV.19). Class "
+    "onsets: STND.CODE.27 to STND.CODE.32 apply from CSQ3, and STND.CODE.34 and STND.CODE.35 from CSQ2. Transition (GOV.42): "
     "existing code conforms when a change next touches it; a hook or a handler that the work installs, and a claim "
     "made after the amendment, conform at once. Rulings D1 of {F.RECORD}; register entries R6.2 (CL3, CL4, CL5, "
     "CL6, CL10, CL13, CL18, CL23, CL25) of review-records/deep-review-2026-10-28/register.md; decisions 1 to 9 of "
@@ -273,7 +275,7 @@ def apply_code(root: Path, at: str) -> None:
     F.set_body(root, "STND/CODE/21.md", CODE21_BODY, title="Finite-value settings near checks", mode="binding",
                instantiates=["PRIME.4", "DSGN.2"])
     F.check_fields(root, [f"STND.CODE.{p['n']}" for p in CODE_NEW if p["n"] not in CODE_BINDING])
-    F.check_fields(root, ["STND.CODE.14", "STND.CODE.21", "STND.CODE.33", "STND.CODE.34"], binding=True)
+    F.check_fields(root, ["STND.CODE.14", "STND.CODE.21", "STND.CODE.33"], binding=True)
     replace_text(root, "STND/CODE/_doc.md", CODE_DOC)
     F.swap_para(root, "STND/CODE/_doc.md", "Responses. STND.CODE.14 lists the responses", CODE_RESPONSES)
     F.swap_para(root, "STND/CODE/_doc.md", "Finite values. An execution setting", CODE_FINITE)
@@ -290,7 +292,7 @@ def apply_code(root: Path, at: str) -> None:
 # ---------------------------------------------------------------- STND.DEPS 1.2
 
 DEPS_NEW = P(13, "Builds at locked revisions", "Records", """
-Other than a check that the standard of its language asks to run against newer revisions, each build of the checks and of each release of the work whose lock file is under version control SHOULD use the revisions that the lock file records, and fail on a lock file that does not match the files that declare its packages (REPRO.1).
+Other than a check that the standard of its language asks to run at revisions other than those that the lock file records, each build of the checks and of each release of the work whose lock file is under version control SHOULD use the revisions that the lock file records, and fail on a lock file that does not match the files that declare its packages (REPRO.1).
 """, ["REPRO.1"])
 
 DEPS_DOC = [
@@ -305,19 +307,19 @@ DEPS_DOC = [
      "among them, and STND.RUST.30 adds builds from the revisions that a committed lock file records.",
      "STND.PY, STND.JL, and STND.RUST name the lock files of their languages, the manifest of a Julia environment "
      "among them. STND.DEPS.13 has each build of the checks and of each release use the revisions that a committed "
-     "lock file records, so that what the checks judged is what the release builds; the check against newer "
-     "revisions that STND.RUST.1 and STND.JL.3 ask, which reports its failure without blocking a change, is the one "
-     "build of the checks that leaves the lock file. STND.LEAN.1 adds the revisions of the Lean toolchain and of "
+     "lock file records, so that what the checks judged is what the release builds; the checks that a language "
+     "standard runs at other revisions, on the oldest declared releases of STND.PY.14 and STND.RUST.1 and on the "
+     "newer revisions that STND.RUST.1 and STND.JL.3 ask, leave the lock file. STND.LEAN.1 adds the revisions of the Lean toolchain and of "
      "each checker, which no lock file of packages records."),
 ]
 
 DEPS_READING = (
     "new STND.DEPS.13 (default, REPRO.1) has each build of the checks and of each release of work whose lock file is "
     "under version control use the revisions that the lock file records, and fail on a lock file that does not "
-    "match the files that declare its packages, other than a check that the standard of its language runs against "
-    "newer revisions, the rule that STND.RUST.30 held for Rust, for every language; the Purpose names it; the Notes "
+    "match the files that declare its packages, other than a check that the standard of its language runs at "
+    "revisions other than those that the lock file records, the rule that STND.RUST.30 held for Rust, for every language; the Purpose names it; the Notes "
     "cite it in place of STND.RUST.30, and describe STND.DFLT.11 as STND.DFLT 1.6 reads it, reviewing each "
-    "dependency that the unit changes")
+    "dependency that the unit changes; References list STND.LEAN")
 DEPS_RATIONALE = (
     f"Minor amendment of STND.DEPS, revision 1.2, ratified by the custodian on {F.DATE}: {DEPS_READING}. The change "
     "is minor under STND.IDENT.3 because it adds one default provision. The custodian ruled under D1 that each "

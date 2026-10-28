@@ -4,26 +4,27 @@ Round d carries ruling D1 and the restatement cleanups of the code and systems s
 
 ## Transactions
 
-There are fourteen transactions, one per document, in citation order. Each document drops its citations of a provision before the document that holds that provision withdraws it. No state of the round cites a withdrawn identifier or a provision not yet added.
+There are fifteen transactions, one per document, in citation order. Each document drops its citations of a provision before the document that holds that provision withdraws it. No state of the round cites a withdrawn identifier or a provision not yet added.
 
 | # | Document | Revision | Class | What |
 | --- | --- | --- | --- | --- |
 | 0 | STND.CODE | 1.3 → 1.4 | Minor | .14 second sentence; .21 binding; new .27 to .35; Terms Library code; Purpose; Notes |
-| 1 | STND.DEPS | 1.1 → 1.2 | Minor | New .13 (builds at locked revisions); Notes on .13 and on STND.DFLT.11 |
-| 2 | STND.CONC | 1.1 → 1.1.1 | Editorial | Notes cite STND.CONC and STND.CODE.29 in place of the MPI, PY, and JL copies |
-| 3 | STND.PERF | 1.0.1 → 1.1 | Minor | .12 reaches offloaded work; .18 aligned with MEAS.7 |
-| 4 | STND.OFFLD | 1.1 → 1.2 | Minor | .31 keeps its first sentence; .27 serves as STND.CONC.24 for device code |
-| 5 | STND.MPI | 1.0.2 → 1.1 | Minor | .18, .19, and .24 withdrawn; Purpose names STND.CONC |
-| 6 | STND.OMP | 1.0.3 → 1.0.4 | Editorial | Revision numbers leave the Notes |
-| 7 | STND.FTN | 1.1.1 → 1.2 | Minor | .29 and .37 withdrawn; .16 and .30 cite STND.CODE.14; revision numbers leave the Notes |
-| 8 | STND.LEAN | 1.0.1 → 1.1 | Minor | .25 withdrawn |
-| 9 | STND.CXX | 1.3 → 1.4 | Minor | .32 withdrawn; .1, .14, .21, and .25 reduced or reworded |
-| 10 | STND.STDC | 1.2 → 1.3 | Minor | .29 and .38 reduced; row of .1; revision numbers leave the Notes |
-| 11 | STND.JL | 1.3 → 1.4 | Minor | .21, .23, .24, and .26 withdrawn; .6, .14, .15, and .31 reduced or recited |
-| 12 | STND.PY | 1.2 → 1.3 | Minor | .16, .17, .19, .20, and .32 withdrawn; .1, .2, .10, .11, .12, .22, .27, and .30 changed; Terms |
-| 13 | STND.RUST | 1.2 → 1.3 | Minor | .13, .30, .34, and .35 withdrawn; .11 and .31 changed |
+| 1 | STND.BUILD | 1.0.2 → 1.0.3 | Editorial | Notes: STND.CODE.21 forbids, and STND.CXX.18 and STND.STDC.40 state the same |
+| 2 | STND.DEPS | 1.1 → 1.2 | Minor | New .13 (builds at locked revisions); Notes on .13 and on STND.DFLT.11 |
+| 3 | STND.CONC | 1.1 → 1.1.1 | Editorial | Notes cite STND.CONC and STND.CODE.29 in place of the MPI, PY, and JL copies |
+| 4 | STND.PERF | 1.0.1 → 1.1 | Minor | .12 reaches offloaded work; .18 aligned with MEAS.7 |
+| 5 | STND.OFFLD | 1.1 → 1.2 | Minor | .31 keeps its first sentence; .27 serves as STND.CONC.24 for device code |
+| 6 | STND.MPI | 1.0.2 → 1.1 | Minor | .18, .19, and .24 withdrawn; Purpose names STND.CONC |
+| 7 | STND.OMP | 1.0.3 → 1.0.4 | Editorial | Revision numbers leave the Notes |
+| 8 | STND.FTN | 1.1.1 → 1.2 | Minor | .29 and .37 withdrawn; .16 and .30 cite STND.CODE.14; revision numbers leave the Notes |
+| 9 | STND.LEAN | 1.0.1 → 1.1 | Minor | .25 withdrawn |
+| 10 | STND.CXX | 1.3 → 1.4 | Minor | .32 withdrawn; .1, .14, .21, and .25 reduced or reworded |
+| 11 | STND.STDC | 1.2 → 1.3 | Minor | .29 and .38 reduced; row of .1; revision numbers leave the Notes |
+| 12 | STND.JL | 1.3 → 1.4 | Minor | .21, .23, .24, and .26 withdrawn; .6, .14, .15, and .31 reduced or recited |
+| 13 | STND.PY | 1.2 → 1.3 | Minor | .16, .17, .19, .20, and .32 withdrawn; .1, .2, .10, .11, .12, .22, .27, and .30 changed; Terms |
+| 14 | STND.RUST | 1.2 → 1.3 | Minor | .13, .30, and .35 withdrawn; .34 binds STND.CODE.34 for Rust; .11 and .31 changed |
 
-STND.CODE and STND.DEPS come first, because the language standards cite their new provisions. STND.PERF comes before STND.OFFLD, so that no state leaves the costs of first use of offloaded work unstated. STND.CONC drops its citations of STND.MPI.18, .19, and .24, STND.PY.17, and STND.JL.24 before STND.MPI, STND.PY, and STND.JL withdraw them. STND.FTN drops STND.PY.20 and STND.JL.21 before STND.PY and STND.JL run. STND.CXX and STND.PY drop STND.RUST.13 and STND.RUST.30 before STND.RUST runs last. MEAS is unchanged: STND.PERF.18 is aligned to it.
+STND.CODE and STND.DEPS come first, because the language standards cite their new provisions. STND.BUILD follows STND.CODE at once, so that its Notes describe STND.CODE.21 as binding from the state in which it binds. STND.PERF comes before STND.OFFLD, so that no state leaves the costs of first use of offloaded work unstated. STND.CONC drops its citations of STND.MPI.18, .19, and .24, STND.PY.17, and STND.JL.24 before STND.MPI, STND.PY, and STND.JL withdraw them. STND.FTN drops STND.PY.20 and STND.JL.21 before STND.PY and STND.JL run. STND.CXX and STND.PY drop STND.RUST.13 and STND.RUST.30 before STND.RUST runs last. MEAS is unchanged: STND.PERF.18 is aligned to it.
 
 ## Decisions
 
@@ -43,11 +44,7 @@ Floor (GOV.11): the rule costs one choice of compiler option for code that holds
 
 The second reading would extend the rule to every check of a contract. I recommend the first, which adds no reach.
 
-**For round e (1b).** STND.CXX.18 and STND.STDC.40 now restate STND.CODE.21 for C++ and for C. They stay because the Notes of STND.BUILD cite them. Two other sentences need correcting there:
-- STND.BUILD's Notes say STND.CODE.21 "advises against" the setting, but it now binds.
-- STND.SV's Notes say the same.
-
-Round e should correct these Notes and then withdraw STND.CXX.18 and STND.STDC.40.
+**For round e (1b).** STND.CXX.18 and STND.STDC.40 now restate STND.CODE.21 for C++ and for C. They stay because the Notes of STND.BUILD cite them. Round d corrects those Notes in an editorial transaction of STND.BUILD 1.0.3, right after STND.CODE (decision 20). Round e can then drop STND.BUILD's citations and withdraw the two.
 
 ### 2. STND.CODE.14 carries each language's forms (D1; CL4)
 
@@ -106,22 +103,22 @@ Floor (GOV.11): the sentence asks for no response beyond PRIME.4. It only keeps 
 
 ### 6. Builds at locked revisions (CL8, checked; holds)
 
-> STND.DEPS.13 (default; REPRO.1), *Builds at locked revisions*: "Other than a check that the standard of its language asks to run against newer revisions, each build of the checks and of each release of the work whose lock file is under version control SHOULD use the revisions that the lock file records, and fail on a lock file that does not match the files that declare its packages (REPRO.1)."
+> STND.DEPS.13 (default; REPRO.1), *Builds at locked revisions*: "Other than a check that the standard of its language asks to run at revisions other than those that the lock file records, each build of the checks and of each release of the work whose lock file is under version control SHOULD use the revisions that the lock file records, and fail on a lock file that does not match the files that declare its packages (REPRO.1)."
 
-STND.RUST.30 is withdrawn.
+STND.RUST.30 is withdrawn. The exception covers each check that a language standard runs off the lock file: the oldest declared releases of STND.PY.14 and of STND.RUST.1, and the newer revisions of STND.RUST.1 and STND.JL.3 (review finding 1).
 
 **For the custodian (6a).** STND.LEAN.1 stays unchanged, against CL8's proposal to reduce it. It also pins the Lean toolchain and the checkers, and it reaches every Lean work, where STND.DEPS.12 keeps a lock file only for an environment that produces reported results. Reducing it would narrow it for proof work. I recommend keeping STND.LEAN.1 and accepting its overlap with STND.DEPS.13 for Lean packages.
 
 ### 7. Restated checks: tolerances, static checks, doctests, warnings (CL18, checked, holds; CL17)
 
 - STND.CODE.31, *Tolerances stated at comparisons*, has the text of STND.PY.20, with "the equality operators of its language". STND.PY.20 and STND.JL.21 are withdrawn.
-- STND.CODE.32, *Language provisions in static checks*: "The static checks that the repository configuration names under STND.CODE.4 SHOULD decide each provision of this standard and of the standard of each language of the work whose compliance a static check among the means of the work is able to decide (DSGN.3)." The second sentences of STND.PY.2 and STND.RUST.31 are dropped. STND.CODE.4 already has three modals, so this could not be a sentence of STND.CODE.4.
+- STND.CODE.32, *Language provisions in static checks*: "The static checks that the repository configuration names under STND.CODE.4 SHOULD decide each provision of the standard of each language of the work whose compliance a static check among the means of the work is able to decide (DSGN.3)." The reach is what STND.PY.2 and STND.RUST.31 held for their own standards, and does not include the provisions of STND.CODE (review finding 2). The second sentences of STND.PY.2 and STND.RUST.31 are dropped. STND.CODE.4 already has three modals, so this could not be a sentence of STND.CODE.4.
 - The second sentences of STND.PY.12 and STND.JL.31 are dropped. Each restated STND.DOCS.13's comparison within a stated tolerance, and the Notes keep the forms in each language.
 - CL17: the second sentence of STND.CXX.25 is dropped, because STND.BUILD.12 holds it. The Notes of STND.CXX and STND.STDC say so.
 
 **For the custodian (7a).** STND.CODE.32 reaches the checks "among the means of the work". STND.RUST.31 reached each provision that "a static check of Rust source is able to decide". That is a narrowing for Rust; I recommend it, since a tool that the work does not have blocks no work.
 
-**For the custodian (7b).** STND.CODE.31 rests on NUMER.11 and VV.3. It is added to the list of exceptions in the class paragraph of STND.CODE, with its onset (CSQ3) in the Notes. STND.CODE.35 is added in the same way. This is the only edit to an onset paragraph that is not a correction for a withdrawn identifier. It keeps that paragraph true until round o replaces it.
+**For the custodian (7b).** STND.CODE.31 rests on NUMER.11 and VV.3. It is added to the list of exceptions in the class paragraph of STND.CODE, with its onset (CSQ3) in the Notes. STND.CODE.34 and STND.CODE.35 are added in the same way. STND.CODE.21 leaves that list of defaults, and the paragraph says that it binds at every class (review finding 3). This is the only edit to an onset paragraph that is not a correction for a withdrawn identifier. It keeps that paragraph true until round o replaces it.
 
 ### 8. Installed handlers (CL25, checked; holds) and claims of undefined behavior (CL10, checked; holds)
 
@@ -134,11 +131,18 @@ STND.CODE.33 covers:
 
 STND.PY.32 and STND.CXX.32 are withdrawn. STND.CXX.33 (default) stays, as C++ content. Floor: the argument that the ratification of 2026-10-24 accepted for the Rust panic hook.
 
-> STND.CODE.34 (binding; PRIME.2), *Claims of absent undefined behavior*: "Each claim, in a report, in the record of a result or of a release, or in a review, that code of the work is free of undefined behavior or of a kind of it, or that no use of an interface of the work is able to cause undefined behavior, SHALL state each means by which that was checked and the code, the code of dependencies included, that each means covered (PRIME.2). Such a claim SHALL NOT extend beyond the code and the executions that those means covered (PRIME.2)."
+> STND.CODE.34 (default; INTPR.10, VV.1), *Claims of absent undefined behavior*: "Each claim, in a report, in the record of a result or of a release, or in a review, that code of the work is free of undefined behavior or of a kind of it, or that no use of an interface of the work is able to cause undefined behavior, SHOULD state each means by which that was checked and the code, the code of dependencies included, that each means covered (INTPR.10, VV.1). Such a claim SHOULD NOT extend beyond the code and the executions that those means covered (INTPR.10, VV.1)."
 
-STND.RUST.34 is withdrawn. STND.STDC.38 keeps only whether the documentation of each means states that means as sound.
+> STND.RUST.34 (binding; PRIME.2), *Claims of soundness*, reworded: "Each claim that STND.CODE.34 governs and that concerns Rust code of the work SHALL meet STND.CODE.34 (PRIME.2)."
 
-**For the custodian (8a).** STND.CODE.34 binds in every language a rule that bound only Rust. For C, the statement of the means was a default from CSQ2 (STND.STDC.38). The floor argument is the Rust one: PRIME.2 already forbids misrepresenting evidence, the cost is one sentence for each claim, and work that makes no such claim owes nothing. Ruling D1 fixes one provision per outcome but not this mode. I recommend binding, because it follows the adopted Rust rule and the pattern of STND.CODE.18. The alternative is a default for every language, which would lower Rust.
+Each language keeps the strength it had:
+- Rust stays bound, through STND.RUST.34, in one sentence that cites STND.CODE.34 and does not restate it.
+- C keeps a default from CSQ2: STND.CODE.34 rests on INTPR.10, as STND.STDC.38 did. STND.STDC.38 keeps only whether the documentation of each means states that means as sound, and the Notes of STND.STDC read the record of a verification as a record of a result under STND.CODE.34 (review finding 9).
+- The other languages had no such rule. They gain a default from CSQ2, the "one provision per outcome, for every language" of D1.
+
+No language changes mode, so no floor is raised (GOV.11). This replaces the earlier draft, which made STND.CODE.34 binding in every language (review finding 7; coordinator's guidance).
+
+STND.CODE.33 also reaches C: a handler that C work installs for the signal that `abort` raises is reached where that signal carries a listed condition. The Notes say so (review finding 4), and the floor argument already covers it.
 
 ### 9. Failure results of dependencies (CL13, checked; holds)
 
@@ -185,7 +189,7 @@ STND.PERF.14 keeps its carve-out, because the first sentence of STND.OFFLD.31 st
 
 ### 14. STND.OFFLD.27 and STND.CONC.24 (R6.3; CS19)
 
-> STND.OFFLD.27, added third sentence: "Tests that meet the two sentences above MAY serve, for device code, as the tests at more than one number of tasks that STND.CONC.24 asks (VV.1)."
+> STND.OFFLD.27, added third sentence: "Tests that meet the two sentences above MAY serve, for device code, as the tests across numbers of tasks that STND.CONC.24 asks (VV.1)."
 
 The Notes now call STND.OFFLD.27 the form of STND.CONC.24 for device code, and the third sentence of STND.CONC.24 still sets the tier of the comparison. The three modals form one bundle: the permission is not applied without the first two sentences.
 
@@ -211,9 +215,7 @@ Clause and section numbers, PEP numbers, and the revisions of the corpus's own d
 | STND.LEAN.27 | Notes of STND.SV | STND.CODE.28 |
 | STND.PY.14 | Notes of STND.BUILD | (CL7, not carried; decision 18) |
 
-Two more items for round e:
-- The Notes of STND.BUILD say that STND.CODE.21 "advises against" the setting. It now binds.
-- STND.SV.28 repeats STND.CODE.28.
+One more item for round e: STND.SV.28 repeats STND.CODE.28. The Notes of STND.BUILD are corrected in this round (decision 20).
 
 ### 17. CL21: no change
 
@@ -236,7 +238,11 @@ So round d changes nothing there.
 
 ### 19. The Notes of STND.DEPS on STND.DFLT.11 (depends on round a)
 
-At the coordinator's direction, the Notes of STND.DEPS now say that the last trigger of STND.DEPS.4 "is that of STND.DFLT.11, which reviews the pinned revision of each dependency that the unit changes". The old Notes said it "narrows that of STND.DFLT.11, which reviews every direct dependency". The new sentence is true only once round a's STND.DFLT 1.6 applies (register R1.6, CC13), and round a runs before round d in the order of the driver. If round a is not ratified, this sentence reverts.
+At the coordinator's direction, the Notes of STND.DEPS now say that the last trigger of STND.DEPS.4 "is that of STND.DFLT.11, which reviews the pinned revision of each dependency that the unit changes". The old Notes said it "narrows that of STND.DFLT.11, which reviews every direct dependency". The new sentence is true only once round a's STND.DFLT 1.6 applies (register R1.6, CC13). The rounds are ratified and applied together, and round a runs before round d in the driver, so this is acceptable (coordinator's ruling on review finding 5). The rationale of STND.DEPS 1.2 states the dependency. If round a is not ratified, this sentence reverts.
+
+### 20. The Notes of STND.BUILD (review finding 6)
+
+STND.BUILD 1.0.3 is an editorial transaction placed right after STND.CODE 1.4. Its Notes say that STND.CODE.21 "forbids", in place of "advises against", the setting near a required check, and that STND.CXX.18 and STND.STDC.40 "state" the same for C++ and C, in place of binding it alone. Contrary to the earlier decision 1b, the Notes of STND.SV do not cite STND.CODE.21 and need no change.
 
 ## Floor arguments of the provisions that bind
 
@@ -245,17 +251,19 @@ At the coordinator's direction, the Notes of STND.DEPS now say that the last tri
 | STND.CODE.14 (second sentence) | PRIME.4 | Keeps out one form of response that may stay unseen. It asks no response beyond PRIME.4. |
 | STND.CODE.21 | PRIME.4, DSGN.2 | One choice of compiler option for code that holds a check that the floor requires. It adds no check. |
 | STND.CODE.33 | PRIME.4 | Only the diagnosis that PRIME.4 names, from a handler that the work writes. |
-| STND.CODE.34 | PRIME.2 | One sentence for each claim. PRIME.2 already forbids misstated evidence. |
+| STND.RUST.34 | PRIME.2 | Binds STND.CODE.34 for Rust as before: one sentence for each claim, which PRIME.2 already asks. STND.CODE.34 itself is a default. |
 
 Every other provision that the round adds or changes is a default that a recorded decision replaces (GOV.19), so none raises the floor (GOV.11).
 
 ## Checks
 
-1. **Rehearsal.** `ROUNDS=apply_round_d_2026_10_28 python3 -B -m govharness rehearse governance ../tools/amendment-scripts/apply_rounds_2026_10_28.py` appends 14 entries, and every check passes. The only warning is g.18, which the corpus already carries. A rehearsal of rounds a and d together also passes with g.18 alone.
-2. **Kept copy.** On the kept copy:
-   - `references --check` passes;
-   - `compose --check` reports 0 stale, with `rendered/` copied beside the copy;
-   - `pairs` was run for all 14 documents, and the 334 pairs whose changed side is a provision of this round are in `pairs-changed.md`, none a conflict. `pairs` lists only pairs across documents of other levels. Within LVL2, the copies of decision 16 duplicate the new provisions word for word and do not conflict.
+The brief's checks were rerun after the review, with round a underneath (`ROUNDS=apply_round_a_2026_10_28,apply_round_d_2026_10_28`).
+
+1. **Rehearsal.** 20 entries are appended: 5 from round a and 15 from round d. Every check passes, and the only warning is g.18, which the corpus already carries. Round d alone also rehearses with g.18 alone.
+2. **Kept copy, rounds a and d.**
+   - `references --check` passes.
+   - `compose --check` reports 3 stale copies: `defaults.md`, `agent-instructions.md`, and `harness-specification.md`. These are round a's documents. With round d alone it reports 0 stale.
+   - `pairs` was run for all fifteen documents. The 403 pairs whose changed side is a provision of this round are in `pairs-changed.md`, none a conflict. Within LVL2, the copies of decision 16 duplicate the new provisions word for word and do not conflict.
 3. **New findings** of `tools/findings.py` on the changed documents, each a review finding, not a defect:
    - **g.12 on STND.PERF.18.** "After the summary was seen" describes the criterion and is no condition. MEAS.7 has the same finding.
    - **g.18 on STND.CODE.28, STND.CODE.29, STND.CODE.31, and STND.OFFLD.27.** Each has three modals that form one bundle. The permission of STND.CODE.28 qualifies its two sentences. STND.CODE.29 concerns one generator and its seed. STND.CODE.31 is one comparison, as STND.PY.20 was. In STND.OFFLD.27, the permission rests on the first two sentences.
@@ -265,6 +273,25 @@ Every other provision that the round adds or changes is a default that a recorde
    - titles of six words or fewer, none verb-initial, and distinct;
    - body identifiers equal to `instantiates` plus `refers_to`;
    - no "such as" or "for example" in any provision.
-
-   The two g.13 defects found in drafting are fixed: "any" in STND.CODE.28 and "several" in STND.OFFLD.27.
 5. **Harness code.** None was changed, so unit 0026 is not used and no verdict of a check on the live corpus changes.
+
+## Review and dispositions
+
+The cold review is `review.md` in this folder. Every Defect and Should-fix is fixed, and every Optional item is taken.
+
+| # | Kind | Finding | Disposition |
+| --- | --- | --- | --- |
+| 1 | Defect | STND.DEPS.13 forbade the oldest-release run of STND.PY.14 | Fixed. The exception reads "a check that the standard of its language asks to run at revisions other than those that the lock file records"; the row and the Notes follow (decision 6). |
+| 2 | Should-fix | STND.CODE.32 widened the reach to STND.CODE's own provisions | Fixed. It now reaches "each provision of the standard of each language of the work", as the withdrawn provisions held (decision 7). |
+| 3 | Should-fix | The class paragraph counted STND.CODE.21 among the defaults | Fixed. STND.CODE.21 leaves both lists, and the paragraph says that it binds at every class (decision 7b). |
+| 4 | Should-fix | STND.CODE.33 reaches C while the Notes denied it | Fixed with the reviewer's sentence on the handler of the signal that `abort` raises (decision 8). |
+| 5 | Should-fix | The STND.DEPS Notes depend on round a | Kept, on the coordinator's ruling that the rounds apply together. The dependency is stated in the rationale (decision 19). |
+| 6 | Should-fix | The STND.BUILD Notes are false after STND.CODE.21 binds | Fixed by the editorial transaction STND.BUILD 1.0.3, right after STND.CODE. Decision 1b's claim about STND.SV is corrected (decision 20). |
+| 7 | Should-fix | STND.CODE.34 raised the mode for seven languages | Fixed. STND.CODE.34 is a default from CSQ2, and STND.RUST.34 binds it for Rust in one sentence, so each language keeps its strength. Reading 8a is withdrawn (decision 8). |
+| 8 | Optional | STND.OFFLD.27 misdescribed STND.CONC.24 | Taken: "the tests across numbers of tasks that STND.CONC.24 asks". |
+| 9 | Optional | STND.STDC.38 could reach less than before | Taken: the Notes of STND.STDC read the record of a verification as a record of a result under STND.CODE.34. |
+| 10 | Optional | The revision row of STND.CODE omitted the changes to References | Taken for every changed document: each row now names the References rows that it adds or drops. |
+
+The review's verdicts on the readings put to the custodian:
+- It resolves these: 1a (first reading), 4a, 6a, 7a, 7b, 10a, 13a, 14a, and 17a. I agree with each, and they stay in this record as readings for ratification, with the reviewer's agreement noted.
+- It keeps three open: 8a, now moot (finding 7), CL7's cadence, and CL24's modes.
