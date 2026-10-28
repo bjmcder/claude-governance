@@ -186,9 +186,10 @@ class Show(unittest.TestCase):
         line of its own; a citing lead text is one line too.
 
         Reference: STND.CLASS.10, cited by STND.KNOW.4, STND.PROJ.1,
-        and the Notes of forty documents, HDES also in "Where the rest
-        lives"; PRIME.3, cited by the lead text of VV (STND.HARN.1;
-        unit 0022, HR-11, and its review, Medium 2 and mutant 10).
+        STND.CLASS.21, and the Notes of forty-one documents, HDES also
+        in "Where the rest lives"; PRIME.3, cited by the lead text of
+        VV (STND.HARN.1; unit 0022, HR-11, and its review, Medium 2 and
+        mutant 10).
         """
         text = show(CORPUS, GRAPH, "STND.CLASS.10")
         cited = text.split("Cited by:")[1]
@@ -203,7 +204,10 @@ class Show(unittest.TestCase):
         self.assertFalse([line for line in lines if "#" in line])
         citing = GRAPH.cited_by["STND.CLASS.10"]
         headings = {GRAPH.sections[n].heading for n in citing if "#" in n}
-        self.assertEqual(len(lines), 2 + len(headings))
+        provisions = [n for n in citing if "#" not in n]
+        kinds = {CORPUS.by_id[n].meta["kind"] for n in provisions}
+        self.assertEqual(kinds, {"provision"})
+        self.assertEqual(len(lines), len(provisions) + len(headings))
         self.assertLess(len(text.splitlines()), 70)
         self.assertIn("VV", GRAPH.cited_by["PRIME.3"])
         cited = show(CORPUS, GRAPH, "PRIME.3").split("Cited by:")[1]
@@ -296,13 +300,18 @@ class Show(unittest.TestCase):
         own items are not listed as citing, though the section itself
         lists what it names; another section's citation is listed.
 
-        Reference: the revision history of STND.DFLT names GOV.41 and
-        STND.DFLT.15; its Mechanisms table names STND.DFLT.7 and
-        PRIME.14 (STND.HARN.1).
+        Reference: the revision history of STND.DFLT names GOV.41, which
+        its Notes also cite, and STND.DFLT.15; its Mechanisms table
+        names STND.DFLT.7 and PRIME.14 (STND.HARN.1).
         """
-        for item in ("GOV.41", "STND.DFLT.7", "STND.DFLT.15"):
+        history = "STND.DFLT#revision-history"
+        self.assertIn("GOV.41", GRAPH.cites[history])
+        for item in GRAPH.cites[history]:
+            with self.subTest(item):
+                self.assertNotIn(history, GRAPH.cited_by.get(item, []))
+        for item in ("STND.DFLT.7", "STND.DFLT.15"):
             self.assertEqual(cited_by_dflt(item), [], item)
-        self.assertIn("GOV.41", GRAPH.cites["STND.DFLT#revision-history"])
+        self.assertEqual(cited_by_dflt("GOV.41"), ["STND.DFLT#notes"])
         self.assertIn(
             "STND.DFLT#mechanisms-and-their-provisions",
             GRAPH.cited_by["PRIME.14"],
@@ -381,7 +390,7 @@ class Find(unittest.TestCase):
         own = [n.startswith("STND.PY") for n in nodes]
         self.assertEqual(own, sorted(own, reverse=True))
         provisions = [k for k in CORPUS.by_id if k.startswith("STND.PY.")]
-        self.assertGreater(len(provisions), 30)
+        self.assertGreater(len(provisions), len(found("STND.PY")))
         self.assertLessEqual(set(provisions), set(nodes[: sum(own)]))
         self.assertIn("STND.PY#notes", nodes[: sum(own)])
         self.assertTrue(names_below("stnd.py", "stnd.py#notes"))
@@ -463,13 +472,14 @@ class Context(unittest.TestCase):
         budget from the provisions behind it.
 
         Reference: STND.HARN.3; "remote write authorization" in force,
-        where GUARD.10, .12, .13, and REPRO.12 are shown at the default
-        budget; STND.CODE#notes, above 20 000 characters, named at a
-        budget of 3000 and shown whole at 100 000 (unit 0022, HR-1; its
-        review, High 2).
+        where each item named is longer than the budget left after the
+        texts shown; STND.CODE#notes, above 20 000 characters, named at
+        a budget of 3000 and shown whole at 100 000 (unit 0022, HR-1;
+        its review, High 2).
         """
         cases = (
             ("remote write authorization", 8000, True),
+            ("remote write authorization", 3000, True),
             ("remote write", 1500, False),
             ("STND.CODE#notes", 3000, False),
             ("STND.CODE#notes", 100_000, False),
@@ -477,16 +487,18 @@ class Context(unittest.TestCase):
         for query, budget, in_force in cases:
             with self.subTest(query=query, budget=budget):
                 text = context(CORPUS, GRAPH, query, budget, in_force)
-                shown = text.split("Also relevant, not shown:")[0]
+                shown, _, rest = text.partition("Also relevant, not shown:")
                 nodes = shown_nodes(shown)
                 blocks = [block(CORPUS, GRAPH, n) for n in nodes]
                 self.assertEqual(shown.rstrip("\n"), "\n\n".join(blocks))
                 self.assertLessEqual(sum(map(len, blocks)), budget)
                 self.assertNotIn("[cut:", text)
-        text = context(CORPUS, GRAPH, "remote write authorization", 8000, True)
-        for ident in ("GUARD.10", "GUARD.12", "GUARD.13", "REPRO.12"):
-            with self.subTest(ident):
-                self.assertIn(f"\n## {ident} — ", text)
+                left = budget - sum(map(len, blocks))
+                for line in rest.splitlines():
+                    if line.startswith("- "):
+                        node = line[2:].split(" — ")[0]
+                        size = len(block(CORPUS, GRAPH, node))
+                        self.assertGreater(size, left, node)
         text = context(CORPUS, GRAPH, "STND.CODE#notes", budget=3000)
         self.assertNotIn("## STND.CODE#notes", text)
         self.assertIn("\n- STND.CODE#notes — Notes", text)

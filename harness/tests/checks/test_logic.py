@@ -309,7 +309,7 @@ CASES: dict[str, tuple[Mutation, set[str]]] = {
     "waivable by text": (waivable_by_text, {"b.3", "f.1"}),
     "missing floor provision": (_drop_floor_provision, {"b.1"}),
     "self-grant cites nothing that resolves": (
-        _replace("GOV.48", "waivers (GOV.44)", "waivers (GOV.999)"),
+        _replace("PRIME.1", "they name (GOV.41)", "they name (GOV.999)"),
         {"b.5"},
     ),
     "procedures waivable": (
@@ -355,11 +355,16 @@ class LogicChecks(unittest.TestCase):
         which PRIME.1 holds at rank 0 (CC23; unit 0024).
         """
         sentence = " They SHALL NOT grant themselves waivers (GOV.44)."
-        drop = _replace("GOV.48", sentence, "")
-        self.assertNotIn("b.5", failed(drop))
+        self.assertNotIn("grant themselves", live_index()["GOV.48"].body)
+        self.assertNotIn("b.5", failed(lambda e: None))
+        unnamed = _replace(
+            "PRIME.1", "authorizations and waivers", "authorizations"
+        )
+        self.assertIn("b.5", failed(unnamed))
 
-        def neither(e: Index) -> None:
-            """Drop the sentence of GOV.48 and the waivers of PRIME.1.
+        def restored(e: Index) -> None:
+            """Restore the sentence of GOV.48 and drop the waivers of
+            PRIME.1.
 
             Parameters
             ----------
@@ -367,12 +372,10 @@ class LogicChecks(unittest.TestCase):
                 Copy of the corpus entries by identifier; changed in
                 place.
             """
-            drop(e)
-            _replace("PRIME.1", "authorizations and waivers", "authorizations")(
-                e
-            )
+            unnamed(e)
+            e["GOV.48"].body += sentence
 
-        self.assertIn("b.5", failed(neither))
+        self.assertNotIn("b.5", failed(restored))
 
     def test_mutations_are_caught(self) -> None:
         """Behavior: each injected defect fails at least its named checks.

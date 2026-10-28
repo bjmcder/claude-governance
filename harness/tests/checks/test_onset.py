@@ -1,14 +1,18 @@
 """Tests of the field ``onset`` (unit 0023): its reading, its check, its
 rendering beside the mode, and the command ``onset``.
 
-The live corpus carries no field yet, so each test adds one to a copy:
-STND.CODE.22, a default of two sentences; STND.STDC.1, a default with a
-table; STND.CODE.6, a binding provision; and VV.1, a provision of LVL0.
+The live corpus carries the field since the rounds of 2026-10-28, so a
+test that needs an item without it takes the field from every entry of a
+copy (``unfielded``), and each test adds one to a copy: STND.CODE.22, a
+default of two sentences; STND.STDC.1, a default with a table;
+STND.CODE.6, a binding provision; and VV.1, a provision of LVL0.
 """
 
 from __future__ import annotations
 
+import re
 import unittest
+from pathlib import Path
 
 from govharness.checks.base import CheckContext
 from govharness.checks.fields import onsets_valid
@@ -25,7 +29,13 @@ from govharness.derive.reading_copy import ReadingCopy, compose
 from govharness.query.graph import build_graph
 from govharness.query.retrieval import show
 from tests.cli.test_main import run
-from tests.support import corpus_copy, corpus_of, live_index, live_ledger
+from tests.support import (
+    Index,
+    corpus_copy,
+    corpus_of,
+    live_index,
+    live_ledger,
+)
 
 PARTED = ["CSQ3", ["sentence 2", "CSQ2"]]
 
@@ -49,6 +59,36 @@ def fielded() -> dict:
         ):
             meta["onset"] = "CSQ3"
     return index
+
+
+def unfielded() -> Index:
+    """Return the live index with the field ``onset`` taken from each
+    entry, as the corpus stood before the field was used.
+
+    Returns
+    -------
+    Index
+        Entries by identifier.
+    """
+    index = live_index()
+    for entry in index.values():
+        entry.meta.pop("onset", None)
+    return index
+
+
+def strip_onsets(root: Path) -> None:
+    """Take the field ``onset`` from each entry of a copy on disk.
+
+    Parameters
+    ----------
+    root : Path
+        Root of a copy of the corpus; changed in place.
+    """
+    for path in root.rglob("*.md"):
+        text = path.read_text(encoding="utf-8")
+        stripped = re.sub(r"(?m)^onset: .*\n", "", text, count=1)
+        if stripped != text:
+            path.write_text(stripped, encoding="utf-8")
 
 
 class Reading(unittest.TestCase):
@@ -200,7 +240,7 @@ class Check(unittest.TestCase):
         self.assertIn("binds at every class", details[0])
 
     def test_live_corpus_passes(self) -> None:
-        """Behavior: the live corpus, which carries no field, passes.
+        """Behavior: the live corpus, which carries the field, passes.
 
         Reference: no verdict on the live corpus changes (unit 0023).
         """
@@ -266,7 +306,7 @@ class Rendering(unittest.TestCase):
 
         Reference: the facts line of ``show`` (STND.HARN.1).
         """
-        index = live_index()
+        index = unfielded()
         before = show(
             corpus_of(index), build_graph(corpus_of(index)), "STND.CODE.22"
         )
@@ -281,7 +321,7 @@ class Rendering(unittest.TestCase):
 
         Reference: the reading copies of `compose`.
         """
-        index = live_index()
+        index = unfielded()
         index["STND.CODE.22"].meta["onset"] = PARTED
         text = compose(
             corpus_of(index),
@@ -300,7 +340,7 @@ class Rendering(unittest.TestCase):
 
         Reference: HW.3 and HW.9, waivable provisions of HW.
         """
-        index = live_index()
+        index = unfielded()
         index["HW.3"].meta["onset"] = "CSQ3"
         text = compose(
             corpus_of(index), live_ledger(), ReadingCopy("HW", "HW.md")
@@ -321,6 +361,7 @@ class Command(unittest.TestCase):
         command.
         """
         with corpus_copy() as root:
+            strip_onsets(root)
             for rel, value in (
                 ("STND/CODE/22.md", '["CSQ3", ["sentence 2", "CSQ2"]]'),
                 ("STND/CODE/23.md", '"CSQ2"'),
@@ -372,7 +413,7 @@ class Command(unittest.TestCase):
 
         Reference: `applying_from`.
         """
-        index = live_index()
+        index = unfielded()
         index["STND.CODE.22"].meta["onset"] = ["CSQ2", ["sentence 2", "CSQ1"]]
         index["STND.CODE.23"].meta["onset"] = "CSQ1"
         index["STND.CODE.3"].meta["onset"] = "CSQ1"

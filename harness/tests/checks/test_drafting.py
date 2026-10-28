@@ -796,58 +796,23 @@ class HeldBehavior(unittest.TestCase):
         Reference: round e of 2026-10-28 merges the spelling table of
         STND.DRAFT.33 into STND.DOCS.8 (CP26, unit 0024).
         """
-
-        def move(e: Index) -> None:
-            """Move the table and its name to STND.DOCS.8.
-
-            Parameters
-            ----------
-            e : Index
-                Entries by identifier, changed in place.
-            """
-            rule, sep, table = e["STND.DRAFT.33"].body.partition("\n\n")
-            self.assertTrue(sep and table.startswith("| British |"))
-            e["STND.DRAFT.33"].body = rule
-            e["STND.DRAFT.33"].meta["defines"] = []
-            e["STND.DRAFT.33"].meta["refers_to"] = ["STND.DOCS.8"]
-            e["STND.DOCS.8"].body += "\n\n" + table
-            e["STND.DOCS.8"].meta["defines"] = ["american-usage", "spelling"]
-
-        clean = statuses(move)
+        index = live_index()
+        self.assertEqual(index["STND.DRAFT.33"].meta["defines"], [])
+        self.assertIn("STND.DOCS.8", index["STND.DRAFT.33"].meta["refers_to"])
+        self.assertIn("\n| British | American |\n", index["STND.DOCS.8"].body)
+        clean = statuses(lambda e: None)
         self.assertEqual(clean["g.1"], "PASS")
         self.assertEqual(clean["g.22"], "PASS")
-        index = live_index()
-        move(index)
         self.assertEqual(
             cited_tables(corpus_of(index), "STND.DRAFT."),
             {("STND.DOCS.8", "spelling")},
         )
-
-        def uncited(e: Index) -> None:
-            """Move the table without the citation of STND.DOCS.8.
-
-            Parameters
-            ----------
-            e : Index
-                Entries by identifier, changed in place.
-            """
-            move(e)
-            e["STND.DRAFT.33"].meta["refers_to"] = []
-
-        self.assertEqual(statuses(uncited)["g.1"], "FAIL")
-
-        def misspelt(e: Index) -> None:
-            """Move the table and misspell a provision of STND.DRAFT.
-
-            Parameters
-            ----------
-            e : Index
-                Entries by identifier, changed in place.
-            """
-            move(e)
-            e["STND.DRAFT.2"].body += " The behaviour SHALL be recorded."
-
-        self.assertEqual(statuses(misspelt)["g.22"], "FAIL")
+        uncited = statuses(_meta("STND.DRAFT.33", refers_to=[]))
+        self.assertEqual(uncited["g.1"], "FAIL")
+        misspelt = statuses(
+            _append("STND.DRAFT.2", "The behaviour SHALL be recorded.")
+        )
+        self.assertEqual(misspelt["g.22"], "FAIL")
 
     def test_mention_columns(self) -> None:
         """Behavior: in a table that a provision names in ``defines``,

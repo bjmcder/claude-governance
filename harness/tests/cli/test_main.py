@@ -14,7 +14,7 @@ from unittest import mock
 
 from govharness.cli.arguments import ENV_ROOT, split_root
 from govharness.cli.main import entry, main
-from tests.support import ROOT, corpus_copy
+from tests.support import ROOT, corpus_copy, live_index
 
 ROOT_COMMANDS = (
     ["verify"],
@@ -324,11 +324,13 @@ class ExitCodes(unittest.TestCase):
         """Behavior: ``show DOC --all`` prints each provision of the
         document whole, under its heading, after the document's lists.
 
-        Reference: STND.PY, 33 provisions (unit 0022, HR-2).
+        Reference: STND.PY and its provisions (unit 0022, HR-2).
         """
+        provisions = [k for k in live_index() if k.startswith("STND.PY.")]
         code, out, _ = run(["show", str(ROOT), "STND.PY", "--all"])
         self.assertEqual(code, 0)
-        self.assertGreaterEqual(out.count("\n## STND.PY."), 33)
+        self.assertGreater(len(provisions), 1)
+        self.assertEqual(out.count("\n## STND.PY."), len(provisions))
         self.assertIn("\n## STND.PY.1 — ", out.split("Holds:")[1])
 
     def test_given_root_must_be_a_directory(self) -> None:
