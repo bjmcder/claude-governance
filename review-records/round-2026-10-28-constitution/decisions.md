@@ -77,9 +77,9 @@ None. No lower provision needs to conform. A project constitution adopted under 
 1. **Wording of the exception.** "Promotes a result other than through its adopted classification (QA.11)" names the act and cites QA.11. It does not repeat the classes. The alternative is "other than through the adopted classification of work of CSQ3 or CSQ4 (QA.11)", which states the classes in GOV.20 as well. Recommendation: the wording as drafted. QA.11 alone fixes the classes at which a classification promotes, and naming them twice would put the same rule in two places (GOV.31).
 2. **The order of the list.** The drafted list keeps the order of GOV.20 and of the ruling, so the qualified item comes first. The qualifier cannot attach to the other two items, since neither is done through a classification, and GOV.9 gives a GOV provision its more restrictive reading. The alternative is to move the qualified item last. Recommendation: keep the order, which is the smaller change.
 
-## Left to a later round
+## The "releases software" limb (item 7 of the review)
 
-The "releases software" limb of GOV.20 (item 7 of `review.md`). Under STND.WPROC.12, a main line advances only on a recorded decision of the human owner to release, and STND.WPROC's defaults apply to work without a constitution. A project of CSQ3 under STND.WPROC therefore releases software at its first main-line advance, and so has a constitution under the second limb of GOV.20. That is the reach at entry 202, outside the ruling, and this round drafts nothing on it. The lead adds to `OPEN-ITEMS.md` the question whether "releases software" means a release beyond the project or every advance of a main line.
+Judged by the lead not to need a later round. The review read a project of CSQ3 under STND.WPROC as releasing software at its first main-line advance (STND.WPROC.12). The Notes of STND.WPROC define a main line as a branch from which the work is used beyond its development, and say that a branch drawn on only within development, for the reliance that the CSQ3 reliance test of STND.CLASS.1 admits, is not a main line, so a push to it is no release decision. A project of CSQ3 or CSQ4 that keeps its reliance within that test therefore releases nothing, and a project that makes a revision available for use beyond its development (LEX.release) releases software and has a constitution, as GOV.20 intends. Nothing is added to `OPEN-ITEMS.md`.
 
 ## Review
 
@@ -93,7 +93,7 @@ The "releases software" limb of GOV.20 (item 7 of `review.md`). Under STND.WPROC
 | 4 | The Note gives a classification to work and has work promote | Fixed as proposed, in the module, the row, the rationale, and this record |
 | 5 | The record does not say where the recommendation was made | Fixed: quoted whole under "The ruling"; both rationales close with the proposed "Proposal: …" sentence |
 | 6 | The reason given for reading 2 | Taken as proposed |
-| 7 | The "releases software" limb | Left to a later round, as above |
+| 7 | The "releases software" limb | Not a gap, as above: a branch used only within the CSQ3 reliance test is no main line (STND.WPROC Notes) |
 | 8 | The self-check omits two rules | Taken as proposed |
 
 ## Checks
@@ -128,3 +128,7 @@ The suite was run on a detached worktree of the branch at 5275278, with this rou
 - `test_repository_rendered_copies_are_current` reports `rendered/GOV.md`, `rendered/LVL0.md`, and `rendered/STND.DFLT.md` as stale.
 
 These tests check that the reading copies are current, and the copies are rebuilt only after application (standing process, step 8). Neither test pins text that this round changes. After `compose governance --write` and `compose governance --all ../rendered` in the worktree, the module's 10 tests pass. No test was changed. When the round is applied, the rebuild of the reading copies regenerates those four files.
+
+## Ratification
+
+The custodian, 2026-10-28, on the recommendation quoted under "The ruling": "i agree with the recommendation on the open items. proceed". The round is applied as drafted, with each reading for the custodian taking its recommended option, as the custodian ratified the rounds of the same day ("proceed in full as recommended").

@@ -139,7 +139,7 @@ Each LVL2 provision is marked binding or default. A provision is marked binding 
 
 . Instantiates .
 
-Every project that promotes a result, releases software, or drives physical hardware has a project constitution: a LVL3 instrument that inherits from and aligns with the levels above it, cites the provisions it instantiates, adds only project-specific obligations, and relaxes none (PRIME.15).
+Every project that promotes a result other than through its adopted classification (QA.11), releases software, or drives physical hardware has a project constitution: a LVL3 instrument that inherits from and aligns with the levels above it, cites the provisions it instantiates, adds only project-specific obligations, and relaxes none (PRIME.15).
 
 #### GOV.21 Project mechanisms
 
