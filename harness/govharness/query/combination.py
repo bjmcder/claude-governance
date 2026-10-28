@@ -88,8 +88,8 @@ class Pair:
         changed side.
     bases : tuple[str, ...]
         Why the pair is listed: ``matter: NAME`` for a shared matter,
-        or a LVL0 identifier both instantiate where the other provision
-        lies in a document that the change touches.
+        or a LVL0 identifier both instantiate where both provisions lie
+        in documents that the change touches.
     """
 
     first: str
@@ -346,11 +346,12 @@ def review_pairs(
     pair joins provisions of two documents, at least one of them a
     profile or sub-profile, and is listed on a shared matter when a
     shared-matters table gives both for one matter, and on a common
-    instantiation when the other provision lies in a document that the
-    change touches, a document named whole or the document of a
-    provision named, and both instantiate one LVL0 provision outside GOV
-    and the Governing Principles. A change of LVL0 alone touches no
-    document below LVL0, so its pairs rest on shared matters.
+    instantiation when both provisions lie in documents that the change
+    touches, each a document named whole or the document of a provision
+    named, and both instantiate one LVL0 provision outside GOV and the
+    Governing Principles. A provision on the changed side only because
+    it instantiates an amended LVL0 provision pairs on shared matters
+    alone, so a change of LVL0 alone lists only such pairs.
 
     Parameters
     ----------
@@ -415,7 +416,7 @@ def review_pairs(
                 for name, members in matters.items()
                 if first in members and second in members
             }
-            if doc_of[second] in docs:
+            if doc_of[first] in docs and doc_of[second] in docs:
                 why |= bases[first] & bases[second]
             if why:
                 key = (

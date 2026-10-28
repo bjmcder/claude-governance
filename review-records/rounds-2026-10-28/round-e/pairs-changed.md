@@ -1,73 +1,61 @@
 # Round e of 2026-10-28: pairs whose changed side is a provision of this round
 
-The kept copy is `/tmp/claude-1000/round-e/kept/governance`: the live corpus with rounds a, d, c, o, and e applied through `apply_rounds_2026_10_28.py`. The provisions that this round adds or changes are STND.HARN.24, STND.HARN.28, AGENT.45, AGENT.46, STND.DOCS.8, STND.DRAFT.10, STND.DRAFT.33, STND.WPROC.13, STND.WPROC.16, STND.IDENT.13, HDES.ASIC.12, STND.PROJ.1, STND.PROJ.2, STND.PERF.1, STND.FTN.4, STND.FTN.33, STND.DEPS.4, STND.DEPS.13, STND.DEPS.14, STND.CODE.5, STND.JL.3, STND.RUST.1, and STND.RUST.28, with GOV.11, GOV.24, GUARD.4, and GUARD.15 in LVL0. Two listings are given: under STND.HARN.28 as this round drafts it, which unit 0024 implements, and under the rule in force, with the code of `HEAD`. The withdrawn provisions (STND.CXX.18, STND.STDC.39, STND.STDC.40, STND.LEAN.27, STND.SV.28, STND.PY.14) have no pair, and a change of the Notes alone pairs nothing.
+The kept copy is `/tmp/claude-1000/round-e/kept/governance`: the live corpus with rounds a, d, c, o, and e applied through `apply_rounds_2026_10_28.py`. The provisions that this round adds or changes are STND.HARN.24, STND.HARN.28, AGENT.45, AGENT.46, STND.DOCS.8, STND.DRAFT.10, STND.DRAFT.33, STND.WPROC.13, STND.WPROC.16, STND.IDENT.13, HDES.ASIC.12, STND.PROJ.1, STND.PROJ.2, STND.PERF.1, STND.FTN.4, STND.FTN.33, STND.DEPS.4, STND.DEPS.13, STND.DEPS.14, STND.CODE.5, STND.JL.3, STND.RUST.1, and STND.RUST.28, with GOV.11, GOV.24, GOV.48, GUARD.4, and GUARD.15 in LVL0. Two listings are given: under STND.HARN.28 as this round drafts it, which unit 0024 implements, and under the rule in force, with the code before unit 0024. The withdrawn provisions (STND.CXX.18, STND.STDC.39, STND.STDC.40, STND.LEAN.27, STND.SV.28, STND.PY.14) have no pair, and a change of the Notes alone pairs nothing.
 
 ## Under the drafted rule
 
-`python3 -B -m govharness pairs <kept>/governance STND.HARN.24 --with <the other 22 provisions> --amends GOV.11 GOV.24 GUARD.4 GUARD.15`: 56 pairs. No pair conflicts, and no pair addresses a matter that no shared-matters table gives.
+`python3 -B -m govharness pairs <kept>/governance STND.HARN.24 --with <the other 22 provisions> --amends GOV.11 GOV.24 GOV.48 GUARD.4 GUARD.15`: 44 pairs. On the changed side of each is a provision that this round adds or changes, or, for AGENT.11, STND.DOCS.10, and STND.DRAFT.42, a provision that instantiates an amended LVL0 provision and lies in a document of which the round amends a provision; on a common LVL0 provision, both provisions lie in such documents. The code review counted 42 before GOV.48 was amended; AGENT.11 and STND.DOCS.10 instantiate GOV.48 and add one pair each. No pair conflicts, and no pair addresses a matter that no shared-matters table gives.
 
 | # | Changed side | Other provision | Bases | Verdict |
 | --- | --- | --- | --- | --- |
-| 1 | AGENT.46 | STND.DRAFT.42 | PRIME.14 | none: the referral that remains is the one STND.DRAFT.42 admits, halting only the line of work that it concerns |
-| 2 | HDES.ASIC.12 | AGENT.12 | VV.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 3 | HDES.ASIC.12 | AGENT.41 | INTPR.10 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 4 | HDES.ASIC.12 | CPS.4 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 5 | HDES.ASIC.12 | HDES.11 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 6 | HDES.ASIC.12 | HDES.13 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 7 | HDES.ASIC.12 | HDES.3 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 8 | HDES.ASIC.12 | HDES.4 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 9 | HDES.ASIC.12 | HDES.5 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 10 | HDES.ASIC.12 | HDES.6 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 11 | HDES.ASIC.12 | HDES.7 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 12 | HDES.ASIC.12 | HDES.8 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 13 | HDES.ASIC.12 | HDES.FPGA.3 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 14 | HDES.ASIC.12 | HDES.FPGA.4 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 15 | HDES.ASIC.12 | HW.ASIC.3 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 16 | HDES.ASIC.12 | HW.ASIC.4 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 17 | HDES.ASIC.12 | HW.FPGA.3 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 18 | HDES.ASIC.12 | HW.FPGA.4 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 19 | HDES.ASIC.12 | STND.CODE.19 | VV.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 20 | HDES.ASIC.12 | STND.CODE.29 | REPRO.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 21 | HDES.ASIC.12 | STND.CODE.34 | INTPR.10, VV.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 22 | HDES.ASIC.12 | STND.CODE.9 | REPRO.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 23 | HDES.ASIC.12 | STND.DEPS.12 | REPRO.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 24 | HDES.ASIC.12 | STND.DEPS.13 | REPRO.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 25 | HDES.ASIC.12 | STND.DEPS.8 | REPRO.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 26 | HDES.ASIC.12 | STND.FTN.28 | VV.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 27 | HDES.ASIC.12 | STND.PERF.11 | VV.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 28 | HDES.ASIC.12 | STND.PERF.13 | VV.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 29 | HDES.ASIC.12 | STND.PERF.16 | VV.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 30 | HDES.ASIC.12 | STND.PERF.22 | REPRO.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 31 | HDES.ASIC.12 | STND.PERF.7 | INTPR.10 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 32 | HDES.ASIC.12 | STND.RUST.33 | INTPR.10, VV.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 33 | HDES.ASIC.12 | STND.RUST.8 | VV.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 34 | HDES.ASIC.12 | STND.WPROC.15 | REPRO.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
-| 35 | STND.CREW.13 | AGENT.10 | GUARD.14 | none: the editorial GUARD.15 keeps the referral, and the estimates of AGENT.6 to AGENT.10 are what STND.CREW.13 bounds |
-| 36 | STND.CREW.13 | AGENT.6 | GUARD.14 | none: the editorial GUARD.15 keeps the referral, and the estimates of AGENT.6 to AGENT.10 are what STND.CREW.13 bounds |
-| 37 | STND.CREW.13 | AGENT.7 | GUARD.14 | none: the editorial GUARD.15 keeps the referral, and the estimates of AGENT.6 to AGENT.10 are what STND.CREW.13 bounds |
-| 38 | STND.CREW.13 | AGENT.8 | GUARD.14 | none: the editorial GUARD.15 keeps the referral, and the estimates of AGENT.6 to AGENT.10 are what STND.CREW.13 bounds |
-| 39 | STND.CREW.13 | AGENT.9 | GUARD.14 | none: the editorial GUARD.15 keeps the referral, and the estimates of AGENT.6 to AGENT.10 are what STND.CREW.13 bounds |
-| 40 | STND.CREW.21 | AGENT.10 | GUARD.14 | none: as for STND.CREW.13 |
-| 41 | STND.CREW.21 | AGENT.6 | GUARD.14 | none: as for STND.CREW.13 |
-| 42 | STND.CREW.21 | AGENT.7 | GUARD.14 | none: as for STND.CREW.13 |
-| 43 | STND.CREW.21 | AGENT.8 | GUARD.14 | none: as for STND.CREW.13 |
-| 44 | STND.CREW.21 | AGENT.9 | GUARD.14 | none: as for STND.CREW.13 |
-| 45 | STND.DEPS.4 | AGENT.22 | REPRO.7 | none: a grouped reason is a decision record that AGENT.22 does not restrict |
-| 46 | STND.DOCS.8 | AGENT.25 | INTPR.12 | none: AGENT.25 asks records when made; spelling does not bear on it |
-| 47 | STND.DRAFT.10 | AGENT.25 | INTPR.12 | none: the provision now reaches governance and project instruments, which the records of AGENT.25 are not |
-| 48 | STND.DRAFT.33 | AGENT.25 | INTPR.12 | none: the rule is unchanged |
-| 49 | STND.DRAFT.42 | AGENT.15 | GUARD.3 | none: AGENT.15 continues the lines of work that a referral does not concern, as STND.DRAFT.42 has it |
-| 50 | STND.FTN.33 | AGENT.22 | REPRO.7 | none: a grouped entry is a decision record that AGENT.22 does not restrict |
-| 51 | STND.VVUQ.83 | AGENT.3 | PRIME.2 | none: the editorial GUARD.15 changes nothing that STND.VVUQ.83 or the AGENT provisions on claims, checks, and departures rely on |
-| 52 | STND.VVUQ.83 | AGENT.4 | PRIME.2 | none: the editorial GUARD.15 changes nothing that STND.VVUQ.83 or the AGENT provisions on claims, checks, and departures rely on |
-| 53 | STND.VVUQ.83 | AGENT.47 | PRIME.2 | none: the editorial GUARD.15 changes nothing that STND.VVUQ.83 or the AGENT provisions on claims, checks, and departures rely on |
-| 54 | STND.VVUQ.83 | AGENT.5 | PRIME.2 | none: the editorial GUARD.15 changes nothing that STND.VVUQ.83 or the AGENT provisions on claims, checks, and departures rely on |
-| 55 | STND.WPROC.16 | AGENT.28 | QA.2 | none: AGENT.28 consults knowledge, and AGENT.39 assesses parallel units; a commit that changes only a shared record is consistent with both |
-| 56 | STND.WPROC.16 | AGENT.39 | DSGN.15 | none: AGENT.28 consults knowledge, and AGENT.39 assesses parallel units; a commit that changes only a shared record is consistent with both |
+| 1 | AGENT.11 | STND.PROJ.3 | GUARD.12 | none: AGENT.11 instantiates GOV.48, which the editorial LVL0 amendment changes in no meaning; a brief that names each authorization extending to a directed agent agrees with STND.PROJ.3 stating the roles to which each standing authorization extends |
+| 2 | AGENT.46 | STND.DRAFT.42 | PRIME.14 | none: the referral that remains is the one STND.DRAFT.42 admits, halting only the line of work that it concerns |
+| 3 | HDES.ASIC.12 | AGENT.12 | VV.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 4 | HDES.ASIC.12 | AGENT.41 | INTPR.10 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 5 | HDES.ASIC.12 | CPS.4 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 6 | HDES.ASIC.12 | HDES.11 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 7 | HDES.ASIC.12 | HDES.13 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 8 | HDES.ASIC.12 | HDES.3 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 9 | HDES.ASIC.12 | HDES.4 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 10 | HDES.ASIC.12 | HDES.5 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 11 | HDES.ASIC.12 | HDES.6 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 12 | HDES.ASIC.12 | HDES.7 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 13 | HDES.ASIC.12 | HDES.8 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 14 | HDES.ASIC.12 | HDES.FPGA.3 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 15 | HDES.ASIC.12 | HDES.FPGA.4 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 16 | HDES.ASIC.12 | HW.ASIC.3 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 17 | HDES.ASIC.12 | HW.ASIC.4 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 18 | HDES.ASIC.12 | HW.FPGA.3 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 19 | HDES.ASIC.12 | HW.FPGA.4 | matter: design record of a realized design | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 20 | HDES.ASIC.12 | STND.CODE.19 | VV.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 21 | HDES.ASIC.12 | STND.CODE.29 | REPRO.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 22 | HDES.ASIC.12 | STND.CODE.34 | INTPR.10, VV.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 23 | HDES.ASIC.12 | STND.CODE.9 | REPRO.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 24 | HDES.ASIC.12 | STND.DEPS.12 | REPRO.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 25 | HDES.ASIC.12 | STND.DEPS.13 | REPRO.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 26 | HDES.ASIC.12 | STND.DEPS.8 | REPRO.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 27 | HDES.ASIC.12 | STND.FTN.28 | VV.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 28 | HDES.ASIC.12 | STND.PERF.11 | VV.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 29 | HDES.ASIC.12 | STND.PERF.13 | VV.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 30 | HDES.ASIC.12 | STND.PERF.16 | VV.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 31 | HDES.ASIC.12 | STND.PERF.22 | REPRO.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 32 | HDES.ASIC.12 | STND.PERF.7 | INTPR.10 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 33 | HDES.ASIC.12 | STND.RUST.33 | INTPR.10, VV.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 34 | HDES.ASIC.12 | STND.RUST.8 | VV.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 35 | HDES.ASIC.12 | STND.WPROC.15 | REPRO.1 | none: the change adds a conjunction; the fabrication readiness record lists what the partner records, and no partner forbids an item of its list |
+| 36 | STND.DEPS.4 | AGENT.22 | REPRO.7 | none: a grouped reason is a decision record that AGENT.22 does not restrict |
+| 37 | STND.DOCS.10 | AGENT.25 | INTPR.12 | none: STND.DOCS.10 instantiates GOV.48, unchanged in meaning; the writing of an agent and the records of AGENT.25 written when made agree |
+| 38 | STND.DOCS.8 | AGENT.25 | INTPR.12 | none: AGENT.25 asks records when made; spelling does not bear on it |
+| 39 | STND.DRAFT.10 | AGENT.25 | INTPR.12 | none: the provision now reaches governance and project instruments, which the records of AGENT.25 are not |
+| 40 | STND.DRAFT.33 | AGENT.25 | INTPR.12 | none: the rule is unchanged |
+| 41 | STND.DRAFT.42 | AGENT.15 | GUARD.3 | none: AGENT.15 continues the lines of work that a referral does not concern, as STND.DRAFT.42 has it |
+| 42 | STND.FTN.33 | AGENT.22 | REPRO.7 | none: a grouped entry is a decision record that AGENT.22 does not restrict |
+| 43 | STND.WPROC.16 | AGENT.28 | QA.2 | none: AGENT.28 consults knowledge, and AGENT.39 assesses parallel units; a commit that changes only a shared record is consistent with both |
+| 44 | STND.WPROC.16 | AGENT.39 | DSGN.15 | none: AGENT.28 consults knowledge, and AGENT.39 assesses parallel units; a commit that changes only a shared record is consistent with both |
 
 ## Under the rule in force
 
-The code of `HEAD` (the rule in force), `pairs <kept>/governance ID` for each of the 27 documents of the round and `pairs <kept>/governance LVL0 --amends GOV.11 GOV.24 GUARD.4 GUARD.15`, keeping the pairs that hold a provision that this round adds or changes: 344 pairs, each counted once. Grouped by changed provision; the verdict of a group applies to each pair in it. No pair conflicts.
+The code before unit 0024 (e0595e9, the rule in force), `pairs <kept>/governance ID` for each of the 33 documents of the round and `pairs <kept>/governance LVL0 --amends GOV.11 GOV.24 GOV.48 GUARD.4 GUARD.15`, keeping the pairs that hold a provision that this round adds or changes: 369 pairs, each counted once. Grouped by changed provision; the verdict of a group applies to each pair in it. No pair conflicts.
 
 ### AGENT.45 (7 pairs)
 
@@ -165,8 +153,8 @@ Verdict: none: a commit that changes only a shared record is the protocol for th
 
 AGENT.28 (QA.2), AGENT.39 (DSGN.15), HDES.11 (DSGN.15), HW.11 (DSGN.15).
 
-### Provisions that instantiate an amended LVL0 provision (16 pairs)
+### Provisions that instantiate an amended LVL0 provision (41 pairs)
 
-Verdict: none: the amendment of GOV.11, GOV.24, GUARD.4, and GUARD.15 is editorial; these provisions instantiate one of them and keep their meaning, and each pair rests on a common LVL0 provision outside the amended ones.
+Verdict: none: the amendment of GOV.11, GOV.24, GOV.48, GUARD.4, and GUARD.15 is editorial; these provisions instantiate one of them and keep their meaning, and each pair rests on a common LVL0 provision outside the amended ones.
 
-AGENT.10 with STND.CREW.13 (GUARD.14), AGENT.10 with STND.CREW.21 (GUARD.14), AGENT.15 with STND.DRAFT.42 (GUARD.3), AGENT.3 with STND.VVUQ.83 (PRIME.2), AGENT.4 with STND.VVUQ.83 (PRIME.2), AGENT.47 with STND.VVUQ.83 (PRIME.2), AGENT.5 with STND.VVUQ.83 (PRIME.2), AGENT.6 with STND.CREW.13 (GUARD.14), AGENT.6 with STND.CREW.21 (GUARD.14), AGENT.7 with STND.CREW.13 (GUARD.14), AGENT.7 with STND.CREW.21 (GUARD.14), AGENT.8 with STND.CREW.13 (GUARD.14), AGENT.8 with STND.CREW.21 (GUARD.14), AGENT.9 with STND.CREW.13 (GUARD.14), AGENT.9 with STND.CREW.21 (GUARD.14), NUMER.26 with STND.VVUQ.83 (PRIME.2).
+AGENT.10 with STND.CREW.13 (GUARD.14), AGENT.10 with STND.CREW.21 (GUARD.14), AGENT.11 with STND.CREW.12 (GUARD.12), AGENT.11 with STND.CREW.14 (GUARD.12), AGENT.11 with STND.DFLT.32 (GUARD.12), AGENT.11 with STND.DFLT.7 (QA.1), AGENT.11 with STND.PROJ.3 (GUARD.12), AGENT.15 with STND.DRAFT.42 (GUARD.3), AGENT.17 with STND.INSTR.8 (INTPR.5), AGENT.2 with STND.INSTR.9 (REPRO.11), AGENT.20 with STND.INSTR.9 (REPRO.11), AGENT.21 with STND.INSTR.9 (REPRO.11), AGENT.22 with STND.INSTR.9 (REPRO.11), AGENT.23 with STND.INSTR.9 (REPRO.11), AGENT.24 with STND.INSTR.9 (REPRO.11), AGENT.25 with STND.DOCS.10 (INTPR.12), AGENT.25 with STND.INSTR.9 (REPRO.11), AGENT.26 with STND.INSTR.9 (INTPR.13), AGENT.27 with STND.INSTR.9 (INTPR.13), AGENT.28 with STND.INSTR.7 (QA.2), AGENT.3 with STND.VVUQ.83 (PRIME.2), AGENT.30 with STND.INSTR.9 (INTPR.13), AGENT.31 with STND.INSTR.9 (REPRO.11), AGENT.32 with STND.INSTR.9 (INTPR.13), AGENT.33 with STND.INSTR.9 (REPRO.11), AGENT.36 with STND.INSTR.9 (INTPR.13), AGENT.37 with STND.INSTR.9 (INTPR.13), AGENT.4 with STND.VVUQ.83 (PRIME.2), AGENT.44 with STND.INSTR.6 (GUARD.16), AGENT.47 with STND.VVUQ.83 (PRIME.2), AGENT.5 with STND.VVUQ.83 (PRIME.2), AGENT.6 with STND.CREW.13 (GUARD.14), AGENT.6 with STND.CREW.21 (GUARD.14), AGENT.7 with STND.CREW.13 (GUARD.14), AGENT.7 with STND.CREW.21 (GUARD.14), AGENT.8 with STND.CREW.13 (GUARD.14), AGENT.8 with STND.CREW.21 (GUARD.14), AGENT.9 with STND.CREW.13 (GUARD.14), AGENT.9 with STND.CREW.21 (GUARD.14), NUMER.26 with STND.VVUQ.83 (PRIME.2), NUMER.4 with STND.INSTR.9 (INTPR.13).

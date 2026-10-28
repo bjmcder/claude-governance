@@ -237,6 +237,54 @@ class Combination(unittest.TestCase):
                     "VV.1", index[pair.first].meta.get("instantiates") or []
                 )
 
+    def test_lvl0_amendment_adds_no_pair_outside_the_change(self) -> None:
+        """Behavior: with NUMER changed and VV.1 amended, a pair on a
+        common LVL0 provision has both provisions in NUMER's change,
+        none of them a provision outside NUMER that is on the changed
+        side only because it instantiates VV.1; no pair rests on a
+        provision of GOV or of the Governing Principles.
+
+        Reference: STND.HARN.28 as ruling E1 narrows it (unit 0024,
+        review Should-fix 1): both provisions in documents that the
+        change touches.
+        """
+        corpus = corpus_of(live_index())
+        pairs = review_pairs(corpus, ("NUMER", "HW"), ("VV.1",))
+        for pair in pairs:
+            with self.subTest(pair):
+                self.assertFalse(
+                    any(b.startswith(("GOV.", "PRIN.")) for b in pair.bases)
+                )
+                if all(b.startswith("matter: ") for b in pair.bases):
+                    continue
+                for ident in (pair.first, pair.second):
+                    self.assertTrue(ident.startswith(("NUMER.", "HW.")))
+                    self.assertNotIn(
+                        ident.split(".")[1],
+                        ("CPU", "GPU", "QPU", "EMBED", "FPGA", "ASIC"),
+                    )
+        alone = review_pairs(corpus, ("NUMER",), ("VV.1",))
+        self.assertEqual(len(alone), 344)
+        for pair in alone:
+            with self.subTest(pair):
+                if not all(b.startswith("matter: ") for b in pair.bases):
+                    self.assertTrue(pair.first.startswith("NUMER."))
+                    self.assertTrue(pair.second.startswith("NUMER."))
+
+    def test_document_in_draft_keeps_its_pairs(self) -> None:
+        """Behavior: a changed document that is not yet in force keeps
+        its pairs: its shared-matters tables and its provisions count,
+        92 pairs for NUMER alone and 39 for NUMER.11 with HW.16.
+
+        Reference: STND.HARN.28: the tables of each document that the
+        change adopts or amends (unit 0024, review Optional 1).
+        """
+        index = live_index()
+        index["NUMER"].meta["status"] = "draft"
+        corpus = corpus_of(index)
+        self.assertEqual(len(review_pairs(corpus, "NUMER")), 92)
+        self.assertEqual(len(review_pairs(corpus, ("NUMER.11", "HW.16"))), 39)
+
     def test_pairs_need_a_profile(self) -> None:
         """Behavior: no pair joins two provisions outside profiles.
 

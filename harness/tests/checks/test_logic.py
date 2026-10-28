@@ -346,6 +346,34 @@ class LogicChecks(unittest.TestCase):
         """
         self.assertEqual(failed(lambda e: None), set())
 
+    def test_waiver_self_grant_read_from_prime_1(self) -> None:
+        """Behavior: without the last sentence of GOV.48, b.5 reads the
+        bar on an agent granting a waiver from the reservation of
+        PRIME.1, and fails once PRIME.1 no longer names waivers.
+
+        Reference: round e of 2026-10-28 drops that sentence of GOV.48,
+        which PRIME.1 holds at rank 0 (CC23; unit 0024).
+        """
+        sentence = " They SHALL NOT grant themselves waivers (GOV.44)."
+        drop = _replace("GOV.48", sentence, "")
+        self.assertNotIn("b.5", failed(drop))
+
+        def neither(e: Index) -> None:
+            """Drop the sentence of GOV.48 and the waivers of PRIME.1.
+
+            Parameters
+            ----------
+            e : Index
+                Copy of the corpus entries by identifier; changed in
+                place.
+            """
+            drop(e)
+            _replace("PRIME.1", "authorizations and waivers", "authorizations")(
+                e
+            )
+
+        self.assertIn("b.5", failed(neither))
+
     def test_mutations_are_caught(self) -> None:
         """Behavior: each injected defect fails at least its named checks.
 

@@ -23,6 +23,7 @@ from govharness.checks.drafting.context import (
     is_imperative,
 )
 from govharness.checks.drafting.family import Finder
+from govharness.checks.drafting.tables import cited_tables
 from govharness.checks.lineage import family as lineage
 from govharness.checks.registry import run_checks
 from govharness.core.entry import Entry
@@ -815,6 +816,25 @@ class HeldBehavior(unittest.TestCase):
         clean = statuses(move)
         self.assertEqual(clean["g.1"], "PASS")
         self.assertEqual(clean["g.22"], "PASS")
+        index = live_index()
+        move(index)
+        self.assertEqual(
+            cited_tables(corpus_of(index), "STND.DRAFT."),
+            {("STND.DOCS.8", "spelling")},
+        )
+
+        def uncited(e: Index) -> None:
+            """Move the table without the citation of STND.DOCS.8.
+
+            Parameters
+            ----------
+            e : Index
+                Entries by identifier, changed in place.
+            """
+            move(e)
+            e["STND.DRAFT.33"].meta["refers_to"] = []
+
+        self.assertEqual(statuses(uncited)["g.1"], "FAIL")
 
         def misspelt(e: Index) -> None:
             """Move the table and misspell a provision of STND.DRAFT.

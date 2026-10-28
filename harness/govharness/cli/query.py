@@ -17,7 +17,7 @@ from pathlib import Path
 from govharness.cli.arguments import corpus_root, default_root, split_root
 from govharness.core.corpus import Corpus, read_corpus
 from govharness.core.onset import STARTS, applying_from, describe, onset_of
-from govharness.query.combination import review_pairs
+from govharness.query.combination import document_id, review_pairs
 from govharness.query.graph import build_graph
 from govharness.query.retrieval import (
     context,
@@ -72,10 +72,13 @@ def add_query(sub: argparse._SubParsersAction) -> None:
         help="provision pairs to review before a change (STND.HARN.28)",
     )
     pairs.add_argument("root", nargs="?", type=corpus_root, help=ROOT_HELP)
-    pairs.add_argument("ident", metavar="ID", help="the changed document")
+    pairs.add_argument(
+        "ident", metavar="ID", help="a changed document or provision"
+    )
     pairs.add_argument(
         "--amends",
-        nargs="*",
+        nargs="+",
+        action="extend",
         default=[],
         metavar="LVL0_ID",
         help="LVL0 provisions the change amends",
@@ -83,7 +86,8 @@ def add_query(sub: argparse._SubParsersAction) -> None:
     pairs.add_argument(
         "--with",
         dest="also",
-        nargs="*",
+        nargs="+",
+        action="extend",
         default=[],
         metavar="ID",
         help="other documents or provisions that the change adopts or amends",
@@ -215,33 +219,81 @@ def run_context(args: argparse.Namespace) -> int:
 def run_pairs(args: argparse.Namespace) -> int:
     """Run ``pairs``: list the provision pairs a change puts to review.
 
+    Each ``ID`` names a document below LVL0 or a provision below LVL0;
+    a LVL0 document, such as an article, is admitted as ``ID`` only with
+    ``--amends``, which names LVL0 provisions alone.
+
     Parameters
     ----------
     args : argparse.Namespace
         ``root``, ``ident``, ``amends``, and ``also``, the other
-        documents of the same change.
+        documents or provisions of the same change.
 
     Returns
     -------
     int
-        1 when a changed document is not in the corpus, 2 when no
-        root is known, else 0. An identifier in the wrong case names
-        its document, as it does for ``show``.
+        1 when an identifier names nothing that the command takes, or
+        when the change puts no pair to review, with the message on the
+        standard error; 2 when no root is known; else 0. An identifier
+        in the wrong case names its item, as it does for ``show``.
     """
     corpus = load("pairs", args.root)
     if corpus is None:
         return 2
     graph = build_graph(corpus)
-    docs: list[str] = []
+    lower_docs = {
+        document_id(corpus, p)
+        for p in corpus.provisions()
+        if p.meta.get("level") not in (None, "LVL0")
+    }
+    amends: list[str] = []
+    for given in args.amends:
+        ident = resolve_ref(corpus, graph, given)
+        entry = corpus.by_id.get(ident or "")
+        if entry is None or not (
+            entry.meta.get("kind") == "provision"
+            and entry.meta.get("level") == "LVL0"
+        ):
+            print(
+                f"pairs: --amends {given} is not a LVL0 provision",
+                file=sys.stderr,
+            )
+            return 1
+        amends.append(str(ident))
+    named: list[str] = []
     for given in [args.ident, *args.also]:
         ident = resolve_ref(corpus, graph, given)
-        if ident is None or ident not in corpus.by_id:
-            print(f"pairs: no document {given}", file=sys.stderr)
+        entry = corpus.by_id.get(ident or "")
+        lower = entry is not None and (
+            ident in lower_docs
+            or (
+                entry.meta.get("kind") == "provision"
+                and entry.meta.get("level") not in (None, "LVL0")
+            )
+        )
+        lvl0_doc = (
+            entry is not None
+            and entry.meta.get("level") == "LVL0"
+            and entry.meta.get("kind") != "provision"
+        )
+        if not lower and not (lvl0_doc and amends):
+            what = (
+                "a LVL0 document, given without --amends"
+                if lvl0_doc
+                else "not a document or provision below LVL0"
+            )
+            print(f"pairs: {given} is {what}", file=sys.stderr)
             return 1
-        if ident not in docs:
-            docs.append(ident)
-    found = review_pairs(corpus, tuple(docs), tuple(args.amends))
-    names = ", ".join(docs)
+        if ident not in named:
+            named.append(str(ident))
+    found = review_pairs(corpus, tuple(named), tuple(amends))
+    names = ", ".join(named)
+    if not found:
+        print(
+            f"pairs: no pair to review before a change of {names}",
+            file=sys.stderr,
+        )
+        return 1
     print(f"# Pairs for review before a change of {names} (STND.HARN.28)")
     print()
     print(f"{len(found)} pair(s).")

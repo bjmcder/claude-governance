@@ -266,12 +266,12 @@ STDC_DOC = [
     ("STND.STDC.40 keeps for C the binding form of STND.CXX.18, which the same ratification applied to C through the "
      "table of STND.STDC.2, at the cost of one choice of option for a unit that holds a required check.",
      "The same ratification applied to C the binding rule on the option that assumes finite values, which "
-     "STND.CODE.21 now states for every language, at the cost of one choice of option for a unit that holds a "
+     "STND.CODE.21 states for every language, at the cost of one choice of option for a unit that holds a "
      "required check."),
     ("the removal of a test by isnan or isfinite under it is unverified, and the ratification of 2026-10-24 kept the "
      "binding form for C, which STND.CODE.21 now states for every language. Both bind at every class.",
-     "the removal of a test by isnan or isfinite under it is unverified. STND.STDC.2 and STND.CODE.21 bind at every "
-     "class."),
+     "and the removal of a test by isnan or isfinite under it is unverified. STND.STDC.2 and STND.CODE.21 bind at "
+     "every class."),
 ]
 
 
@@ -338,7 +338,7 @@ CXX_DOC = [
      "a required check.", ""),
     ("That STND.CXX.3 and STND.CXX.18 raise no floor (GOV.11) is the custodian's ruling of 2026-10-23 (PRIN.10).",
      "That STND.CXX.3 raises no floor (GOV.11), and that the rule on the option that assumes finite values, which "
-     "STND.CODE.21 now states, raises none, is the custodian's ruling of 2026-10-23 (PRIN.10)."),
+     "STND.CODE.21 states, raises none, is the custodian's ruling of 2026-10-23 (PRIN.10)."),
 ]
 
 
@@ -464,7 +464,8 @@ PY_DOC = [
      "the declared releases of Python and of the work's dependencies (STND.PY.13), which STND.DEPS.14 checks;"),
     ("and on the newest combination that its declared ranges admit (STND.PY.14).",
      "and on the newest combination that its declared ranges admit (STND.DEPS.14)."),
-    ("and its checks run on the combinations of STND.PY.14;", "and its checks run on the combinations of STND.DEPS.14;"),
+    ("and its checks run on the combinations of STND.PY.14;",
+     "and its checks run on the combinations of STND.DEPS.14;"),
     ("and STND.PY.14 yields to it by its own text.", "and STND.DEPS.14 yields to it by its own text."),
     ("Running the checks of STND.PY.14 at release,", "Running the checks of STND.DEPS.14 at release,"),
 ]

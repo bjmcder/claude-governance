@@ -15,7 +15,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import rounds_common as F  # noqa: E402
 import round_e_base as E  # noqa: E402
-from govharness.workflows.amend import replace_text  # noqa: E402
+from govharness.workflows.amend import Change, record_transaction, replace_text  # noqa: E402
 
 F1 = E.ruling("F1")
 NONE = "none"
@@ -300,28 +300,34 @@ STND_OLD = "LVL2 standards apply across projects and may name tools and methods.
 STND_NEW = ("LVL2 standards apply across projects and state methods and defaults. They name no product, vendor, or "
             "version; a tool and its version are each project's choice.")
 STND_RATIONALE = (
-    f"Editorial amendment of STND, the root document of the standards, planned, ratified by the custodian on "
+    f"Change of STND/_doc.md, the root document of the standards, planned, ratified and pinned by the custodian on "
     f"{F.DATE}: the text says that LVL2 standards state methods and defaults and name no product, vendor, or "
-    "version, a tool and its version being each project's choice, in place of saying that they may name tools. "
-    "The change is editorial under STND.IDENT.3 because the document is informative and holds no provision; it "
-    "states the custodian's standing direction that standards are agnostic, which each standard already follows "
-    "(GOV.18 leaves the choice of tools to LVL2 and LVL3, and a standard leaves it to the project). No floor is "
-    "raised or lowered (GOV.11). Class onset: none. Transition (GOV.42): none. The path is pinned by a transaction "
-    f"of its own, as ledger entry 186 pinned it. {F1}; register entry R7.1 (CP24); {E.RECORD}." + F.AUTHOR)
+    "version, a tool and its version being each project's choice, in place of saying that they may name tools. The "
+    "document is informative, holds no provision, and has no revision, so the change is recorded as ledger entry "
+    "186 pinned the file, by a transaction of its own over that path alone. It states the custodian's standing "
+    "direction that standards are agnostic, which each standard already follows (GOV.18 leaves the choice of tools "
+    "to LVL2 and LVL3, and a standard leaves it to the project). No floor is raised or lowered (GOV.11). Class "
+    f"onset: none. Transition (GOV.42): none. {F1}; register entry R7.1 (CP24); {E.RECORD}." + F.AUTHOR)
 
 
 def apply_stnd(root: Path, at: str) -> None:
     root = Path(root)
     replace_text(root, "STND/_doc.md", [(STND_OLD, STND_NEW)])
-    E.record(root, "STND", "STND/_doc.md", STND_RATIONALE, at, "(no revision)")
+    rec = record_transaction(root, Change(kind="annotate", actor="The Custodian", role="custodians", at=at,
+                                          authority=["GOV.36"], targets=[], scope=["STND/_doc.md"],
+                                          rationale=STND_RATIONALE))
+    print("seq", rec.entry["seq"], "STND/_doc.md (annotate)")
 
 
 # ---------------------------------------------------------------------------------------------------- STND.PROJ
 
+PROJ_COVERED = ("Work process, Defects, Review and release, Correction, Incidents, Dependencies, Records, Working "
+                "notes, Workbench, Secret store, Access descriptors, Threat model, Reserved actions, Agent "
+                "instructions, and Configuration")
 PROJ2_ADD = (
-    " A project constitution MAY adopt STND.DFLT by one citation as the content of each section whose mechanism "
-    "STND.DFLT provides, and state in full only its other sections and each section whose content departs from "
-    "STND.DFLT (GOV.21, GOV.22).")
+    f" A project constitution MAY adopt STND.DFLT by one citation as the content of its sections {PROJ_COVERED}, and "
+    "state in full only its other sections and each of these whose content departs from STND.DFLT (GOV.21, "
+    "GOV.22).")
 PROJ1 = [
     ("the components that hold domain items of each selected profile, with the execution paths of each by hardware "
      "type;",
@@ -333,11 +339,18 @@ PROJ1 = [
 PROJ_DOC = [(
     "A section that adopts a provision of STND.DFLT by citation adopts its content as the project's own;",
     "A section that adopts a provision of STND.DFLT by citation adopts its content as the project's own, and one "
-    "citation of STND.DFLT adopts it for each section whose mechanism it provides, so that a constitution states "
-    "in full only Identity, Classification, the other sections that STND.DFLT does not hold, and the sections whose "
-    "content departs from it (STND.PROJ.2); the execution paths of each component, by hardware type, are recorded "
-    "where the section Architecture names, a record of the work that changes without a decision of the human "
-    "owner, while the classification records the value of the attribute of HW.1;")]
+    "citation of STND.DFLT adopts it for each section that STND.PROJ.2 names, whose mechanism STND.DFLT provides: "
+    "Work process (STND.DFLT.7 to STND.DFLT.9), Defects (STND.DFLT.10), Review and release and Correction, whose "
+    "records STND.DFLT.8 gives, Incidents (STND.DFLT.12), Dependencies (STND.DFLT.11), Records (STND.DFLT.2 to "
+    "STND.DFLT.5), Working notes (STND.DFLT.6), Workbench (STND.DFLT.28), Secret store (STND.DFLT.29 to "
+    "STND.DFLT.31), Access descriptors (STND.DFLT.27), Threat model (STND.DFLT.18 and STND.DFLT.19), Reserved "
+    "actions (STND.DFLT.14, STND.DFLT.15, and STND.DFLT.24), Agent instructions (STND.DFLT.20 and STND.DFLT.21), "
+    "and Configuration (STND.DFLT.22 and STND.DFLT.35); the other sections, Identity, Classification, Knowledge "
+    "base, Authorizations, Architecture, Physical hardware, and Exceptions, hold what only the project states, "
+    "though the defaults say where the classification is recorded (STND.DFLT.13) and how an authorization is "
+    "recorded and entered (STND.DFLT.16, STND.DFLT.17); the execution paths of each component, by hardware type, "
+    "are recorded where the section Architecture names, a record of the work that changes without a decision of "
+    "the human owner, while the classification records the value of the attribute of HW.1;")]
 
 
 def edit_proj(root: Path) -> None:
@@ -353,10 +366,12 @@ def edit_proj(root: Path) -> None:
 
 PROJ = E.Step(
     "STND.PROJ", edit_proj, True,
-    "STND.PROJ.2 lets a project constitution adopt STND.DFLT by one citation as the content of each section whose "
-    "mechanism STND.DFLT provides, and state in full only its other sections and those whose content departs from "
-    "it; the section Architecture of STND.PROJ.1 names where the execution paths of each component are recorded by "
-    "hardware type, in place of the section Classification listing them, so that a path on a new hardware type changes no record that the human owner "
+    f"STND.PROJ.2 lets a project constitution adopt STND.DFLT by one citation as the content of its sections "
+    f"{PROJ_COVERED}, whose mechanisms STND.DFLT provides, and state in full only its other sections and those whose "
+    "content departs from it, the Notes giving the provisions of STND.DFLT for each; the section Architecture of "
+    "STND.PROJ.1 names where the execution paths of each component are recorded by "
+    "hardware type, in place of the section Classification listing them, so that a path on a new hardware type "
+    "changes no record that the human owner "
     "adopts; the Notes name revision 1.1 where they said this revision",
     "it adds a permission and moves an item from one section to another",
     "No floor is raised or lowered (GOV.11): every mechanism of GOV.21 is still defined, by citation where STND.DFLT "
@@ -377,7 +392,8 @@ HW_DOC = [(
     "add a path on an admitted type without a further decision of the human owner, and costs nothing before the "
     "path exists.",
     "the execution paths of each component are recorded by hardware type where the section Architecture of the "
-    "constitution names (STND.PROJ.1), outside the classification, so that an agent adds a path on a new type to that record without "
+    "constitution names (STND.PROJ.1), outside the classification, so that an agent adds a path on a new type to "
+    "that record without "
     "a decision of the human owner, and the provisions of the sub-profile of that type reach the path from then "
     "on.")]
 
@@ -392,6 +408,31 @@ HW = E.Step(
     "outside the classification, as STND.PROJ.1 now has it",
     "only informative text changes", NOTES_FLOOR, "unchanged", NONE,
     f"{F1}; register entry R2.5 (CS9, the residual of round c)")
+
+# ---------------------------------------------------------------------------------------------------- HW sub-profiles
+
+SUB_OLD = "its provisions reach a component through the execution paths that the classification lists."
+SUB_NEW = ("its provisions reach a component through the execution paths of that component, recorded by hardware type "
+           "where the section Architecture of the constitution names (STND.PROJ.1).")
+
+
+def subprofile_step(name: str) -> E.Step:
+    """Return the editorial step of one sub-profile of HW, whose Notes follow STND.PROJ.1."""
+    doc_id = f"HW.{name}"
+
+    def edit(root: Path) -> None:
+        replace_text(root, f"HW/{name}/_doc.md", [(SUB_OLD, SUB_NEW)])
+
+    return E.Step(
+        doc_id, edit, False,
+        "the Notes say that the provisions reach a component through its execution paths, recorded by hardware "
+        "type where the section Architecture of the constitution names, in place of the paths that the "
+        "classification lists, as STND.PROJ.1 now has it",
+        "only informative text changes", NOTES_FLOOR, "unchanged", NONE,
+        f"{F1}; register entry R2.5 (CS9, the residual of round c)")
+
+
+SUBPROFILES = [subprofile_step(n) for n in ("ASIC", "CPU", "EMBED", "FPGA", "GPU", "QPU")]
 
 # ---------------------------------------------------------------------------------------------------- STND.CLASS
 
@@ -436,4 +477,4 @@ PERF = E.Step(
     f"{F1}; finding CS17 (checked; it holds)")
 
 STEPS = [DOCS, DRAFT, WFLOW, WPROC, IDENT, INSTR, VVUQ, MPI, HDES, HDES_ASIC]
-LATER = [PROJ, HW, CLASS, PERF]
+LATER = [PROJ, HW, *SUBPROFILES, CLASS, PERF]

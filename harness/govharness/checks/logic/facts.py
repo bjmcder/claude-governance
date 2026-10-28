@@ -35,6 +35,7 @@ ROLE_HINTS: dict[str, tuple[str, str]] = {
     "waiver": ("GOV.44", r"^waiver$"),
     "non_waivable": ("GOV.45", r"non-waivable"),
     "agents_bound": ("GOV.48", r"agents bound"),
+    "owner": ("PRIME.1", r"accountable owner"),
     "loud_failure": ("PRIME.4", r"loud failure"),
     "reserved": ("PRIME.6", r"reserved action"),
     "authorization": ("PRIME.7", r"authorization"),

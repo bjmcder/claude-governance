@@ -2,7 +2,9 @@
 
 A provision of the standard that holds a table names it in the
 front-matter field ``defines``, as does a provision of another document
-that a provision of the standard refers to for a table. The harness
+that a provision of the standard refers to for a table; the pickup is
+by name, so a cited provision that defines a name of TABLE_SPECS for
+its own use would become a second holder. The harness
 finds the table by that name and by its column headings, so rewording a
 sentence cannot empty a list. Expressions become regular expressions
 here, with inflections, so that "is not allowed" also matches "are not
@@ -85,8 +87,7 @@ def read_standard_tables(corpus: Corpus, standard_id: str) -> StandardTables:
             for name in entry.meta.get("defines") or []:
                 holders.setdefault(name, []).append(pid)
     for pid, name in sorted(cited_tables(corpus, prefix)):
-        if pid not in holders.setdefault(name, []):
-            holders[name].append(pid)
+        holders.setdefault(name, []).append(pid)
     for name, header in TABLE_SPECS.items():
         owners = holders.get(name, [])
         if len(owners) != 1:
