@@ -2,16 +2,17 @@
 
 Commands::
 
-    show ROOT ID [--expand]               one item and its cross references
-    find ROOT WORD... [--limit N] [--in-force]
+    show [ROOT] ID [--expand] [--all]     one item and its cross references
+    find [ROOT] WORD... [--limit N] [--in-force]
                                           items holding the words, ranked
-    context ROOT WORD... [--budget N] [--in-force]
+    context [ROOT] WORD... [--budget N] [--in-force]
                                           the governance on a topic
-    pairs ROOT ID [--amends LVL0_ID ...]  provision pairs to review before a
+    pairs [ROOT] ID [--amends LVL0_ID ...]
+                                          provision pairs to review before a
                                           change (STND.HARN.28)
-    verify [--no-logic] [--no-z3] [--no-cache] [--cache-dir DIR] ROOT
+    verify [--no-logic] [--no-z3] [--cache DIR] [ROOT]
                                           every check; exit 1 on failure
-    check ROOT [--out-dir DIR] [--no-z3] [--no-cache] [--cache-dir DIR]
+    check ROOT [--out-dir DIR] [--no-z3] [--cache DIR]
                                           logic checks and their report
     manifests ROOT (--check | --write)    stale or regenerated manifests
     references ROOT (--check | --write ID ...)
@@ -21,12 +22,18 @@ Commands::
     sign {found,add-signer,close-signer,require,check} ...
                                           the signer register SIGNR
     compose ROOT (--check | --write)      reading copies in ROOT/../rendered
+    compose ROOT --all DIR [--check]      a reading copy of every document
     rehearse ROOT SCRIPT                  run an amendment on a copy
+
+An omitted ``ROOT`` is ``$GOVHARNESS_ROOT``, else ``./governance``
+(unit 0022). The solve cache of ``verify`` and ``check`` is off unless
+``--cache DIR`` or ``$GOVHARNESS_CACHE`` names a directory.
 """
 
 from __future__ import annotations
 
 import argparse
+import sys
 from collections.abc import Callable
 from datetime import UTC, datetime
 from pathlib import Path
@@ -46,22 +53,20 @@ Runner = Callable[[argparse.Namespace, argparse.ArgumentParser], int]
 
 
 def _add_cache(command: argparse.ArgumentParser) -> None:
-    """Add the options of the solve cache (unit 0011).
+    """Add the option of the solve cache (units 0011 and 0022).
 
     Parameters
     ----------
     command : argparse.ArgumentParser
         Parser of ``verify`` or ``check``.
     """
-    group = command.add_mutually_exclusive_group()
-    group.add_argument(
-        "--no-cache", action="store_true", help="solve every claim afresh"
-    )
-    group.add_argument(
-        "--cache-dir",
+    command.add_argument(
+        "--cache",
         type=Path,
         default=None,
-        help="directory of the solve cache, outside the corpus",
+        metavar="DIR",
+        help="directory of the solve cache, outside the corpus; "
+        "else $GOVHARNESS_CACHE; else no cache",
     )
 
 
@@ -74,7 +79,12 @@ def _add_verify(sub: argparse._SubParsersAction) -> None:
         Subcommand registry of the main parser.
     """
     verify = sub.add_parser("verify", help="run every check")
-    verify.add_argument("root", type=corpus_root)
+    verify.add_argument(
+        "root",
+        nargs="?",
+        type=corpus_root,
+        help="corpus root; else $GOVHARNESS_ROOT, else ./governance",
+    )
     verify.add_argument("--no-logic", action="store_true")
     verify.add_argument("--no-z3", action="store_true")
     _add_cache(verify)
@@ -113,10 +123,18 @@ def _add_derived(sub: argparse._SubParsersAction) -> None:
         "compose", help="check or write the reading copies"
     )
     compose.add_argument("root", type=corpus_root)
-    copies = compose.add_mutually_exclusive_group(required=True)
+    copies = compose.add_mutually_exclusive_group()
     copies.add_argument("--check", action="store_true")
     copies.add_argument("--write", action="store_true")
-    compose.set_defaults(run=lambda a, _: run_compose(a))
+    compose.add_argument(
+        "--all",
+        type=Path,
+        default=None,
+        metavar="DIR",
+        help="write a reading copy of every document into DIR, "
+        "or with --check list the stale ones",
+    )
+    compose.set_defaults(run=run_compose, usage_parser=compose)
 
 
 def _add_ledger(sub: argparse._SubParsersAction) -> None:
@@ -212,7 +230,7 @@ def build_parser() -> argparse.ArgumentParser:
         The ``govharness`` parser.
     """
     parser = argparse.ArgumentParser(
-        prog="python -m govharness",
+        prog="govharness",
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
@@ -244,3 +262,12 @@ def main(argv: list[str]) -> int:
     run: Runner = args.run
     # A usage error names the subcommand whose options were wrong.
     return run(args, getattr(args, "usage_parser", parser))
+
+
+def entry() -> None:
+    """Run the command line and exit with its code.
+
+    The entry point of the console script ``govharness`` and of
+    ``python -m govharness``.
+    """
+    sys.exit(main(sys.argv[1:]))

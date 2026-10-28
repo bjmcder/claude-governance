@@ -26,9 +26,7 @@ from govharness.workflows.amend import Change, record_transaction
 from govharness.workflows.rehearse import rehearse
 from govharness.workflows.solve_store import (
     ENV_DIRECTORY,
-    ENV_DISABLE,
     MAX_ENTRY,
-    XDG_CACHE,
     SolveStore,
     open_store,
     solver_version,
@@ -231,38 +229,30 @@ class Location(unittest.TestCase):
     """The options and the environment name or turn off the cache."""
 
     def test_precedence(self) -> None:
-        """Behavior: ``--no-cache`` turns the cache off; ``--cache-dir``
-        overrides the environment; ``GOVHARNESS_NO_CACHE`` turns it off
-        unless empty or ``0``; ``GOVHARNESS_CACHE_DIR`` names it; else
-        it lies under an absolute ``XDG_CACHE_HOME`` or ``~/.cache``.
+        """Behavior: the cache is opt-in: ``--cache DIR`` names it and
+        overrides the environment; else ``GOVHARNESS_CACHE`` names it;
+        else, an empty variable included, there is none, whatever
+        ``XDG_CACHE_HOME`` or the home directory holds.
 
-        Reference: each setting in turn, with the environment patched.
+        Reference: each setting in turn, with the environment patched
+        (units 0011 and 0022, HR-4).
         """
         clean = {
             k: v
             for k, v in os.environ.items()
-            if k not in {ENV_DIRECTORY, ENV_DISABLE, XDG_CACHE}
+            if k not in {ENV_DIRECTORY, "XDG_CACHE_HOME"}
         }
         with mock.patch.dict(os.environ, clean, clear=True):
-            self.assertIsNone(open_store(False, Path("/x")))
-            given = open_store(True, Path("/x/c"))
+            self.assertIsNone(open_store())
+            given = open_store(Path("/x/c"))
             self.assertEqual(given.directory, Path("/x/c"))
-            with mock.patch.dict(os.environ, {ENV_DISABLE: "1"}):
-                self.assertIsNone(open_store())
-                self.assertIsNotNone(open_store(True, Path("/x")))
-            with mock.patch.dict(os.environ, {ENV_DISABLE: "0"}):
-                self.assertIsNotNone(open_store())
             with mock.patch.dict(os.environ, {ENV_DIRECTORY: "/y"}):
                 self.assertEqual(open_store().directory, Path("/y"))
-            with mock.patch.dict(os.environ, {XDG_CACHE: "/z"}):
-                self.assertEqual(
-                    open_store().directory, Path("/z/govharness/solves")
-                )
-            with mock.patch.dict(os.environ, {XDG_CACHE: "relative"}):
-                self.assertEqual(
-                    open_store().directory,
-                    Path.home() / ".cache" / "govharness" / "solves",
-                )
+                self.assertEqual(open_store(Path("/x")).directory, Path("/x"))
+            with mock.patch.dict(os.environ, {ENV_DIRECTORY: ""}):
+                self.assertIsNone(open_store())
+            with mock.patch.dict(os.environ, {"XDG_CACHE_HOME": "/z"}):
+                self.assertIsNone(open_store())
 
     def test_version_follows_the_solver_source(self) -> None:
         """Behavior: the version is a digest of the solver's source, so
@@ -286,24 +276,24 @@ class Location(unittest.TestCase):
                 self.assertNotEqual(solver_version(), before)
                 files[0].unlink()
                 self.assertIsNone(solver_version())
-                self.assertIsNone(open_store(True, tmp / "cache"))
+                self.assertIsNone(open_store(tmp / "cache"))
 
     def test_cache_inside_the_corpus_is_refused(self) -> None:
         """Behavior: a cache directory inside the corpus is refused, by
         the workflow with ``ValueError`` and by the commands with exit 2,
         and nothing is written there.
 
-        Reference: a copy of the corpus with ``--cache-dir`` under it.
+        Reference: a copy of the corpus with ``--cache`` under it.
         """
         with corpus_copy() as root:
             inside = root / "STND" / "cache"
-            store = open_store(True, inside)
+            store = open_store(inside)
             with self.assertRaises(ValueError):
                 verify_corpus(root, cache=store)
             for command in ("verify", "check"):
                 with self.subTest(command):
                     code, _, err = run(
-                        [command, str(root), "--cache-dir", str(inside)]
+                        [command, str(root), "--cache", str(inside)]
                     )
                     self.assertEqual(code, 2)
                     self.assertIn("inside the corpus", err)
@@ -327,10 +317,10 @@ class Location(unittest.TestCase):
                 ("link", root.parent / "link" / "c"),
             ):
                 with self.subTest(label):
-                    store = open_store(True, directory)
+                    store = open_store(directory)
                     self.assertTrue(store.inside(root))
                     code, _, err = run(
-                        ["verify", str(root), "--cache-dir", str(directory)]
+                        ["verify", str(root), "--cache", str(directory)]
                     )
                     self.assertEqual(code, 2)
                     self.assertIn("inside the corpus", err)
@@ -342,7 +332,7 @@ class Location(unittest.TestCase):
         before they write: the ledger, the manifests, and every other
         file are unchanged, and no copy is made.
 
-        Reference: a copy of the corpus with ``GOVHARNESS_CACHE_DIR``
+        Reference: a copy of the corpus with ``GOVHARNESS_CACHE``
         under it, the transaction of the editorial amendment of
         ``test_rehearse``, and that amendment rehearsed.
         """
@@ -370,11 +360,10 @@ class Location(unittest.TestCase):
             self.assertEqual(list((tmp / "work").iterdir()), [])
 
     def test_relative_paths(self) -> None:
-        """Behavior: a relative ``GOVHARNESS_CACHE_DIR`` is refused, by
+        """Behavior: a relative ``GOVHARNESS_CACHE`` is refused, by
         ``open_store`` with ``ValueError`` and by ``verify`` with exit 2,
         and ignored by ``verify --no-logic``, which opens no cache; a
-        relative ``--cache-dir`` is made absolute when the command
-        starts.
+        relative ``--cache`` is made absolute when the command starts.
 
         Reference: the relative path ``cache`` from a scratch directory.
         """
@@ -391,7 +380,7 @@ class Location(unittest.TestCase):
             here = Path.cwd()
             try:
                 os.chdir(tmp)
-                store = open_store(True, Path("cache"))
+                store = open_store(Path("cache"))
             finally:
                 os.chdir(here)
             self.assertEqual(store.directory, tmp.absolute() / "cache")
@@ -400,8 +389,8 @@ class Location(unittest.TestCase):
         """Behavior: ``verify_corpus`` without ``cache`` writes no entry,
         even where the environment names a cache.
 
-        Reference: the live corpus, with ``GOVHARNESS_CACHE_DIR`` set to
-        a scratch directory that must stay absent.
+        Reference: the live corpus, with ``GOVHARNESS_CACHE`` set to a
+        scratch directory that must stay absent.
         """
         with scratch() as tmp:
             named = {ENV_DIRECTORY: str(tmp / "cache")}
@@ -431,20 +420,41 @@ class Commands(unittest.TestCase):
 
     def test_verify_is_identical_cold_warm_and_without(self) -> None:
         """Behavior: ``verify`` of the live corpus prints the same with a
-        cold cache, a warm one, and ``--no-cache``; the warm run writes
-        no entry, and ``--no-cache`` writes none.
+        cold cache, a warm one, and none; the warm run writes no entry,
+        and without a cache named, with an empty home directory and no
+        ``XDG_CACHE_HOME``, ``verify`` and the read-only queries write
+        nothing anywhere under the home or the working directory.
 
-        Reference: three runs with one cache directory.
+        Reference: three runs with one cache directory; the fourth in
+        an environment holding only ``HOME`` and ``PATH`` (unit 0011;
+        unit 0022, HR-4, where ``verify`` created eight files under
+        ``HOME/.cache/govharness/solves/``).
         """
         with scratch() as tmp:
-            cache = ["--cache-dir", str(tmp / "cache")]
+            cache = ["--cache", str(tmp / "cache")]
             cold = run(["verify", str(ROOT), *cache])
             written = entries(tmp / "cache")
             warm = run(["verify", str(ROOT), *cache])
             self.assertEqual(entries(tmp / "cache"), written)
-            with mock.patch.dict(os.environ, {ENV_DIRECTORY: str(tmp / "n")}):
-                bare = run(["verify", str(ROOT), "--no-cache"])
-            self.assertFalse((tmp / "n").exists())
+            home = tmp / "home"
+            home.mkdir()
+            bare_env = {"HOME": str(home), "PATH": os.environ.get("PATH", "")}
+            here = Path.cwd()
+            with mock.patch.dict(os.environ, bare_env, clear=True):
+                os.chdir(home)
+                try:
+                    bare = run(["verify", str(ROOT)])
+                    queries = (
+                        ["show", str(ROOT), "GOV.38"],
+                        ["find", str(ROOT), "remote", "write"],
+                        ["context", str(ROOT), "remote", "write"],
+                        ["pairs", str(ROOT), "NUMER"],
+                    )
+                    for query in queries:
+                        self.assertEqual(run(query)[0], 0, query)
+                finally:
+                    os.chdir(here)
+            self.assertEqual(list(home.rglob("*")), [])
             self.assertEqual(cold[0], 0)
             self.assertEqual(len(written), 8)
             self.assertEqual(warm, cold)
@@ -457,12 +467,15 @@ class Commands(unittest.TestCase):
 
         Reference: three runs into three output directories.
         """
-        with scratch() as tmp:
+        with (
+            scratch() as tmp,
+            mock.patch.dict(os.environ, {ENV_DIRECTORY: ""}),
+        ):
             outputs = {}
             for label, extra in (
-                ("cold", ["--cache-dir", str(tmp / "cache")]),
-                ("warm", ["--cache-dir", str(tmp / "cache")]),
-                ("none", ["--no-cache"]),
+                ("cold", ["--cache", str(tmp / "cache")]),
+                ("warm", ["--cache", str(tmp / "cache")]),
+                ("none", []),
             ):
                 out = tmp / label
                 printed = run(
@@ -483,7 +496,7 @@ class Commands(unittest.TestCase):
         one entry replaced by a named pipe.
         """
         with scratch() as tmp:
-            cache = ["--cache-dir", str(tmp / "cache")]
+            cache = ["--cache", str(tmp / "cache")]
             code, expected, _ = run(["verify", str(ROOT), *cache])
             good = {p: p.read_bytes() for p in (tmp / "cache").rglob("*.json")}
             for path, data in good.items():
@@ -523,7 +536,7 @@ class Rehearsals(unittest.TestCase):
             settings = (
                 {ENV_DIRECTORY: str(tmp / "cache")},
                 {ENV_DIRECTORY: str(tmp / "cache")},
-                {ENV_DISABLE: "1"},
+                {ENV_DIRECTORY: ""},
             )
             seen = []
             for number, setting in enumerate(settings):

@@ -80,7 +80,7 @@ def usable_store(root: Path, cache: SolveStore | bool) -> SolveStore | None:
     if store.inside(root):
         raise ValueError(
             f"the solve cache {store.directory} lies inside the corpus "
-            f"{root}; name another directory or use --no-cache"
+            f"{root}; name another directory or none"
         )
     return store
 

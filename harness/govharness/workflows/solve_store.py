@@ -8,12 +8,10 @@ replaced by a different one; an entry a run refused is replaced by the
 result recomputed. The directory lies outside the corpus and is no
 part of the record or of any derived file; deleting it costs only time.
 
-The directory is, in order of precedence, the one passed (the command
-option ``--cache-dir``), the environment variable
-``GOVHARNESS_CACHE_DIR``, or ``govharness/solves`` under
-``XDG_CACHE_HOME`` (when absolute) or ``~/.cache``. The option
-``--no-cache`` or a non-empty ``GOVHARNESS_NO_CACHE`` other than ``0``
-turns it off.
+The cache is opt-in (unit 0022): the directory is the one passed (the
+command option ``--cache DIR``), else the one the environment variable
+``GOVHARNESS_CACHE`` names; where neither names one, there is no cache
+and nothing is written anywhere.
 
 Every read and write is best effort, and none is trusted: a missing,
 unreadable, oversized, or non-regular entry is not loaded, and what is
@@ -40,10 +38,7 @@ from pathlib import Path
 from govharness.checks.logic import satlib, solvecache
 from govharness.core import hashing
 
-ENV_DIRECTORY = "GOVHARNESS_CACHE_DIR"
-ENV_DISABLE = "GOVHARNESS_NO_CACHE"
-XDG_CACHE = "XDG_CACHE_HOME"
-SUBDIRECTORY = ("govharness", "solves")
+ENV_DIRECTORY = "GOVHARNESS_CACHE"
 MAX_ENTRY = 1 << 22  # bytes; an honest entry of this corpus is under 2 KiB
 KEY_RE = re.compile(r"[0-9a-f]{64}")
 _COUNT = itertools.count()  # numbers this process's temporary files
@@ -335,41 +330,23 @@ def default_directory() -> Path | None:
     Returns
     -------
     Path | None
-        ``GOVHARNESS_CACHE_DIR`` when set, else ``govharness/solves``
-        under an absolute ``XDG_CACHE_HOME`` or under ``~/.cache``;
-        ``None`` when no home directory is known.
+        ``GOVHARNESS_CACHE`` when set; ``None`` otherwise, which is no
+        cache.
 
     Raises
     ------
     ValueError
-        If ``GOVHARNESS_CACHE_DIR`` is relative: it would name another
+        If ``GOVHARNESS_CACHE`` is relative: it would name another
         directory from each working directory, a rehearsal's among them.
     """
     named = os.environ.get(ENV_DIRECTORY, "")
-    if named:
-        if not Path(named).is_absolute():
-            raise ValueError(
-                f"{ENV_DIRECTORY} must be an absolute path, not {named!r}"
-            )
-        return Path(named)
-    base = os.environ.get(XDG_CACHE, "")
-    if not base or not Path(base).is_absolute():
-        try:
-            base = str(Path.home() / ".cache")
-        except RuntimeError:
-            return None
-    return Path(base, *SUBDIRECTORY)
-
-
-def disabled_by_environment() -> bool:
-    """Return whether ``GOVHARNESS_NO_CACHE`` turns the cache off.
-
-    Returns
-    -------
-    bool
-        True when it is set to anything but the empty string or ``0``.
-    """
-    return os.environ.get(ENV_DISABLE, "") not in {"", "0"}
+    if not named:
+        return None
+    if not Path(named).is_absolute():
+        raise ValueError(
+            f"{ENV_DIRECTORY} must be an absolute path, not {named!r}"
+        )
+    return Path(named)
 
 
 def supported() -> bool:
@@ -393,38 +370,31 @@ def supported() -> bool:
     )
 
 
-def open_store(
-    enabled: bool = True, directory: Path | None = None
-) -> SolveStore | None:
-    """Return the solve cache to use, or None when it is off.
+def open_store(directory: Path | None = None) -> SolveStore | None:
+    """Return the solve cache to use, or None when there is none.
 
     Parameters
     ----------
-    enabled : bool
-        False for ``--no-cache``.
     directory : Path | None
-        Directory from ``--cache-dir``; it takes precedence over the
-        environment, ``GOVHARNESS_NO_CACHE`` included. A relative one is
-        made absolute against the working directory now, when the
-        command starts.
+        Directory from ``--cache DIR``; it takes precedence over the
+        environment. A relative one is made absolute against the
+        working directory now, when the command starts.
 
     Returns
     -------
     SolveStore | None
-        The store; ``None`` when the cache is off, the system is not
-        ``supported``, no directory is known, or the solver source
-        cannot be read.
+        The store; ``None`` when neither the option nor
+        ``GOVHARNESS_CACHE`` names a directory, the system is not
+        ``supported``, or the solver source cannot be read.
 
     Raises
     ------
     ValueError
-        If ``GOVHARNESS_CACHE_DIR`` is relative (``default_directory``).
+        If ``GOVHARNESS_CACHE`` is relative (``default_directory``).
     """
-    if not enabled or not supported():
+    if not supported():
         return None
     if directory is None:
-        if disabled_by_environment():
-            return None
         directory = default_directory()
         if directory is None:
             return None

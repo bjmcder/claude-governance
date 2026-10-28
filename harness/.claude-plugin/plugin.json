@@ -1,0 +1,8 @@
+{
+  "name": "governance",
+  "description": "Read-only access to the governance corpus and its query harness",
+  "author": {
+    "name": "Brian J. McDermott"
+  },
+  "keywords": ["governance"]
+}

@@ -1,24 +1,30 @@
-# Governance corpus
+# Governance corpus and harness
 
-The working governance corpus of the custodian, with the harness that verifies, composes, and amends it. The system of record is `harness/governance/`, whose hash-chained ledger `harness/governance/ledger.jsonl` records every adoption and amendment. `harness/README.md` gives the current state, the commands, and the checks.
+A governance corpus for computational and cyber-physical systems whose outputs or actions are relied upon, and for the people and AI agents who build them, with a small Python harness that queries and checks it. The corpus is plain Markdown in `harness/governance/`, and every adoption and amendment is an entry of its hash-chained ledger, `harness/governance/ledger.jsonl`. A project can install the harness, or the Claude Code plugin built on it, so that its agents look up the provisions that apply. Nothing depends on that software: the corpus is complete and readable without it.
 
-| Path | What it is |
+## Where to start
+
+| You are | Start at |
 | --- | --- |
-| `harness/` | The runnable harness: `governance/` (the corpus), `govharness/` (Python 3.11 or later, standard library only), `tests/`, and `records/` (units, reviews, and decisions of the harness) |
-| `rendered/` | A reading copy of each document, composed from the corpus by `govharness.derive.reading_copy.compose` |
-| `research/` | Research notes behind the standards, cited from their Notes |
-| `review-records/` | The review record of each round: drafts, reviews, verifications, dispositions, and pair lists |
-| `tools/` | Briefs for drafting, review, and rounds; `findings.py`; `check_refs.py` (a wrapper of the harness check g.25); `lvl0.txt`; and `amendment-scripts/`, the content modules and apply scripts that produced the ledger entries |
-| `docs/` | Documents carried over from the former online project |
-| `CUSTODIAN.md` | The custodian's standing process and directions |
-| `OPEN-ITEMS.md` | Work the custodian has directed, and items left open by ratified rounds |
+| Setting up a project to use the governance | [docs/installation.md](docs/installation.md) |
+| The human owner of a project | [docs/adoption.md](docs/adoption.md) |
+| Working day to day in a project | [docs/operating.md](docs/operating.md) |
+| The custodian of the corpus | [docs/custodian-guide.md](docs/custodian-guide.md) |
+| Maintaining the repository or the harness | [docs/architecture.md](docs/architecture.md), then [harness/README.md](harness/README.md) |
+| An agent working on this repository | [for-agents/README.md](for-agents/README.md) |
+| Reading the governance itself | [rendered/LVL0.md](rendered/LVL0.md), then the other reading copies in `rendered/` |
+
+[docs/README.md](docs/README.md) indexes the documentation.
+
+## Layout
+
+`harness/` holds the corpus, the harness package, and the Claude Code plugin; `docs/` holds the documentation for people, and `for-agents/` the material for agents working on this repository. [docs/architecture.md](docs/architecture.md) describes each part of the repository and of the harness package.
 
 ## Quick check
 
+From `harness/`, with Python 3.11 or later:
+
 ```bash
-cd harness
-python3 -B -m govharness verify governance          # every check passes
-python3 -B -m govharness references governance --check
-python3 -B -m govharness compose governance --check
-python3 -B -m unittest discover -s tests
+python3 -B -m govharness verify governance
+python3 -B -m govharness show governance GOV.38
 ```

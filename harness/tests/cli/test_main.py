@@ -1,15 +1,20 @@
-"""Tests of the command-line parser."""
+"""Tests of the command-line parser, the default root, and exit codes."""
 
 from __future__ import annotations
 
 import contextlib
 import io
+import os
+import sys
 import tempfile
 import unittest
+from collections.abc import Iterator
 from pathlib import Path
+from unittest import mock
 
-from govharness.cli.main import main
-from tests.support import corpus_copy
+from govharness.cli.arguments import ENV_ROOT, split_root
+from govharness.cli.main import entry, main
+from tests.support import ROOT, corpus_copy
 
 ROOT_COMMANDS = (
     ["verify"],
@@ -18,6 +23,277 @@ ROOT_COMMANDS = (
     ["references", "--check"],
     ["compose", "--check"],
 )
+# The read-only commands, each with its positional form after the root.
+QUERIES = (
+    ["show", "GOV.38"],
+    ["find", "remote", "write"],
+    ["context", "remote", "write"],
+    ["pairs", "NUMER"],
+    ["verify", "--no-logic"],
+)
+
+
+def run(argv: list[str]) -> tuple[int, str, str]:
+    """Run the command line in this process.
+
+    Parameters
+    ----------
+    argv : list[str]
+        Arguments after the program name.
+
+    Returns
+    -------
+    tuple[int, str, str]
+        Exit code, standard output, and standard error; a parser exit
+        gives its code.
+    """
+    out, err = io.StringIO(), io.StringIO()
+    with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+        try:
+            code = main(argv)
+        except SystemExit as stop:
+            code = int(stop.code or 0)
+    return code, out.getvalue(), err.getvalue()
+
+
+@contextlib.contextmanager
+def working_directory(path: Path) -> Iterator[None]:
+    """Run the body in another working directory.
+
+    Parameters
+    ----------
+    path : Path
+        The directory.
+
+    Yields
+    ------
+    None
+        With the working directory changed, restored afterwards.
+    """
+    here = Path.cwd()
+    os.chdir(path)
+    try:
+        yield
+    finally:
+        os.chdir(here)
+
+
+class DefaultRoot(unittest.TestCase):
+    """The read-only commands take the root from the environment."""
+
+    def test_root_from_the_environment(self) -> None:
+        """Behavior: with ``GOVHARNESS_ROOT`` set and no root given,
+        each read-only command runs on that corpus, from any working
+        directory, and prints what the positional form prints.
+
+        Reference: the live corpus, named by the variable, from an
+        empty temporary directory (unit 0022, HR-5).
+        """
+        with (
+            tempfile.TemporaryDirectory() as tmp,
+            working_directory(Path(tmp)),
+        ):
+            for query in QUERIES:
+                with self.subTest(query[0]):
+                    with mock.patch.dict(os.environ, {ENV_ROOT: str(ROOT)}):
+                        short = run(query)
+                    long = run([query[0], str(ROOT), *query[1:]])
+                    self.assertEqual(short[0], 0)
+                    self.assertEqual(short, long)
+
+    def test_root_from_the_working_directory(self) -> None:
+        """Behavior: with the variable unset, ``./governance`` is the
+        root when it exists.
+
+        Reference: a copy of the corpus under a temporary directory,
+        which is the working directory (unit 0022, HR-5).
+        """
+        env = {k: v for k, v in os.environ.items() if k != ENV_ROOT}
+        with (
+            corpus_copy() as root,
+            working_directory(root.parent),
+            mock.patch.dict(os.environ, env, clear=True),
+        ):
+            for query in QUERIES:
+                with self.subTest(query[0]):
+                    self.assertEqual(run(query)[0], 0)
+
+    def test_no_root_is_a_usage_error(self) -> None:
+        """Behavior: with the variable unset and no ``./governance``,
+        each read-only command exits 2 with one line on the standard
+        error naming the variable; a variable naming no directory does
+        the same.
+
+        Reference: an empty temporary directory (unit 0022, HR-5).
+        """
+        env = {k: v for k, v in os.environ.items() if k != ENV_ROOT}
+        with (
+            tempfile.TemporaryDirectory() as tmp,
+            working_directory(Path(tmp)),
+        ):
+            for query in QUERIES:
+                with self.subTest(query[0]):
+                    with mock.patch.dict(os.environ, env, clear=True):
+                        code, out, err = run(query)
+                    self.assertEqual((code, out), (2, ""))
+                    self.assertEqual(len(err.splitlines()), 1)
+                    self.assertIn(ENV_ROOT, err)
+                    bad = {ENV_ROOT: str(Path(tmp) / "absent")}
+                    with mock.patch.dict(os.environ, bad):
+                        code, out, err = run(query)
+                    self.assertEqual((code, out), (2, ""))
+                    self.assertIn(f"{ENV_ROOT}=", err)
+                    self.assertIn("no such directory", err)
+
+    def test_first_word_is_the_root_only_when_a_corpus(self) -> None:
+        """Behavior: for ``find`` and ``context``, the first positional
+        argument is the root where a directory of that name holds
+        ``LVL0/_doc.md``, and the first word otherwise, a word naming
+        a directory of the project included; so run from a project
+        with ``tests/``, with the variable set, ``find tests coverage``
+        searches the corpus for both words.
+
+        Reference: ``split_root`` on the live corpus, on a temporary
+        directory, and on a word that names none; a working directory
+        holding ``tests/notes.md`` (unit 0022, HR-5; its review, High
+        1, where ``tests/`` was read as the corpus).
+        """
+        self.assertEqual(split_root(str(ROOT), ["remote"]), (ROOT, ["remote"]))
+        with tempfile.TemporaryDirectory() as tmp:
+            self.assertEqual(
+                split_root(tmp, ["remote"]), (None, [tmp, "remote"])
+            )
+            absent = str(Path(tmp) / "remote")
+            self.assertEqual(
+                split_root(absent, ["write"]), (None, [absent, "write"])
+            )
+            tests = Path(tmp) / "tests"
+            tests.mkdir()
+            (tests / "notes.md").write_text("# Notes\n", encoding="utf-8")
+            with (
+                working_directory(Path(tmp)),
+                mock.patch.dict(os.environ, {ENV_ROOT: str(ROOT)}),
+            ):
+                for command in ("find", "context"):
+                    with self.subTest(command):
+                        short = run([command, "tests", "coverage"])
+                        long = run([command, str(ROOT), "tests", "coverage"])
+                        self.assertEqual(short[0], 0)
+                        self.assertEqual(short, long)
+        self.assertEqual(split_root(None, ["write"]), (None, ["write"]))
+
+
+class ExitCodes(unittest.TestCase):
+    """One rule: 0 found, 1 not found on stderr, 2 for a usage error."""
+
+    def test_not_found_exits_one_on_stderr(self) -> None:
+        """Behavior: ``show``, ``find``, ``context``, and ``pairs`` exit
+        1 when nothing is found, with one line on the standard error
+        and nothing on the standard output; and 0 when something is.
+
+        Reference: an identifier, a word, and a document absent from
+        the live corpus (unit 0022, HR-10; before it ``pairs`` exited 2
+        and ``context`` printed to the standard output and exited 0).
+        """
+        absent = (
+            ["show", "STND.NOPE.1"],
+            ["find", "zzzqqq"],
+            ["context", "zzzqqq"],
+            ["pairs", "NOPE"],
+        )
+        for query in absent:
+            with self.subTest(query[0]):
+                code, out, err = run([query[0], str(ROOT), *query[1:]])
+                self.assertEqual((code, out), (1, ""))
+                self.assertEqual(len(err.splitlines()), 1)
+                self.assertTrue(err.startswith(f"{query[0]}: "))
+        for query in QUERIES[:4]:
+            with self.subTest(query[0]):
+                code, out, err = run([query[0], str(ROOT), *query[1:]])
+                self.assertEqual((code, err), (0, ""))
+                self.assertTrue(out)
+
+    def test_show_and_pairs_resolve_case(self) -> None:
+        """Behavior: ``show`` of an identifier in the wrong case prints
+        the item, and ``pairs`` of one prints the pairs of the
+        document, under its identifier as the corpus writes it.
+
+        Reference: ``stnd.py`` for STND.PY, ``numer`` for NUMER (unit
+        0022, HR-10; its review, Low 4).
+        """
+        code, out, _ = run(["show", str(ROOT), "stnd.py"])
+        self.assertEqual(code, 0)
+        self.assertTrue(out.startswith("## STND.PY — Python standard"))
+        lower = run(["pairs", str(ROOT), "numer"])
+        self.assertEqual(lower[0], 0)
+        self.assertEqual(lower, run(["pairs", str(ROOT), "NUMER"]))
+        self.assertIn("change of NUMER (STND.HARN.28)", lower[1])
+
+    def test_best_hold_is_the_most_any_match_holds(self) -> None:
+        """Behavior: where no item holds every word, ``find`` reports
+        the most words any match holds, which may exceed what the
+        first match holds, since items rank before prose.
+
+        Reference: "evidence level assignment reproducibility zyzzyva"
+        on the live corpus: STND.KNOW.4 holds three words and is
+        first, the Notes of STND.CXX hold four (unit 0022, HR-1; its
+        review, mutant 12).
+        """
+        words = ["evidence", "level", "assignment", "reproducibility"]
+        code, out, _ = run(["find", str(ROOT), *words, "zyzzyva"])
+        self.assertEqual(code, 0)
+        lines = out.splitlines()
+        self.assertEqual(lines[0], "(no item holds every word; best hold 4)")
+        self.assertEqual(lines[1], "- STND.KNOW.4 — Evidence level assignment")
+        self.assertIn("- STND.CXX#notes — Notes", lines)
+
+    def test_entry_exits_with_the_code(self) -> None:
+        """Behavior: the console script's entry point exits with the
+        code of the command, 1 for an item not found and 0 for one
+        found.
+
+        Reference: ``show`` of STND.NOPE.1 and of GOV.38 through
+        ``entry`` with the arguments in ``sys.argv`` (unit 0022, HR-5;
+        its review, mutant 14).
+        """
+        for ident, expected in (("STND.NOPE.1", 1), ("GOV.38", 0)):
+            with self.subTest(ident):
+                argv = ["govharness", "show", str(ROOT), ident]
+                with (
+                    mock.patch.object(sys, "argv", argv),
+                    contextlib.redirect_stdout(io.StringIO()),
+                    contextlib.redirect_stderr(io.StringIO()),
+                    self.assertRaises(SystemExit) as stop,
+                ):
+                    entry()
+                self.assertEqual(stop.exception.code, expected)
+
+    def test_show_all_prints_the_provisions(self) -> None:
+        """Behavior: ``show DOC --all`` prints each provision of the
+        document whole, under its heading, after the document's lists.
+
+        Reference: STND.PY, 33 provisions (unit 0022, HR-2).
+        """
+        code, out, _ = run(["show", str(ROOT), "STND.PY", "--all"])
+        self.assertEqual(code, 0)
+        self.assertGreaterEqual(out.count("\n## STND.PY."), 33)
+        self.assertIn("\n## STND.PY.1 — ", out.split("Holds:")[1])
+
+    def test_given_root_must_be_a_directory(self) -> None:
+        """Behavior: a root given to ``show`` or ``pairs`` that is no
+        directory is a usage error, exit 2, as before the root became
+        optional.
+
+        Reference: a path inside a fresh temporary directory (unit
+        0022, HR-5).
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            missing = str(Path(tmp) / "absent")
+            for command, ident in (("show", "GOV.38"), ("pairs", "NUMER")):
+                with self.subTest(command):
+                    code, _, err = run([command, missing, ident])
+                    self.assertEqual(code, 2)
+                    self.assertIn(f"{missing}: no such directory", err)
 
 
 class CorpusRoot(unittest.TestCase):

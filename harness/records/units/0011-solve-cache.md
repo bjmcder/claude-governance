@@ -109,3 +109,7 @@ This section supersedes the Record above where they differ: the z3 bullet of the
 ## Revision after verification
 
 The verification (`review-records/harness/verify-unit-0011.md`) found no High or Medium item. Its V1 is fixed: `verify --no-logic` opens no cache, since nothing is solved, so a relative `GOVHARNESS_CACHE_DIR` no longer refuses it. `test_relative_paths` checks both cases. V2 is not taken: `record_transaction` and `rehearse` take the cache from the environment only, and `GOVHARNESS_NO_CACHE` or `GOVHARNESS_CACHE_DIR` names or disables it. V3, real z3, other systems, and network filesystems, stays unchecked. V4, no `fsync` and no eviction, stays as the earlier revision states.
+
+## Revision by unit 0022
+
+The cache is opt-in since unit 0022 (review HR-4 of 2026-10-28): it lies in `--cache DIR`, else `$GOVHARNESS_CACHE`, and where neither names a directory there is none. The `~/.cache` and `XDG_CACHE_HOME` default, `--no-cache`, and `GOVHARNESS_NO_CACHE` are gone, so a read-only command writes nothing anywhere by default. The option `--cache-dir` and the variable `GOVHARNESS_CACHE_DIR` named above are the earlier spellings.
