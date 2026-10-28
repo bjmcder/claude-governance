@@ -38,9 +38,10 @@ CODE_DOC = [
      "that adopts such a standard (REPRO.7). Where the classification records an expected class of CSQ1 or CSQ0, "
      "STND.CLASS.21 has the design not preclude the subset, the edition, the failure channel, and the dependencies "
      "that STND.CODE.17, STND.CODE.19, and STND.DEPS.1 ask at that class, with the reason for each such choice in a "
-     "decision record, and owes no record of that class before the reclassification; the marker of STND.CODE.20 is "
-     "the one thing kept earlier, so that the reclassification finds each deviation by a search and the record "
-     "that STND.CLASS.22 then owes is written once."),
+     "decision record, and asks no other record of that class before the reclassification than the records of "
+     "STND.CLASS.23; the marker of STND.CODE.20 is the one thing of this standard kept earlier, so that the "
+     "reclassification finds each deviation by a search and the record that STND.CLASS.22 then owes is written "
+     "once."),
     ("These onsets depart from STND.CLASS.10. STND.CODE.17 and STND.CODE.19 apply from CSQ1, earlier than the CSQ0 "
      "rows of DSGN.3 and VV.1 that they tighten, and STND.CODE.20 applies wherever a high-assurance coding standard "
      "is adopted, CSQ4 included, though STND.CLASS.10 lets work of CSQ4 omit an obligation above the floor. The "
@@ -155,14 +156,16 @@ HW_DOC = [
      "path exists."),
     ("Each sub-profile's selector restates its attribute from HW.1.",
      "Each sub-profile's selector gives the attribute of HW.1."),
+    ("Hardware of a kind that no attribute names is governed by LVL0",
+     "Hardware of a kind that Hardware type does not name is governed by LVL0"),
     ("Both reports therefore tighten above the class at which INTPR.7 applies, at the cost of one message each.",
      "Both reports therefore tighten above the class at which INTPR.7 applies, at the cost of one message each; "
      "each goes to the operator of a run during which one acts, and otherwise into the record of the run, since an "
      "unattended run has no operator to receive a message and its record is what a reader examines afterward. "
      "Where the classification records an expected class, STND.CLASS.21 has the design not preclude the hardware, "
      "the reference path (HW.15), the reduction order, and the bounds (HW.20) that the obligations of that class "
-     "ask of the work, with the reason for each such choice in a decision record, and owes no record of that class "
-     "before the reclassification."),
+     "ask of the work, with the reason for each such choice in a decision record, and asks no other record of that "
+     "class before the reclassification than the records of STND.CLASS.23."),
 ]
 
 HW_READING = (
@@ -249,6 +252,14 @@ def apply_subprofile(root: Path, folder: str, attribute: str, old_selector: str,
          "(STND.DRAFT.36), so that the sub-profile binds with HW and its provisions reach a component through the "
          "execution paths that the classification lists."),
     ])
+    stale = {
+        "FPGA": ("so HW.EMBED does not bind its firmware (HW.EMBED.1).",
+                 "so no provision of HW.EMBED reaches its firmware (HW.EMBED.1)."),
+        "ASIC": ("is not an integrated circuit under HW, and this sub-profile does not bind it.",
+                 "is not an integrated circuit under HW, and no provision of this sub-profile reaches it."),
+    }
+    if folder in stale:
+        replace_text(root, f"HW/{folder}/_doc.md", [stale[folder]])
     reading = subprofile_reading(folder, plural)
     if folder == "CPU":
         replace_text(root, "HW/CPU/5.md", CPU5)
@@ -329,7 +340,8 @@ CONC_DOC = [
      "bundle. No default raises the floor (GOV.11). Where the classification records an expected class at which an "
      "acceptance criterion asks bitwise identity across numbers of tasks, STND.CLASS.21 has the design not preclude "
      "the fixed-order or order-independent combination of STND.CONC.22, with the reason for the choice in a "
-     "decision record, and owes no record of that class before the reclassification."),
+     "decision record, and asks no other record of that class before the reclassification than the records of "
+     "STND.CLASS.23."),
 ]
 
 CONC_READING = (
@@ -375,9 +387,9 @@ AGENT_DOC = [
      "AGENT.23 records each attempt, refused ones included; the vocabulary of access descriptors belongs to the "
      "defaults standard or a project instrument. A transcript of the session that the agent did not edit, as a "
      "tool of the agent keeps one, shows each access with its address, its time, and the direction of transfer, "
-     "and the items it lacks, the authorization relied on and the access descriptor among them, hold for every "
-     "access of the session and are stated once, so that an agent at CSQ3 writes no seven-item record before each "
-     "next step."),
+     "and the items it lacks, the authorization relied on and the access descriptor among them, are stated once "
+     "where they hold for every access of the session, and beside the access otherwise, so that an agent at CSQ3 "
+     "writes no seven-item record before each next step."),
     ("AGENT.39 and AGENT.40 make parallel work safe and efficient: an assessment before it begins, and units "
      "started on a shared machine as soon as, and only while, it is able to serve them.",
      "AGENT.39 and AGENT.40 make parallel work safe and efficient: an assessment before it begins, and units "
@@ -388,9 +400,9 @@ AGENT_DOC = [
     ("a reading resting on GOV.9 and GOV.17 and recorded as a judgment (PRIN.10) until the custodians interpret "
      "GOV.11 for such provisions.",
      "a reading resting on GOV.9 and GOV.17 and recorded as a judgment (PRIN.10) until the custodians interpret "
-     "GOV.11 for such provisions; for AGENT.39 the question is closed, since an effort estimate that states its "
-     "basis is a basis the agent itself supplies at every class, so that the provision binding at every class asks "
-     "no measured baseline and no decision of the human owner."),
+     "GOV.11 for such provisions; for AGENT.39 the question no longer affects the burden, since an effort estimate "
+     "that states its basis is a basis the agent itself supplies at every class, so that the provision binding at "
+     "every class asks no measured baseline and no decision of the human owner."),
 ]
 
 AGENT_READING = (
@@ -398,8 +410,8 @@ AGENT_READING = (
     "recorded decision of the human owner, as the basis of the assessment that running units together costs less "
     "than running them in sequence (CP8); AGENT.23 accepts a transcript of the session that the agent did not edit "
     "in place of the record of each access it shows, an item the transcript lacks stated once for the session or "
-    "beside the access (CC19); the Notes say so, and that the question left to the custodians on GOV.11 is closed "
-    "for AGENT.39")
+    "beside the access (CC19); the Notes say so, and that the question left to the custodians on GOV.11 no longer "
+    "affects the burden of AGENT.39")
 AGENT_ROW = f"| 1.3 | {F.DATE} | Minor amendment (GOV.41): {AGENT_READING}. |"
 AGENT_RATIONALE = (
     f"Minor amendment of AGENT, revision 1.3, ratified by the custodian on {F.DATE}: {AGENT_READING}. The change is "
@@ -434,8 +446,8 @@ CREW10 = [
     ("The lead agent SHOULD assign to a unit of work each defect recorded under QA.5 that the finder does not fix, "
      "and each such change (QA.4, QA.5).",
      "The lead agent SHOULD assign to a unit of work each defect recorded under QA.5 that the finder does not fix, "
-     "and each such change, and present the reports of those defects that QA.5 asks to the human owner together, "
-     "in its next report (QA.4, QA.5)."),
+     "and each such change, and present to the human owner together, in its next report, the reports of those "
+     "defects that QA.5 asks (QA.4, QA.5)."),
 ]
 
 CREW23 = [
@@ -443,9 +455,9 @@ CREW23 = [
      "change no part of the work, other than records, in the session in which it made that access (PRIME.11, "
      "GUARD.16).",
      "An agent that has made a network access under an authorization for read-only research retrieval SHALL change "
-     "no part of the work, other than records, in the session in which it made that access (PRIME.11, GUARD.16). A "
-     "context that holds none of the retrieved content, other than through a research note, SHALL count as a "
-     "session other than that one (PRIME.11)."),
+     "no part of the work, other than records, in the session in which it made that access (PRIME.11, GUARD.16). "
+     "For this provision, a context that holds none of the retrieved content, other than through a research note, "
+     "SHALL count as a session other than that one (PRIME.11)."),
 ]
 
 CREW_DOC = [
@@ -571,33 +583,31 @@ def apply_wproc(root: Path, at: str) -> None:
 # The language Notes: STND.JL 1.4.1, STND.PY 1.3.1, STND.RUST 1.3.1, STND.STDC 1.3.1
 # ----------------------------------------------------------------------------------------------------------------
 
-TRANSITION = ("that a default of form or style first reaches conforms as STND.CLASS.22 provides, at the next change "
-              "that touches it; GOV.42 governs the transition for every other provision.")
+TRANSITION = "; on a reclassification, STND.CLASS.22 governs."
 
 LANGS = [
     ("JL", "1.4", "1.4.1",
      "Existing Julia source conforms to the default provisions when a change next touches it.",
-     f"Existing Julia source {TRANSITION}"),
+     f"Existing Julia source conforms to the default provisions when a change next touches it{TRANSITION}"),
     ("PY", "1.3", "1.3.1",
      "Existing source conforms when a change next touches it, other than the strict checking of STND.PY.5, which "
      "existing modules reach through the list of STND.PY.6.",
-     "Existing source that a default of form or style first reaches conforms as STND.CLASS.22 provides, at the "
-     "next change that touches it, other than the strict checking of STND.PY.5, which existing modules reach "
-     "through the list of STND.PY.6; GOV.42 governs the transition for every other provision."),
+     "Existing source conforms when a change next touches it, other than the strict checking of STND.PY.5, which "
+     f"existing modules reach through the list of STND.PY.6{TRANSITION}"),
     ("RUST", "1.3", "1.3.1",
      "Existing Rust source conforms to the default provisions when a change next touches it.",
-     f"Existing Rust source {TRANSITION}"),
+     f"Existing Rust source conforms to the default provisions when a change next touches it{TRANSITION}"),
     ("STDC", "1.3", "1.3.1",
      "Existing C source conforms to the default provisions when a change next touches it.",
-     f"Existing C source {TRANSITION}"),
+     f"Existing C source conforms to the default provisions when a change next touches it{TRANSITION}"),
 ]
 
 
 def apply_lang(root: Path, folder: str, old_rev: str, new_rev: str, old: str, new: str, at: str) -> None:
     doc_id = f"STND.{folder}"
     replace_text(root, f"STND/{folder}/_doc.md", [(old, new)])
-    reading = ("the Notes cite STND.CLASS.22 for the conformance of existing source that a default of form or style "
-               "first reaches, in place of the transition sentence they held, and GOV.42 for every other provision")
+    reading = ("the Notes keep their sentence on existing source and add that STND.CLASS.22 governs on a "
+               "reclassification")
     row = (f"| {new_rev} | {F.DATE} | Editorial amendment (GOV.41): {reading}; no obligation, permission, or defined "
            "meaning changes. |")
     rationale = (
