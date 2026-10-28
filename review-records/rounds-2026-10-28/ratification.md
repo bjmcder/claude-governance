@@ -175,3 +175,9 @@ The lead:
 5. merges `rounds-2026-10-28` to main and tags `ledger-322` locally.
 
 Nothing is pushed (F3).
+
+## Ratification
+
+The custodian, 2026-10-28: "proceed in full as recommended".
+
+Every item of Parts 0, 1, and 2 is ratified as recommended: the readings of A1, A2, and B2 are confirmed, the order a, d, c, o, e is accepted, and each reading takes its recommended option, so the rounds are applied as drafted.
