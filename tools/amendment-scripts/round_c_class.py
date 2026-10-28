@@ -174,8 +174,8 @@ CLASS18 = [
      "revision, whatever its tools. |"),
     ("| CSQ3 | An actor other than the author; an agent is eligible (QA.7). |",
      "| CSQ3 | An actor other than the author: a human, or an agent, of the author's agent configuration or "
-     "another, in a session other than each session of the author whose context holds nothing of those sessions "
-     "except what it reads from the records of the work (QA.7). |"),
+     "another, in a session, other than each session of the author, whose context holds nothing of the author's "
+     "sessions except what it reads from the records of the work (QA.7). |"),
 ]
 
 CLASS19 = [
@@ -204,7 +204,8 @@ CLASS22 = provision(
     "obligations of that class through these steps (GOV.14):\n\n"
     "- the regeneration of each result to be relied upon at the new class whose record lacks an input of REPRO.1 "
     "(REPRO.1);\n"
-    "- the label unverified on each such result judged against criteria set after it was seen (QA.12);\n"
+    "- the label unverified on each result to be relied upon at the new class that was judged against criteria set "
+    "after it was seen (QA.12);\n"
     "- one review, at the independence of the row of the new class in the table of STND.CLASS.18, of the changes "
     "made since the last review at that independence, taken as one change, against the obligations of the new "
     "class (QA.7);\n"
