@@ -40,3 +40,7 @@ As STND.HARN 1.4 reads, an open row for "all" ledgers accepts its key on every l
 | 5 (L) | The problem-text test checks a substring only | Not taken: optional, and no defect. |
 | 6 (L) | `All` passes as a ledger | Fixed: `all` in any case is refused and is a register problem; tested. |
 | 13 (mutation) | The role-label test of `_valid_for` was untested (before this unit) | Fixed: a wrong actor is refused; the mutation is killed. |
+
+## Verification
+
+`verify.md`, by an agent of another configuration: no defect and no should-fix. Its two optional notes need no change: the rationale's ratification is true because the script is applied only after ratification (S2), and the mutation run of unit 0021 checked each reverted guard, of which the verifier repeated four.
