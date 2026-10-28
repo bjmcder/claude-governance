@@ -39,7 +39,7 @@ In this table, ROOT is `"${CLAUDE_PLUGIN_ROOT}/governance"`, or nothing where `G
 | `show ROOT DOC --all` | A document's provisions in full, in reading order |
 | `find ROOT WORD... [--in-force]` | One line per matching item, best first: provisions and terms rank above Notes. Exit status 1 when no item holds a word |
 | `context ROOT WORD... [--budget N] [--in-force]` | The best matches and the items they cite, each whole while the budget of characters lasts, then the names of the rest |
-| `pairs ROOT DOC` | The pairs of provisions that STND.HARN.28 puts to review before a change of `DOC` |
+| `pairs ROOT DOC [--with ID ...] [--amends LVL0_ID ...]` | The pairs of provisions that STND.HARN.28 puts to review before a change of `DOC` |
 | `onset ROOT CSQn` | One line per provision, or named part of a provision, that applies from the class CSQn by its field `onset`. `show` prints the same onset beside the mode of each provision |
 
 `find` and `context` match words and their inflected forms, not meanings. The corpus's own terms match best: "remote write" finds the provisions on pushing, where "push" finds only the provisions that use that word. `--in-force` keeps only adopted and ratified items.
