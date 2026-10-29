@@ -22,7 +22,7 @@ The commands on this page use these names:
 | `governance@governance-harness` | The plugin's identifier in Claude Code settings and commands |
 | `ledger-324` | A tag of a published state of the corpus, as described below |
 
-`REPO` and the URL `https://git.example.org/governance-harness.git` stand for the address you clone this repository from; replace them with that address.
+The published repository is `https://github.com/bjmcder/claude-governance.git`, and the examples that give a full URL use it. `REPO` stands for that address, or for the address of a fork or mirror you clone instead; a URL in an example is replaced the same way.
 
 The custodian tags each published state of the corpus `ledger-N`, where N is the number of the last ledger entry it includes: `ledger-324` is the state whose ledger, `harness/governance/ledger.jsonl`, ends at entry 324. A project pins the governance by such a tag, or by a full commit hash wherever the mechanism accepts one. `git ls-remote --tags REPO` lists the tags that exist. What each option accepts:
 
@@ -62,7 +62,7 @@ claude plugin marketplace add REPO
 To follow a tag or branch rather than the default branch, append it with `#`:
 
 ```bash
-claude plugin marketplace add https://git.example.org/governance-harness.git#ledger-324
+claude plugin marketplace add https://github.com/bjmcder/claude-governance.git#ledger-324
 ```
 
 The repository's files take about 20 MB, most of them review records that a project does not need. For a marketplace added from a git URL, `--sparse` checks out only the two directories the plugin uses; for a local path it has no effect:
@@ -142,7 +142,7 @@ or write the settings directly:
     "governance-harness": {
       "source": {
         "source": "git",
-        "url": "https://git.example.org/governance-harness.git",
+        "url": "https://github.com/bjmcder/claude-governance.git",
         "ref": "ledger-324",
         "sparsePaths": [".claude-plugin", "harness"]
       }
@@ -181,7 +181,7 @@ A tag or branch can move. To pin one commit, declare the marketplace inline with
             "name": "governance",
             "source": {
               "source": "git-subdir",
-              "url": "https://git.example.org/governance-harness.git",
+              "url": "https://github.com/bjmcder/claude-governance.git",
               "path": "harness",
               "sha": "<40-character commit hash>"
             }
@@ -272,7 +272,7 @@ A project that works offline, or that wants the governance revision in its own h
 As a git submodule, from the repository's URL:
 
 ```bash
-git submodule add https://git.example.org/governance-harness.git vendor/governance-harness
+git submodule add https://github.com/bjmcder/claude-governance.git vendor/governance-harness
 git -C vendor/governance-harness checkout ledger-324
 git add .gitmodules vendor/governance-harness
 git commit -m "Vendor the governance at ledger-324"
