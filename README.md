@@ -12,7 +12,7 @@ A governance corpus for computational and cyber-physical systems whose outputs o
 | The custodian of the corpus | [docs/custodian-guide.md](docs/custodian-guide.md) |
 | Maintaining the repository or the harness | [docs/architecture.md](docs/architecture.md), then [harness/README.md](harness/README.md) |
 | An agent working on this repository | [for-agents/README.md](for-agents/README.md) |
-| Reading the governance itself | [rendered/LVL0.md](rendered/LVL0.md), then the other reading copies in `rendered/` |
+| Reading the governance itself | [rendered/LVL0.md](rendered/LVL0.md), then the other reading copies, listed by level in [rendered/README.md](rendered/README.md) |
 
 [docs/README.md](docs/README.md) indexes the documentation.
 

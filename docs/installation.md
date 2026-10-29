@@ -339,7 +339,7 @@ The `verify` command passes with the g.18 warning. To update a submodule, fetch 
 
 The corpus is plain Markdown and needs no program to read. A copy of this repository, or of its `rendered/` directory alone, is enough:
 
-- [`rendered/`](../rendered/LVL0.md) holds a reading copy of every document, named by identifier. Start with `LVL0.md`.
+- [`rendered/`](../rendered/README.md) holds a reading copy of every document, named by identifier, and a table of contents, `README.md`. Start with `LVL0.md`.
 - [`harness/governance/README.md`](../harness/governance/README.md) maps each identifier to its file: `GOV.38` is `harness/governance/GOV/38.md`.
 - [`harness/README.md`](../harness/README.md#reading-and-applying-the-corpus-without-software), in its section on reading and applying the corpus without software, gives each check by hand with `sha256sum`, `sed`, and `gpg`.
 

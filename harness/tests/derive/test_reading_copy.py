@@ -176,8 +176,9 @@ class ReadingCopies(unittest.TestCase):
 
     def test_compose_all_writes_every_document(self) -> None:
         """Behavior: ``compose ROOT --all DIR`` writes a reading copy
-        ``<ID>.md`` of every document into DIR, ``--check`` then
-        passes, an edited provision makes its copy stale and the check
+        ``<ID>.md`` of every document into DIR, with a table of
+        contents ``README.md`` that links each copy under its level and
+        each level's table, ``--check`` then passes, an edited provision makes its copy stale and the check
         names it, a Markdown file of DIR that no document produces is
         named as an orphan in both modes and fails the check without
         being removed, DIR is created with its parents, and
@@ -199,9 +200,19 @@ class ReadingCopies(unittest.TestCase):
             )
             self.assertGreater(len(documents), 70)
             code, out = run("compose", str(root), "--all", str(out_dir))
-            self.assertEqual((code, out), (0, f"written: {len(documents)}\n"))
+            self.assertEqual(
+                (code, out), (0, f"written: {len(documents) + 1}\n")
+            )
             written = sorted(p.name for p in out_dir.iterdir())
-            self.assertEqual(written, sorted(f"{d}.md" for d in documents))
+            self.assertEqual(
+                written,
+                sorted([f"{d}.md" for d in documents] + ["README.md"]),
+            )
+            index = (out_dir / "README.md").read_text(encoding="utf-8")
+            for d in documents:
+                self.assertIn(f"| [{d}]({d}.md) |", index)
+            self.assertIn("- [LVL2: Standards](#lvl2-standards)\n", index)
+            self.assertIn("\n## LVL2: Standards\n", index)
             self.assertEqual(
                 run("compose", str(root), "--all", str(out_dir), "--check"),
                 (0, "stale: 0\n"),

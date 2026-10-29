@@ -24,6 +24,14 @@ from govharness.core.tables import HISTORY_HEADING
 from govharness.ledger.transactions import Transaction, revision_named
 
 REVISION_TYPES = {"adopt", "amend"}
+# The table of contents of the full set; no document has this identifier.
+CONTENTS_FILE = "README.md"
+LEVEL_NAMES = {
+    "LVL0": "Constitution",
+    "LVL1": "Profiles",
+    "LVL2": "Standards",
+    "LVL3": "Projects",
+}
 
 
 @dataclass(frozen=True)
@@ -288,6 +296,109 @@ def compose(
     return out.rstrip() + "\n"
 
 
+def _level_order(doc: Entry, parts: list[str]) -> tuple[int, str]:
+    """Place a document in the contents within its level.
+
+    Parameters
+    ----------
+    doc : Entry
+        A document entry.
+    parts : list[str]
+        The parts of the constitution, in its order.
+
+    Returns
+    -------
+    tuple[int, str]
+        The constitution first, then its parts in its order, then the
+        other documents by identifier.
+    """
+    ident = str(doc.meta["id"])
+    if doc.meta.get("kind") == "constitution":
+        return (0, ident)
+    if ident in parts:
+        return (1 + parts.index(ident), ident)
+    return (1 + len(parts), ident)
+
+
+def contents(corpus: Corpus) -> str:
+    """Write the table of contents of the full set of reading copies.
+
+    Parameters
+    ----------
+    corpus : Corpus
+        Indexed corpus.
+
+    Returns
+    -------
+    str
+        Markdown text ending in one newline: a link to each level's
+        table, then one table per level, from LVL0 down, and last the
+        documents outside the levels, each row linking a copy
+        ``<ID>.md`` with its title, revision, and status.
+    """
+    docs = [e for e in corpus.entries if e.path.name == DOC_FILE]
+    parts = [
+        str(p)
+        for e in docs
+        if e.meta.get("kind") == "constitution"
+        for p in e.meta.get("parts") or []
+    ]
+    groups: dict[str, list[Entry]] = {}
+    for doc in docs:
+        groups.setdefault(str(doc.meta.get("level") or ""), []).append(doc)
+    levels = sorted(groups, key=lambda lvl: (lvl == "", lvl))
+    headings = {
+        lvl: (
+            f"{lvl}: {LEVEL_NAMES[lvl]}"
+            if lvl in LEVEL_NAMES
+            else lvl or "Outside the levels"
+        )
+        for lvl in levels
+    }
+    out = (
+        "# Reading copies\n\n"
+        "One reading copy of each document of the governance corpus, "
+        "named by its identifier. Each is composed from the corpus, and "
+        "the corpus is the system of record. Start with the constitution, "
+        "[LVL0](LVL0.md).\n\n"
+    )
+    out += "".join(
+        f"- [{headings[lvl]}](#{_anchor(headings[lvl])})\n" for lvl in levels
+    )
+    for lvl in levels:
+        out += (
+            f"\n## {headings[lvl]}\n\n"
+            "| Document | Title | Revision | Status |\n"
+            "| --- | --- | --- | --- |\n"
+        )
+        for doc in sorted(groups[lvl], key=lambda d: _level_order(d, parts)):
+            ident = str(doc.meta["id"])
+            out += (
+                f"| [{ident}]({ident}.md) | {doc.meta.get('title', '')} "
+                f"| {doc.meta.get('revision') or ''} "
+                f"| {doc.meta.get('status', '')} |\n"
+            )
+    return out
+
+
+def _anchor(heading: str) -> str:
+    """Return the fragment that a Markdown viewer gives a heading.
+
+    Parameters
+    ----------
+    heading : str
+        Heading text.
+
+    Returns
+    -------
+    str
+        The text in lowercase, with spaces as hyphens and every other
+        character that is not a letter, digit, or hyphen removed.
+    """
+    lowered = heading.lower().replace(" ", "-")
+    return "".join(c for c in lowered if c.isalnum() or c == "-")
+
+
 def all_reading_copies(
     corpus: Corpus, ledger: list[Transaction]
 ) -> dict[PurePosixPath, str]:
@@ -304,10 +415,10 @@ def all_reading_copies(
     -------
     dict[PurePosixPath, str]
         Text by file name, one per ``_doc.md`` of the corpus, with no
-        appendix; the set the custodian's process rebuilds in the
-        repository's ``rendered/``.
+        appendix, and the table of contents ``README.md``; the set the
+        custodian's process rebuilds in the repository's ``rendered/``.
     """
-    return {
+    copies = {
         PurePosixPath(f"{ident}.md"): compose(
             corpus, ledger, ReadingCopy(ident, f"{ident}.md")
         )
@@ -315,6 +426,8 @@ def all_reading_copies(
         if e.path.name == DOC_FILE
         for ident in [str(e.meta["id"])]
     }
+    copies[PurePosixPath(CONTENTS_FILE)] = contents(corpus)
+    return copies
 
 
 def reading_copies(

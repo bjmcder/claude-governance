@@ -18,7 +18,7 @@ The corpus in `harness/governance/` is the system of record. Every adoption and 
 
 Two sets of reading copies sit beside the corpus. Both are composed from it, and the corpus governs where they differ.
 
-- `rendered/`, at the root of the repository, is the full reading copy: one Markdown file per document, named by identifier, such as [`rendered/STND.DFLT.md`](../rendered/STND.DFLT.md). Start with [`rendered/LVL0.md`](../rendered/LVL0.md).
+- `rendered/`, at the root of the repository, is the full reading copy: one Markdown file per document, named by identifier, such as [`rendered/STND.DFLT.md`](../rendered/STND.DFLT.md). Its table of contents, [`rendered/README.md`](../rendered/README.md), lists every copy by level. Start with [`rendered/LVL0.md`](../rendered/LVL0.md).
 - `harness/rendered/` holds the copies of six standards that the harness command `compose` writes, under descriptive names. The plugin carries only this set, because a plugin installs only the files under `harness/`.
 
 ## Other parts of the repository

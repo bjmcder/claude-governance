@@ -48,7 +48,7 @@ From any other directory, `PYTHONPATH` names the directory that holds `govharnes
 PYTHONPATH=governance-harness/harness python3 -B -m govharness show governance-harness/harness/governance GOV.38
 ```
 
-For reading at length, [`rendered/`](../rendered/LVL0.md) has a reading copy of every document.
+For reading at length, [`rendered/`](../rendered/README.md) has a reading copy of every document, listed by level in its table of contents.
 
 ## Checking the corpus
 
