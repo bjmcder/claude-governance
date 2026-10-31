@@ -4,7 +4,7 @@ This guide is for the custodian of the corpus: who amends it, how a round of ame
 
 ## What the custodian decides
 
-The custodians alone amend the constitution (GOV.40), and they adopt the profiles and the standards (GOV.41). They register each new mnemonic (STND.IDENT.23). A project's human owner adopts that project's own instruments; the custodian does not. Agents draft and propose, and never adopt.
+The custodians alone amend the constitution (GOV.40), and they adopt the profiles and the standards (GOV.41). They register each new mnemonic other than a project's own (STND.IDENT.23). A project's human owner registers the project's mnemonic in the project's ledger and adopts that project's own instruments; the custodian does not. Agents draft and propose, and never adopt.
 
 Every change to the corpus is a ledger transaction (GOV.36). An edit to a file without one fails `verify`, because the ledger pins the hash of the content each transaction adopted.
 
@@ -59,7 +59,7 @@ Projects pin a revision of this repository by tag, branch, or commit ([installat
 
 ```bash
 tail -n 1 harness/governance/ledger.jsonl | python3 -c 'import json,sys; print(json.load(sys.stdin)["seq"])'
-git tag -a ledger-324 -m "Governance at ledger entry 324"
+git tag -a ledger-343 -m "Governance at ledger entry 343"
 ```
 
 A project that follows a branch receives every commit; one that pins a tag moves only when it changes the tag.

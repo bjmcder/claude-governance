@@ -366,7 +366,7 @@ Under the defaults of STND.DFLT, which apply to a project without a project cons
 | The workbench | `records/workbench/` | STND.DFLT.28 |
 | The store of non-credential secrets, if one is provided | `secrets/`, excluded from version control | STND.DFLT.29 |
 
-A project constitution (STND.PROJ) starts as a copy of the template directory `harness/governance/_PROJECT/NAME/`, taken from the revision the project pins. The copy lives in the project's repository, and its Records section names where the other records go. The harness reads the corpus only: `show` and `find` do not read a project's constitution or ledger. [adoption.md](adoption.md) covers when a project needs a constitution and how the class is recorded.
+A project constitution (STND.PROJ) starts as a copy of the template directory `harness/governance/_PROJECT/NAME/`, taken from the revision the project pins. NAME is the project's mnemonic, which its human owner registers in the project's ledger (STND.IDENT.23). The copy lives in the project's repository, and its Records section names where the other records go. `show`, `find`, and the other query commands read the corpus only, never a project's constitution or ledger; `ledger check` and `ledger append` read and append to a project's ledger, as [adoption.md](adoption.md#adopting), step 4, shows. [adoption.md](adoption.md) covers when a project needs a constitution and how the class is recorded.
 
 ## Pointing other agents at the governance
 

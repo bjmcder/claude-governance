@@ -1,6 +1,6 @@
 # Governance harness
 
-The harness is `govharness`, a Python package that uses the standard library alone, retrieves provisions from the governance corpus in [`governance/`](governance/README.md), and checks that the corpus agrees with its manifests and its ledger. It is optional and read-only for an agent: it installs no hook and sets no permission, and the corpus is complete and readable without it (GOV.38, INTPR.12).
+The harness is `govharness`, a Python package that uses the standard library alone, retrieves provisions from the governance corpus in [`governance/`](governance/README.md), and checks that the corpus agrees with its manifests and its ledger. It is optional: it installs no hook and sets no permission, the only thing an agent in a project writes with it is an entry of the project's own ledger ([docs/adoption.md](../docs/adoption.md#adopting), step 4), and the corpus is complete and readable without it (GOV.38, INTPR.12).
 
 [docs/installation.md](../docs/installation.md) covers installing the harness, [docs/operating.md](../docs/operating.md) covers looking up provisions with it, and [docs/architecture.md](../docs/architecture.md) describes the layout of the repository and of the package. This file is the reference for the custodian and for developers of the harness: every command, every check, the checks by hand, and the tests.
 
