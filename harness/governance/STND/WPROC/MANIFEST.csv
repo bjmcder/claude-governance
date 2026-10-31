@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.WPROC,standard,LVL2,Work process standard,adopted,_doc.md,97b0bc1c4d3f9ba14f3a162be5a71224eb197ae3c263587ef717ed01aab3a1b1,14502
+STND.WPROC,standard,LVL2,Work process standard,adopted,_doc.md,9ab7b0cdece7656563fa00d1fcf1e23f8d0b0bcdb9ea35e2c7dad1ed0d0b6bd1,16159
 STND.WPROC.1,provision,LVL2,Unit records in history,adopted,1.md,dd47eb3709a955c0a7966e715da25de2145aa3cb9e27c16eb8bad01a57b06ff2,750
 STND.WPROC.2,provision,LVL2,Attribution of commits,adopted,2.md,f24a4c354a778fc06c04775eeabe0a109a85d4a234e9cd225453cbd686a7e697,502
 STND.WPROC.3,provision,LVL2,Main and development lines,adopted,3.md,3a8ebb637294efd18913bb4616845f16badd7ee8393132cc08753ab14c215e1e,402

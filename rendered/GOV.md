@@ -50,7 +50,7 @@ When a provision of VV, REPRO, INTPR, DSGN, SIMPL, RSRC, or QA admits two readin
 
 #### GOV.10 Floor
 
-Every piece of work, at every consequence class, meets a floor: the prime directives; GUARD and GOV; source under version control (REPRO.5); a definition of done for each unit of work (QA.1); documentation enough for a human and an agent to understand its purpose and use (INTPR.2); and tests for basic correctness and regressions (VV.7). At the floor, the mechanisms the prime directives, GUARD, and GOV require are met by the defaults (GOV.22).
+Every piece of work, at every consequence class, meets a floor: the prime directives; GUARD and GOV; source under version control (REPRO.5); a definition of done for each unit of work (QA.1); documentation enough for a human and an agent to understand its purpose and use (INTPR.2); and, for work that changes code or data, tests for basic correctness and regressions (VV.7). At the floor, the mechanisms the prime directives, GUARD, and GOV require are met by the defaults (GOV.22).
 
 #### GOV.11 Proportioned obligations
 
@@ -69,11 +69,11 @@ Detailed criteria for each class are LVL2 standards. A profile MAY require work 
 
 #### GOV.13 Class assignment
 
-The human owner sets the project's consequence class at inception, as the most severe class of the uses then made of its outputs, and MAY revise it throughout the project's life. Where a more severe use is planned, the classification records the class of that use as the expected class, adopted with the classification (GOV.24) and setting no class before that use begins (GOV.14). The human owner MAY record a less severe class for a component shown to be isolated from the more severe outputs. No class is assumed by default: where none is recorded, the work meets the floor (GOV.10), and an agent that needs the class to promote, release, deploy, or drive physical hardware halts that line of work and refers (PRIME.14).
+The human owner sets the project's consequence class at inception, as the most severe class of the uses then made of its outputs, and MAY revise it throughout the project's life. Where a more severe use is planned, the classification records the class of that use as the expected class, adopted with the classification (GOV.24) and setting no class before that use begins (GOV.14). The human owner MAY record a less severe class for a component shown to be isolated from the more severe outputs. Until the human owner records a class, the work is treated as CSQ4. That presumption NEVER covers commanding, configuring, or powering physical hardware (PRIME.13), or a use made of the work that the record, the request, or the work's own content shows to be more severe than CSQ4. Where the presumption does not cover a line of work and no class is recorded, an agent halts that line of work and refers (PRIME.14).
 
 #### GOV.14 Class follows use
 
-A consequence class attaches to the use of work, not to its code. The class moves toward CSQ0 whenever reliance or exposure grows, and away from CSQ0 only by recorded decision of the human owner. Work moved to a more severe class meets that class's obligations before it is relied upon at that class; nothing is grandfathered.
+A consequence class attaches to the use of work, not to its code. The class that the human owner records governs until the human owner reclassifies the work, and the class that GOV.13 presumes governs until one is recorded. An agent that finds the work relied upon at a class more severe than the class recorded or presumed halts that line of work and refers it (PRIME.14), and an agent that finds the exposure of the work grown reports that growth to the human owner. Work moved to a more severe class meets that class's obligations before it is relied upon at that class; nothing is grandfathered.
 
 #### GOV.15 Physical harm
 
@@ -99,7 +99,7 @@ Each LVL2 provision is marked binding or default. A provision is marked binding 
 
 #### GOV.20 Project constitution
 
-Every project that promotes a result other than through its adopted classification (QA.11), releases software, or drives physical hardware has a project constitution: a LVL3 instrument that inherits from and aligns with the levels above it, cites the provisions it instantiates, adds only project-specific obligations, and relaxes none (PRIME.15).
+A project of CSQ1 or CSQ0, a project that commands, configures, or powers physical hardware (PRIME.13), and a project whose human owner asks for one have a project constitution: a LVL3 instrument that inherits from and aligns with the levels above it, cites the provisions it instantiates, adds only project-specific obligations, and relaxes none (PRIME.15). In a project without one, a promotion other than one that QA.11 makes of the adopted classification or of the human owner's direction, and a release (QA.10), are acts of the human owner, recorded under the defaults.
 
 #### GOV.21 Project mechanisms
 
@@ -107,7 +107,7 @@ The project constitution defines the mechanisms this document requires of every 
 
 #### GOV.22 Defaults
 
-Work without a project constitution operates under defaults that the custodians adopt as LVL2 standards. No default grants an authorization, adopts a hazard analysis, sets a consequence class, or authorizes an estimate; only the human owner does.
+Work without a project constitution operates under defaults that the custodians adopt as LVL2 standards. No default grants an authorization, adopts a hazard analysis, records a consequence class (GOV.13), or authorizes an estimate; only the human owner does, and an estimate that an agent states under PRIME.8 is authorized by the human owner's direction that PRIME.8 names.
 
 ### Profiles
 
@@ -221,7 +221,7 @@ Each project's compliance with this document and its lower governance is audited
 
 #### GOV.48 Agents bound
 
-Agents acting on covered work are governed by agent instructions derived under PRIME.15, and are held to the prime directives, GUARD, and INTPR.11 for every action.
+Agents acting on covered work are governed by agent instructions derived under PRIME.15, are held to the prime directives and GUARD for every action, and are held to INTPR.11 at the level that GOV.10 and GOV.11 set.
 
 #### GOV.49 No self-adoption
 
@@ -229,7 +229,7 @@ An agent SHALL NOT adopt, put into force, or alter in force governance, whatever
 
 #### GOV.50 Owner-adopted judgments
 
-Judgments that set the burden on the work are adopted only by the human owner, and an agent MAY draft them: the classification, consequence class, and proportionality judgment (GOV.11, GOV.13, GOV.24); promotion (QA.11); axioms (VV.9); the hazard analysis (PRIME.13); the reserved-action register and its exempt classes (GUARD.4, GUARD.7); estimates for implicit expenditure (PRIME.8); and the decision to release or deploy (QA.10).
+Judgments that set the burden on the work are adopted only by the human owner, and an agent MAY draft them: the classification, consequence class, and proportionality judgment (GOV.11, GOV.13, GOV.24); promotion (QA.11); axioms (VV.9); the hazard analysis (PRIME.13); the reserved-action register and its exempt classes (GUARD.4, GUARD.7); estimates for implicit expenditure other than an agent's own operating cost (PRIME.8); and the decision to release or deploy (QA.10).
 
 #### GOV.51 Agent designation
 

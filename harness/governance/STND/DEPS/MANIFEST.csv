@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.DEPS,standard,LVL2,Dependency policy,adopted,_doc.md,ae7ee3a0a75324778a030fcee049a77279e21167264590fe6c7fe87d4e7789e6,11839
+STND.DEPS,standard,LVL2,Dependency policy,adopted,_doc.md,75671edf7dd2220506e48530dfe31645573bcdb68113fe1eed5b44f901d8eb46,12365
 STND.DEPS.1,provision,LVL2,Dependency selection criteria,adopted,1.md,e2f8d9b2abe67c9dc66a7459361ac61ec67c74c3d786b9d3e232313700739269,1165
 STND.DEPS.2,provision,LVL2,Thinly supported dependencies,adopted,2.md,174299ffaee4bd1d54ba45262b2313cc371a57886499637183d21a40f8fa284e,498
 STND.DEPS.3,provision,LVL2,Initial revision choice,adopted,3.md,8bd1f2f8d6d2422ac8d6ec5ae7da7c88c63d555e3353cc390ed06b25821f07c9,542

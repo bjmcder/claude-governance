@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.VVUQ,standard,LVL2,"Verification, validation, and uncertainty quantification methods",adopted,_doc.md,3e904976eb214510a01373e1cb40cb9c4d0f1e9a1e3a530625f170dbbedd48fb,40708
+STND.VVUQ,standard,LVL2,"Verification, validation, and uncertainty quantification methods",adopted,_doc.md,740108ac6c4a5548f3076fee382bfb0e49ee62bc0ab5e26b14d5eea1afebc9fb,41993
 STND.VVUQ.1,provision,LVL2,Comparison tier choice,adopted,1.md,031dec5b7ac0bb0f2ad11e8feb3e3a514c43d0db316dfee8f72c23a546c7c930,2628
 STND.VVUQ.2,provision,LVL2,Bitwise identity,adopted,2.md,9c1a99d51d974dffcefcf45725f10077aec39b96884eeab50680c3a50dcc05ae,730
 STND.VVUQ.3,provision,LVL2,Non-finite values,adopted,3.md,2eef12b4f1610342d994a8614d625cc6141d0e49ecf81b6bc5175b52754dbd2e,694
@@ -63,7 +63,7 @@ STND.VVUQ.60,provision,LVL2,Importance weights,adopted,60.md,c75c2a8ece1f8e7d4cf
 STND.VVUQ.61,provision,LVL2,Tally reliability,adopted,61.md,ef0dd8ad4a56b0363f6a914baca35308dd2aa2424bdc6e7315af001a86a825e4,1440
 STND.VVUQ.62,provision,LVL2,Stream construction,adopted,62.md,500c9723f448017b2e1ff0e1305a9f2a2bd36a05bffe13b2e37a4e9fd7a7388c,675
 STND.VVUQ.63,provision,LVL2,Generator testing,adopted,63.md,7b30ff8aad4ba852bf26a8b004642524a5a493bbf203fd74e6fa6de297fd97f0,652
-STND.VVUQ.64,provision,LVL2,Fixed-seed and fresh-seed tests,adopted,64.md,50cb3379b51f61ec3720b5183b62b5b6e7b1a41ac6c9277517a601ea986b9332,621
+STND.VVUQ.64,provision,LVL2,Fixed-seed and fresh-seed tests,adopted,64.md,692c6d66e21faabb997124a46c84937f30d7527f78838704e4fcd50503acb485,753
 STND.VVUQ.65,provision,LVL2,Repetition rule,adopted,65.md,03ebc5eaf3aaebadbcdbfc7593234deede9b51b3d9d0942c9a271d8385d8362b,638
 STND.VVUQ.66,provision,LVL2,Computing derivatives,adopted,66.md,bd9385752a85afebd478ec09ecc2d17ee15e7d1b4c3e4dd6c996f1fd83b6d87b,642
 STND.VVUQ.67,provision,LVL2,Derivatives through iterations,adopted,67.md,b842579b7d5e6c84b51eebb09b7b092a720261d0bd771721ef5bf7db4fe49f33,490

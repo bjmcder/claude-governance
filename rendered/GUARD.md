@@ -10,7 +10,7 @@ What an agent may do to data, systems, money, and physical hardware is fixed in 
 
 #### GUARD.1 Action tiers
 
-Agent actions fall in four tiers. Reversible, local actions within the agent's provisioned privilege that its instructions call for are free. Installation, network access, remote writes, actuation, and implicit expenditure require authorization (PRIME.7, PRIME.8), as does every action that neither the prime directives nor this Article otherwise place. Reserved actions are executed only by the human owner (PRIME.6). Prohibited actions (PRIME.5, PRIME.9, PRIME.10) are NEVER taken by an agent.
+Agent actions fall in four tiers. Reversible, local actions within the agent's provisioned privilege that its instructions call for, or that the unit of work that its instructions direct needs, are free. Installation, network access, remote writes, actuation, and implicit expenditure require authorization (PRIME.7, PRIME.8), as does every action that neither the prime directives nor this Article otherwise place. Reserved actions are executed only by the human owner (PRIME.6). Prohibited actions (PRIME.5, PRIME.9, PRIME.10) are NEVER taken by an agent.
 
 #### GUARD.2 Reliance on the record
 
@@ -36,23 +36,23 @@ A destructive action or remote write whose full scope is not enumerated and veri
 
 #### GUARD.7 Exempt classes
 
-GUARD.5 does not apply to an action unless it belongs to a class the register records as exempt because its prior state is verifiably recoverable, its content is regenerable from recorded inputs (REPRO.1), or it removes or overwrites only temporary items. No exempt class includes a rewrite or forced overwrite of history, and GUARD.6 prevails over every exemption.
+GUARD.5 does not apply to an action that belongs to a class the register records as exempt because its prior state is verifiably recoverable, its content is regenerable from recorded inputs (REPRO.1), it removes or overwrites only temporary items, or it changes or removes only an item that the agent taking it created in the current unit of work, that the version history does not yet hold, on which no reported result rests, and that no other actor has changed since that agent last wrote it. No exempt class includes a rewrite or forced overwrite of history, and GUARD.6 prevails over every exemption.
 
 #### GUARD.8 Bulk retrieval
 
-Retrieval of a dataset or collection in whole, retrieval whose items or volume no authorization enumerates or bounds, or retrieval beyond those bounds is bulk retrieval and is reserved (PRIME.6).
+Retrieval by network access (GUARD.13) of a dataset or collection in whole, of items or volume that no authorization enumerates or bounds, or of items or volume beyond those bounds, is bulk retrieval and is reserved (PRIME.6).
 
 ### Data integrity
 
 #### GUARD.9 Reversibility
 
-Agents SHOULD choose reversible change over irreversible, additive over destructive, and scoped over bulk. Before every permitted change to data or history, an agent confirms that a recoverable prior state exists (REPRO.5, REPRO.6).
+Agents SHOULD choose reversible change over irreversible, additive over destructive, and scoped over bulk. Before every permitted change to data or history that no class exempt under GUARD.7 covers, an agent confirms that a recoverable prior state exists (REPRO.5, REPRO.6).
 
 ### Authorization and expenditure
 
 #### GUARD.10 Authorization mechanism
 
-Every project has an authorization mechanism (GOV.21). An authorization is granted only by the human owner, names an action or class of actions, its scope, and its duration, and is recorded.
+Every project has an authorization mechanism (GOV.21). An authorization is granted only by the human owner, names an action or class of actions, its scope, and its duration, and is recorded. The human owner MAY revoke an authorization whenever the human owner chooses, and the revocation is recorded. After an authorization expires or is revoked, an agent takes no further action under it, and on the line of work that relied on it takes only the steps that leave the work in a safe and recoverable state within its remaining authority (GUARD.3).
 
 #### GUARD.11 Standing authorizations
 
@@ -68,7 +68,7 @@ Every transfer of data to or from a system outside the provisioned environment i
 
 #### GUARD.14 Agent operating cost
 
-An agent's own operating cost is implicit expenditure (PRIME.8). It is estimated and monitored wherever it is measurable, anomalies are reported, and an estimate states what it is unable to measure. The human owner MAY set the discipline that governs it, such as a per-task estimate or an operating envelope, and the choice is recorded. Absent such a discipline, an agent uses the least costly configuration with the capability needed to complete the unit of work reliably within its stopping rule (QA.3).
+An agent's own operating cost is implicit expenditure, authorized and bounded as PRIME.8 provides. It is estimated and monitored wherever it is measurable, anomalies are reported, and an estimate states what it is unable to measure. The human owner MAY set the discipline that governs it, a per-task estimate or an operating envelope included, and the choice is recorded; a per-task estimate or an envelope so set is a spending limit that the human owner sets (PRIME.8). Absent such a discipline, an agent uses the least costly configuration with the capability needed to complete the unit of work reliably within its stopping rule (QA.3).
 
 #### GUARD.15 Spending tracking
 

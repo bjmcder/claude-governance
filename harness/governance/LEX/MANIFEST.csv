@@ -16,7 +16,7 @@ LEX.baseline,term,LVL0,Baseline,ratified,baseline.md,9fafe9c09915427bf960d141163
 LEX.binding-provision,term,LVL0,Binding provision,ratified,binding-provision.md,2f5d80ea4511fa2c74b3cee3f8316865b1794021b7eced0976e9c158502aefef,253
 LEX.budget,term,LVL0,Budget,ratified,budget.md,cc41c947b8c5e7fa1a2af61df79cd0c8cc596b18e60a4c54fb9fc95abbcfb3aa,289
 LEX.bulk-action,term,LVL0,Bulk action,ratified,bulk-action.md,6226d6bd1f6d966569f49b38ccaa5377c61362d21405fa63faf699d2eef6d6ed,332
-LEX.bulk-retrieval,term,LVL0,Bulk retrieval,ratified,bulk-retrieval.md,23766b088723fd256a7cd3506b4a65452396ef90d83e5ea54c2bca7ae9b2b083,292
+LEX.bulk-retrieval,term,LVL0,Bulk retrieval,ratified,bulk-retrieval.md,507ed706df7944fd9ea1e8f119680a90c7fbeda25d607d77f2dc4f36abf70e78,381
 LEX.classification,term,LVL0,Classification,ratified,classification.md,0ef88e7c8d2163aae86ab23cec4d51386395d5bc26daeaa993267f856240497a,325
 LEX.compliance-audit,term,LVL0,Compliance audit,ratified,compliance-audit.md,bd20a519e9f6a3c64a1310965aa715548cc15ec54ef347a2467c00779464c74f,287
 LEX.component,term,LVL0,Component,ratified,component.md,77211b5221d3a01f981661d68283be982db7cad531bd4daac13d71b9a9c7587a,317
@@ -34,7 +34,7 @@ LEX.custodians,term,LVL0,Custodians,ratified,custodians.md,a7060f62cb57bff6d6494
 LEX.decision-record,term,LVL0,Decision record,ratified,decision-record.md,e74b5dd6a1552cf7b89e4ef106a2df5713c4b55f4467943c413d329d4e421772,251
 LEX.default-provision,term,LVL0,Default provision,ratified,default-provision.md,f035d8098c3ebd5b9a838fad54080aa010445226570736936240ca13972bb72c,322
 LEX.defect,term,LVL0,Defect,ratified,defect.md,2c7af8656a9a46f68eb0325a49eef8d924fd250bd00349364ea21e9c67d07838,259
-LEX.definition-of-done,term,LVL0,Definition of done,ratified,definition-of-done.md,a7ed81c2ab63bf6e7df6e6fd3c259497696728750eda932b4c3c3699fd08b029,240
+LEX.definition-of-done,term,LVL0,Definition of done,ratified,definition-of-done.md,b44eb4dfd93c34403967736c0504b62d108f088ce419e6c86558f1aadaf75a44,279
 LEX.dependency,term,LVL0,Dependency,ratified,dependency.md,198b6f6bc1fea47efed2252820f8d051af505b2f466c4566e7f7c8c816d53d92,238
 LEX.dependency-management,term,LVL0,Dependency management,ratified,dependency-management.md,fd1400704c95151e311339bf3a7bc17e468498a3b773f779633caa00d292885f,288
 LEX.determinism,term,LVL0,Determinism,ratified,determinism.md,6e077c2dfa3115cc7965c97c76766ed08d62cd285e9fa114851dbb3891ed3269,237
@@ -43,7 +43,7 @@ LEX.dissent,term,LVL0,Dissent,ratified,dissent.md,35fede2d6e9ab0a69ae7e33f9b7ea4
 LEX.domain-of-validity,term,LVL0,Domain of validity,ratified,domain-of-validity.md,fa1f8ad0e0384c9098fe05b8f1ddbe9a5963b0004d5354d46ebf60c32c07c5d7,303
 LEX.drafting-standard,term,LVL0,Drafting standard,ratified,drafting-standard.md,b3645b92b0e4be428e3300c75543fae5d946ad87d829bb4e578980e4f682a63d,331
 LEX.effect,term,LVL0,Effect,ratified,effect.md,a21a9d52ee3b79b33c4e0751b678d9c595a40a7a11825c6d38da9b9c35c024e8,282
-LEX.elevated-privilege,term,LVL0,Elevated privilege,ratified,elevated-privilege.md,dfc69f3a0a8b71c57665608a317a5e0514ee8fadd9049185db675bd8fc0bacba,394
+LEX.elevated-privilege,term,LVL0,Elevated privilege,ratified,elevated-privilege.md,e833bcb51b0fbb21e7a9402dea286b1529eecdb6478311be2ef060dda994dec9,485
 LEX.essential-complexity,term,LVL0,Essential complexity,ratified,essential-complexity.md,704a9a146b7150f97d1295983c3a9b5c4919888d2e0949abd7026dd497916310,312
 LEX.evidence,term,LVL0,Evidence,ratified,evidence.md,72ebfe549aff51f501f473af601630302ab0fa66df5169935e8f7fdf25dc6880,410
 LEX.evidence-level,term,LVL0,Evidence level,ratified,evidence-level.md,95cb2e49c6b7b9e59c04f324722982dcb9a45b23b653ab176706d03d53a33eea,311
@@ -62,7 +62,7 @@ LEX.harness,term,LVL0,Harness,ratified,harness.md,1876115fd1294f79fbfcb7a6266a3d
 LEX.hazard-analysis,term,LVL0,Hazard analysis,ratified,hazard-analysis.md,c2acee6a3bd5fce8d459d0510b03f36fe88dc669431b9656a0b5e66814a411c0,285
 LEX.human-facing-documentation,term,LVL0,Human-facing documentation,ratified,human-facing-documentation.md,15d90b0e9642298e9ebbf5d22d48826f6f359ca3a0814660240b3776335ce423,299
 LEX.human-owner,term,LVL0,Human owner,ratified,human-owner.md,b085fb30d9fbf60d0cc237c25988a1dfdce73b9ade669b80d140db8695a9b346,502
-LEX.implicit-expenditure,term,LVL0,Implicit expenditure,ratified,implicit-expenditure.md,024eeeeec36ab1096fc090178de1a4e66e968787be6be562838e36ba881a437e,358
+LEX.implicit-expenditure,term,LVL0,Implicit expenditure,ratified,implicit-expenditure.md,76e43707923f0ac3826a35b48adb2b703b1fceb16dba114fee39138cb0cc07b7,507
 LEX.incident,term,LVL0,Incident,ratified,incident.md,b6954837f0b0fcf9c08481c3f034137de727a3848d54e36c105c92381c3814c1,232
 LEX.index,term,LVL0,Index,ratified,index.md,6caffec0f0b4fc9778e87e79935ae2759e0c4e51566e815c48cccf41aa75d24f,264
 LEX.indirection,term,LVL0,Indirection,ratified,indirection.md,002bde52608ba4db67c26a4851e384f426b3e27f8b013f466bd188e1e6901855,254
@@ -84,7 +84,7 @@ LEX.manifest,term,LVL0,Manifest,ratified,manifest.md,5c5d0917958a90f4ab56c9001b3
 LEX.mechanical-checking,term,LVL0,Mechanical checking,ratified,mechanical-checking.md,19d2de9ed10bea824ba9ac11393a9921da1395de662b396791a59b23e91e3d56,319
 LEX.misrepresented-evidence,term,LVL0,Misrepresented evidence,ratified,misrepresented-evidence.md,41db036a8108bd069a7ed14a47942651b17601867df718ee03c8faffda89b033,315
 LEX.mnemonic,term,LVL0,Mnemonic,ratified,mnemonic.md,dde55707448ed55d9dbf8057932ce4edaee8e060f7af4d2233a0aadd436125a1,344
-LEX.network-access,term,LVL0,Network access,ratified,network-access.md,1aaf68df2e902c69e8f26b13cd1ba7c12290b5f54782a6751d9fcb9b771d50df,373
+LEX.network-access,term,LVL0,Network access,ratified,network-access.md,5dc71fc72275056d8be40c932e8f43062d9fac9f70f086b28ef8dad313a0f7cf,439
 LEX.obvious-implementation,term,LVL0,Obvious implementation,ratified,obvious-implementation.md,f5bc61d2e31e89a8d08ba900f68097091a6114e117380f55124c7058ce8450bd,264
 LEX.operating-envelope,term,LVL0,Operating envelope,ratified,operating-envelope.md,81a626b21019901e5aaa2c3c04c6d480d143d98992e3eea73af7cfe835aaf9de,370
 LEX.operator,term,LVL0,Operator,ratified,operator.md,ba2a1bd594cc75e05460e31ea3c57739b2f5aea88e0339cbe204c890a1f81a25,234
@@ -98,7 +98,7 @@ LEX.profile,term,LVL0,Profile,ratified,profile.md,d0d775a970ddabb55a368d42f30f96
 LEX.project,term,LVL0,Project,ratified,project.md,a67f463cd79f976eb4fd043ec8e47ed29f7a32a747d11a8e6eedceb3601112ce,236
 LEX.project-constitution,term,LVL0,Project constitution,ratified,project-constitution.md,9733d127e68660ec273bf7ef6c628ae7743077b1eb24bb8acee5e58eb183d312,260
 LEX.project-instrument,term,LVL0,Project instrument,ratified,project-instrument.md,d81ac856af57664906f062c4396b122cec505e18e207097530192af3bf3f5380,365
-LEX.promotion,term,LVL0,Promotion,ratified,promotion.md,834bf2c226999f68c8d946a48ac6db8811cba6b4107274a575d2effa2c8323c4,294
+LEX.promotion,term,LVL0,Promotion,ratified,promotion.md,fd2692abf112a0bac0fdef6855d8fd12c7e84b763fbae4f2bc6dec89f44206a6,428
 LEX.proportionality-judgment,term,LVL0,Proportionality judgment,ratified,proportionality-judgment.md,f80eb686eaa3ca0ba2fc0182c8eb74df261d41b63189dd90f23ef57ea267d3b0,371
 LEX.provenance,term,LVL0,Provenance,ratified,provenance.md,324a3aaa85a1df38e3b0d0ecdfffd7b7ae7e391e5927a2d9bc8e3d8864d197f9,230
 LEX.provision,term,LVL0,Provision,ratified,provision.md,f026f3b6d3e2e9e21ce62e610b03192a6b802dce043b7019fd85c0daeefb68ab,269
@@ -115,7 +115,7 @@ LEX.relying-party,term,LVL0,Relying party,ratified,relying-party.md,4c50691bde1b
 LEX.remote-write,term,LVL0,Remote write,ratified,remote-write.md,c643ad8b10439fe3229f261fb99febdb257f7dfacdf2e7ab2de8b4a57cfbc9d4,392
 LEX.reported-result,term,LVL0,Reported result,ratified,reported-result.md,95cc88afced90cb8a2d1d2661b7cdfc2c9e101c8a06f0744f85e5cef68f2b657,239
 LEX.reproducibility,term,LVL0,Reproducibility,ratified,reproducibility.md,ca5a9831b3c83dcd5bcafb6fafa57e99ea1115a03a9047e73022507037134638,263
-LEX.reserved-action,term,LVL0,Reserved action,ratified,reserved-action.md,6263971807825610c23d85fe384cec9fe2d9d1b4a9c1718ccbdb807be6152695,385
+LEX.reserved-action,term,LVL0,Reserved action,ratified,reserved-action.md,1af1b35594f6e21c5a4dcf372277d0518779238f64edd442288e144ad4ca55e8,483
 LEX.reserved-action-register,term,LVL0,Reserved-action register,ratified,reserved-action-register.md,74bd91613241c901486c8df11e036d925b4c20217c9edefd42073c61dbc992c5,320
 LEX.resource,term,LVL0,Resource,ratified,resource.md,3fc9d36e944e9281870867135113945787452155021b6610abd2bcd420dcb9df,260
 LEX.result,term,LVL0,Result,ratified,result.md,1e1e614070011af5519493143117abda78e5eb561e7d17d732784dd46a982f43,258

@@ -1,6 +1,6 @@
-# Numerical computation (NUMER) 1.4.1
+# Numerical computation (NUMER) 1.5
 
-Adopted by The Custodian as revision 1.0 in ledger entry 59 (2026-10-11); revised to 1.1 in entry 65 (2026-10-17), 1.1.1 in entry 76 (2026-10-18), 1.2 in entry 82 (2026-10-19), 1.3 in entry 121 (2026-10-24), 1.4 in entry 235 (2026-10-28), and 1.4.1 in entry 261 (2026-10-28). This reading copy is composed from the per-provision files in NUMER/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 59 (2026-10-11); revised to 1.1 in entry 65 (2026-10-17), 1.1.1 in entry 76 (2026-10-18), 1.2 in entry 82 (2026-10-19), 1.3 in entry 121 (2026-10-24), 1.4 in entry 235 (2026-10-28), 1.4.1 in entry 261 (2026-10-28), and 1.5 in entry 327 (2026-10-31). This reading copy is composed from the per-provision files in NUMER/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -79,7 +79,7 @@ The profile sets requirements and bounds them; it names no method (GOV.18). Each
 
 Three requirements guard against evidence that is circular. A method is verified against an oracle exact for its problem or computed without its implementation (NUMER.6), and an error estimate rests on a method so verified (NUMER.8), since an estimate on unverified code is able to converge to a wrong answer. An inverse method is tested on data produced independently of the computation it inverts (NUMER.19), since data made by that same computation flatter it. A failed stochastic comparison is not repeated with new random numbers to obtain a pass (NUMER.26). A result whose numerical-error component NUMER.13 marks not assessed lacks the evidence NUMER.9 requires and is labeled unverified (PRIME.3, GOV.7). Tolerances under NUMER.11 come from the required precision, the estimated error, the statistical uncertainty, or the oracle's uncertainty, and not from the size of the observed discrepancy; the recorded relation shows a tolerance set far above its basis. Forward problems are governed by the general sections; problems built from other numerical results are governed by NUMER.14.
 
-Every provision other than NUMER.1, NUMER.2, and NUMER.26 instantiates only VV, REPRO, INTPR, DSGN, SIMPL, or RSRC, inherits their rank and waivability (GOV.17), and applies from the class that its field `onset` gives under STND.CLASS.10, where a field that gives CSQ3 for a cited source, a stated precision, limit, or sensitivity, a disclosure, a reference oracle, or a report, content that the table of STND.CLASS.10 starts at a more severe class, tightens above the floor (PRIME.15), because each costs one statement, one record, or one message and the error it exposes is silent at every class. NUMER.6 asks at CSQ3 for a reference oracle exact for its problem or computed without the implementation it judges, which STND.CLASS.10 otherwise starts at CSQ2; this tightens above the floor (PRIME.15), because verification against an oracle the implementation produced is circular. NUMER.26 states how PRIME.2 applies to stochastic comparisons and binds at every class, adding nothing to the floor that PRIME.2 does not already hold. NUMER.18 reports a departure from the domain of validity during the run to the operator of a run during which one acts, and otherwise in the record of the run, since an unattended run has no operator to receive a message and its record is what a reader examines afterward (INTPR.7). NUMER.11 and NUMER.25 govern the tolerances of acceptance criteria and correctness evidence above the floor; at the floor VV.7 alone governs a test's tolerance. No provision raises the floor (GOV.11).
+Every provision other than NUMER.1, NUMER.2, and NUMER.26 instantiates only VV, REPRO, INTPR, DSGN, SIMPL, or RSRC, inherits their rank and waivability (GOV.17), and applies from the class that its field `onset` gives under STND.CLASS.10, where a field that gives CSQ3 for a cited source, a stated precision, limit, or sensitivity, a disclosure, a reference oracle, or a report, content that the table of STND.CLASS.10 starts at a more severe class, tightens above the floor (PRIME.15), because each costs one statement, one record, or one message and the error it exposes is silent at every class. NUMER.7, NUMER.12, NUMER.25, and the second sentences of NUMER.5 and NUMER.23 apply from CSQ2, a departure from the rule of STND.CLASS: an order test, an estimate of rounding error under conditioning, a showing that the working precision keeps that error within the required precision, evidence that a statistical uncertainty has settled as the samples grow, and the error rates of a statistical criterion each cost an analysis or added computations rather than one statement, and STND.VVUQ gives its default method for each only from CSQ2. The core of STND.VVUQ still reaches two of them at CSQ3: STND.VVUQ.7 places a tolerance within its bracket, with the required precision as the departure to detect, and tiers 3 and 5 of the table of STND.VVUQ.1 rest the agreement of a comparison on an estimate of rounding error and on a criterion with stated error rates; HW.QPU.6 and HDES.ASIC.5 keep the content of NUMER.23 and NUMER.25 at CSQ3 within their domains. VV.1, VV.5, NUMER.13, and PRIME.3 hold for these results at CSQ3 in full, so a result of CSQ3 that lacks the evidence that a moved part would supply has the component concerned marked not assessed under NUMER.13, and carries the label unverified of PRIME.3 where it lacks the evidence that VV requires. The third sentence of NUMER.5 keeps CSQ3 and governs a record of the working precision that work below CSQ2 keeps by choice. NUMER.6 asks at CSQ3 for a reference oracle exact for its problem or computed without the implementation it judges, which STND.CLASS.10 otherwise starts at CSQ2; this tightens above the floor (PRIME.15), because verification against an oracle the implementation produced is circular. NUMER.26 states how PRIME.2 applies to stochastic comparisons and binds at every class, adding nothing to the floor that PRIME.2 does not already hold. NUMER.18 reports a departure from the domain of validity during the run to the operator of a run during which one acts, and otherwise in the record of the run, since an unattended run has no operator to receive a message and its record is what a reader examines afterward (INTPR.7). NUMER.11 and NUMER.25 govern the tolerances of acceptance criteria and correctness evidence above the floor; at the floor VV.7 alone governs a test's tolerance. No provision raises the floor (GOV.11).
 
 Derivatives are supported and not required. NUMER.27 asks only that a method's design not rule out computing first and second derivatives, which admits the capability without building it; a design that does rule them out records why (PRIN.10). NUMER.27 asks for no abstraction built ahead of need (DSGN.12, SIMPL.3); it is met by design choices that cost nothing now, such as effects kept apart from computation and no hidden state. Once an error in a derivative is able to change a result, NUMER.28 requires the derivative verified against an evaluation independent of its computation; a derivative that affects only cost, such as one inside a solve that stops on the true residual, is exempt. NUMER.29 requires each derivative relied upon to say what it is the derivative of, since the derivative of the implemented computation, of the discrete equations at their exact solution, and of the model differ by the discretization and the stopping of repeated computations. A derivative estimated by a stochastic method is also a result of that method under NUMER.22 to NUMER.26. The methods that compute derivatives and the checks that verify them belong to the LVL2 standard on verification, validation, and uncertainty quantification.
 
@@ -93,7 +93,9 @@ NUMER owns seven shared matters and addresses two that HW owns and one that MEAS
 | DSGN | Design |
 | GOV | Governance |
 | HDES | Hardware design |
+| HDES.ASIC | Integrated circuit design |
 | HW | Execution hardware |
+| HW.QPU | Quantum processors |
 | INTPR | Interpretability |
 | MEAS | Measurement and instrumentation |
 | ML | Learned models |
@@ -159,7 +161,7 @@ Each numerical method that the work implements SHALL be documented beside its im
 
 #### NUMER.5 Required precision
 
-From CSQ3. Instantiates DSGN.5, REPRO.2, REPRO.7, VV.1.
+From CSQ3; sentence 2 from CSQ2. Instantiates DSGN.5, REPRO.2, REPRO.7, VV.1.
 
 Each numerical specification SHALL state the required precision of its quantity of interest (DSGN.5, REPRO.7). The working precision of the computation of each reported numerical result SHALL be recorded, with the delivered arithmetic that the hardware contract of each of its execution paths states under HW.5 and the precision of each operand exchanged between those paths, and shown to keep the rounding error estimated under NUMER.12 within the result's required precision (DSGN.5, REPRO.2, VV.1). Where a boundary contract under HW.13 states the precision of an exchanged operand, the record of the working precision SHALL take that precision from it (DSGN.5, REPRO.2).
 
@@ -173,7 +175,7 @@ Each numerical method that the work implements SHALL be verified against referen
 
 #### NUMER.7 Predicted error behavior
 
-From CSQ3. Instantiates VV.1, VV.3, VV.5.
+From CSQ2. Instantiates VV.1, VV.3, VV.5.
 
 Where analysis predicts how a numerical method's error changes as its approximation is refined, its verification SHALL state whether the implementation exhibits that behavior on a problem that meets the assumptions of that analysis, from computations chosen and a criterion recorded before their results are seen, every computation made being reported (VV.1, VV.3, VV.5).
 
@@ -203,7 +205,7 @@ Each tolerance that judges a numerical result, a tolerance on run-to-run variati
 
 #### NUMER.12 Rounding and conditioning
 
-From CSQ3. Instantiates VV.1, INTPR.10.
+From CSQ2. Instantiates VV.1, INTPR.10.
 
 The numerical error estimate of each reported numerical result SHALL include an estimate or bound of its rounding error as the conditioning of the computations on its path amplifies it (VV.1, INTPR.10).
 
@@ -281,7 +283,7 @@ Each result of a stochastic method SHALL state its estimator with the estimator'
 
 #### NUMER.23 Sampling reliability
 
-From CSQ3. Instantiates VV.1, INTPR.9.
+From CSQ3; sentence 2 from CSQ2. Instantiates VV.1, INTPR.9.
 
 Each result of a stochastic method SHALL carry evidence that the samples it uses represent the distribution from which they are meant to be drawn (VV.1, INTPR.9). Each statistical uncertainty of a reported numerical result SHALL carry evidence that its own estimate changes by less than a recorded fraction of itself as the number of samples grows (VV.1, INTPR.9).
 
@@ -293,7 +295,7 @@ Where a stochastic method draws from more than one source of random numbers, the
 
 #### NUMER.25 Statistical acceptance criteria
 
-From CSQ3. Instantiates VV.1, VV.3.
+From CSQ2. Instantiates VV.1, VV.3.
 
 Each acceptance criterion that compares a stochastic result with a reference oracle SHALL state its probability of rejecting a correct result and the smallest departure that it detects with a stated probability, with that departure's relation to the result's required precision (VV.1, VV.3).
 
@@ -334,3 +336,4 @@ Each derivative that a reported numerical result relies on SHALL be stated as th
 | 1.3 | 2026-10-24 | Minor amendment (GOV.41), conforming on the adoption of STND.CONC: NUMER.2 gains the matter Random streams of a computation divided among concurrent tasks, owned by NUMER and given by NUMER.24, as the custodian assigned at the adoption of STND.CONC; the Notes count seven owned matters and cite STND.CONC.23 and STND.VVUQ.62 for the keying and construction of the streams; References lists STND.CONC and STND.VVUQ. |
 | 1.4 | 2026-10-28 | Minor amendment (GOV.41): NUMER.18 reports a departure from the domain of validity to the operator of a run during which one acts and otherwise in the record of the run (CS8). |
 | 1.4.1 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields; no obligation, permission, or defined meaning changes. |
+| 1.5 | 2026-10-31 | Minor amendment (GOV.41): NUMER.7, NUMER.12, NUMER.25, and the second sentences of NUMER.5 and NUMER.23 apply from CSQ2 by their field onset, in place of CSQ3, and the Notes give the reason for the departure from the rule of STND.CLASS: each asks an analysis or added computations whose default methods are those of STND.VVUQ beyond its core. |

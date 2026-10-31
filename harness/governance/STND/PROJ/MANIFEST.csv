@@ -1,8 +1,8 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.PROJ,standard,LVL2,Project constitution template,adopted,_doc.md,9ef8d044efca851828117adb2455aeba5fc7e47143d7fbf36ad1dedb1c389bd2,17216
-STND.PROJ.1,provision,LVL2,Constitution sections,adopted,1.md,c3a11a9edf78f15b45dbd76864ebeeca3e7f82925d221031080b4947b4d2a76e,5144
-STND.PROJ.2,provision,LVL2,Sections adopted by citation,adopted,2.md,51eb25d164da953347e2566896b01b819932c37e9c9dcf56849e1263b33e9302,985
-STND.PROJ.3,provision,LVL2,Proposed standing authorizations,adopted,3.md,a30fe8447e477f4e5f15547971e1c24e0e1df1bf725ffe9580878f5cfac66d96,2699
+STND.PROJ,standard,LVL2,Project constitution template,adopted,_doc.md,24bac311a4e7eddd0a07af2ca03bac83a7d7bac1d25acce10c6cbc49b5cba323,19249
+STND.PROJ.1,provision,LVL2,Constitution sections,adopted,1.md,6b7fdeabe4c8e93453d2fdaf9de4e5789d1e82af3b8074ec40634d5d72a1be70,5169
+STND.PROJ.2,provision,LVL2,Sections adopted by citation,adopted,2.md,bc5924188cb61f94ea7ec365be9c98fdd6c493850aaa0fc3e99feb97bd31465f,1011
+STND.PROJ.3,provision,LVL2,Proposed standing authorizations,adopted,3.md,f6253defd4d08b79f2ca063ea5e2ea7c60d1a62b7a5a5f6f3c28ebae43d37f6b,3026
 STND.PROJ.4,provision,LVL2,Constitution files,adopted,4.md,a45d50d9c24243fdf25e0d254cc9074c04409e71cb781deda8da87d32334b04f,589
 STND.PROJ.5,provision,LVL2,Proposed cost discipline,adopted,5.md,f188906510059d791134b6929fdd0cb10417e13ac8df320f5595cfcc118d34bb,734
 STND.PROJ.6,provision,LVL2,Remote-write authorization fields,adopted,6.md,cd72e6967030e0fb6a1e664a9718d1b07246c126be7208d3af8cc15467645b3b,1777

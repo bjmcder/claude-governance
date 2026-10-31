@@ -1,19 +1,19 @@
 id,kind,level,title,status,path,sha256,bytes
 GUARD,article,LVL0,Safeguards,ratified,_doc.md,b3dc3fbe6e219bedb139ca173e52dc7e9f392a690a643b583c3708be516344c7,674
-GUARD.1,provision,LVL0,Action tiers,ratified,1.md,3a58c8060a4167431b09cfafaa9bcb6a10bfcea94ab08a864f868c9ce821952b,760
+GUARD.1,provision,LVL0,Action tiers,ratified,1.md,4bc9d079673128813bfc039e5f622f30903bce4b5e76dfc8f83ffb4f3f3b3153,822
 GUARD.2,provision,LVL0,Reliance on the record,ratified,2.md,0efc2db7054c91c09d62d8def0bb0d30d184d8efd80566940264bdc088d054b9,536
 GUARD.3,provision,LVL0,Transparent halting,ratified,3.md,a7ab5934fe6052e2eb6b903c72586dff6631b9469471966b62cf8176b69c39e9,479
 GUARD.4,provision,LVL0,Reserved-action register,ratified,4.md,1a1aaeb64518176f8e6fa29aea9cafec366608845499a46c4d9c46cbad9e429e,321
 GUARD.5,provision,LVL0,Irrecoverable actions,ratified,5.md,2d5d2bea9ac7ff9dbe0f8c1edbff5b7ad092b3cd190c6be463fa242656bbca95,451
 GUARD.6,provision,LVL0,Bulk actions,ratified,6.md,05682260113918297a39dc2cb645cf90de20c99c95b556c62b6ac8887dac81ec,446
-GUARD.7,provision,LVL0,Exempt classes,ratified,7.md,cfff5e66d808556a3baca9ba7071da0a9c6cfe209875ac73a0b460d199a7d23a,601
-GUARD.8,provision,LVL0,Bulk retrieval,ratified,8.md,50b4ee51f0b189171a71d43fbcf7c176ecd6668de77105fc17917c56a3928fe3,409
-GUARD.9,provision,LVL0,Reversibility,ratified,9.md,35b7ee2046c720a0b7c4273f5004e34692cb3c0ece36f402cd1b85de06e899f8,454
-GUARD.10,provision,LVL0,Authorization mechanism,ratified,10.md,c3f63773bbe75deb9479d50900520fa71984bd2a1d5360b901f895e3267f2192,426
+GUARD.7,provision,LVL0,Exempt classes,ratified,7.md,e310d09f6fd12f9c7fdb2f7110ec1a7bfb382f445aa09382e42753dd31ebd4c0,840
+GUARD.8,provision,LVL0,Bulk retrieval,ratified,8.md,e0061a089311371e8cc881e045318561842d650edaea198e482e1a6135259873,452
+GUARD.9,provision,LVL0,Reversibility,ratified,9.md,93945fec60c88f450d106aefae28e46cb51426fc0904afda780172bf6d66d936,507
+GUARD.10,provision,LVL0,Authorization mechanism,ratified,10.md,8ac3087674b4d5c39de7454347963ebe70092aca4b6facc83bfd5b65c9046c63,793
 GUARD.11,provision,LVL0,Standing authorizations,ratified,11.md,46d5a3888f5fa5a414634fffec53eb1651e491049816421f700b5e07aa322d8a,514
 GUARD.12,provision,LVL0,Delegated authorization,ratified,12.md,4fa211ccc9ba35c38ae1b85e6f8e5209a74d6b26943c84148bdb7e876ce30303,624
 GUARD.13,provision,LVL0,Network access,ratified,13.md,3bfd992e18eaf151f6dad87e50160f10d61f17c2aca77723947c4fa16c338d7b,659
-GUARD.14,provision,LVL0,Agent operating cost,ratified,14.md,79c58be31373c0a0c20e71b05a3e5e29e997b092440918fe5222be24c185cf34,747
+GUARD.14,provision,LVL0,Agent operating cost,ratified,14.md,3a95718567a77849304c102983aff70299d9d2b9e683df0e74d3aeb34368c743,881
 GUARD.15,provision,LVL0,Spending tracking,ratified,15.md,4e189939bbb85ec6b8ef0e54df789580d24b4454e3e4a157715f753c4a1445d9,547
 GUARD.16,provision,LVL0,Threat model,ratified,16.md,0a09ea066c9918356ee58ee5029e16abc6c3ab91fb395222aa5842cb8f2d8bbf,528
 GUARD.17,provision,LVL0,Secure practice,ratified,17.md,81b809982a1ffdfcf4d88d2b9a3b306da78d59d174452f6d71daf1efdd6f90db,267

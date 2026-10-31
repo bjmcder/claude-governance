@@ -10,7 +10,7 @@ Work is done in bounded units, judged against criteria fixed in advance, reviewe
 
 #### QA.1 Definition of done
 
-Projects MAY be open-ended; their units of work are not. Every unit of work has a definition of done and acceptance criteria (VV.3), recorded before the work is executed.
+Projects MAY be open-ended; their units of work are not. Every unit of work has a definition of done and acceptance criteria (VV.3), recorded before the work is executed. Where the request for a unit of work states its definition of done, that statement meets this provision for that unit.
 
 #### QA.2 Work process
 
@@ -54,7 +54,7 @@ A release proceeds only on the decision of the human owner, with no open blockin
 
 #### QA.11 Promotion
 
-A result SHALL NOT be reported before promotion: a recorded act by which the human owner adopts the proportionality judgment for its intended use (GOV.11) and confirms that the result, regenerated where that judgment requires, meets the acceptance criteria recorded before it was seen (VV.3), under VV and REPRO at the level the judgment sets; or, where the evidence VV requires is absent, confirms that the result is labeled unverified (PRIME.3) and that the gap is recorded. For work of CSQ3 or CSQ4, the adopted classification is the promotion of each result that meets its acceptance criteria (QA.1), for reliance by its author or immediate team alone, feeding work that is verified later (GOV.12). An agent MAY propose a promotion. Reporting an unpromoted result, or relying on one beyond its author, is a blocking defect.
+A result SHALL NOT be reported before promotion: a recorded act by which the human owner adopts the proportionality judgment for its intended use (GOV.11) and confirms that the result, regenerated where that judgment requires, meets the acceptance criteria recorded before it was seen (VV.3), under VV and REPRO at the level the judgment sets; or, where the evidence VV requires is absent, confirms that the result is labeled unverified (PRIME.3) and that the gap is recorded. For work of CSQ3 or CSQ4, the adopted classification is the promotion of each result that meets its acceptance criteria (QA.1), for reliance by its author or immediate team alone, feeding work that is verified later (GOV.12). For work that GOV.13 presumes to be CSQ4, the human owner's direction of the work is the promotion of each result that meets its acceptance criteria, for reliance by its author or by the human owner alone, feeding work that is verified later. An agent MAY propose a promotion. Reporting an unpromoted result, or relying on one beyond its author, is a blocking defect.
 
 #### QA.12 Post-hoc criteria
 

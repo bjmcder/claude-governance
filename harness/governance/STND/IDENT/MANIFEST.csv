@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.IDENT,standard,LVL2,Identifier scheme and mnemonic register,adopted,_doc.md,eab9099ee7456a28d9f3b757fc178de166a58d0263e0223b9447234cf970b22d,8418
+STND.IDENT,standard,LVL2,Identifier scheme and mnemonic register,adopted,_doc.md,e6ba9d9fadf11852707fa0e29ea286fd167b79cb84e30285c7ba1c6b493855c6,9829
 STND.IDENT.1,provision,LVL2,Revision number,adopted,1.md,af83e6845936f1e8472dc125d867d8b730ef04a1e3d6f9d9353d77ccf651aa40,679
 STND.IDENT.2,provision,LVL2,Zero editorial segment,adopted,2.md,23e655738dbe90fe787343af24d6608f2cc860bb69ff348b488f9915f76a3ba3,477
 STND.IDENT.3,provision,LVL2,Revision classes,adopted,3.md,3483c9109c48157eae85d83440b031839d2a1cd72a134abdb473dd7152711d68,1396
@@ -22,5 +22,5 @@ STND.IDENT.19,provision,LVL2,Mnemonic register,adopted,19.md,559524850d05d096de5
 STND.IDENT.20,provision,LVL2,Register transaction,adopted,20.md,037571aee2edc8fa5787d3cd80fe980ac789743b48373c4c83dba3b44ee021a4,413
 STND.IDENT.21,provision,LVL2,Permanent rows,adopted,21.md,22d2c580ee3c8acd9b80b859c7069fba3b52c4f3760f1143c8495dae5b072850,457
 STND.IDENT.22,provision,LVL2,Mnemonic and grade use,adopted,22.md,514d00722e7751e62c0184a7e82600c2ce6b63378ac949beb69f8f2d5ca91122,465
-STND.IDENT.23,provision,LVL2,Registering authority,adopted,23.md,01b0bf6ecc2aff4859d656e73bc1e7e0a0a48c92cc30bd1fd34319796763b93a,421
+STND.IDENT.23,provision,LVL2,Registering authority,adopted,23.md,2200fc5315a0a75c344e9370ea9de53df52a14dfe215cf00d9144e9390b903dc,716
 STND.IDENT.24,provision,LVL2,Withdrawn constitution provisions,adopted,24.md,913bc50b35d583ed86c1feda7c7554df44855e8c8f2013483cc5ad9608395aca,461

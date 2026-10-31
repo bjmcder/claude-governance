@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.CREW,standard,LVL2,Agent roles standard,adopted,_doc.md,a2c2708579adaa122445d892fa0e8150af11a04a76c4d73b6fa670091f068f2a,23235
+STND.CREW,standard,LVL2,Agent roles standard,adopted,_doc.md,ab699e93285bdafc6a9208eeeeb469ea5adc08b035e03ee02622a12a2de56e34,24640
 STND.CREW.1,provision,LVL2,Lead agent delegation,adopted,1.md,71a0ad24fd68ab96aaa4ce15a601c9c32375fcdefd285655315b4f236bf9fb60,851
 STND.CREW.2,provision,LVL2,Queue of owner decisions,adopted,2.md,128a866a5abe502b63da50eb26241d4fae3a1356ee55f5770a05abb0b802e13d,964
 STND.CREW.3,provision,LVL2,Governance findings,adopted,3.md,9e31b433f43ddf89f97685ae904b4f851c7eed2ede52983f7a30eaa13f5eb3dd,684
@@ -12,7 +12,7 @@ STND.CREW.9,provision,LVL2,Self-review before review,adopted,9.md,bf91b8bc05d327
 STND.CREW.10,provision,LVL2,Out-of-scope findings,adopted,10.md,d28f02b55596e32c7cc4b1ce299ac4df253d1e33dfd2930c77482b8f5dd30b63,762
 STND.CREW.11,provision,LVL2,Integration of unit branches,adopted,11.md,2067392ad7fc34bb484cf0791755643e5a534bd31e534841fd5e7290e8021492,586
 STND.CREW.12,provision,LVL2,Role and depth in briefs,adopted,12.md,3a343c4ade556b2799658c18c3ce47425b1a1bac5149cdc62c311be0473b6695,501
-STND.CREW.13,provision,LVL2,Delegation beyond depth two,adopted,13.md,7f211a44a3de5d9f193d30389b55fbec5f1f956edccc9226e31603a9f44b2010,710
+STND.CREW.13,provision,LVL2,Delegation beyond depth two,adopted,13.md,edc39fc29895a602771a57098c7ba845463ecc46034611667348eea0d85e13fd,715
 STND.CREW.14,provision,LVL2,Coalescence of delegated work,adopted,14.md,8e45befc16ff7517eb3a3109b663707648137ad36f196c76f990fa69124a5cd9,994
 STND.CREW.15,provision,LVL2,Context given to reviewers,adopted,15.md,5820fec1ef6d017beb3156fc17bebb28781a7ef1e1733322681a07881f26acd3,882
 STND.CREW.16,provision,LVL2,Findings of review,adopted,16.md,4c01ca86a5d894607861170c1030f3629c6fe133b8db51454c5f39dd32f4490b,737
@@ -20,6 +20,6 @@ STND.CREW.17,provision,LVL2,Release audit,adopted,17.md,19753d18fafd065e3ba338f1
 STND.CREW.18,provision,LVL2,Audit independence,adopted,18.md,a1f249b7d6e3b6e66b44084803c7b23e582a994a5a0c1a11425722a691e52538,496
 STND.CREW.19,provision,LVL2,Audit capability level,adopted,19.md,9e2969ea75518843c46c4aabd61ee8923a019d57131e52a70d1ab21ac5ff7ffa,453
 STND.CREW.20,provision,LVL2,Capability escalation,adopted,20.md,bcd5d1e2398f760d3a61ae81c6e3969bcb73ceb59e2fd29c305eb6ed0a6fd19f,807
-STND.CREW.21,provision,LVL2,Capability levels needing a ruling,adopted,21.md,daf7d731944688043a5ee1295c8594e07352e164999fd88fedb27217f69276d0,1053
+STND.CREW.21,provision,LVL2,Capability levels needing a ruling,adopted,21.md,da3dda8c49fa47f46d7339320d354707f41b276d5abc981e60ac285784744e5b,1096
 STND.CREW.22,provision,LVL2,Units awaiting a level ruling,adopted,22.md,ff79757eda313bd94127606f25ee3b4ed37291525b3b63e2f4f403e8b70ecd5b,814
 STND.CREW.23,provision,LVL2,Separation of research retrieval,adopted,23.md,4d73a308bc086900ef08e2dfd2ebf3c35ae817ceb2a3078393c0b6c1b42ca7c9,694

@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.CODE,standard,LVL2,Coding standard,adopted,_doc.md,053eb3fc2234a84d2aa552c48f1de809dce980ab3894ce1abe414f5d3391260a,45834
+STND.CODE,standard,LVL2,Coding standard,adopted,_doc.md,800cf9c90f14c77fb2348e79ad91ed09139b492a3a03226802669cb5ececf946,46602
 STND.CODE.1,provision,LVL2,Mechanical cycle check,adopted,1.md,88859188858c96ad1413c636286fcff7f1e67719f8e11c7a29da8c1449e4a542,425
 STND.CODE.2,provision,LVL2,Inputs through interfaces,adopted,2.md,4e513c4d5d9a3affedc22e877cbbab662d5a6e9525bacf6c635a17524eb98482,546
 STND.CODE.3,provision,LVL2,Contracts at declarations,adopted,3.md,659b96bdbb8ccf312a0e7e2f5b06edd5c4cffa4c470dc71e491ce97eba257fb0,561
@@ -29,7 +29,7 @@ STND.CODE.26,provision,LVL2,Objects that foreign code keeps,adopted,26.md,d88ec5
 STND.CODE.27,provision,LVL2,Finite-value annotations near checks,adopted,27.md,ef25b2483d872063c5ac9c6eaa0caeda9a4189e54d61876205ab4ecabd021bb3,613
 STND.CODE.28,provision,LVL2,Names under a stated convention,adopted,28.md,75d2a4840f2271a36b150863348c01bdd2922e54b9fc549e7d899fef61270e9c,854
 STND.CODE.29,provision,LVL2,Seeded random generators,adopted,29.md,4acae11708f5609bc5f8a733f3d8485a43479b3254167347688bddd0df80b535,957
-STND.CODE.30,provision,LVL2,Hash values outside results,adopted,30.md,05f14d837c654909477b965ab5072dbf620ac24cadd5ecb283f54234f6688f8d,784
+STND.CODE.30,provision,LVL2,Hash values outside results,adopted,30.md,825d958eb49895599d53498f646af3917d277684db6099266f26336003745454,918
 STND.CODE.31,provision,LVL2,Tolerances stated at comparisons,adopted,31.md,a75582a4fb1a5a69f084b67fe4a736aded1d9cd44afbefe25573f3c0c41c1423,988
 STND.CODE.32,provision,LVL2,Language provisions in static checks,adopted,32.md,2e8b2c7a3df6ae081f75c1313b63fdaf4ce3d2cb0a6232928c0bbe0c9686af77,565
 STND.CODE.33,provision,LVL2,Diagnoses from installed failure handlers,adopted,33.md,2f030669e104a95e34d0a9d9efe0c9ecb0c71ffc66fa17ad35e86e9c38879ac5,738

@@ -1,6 +1,6 @@
-# Learned models (ML) 1.0.2
+# Learned models (ML) 1.1
 
-Adopted by The Custodian as revision 1.0 in ledger entry 81 (2026-10-19); revised to 1.0.1 in entry 161 (2026-10-25) and 1.0.2 in entry 260 (2026-10-28). This reading copy is composed from the per-provision files in ML/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 81 (2026-10-19); revised to 1.0.1 in entry 161 (2026-10-25), 1.0.2 in entry 260 (2026-10-28), and 1.1 in entry 328 (2026-10-31). This reading copy is composed from the per-provision files in ML/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -19,11 +19,11 @@ This section fixes meaning and imposes no obligation, as the Lexicon does.
 | Learned model | A model whose relation between inputs and outputs is set mainly by parameters fitted to data, rather than by a stated physical, measurement, or mathematical model, together with those parameters. |
 | Training data | The data to which a learned model's parameters are fitted, and the data used to choose among models or settings. |
 | Evaluation data | The data on which the error of a learned model is estimated. |
-| Learned model use | An attribute, true when the classification records that a learned model sits, or is admitted to sit, on a path that affects a result the work reports or relies on, or physical hardware. |
+| Learned model use | An attribute, true when the classification records that a learned model sits, or is admitted to sit, on a path that affects a result the work reports or relies on, or physical hardware. A learned model in its use as the model through which an agent does the work does not make the attribute true. That exclusion does not reach a learned model that the work builds, trains, or runs as part of what it delivers, even when it is the model of an agent. |
 
 ## Selector
 
-ML.1 states the selector: the attribute Learned model use, defined here. The domain items are learned models, their records, their error estimates, and their inputs, and each provision names one of them as its subject (STND.DRAFT.37). A calibration, a regression on a stated model, and an inversion are not learned models: MEAS and NUMER govern them. The models through which agents do the work are governed by the agent practice profile (AGENT) and the Safeguards Article (GUARD), not by this profile. A learned model used as a numerical surrogate is numerical work as well, which NUMER binds where the classification records the attribute Numerical.
+ML.1 states the selector: the attribute Learned model use, defined here. The domain items are learned models, their records, their error estimates, and their inputs, and each provision names one of them as its subject (STND.DRAFT.37). A calibration, a regression on a stated model, and an inversion are not learned models: MEAS and NUMER govern them. The term Learned model use leaves out the model through which an agent does the work, which the agent practice profile (AGENT) and the Safeguards Article (GUARD) govern, and keeps a learned model that the work builds, trains, or runs as part of what it delivers, even when an agent uses that model too. A learned model used as a numerical surrogate is numerical work as well, which NUMER binds where the classification records the attribute Numerical.
 
 ## Where the rest lives
 
@@ -142,3 +142,4 @@ Each learned model whose parameters change, by refitting, by fine-tuning, or by 
 | 1.0 | 2026-10-19 | Adopted. |
 | 1.0.1 | 2026-10-25 | Editorial amendment (GOV.41): the informative Selector text cites AGENT and GUARD, which it names as governing the models through which agents do the work, and References lists AGENT and GUARD; no obligation, permission, or defined meaning changes. |
 | 1.0.2 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields; no obligation, permission, or defined meaning changes. |
+| 1.1 | 2026-10-31 | Minor amendment (GOV.41): the term Learned model use leaves out a learned model in its use as the model through which an agent does the work, an exclusion that only the informative Selector text stated before, and keeps a learned model that the work builds, trains, or runs as part of what it delivers, even when it is the model of an agent; the Selector text cites the term. |

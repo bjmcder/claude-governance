@@ -1,11 +1,11 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.RUST,standard,LVL2,Rust standard,adopted,_doc.md,ec410f3269ee46b26d02d5594211f72d2e5d5bff7d4a9ba40188ec61bb985b93,37942
+STND.RUST,standard,LVL2,Rust standard,adopted,_doc.md,398e25c2dc143eb0eebea7e39ed6c5edeca964083e7339b5c2611441e8b296f2,38336
 STND.RUST.1,provision,LVL2,Declared edition and toolchain,adopted,1.md,1fc868b1c385cdeb97ac6ef25317adf8b7a13b9ab505a82354e003c3cd3341ad,654
 STND.RUST.2,provision,LVL2,Rust build settings stated,adopted,2.md,1a6b7336d4fc9c58b63b4881f1a0e344403a8ffc7c81518a6fc830650b8600cb,770
 STND.RUST.3,provision,LVL2,Soundness arguments and conditions,adopted,3.md,720b5a8a6755b6466c8636d617e92a57c537f214f9dc9894fb9479714aec557b,822
 STND.RUST.4,provision,LVL2,Sound modules,adopted,4.md,04924d77d830bde10d0e9ad7b6eff38f0b09a154bb40bf4c37a3f1c658c37056,632
 STND.RUST.5,provision,LVL2,Listed unsafe modules,adopted,5.md,9e8bea373af44da0411dc063005650cd86704f8b8e2456423ce37f8e4006719a,600
-STND.RUST.6,provision,LVL2,Agent soundness arguments,adopted,6.md,12965e6fe34db343781b6a96cb4272a0ca4f978e9c7179b8ffa806541543d197,890
+STND.RUST.6,provision,LVL2,Agent soundness arguments,adopted,6.md,4cac67f0fe1749fa8925619b234dd6a77c43f2c4f8ee76a027928fe28f51793a,1414
 STND.RUST.7,provision,LVL2,Soundness without destructors or poisoning,adopted,7.md,de1f93022b59c4f200ee23e0266520686999daec5bdcbadd6778222fdfb3aa6e,670
 STND.RUST.8,provision,LVL2,Panic strategy relied upon,adopted,8.md,b09601003cdb175eaddaefa2af2add9ab42c79dff8181a0b0d5d6dcb5d74b257,622
 STND.RUST.9,provision,LVL2,Panic safety of unsafe code,adopted,9.md,4756df528733ccd14f7bb0ca7724f33bb1bbb81d83f65b0f1aac2da559417af3,645
