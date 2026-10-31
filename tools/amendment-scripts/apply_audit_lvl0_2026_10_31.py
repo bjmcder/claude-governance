@@ -106,11 +106,14 @@ PROVISIONS: list[tuple[str, str, dict[str, object]]] = [
      "executed only by the human owner (PRIME.6). Prohibited actions (PRIME.5, PRIME.9, PRIME.10) are NEVER taken by "
      "an agent.",
      {"cites": ["PRIME.5", "PRIME.6", "PRIME.7", "PRIME.8", "PRIME.9", "PRIME.10"]}),
-    # S1: an action that belongs to an exempt class, in place of "unless it belongs".
+    # S1: an action that belongs to an exempt class, in place of "unless it belongs"; reconciliation X1 (b): a
+    # fourth ground for the agent's own uncommitted, unrelied work of the unit.
     ("GUARD/7.md",
      "GUARD.5 does not apply to an action that belongs to a class the register records as exempt because its prior "
-     "state is verifiably recoverable, its content is regenerable from recorded inputs (REPRO.1), or it removes or "
-     "overwrites only temporary items. No exempt class includes a rewrite or forced overwrite of history, and "
+     "state is verifiably recoverable, its content is regenerable from recorded inputs (REPRO.1), it removes or "
+     "overwrites only temporary items, or it changes or removes only an item that the agent taking it created in the "
+     "current unit of work, that the version history does not yet hold, on which no reported result rests, and that "
+     "no other actor has changed since that agent last wrote it. No exempt class includes a rewrite or forced overwrite of history, and "
      "GUARD.6 prevails over every exemption.",
      {"cites": ["GUARD.5", "GUARD.6", "REPRO.1"]}),
     # B2: bulk retrieval is retrieval by network access.
@@ -139,7 +142,8 @@ PROVISIONS: list[tuple[str, str, dict[str, object]]] = [
      "An agent's own operating cost is implicit expenditure, authorized and bounded as PRIME.8 provides. It is "
      "estimated and monitored wherever it is measurable, anomalies are reported, and an estimate states what it is "
      "unable to measure. The human owner MAY set the discipline that governs it, a per-task estimate or an operating "
-     "envelope included, and the choice is recorded. Absent such a discipline, an agent uses the least costly "
+     "envelope included, and the choice is recorded; a per-task estimate or an envelope so set is a spending limit "
+     "that the human owner sets (PRIME.8). Absent such a discipline, an agent uses the least costly "
      "configuration with the capability needed to complete the unit of work reliably within its stopping rule "
      "(QA.3).",
      {"cites": ["PRIME.8", "QA.3"]}),
@@ -160,10 +164,10 @@ PROVISIONS: list[tuple[str, str, dict[str, object]]] = [
      "classification records the class of that use as the expected class, adopted with the classification (GOV.24) "
      "and setting no class before that use begins (GOV.14). The human owner MAY record a less severe class for a "
      "component shown to be isolated from the more severe outputs. Until the human owner records a class, the work "
-     "is treated as CSQ4. That presumption NEVER covers driving physical hardware, or a use made of the work that the "
+     "is treated as CSQ4. That presumption NEVER covers commanding, configuring, or powering physical hardware (PRIME.13), or a use made of the work that the "
      "record, the request, or the work's own content shows to be more severe than CSQ4. Where the presumption does "
      "not cover a line of work and no class is recorded, an agent halts that line of work and refers (PRIME.14).",
-     {"cites": ["GOV.24", "GOV.14", "PRIME.14"]}),
+     {"cites": ["GOV.24", "GOV.14", "PRIME.13", "PRIME.14"]}),
     # I3: the recorded class governs until the human owner reclassifies; reliance at a more severe class halts.
     ("GOV/14.md",
      "A consequence class attaches to the use of work, not to its code. The class that the human owner records "
@@ -175,18 +179,27 @@ PROVISIONS: list[tuple[str, str, dict[str, object]]] = [
      {"cites": ["GOV.13", "PRIME.14"]}),
     # R5 (O2): a constitution at CSQ1 and CSQ0, for physical hardware, and on request.
     ("GOV/20.md",
-     "A project of CSQ1 or CSQ0, a project that drives physical hardware, and a project whose human owner asks for "
+     "A project of CSQ1 or CSQ0, a project that commands, configures, or powers physical hardware (PRIME.13), and a project whose human owner asks for "
      "one have a project constitution: a LVL3 instrument that inherits from and aligns with the levels above it, "
      "cites the provisions it instantiates, adds only project-specific obligations, and relaxes none (PRIME.15). In "
      "a project without one, a promotion other than one that QA.11 makes of the adopted classification or of the "
      "human owner's direction, and a release (QA.10), are acts of the human owner, recorded under the defaults.",
-     {"cites": ["PRIME.15", "QA.10", "QA.11"]}),
+     {"cites": ["PRIME.13", "PRIME.15", "QA.10", "QA.11"]}),
     # R5: no default records a class; GOV.13 holds the presumption.
     ("GOV/22.md",
      "Work without a project constitution operates under defaults that the custodians adopt as LVL2 standards. No "
      "default grants an authorization, adopts a hazard analysis, records a consequence class (GOV.13), or authorizes "
-     "an estimate; only the human owner does.",
-     {"cites": ["GOV.13"]}),
+     "an estimate; only the human owner does, and an estimate that an agent states under PRIME.8 is authorized by the "
+     "human owner's direction that PRIME.8 names.",
+     {"cites": ["PRIME.8", "GOV.13"]}),
+    # Reconciliation X3: the estimates that the owner alone adopts exclude the agent's own operating cost.
+    ("GOV/50.md",
+     "Judgments that set the burden on the work are adopted only by the human owner, and an agent MAY draft them: the "
+     "classification, consequence class, and proportionality judgment (GOV.11, GOV.13, GOV.24); promotion (QA.11); "
+     "axioms (VV.9); the hazard analysis (PRIME.13); the reserved-action register and its exempt classes (GUARD.4, "
+     "GUARD.7); estimates for implicit expenditure other than an agent's own operating cost (PRIME.8); and the "
+     "decision to release or deploy (QA.10).",
+     {"cites": ["PRIME.8", "PRIME.13", "GUARD.4", "GUARD.7", "VV.9", "QA.10", "QA.11", "GOV.11", "GOV.13", "GOV.24"]}),
     # I5: INTPR.11 binds agents at the level that the floor and the proportionality judgment set.
     ("GOV/48.md",
      "Agents acting on covered work are governed by agent instructions derived under PRIME.15, are held to the prime "
@@ -258,7 +271,7 @@ TERMS: list[tuple[str, str, dict[str, object]]] = [
 
 TARGETS = ["LVL0", "PRIME.8", "PRIME.9", "PRIME.11", "PRIME.13", "PRIME.14", "GUARD.1", "GUARD.7", "GUARD.8",
            "GUARD.9", "GUARD.10", "GUARD.14", "QA.1", "QA.11", "GOV.10", "GOV.13", "GOV.14", "GOV.20", "GOV.22",
-           "GOV.48", "LEX.network-access", "LEX.bulk-retrieval", "LEX.reserved-action", "LEX.elevated-privilege",
+           "GOV.48", "GOV.50", "LEX.network-access", "LEX.bulk-retrieval", "LEX.reserved-action", "LEX.elevated-privilege",
            "LEX.definition-of-done", "LEX.implicit-expenditure", "LEX.promotion"]
 
 READING = (
@@ -273,7 +286,7 @@ READING = (
     "administrative privilege only as provisioned within an environment that the owner's provisioning record states "
     "is isolated (PRIME.9); a person the owner names by the owner's own recorded act instructs within the scope "
     "named, names no one else, and never performs the owner's acts of PRIME.1 (PRIME.11); work is treated as CSQ4 "
-    "until a class is recorded, never for driving physical hardware or a use that the record, the request, or the "
+    "until a class is recorded, never for commanding, configuring, or powering physical hardware or a use that the record, the request, or the "
     "work shows to be more severe (GOV.13, GOV.22, PRIME.14), and under that presumption the owner's direction is "
     "the promotion for reliance by the author or the owner alone, feeding work verified later (QA.11); the recorded "
     "or presumed class governs until the owner records another, and an agent that finds the work relied upon at a "
@@ -283,7 +296,13 @@ READING = (
     "code or data, and a definition of done stated in the request meets QA.1 (GOV.10, QA.1); bulk retrieval is "
     "retrieval by network access (GUARD.8); GUARD.9 does not reach the exempt classes, and GUARD.7 reads \"an action "
     "that belongs to\" an exempt class; the free tier covers the reversible, local actions that the directed unit "
-    "of work needs (GUARD.1); an authorization is revocable, and after expiry or revocation nothing further is done "
+    "of work needs (GUARD.1); GUARD.7 gains a fourth ground of exemption, a change or removal only of an item that "
+    "the acting agent created in the current unit of work, that the version history does not yet hold, on which no "
+    "reported result rests, and that no other actor has changed since that agent last wrote it; GOV.50 excepts an "
+    "agent's own operating cost from the estimates that only the owner adopts, GOV.22 says that the owner's direction "
+    "authorizes the estimate stated under PRIME.8, and GUARD.14 makes a per-task estimate or envelope that the owner "
+    "sets a spending limit of PRIME.8; GOV.13 and GOV.20 speak of commanding, configuring, or powering physical "
+    "hardware, as PRIME.13 does; an authorization is revocable, and after expiry or revocation nothing further is done "
     "under it beyond the steps of GUARD.3 within the remaining authority (GUARD.10); INTPR.11 binds agents at the "
     "level GOV.10 and GOV.11 set (GOV.48); the Lexicon terms Network access, Bulk retrieval, Reserved action, "
     "Elevated privilege, Definition of done, Implicit expenditure, and Promotion match those provisions")
@@ -305,7 +324,9 @@ def rationale(date: str) -> str:
         "holds agents to INTPR.11 above the floor (I5). The outcomes carry recommendation R1, recommendation R2, "
         "the LVL0 part of recommendation R3, recommendation R5, recommendation R8, and recommendation R9 of "
         f"{FINDINGS}, put to the custodian at ratification, and the drafting fixes S1, B2, B3, B10, I1, and I3 to "
-        f"I5, as {RECORD} directs, revised after the cold review review-records/audit-2026-10-31/lvl0/review.md. "
+        f"I5, as {RECORD} directs, revised after the cold review review-records/audit-2026-10-31/lvl0/review.md and, for "
+        "findings X1 (option b), X3, X4, and X11, after the reconciliation review "
+        "review-records/audit-2026-10-31/reconciliation.md. "
         "Alternatives weighed: for R1, keeping PRIME.8 and widening STND.DFLT.33 to a bare direction with a default "
         "envelope (option b, rejected: a default envelope is a default that authorizes an estimate, which GOV.22 "
         "bars), leaving both (option c, rejected: every task halts), and authorizing the operating cost with no "
@@ -337,14 +358,20 @@ def rationale(date: str) -> str:
         "within an environment recorded as isolated and never beyond it; a named person grants no authorization and "
         "names no one; the presumed class never covers physical hardware or a use that the record, the request, or "
         "the work shows to be more severe, and reliance under it is the owner's own, feeding work verified later, "
-        "while reliance at a more severe class halts; promotion beyond that and release stay the owner's acts; local "
+        "while reliance at a more severe class halts; promotion beyond that and release stay the owner's acts; the "
+        "fourth exempt class of GUARD.7 loses only the acting agent's own work of the current unit, which the version "
+        "history does not hold, on which no reported result rests, and which no other actor has changed, so no history "
+        "is rewritten (PRIME.5), no reported result loses its regeneration, and no other actor's work is lost, while "
+        "history rewrites stay in no exempt class and GUARD.6 prevails over every exemption; local "
         "reads stay bounded by PRIME.9 and PRIME.10; GUARD.9 leaves only the classes whose recovery or regeneration "
         "the register already records; the free tier stays reversible, local, and within provisioned privilege; "
         "nothing further is done under a lapsed authorization; INTPR.11 stays at the level GOV.11 sets above the "
         "floor; and commanding a designed safe state that the owner adopted and verified causes no harm (term Safe "
         "state), the precedence reaching only that command and its transfer. The residual risks put to the custodian "
         f"are listed in {LVL0_RECORD}. Onset: none changes; LVL0 carries no onset field. Lower governance affected: "
-        "STND.DFLT.7, STND.DFLT.15, STND.DFLT.17, STND.DFLT.33, and the Notes of STND.DFLT, among them those on the "
+        "STND.DFLT.7, STND.DFLT.15 (whose sixth class rests on the fourth ground of GUARD.7), STND.DFLT.17, "
+        "STND.DFLT.19 and the row Physical hardware of STND.PROJ.1 (which say \"drives\"), STND.DFLT.33, and the "
+        "Notes of STND.DFLT, among them those on the "
         "default class and on promotion without a constitution; AGENT.6, AGENT.8, AGENT.17, and the Notes of AGENT on "
         "AGENT.6; STND.CLASS.7, STND.CLASS.10, and the Notes of STND.CLASS; STND.CREW.13 and the Notes of STND.CREW; "
         "the reading of STND.PROJ.3, HW.3, HW.CPU.4, and HW.GPU.4 under the term Elevated privilege; each is listed "
@@ -373,7 +400,10 @@ ROW = (f"| {NEW} | {{date}} | Major amendment (GOV.40): PRIME.13 lets an agent c
        "of work that changes code or data, and QA.1 accepts a definition of done stated in the request; GUARD.1 frees "
        "the reversible, local actions that the directed unit needs; GUARD.7 reads \"an action that belongs to\" an "
        "exempt class; GUARD.8 limits bulk retrieval to network access; GUARD.9 excludes the exempt classes; "
-       "GUARD.10 adds revocation and confines what follows expiry to the steps of GUARD.3; GOV.48 holds agents to "
+       "GUARD.7 gains a fourth ground for the acting agent's own uncommitted, unrelied items of the unit that no other "
+       "actor has changed; GOV.50 and GOV.22 treat the estimate of an agent's own operating cost as PRIME.8 does, and "
+       "GUARD.14 makes an owner-set per-task estimate or envelope a spending limit; GOV.13 and GOV.20 speak of "
+       "commanding, configuring, or powering physical hardware; GUARD.10 adds revocation and confines what follows expiry to the steps of GUARD.3; GOV.48 holds agents to "
        "INTPR.11 as GOV.10 and GOV.11 set; the Lexicon terms Network access, Bulk retrieval, Reserved action, "
        "Elevated privilege, Definition of done, Implicit expenditure, and Promotion match. |")
 

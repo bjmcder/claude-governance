@@ -1,12 +1,12 @@
 # Round of 2026-10-31, part lvl0: LVL0 2.0
 
-This part carries the section "LVL0 (one transaction …)" of `../decisions.md`: S1, S2, S3, R1, the LVL0 part of R3, R5 (with I4), R8, R9, B2, B3, B10, I1, I3, and I5, together with the Lexicon terms these touch. The draft was revised after the cold review in `review.md` (findings L1 to L10), on the lead's directions; see "Review and dispositions". Nothing here is in force until the custodian ratifies it and the script runs. Rulings R1, R2, R3, R5, R8, and R9 are not yet ruled. Each is drafted on the recommended option of `../findings.md`, and goes to the custodian at ratification.
+This part carries the section "LVL0 (one transaction …)" of `../decisions.md`: S1, S2, S3, R1, the LVL0 part of R3, R5 (with I4), R8, R9, B2, B3, B10, I1, I3, and I5, together with the Lexicon terms these touch. The draft was revised after the cold review in `review.md` (findings L1 to L10), and after the reconciliation review in `../reconciliation.md` (X1 option b, X3, X4, X11), on the lead's directions; see "Review and dispositions". Nothing here is in force until the custodian ratifies it and the script runs. Rulings R1, R2, R3, R5, R8, and R9 are not yet ruled. Each is drafted on the recommended option of `../findings.md`, and goes to the custodian at ratification.
 
 - **Module:** `tools/amendment-scripts/apply_audit_lvl0_2026_10_31.py`, run through `apply_audit_2026_10_31.py` as the first part, with `TRANSACTIONS = 1`.
 - **The one transaction:**
   - kind `amend`, actor The Custodian, role custodians, authority GOV.40;
   - scope: the thirteen LVL0 directories (LVL0, PRIN, PRIME, GUARD, VV, REPRO, INTPR, DSGN, SIMPL, RSRC, QA, GOV, LEX);
-  - targets: LVL0; PRIME.8, PRIME.9, PRIME.11, PRIME.13, and PRIME.14; GUARD.1, GUARD.7, GUARD.8, GUARD.9, GUARD.10, and GUARD.14; QA.1 and QA.11; GOV.10, GOV.13, GOV.14, GOV.20, GOV.22, and GOV.48; and the terms LEX.network-access, LEX.bulk-retrieval, LEX.reserved-action, LEX.elevated-privilege, LEX.definition-of-done, LEX.implicit-expenditure, and LEX.promotion.
+  - targets: LVL0; PRIME.8, PRIME.9, PRIME.11, PRIME.13, and PRIME.14; GUARD.1, GUARD.7, GUARD.8, GUARD.9, GUARD.10, and GUARD.14; QA.1 and QA.11; GOV.10, GOV.13, GOV.14, GOV.20, GOV.22, GOV.48, and GOV.50; and the terms LEX.network-access, LEX.bulk-retrieval, LEX.reserved-action, LEX.elevated-privilege, LEX.definition-of-done, LEX.implicit-expenditure, and LEX.promotion.
 - **Revision:** LVL0 1.8 becomes 2.0, drafted as major (see the next section). It adds one row of revision history, dated by the transaction. In rehearsal the transaction is ledger entry 325.
 
 ## Revision class (STND.IDENT.3, STND.IDENT.4)
@@ -26,7 +26,7 @@ The case for minor rests on what the PRIME opening says the directives protect: 
 - instruction authority stays traceable to the owner's own recorded act;
 - the safe state stays the default on fault.
 
-Revisions 1.5, 1.7, and 1.8 were minor, but none of them changed a prime directive's own text this far.
+Revisions 1.5, 1.7, and 1.8 were minor, but none of them changed a prime directive's own text this far. The reconciliation additions (a fourth exempt ground in GUARD.7, the conforming of GOV.50, GOV.22, and GUARD.14, and the vocabulary of GOV.13 and GOV.20) change no prime directive and do not move the class.
 
 The class is in doubt. STND.IDENT.4 gives a doubtful change "the class nearer the top of the table", so the draft takes major.
 
@@ -36,9 +36,20 @@ The class is in doubt. STND.IDENT.4 gives a doubtful change "the class nearer th
 
 The front-matter `cites` of each provision lists exactly the identifiers that its text names (check c.2). Titles are unchanged.
 
-### S1, GUARD.7 (wording only)
+### S1, GUARD.7, with the fourth ground of reconciliation X1 (option b)
 
-> GUARD.5 does not apply to an action that belongs to a class the register records as exempt because its prior state is verifiably recoverable, its content is regenerable from recorded inputs (REPRO.1), or it removes or overwrites only temporary items. No exempt class includes a rewrite or forced overwrite of history, and GUARD.6 prevails over every exemption.
+> GUARD.5 does not apply to an action that belongs to a class the register records as exempt because its prior state is verifiably recoverable, its content is regenerable from recorded inputs (REPRO.1), it removes or overwrites only temporary items, or it changes or removes only an item that the agent taking it created in the current unit of work, that the version history does not yet hold, on which no reported result rests, and that no other actor has changed since that agent last wrote it. No exempt class includes a rewrite or forced overwrite of history, and GUARD.6 prevails over every exemption.
+
+S1 changes "unless it belongs" to "that belongs". The fourth ground gives the sixth class of STND.DFLT.15 a ground in LVL0. The process part narrows that class to cite this ground, and says how the agent checks it: a digest kept at its last write, within the session.
+
+The four conditions keep the class within what GUARD.5, PRIME.5, and PRIME.6 protect:
+
+- **"Created in the current unit of work".** Only the agent's own work is reached.
+- **"That the version history does not yet hold".** No history is rewritten (PRIME.5), and nothing the history preserves is lost.
+- **"On which no reported result rests".** No reported result loses the means of its regeneration (PRIME.5). This condition is added to the lead's wording, because an uncommitted file from which a result was reported is exactly what PRIME.5 guards.
+- **"That no other actor has changed since that agent last wrote it".** Another actor's changes stay under GUARD.5 and STND.INSTR.2.
+
+What a change or removal in this class can lose is the acting agent's own unrelied, uncommitted work of the unit, which the agent can redo. The second sentence of GUARD.7 is kept: no exempt class includes a rewrite or forced overwrite of history, and GUARD.6 prevails over every exemption, so an unenumerated or oversized action stays reserved. GUARD.9 asks no confirmation of a prior state for the class (B3). Membership is checked by the digest of the process part. Where the agent cannot check it, GUARD.2 places the action in the highest tier that can apply.
 
 ### S2 (R2), PRIME.13
 
@@ -84,7 +95,7 @@ A plain "fix the bug in foo.py" stays workable. It falls under case 1 or 2, or u
 GUARD.14 changes in two places:
 
 - The first sentence now reads: "An agent's own operating cost is implicit expenditure, authorized and bounded as PRIME.8 provides."
-- The third sentence reads "… a per-task estimate or an operating envelope included …" in place of "such as" (L10.1). The rest stays.
+- The third sentence reads "… a per-task estimate or an operating envelope included, and the choice is recorded; a per-task estimate or an envelope so set is a spending limit that the human owner sets (PRIME.8)" in place of "such as" (L10.1). The added clause is X4's related ambiguity: a per-task estimate that the owner sets now has a route to bound the cost under PRIME.8's fourth and fifth sentences, and it adds no modal. The rest stays.
 
 LEX.implicit-expenditure (`governed_by` adds GUARD.14) gains a second sentence (L10.6):
 
@@ -94,12 +105,7 @@ A paid service that an agent calls therefore keeps PRIME.8's authorized estimate
 
 **For the custodian at ratification (2): direction through a named person.** "Through a person whom the human owner names under PRIME.11 within the scope of that naming" goes beyond R1's words. It is needed so that work a named person instructs is not halted for want of a cost authorization. The authorization is the owner's own naming act, read with PRIME.8, and it is confined to the scope that the act names (L3). Recommendation: keep the clause.
 
-**For the custodian at ratification (3): GOV.50.** GOV.50 lists "estimates for implicit expenditure (PRIME.8)" among the judgments that the owner adopts. Two estimates differ here:
-
-- The estimate stated under PRIME.8's fourth sentence is a bound that the agent states and cannot revise. It is not adopted, and extending it is the owner's act.
-- The estimate that GOV.50 means is the authorized estimate of PRIME.8's first sentence.
-
-GOV.50 is not changed. Recommendation: no change. The alternative wording is "estimates that authorize implicit expenditure (PRIME.8)".
+**GOV.50 (formerly reading 3).** Amended on reconciliation X3; see R5 below.
 
 ### R3 (S6), LVL0 part: PRIME.11
 
@@ -113,7 +119,7 @@ GOV.13. The first three sentences are unchanged. Then:
 
 > Until the human owner records a class, the work is treated as CSQ4. That presumption NEVER covers driving physical hardware, or a use made of the work that the record, the request, or the work's own content shows to be more severe than CSQ4. Where the presumption does not cover a line of work and no class is recorded, an agent halts that line of work and refers (PRIME.14).
 
-`cites`: `["GOV.24", "GOV.14", "PRIME.14"]`. The trigger is the record, the request, or the work's own content, in place of what an agent "knows" (L6). It is decidable from what the agent reads. A use that none of these shows is not one an agent could be held to.
+Reconciliation X11 replaces "driving physical hardware" with "commanding, configuring, or powering physical hardware (PRIME.13)". `cites`: `["GOV.24", "GOV.14", "PRIME.13", "PRIME.14"]`. The trigger is the record, the request, or the work's own content, in place of what an agent "knows" (L6). It is decidable from what the agent reads. A use that none of these shows is not one an agent could be held to.
 
 QA.11 gains a sentence after the sentence on CSQ3 and CSQ4 (L5/L6, O1):
 
@@ -125,15 +131,17 @@ The reliance is confined to the author and the owner who directed the work, feed
 
 GOV.20:
 
-> A project of CSQ1 or CSQ0, a project that drives physical hardware, and a project whose human owner asks for one have a project constitution: a LVL3 instrument that inherits from and aligns with the levels above it, cites the provisions it instantiates, adds only project-specific obligations, and relaxes none (PRIME.15). In a project without one, a promotion other than one that QA.11 makes of the adopted classification or of the human owner's direction, and a release (QA.10), are acts of the human owner, recorded under the defaults.
+> A project of CSQ1 or CSQ0, a project that commands, configures, or powers physical hardware (PRIME.13), and a project whose human owner asks for one have a project constitution: a LVL3 instrument that inherits from and aligns with the levels above it, cites the provisions it instantiates, adds only project-specific obligations, and relaxes none (PRIME.15). In a project without one, a promotion other than one that QA.11 makes of the adopted classification or of the human owner's direction, and a release (QA.10), are acts of the human owner, recorded under the defaults.
 
-`cites`: `["PRIME.15", "QA.10", "QA.11"]`. The standing promotions are excepted, so the sentence adds no second act (L8). The "(GOV.22)" is cut (GOV.31).
+`cites`: `["PRIME.13", "PRIME.15", "QA.10", "QA.11"]`. The wording "commands, configures, or powers … (PRIME.13)" is X11's. The other LVL0 uses of "drive" stay. In PRIME.13, "before the system first drives the hardware" speaks of a system already defined as one that commands, configures, or powers it. In the Preamble, DSGN.5, and the term Computational and cyber-physical system, "drive, read, or execute on" is the general sense of the scope. The standing promotions are excepted, so the sentence adds no second act (L8). The "(GOV.22)" is cut (GOV.31).
 
 GOV.22:
 
-> Work without a project constitution operates under defaults that the custodians adopt as LVL2 standards. No default grants an authorization, adopts a hazard analysis, records a consequence class (GOV.13), or authorizes an estimate; only the human owner does.
+> Work without a project constitution operates under defaults that the custodians adopt as LVL2 standards. No default grants an authorization, adopts a hazard analysis, records a consequence class (GOV.13), or authorizes an estimate; only the human owner does, and an estimate that an agent states under PRIME.8 is authorized by the human owner's direction that PRIME.8 names.
 
-`cites`: `["GOV.13"]`. The restating sentence is cut (L10.5).
+`cites`: `["PRIME.8", "GOV.13"]`. The restating sentence is cut (L10.5). The added clause is X3's: the stated estimate is the owner's by the direction, and no default authorizes it.
+
+GOV.50, from reconciliation X3: "estimates for implicit expenditure (PRIME.8)" becomes "estimates for implicit expenditure other than an agent's own operating cost (PRIME.8)". `cites` is unchanged. This supersedes the earlier reading 3 (no change to GOV.50).
 
 PRIME.14, fourth trigger:
 
@@ -210,6 +218,10 @@ GOV.11 bars lower governance from raising the floor. It does not bar the custodi
 | Change | Direction | Why no prohibited condition becomes reachable | Residual risk |
 | --- | --- | --- | --- |
 | S1, GUARD.7 | Settles wording | Closes the literal misreading | None |
+| X1, GUARD.7 fourth ground | Narrows GUARD.5 for one class | Only the acting agent's own items of the unit are reached: not yet in the version history, with no reported result resting on them, and changed by no one else. No history is rewritten, no reported result loses its regeneration, and no other actor's work is lost (PRIME.5, PRIME.6, GUARD.5). History rewrites stay outside every class, and GUARD.6 prevails | The agent's check that no one else changed the item. The process part keeps a digest at the last write, and where it cannot check, GUARD.2 places the action in the highest tier |
+| X3, GOV.50, GOV.22 | Settles | Conforms both to PRIME.8. Every estimate stays authorized by an act of the owner | None |
+| X4, GUARD.14 | Settles | An owner-set per-task estimate or envelope is a spending limit, so work halts before it | **For the custodian.** Where only the agent's stated estimate bounds the cost, the owner does not see the figure before the spend (reconciliation X4). The process part shows it (STND.DFLT.33). Recommendation: accept, with that display |
+| X11, GOV.13, GOV.20 | Tightens slightly | Configuring or powering hardware is now also outside the presumption and needs a constitution, as PRIME.13 already treats it | None |
 | S2, PRIME.13 | Narrows PRIME.6 to PRIME.8 for one command | Only the command toward the designed safe state, and its transfer to the controller, are freed. The owner adopted that state, its reaching was verified before the first drive, and it "causes no harm" (term Safe state). Every other actuation, transfer, and side effect keeps its tier | A command from a mode that the hazard analysis did not weigh. That is a defect of the analysis, which the owner adopts |
 | R1, PRIME.8, GUARD.14 | Narrows: the direction replaces the authorized estimate for operating cost | The cost is authorized only by an act of the owner, in a provisioned configuration, and is always bounded by a spending limit, a fixed provisioned cost, or a stated estimate. Work halts before each bound, and an extension is the owner's. Where no bound exists, nothing is authorized and the agent halts. Explicit monetary transactions stay reserved. Services that the agent calls keep the authorized estimate (term Implicit expenditure) | **For the custodian (6).** The stated estimate is the agent's own derivation. A careless estimate is bounded by "rigorously and faithfully derived" (PRIME.2 in substance), by the anomaly report of GUARD.14, and by its being fixed once stated. Recommendation: accept |
 | R3, PRIME.11 | Narrows: a named person may instruct | The authority rests on the owner's own recorded act and is confined to its scope. The named person names no one else and performs none of the acts of PRIME.1. Content gains nothing | Recognizing the named person on the channel. That is for the process part's "given directly" |
@@ -240,7 +252,7 @@ These lower provisions and Notes become stale under LVL0 2.0. Each must change a
    - "Given directly" extends to a named person's messages within scope.
    The DFLT Notes list of entered acts adds the naming. (R3)
 6. **The owner presumption (STND.DFLT).** State it as how an agent identifies the owner absent a record, not as an assignment of ownership. The Preamble and LEX.human-owner leave that to governance outside LVL0. (R3)
-7. **STND.DFLT.15.** B3's class for items that the agent created in the current unit. (B3)
+7. **STND.DFLT.15.** B3's class for items that the agent created in the current unit. It must cite the fourth ground of GUARD.7 and match its four conditions: created in the current unit, not yet in the version history, no reported result resting on it, and changed by no other actor since the agent's last write. The DFLT Notes must say how the agent checks the last condition: a digest kept at its last write, within the session. Where the check is not possible, the class does not apply (GUARD.2). (B3, X1)
 8. **AGENT.17, or a provision of STND.DFLT (I1).** Re-read the authorizations in force before relying on a standing grant, and enter a grant before first relying on it. (I1)
 9. **STND.CLASS.22 and STND.DFLT.20 (O7).** As decided.
 10. **STND.DFLT Notes on class and constitution (not in decisions.md; review L6).** These sentences become untrue:
@@ -258,6 +270,8 @@ These lower provisions and Notes become stale under LVL0 2.0. Each must change a
 15. **A record of isolation (recommended).** PRIME.9 now asks for the owner's provisioning record that the environment is isolated. The defaults should say where that record lives, likely beside the working bounds of STND.DFLT, and that without it the agent refers before it uses superuser privilege.
 16. **STND.PROJ.1, row Identity (optional).** The persons named under PRIME.11, with their scopes.
 17. **Readings under the term Elevated privilege (no text change).** STND.PROJ.3 ("installed without elevated privilege"), HW.3, HW.CPU.4, HW.GPU.4, and the HW Notes now read with the new term.
+18. **"Drives" (X11).** STND.DFLT.19 and the row Physical hardware of STND.PROJ.1 say "drives physical hardware". Conform them to "commands, configures, or powers physical hardware (PRIME.13)" at their amendment, or have the DFLT Notes give "drive" that sense.
+19. **GOV.50 in the docs (X3).** `docs/adoption.md` repeats GOV.50's list, so the lead conforms it after application.
 
 Outside the corpus, the lead updates the following after application: the reading copies `rendered/LVL0.md`, `PRIME.md`, `GUARD.md`, `GOV.md`, `QA.md`, and `LEX.md`; and `docs/adoption.md`, on constitutions, unclassified work, and operating cost.
 
@@ -286,6 +300,10 @@ The cold review is in `review.md`. The lead's directions are quoted in brief.
 | L10.4 | "They" in GUARD.1 | **Fixed**: "the unit of work that its instructions direct" |
 | L10.5 | GOV.22 restates GOV.13 | **Fixed**: the sentence is cut, and "records a consequence class (GOV.13)" cites it |
 | L10.6 | "Own operating cost" undefined | **Fixed** in LEX.implicit-expenditure: "the part that running the agent incurs, and not the cost of a service or capacity that its actions use" |
+| X1 (reconciliation) | STND.DFLT.15's sixth class is outside GUARD.7 | **Fixed** by option (b), on the lead's direction. GUARD.7 gains the fourth ground quoted above, with "on which no reported result rests" added for PRIME.5. The second sentence is kept. The process part narrows the sixth class to cite the ground |
+| X3 (reconciliation) | GOV.50 and GOV.22 against PRIME.8 | **Fixed**. GOV.50 reads "other than an agent's own operating cost". GOV.22 says that the owner's direction authorizes the estimate stated under PRIME.8 |
+| X4, related ambiguity (reconciliation) | An owner-set per-task estimate has no route to bound the cost | **Fixed** in GUARD.14: "a per-task estimate or an envelope so set is a spending limit that the human owner sets (PRIME.8)". The main point of X4, the figure shown to the owner, is the process part's (STND.DFLT.33) and a residual for the custodian |
+| X11 (reconciliation) | "Drives" against "commands, configures, or powers" | **Fixed** in GOV.13 and GOV.20. Other LVL0 uses of "drive" are left, for the reasons under R5. STND.DFLT.19 and STND.PROJ.1 go to the process part (item 18) |
 | L10.7 | Definition of done: "the request being a record" | **Not fixed.** QA.1's new sentence has the stated definition meet the provision without being a record. Calling a request a record would stretch "recorded" in Normative Language ("durable, versioned, discoverable"). The term says "recorded or stated in the request", which matches QA.1 |
 
 The earlier readings for the custodian are settled by the review. The reading on PRIME.9 for remote hardware is settled by L9. The reading on QA.11 under the presumption is reversed by L6. The reading on refer versus halt in GOV.14 is replaced by L5. The residual risks on unbounded cost and on the agent's judgment after revocation are closed by L1 and L4.
@@ -304,10 +322,10 @@ LVL0 follows the drafting standard as discipline, not as a binding rule (g.24 is
 
 ## Checks (after the revision)
 
-- **Rehearsal.** `PARTS=apply_audit_lvl0_2026_10_31 python3 -B -m govharness rehearse governance ../tools/amendment-scripts/apply_audit_2026_10_31.py` appends 1 entry (seq 325, LVL0 2.0).
+- **Rehearsal of this part.** `PARTS=apply_audit_lvl0_2026_10_31 python3 -B -m govharness rehearse governance ../tools/amendment-scripts/apply_audit_2026_10_31.py` appends 1 entry (seq 325, LVL0 2.0).
   - Full verify passes: ids, mnemonics, references, manifests, ledger, unpinned, templates, status, checked-by, onset, and logic.
   - The only warning is the existing g.18, with its details unchanged.
-  - The full driver was not run: no process module exists yet. The tech part is another drafter's.
+- **Rehearsal of the full driver** (lvl0, tech, process), after the reconciliation edits: 19 entries are appended (325 to 343), and every check passes. The only warning is g.18. No anchor of the process module broke.
 - **Kept copy** (`/tmp/claude-1000/-home-brianm-projects-utils-governance-harness/dd5b6543-26b0-461c-b4d2-a83cf831ff9f/scratchpad/lvl0/kept/governance`).
   - `references --check` passes. `compose --check` reports 0 stale.
   - The logic verdicts equal the live corpus's, except c.4, which moves from INFO to PASS.

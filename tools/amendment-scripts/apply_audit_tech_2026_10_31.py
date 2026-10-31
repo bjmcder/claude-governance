@@ -7,7 +7,8 @@ Ten transactions, one per document, in citation order: the profiles first, then 
   by their field onset (O3); the Notes give the reason for the departure from the rule of STND.CLASS.
 - ML 1.1 (minor): the term Learned model use leaves out the model through which an agent does the work, which the
   informative Selector text alone said before (I7).
-- STND.VVUQ 1.5.2 (editorial): the Notes no longer say that work of CSQ3 meets NUMER through the core (O3).
+- STND.VVUQ 1.6 (minor): the Notes no longer say that work of CSQ3 meets NUMER through the core (O3), and
+  STND.VVUQ.64 judges a fresh-seed test under STND.VVUQ.33 to .35 where those apply (X12 of the reconciliation).
 - STND.CODE 1.8 (minor): STND.CODE.30 admits a dependence on the order of iteration that is declared as run-to-run
   variation and lies within the tolerance of each comparison that judges the result (I2).
 - STND.DEPS 1.3.1 (editorial): the Notes on STND.DEPS.14 say that a run that retrieves a revision from outside the
@@ -77,11 +78,17 @@ CPS10 = "\n".join([
     "(PRIME.14).", ""])
 
 CPS_DOC = [
+    ("and actuation by an agent only within an authorized safe range and while a human can stop it.",
+     "and actuation by an agent, other than commanding the designed safe state, only within an authorized safe range "
+     "and while a human can stop it."),
+    ("An embedded controller that drives physical hardware engages both this profile and HW.EMBED.",
+     "An embedded controller that commands, configures, or powers physical hardware (PRIME.13) engages both this "
+     "profile and HW.EMBED."),
     ("cites PRIME.13 without instantiating it, so that the floor stays where LVL0 puts it.",
      "cites PRIME.13 without instantiating it, so that the floor stays where LVL0 puts it. CPS.1 has work on a "
      "system that commands, configures, or powers physical hardware classified CSQ3 or a more severe class, as "
      "GOV.12 lets a profile "
-     "require of work in its domain: a wrong command is able to damage the hardware it drives, or what that "
+     "require of work in its domain: a wrong command is able to damage the hardware it commands, or what that "
      "hardware acts on, a loss beyond the author's own time that the consequence test of CSQ3 in STND.CLASS.1 "
      "counts, and the minimum keeps CPS.3 to CPS.9 in reach of all such work, the revision of the hazard analysis "
      "before an uncovered change first drives the hardware among them. The human owner sets that class "
@@ -106,7 +113,9 @@ CPS_READING = (
     "severe class, as GOV.12 lets a profile require of work in its domain, so that CPS.3 to CPS.9, and with them the "
     "revision of the hazard analysis before an uncovered change first drives the hardware, reach all such work, and "
     "new CPS.10 has an agent that finds a less severe class recorded for such work halt that line of work and "
-    "refer it (PRIME.14); the Notes give the reason and the floor argument")
+    "refer it (PRIME.14); the Notes give the reason and the floor argument, the Purpose excepts commanding the "
+    "designed safe state as PRIME.13 does, and the Selector text names the reach of PRIME.13 for an embedded "
+    "controller")
 
 
 def apply_cps(root: Path, at: str) -> None:
@@ -132,7 +141,7 @@ def apply_cps(root: Path, at: str) -> None:
         "places work of the domain in a class by the means that GOV.12 itself gives a profile, and the obligations "
         "that it brings to work that was CSQ4, CPS.3 to CPS.9 among them, are the obligations above the floor that "
         "GOV.11 proportions to CSQ3. It proportions them to the consequence, not to the setting or hardware of the "
-        "work (PRIN.9): a wrong command is able to damage the hardware it drives, a loss beyond the author's own "
+        "work (PRIN.9): a wrong command is able to damage the hardware it commands, a loss beyond the author's own "
         "time that the consequence test of CSQ3 in STND.CLASS.1 counts and that STND.CLASS.2 already counts met in "
         "doubt. The obligations fall on work at the decisions that the human owner already makes, the "
         "classification and the adoption of the hazard analysis under PRIME.13, and ask of the owner no decision "
@@ -272,19 +281,36 @@ VVUQ_READING = (
     "place of saying that work of CSQ3 meets NUMER through the core")
 
 
+VVUQ64 = [(
+    "tests with fresh, logged seeds that judge correctness under the criteria of STND.VVUQ.33, STND.VVUQ.34, and "
+    "STND.VVUQ.35 (NUMER.25, VV.1, VV.3).",
+    "tests with fresh, logged seeds that judge correctness under the criteria of STND.VVUQ.33, STND.VVUQ.34, and "
+    "STND.VVUQ.35 at each class from which those apply, and under the criterion that the acceptance criterion of "
+    "the test states at every other class (NUMER.25, VV.1, VV.3)."),
+]
+
+
 def apply_vvuq(root: Path, at: str) -> None:
     date = at[:10]
+    replace_text(root, "STND/VVUQ/64.md", VVUQ64)
     replace_text(root, "STND/VVUQ/_doc.md", VVUQ_DOC)
-    row = (f"| 1.5.2 | {date} | Editorial amendment (GOV.41): {VVUQ_READING}; no obligation, permission, or "
-           "defined meaning changes. |")
+    reading = VVUQ_READING + ("; STND.VVUQ.64 judges a test with fresh seeds under STND.VVUQ.33 to STND.VVUQ.35 "
+                              "at each class from which those apply, and otherwise under the criterion that its "
+                              "acceptance criterion states, as the Notes already read it")
+    row = f"| 1.6 | {date} | Minor amendment (GOV.41): {reading}. |"
     rationale = (
-        f"Editorial amendment of STND.VVUQ, revision 1.5.2, ratified by the custodian on {date}: {VVUQ_READING}. "
+        f"Minor amendment of STND.VVUQ, revision 1.6, ratified by the custodian on {date}: {reading}. "
         "Reading: the core that applies from CSQ3 gives no method for NUMER.7, NUMER.12, NUMER.13, NUMER.23, or "
         "NUMER.25, so the Notes claimed more than the core does; NUMER 1.5 moves the parts whose methods start at "
-        "CSQ2, and NUMER.13 is met at CSQ3 by its markings. The change is editorial under STND.IDENT.3 because only "
-        "the Notes change, and no obligation, permission, or defined meaning of this document changes. Floor "
-        "(GOV.11): unchanged. Transition (GOV.42): none. " + cite("O3") + F.AUTHOR)
-    F.finish(root, "STND/VVUQ", "STND.VVUQ", "1.5.1", "1.5.2", row, rationale, at)
+        "CSQ2, and NUMER.13 is met at CSQ3 by its markings. STND.VVUQ.64 applies from CSQ3 and pointed at "
+        "STND.VVUQ.33 to STND.VVUQ.35, which start at CSQ2, so its text now gives the reading that the Notes "
+        "stated; its onset stays CSQ3 under the rule of STND.CLASS, since it asks for no item of the table of "
+        "STND.CLASS.10. The change is minor under STND.IDENT.3 because it alters a recommendation, without altering "
+        "the motivation or intent of the governance. Floor (GOV.11): the change narrows what a waivable default asks "
+        "at CSQ3 to the criterion that the work already states (VV.3), and raises nothing. Transition (GOV.42): "
+        "none. Finding O3 of " + FINDINGS + "; finding X12 of review-records/audit-2026-10-31/reconciliation.md; "
+        + RECORD + "; " + PART_RECORD + "." + F.AUTHOR)
+    F.finish(root, "STND/VVUQ", "STND.VVUQ", "1.5.1", "1.6", row, rationale, at)
 
 
 # ------------------------------------------------------------------------------------------------------ STND.CODE 1.8

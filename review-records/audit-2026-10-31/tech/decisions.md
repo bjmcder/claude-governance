@@ -11,7 +11,7 @@ Ten transactions, one per document, each a GOV.41 amend by The Custodian, role c
 | 0 | CPS | 1.0.2 to 1.1 (CPS.1 amended, CPS.10 new) | Minor | S7 (R7) |
 | 1 | NUMER | 1.4.1 to 1.5 | Minor | O3 |
 | 2 | ML | 1.0.2 to 1.1 | Minor | I7 |
-| 3 | STND.VVUQ | 1.5.1 to 1.5.2 | Editorial | O3 |
+| 3 | STND.VVUQ | 1.5.1 to 1.6 | Minor | O3, X12 of the reconciliation |
 | 4 | STND.CODE | 1.7 to 1.8 | Minor | I2 |
 | 5 | STND.DEPS | 1.3 to 1.3.1 | Editorial | S8 |
 | 6 | STND.DOCS | 1.0.2 to 1.0.3 | Editorial | I6 |
@@ -35,7 +35,7 @@ The subject of CPS.1 is the work on a system that commands, configures, or power
 
 The Notes gain, after the sentence on PRIME.13:
 
-> CPS.1 has work on a system that commands, configures, or powers physical hardware classified CSQ3 or a more severe class, as GOV.12 lets a profile require of work in its domain: a wrong command is able to damage the hardware it drives, or what that hardware acts on, a loss beyond the author's own time that the consequence test of CSQ3 in STND.CLASS.1 counts, and the minimum keeps CPS.3 to CPS.9 in reach of all such work, the revision of the hazard analysis before an uncovered change first drives the hardware among them. The human owner sets that class (STND.CLASS.1); under CPS.10, an agent that finds a less severe class recorded for such work halts that line of work and refers it, so that the CSQ3 content of this profile is not left out under a class that the profile does not admit, and the referral asks the owner only for the classification that STND.CLASS.1 already asks. A credible path to injury, or to a major and hard-to-reverse loss, still sets CSQ0 or CSQ1 (STND.CLASS.1), and a component that the classification records as isolated from every such system keeps the class recorded for it (GOV.13).
+> CPS.1 has work on a system that commands, configures, or powers physical hardware classified CSQ3 or a more severe class, as GOV.12 lets a profile require of work in its domain: a wrong command is able to damage the hardware it commands, or what that hardware acts on, a loss beyond the author's own time that the consequence test of CSQ3 in STND.CLASS.1 counts, and the minimum keeps CPS.3 to CPS.9 in reach of all such work, the revision of the hazard analysis before an uncovered change first drives the hardware among them. The human owner sets that class (STND.CLASS.1); under CPS.10, an agent that finds a less severe class recorded for such work halts that line of work and refers it, so that the CSQ3 content of this profile is not left out under a class that the profile does not admit, and the referral asks the owner only for the classification that STND.CLASS.1 already asks. A credible path to injury, or to a major and hard-to-reverse loss, still sets CSQ0 or CSQ1 (STND.CLASS.1), and a component that the classification records as isolated from every such system keeps the class recorded for it (GOV.13).
 
 The class paragraph opens: "Every provision other than the selector, the shared-matters provision, and CPS.10, which instantiates PRIME.14 and binds at every class, instantiates only VV, …".
 
@@ -88,6 +88,12 @@ The CSQ3 defaults STND.VVUQ.7 and STND.VVUQ.64 list NUMER.25 in `instantiates`. 
 The STND.VVUQ Notes replace "so that work of CSQ3 meets NUMER through the core, while the obligations of LVL0 that the other provisions serve apply to it in full" with:
 
 > as do NUMER.7, NUMER.12, NUMER.25, and the second sentences of NUMER.5 and NUMER.23, whose default methods are among them. Work of CSQ3 meets each other provision of NUMER through the core where the core reaches it, and otherwise by a method that the work chooses or by the statement that the provision admits, a component of NUMER.13 marked not assessed among them, while the obligations of LVL0 that the other provisions serve apply to it in full. For a comparison that takes tier 3, the table of STND.VVUQ.1 gives a tolerance set from an estimate of rounding error of the kind that NUMER.12 describes, and for one that takes tier 5, a criterion with a stated probability of rejecting a correct result and a stated detection power, the content of NUMER.25.
+
+STND.VVUQ.64 now reads, after "fixed-seed tests that detect change, and":
+
+> tests with fresh, logged seeds that judge correctness under the criteria of STND.VVUQ.33, STND.VVUQ.34, and STND.VVUQ.35 at each class from which those apply, and under the criterion that the acceptance criterion of the test states at every other class (NUMER.25, VV.1, VV.3).
+
+Its onset stays CSQ3 under the rule of STND.CLASS, since it asks for no item of the table of STND.CLASS.10. The text now gives the reading that the Notes stated, so STND.VVUQ 1.6 is a minor amendment, not an editorial one. The wording avoids a trailing condition (g.12).
 
 **Floor argument (GOV.11).** Moving an onset from CSQ3 to CSQ2 narrows a waivable default to more severe work. It lowers no floor and raises none. VV.1, VV.5, and PRIME.3, which these parts serve, apply at CSQ3 in full.
 
@@ -196,3 +202,6 @@ The cold review is `review.md` in this folder.
 | T4, Notes overstatement | Fixed | The STND.VVUQ Note now describes what the table of STND.VVUQ.1 gives for tiers 3 and 5, with no indicative obligation. The NUMER Notes name what the core keeps at CSQ3 (STND.VVUQ.7, and tiers 3 and 5 of STND.VVUQ.1) and the domain tightenings of HW.QPU.6 and HDES.ASIC.5. |
 | T5, ML exclusion unbounded | Fixed | The term adds: "That exclusion does not reach a learned model that the work builds, trains, or runs as part of what it delivers, even when it is the model of an agent." The Selector text and the rationale follow. |
 | T6, CPS rationale reads as ratified while R7 is unruled | Not fixed | This is by design. Every amendment script runs only after ratification, and the rationale's "ratified by the custodian on" is then true. R7 goes to the custodian at ratification. If the custodian chooses option (b), the CPS transaction is withdrawn from the part and PRIME.13 is amended in the lvl0 part instead. |
+| X12 (reconciliation), STND.VVUQ.64 text against the Notes | Fixed | STND.VVUQ.64 now judges a fresh-seed test under STND.VVUQ.33 to .35 at each class from which those apply, and under the criterion that its acceptance criterion states at every other class. STND.VVUQ becomes 1.6 (minor), with the row and the rationale changed to match. The onset stays CSQ3 by the rule of STND.CLASS. The reconciliation's wording ("where those apply, and otherwise …") gave a trailing condition (g.12), so the class is named in place of it. |
+| X13 (reconciliation), first bullet: CPS Purpose | Fixed | "actuation by an agent, other than commanding the designed safe state, only within an authorized safe range and while a human can stop it", conforming to PRIME.13 as the lvl0 part amends it. |
+| X11 (reconciliation), "drives" | Fixed where it has the same sense | The CPS Selector text says "An embedded controller that commands, configures, or powers physical hardware (PRIME.13)". The added Notes and the rationale say "the hardware it commands". Two other uses are kept, because they do not have the sense of GOV.13 and GOV.20. "Before … first drives the hardware" (CPS.3, CPS Notes, CPS Purpose "first driven") names the event at which PRIME.13 itself, as amended, still says "before the system first drives the hardware". "Drives an output" in CPS.4 is the electrical sense. ML, NUMER, and the standards of this part hold no other such use; the use in the STND.VVUQ Terms ("drives to its allocation") is unrelated. |
