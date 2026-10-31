@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.INSTR,standard,LVL2,Agent instructions,adopted,_doc.md,626b0ed45f4303d802efda2ac4028ac9a2c56263dac8078dbafe5addff0dc2ba,8712
+STND.INSTR,standard,LVL2,Agent instructions,adopted,_doc.md,1760bcf8f9d9be615d476569ab20522b7918d890134b814d5b8562eceea06e7f,10029
 STND.INSTR.1,provision,LVL2,Agents governed,adopted,1.md,44efc66302740a75918ce610c3ba7308b41b0c56678b76d1b6594a1e190e79a3,422
 STND.INSTR.2,provision,LVL2,Recoverable prior state,adopted,2.md,bc5ddac9637a019df9df575c97eb12cb96f8225cf71afe5feeba747fb9fcbde0,528
 STND.INSTR.3,provision,LVL2,Protected locations,adopted,3.md,fc6263af02fb920d9df80d205cdf2cc5d7ad247b0da876eddd2e92a737d6011b,702
@@ -11,3 +11,4 @@ STND.INSTR.8,provision,LVL2,Session notes,adopted,8.md,182eb5a1b030614477c688044
 STND.INSTR.9,provision,LVL2,Research placement,adopted,9.md,29e29ea6543154889dc1ae2ef6d48eb24c4924eff4efef2adf4c4aef00249b87,576
 STND.INSTR.10,provision,LVL2,Agent provisions of other standards,adopted,10.md,53436d9af8e9738d160c7a60d4f62b21755146bc46fc140fba4a09d5f4a8cbc4,516
 STND.INSTR.11,provision,LVL2,Instruction files,adopted,11.md,4cd6b248de60d0e164ce8f9b59059f765df9652c07b9b24aea4b841769aefad2,816
+STND.INSTR.12,provision,LVL2,Restrictions in unadopted files,adopted,12.md,ef472b82f56b17579498aae2e289694988f3b5cef7578c1505db43cbfa6d3805,927

@@ -9,4 +9,4 @@ adopted: "2026-10-08"
 governed_by: ["QA.1"]
 ---
 
-The recorded condition under which a unit of work is complete.
+The condition under which a unit of work is complete, recorded or stated in the request for the unit.

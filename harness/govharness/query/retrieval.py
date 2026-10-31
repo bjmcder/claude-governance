@@ -18,6 +18,7 @@ Every text is returned whole or named only (GOV.39, STND.HARN.3).
 from __future__ import annotations
 
 import re
+import unicodedata
 from dataclasses import dataclass
 
 from govharness.core.corpus import Corpus
@@ -60,10 +61,12 @@ ITEM, TERMS, PROSE = 0, 1, 2
 TERMS_SLUG = "terms"
 # What a folded "Cited by" calls a document's text before its sections.
 LEAD = "Lead text"
+# A letter or digit of any script: a word character other than "_".
+ALNUM = r"[^\W_]"
 # An identifier keeps its dots and hyphens, and a locator its section
-# slug; other words split at hyphens.
+# slug; other words split at hyphens and underscores.
 WORD_RE = re.compile(
-    r"[a-z0-9]+(?:\.[a-z0-9][a-z0-9-]*)+(?:#[a-z0-9-]+)?|[a-z0-9]+"
+    rf"{ALNUM}+(?:\.{ALNUM}(?:{ALNUM}|-)*)+(?:#(?:{ALNUM}|-)+)?|{ALNUM}+"
 )
 
 
@@ -453,10 +456,12 @@ def words_of(text: str) -> list[str]:
     Returns
     -------
     list[str]
-        Words, with identifiers such as ``guard.6`` and locators such
-        as ``stnd.dflt#terms`` kept whole.
+        Words of letters and digits of any script, composed (NFC) so
+        that "naïve" is one word however its "ï" is encoded, with
+        identifiers such as ``guard.6`` and locators such as
+        ``stnd.dflt#terms`` kept whole.
     """
-    return WORD_RE.findall(text.lower())
+    return WORD_RE.findall(unicodedata.normalize("NFC", text).lower())
 
 
 def stem(word: str) -> str:

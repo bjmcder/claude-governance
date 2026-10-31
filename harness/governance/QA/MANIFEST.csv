@@ -1,6 +1,6 @@
 id,kind,level,title,status,path,sha256,bytes
 QA,article,LVL0,Process,ratified,_doc.md,5cccb712ff237a6870326f38825745a2a7ecd2040c0b6530a58d836479e8ad08,471
-QA.1,provision,LVL0,Definition of done,ratified,1.md,4b2f1c4ac2c63803576b83763912a86dfa769cc06bbf972b8f75c2a6dfb61a96,379
+QA.1,provision,LVL0,Definition of done,ratified,1.md,12031fdda24d2c802437c20d5ace779afcefa8b5b1f4d0ced1b431bc77da3254,498
 QA.2,provision,LVL0,Work process,ratified,2.md,347a340cb4a0ce78d284584b6280d56a60b1e7d626450591d11129e6e07d71bd,517
 QA.3,provision,LVL0,Stopping rule,ratified,3.md,4ebce756466aff99e82ee5f5bdc097ec55e3f64884d0552ce6e5cbdf107c17c3,697
 QA.4,provision,LVL0,Defect tracking,ratified,4.md,bbd7f41cd06dcfb1971df85221982b69ebe57a503ce38201e1d7d9e47ae4f316,373
@@ -10,7 +10,7 @@ QA.7,provision,LVL0,Review,ratified,7.md,18fdef12340803db3f1cb1e02598848120590ce
 QA.8,provision,LVL0,Review independence,ratified,8.md,af5dbd1b7d5daa2d2a3345ad46888642abcf5bf43fb1adbe71ea618baf54844f,381
 QA.9,provision,LVL0,Regeneration,ratified,9.md,d62fad9ef91ed8570ccb5add65a1476f3cb8950c89e9c5aacf0b5ee15a75eacb,399
 QA.10,provision,LVL0,Release,ratified,10.md,42ef339b7be09a9d4b387945d431ba8062e9f6871b3c65d5ac30d55ae30bb9f5,365
-QA.11,provision,LVL0,Promotion,ratified,11.md,63b99e7493e7f8adfe64ee426af4737664cafe960ecd04101f6bf8beb12ee9fb,1071
+QA.11,provision,LVL0,Promotion,ratified,11.md,46fd514a7480f115783af551bba28f0d11f03acc7db395be87ed31555dbba06b,1324
 QA.12,provision,LVL0,Post-hoc criteria,ratified,12.md,1b43366c3b2eb58b57d8e436786475a76a8d279f4bfae7886f6a2c2a5702f514,445
 QA.13,provision,LVL0,Correction propagation,ratified,13.md,476dcaf1305dc2126edb869af644f201e81899595f31e1686a500b7e03c23809,666
 QA.14,provision,LVL0,Dependency tracking,ratified,14.md,ec25ccb8a973281bcb02c0c7ded52a2e2ecc3dfc9392d616996da5af7e5476ef,353

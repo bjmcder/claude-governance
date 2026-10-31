@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.DOCS,standard,LVL2,Documentation standard,adopted,_doc.md,b5ff804b22d9aa6be6c9168397e1722345f33037cd3f9a2dffdb1c71798baa2e,14798
+STND.DOCS,standard,LVL2,Documentation standard,adopted,_doc.md,de91e64bed15e0b66740e5f5e4a73ebfad4886196864b6c8bea3b43781e43eb5,15191
 STND.DOCS.1,provision,LVL2,Voice of documentation,adopted,1.md,0ac26220a1bcf201c4455783e3375fdd4350bc4abbbba908a9f171b429985caa,468
 STND.DOCS.2,provision,LVL2,Explanatory content,adopted,2.md,f2f69e8427729670ac81abc98d3cd2fa63380030043f3b44af43ac88ad868e05,435
 STND.DOCS.3,provision,LVL2,Agents kept out of documentation,adopted,3.md,04a007597b86814843871cdcf59bdab237b0adefc7547bf4eba32285c8ae1be7,647
@@ -9,7 +9,7 @@ STND.DOCS.6,provision,LVL2,Governance as subject,adopted,6.md,6432776f8312a0fa86
 STND.DOCS.7,provision,LVL2,Required statements of agent use,adopted,7.md,5412bc9145c182e50931759246b70b5a756829305f1be1e229d9d3ab3106383d,671
 STND.DOCS.8,provision,LVL2,American English,adopted,8.md,cced55be272ea475f042d19c35941e372e204bd29a290008d8343f1fd016ce52,2908
 STND.DOCS.9,provision,LVL2,Specific statements,adopted,9.md,7c6e003c2ce1e59075170b90fac5d4f874fd86424458b505e16ee54d72f82a5a,6211
-STND.DOCS.10,provision,LVL2,Agent writing,adopted,10.md,ed41f7b62e7c042c0a4b9c652ed34f2d5324153248aa25d6ea37ad044aa6c4e2,1105
+STND.DOCS.10,provision,LVL2,Agent writing,adopted,10.md,6372721e7b856f7e0328b00cfc33dab0fe9f1bd7910380fffe85d62d66333508,1722
 STND.DOCS.11,provision,LVL2,Documentation in step with the work,adopted,11.md,4888b36a127a8ea83f38e1921100bb72bbc3e008973056600fbc3d16e981e974,933
 STND.DOCS.12,provision,LVL2,One name per concept,adopted,12.md,d5a847464f9c54a0ad17a9b611bff50a33b00dd1032861090ad6d2a09e7c6bea,614
 STND.DOCS.13,provision,LVL2,Checked examples,adopted,13.md,f1c78dc19bbd270de7fdc83ebae4e6538461d3ececf5c4fc350ac52804477e38,836

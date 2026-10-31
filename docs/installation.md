@@ -100,10 +100,10 @@ In a session, type `/` and look for `/governance:consulting-governance`, `/gover
 To confirm that the harness runs against the installed corpus, take `installPath` from `claude plugin list --json` and run:
 
 ```bash
-PYTHONPATH="<installPath>" python3 -B -m govharness show "<installPath>/governance" GOV.38
+PYTHONPATH="<installPath>" python3 -B -P -m govharness show "<installPath>/governance" GOV.38
 ```
 
-It prints GOV.38, the provision on the harness itself.
+It prints GOV.38, the provision on the harness itself. `-P` keeps the working directory, which is your project, off Python's module search path, so that a file or directory of the project named like a module of the standard library, such as `json/`, is never run in its place. Every form on this page that sets `PYTHONPATH` uses it.
 
 ### Update
 
@@ -228,7 +228,7 @@ Both installs build the package with `setuptools` 68 or later, which `pip` and `
 
 To work on the harness code itself, an editable install from the root of the clone picks up each change without reinstalling: `pip install --no-deps -e harness`, inside a virtual environment.
 
-`GOVHARNESS_ROOT` names the corpus that `show`, `find`, `context`, `pairs`, and `verify` read when no corpus is named on the command line. Set it in your shell profile, or, for Claude Code, under `env` in a settings file:
+`GOVHARNESS_ROOT` names the corpus that `show`, `find`, `context`, `pairs`, `onset`, and `verify` read when no corpus is named on the command line. Set it in your shell profile, or, for Claude Code, under `env` in a settings file:
 
 ```json
 {"env": {"GOVHARNESS_ROOT": "/home/me/src/governance-harness/harness/governance"}}
@@ -237,7 +237,7 @@ To work on the harness code itself, an editable install from the root of the clo
 Without installing anything, every command also runs from the clone, with no network access:
 
 ```bash
-PYTHONPATH=governance-harness/harness python3 -B -m govharness show governance-harness/harness/governance GOV.38
+PYTHONPATH=governance-harness/harness python3 -B -P -m govharness show governance-harness/harness/governance GOV.38
 ```
 
 ### Verify
@@ -247,7 +247,7 @@ govharness show GOV.38
 govharness verify
 ```
 
-`show` prints GOV.38. `verify` runs every check of the corpus and passes, printing one warning, g.18, on three provisions of STND.DRAFT whose three modals the custodian reviewed. It writes nothing unless a cache of solver results is named, by `--cache DIR` or by `GOVHARNESS_CACHE`, which must be an absolute path outside the corpus; with a cache, later runs are about a second faster. [operating.md](operating.md#checking-the-corpus) says more about both commands. A subset of the tests runs in about ten seconds from `governance-harness/harness`:
+`show` prints GOV.38. `verify` runs every check of the corpus and passes, printing one warning, g.18, on three provisions of STND.DRAFT whose three modals the custodian reviewed. It writes nothing unless a cache of solver results is named, by `--cache DIR` or by `GOVHARNESS_CACHE`, which must be an absolute path outside the corpus; with a cache, later runs are about a second faster. [operating.md](operating.md#checking-the-corpus) says more about both commands. A subset of the tests runs in under twenty seconds from `governance-harness/harness`:
 
 ```bash
 python3 -B -m unittest tests.query.test_retrieval tests.cli.test_main tests.test_architecture tests.test_conventions
@@ -304,7 +304,7 @@ On the air-gapped machine, `git clone governance-harness.bundle vendor/governanc
 The vendored copy is used through the harness without installing it, which needs no network access:
 
 ```bash
-PYTHONPATH=vendor/governance-harness/harness python3 -B -m govharness show vendor/governance-harness/harness/governance GOV.38
+PYTHONPATH=vendor/governance-harness/harness python3 -B -P -m govharness show vendor/governance-harness/harness/governance GOV.38
 ```
 
 With `GOVHARNESS_ROOT` set to the absolute path of `vendor/governance-harness/harness/governance`, the corpus argument can be left out. To install the package instead, use `--no-build-isolation` with a locally installed `setuptools`, as in [option 3](#3-the-harness-alone). With Claude Code, the plugin loads from the copy without network access, either for one session:
@@ -324,7 +324,7 @@ claude plugin install governance@governance-harness --scope local
 
 ```bash
 git -C vendor/governance-harness log -1 --format='%H %d'
-PYTHONPATH=vendor/governance-harness/harness python3 -B -m govharness verify vendor/governance-harness/harness/governance
+PYTHONPATH=vendor/governance-harness/harness python3 -B -P -m govharness verify vendor/governance-harness/harness/governance
 ```
 
 For a submodule, the first prints the vendored commit. For a subtree it prints the project's own commit; the message of the squash commit names the vendored one:
@@ -366,7 +366,7 @@ Under the defaults of STND.DFLT, which apply to a project without a project cons
 | The workbench | `records/workbench/` | STND.DFLT.28 |
 | The store of non-credential secrets, if one is provided | `secrets/`, excluded from version control | STND.DFLT.29 |
 
-A project constitution (STND.PROJ) starts as a copy of the template directory `harness/governance/_PROJECT/NAME/`, taken from the revision the project pins. The copy lives in the project's repository, and its Records section names where the other records go. The harness reads the corpus only: `show` and `find` do not read a project's constitution or ledger. [adoption.md](adoption.md) covers when a project needs a constitution and how the class is recorded.
+A project constitution (STND.PROJ) starts as a copy of the template directory `harness/governance/_PROJECT/NAME/`, taken from the revision the project pins. NAME is the project's mnemonic, which its human owner registers in the project's ledger (STND.IDENT.23). The copy lives in the project's repository, and its Records section names where the other records go. `show`, `find`, and the other query commands read the corpus only, never a project's constitution or ledger; `ledger check` and `ledger append` read and append to a project's ledger, as [adoption.md](adoption.md#adopting), step 4, shows. [adoption.md](adoption.md) covers when a project needs a constitution and how the class is recorded.
 
 ## Pointing other agents at the governance
 
@@ -378,8 +378,12 @@ Claude Code reads a project's `CLAUDE.md`, and reads `AGENTS.md` when no `CLAUDE
 This project follows the governance corpus in vendor/governance-harness/harness/governance,
 at the commit of that submodule. Its records are in records/ and its working notes in notes/.
 The agent instructions are the provisions of STND.INSTR; rendered/STND.INSTR.md in that
-repository is a reading copy. `govharness show ID`, `govharness find WORDS`, and
-`govharness context WORDS --in-force` read the corpus that GOVHARNESS_ROOT names.
+repository is a reading copy. From the top of this project, without installing anything,
+`PYTHONPATH=vendor/governance-harness/harness python3 -B -P -m govharness show vendor/governance-harness/harness/governance ID`
+prints a provision; with `find` or `context` in place of `show`, and words in place of
+`ID`, the same command lists or prints the provisions on a topic. Where the harness is installed and
+GOVHARNESS_ROOT names that corpus, `govharness show ID`, `govharness find WORDS`, and
+`govharness context WORDS --in-force` do the same.
 ```
 
 Adjust the path to the option the project uses. For a project on the plugin alone, name the plugin instead of a path.
@@ -390,7 +394,7 @@ The file directs the project's agents only once the human owner adopts it, by a 
 
 | Symptom | Cause and fix |
 | --- | --- |
-| `No module named govharness` | `PYTHONPATH` must name the `harness` directory, the one that contains `govharness/`, not the corpus |
+| `No module named govharness` | `PYTHONPATH` must name the `harness` directory, the one that contains `govharness/`, not the corpus. With `-P`, the working directory does not count, even inside `harness/` |
 | A syntax error on start | Python is older than 3.11; `python3 --version` shows which |
 | `error: argument root: ... no such directory`, exit status 2 | The corpus path on the command line is wrong |
 | `no corpus root: give ROOT, set GOVHARNESS_ROOT, or run where ./governance exists`, exit status 2 | No corpus is named, `GOVHARNESS_ROOT` is unset, and the working directory has no `governance/` |

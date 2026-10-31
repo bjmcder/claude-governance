@@ -5,7 +5,7 @@ Run from ``harness/``, the directory that holds ``govharness/`` and
 
     python3 -B -m unittest discover -s tests -t .
 
-The fast subset, under 10 s, for an installer::
+The fast subset, under 20 s, for an installer::
 
     python3 -B -m unittest tests.query.test_retrieval tests.cli.test_main \\
         tests.test_architecture tests.test_conventions

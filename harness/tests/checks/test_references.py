@@ -278,8 +278,7 @@ class LiveCorpus(unittest.TestCase):
 
     def test_live_corpus_passes(self) -> None:
         """Behavior: on the live corpus every document g.25 reads cites
-        each document it names, g.25 passes, and the wrapper
-        ``tools/check_refs.py`` reports 0 documents with missing rows.
+        each document it names, and g.25 passes.
 
         Reference: the definition of done of 2026-10-25, item 8, and the
         live corpus after ledger entry 175, which closed every gap.
@@ -297,6 +296,22 @@ class LiveCorpus(unittest.TestCase):
                 self.assertLessEqual(named, set(cited_documents(corpus, doc)))
                 self.assertIsNone(references_problem(corpus, doc))
         self.assertEqual(g25(live_index()), "PASS")
+
+    @unittest.skipUnless(
+        WRAPPER.is_file(), "needs tools/check_refs.py, outside harness/"
+    )
+    def test_wrapper_reports_no_missing_row(self) -> None:
+        """Behavior: the wrapper ``tools/check_refs.py`` reports 0
+        documents with missing rows on the live corpus.
+
+        Reference: as for ``test_live_corpus_passes``. The wrapper lies
+        outside ``harness/``, so an installed plugin skips this test.
+        """
+        ctx = build_context(corpus_of(live_index()))
+        assert ctx is not None
+        subjects = [
+            u.subject for u in ctx.units_for(BELOW, {"informative", "body"})
+        ]
         run = subprocess.run(
             [sys.executable, "-B", str(WRAPPER), str(ROOT)],
             cwd=REPO,

@@ -1,6 +1,6 @@
 id,kind,level,title,status,path,sha256,bytes
-CPS,profile,LVL1,Cyber-physical and actuation,adopted,_doc.md,f245a1ee40992a7ccea09ce56406133e89195700d8448c6f0fb4be7ea19f169c,8048
-CPS.1,provision,LVL1,Physical hardware control selector,adopted,1.md,fed4fbcc4f74dcd5635605b2c13637393334e5e1d4b8d230c3ab09ccbb2e549d,497
+CPS,profile,LVL1,Cyber-physical and actuation,adopted,_doc.md,c1fc8cf45a932b938fae07a77259c7677a892013ccb383449503dfac6d6e23d0,10150
+CPS.1,provision,LVL1,Physical hardware control selector,adopted,1.md,f4e3aa104cdd157328f880c25f6e8b7c4051a05e45979e36a0b3c9a6fefb9712,637
 CPS.2,provision,LVL1,Physical hardware control shared matters,adopted,2.md,2ceb36dff9acb237564a7cfa62eb2f07e894aaf9f4a6d116dabaccef7268d51a,892
 CPS.3,provision,LVL1,Hazard analysis coverage,adopted,3.md,6330f29d2b3b9c9cdcffd1a1dba335af102882bb628cd8de09629791599157a0,769
 CPS.4,provision,LVL1,Safe state coverage,adopted,4.md,71093ac0238ba856bc79a16ca76d8e1d57b6a31207a39f8c4c599e308e9a4aad,1051
@@ -9,3 +9,4 @@ CPS.6,provision,LVL1,Staged first operation,adopted,6.md,052c78b57ad7ab1d94b29b0
 CPS.7,provision,LVL1,Command record,adopted,7.md,8795c7aaae04611f1500e0a8c480f5f70e5ae6ceebdb47f01a4340be793ee35d,498
 CPS.8,provision,LVL1,Control loop behavior,adopted,8.md,16e1dff3917b67b588d534c8a0e49ffd06e77d2132865b8c841de9868b9bec28,867
 CPS.9,provision,LVL1,Plausible and current observations,adopted,9.md,74a6ed132694e6f90d0545a20fb5bc9a42a2bd0444c5e78c31006e4ad504dd8c,550
+CPS.10,provision,LVL1,Lower class referral,adopted,10.md,6538ca2790e641862f84f8e849acb4dc65c17b6163b697c727d00d26263bee55,486

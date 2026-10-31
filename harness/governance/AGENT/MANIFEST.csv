@@ -1,11 +1,11 @@
 id,kind,level,title,status,path,sha256,bytes
-AGENT,profile,LVL1,Agent practice,adopted,_doc.md,2b98b3929c9c09a66bbe83f95ba25a979c26fbc2cd38ae9665548d4841905e96,24009
+AGENT,profile,LVL1,Agent practice,adopted,_doc.md,1b79e3267e47a75fb2f08ba55585f8b89b84dfaa97082ea4f324e0e10948dd46,25887
 AGENT.1,provision,LVL1,Profile selector,adopted,1.md,a4841dfccaba05ef6e1fc175daf9871e730408d1c793e9f345b21c264f5e9c72,311
 AGENT.2,provision,LVL1,Explanations for review,adopted,2.md,254b752e9aea540fe016420cbd8488a00217f9867ce698fdabe26ac2b328343d,555
 AGENT.3,provision,LVL1,Claim status,adopted,3.md,b31bb2024735c8dd1bdc47eb8101197e1539471a4b037d0e6c43d6d8128e209c,382
 AGENT.4,provision,LVL1,Current check results,adopted,4.md,2ea1e92ab52cc7aa2d3eb30fb5f43fcc6e4a39189d24597ff4086393ca048785,408
 AGENT.5,provision,LVL1,Separate check changes,adopted,5.md,e3ff7116922f728d563b278a08d67961cfbed8f7a69d5e69598b689feef0bcc6,478
-AGENT.6,provision,LVL1,Effort estimate,adopted,6.md,11133bd02c00e73c1f66991248f430a9b10ee705f902fe9dfae13071d82334af,489
+AGENT.6,provision,LVL1,Effort estimate,adopted,6.md,d8e4195726a2179d3008dab5b0f3078ec95e3140b24c410741fd4b5c0df2f9c9,922
 AGENT.7,provision,LVL1,Estimate comparison,adopted,7.md,4252fc5f6b1b555406dc635ab85b6d5cf0f629e15ece620c937f02b9ddb4f2dd,524
 AGENT.8,provision,LVL1,Estimate overrun,adopted,8.md,740da4c5adc13eb9b022954f5ed24b880061020b49569d761904869aa6f51cfc,482
 AGENT.9,provision,LVL1,Delegation scale,adopted,9.md,e59cb15b40cc4ae50e6b7b1fe69b44541da08480d4155d9e6e99c0e7c6af9799,437

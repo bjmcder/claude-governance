@@ -9,4 +9,4 @@ adopted: "2026-10-08"
 governed_by: ["PRIME.7", "GUARD.13"]
 ---
 
-Any transfer of data to or from a system outside the provisioned environment, other than over the channel that carries the agent's own instructions and responses.
+Any transfer of data to or from a system outside the provisioned environment, transfer through tools offered over the channel that carries the agent's own instructions and responses included, other than over that channel itself.

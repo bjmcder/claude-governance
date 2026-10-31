@@ -1,9 +1,9 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.PY,standard,LVL2,Python standard,adopted,_doc.md,37bc3eadfbb2bb646939a3f8a7c8b0643a0e0e5e20ffb2e3b0b9cc16cb57fe77,34667
+STND.PY,standard,LVL2,Python standard,adopted,_doc.md,6e592b49622852215f7cf9e9794949c3051a99f6bb52f06ea3c0ab2e19c05e9d,35059
 STND.PY.1,provision,LVL2,Configured style guide as baseline,adopted,1.md,144be00dd550e8c907d262b0a4aae76dc879f5ac6b698c68914c9a3c738b6b89,485
 STND.PY.2,provision,LVL2,Python linter coverage,adopted,2.md,2d92227705a978a68c6459403ac02a9893b99a0466aef711e9bcb31247fef552,743
 STND.PY.3,provision,LVL2,Annotation coverage,adopted,3.md,0c7e6641dafbae5d57e656d33079bdbba5a7618aa706e55dcec99f947d5b4c98,672
-STND.PY.4,provision,LVL2,Agent annotations,adopted,4.md,684e5e1aa47aa52b09bc148a69b53a9a9730be50c2365e8739b2efb162eb0108,564
+STND.PY.4,provision,LVL2,Agent annotations,adopted,4.md,72739781ce443a8e239947d58093799aa5df65fd749e56452bbe3f91b3b165fa,1137
 STND.PY.5,provision,LVL2,Strict type checking,adopted,5.md,34057dcf29ed377d6aa6b97e6b6da6e72012fd4da98fc6fe57b90e926022fc80,787
 STND.PY.6,provision,LVL2,Modules exempted from strict checking,adopted,6.md,d55a0262ec194c01833cc12eeff6167100c6e65b5e66c135aedc5d19d17c94f0,648
 STND.PY.7,provision,LVL2,Typed package marker,adopted,7.md,0e4e9c1a764fde8a8cc8d34b9413cd760c4ddced28d478a0db8b6a65b7799267,385

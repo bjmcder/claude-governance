@@ -217,8 +217,19 @@ def run_check(args: argparse.Namespace) -> int:
     -------
     int
         1 if any check failed, 2 if the cache cannot be used (inside
-        the corpus, or a relative ``GOVHARNESS_CACHE``), else 0.
+        the corpus, or a relative ``GOVHARNESS_CACHE``) or the output
+        directory lies inside the corpus, which its files would change,
+        else 0.
     """
+    if args.out_dir is not None and args.out_dir.resolve().is_relative_to(
+        args.root.resolve()
+    ):
+        return _refused(
+            ValueError(
+                f"the output directory {args.out_dir} lies inside the "
+                f"corpus {args.root}; name another directory"
+            )
+        )
     try:
         store = usable_store(args.root, _store(args) or False)
     except ValueError as error:

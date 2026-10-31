@@ -30,6 +30,7 @@ from govharness.query.graph import build_graph
 from govharness.query.retrieval import show
 from tests.cli.test_main import run
 from tests.support import (
+    ROOT,
     Index,
     corpus_copy,
     corpus_of,
@@ -336,7 +337,7 @@ class Rendering(unittest.TestCase):
     def test_profile_without_mode_prints_the_onset(self) -> None:
         """Behavior: a provision of a profile, which has no mode, reads
         "From CSQ3." before what it instantiates, and one without the
-        field keeps its line as before.
+        field reads only what it instantiates.
 
         Reference: HW.3 and HW.9, waivable provisions of HW.
         """
@@ -346,7 +347,8 @@ class Rendering(unittest.TestCase):
             corpus_of(index), live_ledger(), ReadingCopy("HW", "HW.md")
         )
         self.assertIn("From CSQ3. Instantiates REPRO.1, REPRO.2.", text)
-        self.assertIn("\n. Instantiates INTPR.9.\n", text)
+        self.assertIn("\n\nInstantiates INTPR.9.\n", text)
+        self.assertNotRegex(text, r"(?m)^\. |Instantiates \.")
 
 
 class Command(unittest.TestCase):
@@ -384,6 +386,43 @@ class Command(unittest.TestCase):
                 (1, "onset: no provision applies from CSQ1"),
             )
             self.assertEqual(run(["onset", str(root), "CSQ4"])[0], 2)
+
+    def test_from_lists_what_a_move_adds(self) -> None:
+        """Behavior: ``onset CSQn --from CSQm`` lists, under one heading
+        per class from the class after CSQm to CSQn, what applies from
+        each, so a move from CSQ4 to CSQ1 lists CSQ3, CSQ2, and CSQ1;
+        each heading's lines are those of ``onset`` of that class; a
+        class moved from that is not less severe is a usage error.
+
+        Reference: O4 of the cleanup audit of 2026-10-31: ``onset CSQ1``
+        lists only what starts at CSQ1, so a move from CSQ4 showed 22
+        items and missed the rest.
+        """
+        root = str(ROOT)
+        code, out, _ = run(["onset", root, "CSQ1", "--from", "CSQ4"])
+        self.assertEqual(code, 0)
+        self.assertTrue(
+            out.startswith(
+                "# Provisions and parts that a move from CSQ4 to CSQ1 adds\n"
+            )
+        )
+        sections = re.split(r"\n## From (CSQ\d)\n\n", out)
+        self.assertEqual(sections[1::2], ["CSQ3", "CSQ2", "CSQ1"])
+        total = 0
+        for cls, lines in zip(sections[1::2], sections[2::2], strict=True):
+            alone = run(["onset", root, cls])[1].split("\n\n", 2)[2]
+            self.assertEqual(lines.strip(), alone.strip())
+            total += len(lines.strip().splitlines())
+        self.assertIn(f"\n{total} item(s).\n", out)
+        moved = run(["onset", root, "CSQ2", "--from", "CSQ3"])[1]
+        alone = run(["onset", root, "CSQ2"])[1]
+        self.assertEqual(
+            moved.split("\n\n")[2:], ["## From CSQ2", *alone.split("\n\n")[2:]]
+        )
+        for after in ("CSQ1", "CSQ0", "CSQ5"):
+            with self.subTest(after):
+                code, _, _ = run(["onset", root, "CSQ1", "--from", after])
+                self.assertEqual(code, 2)
 
     def test_verify_fails_a_bad_onset(self) -> None:
         """Behavior: ``verify`` fails, under the check onset, a field on

@@ -76,7 +76,7 @@ HW.GPU.3 instantiates PRIME.4 and binds at every class. Every other provision ex
 
 #### HW.GPU.1 Accelerator selector
 
-. Instantiates GOV.25, GOV.26, GOV.27.
+Instantiates GOV.25, GOV.26, GOV.27.
 
 This sub-profile SHALL bind a project whose classification makes at least one attribute of the table of this provision true (GOV.25, GOV.26, GOV.27).
 
@@ -86,7 +86,7 @@ This sub-profile SHALL bind a project whose classification makes at least one at
 
 #### HW.GPU.2 Accelerator shared matters
 
-. Instantiates GOV.26.
+Instantiates GOV.26.
 
 Each matter of the table of this provision SHALL be governed in this document by the provisions that the table gives for it (GOV.26).
 
@@ -98,7 +98,7 @@ Each matter of the table of this provision SHALL be governed in this document by
 
 #### HW.GPU.3 Completion of offloaded work
 
-. Instantiates PRIME.4.
+Instantiates PRIME.4.
 
 Each execution path on an accelerator SHALL obtain the completion status of its offloaded work, and handle each error that status reports as HW.8 requires for a detected fault, before a result that depends on that work, directly or through another execution path, is reported or relied upon (PRIME.4).
 

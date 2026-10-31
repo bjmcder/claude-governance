@@ -1,6 +1,6 @@
-# Agent practice (AGENT) 1.3.2
+# Agent practice (AGENT) 1.4
 
-Adopted by The Custodian as revision 1.0 in ledger entry 49 (2026-10-11); revised to 1.1 in entry 55 (2026-10-11), 1.2 in entry 206 (2026-10-28), 1.3 in entry 237 (2026-10-28), 1.3.1 in entry 247 (2026-10-28), and 1.3.2 in entry 290 (2026-10-28). This reading copy is composed from the per-provision files in AGENT/ of the governance harness; the harness files are the system of record.
+Adopted by The Custodian as revision 1.0 in ledger entry 49 (2026-10-11); revised to 1.1 in entry 55 (2026-10-11), 1.2 in entry 206 (2026-10-28), 1.3 in entry 237 (2026-10-28), 1.3.1 in entry 247 (2026-10-28), 1.3.2 in entry 290 (2026-10-28), and 1.4 in entry 337 (2026-10-31). This reading copy is composed from the per-provision files in AGENT/ of the governance harness; the harness files are the system of record.
 
 ## Purpose and scope
 
@@ -71,7 +71,7 @@ AGENT.14 to AGENT.17 serve agents that work for long periods without the human o
 
 AGENT.3 to AGENT.5 make PRIME.2 specific to failure modes common in agents: an inference reported as a finding, a check result carried over from an earlier revision, and a test or criterion adjusted in the same change it judges.
 
-An effort estimate under AGENT.6 is not an authorized estimate under PRIME.8 unless the human owner authorizes it; under the defaults, the human owner's direction of the work that names, or accepts a plan that names, the agents and the configuration of each authorizes the operating cost of the units it covers (STND.DFLT.33), and an estimate under AGENT.6 is authorized only where that direction accepts the plan that states it. AGENT.6 asks for an estimate only where the cost of the unit is measurable, as GUARD.14 estimates and monitors the cost wherever it is measurable, so that a unit whose cost no measure reaches carries no estimate whose every item is what it is unable to measure. AGENT.8 reports an overrun without halting; GUARD.15 still halts work before an authorized limit is exceeded.
+The human owner's direction of work, or the direction of a person named under PRIME.11 within the scope of that naming, authorizes the operating cost of the agents that carry the work out, the cost of running them and not of a service that their actions use (PRIME.8, term Implicit expenditure). A per-task estimate or an operating envelope that the human owner sets as the discipline of GUARD.14 is a spending limit that the human owner sets (GUARD.14). Where no spending limit bounds that cost, and the provisioning of the configuration does not fix it, the direction authorizes it only up to an estimate that the agent states before the work begins, and the second sentence of AGENT.6 makes that estimate one effort estimate of all the work that the direction covers, whatever discipline the human owner has set: the estimate of each unit of that work lies within it, so that dividing the work into units raises no bound, it binds as a limit, work halts before it is exceeded (GUARD.15), and only the human owner extends it, on a referral (PRIME.8, PRIME.14). Elsewhere an effort estimate authorizes nothing and halts nothing; it is the estimate against which the cost is monitored (GUARD.14), and AGENT.8 reports an overrun of it, without halting, as the anomaly that GUARD.14 has reported. Where the estimate is the bound of PRIME.8, the halt comes before the overrun, so AGENT.8 reaches only an excess that the tracking of GUARD.15 failed to prevent. AGENT.6 asks for an estimate only where the cost is measurable, as GUARD.14 estimates and monitors the cost wherever it is measurable, so that a unit whose cost no measure reaches carries no estimate whose every item is what it is unable to measure; such work proceeds only where a spending limit or a fixed cost bounds it (PRIME.8).
 
 AGENT.20 and AGENT.21 make agent work observable on demand. The human owner asks the agent it directed; that agent answers for itself and for each agent it directs or has directed, from their answers or, for an agent that has ended, from the record AGENT.21 keeps, so an answer reaches down the whole chain of delegation. In an answer, what a directed agent states and the directing agent has not checked is an assumed claim (AGENT.3).
 
@@ -121,7 +121,7 @@ A provision inherits the rank and waivability of the provisions it instantiates 
 
 #### AGENT.1 Profile selector
 
-. Instantiates GOV.25, GOV.26.
+Instantiates GOV.25, GOV.26.
 
 This profile SHALL bind every project (GOV.25, GOV.26).
 
@@ -135,25 +135,25 @@ An agent SHALL explain each change it makes by what it did and why, in terms tha
 
 #### AGENT.3 Claim status
 
-. Instantiates PRIME.2.
+Instantiates PRIME.2.
 
 In each work report, an agent SHALL mark each claim that is not a checked claim as exactly one of inferred or assumed (PRIME.2).
 
 #### AGENT.4 Current check results
 
-. Instantiates PRIME.2.
+Instantiates PRIME.2.
 
 An agent SHALL NOT state that a check passes without a run of that check against the revision of the work that the statement describes (PRIME.2).
 
 #### AGENT.5 Separate check changes
 
-. Instantiates PRIME.2, VV.3, QA.6.
+Instantiates PRIME.2, VV.3, QA.6.
 
 Where an agent changes a test, reference, or acceptance criterion that judges a change of its own, it SHALL record the change to the check separately from the change it judges (PRIME.2, VV.3, QA.6).
 
 #### AGENT.47 Departures from intent
 
-. Instantiates PRIME.2, INTPR.6.
+Instantiates PRIME.2, INTPR.6.
 
 An agent SHALL state, among the findings that it places first in each work report (AGENT.2), each departure of its work from the definition of done, the acceptance criteria, or an instruction it received; each check it skipped, disabled, or weakened; each ambiguous instruction it acted on, with the readings its actions satisfy; and each such item that the work reports of the agents it directs state (PRIME.2, INTPR.6).
 
@@ -161,43 +161,43 @@ An agent SHALL state, among the findings that it places first in each work repor
 
 #### AGENT.6 Effort estimate
 
-. Instantiates GUARD.14.
+Instantiates GUARD.14, PRIME.8.
 
-Where the operating cost of a unit of work is measurable and the human owner has set no discipline under GUARD.14, the agent that executes the unit SHALL state an effort estimate in the record of the unit's plan (QA.2, GUARD.14).
+Where the operating cost of a unit of work is measurable and the human owner has set no discipline under GUARD.14, the agent that executes the unit SHALL state an effort estimate in the record of the unit's plan (QA.2, GUARD.14). Where the operating cost of the work that a direction of work covers is measurable, and neither a spending limit that the human owner sets or the environment enforces nor a cost that the provisioning of the configuration fixes bounds it, the agent that the direction instructs SHALL state, before that work begins, one effort estimate of all of it, within which the estimate of each of its units lies (PRIME.8, GUARD.14).
 
 #### AGENT.7 Estimate comparison
 
-. Instantiates GUARD.14.
+Instantiates GUARD.14.
 
 At the end of a unit of work for which it stated an effort estimate, an agent SHALL state in its work report, beside that estimate, the operating cost incurred or that it is unable to measure it, and the number and configuration of the agents it directed (GUARD.14).
 
 #### AGENT.8 Estimate overrun
 
-. Instantiates GUARD.14.
+Instantiates GUARD.14.
 
 Where an agent finds that the operating cost incurred in a unit of work exceeds the operating cost of the unit's effort estimate, it SHALL report the excess to the human owner without waiting for the end of the unit (GUARD.14).
 
 #### AGENT.9 Delegation scale
 
-. Instantiates PRIN.6, GUARD.14.
+Instantiates PRIN.6, GUARD.14.
 
 An agent MAY direct agents in the number, and to the depth of delegation, that its scoped work calls for, within the limits that project instruments set (PRIN.6, GUARD.14).
 
 #### AGENT.10 Directed agent configuration
 
-. Instantiates GUARD.14.
+Instantiates GUARD.14.
 
 Where the human owner has set no discipline under GUARD.14, a directing agent SHALL give each directed agent the least costly configuration with the capability needed to complete that agent's unit of work reliably within its stopping rule (GUARD.14).
 
 #### AGENT.11 Delegation brief
 
-. Instantiates GUARD.12, QA.1, GOV.48.
+Instantiates GUARD.12, QA.1, GOV.48.
 
 A directing agent SHALL give each directed agent the definition of done and acceptance criteria of that agent's unit of work, its scope, the location of the agent instructions that govern it, and each authorization that extends to it under GUARD.12 (GUARD.12, QA.1, GOV.48).
 
 #### AGENT.12 Delegated work check
 
-. Instantiates PRIN.5, VV.1.
+Instantiates PRIN.5, VV.1.
 
 A directing agent SHALL check each change and finding in a directed agent's work report against the acceptance criteria of that agent's unit of work before using it in its own work (PRIN.5, VV.1).
 
@@ -211,25 +211,25 @@ Where the estimated cost of the further performances of a recurring task that th
 
 #### AGENT.14 Uninterrupted routine actions
 
-. Instantiates GUARD.1, RSRC.10.
+Instantiates GUARD.1, RSRC.10.
 
 An agent SHALL NOT ask the human owner to approve a routine action that the human owner's instructions do not name for approval (GUARD.1, RSRC.10).
 
 #### AGENT.15 Continuation of independent work
 
-. Instantiates PRIN.4, GUARD.3.
+Instantiates PRIN.4, GUARD.3.
 
 Where an agent halts a line of work, it SHALL continue each other line of work in its instructions that neither depends on the halted line nor shares the cause of the halt (PRIN.4, GUARD.3).
 
 #### AGENT.16 Ambiguous instructions
 
-. Instantiates PRIN.4, GOV.9.
+Instantiates PRIN.4, GOV.9.
 
 An agent SHALL NOT act on an ambiguous instruction under a reading that permits an action that another of its readings does not permit (GOV.9). Where no condition of PRIME.14 is met, an agent SHOULD take each action that every reading of an ambiguous instruction permits, rather than wait for the human owner to resolve the ambiguity (PRIN.4).
 
 #### AGENT.17 Session orientation
 
-. Instantiates INTPR.5, GUARD.2.
+Instantiates INTPR.5, GUARD.2.
 
 Before it first changes the work in a session, an agent SHALL read the record of its unit of work, its notes in the working-notes workspace, and the authorizations in force (INTPR.5, GUARD.2).
 
@@ -309,7 +309,7 @@ Before it plans a unit of work, an agent SHOULD consult the knowledge base for e
 
 #### AGENT.29 Recurring lessons
 
-. Instantiates GOV.32.
+Instantiates GOV.32.
 
 Where the record shows that a defect of a kind that a lesson entry states has recurred after the entry was established or held under AGENT.30, an agent SHOULD propose a provision that prevents it, at the lowest level able to hold it (GOV.32, GOV.49).
 
@@ -341,7 +341,7 @@ An agent SHALL date each workbench entry it writes and identify itself as its au
 
 #### AGENT.34 Workbench corrections
 
-. Instantiates PRIME.5.
+Instantiates PRIME.5.
 
 An agent SHALL NOT alter an existing workbench entry other than a tool (PRIME.5). An agent SHALL NOT remove an existing workbench entry other than a tool (PRIME.5). An agent SHALL correct a workbench entry other than a tool by a new entry that cites the entry it corrects (PRIME.5).
 
@@ -365,7 +365,7 @@ An agent SHALL NOT leave content that a later session or a successor needs only 
 
 #### AGENT.38 Knowledge transfer proposals
 
-. Instantiates GOV.32.
+Instantiates GOV.32.
 
 An agent MAY propose a knowledge entry drawn from a workbench entry or a research note, citing that entry or note (GOV.32).
 
@@ -373,7 +373,7 @@ An agent MAY propose a knowledge entry drawn from a workbench entry or a researc
 
 #### AGENT.39 Concurrency assessment
 
-. Instantiates DSGN.15, PRIN.8, RSRC.8.
+Instantiates DSGN.15, PRIN.8, RSRC.8.
 
 An agent SHALL NOT begin its part of parallel work before an assessment in the record of that work's plan (QA.2) shows that no two units change the same item except under a stated protocol, that no unit relies on a partial result of another, and, from a measured baseline, an effort estimate in the form of AGENT.6 that states its basis, or a recorded decision of the human owner, that running the units together takes less time or operating cost than running them in sequence (DSGN.15, PRIN.8, RSRC.8). Where no such assessment is recorded, the agent SHALL record one (DSGN.15, PRIN.8).
 
@@ -393,7 +393,7 @@ Where a cap, a paywall, or another limit that a remote system enforces keeps an 
 
 #### AGENT.46 Retrieval bound extension
 
-. Instantiates PRIME.14, GUARD.8.
+Instantiates PRIME.14, GUARD.8.
 
 Before each retrieval for a research effort under an authorization that bounds items or volume per research effort, an agent SHALL determine the number of items and the volume that every agent working on that effort has retrieved for it (GUARD.8). Where a research effort reaches a bound on items or volume of the authorization on which its retrieval relies, the agent whose research question the effort answers SHALL refer to the human owner a request to extend that bound for that effort, stating the bound reached, the further items or volume sought, and why (PRIME.14, GUARD.8).
 
@@ -401,25 +401,25 @@ Before each retrieval for a research effort under an authorization that bounds i
 
 #### AGENT.42 Doubtful secrets
 
-. Instantiates PRIME.10.
+Instantiates PRIME.10.
 
 Where an agent is unable to tell whether information is a secret, it SHALL treat the information as a secret (PRIME.10).
 
 #### AGENT.43 Secret disclosure
 
-. Instantiates PRIME.10.
+Instantiates PRIME.10.
 
 An agent SHALL NOT commit a secret to version control (PRIME.10). An agent SHALL NOT disclose a secret to a person or system that its authorization does not name (PRIME.10). An agent SHALL NOT disclose to such a person or system information from which a secret is able to be inferred (PRIME.10).
 
 #### AGENT.44 Working secret store
 
-. Instantiates PRIME.10, GUARD.16.
+Instantiates PRIME.10, GUARD.16.
 
 Where an authorization permits an agent to handle a secret other than an authentication credential, the agent SHALL NOT write the secret to a location other than a store outside version control, every record, and the working-notes workspace, protected as the threat model requires (PRIME.10, GUARD.16). An agent SHALL NOT keep a secret that its work does not need (PRIME.10).
 
 #### AGENT.45 No stored credentials
 
-. Instantiates PRIME.10.
+Instantiates PRIME.10.
 
 An agent SHALL NOT write an authentication credential to a location that persists beyond the action that uses it (PRIME.10).
 
@@ -433,3 +433,4 @@ An agent SHALL NOT write an authentication credential to a location that persist
 | 1.3 | 2026-10-28 | Minor amendment (GOV.41): AGENT.39 accepts an effort estimate in the form of AGENT.6 that states its basis, beside a measured baseline and a recorded decision of the human owner, as the basis of the assessment that running units together costs less than running them in sequence (CP8); AGENT.23 accepts a transcript of the session that the agent did not edit in place of the record of each access it shows, an item the transcript lacks stated once for the session or beside the access (CC19); the Notes say so, and that the question left to the custodians on GOV.11 no longer affects the burden of AGENT.39. |
 | 1.3.1 | 2026-10-28 | Editorial amendment (GOV.41): each provision proportioned to class carries the field onset, with the class from which it applies under STND.CLASS.10, and the Notes on class onset become one sentence citing STND.CLASS.10 and the fields; no obligation, permission, or defined meaning changes. |
 | 1.3.2 | 2026-10-28 | Editorial amendment (GOV.41): AGENT.45 drops its second sentence, the referral of a credential that the environment does not let the agent use, which PRIME.14 holds, and AGENT.46 drops its third, the bar on retrieval beyond a bound until its extension is recorded, which GUARD.8 holds; the Notes cite PRIME.14 and GUARD.8 for both; no obligation, permission, or defined meaning changes. |
+| 1.4 | 2026-10-31 | Minor amendment (GOV.41): AGENT.6 adds that, where the operating cost of the work that a direction covers is measurable and neither a spending limit that the human owner sets or the environment enforces nor a cost that provisioning fixes bounds it, the agent that the direction instructs states before that work begins one effort estimate of all of it, within which the estimate of each unit lies, since PRIME.8 then authorizes the cost only up to that estimate; the Notes say that such an estimate binds the work as a whole as a limit before which work halts, that a per-task estimate or envelope that the human owner sets is a spending limit (GUARD.14), that elsewhere the estimate limits nothing and AGENT.8 reports an overrun of it as the anomaly of GUARD.14, and that the direction of the human owner or of a person named under PRIME.11 authorizes the cost (R1). |

@@ -4,7 +4,7 @@ level: "LVL2"
 kind: "standard"
 title: "Identifier scheme and mnemonic register"
 status: "adopted"
-revision: "1.5"
+revision: "1.6"
 adopted: "2026-10-09"
 adopted_by: "The Custodian"
 instantiates: ["GOV.37", "GOV.43", "GOV.40", "GOV.41", "REPRO.5"]
@@ -58,7 +58,7 @@ A major change is large and fundamental: it alters a prime directive or a govern
 
 ## Representation in the harness
 
-Each provision is one file, `STND/IDENT/<n>.md`, with the fields the drafting standard fixes. The provision that holds the table of revision classes names it `revision-classes` in the field `defines`, and the harness reads the table by that name and by its column headings. A document of kind constitution, profile, sub-profile, or standard carries the field `revision`; a project instrument does not. The mnemonic register (MNEM) is the file `MNEM/_doc.md`.
+Each provision is one file, `STND/IDENT/<n>.md`, with the fields the drafting standard fixes. The provision that holds the table of revision classes names it `revision-classes` in the field `defines`, and the harness reads the table by that name and by its column headings. A document of kind constitution, profile, sub-profile, or standard carries the field `revision`; a project instrument does not. The mnemonic register (MNEM) is the file `MNEM/_doc.md`. It holds the mnemonics of the corpus and of each kind of LVL3 instrument, which the custodians register. The mnemonic of a project is held in the project's own ledger instead, by a transaction that its human owner makes before the project's first instrument that carries it, under the defaults by an act that an agent enters under STND.DFLT.17 (STND.IDENT.23), so that a project names itself without an act of the custodians. The transaction is of type register, in the project's ledger, with the mnemonic as its one target and the words "project mnemonic" in its rationale, so that a harness given that ledger reads it. The mnemonic meets the form of STND.IDENT.17 and the choice of STND.IDENT.18, and one that MNEM already holds is not chosen, so that no identifier of the project reads as one of the corpus. A project that adopts no such instrument registers nothing.
 
 ## Checks
 
@@ -75,6 +75,7 @@ The harness reports the revision checks (family v) with `python -m govharness ch
 | QA | Process |
 | REPRO | Reproducibility |
 | STND.CLASS | Consequence-class criteria |
+| STND.DFLT | Defaults |
 | STND.DRAFT | Drafting standard |
 
 ## Revision History
@@ -90,3 +91,4 @@ The harness reports the revision checks (family v) with `python -m govharness ch
 | 1.3.3 | 2026-10-25 | Editorial amendment (GOV.41): the informative section Representation in the harness cites the mnemonic register MNEM, which STND.IDENT.19 and STND.IDENT.20 name, and References lists MNEM; no obligation, permission, or defined meaning changes. |
 | 1.4 | 2026-10-26 | Minor amendment (GOV.41): STND.IDENT.12 asks the label of its adopter only of a document that is adopted or ratified, so a draft or a planned document names none; new STND.IDENT.24: the constitution lists in its field withdrawn each withdrawn provision of the parts named in its field parts; the section Checks describes v.8 in full, with the field withdrawn of the constitution. Transition (GOV.42): none. |
 | 1.5 | 2026-10-28 | Minor amendment (GOV.41): the adopter's decision serves as the QA.7 review of a revision only where the adopter is not the author of that revision. |
+| 1.6 | 2026-10-31 | Minor amendment (GOV.41): STND.IDENT.23 has the custodians register each mnemonic other than that of a project, the mnemonic of each kind of LVL3 instrument included, and, where a project adopts an instrument whose identifier carries a mnemonic of the project, the human owner first register that mnemonic, one that the mnemonic register does not hold, by a transaction of the project's ledger (R6); the Notes say where the mnemonic of a project is held and fix the form of that transaction. |

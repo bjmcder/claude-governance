@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import os
+from collections.abc import Callable
 from pathlib import Path
 
 ENV_ROOT = "GOVHARNESS_ROOT"
@@ -43,6 +44,54 @@ def corpus_root(text: str) -> Path:
     if not root.is_dir():
         raise argparse.ArgumentTypeError(f"{text}: no such directory")
     return root
+
+
+def at_least(least: int) -> Callable[[str], int]:
+    """Return an argument type of whole numbers no smaller than a bound.
+
+    Parameters
+    ----------
+    least : int
+        The smallest value admitted.
+
+    Returns
+    -------
+    Callable[[str], int]
+        A function that parses an argument, raising
+        ``argparse.ArgumentTypeError`` for a value that is not a whole
+        number or is below ``least``, so that the value is a usage
+        error (exit 2) rather than a wrong answer.
+    """
+
+    def parse(text: str) -> int:
+        """Parse one argument.
+
+        Parameters
+        ----------
+        text : str
+            The argument.
+
+        Returns
+        -------
+        int
+            Its value.
+
+        Raises
+        ------
+        argparse.ArgumentTypeError
+            If it is not a whole number of at least ``least``.
+        """
+        try:
+            value = int(text)
+        except ValueError:
+            raise argparse.ArgumentTypeError(
+                f"{text}: not a whole number"
+            ) from None
+        if value < least:
+            raise argparse.ArgumentTypeError(f"{text}: less than {least}")
+        return value
+
+    return parse
 
 
 def default_root() -> Path:

@@ -11,6 +11,7 @@ products of an installation are left out.
 from __future__ import annotations
 
 import ast
+import re
 import tempfile
 import unittest
 from collections.abc import Iterator
@@ -179,6 +180,32 @@ class Conventions(unittest.TestCase):
         self.assertLessEqual(
             {"govharness", "tests"}, {p.name for p in sources()}
         )
+
+    def test_run_forms_keep_the_working_directory_off_the_path(
+        self,
+    ) -> None:
+        """Behavior: every form of the skills that runs the package as a
+        module, and every such form of the documentation that sets
+        ``PYTHONPATH``, passes ``-P``. The documentation's other forms
+        run from ``harness/``, where the working directory provides the
+        package, and are not held to it.
+
+        Reference: S9 of the cleanup audit of 2026-10-31. The
+        documentation in ``docs/`` lies outside ``harness/`` and is read
+        only where it is present.
+        """
+        run = re.compile(r"python3? (?:-\w+ )*-m govharness")
+        skills = sorted((REPO / "skills").glob("*/SKILL.md"))
+        self.assertEqual(len(skills), 3)
+        docs = sorted((REPO.parent / "docs").glob("*.md"))
+        for path in [*skills, REPO / "README.md", *docs]:
+            text = path.read_text(encoding="utf-8")
+            for form in run.finditer(text):
+                line = text[: form.end()].rsplit("\n", 1)[-1]
+                needed = path in skills or "PYTHONPATH" in line
+                with self.subTest(path.name, line=line[-90:]):
+                    if needed:
+                        self.assertIn(" -P ", form[0])
 
 
 if __name__ == "__main__":

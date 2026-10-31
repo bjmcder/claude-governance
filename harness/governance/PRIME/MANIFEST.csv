@@ -7,11 +7,11 @@ PRIME.4,provision,LVL0,Loud failure,ratified,4.md,610fea54bffa3fa54e71210e309179
 PRIME.5,provision,LVL0,Preserved history,ratified,5.md,312bee4953f9f1dc3da09509eabab74f04bd634f8c3a15a435766947e3148bca,574
 PRIME.6,provision,LVL0,Reserved actions,ratified,6.md,e287ffd7f7c56a16baac3a52115f91a5f3297593101cc37268fa424b80579d89,788
 PRIME.7,provision,LVL0,Recorded authorization,ratified,7.md,4e56fd984b22327907cf6adc7c9e277ebaaa9ad573e765c72c64a457fa6388b6,838
-PRIME.8,provision,LVL0,Bounded spending,ratified,8.md,a1bfc0a091f2cc7ed667db51bd264cd647bd1242cef79aa1c5c00db1c74b468b,610
-PRIME.9,provision,LVL0,Provisioned privilege,ratified,9.md,718f33372d349bec9c40a8a30bc6dbf204e59451d6a47f407a3851ffc63b023c,582
+PRIME.8,provision,LVL0,Bounded spending,ratified,8.md,0761ffc5723b8ce4852cd4ee85a16c2a50df69395a140d5f11c09d2d7a1b3567,1708
+PRIME.9,provision,LVL0,Provisioned privilege,ratified,9.md,832acd508a89f4e72c5bbdd645dc533e5c39bda2ce03423c3e6f8a6d2ed20a15,712
 PRIME.10,provision,LVL0,Protected secrets,ratified,10.md,85ced5c8cf3aa45a5ba135e5c2f028050f8552c8538a35837266e772218f158a,838
-PRIME.11,provision,LVL0,Instruction authority,ratified,11.md,e120fb032d8618db1f7574c961ebb88be1d5d17b15fda0d4af9cb537d1854d74,534
+PRIME.11,provision,LVL0,Instruction authority,ratified,11.md,63ece2c405b3ac6db936f2621ae3c844548957b1ca24487e8c909dccd5eb7a32,818
 PRIME.12,provision,LVL0,No circumvention,ratified,12.md,8ca3e8a6a6ff012e4a65e197e810ddd28ab9b8a7ca108557a090e55563becb99,469
-PRIME.13,provision,LVL0,Physical safety,ratified,13.md,5768c4e12243b17f2d161bff6958dbd12588975777716ff1c8b68e9a16a0291a,1133
-PRIME.14,provision,LVL0,Halt and refer,ratified,14.md,d778b64c0ac0fd646f1a7b7318bf0c55579d0572d49dcdb059730abfa0d3831e,1118
+PRIME.13,provision,LVL0,Physical safety,ratified,13.md,eb94616585bb8b55e421d6357d59df64d1d0fde4eae7efd1bf939f3fb42d3bda,1515
+PRIME.14,provision,LVL0,Halt and refer,ratified,14.md,59f34e056dfcbb8de6230a3f748aa379ae13f13b7d9f38dafa4f027107734b94,1242
 PRIME.15,provision,LVL0,Tighten only,ratified,15.md,5cac81fa820de8f27babe78823f60fbe74407a04caf4feb3fb88a393c3e9c46c,732

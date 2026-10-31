@@ -25,7 +25,6 @@ from govharness.core.tables import read_table
 from govharness.ledger.gpg import DEFAULT_GPG, key_fingerprint
 from govharness.ledger.transactions import ALL_LEDGERS, GOVERNANCE
 
-REGISTER_ID = "SIGNR"
 SIGNER_HEADER = ("Ledger", "Role label", "Name", "Fingerprint", "Last entry")
 REQUIRE_HEADER = ("Ledger", "Actor", "From entry")
 FINGERPRINT_RE = re.compile(r"^[0-9A-F]{40}$")

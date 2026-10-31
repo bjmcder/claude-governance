@@ -6,7 +6,7 @@ term: "Bulk retrieval"
 group: "Safeguards (PRIME.6–PRIME.14, GUARD)"
 status: "ratified"
 adopted: "2026-10-08"
-governed_by: ["GUARD.8"]
+governed_by: ["GUARD.8", "GUARD.13"]
 ---
 
-Retrieval of a dataset or collection, or of more items or volume than an authorization names.
+Retrieval by network access of a dataset or collection in whole, of items or volume that no authorization enumerates or bounds, or of items or volume beyond those bounds.

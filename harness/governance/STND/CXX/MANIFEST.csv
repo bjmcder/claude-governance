@@ -1,8 +1,8 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.CXX,standard,LVL2,C++ standard,adopted,_doc.md,674d4ddb86d37dc13ca42c67252f6c91d40d0bde571c35c97caea6dc9b1b50e6,35157
+STND.CXX,standard,LVL2,C++ standard,adopted,_doc.md,946a1046c31ae699b2a85bef5160adb3d775ba92a1d34509fb79c7069dd4bd17,36048
 STND.CXX.1,provision,LVL2,Reference guide of C++ practice,adopted,1.md,605a0722731fd78367be88be29b524458792c7450441c6344fa93352af587558,731
-STND.CXX.2,provision,LVL2,Language edition,adopted,2.md,3676f4bf4be892c543b8016e95309ed52524d1d33a3046bda0586c05c4bb016f,1197
-STND.CXX.3,provision,LVL2,Agent edition changes,adopted,3.md,69368b6a3002c4b58052a6282cc69ead726ede65f14cf15b0a2e3c326ec09253,964
+STND.CXX.2,provision,LVL2,Language edition,adopted,2.md,d5305c2ad16abbaa8241425fd78f0b913e571cc264016f481c10b868714a6ed8,1211
+STND.CXX.3,provision,LVL2,Agent edition changes,adopted,3.md,d416b38384876216c07aa8bb331b7273bdbbbaacce6fa455dec0de0a7114e616,1509
 STND.CXX.4,provision,LVL2,Stated build settings,adopted,4.md,bc21c6d16819755f78136d329bd6229b2cb712f0a091c0323724a2c7aa205118,928
 STND.CXX.5,provision,LVL2,Owned resources,adopted,5.md,019a7719e3595b400063868d075c6c8ec390c91ee52c44c04f2fc0236785a6ca,829
 STND.CXX.6,provision,LVL2,Sequences and pointer arithmetic,adopted,6.md,6f395b834d378d235d23151a6d47a14053c6ce34d38df06649a97bcf7f9249f3,681

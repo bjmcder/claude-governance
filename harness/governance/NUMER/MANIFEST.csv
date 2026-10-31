@@ -1,17 +1,17 @@
 id,kind,level,title,status,path,sha256,bytes
-NUMER,profile,LVL1,Numerical computation,adopted,_doc.md,7f993a92096d7621b92d7dae9272a9b65247467cab1245a4c6e74540235d8c82,16983
+NUMER,profile,LVL1,Numerical computation,adopted,_doc.md,369d95ff854d4c97cc9a2e4a9460dd7f2d52528ed8b7a160c7adb2771df97d17,18809
 NUMER.1,provision,LVL1,Numerical profile selector,adopted,1.md,bdb48233466530bca2ec523d403bd4b554211b898b560fe7b3ae63407d5925e6,477
 NUMER.2,provision,LVL1,Shared matters owned,adopted,2.md,f87c103c7b76520f0f3858dd992d6febad09e44b888cd7fd4c96fc0e82346ed8,1488
 NUMER.3,provision,LVL1,Numerical specification,adopted,3.md,29679f2c04e6c1eb5eb6627b392b025ca1e8bb28d9595b6ac8fa37ec86a0a41a,453
 NUMER.4,provision,LVL1,Visible mathematics,adopted,4.md,72dc6b5cba25156323c9e95147016ff8704b4fb0b5225cddc1366fd4c9652a47,593
-NUMER.5,provision,LVL1,Required precision,adopted,5.md,2bf319add1db69c8476a36c50f6460b981b0a86e4d3e1c86f4cb085d17baed62,991
+NUMER.5,provision,LVL1,Required precision,adopted,5.md,c2048a035c9d3af582c1c4283e4365aa2a726982c1bafccd00276ad0eca778bd,1017
 NUMER.6,provision,LVL1,Method verification,adopted,6.md,4bf86046b2bdaa7792d3a17fe5e6bcc734b09cb0aae0055ae6b26cbaffa76d8d,567
-NUMER.7,provision,LVL1,Predicted error behavior,adopted,7.md,7ce748c3aeaf9043d8b6385a0fe7430800659f4241cf15478c56153bfcb34d06,650
+NUMER.7,provision,LVL1,Predicted error behavior,adopted,7.md,d101f7f7bad541796874533773e2d3046b6ce648f34031bd97a81e16f986cc4f,650
 NUMER.8,provision,LVL1,Basis of error estimates,adopted,8.md,592fcf570dbff3868d184d9c71d9a015da0661d140867daba7328937926568cc,649
 NUMER.9,provision,LVL1,Numerical error estimate,adopted,9.md,8fe593744401b0a943d83fb669e38f68c3522182083e4827cfb24ddd7250b1db,709
 NUMER.10,provision,LVL1,Stopping criteria,adopted,10.md,e2d242e73a0eb26e2a9e2eb3c14f2a04233b0810a22849a2ca4c0b66bf6f2dc6,475
 NUMER.11,provision,LVL1,Tolerance basis,adopted,11.md,a4d29926d5542edeb17dc6aa83484ecbc8f5cdef536a2f8b5d400c7ed7de5d25,644
-NUMER.12,provision,LVL1,Rounding and conditioning,adopted,12.md,153d172c4118c7dc73efbc0646ddbdbceaa7b73b1aa0cde0ff5be0b62905ed17,479
+NUMER.12,provision,LVL1,Rounding and conditioning,adopted,12.md,b46d76339ba3d86c4df87f89ec805fe8f558b2dd0239cdc5a62744f987aa1bee,479
 NUMER.13,provision,LVL1,Uncertainty by source,adopted,13.md,ff046f95387814b1b58181f3317d1708c5ce3cc1c79a0c6ee9a748030dad2a53,893
 NUMER.14,provision,LVL1,Composite results,adopted,14.md,eedd3fafb23ebc801c4a047c734a1af280fb7da374efcfb8bc9c98a3189f1a27,542
 NUMER.15,provision,LVL1,Measured inputs,adopted,15.md,4174319e4059b084ada868c89e000f75a3c57e6301a4cde6d3343ff974ba6cff,693
@@ -22,9 +22,9 @@ NUMER.19,provision,LVL1,Recovery test,adopted,19.md,4499c4eb222608d6e61d30726e66
 NUMER.20,provision,LVL1,Assumption sensitivity,adopted,20.md,0cc7336469713265ed9ef87eb06ca48033b909f69c3314d9d98bdbf205f395c6,535
 NUMER.21,provision,LVL1,Optimum status,adopted,21.md,f4b743bc4a14889d784c804e3e91202880a66d1be4bb168a8cd3ed7dbc716d17,557
 NUMER.22,provision,LVL1,Estimator statement,adopted,22.md,7a8f7c5602f74fb36a1da82684ac84b212d9dac6a8f8d54087eaa81371d44a79,520
-NUMER.23,provision,LVL1,Sampling reliability,adopted,23.md,80da39eb9b6932569b435d1a24fb45430bad090ad3a2b8bc1802e68da5959aca,641
+NUMER.23,provision,LVL1,Sampling reliability,adopted,23.md,6c98b3df6c044d7260f95648766daf782561dd15b849852c3b67dbc5f5462697,667
 NUMER.24,provision,LVL1,Independent randomness,adopted,24.md,5ecefc69c4c7790aef493cfd5e24e5ee35b213b27c457e910deac3ce4a6301d5,487
-NUMER.25,provision,LVL1,Statistical acceptance criteria,adopted,25.md,7ce9c046171c28d8b2f98edae1cae7c757646e094f993c6a192bae73de24a7ea,576
+NUMER.25,provision,LVL1,Statistical acceptance criteria,adopted,25.md,99c12d549ea10b67cfafdf79942a285da46b5f673eee6b1b5bc5b3d9fecca2e8,576
 NUMER.26,provision,LVL1,No reseeding to pass,adopted,26.md,d7c30d58d1ef24c9ae939345f72e2a68d02e3cd73c2146dd2cf9b3d2ee38e741,463
 NUMER.27,provision,LVL1,Derivative capability,adopted,27.md,cdca821d93157ed9fab519fba4dc5e0bdb27600c289c2cc2916fe2c514426389,547
 NUMER.28,provision,LVL1,Derivative verification,adopted,28.md,33afcf49e7c4827bd64de69bc9b1830db7ae2a4d4537d24528f2835c9f955ce5,590

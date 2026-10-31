@@ -16,8 +16,10 @@ The harness package `govharness` is in `${CLAUDE_PLUGIN_ROOT}`. It needs Python 
 Without installation, each command runs as:
 
 ```bash
-PYTHONPATH="${CLAUDE_PLUGIN_ROOT}" python3 -B -m govharness show "${CLAUDE_PLUGIN_ROOT}/governance" GOV.38
+PYTHONPATH="${CLAUDE_PLUGIN_ROOT}" python3 -B -P -m govharness show "${CLAUDE_PLUGIN_ROOT}/governance" GOV.38
 ```
+
+`-P` keeps the working directory off the import path, so that no module of the project runs in place of one of Python's.
 
 Where the package is installed, `govharness` is on the `PATH`, and where `GOVHARNESS_ROOT` names a corpus, `show`, `find`, `context`, `pairs`, and `onset` take that corpus when no root is given:
 
@@ -40,7 +42,8 @@ In this table, ROOT is `"${CLAUDE_PLUGIN_ROOT}/governance"`, or nothing where `G
 | `find ROOT WORD... [--in-force]` | One line per matching item, best first: provisions and terms rank above Notes. Exit status 1 when no item holds a word |
 | `context ROOT WORD... [--budget N] [--in-force]` | The best matches and the items they cite, each whole while the budget of characters lasts, then the names of the rest |
 | `pairs ROOT DOC [--with ID ...] [--amends LVL0_ID ...]` | The pairs of provisions that STND.HARN.28 puts to review before a change of `DOC` |
-| `onset ROOT CSQn` | One line per provision, or named part of a provision, that applies from the class CSQn by its field `onset`. `show` prints the same onset beside the mode of each provision |
+| `onset ROOT CSQn` | One line per provision, or named part of a provision, that applies from the class CSQn itself by its field `onset`. `show` prints the same onset beside the mode of each provision |
+| `onset ROOT CSQn --from CSQm` | The same for each class more severe than CSQm and no more severe than CSQn, under a heading per class: everything that a move from CSQm to CSQn adds by the field `onset`. Neither form lists the rows of the table of STND.CLASS.10, the reviewer of STND.CLASS.18, or the audit of STND.CLASS.19 |
 
 `find` and `context` match words and their inflected forms, not meanings. The corpus's own terms match best: "remote write" finds the provisions on pushing, where "push" finds only the provisions that use that word. `--in-force` keeps only adopted and ratified items.
 
@@ -51,7 +54,7 @@ In this table, ROOT is `"${CLAUDE_PLUGIN_ROOT}/governance"`, or nothing where `G
 | What applies to this action? | `context ROOT WORDS --in-force`, then `show ROOT ID` for each provision relied on |
 | What does this term mean? | `find ROOT WORDS`, then `show ROOT LEX.<slug>` |
 | What applies to code in language X? | `show ROOT STND.<X> --all` (STND.PY, STND.CXX, STND.RUST, STND.STDC, STND.FTN, STND.JL, STND.LEAN, STND.SV) |
-| Which actions are reserved to the human owner? | `show ROOT PRIME.6`, `show ROOT GUARD.6`, `show ROOT LEX.reserved-action` |
+| Which actions are reserved to the human owner? | `show ROOT PRIME.6`, `show ROOT GUARD.6`, `show ROOT GUARD.8`, `show ROOT LEX.reserved-action` |
 | Which actions need a recorded authorization? | `show ROOT PRIME.7`, `show ROOT GUARD.10`, `show ROOT GUARD.13` |
 | Before a remote write or a push | `context ROOT remote write --in-force`, `show ROOT LEX.remote-write` |
 | Before a destructive action | `context ROOT destructive action --in-force`, `show ROOT STND.DFLT.24` |
@@ -62,8 +65,14 @@ In this table, ROOT is `"${CLAUDE_PLUGIN_ROOT}/governance"`, or nothing where `G
 | Under the defaults, where records go | `show ROOT STND.DFLT --all` |
 | What a class requires, and from which class | `show ROOT STND.CLASS.10`, `show ROOT STND.CLASS.18`, `show ROOT STND.CLASS.19` |
 | What a reclassification to a more severe class owes | `show ROOT GOV.14`, `show ROOT STND.CLASS.22`, `show ROOT STND.CLASS.19` |
-| What does reclassification to CSQn add? | `onset ROOT CSQn`, then `show ROOT ID` for each provision relied on |
-| Before a promotion or a release | `show ROOT QA.11`, `show ROOT QA.10`, `show ROOT GOV.50` |
+| What does reclassification from CSQm to CSQn add? | `onset ROOT CSQn --from CSQm`, then `show ROOT STND.CLASS.10` for the rows of its table, `show ROOT STND.CLASS.18`, `show ROOT STND.CLASS.19`, and `show ROOT ID` for each provision relied on |
+| Before a promotion or a release | `show ROOT QA.11`, `show ROOT QA.10`, `show ROOT GOV.50`, `show ROOT GOV.20` |
+| Where no consequence class is recorded | `show ROOT GOV.13`, `show ROOT GOV.14`, `show ROOT QA.11` |
+| What bounds an agent's own operating cost | `show ROOT PRIME.8`, `show ROOT GUARD.14`, `show ROOT AGENT.6`, `show ROOT STND.DFLT.33` |
+| Whose instructions and acts count | `show ROOT PRIME.11`, `show ROOT STND.DFLT.36`, `show ROOT STND.DFLT.17` |
+| Before relying on an entry of the project's ledger | `show ROOT STND.DFLT.23`, `show ROOT STND.DFLT.38`, `show ROOT STND.DFLT.17` |
+| Before using superuser or administrative privilege | `show ROOT PRIME.9`, `show ROOT STND.DFLT.37` |
+| Before commanding, configuring, or powering physical hardware | `show ROOT PRIME.13`, `show ROOT CPS.1`, `show ROOT CPS.10` |
 
 GOV.39 asks that a provision be read in full before it is relied on; `show` prints the full text, and a line of `find` names an item without its text.
 

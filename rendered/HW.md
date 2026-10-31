@@ -114,7 +114,7 @@ HW.8 states how PRIME.4 applies to detected, uncorrected hardware faults and to 
 
 #### HW.1 Execution hardware selector
 
-. Instantiates GOV.25, GOV.26.
+Instantiates GOV.25, GOV.26.
 
 This profile SHALL bind a project whose classification makes at least one attribute of the table of this provision true (GOV.25, GOV.26).
 
@@ -124,7 +124,7 @@ This profile SHALL bind a project whose classification makes at least one attrib
 
 #### HW.2 Hardware shared matters
 
-. Instantiates GOV.26.
+Instantiates GOV.26.
 
 Each matter of the table of this provision SHALL be governed in this document by the provisions that the table gives for it (GOV.26).
 
@@ -175,7 +175,7 @@ Before a claim of correctness of a result rests on a property of the hardware co
 
 #### HW.8 Faults and exhaustion
 
-. Instantiates PRIME.4.
+Instantiates PRIME.4.
 
 Where an execution path detects a hardware fault that its hardware does not correct, receives notice of one through its interface to that hardware, or exhausts a capacity of its hardware, the path SHALL halt, degrade visibly, or transition to a designed safe state, with an actionable diagnosis (PRIME.4).
 

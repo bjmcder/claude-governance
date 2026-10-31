@@ -28,6 +28,7 @@ from govharness.query.retrieval import (
     show,
     stem,
     stems,
+    words_of,
 )
 from tests.support import live_entries
 
@@ -335,6 +336,24 @@ class Find(unittest.TestCase):
         self.assertEqual(stem("committed"), stem("commit"))
         self.assertNotEqual(stem("commitment"), stem("commit"))
         self.assertNotIn(stem("sign"), {stem("signal"), stem("signature")})
+
+    def test_words_of_any_script(self) -> None:
+        """Behavior: a word holds letters of any script, composed or
+        decomposed, and splits at an underscore; a name is found whole,
+        and a part of it is no word.
+
+        Reference: H9 of the cleanup audit of 2026-10-31: "naïve"
+        split into "na" and "ve", and "ünïcødé" into single letters.
+        The Notes of STND.VVUQ cite Wächter and Biegler.
+        """
+        decomposed = "naïve"
+        self.assertEqual(
+            words_of(f"Naïve ünïcødé {decomposed} snake_case GUARD.6"),
+            ["naïve", "ünïcødé", "naïve", "snake", "case", "guard.6"],
+        )
+        self.assertEqual(stems("naïve"), [stem("naïve")])
+        self.assertTrue(found("Wächter")[0].startswith("STND.VVUQ"))
+        self.assertEqual(found("ächter"), [])
 
     def test_every_word(self) -> None:
         """Behavior: "delete files" finds STND.INSTR.3, which says

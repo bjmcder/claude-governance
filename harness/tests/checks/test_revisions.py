@@ -9,8 +9,11 @@ no failure and no warning in the v family. Ported from
 
 from __future__ import annotations
 
+import re
+import shutil
 import unittest
 from collections.abc import Callable
+from pathlib import Path
 from typing import Any
 
 from govharness.checks.base import CheckContext
@@ -19,11 +22,20 @@ from govharness.checks.revisions import family as revisions
 from govharness.checks.revisions.adopters import role_labels, template_problems
 from govharness.checks.revisions.identifiers import (
     form_problem,
+    project_registrations,
     read_register,
     usage_problems,
 )
+from govharness.core.corpus import read_corpus
 from govharness.core.entry import Entry
-from tests.support import Index, corpus_of, live_index, live_ledger
+from govharness.ledger.chain import append, read_ledger
+from tests.support import (
+    Index,
+    corpus_copy,
+    corpus_of,
+    live_index,
+    live_ledger,
+)
 
 Ledger = list[dict[str, Any]]
 Mutation = Callable[[Index, Ledger], None]
@@ -700,7 +712,7 @@ class HeldBehavior(unittest.TestCase):
         self.assertIn("- LVL0: 1.6 does not follow the row above", details)
 
     def test_major_step(self) -> None:
-        """Behavior: a major step to 2.0 passes v.3.
+        """Behavior: a major step to the next major revision passes v.3.
 
         Reference: the table of STND.IDENT.3 (Major raises the major
         segment and resets the others); QA.8 part C, M5, the mutation
@@ -708,7 +720,7 @@ class HeldBehavior(unittest.TestCase):
         """
 
         def major(index: Index, ledger: Ledger) -> None:
-            """Raise LVL0 to 2.0 by a major amendment.
+            """Raise LVL0 to its next major revision by a major amendment.
 
             Parameters
             ----------
@@ -718,10 +730,11 @@ class HeldBehavior(unittest.TestCase):
             ledger : Ledger
                 Copy of the ledger entries; changed in place.
             """
+            step = f"{int(index['LVL0'].meta['revision'].split('.')[0]) + 1}.0"
             _history_row(
-                "| 2.0 | 2026-10-12 | Major amendment (GOV.40): x. |"
+                f"| {step} | 2026-10-12 | Major amendment (GOV.40): x. |"
             )(index, ledger)
-            index["LVL0"].meta["revision"] = "2.0"
+            index["LVL0"].meta["revision"] = step
 
         self.assertEqual(result(major, "v.3"), ("PASS", []))
 
@@ -909,6 +922,186 @@ class HeldBehavior(unittest.TestCase):
         self.assertEqual(
             result(_cite("STND.PERF", "See STND.CXX.16."), "v.8"),
             ("PASS", []),
+        )
+
+
+def _project(root: Path, name: str) -> None:
+    """Copy the project template to a project directory of a corpus copy.
+
+    Parameters
+    ----------
+    root : Path
+        Root of a corpus copy; changed in place.
+    name : str
+        Mnemonic of the project, which replaces NAME in every file.
+    """
+    shutil.copytree(root / "_PROJECT" / "NAME", root / name)
+    for path in (root / name).rglob("*.md"):
+        text = path.read_text(encoding="utf-8")
+        path.write_text(re.sub(r"\bNAME\b", name, text), encoding="utf-8")
+
+
+def _register(root: Path, targets: list[str], rationale: str) -> None:
+    """Append a project's register transaction to a corpus copy's ledger.
+
+    Parameters
+    ----------
+    root : Path
+        Root of a corpus copy; its ledger is changed in place.
+    targets : list[str]
+        Targets of the transaction.
+    rationale : str
+        Its rationale.
+    """
+    append(
+        root,
+        {
+            "type": "register",
+            "actor": "The Human Owner",
+            "role": "human owner",
+            "authority": ["STND.IDENT.23"],
+            "targets": targets,
+            "scope": [],
+            "rationale": rationale,
+            "at": "2026-10-31T12:00:00+00:00",
+            "corpus_hash": None,
+            "signature": "",
+        },
+    )
+
+
+def _identifier_checks(root: Path) -> dict[str, tuple[str, list[str]]]:
+    """Run the v checks on a corpus copy and its ledger.
+
+    Parameters
+    ----------
+    root : Path
+        Root of a corpus copy.
+
+    Returns
+    -------
+    dict[str, tuple[str, list[str]]]
+        Status and details of v.10 and v.11.
+    """
+    ctx = CheckContext(read_corpus(root), read_ledger(root))
+    report = run_checks((revisions,), ctx)
+    return {
+        r.key: (r.status, r.details)
+        for r in report.results
+        if r.key in {"v.10", "v.11"}
+    }
+
+
+class ProjectMnemonic(unittest.TestCase):
+    """A project's own mnemonic, registered in its ledger (unit 0026)."""
+
+    def test_registration_in_the_ledger(self) -> None:
+        """Behavior: v.10 takes the first mnemonic of a LVL3 project
+        constitution that a register transaction of the ledger names,
+        in the form that the Notes of STND.IDENT fix, and nothing else.
+
+        Reference: STND.IDENT.23 (revision 1.6) and the Notes of
+        STND.IDENT, section Representation in the harness; finding X7
+        of review-records/audit-2026-10-31/reconciliation.md. A corpus
+        copy holds `_PROJECT/NAME/` copied to `ACME/`: without a
+        registration v.10 fails on each of its items; with one it
+        passes, and v.11 passes in both. A registration of a mnemonic
+        that MNEM holds (COMP, a facet under TAG), one with two targets
+        or a target not in the form of a mnemonic, and a registered
+        mnemonic whose directory is not a LVL3 project constitution
+        each fail.
+        """
+        words = "Registers ACME as the project mnemonic (STND.IDENT.23)."
+        with corpus_copy() as root:
+            _project(root, "ACME")
+            found = _identifier_checks(root)
+            status, details = found["v.10"]
+            self.assertEqual(status, "FAIL")
+            self.assertIn(
+                "- ACME: `ACME` is not registered under `none`", details
+            )
+            self.assertIn(
+                "- ACME.WAIV.1: `ACME` is not registered under `none`",
+                details,
+            )
+            self.assertEqual(found["v.11"][0], "PASS")
+            _register(root, ["ACME"], words)
+            found = _identifier_checks(root)
+            self.assertEqual(found["v.10"], ("PASS", []))
+            self.assertEqual(found["v.11"], ("PASS", []))
+            doc = root / "ACME" / "_doc.md"
+            text = doc.read_text(encoding="utf-8")
+            doc.write_text(
+                text.replace('level: "LVL3"', 'level: "LVL2"'),
+                encoding="utf-8",
+            )
+            status, details = _identifier_checks(root)["v.10"]
+            self.assertEqual(status, "FAIL")
+            self.assertIn(
+                "- ACME: `ACME` is not registered under `none`", details
+            )
+        with corpus_copy() as root:
+            _project(root, "COMP")
+            seq = len(read_ledger(root)) + 1
+            _register(root, ["COMP"], words.replace("ACME", "COMP"))
+            status, details = _identifier_checks(root)["v.10"]
+            self.assertEqual(status, "FAIL")
+            self.assertIn(
+                f"- seq {seq}: project mnemonic `COMP` is one that MNEM holds",
+                details,
+            )
+            self.assertIn(
+                "- COMP: `COMP` is not registered under `none`", details
+            )
+        for targets in (["ACME", "ACMEX"], ["Acme"], []):
+            with self.subTest(targets=targets), corpus_copy() as root:
+                _project(root, "ACME")
+                seq = len(read_ledger(root)) + 1
+                _register(root, targets, words)
+                status, details = _identifier_checks(root)["v.10"]
+                self.assertEqual(status, "FAIL")
+                self.assertIn(
+                    f"- seq {seq}: a project mnemonic registration names "
+                    f"`{targets}`, not one mnemonic",
+                    details,
+                )
+                self.assertIn(
+                    "- ACME: `ACME` is not registered under `none`", details
+                )
+        with corpus_copy() as root:
+            _project(root, "ACME")
+            _register(root, ["ACME"], "Registers ACME.")
+            status, details = _identifier_checks(root)["v.10"]
+            self.assertEqual(status, "FAIL")
+            self.assertIn(
+                "- ACME: `ACME` is not registered under `none`", details
+            )
+
+    def test_register_change_is_no_project_registration(self) -> None:
+        """Behavior: a register transaction scoped to MNEM, a change of
+        the register that v.11 governs, registers no project mnemonic,
+        whatever its rationale says.
+
+        Reference: STND.IDENT.20 and STND.IDENT.23; the Notes of
+        STND.IDENT. The custodians' entry names MNEM, which MNEM holds,
+        and would otherwise be reported as a registration of it.
+        """
+        register, _ = read_register(corpus_of(live_index()))
+        change = {
+            "seq": 1,
+            "type": "register",
+            "role": "custodians",
+            "targets": ["MNEM"],
+            "scope": ["MNEM"],
+            "rationale": "Adds a row; no project mnemonic is registered.",
+        }
+        self.assertEqual(
+            project_registrations([change], register), (frozenset(), [])
+        )
+        project = {**change, "scope": [], "targets": ["ACME"]}
+        self.assertEqual(
+            project_registrations([project], register),
+            (frozenset({"ACME"}), []),
         )
 
 

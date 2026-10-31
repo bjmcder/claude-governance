@@ -1,5 +1,5 @@
 id,kind,level,title,status,path,sha256,bytes
-STND.CLASS,standard,LVL2,Consequence-class criteria,adopted,_doc.md,646bbb9223c5385b4327261e5781b45983a0ef847cecc011b116953e9d1a0255,16132
+STND.CLASS,standard,LVL2,Consequence-class criteria,adopted,_doc.md,a1bf83dca1beca56f4d4959600cdf3d6121ce45ca3912ce2b6d0db1b10d710dd,18737
 STND.CLASS.1,provision,LVL2,Class criteria,adopted,1.md,043a279ae3ddcf587963cc4c35f80cb1be73355232394427222e86690e5bd51f,2037
 STND.CLASS.2,provision,LVL2,Doubtful test,adopted,2.md,764cf7547b9dd0b609dd3a8dab3f2169b770c3e7e46ac5411935d0ecdcf507d0,422
 STND.CLASS.3,provision,LVL2,Cost threshold,adopted,3.md,26f185970c434217ee0258831bd85bb939a3400f2ec5095ec3241f8f47736bf2,536
@@ -7,11 +7,11 @@ STND.CLASS.4,provision,LVL2,Harm scenarios,adopted,4.md,afc147232ce8192980e1580b
 STND.CLASS.5,provision,LVL2,Classification record,adopted,5.md,c05402f6ca1f7a21511593bea74e17056e0530d01ba5c7663c426e9e8c1fb581,724
 STND.CLASS.6,provision,LVL2,Isolated components,adopted,6.md,2967334734454785cf413ebf6d8e65d787f60285c9c5abb120d1f3ecdfeaa079,556
 STND.CLASS.7,provision,LVL2,Reclassification events,adopted,7.md,06d87b3345c81e5dfc7b7eb2219e3677c9b2e815e078572c8d90519a2f6b7de9,769
-STND.CLASS.10,provision,LVL2,Application by class,adopted,10.md,ef1c0aef39206c7a1cb1154ee120eacf5db4883b28e6a10c9ad1e240e4cb388b,3274
+STND.CLASS.10,provision,LVL2,Application by class,adopted,10.md,84340fbcd247e04f49ee5153bc815642d2dcd20e4869811fa73358daaf78a05e,3228
 STND.CLASS.17,provision,LVL2,Hazard responses,adopted,17.md,20f4f12d2194533466e87724693a6336618718b7fe872fe9233812ff6bf5b204,535
 STND.CLASS.18,provision,LVL2,Reviewer independence,adopted,18.md,81be2fee7f8124a015b154c4b29d072f6a0244d47e72043678d8b8345b2359f3,1389
 STND.CLASS.19,provision,LVL2,Audit interval,adopted,19.md,2682957523b2eb7b5f218c4bfeb1ed8e57cfeef8169489b0cbd5880e17b53328,1383
-STND.CLASS.20,provision,LVL2,Proportionality judgment,adopted,20.md,84b534b1040f7cd53c7157aaed7f3b648320ce130208d449d7a792b9b572f445,484
+STND.CLASS.20,provision,LVL2,Proportionality judgment,adopted,20.md,93683dfdc1c260829c5cd9c8bcb5c2a53eed475c609ef5ad2c57e8c5cb914de6,753
 STND.CLASS.21,provision,LVL2,Expected class in design,adopted,21.md,7b2071054b313294b671de1a852f98499202e9b4fd10eed559a084235c921c06,1153
-STND.CLASS.22,provision,LVL2,Reclassification obligations,adopted,22.md,2753d86fe514518cb2b3e345685d15c9cf3851bc38bb93f79e86ff37889918b3,1448
+STND.CLASS.22,provision,LVL2,Reclassification obligations,adopted,22.md,b607b2df0497fd84192f03a55a18773d4159fba7b43825bde0b5786fb7ef2f57,1737
 STND.CLASS.23,provision,LVL2,Records below the expected class,adopted,23.md,501d0d7424234d3829d66cf302ce1a6be051e8fabf51cf1047c6033e0a1c77a0,1232
