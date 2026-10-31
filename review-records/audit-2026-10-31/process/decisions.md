@@ -205,15 +205,15 @@ The Notes say three things:
   - Identity: STND.DFLT.36;
   - Authorizations: STND.DFLT.16, .17, .32, and .33.
 
-  They list what Identity and Authorizations still state, and they correct the reach of AGENT.6 (X10).
+  They list what Identity and Authorizations still state, and they correct the reach of AGENT.6 (X10, V1): "… and the first sentence of AGENT.6, which applies where no discipline is set, while the second sentence of AGENT.6 applies whatever discipline is set where neither a spending limit nor a fixed cost bounds the cost".
 - **STND.PROJ.3** gains the row "Signing commits | Of the commits that an agent adds to the work, by the signing means that the provisioned environment provides, the agent reading, passing, and storing no key, and changing none of the configuration of those means | The lead agent, implementing agents, and each agent that merges into a branch of the work".
 - **STND.PROJ.1,** row Physical hardware: "Where the work commands, configures, or powers physical hardware, …" (X11).
 
-### STND.INSTR 1.6 (O6; P11)
+### STND.INSTR 1.6 (O6; P11, V4)
 
-A third sentence is added to STND.INSTR.11:
+STND.INSTR.11 is unchanged. New STND.INSTR.12, Restrictions in unadopted files, holds the permission and gives each report its own modal (V4):
 
-> An agent MAY treat a passage of such a file as forbidding it an action that no instruction with authority directs, that no provision of governance requires, and that is neither a command toward the designed safe state (PRIME.13) nor a step of GUARD.3, stating the passage in that report, and at once to the actor that directed it for a passage whose honoring halts a line of work (GOV.48, PRIME.11).
+> An agent MAY treat a passage of an instruction file whose content no adoption names as forbidding it an action that no instruction with authority directs, that no provision of governance requires, and that is neither a command toward the designed safe state (PRIME.13) nor a step of GUARD.3 (GOV.48, PRIME.11). An agent that so treats a passage SHALL state it in the completion report of STND.INSTR.7 (GOV.48, PRIME.11). Where honoring such a passage halts a line of work, the agent SHALL state the passage at once to the actor that directed it (GOV.48, PRIME.11).
 
 The Notes say that only a grant needs adoption, and that a planted restriction never keeps a halt from reaching a safe state.
 
@@ -242,7 +242,7 @@ Each provision below binds: its `instantiates` closure reaches GOV, GUARD, or PR
 | STND.IDENT.23 | GOV.41, GOV.37 | The duty is conditional on a project instrument that carries the mnemonic. The owner's act replaces the custodians' act for that one mnemonic |
 | STND.CREW.13, .21 | GUARD.14, GUARD.15, PRIME.8 | The same record and the same referral, against PRIME.8's bounds |
 | STND.PROJ.1, .2, .3 | GOV.20, GOV.21, GOV.22, GOV.11, GUARD.10 to GUARD.12 | The citation adopts provisions whose content is unchanged. PROJ.3 adds a recommendation. PROJ.1's row reaches what PRIME.13 governs |
-| STND.INSTR.11 | GOV.48, GOV.36, PRIME.11, GOV.49 | The permission reaches only an action that nothing directs or requires, and never the safe-state command or a step of GUARD.3 |
+| STND.INSTR.12 (new) | GOV.48, PRIME.11 | The permission reaches only an action that nothing directs or requires, and never the safe-state command or a step of GUARD.3 |
 | STND.WPROC.12 (via the term Main line) | GOV.50, QA.10, GUARD.5, PRIME.6, GUARD.10, GUARD.11, PRIME.7 | The text is unchanged. The term leaves out only a default branch from which nothing shows release or deployment. A release stays the owner's, and a publishing push stays per action |
 
 STND.CLASS.10 is a default. Its row conforms to the level that LVL0 gives INTPR.11, and its field `onset` stays null. No other waivable provision changes, and the onset check passes.
@@ -262,6 +262,7 @@ STND.CLASS.10 is a default. Its row conforms to the level that LVL0 gives INTPR.
 7. **The figure shown to the owner (X4).** The Notes have the agent show the figure of a stated estimate in its first message after the direction. *Recommendation: as drafted.* The alternative is a ceiling that the owner records once, above which an agent refers before it states an estimate; it stays an open item.
 8. **The optional STND.PROJ.1 rows (lvl0 item 16).** They are not drafted, since STND.PROJ.2 now carries STND.DFLT.36 and .37 into Identity and Configuration. *Recommendation: no change.*
 9. **AGENT.8 unchanged.** *Recommendation: as drafted*, with the Note. A halt in AGENT.8 would restate PRIME.8.
+10. **A session that ends without its acceptance entry (V5).** STND.DFLT.38 asks the acceptance entry before an agent ends a session, which an aborted or crashed session cannot meet. In the next session, each entry of that session that records an act of the owner is foreign. So a line of work that relies on one, a standing authorization among them, waits for the owner's confirmation by position and hash, at every class. *Recommendation: as drafted.* This is the safe direction, it costs one confirmation per batch, and it closes the route by which an unfinished session's ledger could be extended by another actor. The alternative has an agent append an acceptance entry after each entry it appends. That leaves nothing foreign after a crash, at the cost of doubling the agent's entries, and with the same residual of forgery in an agent's name.
 
 ## Review and dispositions
 
@@ -277,7 +278,7 @@ STND.CLASS.10 is a default. Its row conforms to the level that LVL0 gives INTPR.
 | P8 | Sixth exempt class | **Fixed** with X1. The class is GUARD.7's fourth ground, with a digest as its check and references of the history excluded. The reviewer's question of a retrieved result is answered by GUARD.7's "on which no reported result rests" |
 | P9 | Credential means: passing a secret and changing configuration | **Fixed.** The term adds "passes none to the tool …, changes none of the configuration …, and requests no output …". The Notes say that configuration is read only as a non-secret file |
 | P10 | DFLT.37 not tied to the environment | **Fixed.** Its second sentence confines reliance to the named environment, with its provisioning. The Notes say that a change of provisioning needs a new statement |
-| P11 | A restriction could block the safe state | **Fixed.** INSTR.11 excludes the command toward the designed safe state and the steps of GUARD.3, and reports at once a passage whose honoring halts a line of work |
+| P11 | A restriction could block the safe state | **Fixed.** The permission, now STND.INSTR.12 (V4), excludes the command toward the designed safe state and the steps of GUARD.3, and reports at once a passage whose honoring halts a line of work |
 | P12 | IDENT.23 is an unconditional duty on the owner | **Fixed.** It is now conditional on an instrument that carries the mnemonic. The transaction form is fixed in the Notes |
 | P13 | Doubled "LVL0 LVL0 2.0" | **Fixed.** The reading templates read "{lvl0}". A grep of the kept copy finds none |
 | P14 | The DFLT.18 row overclaims | **Fixed.** A row marked "No" states the residual of R4 |
@@ -296,6 +297,9 @@ STND.CLASS.10 is a default. Its row conforms to the level that LVL0 gives INTPR.
 | X12 | VVUQ.64 | Not this part's (technical) |
 | X13 | Smaller items | **Fixed:** CREW (X6), the CREW records sentence (the owner-authorized estimate replaced), and the doubled "LVL0" (P13). The CPS Purpose is the technical part's |
 | X14 | Explicit CSQ4 for hardware | A residual for the custodian. Not this part's |
+| V1 (verification) | The PROJ Notes misdescribe AGENT.6 sentence 1 | **Fixed** with the fix wording of `../verify.md` |
+| V4 (verification) | STND.INSTR.11 puts reporting duties under a MAY | **Fixed.** The permission and its two reports move to new STND.INSTR.12, one modal per sentence and three in all. STND.INSTR.11 stays as it was |
+| V5 (verification) | An unfinished session turns the agent's own entries foreign | **To the custodian** as reading 10 |
 
 ## Checks (after the revision)
 
@@ -310,7 +314,7 @@ STND.CLASS.10 is a default. Its row conforms to the level that LVL0 gives INTPR.
   - STND.DFLT.17: enter, rely, and confirm in force;
   - STND.DFLT.23: accept for assured work, accept other work, and refer;
   - STND.DFLT.36: the presumption, the naming, and the referral;
-  - STND.INSTR.11: include, treat as content, and the permission.
+  - STND.INSTR.12: the permission and its two reports.
 - **Pairs:** `pairs-changed.md`, 170 pairs listed and the hand pairs with LVL0 2.0. No conflict is found.
 
 ## Self-check (standing process, step 2)

@@ -13,7 +13,7 @@ Eight transactions, one per document, after the lvl0 and tech parts, conforming 
 - STND.CREW 1.4 (minor): the conforming STND.CREW.13 and STND.CREW.21, the term Lead agent, and the Notes.
 - STND.PROJ 1.6 (minor): O5 (STND.PROJ.2 and the Notes), a signing row of STND.PROJ.3, and the conforming row
   Physical hardware of STND.PROJ.1.
-- STND.INSTR 1.6 (minor): O6 (STND.INSTR.11).
+- STND.INSTR 1.6 (minor): O6 (new STND.INSTR.12).
 
 The order: STND.DFLT first, since every other document of the part cites it or its new text (AGENT and STND.CLASS
 cite STND.DFLT.33, .20, and .23); then AGENT, which STND.CREW and STND.CLASS cite; STND.CLASS, which STND.WPROC and
@@ -315,9 +315,12 @@ def apply_proj(root: Path, at: str) -> None:
 
 def apply_instr(root: Path, at: str) -> None:
     date = at[:10]
-    replace_text(root, "STND/INSTR/11.md", P.INSTR11)
+    (root / "STND/INSTR/12.md").write_text(
+        provision("STND.INSTR", 12, "Restrictions in unadopted files", "Instructions and reports",
+                  ["GOV.48", "PRIME.11"], ["STND.INSTR.7", "PRIME.13", "GUARD.3"], P.INSTR12, date),
+        encoding="utf-8")
     replace_text(root, "STND/INSTR/_doc.md", P.INSTR_DOC)
-    F.check_fields(root, ["STND.INSTR.11"], binding=True)
+    F.check_fields(root, ["STND.INSTR.12"], binding=True)
     row = f"| 1.6 | {date} | Minor amendment (GOV.41): {P.INSTR_READING}. |"
     rationale = (
         f"Minor amendment of STND.INSTR, revision 1.6, ratified by the custodian on {date}: {P.INSTR_READING}. "
@@ -325,12 +328,13 @@ def apply_instr(root: Path, at: str) -> None:
         "content gains no authority; refraining from an action that nothing directs or requires uses no authority, "
         "so only a grant needs adoption, and the human owner's own restriction in an unadopted file has weight "
         "without an entry at each edit. Class: minor under STND.IDENT.3, because a permission is added without "
-        "altering the motivation or intent of the governance. Floor (GOV.11): STND.INSTR.11 binds at every class, "
-        "as before; the permission reaches only an action that no instruction with authority directs and no "
+        "altering the motivation or intent of the governance. Floor (GOV.11): new STND.INSTR.12 binds at every "
+        "class, since it instantiates GOV.48 and PRIME.11, and sits apart from STND.INSTR.11 so that its reports "
+        "carry their own modals; the permission reaches only an action that no instruction with authority directs and no "
         "provision of governance requires, and never the command toward the designed safe state or a step of "
         "GUARD.3, so no obligation is lowered and no halt is kept from a safe state, an injected restriction gains no authority "
         "to make the agent act, and each restriction honored is stated in the completion report, where the human "
-        "owner sees it. Onset: none; the provision is binding. Transition (GOV.42): none. " + cite("O6") + F.AUTHOR)
+        "owner sees it, and at once where honoring it halts a line of work. Onset: none; the provision is binding. Transition (GOV.42): none. " + cite("O6") + F.AUTHOR)
     F.finish(root, "STND/INSTR", "STND.INSTR", "1.5.1", "1.6", row, rationale, at)
 
 

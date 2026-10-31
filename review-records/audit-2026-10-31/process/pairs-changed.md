@@ -16,7 +16,7 @@ The changed provisions:
 - STND.IDENT.23;
 - STND.CREW.13 and .21;
 - STND.PROJ.1, .2, and .3;
-- STND.INSTR.11.
+- STND.INSTR.12 (new).
 
 No LVL0 provision is amended, so `--amends` does not apply. Hand pairs with LVL0 2.0 follow the table.
 
@@ -60,6 +60,6 @@ No LVL0 provision is amended, so `--amends` does not apply. Hand pairs with LVL0
 | STND.CLASS.10, .22 | GOV.48, GOV.14, GOV.20 | none | The row drops the clause that GOV.48 no longer supports. The step applies only before the constitution of GOV.20 |
 | STND.IDENT.23 | GOV.37, GOV.41 | none | The duty arises only for a project instrument that carries the mnemonic. A ledger transaction changes the project's register |
 | Term Main line, STND.WPROC.12 | GOV.50, QA.10, GUARD.11 | none | The default branch is a main line once the work is released or deployed from it. A release stays the owner's |
-| STND.INSTR.11 | PRIME.11, PRIME.13, GUARD.3, GOV.49 | none | A restriction never bars the safe-state command or the steps of GUARD.3, and it gains no power to direct |
+| STND.INSTR.12 (new) | PRIME.11, PRIME.13, GUARD.3, GOV.49 | none | A restriction never bars the safe-state command or the steps of GUARD.3, and it gains no power to direct |
 | STND.CREW.13, .21, term Lead agent | PRIME.8, PRIME.11 | none | The bounds are PRIME.8's. A named person performs no act of PRIME.1 |
 | STND.PROJ.2 | GOV.21, GOV.22 | none | The citation adopts provisions whose content is unchanged, with the rules they rest on |
