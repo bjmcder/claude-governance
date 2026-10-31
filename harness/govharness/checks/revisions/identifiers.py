@@ -6,7 +6,11 @@ every Lexicon term with its term (STND.IDENT.16). v.10 reads the
 mnemonic register MNEM (STND.IDENT.17, STND.IDENT.19), confirms that the
 identifier of every item that is not retired uses only active mnemonics
 and registered grades (STND.IDENT.22), and lists siblings at a letter
-distance of 1 that are not established acronyms (STND.IDENT.18). v.11
+distance of 1 that are not established acronyms (STND.IDENT.18). The
+mnemonic of a project, which MNEM does not hold, is registered instead
+by a transaction of the ledger in the form that the Notes of STND.IDENT
+fix (STND.IDENT.23): v.10 takes it as the first mnemonic of the items of
+a LVL3 project constitution that carries it, and of nothing else. v.11
 confirms that every transaction with the scope MNEM is of type register
 and made by the custodians (STND.IDENT.20, STND.IDENT.23).
 """
@@ -19,6 +23,7 @@ from govharness.checks.base import CheckContext, Verdict
 from govharness.core.corpus import Corpus
 from govharness.core.locators import heading_slug
 from govharness.core.tables import read_table
+from govharness.ledger.transactions import Transaction
 
 REGISTER_ID = "MNEM"
 CONSTITUTION_ID = "LVL0"
@@ -38,6 +43,7 @@ REFERENCE_FIELDS = (
     "triggers",
 )
 STATUSES = {"active", "retired"}
+PROJECT_WORDS = "project mnemonic"
 ACRONYM = "Established acronym"
 Register = dict[tuple[str, str], dict[str, str]]
 
@@ -148,8 +154,64 @@ def read_register(corpus: Corpus) -> tuple[Register, list[str]]:
     return register, problems
 
 
+def project_registrations(
+    ledger: list[Transaction] | None, register: Register
+) -> tuple[frozenset[str], list[str]]:
+    """Return the project mnemonics that a ledger registers, and problems.
+
+    A registration is a transaction of type ``register``, not scoped to
+    MNEM, whose rationale holds the words "project mnemonic"; its one
+    target is the mnemonic (the Notes of STND.IDENT, STND.IDENT.23).
+
+    Parameters
+    ----------
+    ledger : list[Transaction] | None
+        Ledger entries, or ``None`` when no ledger is supplied.
+    register : Register
+        Register rows.
+
+    Returns
+    -------
+    tuple[frozenset[str], list[str]]
+        The mnemonics registered, and one line per registration that
+        names other than one mnemonic or names one that MNEM holds.
+    """
+    held = {mnemonic for _, mnemonic in register}
+    named: set[str] = set()
+    problems: list[str] = []
+    for entry in ledger or []:
+        if (
+            entry.get("type") != "register"
+            or REGISTER_ID in (entry.get("scope") or [])
+            or PROJECT_WORDS not in str(entry.get("rationale") or "")
+        ):
+            continue
+        targets = entry.get("targets") or []
+        seq = entry.get("seq")
+        if not (
+            isinstance(targets, list)
+            and len(targets) == 1
+            and MNEMONIC_RE.match(str(targets[0]))
+        ):
+            problems.append(
+                f"- seq {seq}: a project mnemonic registration names "
+                f"`{targets}`, not one mnemonic"
+            )
+        elif targets[0] in held:
+            problems.append(
+                f"- seq {seq}: project mnemonic `{targets[0]}` is one that "
+                f"{REGISTER_ID} holds"
+            )
+        else:
+            named.add(targets[0])
+    return frozenset(named), problems
+
+
 def usage_problems(
-    ident: str, register: Register, projects: frozenset[str] = frozenset()
+    ident: str,
+    register: Register,
+    projects: frozenset[str] = frozenset(),
+    registered: frozenset[str] = frozenset(),
 ) -> list[str]:
     """Return problems with the mnemonics and grade an identifier uses.
 
@@ -161,6 +223,10 @@ def usage_problems(
         Register rows.
     projects : frozenset[str]
         Mnemonics of the projects in the corpus.
+    registered : frozenset[str]
+        Mnemonics of the LVL3 project constitutions that the ledger
+        registers (``project_registrations``); each stands as a first
+        mnemonic without a row of MNEM.
 
     Returns
     -------
@@ -182,6 +248,9 @@ def usage_problems(
         if not MNEMONIC_RE.match(segment):
             break  # the leaf
         row = register.get((parent, segment))
+        if row is None and parent == "none" and segment in registered:
+            parent = "project"
+            continue
         if row is None:
             problems.append(
                 f"- {ident}: `{segment}` is not registered under `{parent}`"
@@ -267,6 +336,26 @@ def _projects(corpus: Corpus) -> frozenset[str]:
     )
 
 
+def _constitutions(corpus: Corpus) -> frozenset[str]:
+    """Return the mnemonics of the LVL3 project constitutions.
+
+    Parameters
+    ----------
+    corpus : Corpus
+        Indexed corpus.
+
+    Returns
+    -------
+    frozenset[str]
+        Identifiers of the entries of kind ``project`` at LVL3.
+    """
+    return frozenset(
+        str(e.meta["id"])
+        for e in corpus.entries
+        if e.meta.get("kind") == "project" and e.meta.get("level") == "LVL3"
+    )
+
+
 def identifier_forms(ctx: CheckContext) -> Verdict:
     """Check v.9: every identifier and locator has its form.
 
@@ -314,17 +403,21 @@ def register_usage(ctx: CheckContext) -> Verdict:
     Returns
     -------
     Verdict
-        FAIL on a register problem or a mnemonic or grade misused;
+        FAIL on a register problem, a malformed project mnemonic
+        registration in the ledger, or a mnemonic or grade misused;
         INFO listing near siblings otherwise.
     """
     corpus = ctx.corpus
     projects = _projects(corpus)
     register, problems = read_register(corpus)
+    named, wrong = project_registrations(ctx.ledger, register)
+    problems += wrong
+    registered = named & _constitutions(corpus)
     retired = retired_ids(corpus)
     for entry in corpus.entries:
         own = str(entry.meta["id"])
         if own not in retired:
-            problems += usage_problems(own, register, projects)
+            problems += usage_problems(own, register, projects, registered)
     near = sorted(
         f"- `{a}` and `{b}` under `{p}` are at a letter distance of 1"
         for (p, a), first in register.items()
