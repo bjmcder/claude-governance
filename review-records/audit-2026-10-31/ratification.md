@@ -135,3 +135,11 @@ The lead, under step 8 of the standing process:
 2. Updates `docs/` and `README.md`, the three skills (P15), and `harness/README.md`, from the list in `reconciliation.md`, section 5, and the process record. This includes R11 as ruled.
 3. Makes the v.10 harness unit for R6 (X7), with tests.
 4. Updates `OPEN-ITEMS.md` and merges `audit-2026-10-31` into `main`.
+
+## Ratification
+
+The custodian, 2026-10-31, replied to this packet:
+
+> Ratify as recommended
+
+Every recommendation of Parts 1 and 2 is adopted: rulings R1 to R11 as recommended (R11 option (a)), and readings 2.1 to 2.18 as recommended (2.1: major, LVL0 2.0). The residual risks of Part 3 stand on the record.
