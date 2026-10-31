@@ -21,6 +21,8 @@ from tests.support import corpus_copy, corpus_of, live_index, live_ledger
 
 COPIES = len(READING_COPIES)
 
+# The repository that holds harness/; its rendered/ is the full set.
+REPO_ROOT = Path(__file__).resolve().parents[3]
 DFLT = ReadingCopy("STND.DFLT", "defaults.md")
 IDENT = next(c for c in READING_COPIES if c.document == "STND.IDENT")
 
@@ -245,6 +247,33 @@ class ReadingCopies(unittest.TestCase):
             self.assertEqual(stop.exception.code, 2)
             self.assertIn("--all DIR", err.getvalue())
 
+    def test_mode_line_holds_only_what_the_provision_has(self) -> None:
+        """Behavior: a provision of LVL0, with no mode and nothing it
+        instantiates, has no line between its heading and its body; a
+        selector without a mode reads "Instantiates ..." alone; no copy
+        holds a sentence of the mode line that is empty.
+
+        Reference: H1 of the cleanup audit of 2026-10-31: every LVL0
+        provision read ". Instantiates ." and every provision without a
+        mode ". Instantiates GOV.25, ...".
+        """
+        corpus = corpus_of(live_index())
+        prime = compose(corpus, live_ledger(), ReadingCopy("PRIME", "x.md"))
+        body = corpus.by_id["PRIME.6"].body
+        self.assertIn(f"#### PRIME.6 Reserved actions\n\n{body}\n", prime)
+        asic = compose(corpus, live_ledger(), ReadingCopy("HW.ASIC", "x.md"))
+        self.assertIn(
+            "#### HW.ASIC.1 Integrated circuit execution selector\n\n"
+            "Instantiates GOV.25, GOV.26, GOV.27.\n\n",
+            asic,
+        )
+        for text in (prime, asic):
+            self.assertNotRegex(text, r"(?m)^\. |Instantiates \.")
+
+    @unittest.skipUnless(
+        (REPO_ROOT / "rendered").is_dir(),
+        "needs the repository's rendered/, outside harness/",
+    )
     def test_repository_rendered_copies_are_current(self) -> None:
         """Behavior: ``compose --all`` of the live corpus against the
         repository's ``rendered/`` reports no stale copy and no orphan,
@@ -254,7 +283,7 @@ class ReadingCopies(unittest.TestCase):
         custodian's process rebuilds (for-agents/standing-process.md,
         step 8; unit 0022, HR-6); regression guard.
         """
-        repo = Path(__file__).resolve().parents[3]
+        repo = REPO_ROOT
         code, out = run(
             "compose",
             str(repo / "harness" / "governance"),

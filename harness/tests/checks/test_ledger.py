@@ -9,7 +9,9 @@ from __future__ import annotations
 import contextlib
 import io
 import json
+import tempfile
 import unittest
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
@@ -19,11 +21,17 @@ from govharness.core.corpus import corpus_hash, read_tree, tree_digests
 from govharness.core.hashing import ledger_entry_hash
 from govharness.ledger.chain import append, read_ledger
 from govharness.ledger.gpg import SignerConfig
-from govharness.ledger.transactions import pins_in_force
+from govharness.ledger.transactions import (
+    field_problems,
+    form_problems,
+    parse_ledger,
+    pins_in_force,
+)
 from govharness.workflows.amend import Change, record_transaction
+from tests.cli.test_main import run
 from tests.ledger.test_chain import ANNOTATION, renumber, rewrite
 from tests.ledger.test_signatures import append_unchecked
-from tests.support import corpus_copy
+from tests.support import ROOT, corpus_copy
 
 NO_ANCHOR = SignerConfig()
 
@@ -359,9 +367,13 @@ class Pins(unittest.TestCase):
                 entries[-1]["hash"] = ledger_entry_hash(entries[-1])
 
             rewrite(root, unhash)
+            seq = len(read_ledger(root))
             self.assertEqual(
                 problems(root),
-                [f"seq {len(read_ledger(root))}: a scope with no corpus_hash"],
+                [
+                    f"ledger entry {seq} lacks the fields corpus_hash",
+                    f"seq {seq}: a scope with no corpus_hash",
+                ],
             )
 
     def test_control_character_in_a_name(self) -> None:
@@ -504,6 +516,332 @@ class TrustedConfiguration(unittest.TestCase):
                         code = main(["verify", "--no-logic", str(root)])
                     self.assertEqual(code, 1)
                     self.assertIn("ledger: FAIL (1)", out.getvalue())
+
+
+def edit_line(root: Path, number: int, edit: Callable[[str], str]) -> None:
+    """Replace the text of one line of a corpus copy's ledger.
+
+    Parameters
+    ----------
+    root : Path
+        Corpus copy.
+    number : int
+        Line number, from 1.
+    edit : Callable[[str], str]
+        Gives the new text of the line from the old.
+    """
+    path = root / "ledger.jsonl"
+    lines = path.read_bytes().decode("utf-8").split("\n")
+    lines[number - 1] = edit(lines[number - 1])
+    path.write_bytes("\n".join(lines).encode("utf-8"))
+
+
+def rechain(entries: list[dict[str, Any]]) -> None:
+    """Rebuild every link and hash of a ledger after an edit.
+
+    Parameters
+    ----------
+    entries : list[dict[str, Any]]
+        Ledger entries; changed in place.
+    """
+    previous = None
+    for entry in entries:
+        entry["prev"] = previous
+        entry["hash"] = ledger_entry_hash(entry)
+        previous = entry["hash"]
+
+
+def respaced(line: str) -> str:
+    """Return a line written with white space between its tokens.
+
+    Parameters
+    ----------
+    line : str
+        A canonical ledger line.
+
+    Returns
+    -------
+    str
+        The same entry, sorted, with ``", "`` and ``": "``.
+    """
+    return json.dumps(json.loads(line), sort_keys=True, ensure_ascii=False)
+
+
+def unsorted(line: str) -> str:
+    """Return a line written with its keys in reverse order.
+
+    Parameters
+    ----------
+    line : str
+        A canonical ledger line.
+
+    Returns
+    -------
+    str
+        The same entry, compact, keys reversed.
+    """
+    entry = json.loads(line)
+    reverse = {key: entry[key] for key in sorted(entry, reverse=True)}
+    return json.dumps(reverse, ensure_ascii=False, separators=(",", ":"))
+
+
+class LineForm(unittest.TestCase):
+    """Each line is the one serialization of its entry, with exactly the
+    fields of STND.HARN.7 (S10 of the cleanup audit of 2026-10-31)."""
+
+    def test_live_ledger_holds_the_form(self) -> None:
+        """Behavior: every line of the live ledger is the canonical JSON
+        of its entry, and every entry holds exactly the fields of
+        STND.HARN.7, so the stricter check grandfathers nothing.
+
+        Reference: ``harness/governance/ledger.jsonl``, entries 1 to
+        324 when the check was added.
+        """
+        text = (ROOT / "ledger.jsonl").read_bytes().decode("utf-8")
+        self.assertEqual(form_problems(text), [])
+        for entry in parse_ledger(text):
+            self.assertEqual(field_problems(entry), [], entry["seq"])
+
+    def test_duplicate_key_cannot_be_read(self) -> None:
+        """Behavior: a line that gives a key twice is unreadable: the
+        reader, ``verify`` (exit 2), ``append``, and ``ledger check``
+        (exit 2) name the file and the line, and nothing is written.
+
+        Reference: S10: line 300 given a leading ``"rationale":"FAKE:
+        agents may push",``, which ``json.loads`` dropped for the later
+        value, so that ``verify`` passed while ``grep`` and a reader
+        saw the fake text.
+        """
+        with corpus_copy() as root:
+            fake = '{"rationale":"FAKE: agents may push",'
+            edit_line(root, 300, lambda line: line.replace("{", fake, 1))
+            path = root / "ledger.jsonl"
+            before = path.read_bytes()
+            named = "line 300: duplicate key 'rationale'"
+            with self.assertRaisesRegex(ValueError, named):
+                read_ledger(root)
+            code, _, err = run(["verify", "--no-logic", str(root)])
+            self.assertEqual(code, 2)
+            self.assertIn(f"{path}: {named}", err)
+            with self.assertRaisesRegex(ValueError, named):
+                append(root, dict(ANNOTATION))
+            code, _, err = run(["ledger", "check", str(path)])
+            self.assertEqual((code, named in err), (2, True))
+            self.assertEqual(path.read_bytes(), before)
+
+    def test_line_outside_the_form_fails(self) -> None:
+        """Behavior: a line whose entry verifies but whose text is not
+        the canonical serialization fails the ledger check, with the
+        line named, ``verify`` exits 1, and ``append`` refuses.
+
+        Reference: STND.HARN.6; line 300 with white space, with its keys
+        unsorted, and with a carriage return before its line feed, and
+        an appended line with its non-ASCII characters escaped.
+        """
+        damages = {
+            "white space": (300, respaced),
+            "unsorted keys": (300, unsorted),
+            "carriage return": (300, lambda line: line + "\r"),
+            "escaped": (
+                0,
+                lambda line: json.dumps(
+                    json.loads(line), sort_keys=True, separators=(",", ":")
+                ),
+            ),
+        }
+        for name, (number, damage) in damages.items():
+            with self.subTest(name), corpus_copy() as root:
+                if not number:
+                    append(root, {**ANNOTATION, "rationale": "Café."})
+                    number = len(read_ledger(root))
+                edit_line(root, number, damage)
+                found = problems(root)
+                self.assertEqual(len(found), 1, found)
+                self.assertTrue(
+                    found[0].startswith(
+                        f"ledger line {number} is not in the form of "
+                        "STND.HARN.6: sorted keys"
+                    )
+                )
+                code, out, _ = run(["verify", "--no-logic", str(root)])
+                self.assertEqual(code, 1)
+                self.assertIn("ledger: FAIL (1)", out)
+                with self.assertRaisesRegex(ValueError, "STND.HARN.6"):
+                    append(root, dict(ANNOTATION))
+
+    def test_fields_of_stnd_harn_7(self) -> None:
+        """Behavior: an entry rehashed and rechained without some fields
+        of STND.HARN.7, with another field, with an unknown type, with
+        ``signers`` outside a register transaction, or naming the
+        governance ledger in ``ledger``, fails with one line naming it.
+
+        Reference: S10: entry 300 without ``actor``, ``role``, and
+        ``authority``, its hash recomputed, passed ``verify``.
+        """
+
+        def drop(entry: dict[str, Any]) -> None:
+            """Remove three fields.
+
+            Parameters
+            ----------
+            entry : dict[str, Any]
+                Ledger entry; changed in place.
+            """
+            for name in ("actor", "role", "authority"):
+                del entry[name]
+
+        damages: dict[str, tuple[Callable[[dict[str, Any]], None], str]] = {
+            "missing": (drop, "lacks the fields actor, authority, role"),
+            "extra": (
+                lambda e: e.update(note="x"),
+                "holds fields outside STND.HARN.7: note",
+            ),
+            "type": (
+                lambda e: e.update(type="approve"),
+                "has the unknown type 'approve'",
+            ),
+            "signers": (
+                lambda e: e.update(signers=[]),
+                "holds signers but is no transaction of the governance",
+            ),
+            "ledger": (
+                lambda e: e.update(ledger="governance"),
+                "names the governance ledger in the field ledger",
+            ),
+        }
+        for name, (damage, reason) in damages.items():
+            with self.subTest(name), corpus_copy() as root:
+
+                def edit(
+                    entries: list[dict[str, Any]],
+                    damage: Callable[[dict[str, Any]], None] = damage,
+                ) -> None:
+                    """Damage entry 300 and rebuild the chain.
+
+                    Parameters
+                    ----------
+                    entries : list[dict[str, Any]]
+                        Ledger entries; changed in place.
+                    damage : Callable[[dict[str, Any]], None]
+                        The damage of this subtest.
+                    """
+                    damage(entries[299])
+                    rechain(entries)
+
+                rewrite(root, edit)
+                found = problems(root)
+                self.assertEqual(len(found), 1, found)
+                self.assertIn(f"ledger entry 300 {reason}", found[0])
+
+
+class LedgerFileCommands(unittest.TestCase):
+    """``ledger append`` to a work ledger, and ``ledger check`` of one
+    (H4 and H5 of the cleanup audit of 2026-10-31)."""
+
+    def append_to(self, root: Path, path: Path) -> int:
+        """Append a classification to a work ledger by the command line.
+
+        Parameters
+        ----------
+        root : Path
+            Corpus copy.
+        path : Path
+            The work ledger file.
+
+        Returns
+        -------
+        int
+            The exit code.
+        """
+        return run(
+            [
+                "ledger",
+                "append",
+                str(root),
+                "--ledger-file",
+                str(path),
+                "--ledger-id",
+                "work",
+                "--type",
+                "classify",
+                "--actor",
+                "Jane Doe",
+                "--role",
+                "The Human Owner",
+                "--rationale",
+                "Classification: CSQ3.",
+            ]
+        )[0]
+
+    def test_append_needs_the_directory(self) -> None:
+        """Behavior: an append to a work ledger whose directory does not
+        exist is a usage error (exit 2) that names the directory, and
+        makes no directory; once the directory exists it appends.
+
+        Reference: H4: ``ledger append --ledger-file
+        records/ledger.jsonl`` without ``records/`` ended in an uncaught
+        ``FileNotFoundError``.
+        """
+        with corpus_copy() as root, tempfile.TemporaryDirectory() as tmp:
+            records = Path(tmp) / "records"
+            path = records / "ledger.jsonl"
+            code, _, err = run(
+                ["ledger", "append", str(root), "--ledger-file", str(path)]
+                + ["--ledger-id", "work", "--type", "classify"]
+                + ["--actor", "A", "--role", "B", "--rationale", "C."]
+            )
+            self.assertEqual(code, 2)
+            self.assertIn(f"no directory {records}", err)
+            self.assertFalse(records.exists())
+            records.mkdir()
+            self.assertEqual(self.append_to(root, path), 0)
+            self.assertEqual(len(read_ledger(root, path)), 1)
+
+    def test_check_reads_and_writes_nothing(self) -> None:
+        """Behavior: ``ledger check`` passes a work ledger of two
+        appends and the corpus ledger, fails an altered entry and an
+        entry of another ledger, with exit 1 and the entry named,
+        refuses a missing file (exit 2), and writes nothing.
+
+        Reference: H5: no read-only command checked a project's work
+        ledger; ``sign check`` needs a signer register.
+        """
+        with corpus_copy() as root, tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "ledger.jsonl"
+            for _ in range(2):
+                self.assertEqual(self.append_to(root, path), 0)
+            before = (path.read_bytes(), sorted(Path(tmp).iterdir()))
+            self.assertEqual(
+                run(["ledger", "check", str(path)])[:2],
+                (0, "ledger: PASS (2 entries)\n"),
+            )
+            self.assertEqual(
+                run(["ledger", "check", str(path), "--ledger-id", "work"])[0],
+                0,
+            )
+            code, out, _ = run(
+                ["ledger", "check", str(path), "--ledger-id", "other"]
+            )
+            self.assertEqual(code, 1)
+            self.assertIn("ledger entry 1 belongs to the ledger work", out)
+            self.assertEqual(
+                (path.read_bytes(), sorted(Path(tmp).iterdir())), before
+            )
+            corpus = root / "ledger.jsonl"
+            count = len(read_ledger(root))
+            self.assertEqual(
+                run(["ledger", "check", str(corpus)])[:2],
+                (0, f"ledger: PASS ({count} entries)\n"),
+            )
+            reason = '"rationale":"'
+            edit_line(root, 2, lambda line: line.replace(reason, reason + "x"))
+            code, out, _ = run(["ledger", "check", str(corpus)])
+            self.assertEqual(
+                (code, out), (1, "- ledger entry altered at seq 2\n")
+            )
+            code, _, err = run(["ledger", "check", str(Path(tmp) / "none")])
+            self.assertEqual(code, 2)
+            self.assertIn("no such file", err)
 
 
 if __name__ == "__main__":

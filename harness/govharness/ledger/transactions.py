@@ -1,8 +1,14 @@
-"""Transaction types and the links of the hash chain.
+"""Transaction types, the form of a ledger line, and the hash chain.
 
 Each ledger entry records the hash of the entry before it (``prev``) and
 its own hash over every other field (``hash``), so that an edit to an
-entry, or a removed or reordered entry, breaks the chain (GOV.36).
+entry, or a removed or reordered entry, breaks the chain (GOV.36). The
+hash covers the parsed entry, not the text of its line, so the line is
+held to one form as well: a key given twice, a line that is not the
+canonical serialization of its entry (STND.HARN.6), and an entry
+without exactly the fields of STND.HARN.7 are each reported, since each
+lets the text that a person or ``grep`` reads differ from the entry
+that the chain verifies.
 """
 
 from __future__ import annotations
@@ -12,10 +18,12 @@ import re
 from pathlib import PurePosixPath
 from typing import Any
 
-from govharness.core.hashing import ledger_entry_hash
+from govharness.core.hashing import canonical_json, ledger_entry_hash
 
 GOVERNANCE = "governance"
 ALL_LEDGERS = "all"
+# The signer register, whose transactions alone carry ``signers``.
+REGISTER_ID = "SIGNR"
 # The types of STND.HARN.7.
 TYPES = {
     "adopt",
@@ -35,6 +43,27 @@ TYPES = {
     "configure",
     "annotate",
 }
+# The fields of STND.HARN.7 that every transaction holds; ``signers``
+# and ``ledger`` are held only where that provision says.
+FIELDS = frozenset(
+    {
+        "seq",
+        "type",
+        "actor",
+        "role",
+        "authority",
+        "targets",
+        "scope",
+        "rationale",
+        "at",
+        "corpus_hash",
+        "prev",
+        "signature",
+        "hash",
+    }
+)
+SIGNERS = "signers"
+LEDGER = "ledger"
 Transaction = dict[str, Any]
 REVISION_NAMED_RE = re.compile(r"revision (\d+(?:\.\d+)+)", re.IGNORECASE)
 
@@ -59,17 +88,162 @@ def parse_ledger(text: str) -> list[Transaction]:
     Raises
     ------
     ValueError
-        If a line is not JSON; the message names its line number.
+        If a line is not JSON, or an object of it gives a key twice,
+        which JSON readers resolve differently; the message names its
+        line number.
     """
     entries: list[Transaction] = []
     for number, line in enumerate(text.split("\n"), start=1):
         if not line.strip():
             continue
         try:
-            entries.append(json.loads(line))
+            entries.append(json.loads(line, object_pairs_hook=_object))
         except ValueError as error:
             raise ValueError(f"line {number}: {error}") from error
     return entries
+
+
+def _object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    """Build one JSON object of a ledger line, refusing a repeated key.
+
+    Parameters
+    ----------
+    pairs : list[tuple[str, Any]]
+        The object's keys and values, in the order of the text.
+
+    Returns
+    -------
+    dict[str, Any]
+        The object.
+
+    Raises
+    ------
+    ValueError
+        If a key occurs twice; the message names it.
+    """
+    keys = [key for key, _ in pairs]
+    repeated = sorted({key for key in keys if keys.count(key) > 1})
+    if repeated:
+        raise ValueError(f"duplicate key {', '.join(map(repr, repeated))}")
+    return dict(pairs)
+
+
+def form_problems(text: str) -> list[str]:
+    """Return each line of a ledger not in the form of STND.HARN.6.
+
+    Parameters
+    ----------
+    text : str
+        Contents of a ledger file, as stored.
+
+    Returns
+    -------
+    list[str]
+        A line for each blank line before the last line feed, and for
+        each line other than the canonical JSON of its entry (sorted
+        keys, no white space between tokens, non-ASCII characters
+        unescaped), so that the hash a person computes from the text
+        is the one the chain verifies.
+    """
+    problems: list[str] = []
+    lines = text.split("\n")
+    for number, line in enumerate(lines, start=1):
+        if not line.strip():
+            if number < len(lines):
+                problems.append(f"ledger line {number} is blank")
+            continue
+        try:
+            canonical = canonical_json(
+                json.loads(line, object_pairs_hook=_object)
+            )
+        except ValueError:
+            # Text that a reader of lines takes apart differently, such
+            # as two entries joined by a carriage return.
+            canonical = None
+        if line != canonical:
+            problems.append(
+                f"ledger line {number} is not in the form of STND.HARN.6: "
+                "sorted keys, no white space, Unicode unescaped"
+            )
+    return problems
+
+
+def field_problems(entry: Transaction) -> list[str]:
+    """Return how an entry departs from the fields of STND.HARN.7.
+
+    Parameters
+    ----------
+    entry : Transaction
+        Ledger entry.
+
+    Returns
+    -------
+    list[str]
+        A line naming the fields missing; a line naming the fields
+        that STND.HARN.7 does not list; a line when ``type`` is none of
+        its types; a line when ``signers`` stands on a transaction other
+        than one of the governance ledger whose scope names the signer
+        register; and a line when ``ledger`` names the governance
+        ledger, whose transactions carry no such field.
+    """
+    seq = entry.get("seq")
+    problems: list[str] = []
+    missing = sorted(FIELDS - entry.keys())
+    if missing:
+        problems.append(
+            f"ledger entry {seq} lacks the fields {', '.join(missing)}"
+        )
+    other = sorted(entry.keys() - FIELDS - {SIGNERS, LEDGER})
+    if other:
+        problems.append(
+            f"ledger entry {seq} holds fields outside STND.HARN.7: "
+            + ", ".join(other)
+        )
+    if "type" in entry and entry["type"] not in TYPES:
+        problems.append(
+            f"ledger entry {seq} has the unknown type {entry['type']!r}"
+        )
+    scope = entry.get("scope")
+    if SIGNERS in entry and (
+        LEDGER in entry
+        or not isinstance(scope, list)
+        or REGISTER_ID not in scope
+    ):
+        problems.append(
+            f"ledger entry {seq} holds signers but is no transaction of "
+            f"the governance ledger whose scope names {REGISTER_ID}"
+        )
+    if entry.get(LEDGER) == GOVERNANCE:
+        problems.append(
+            f"ledger entry {seq} names the governance ledger in the field "
+            "ledger, which only another ledger's entries carry"
+        )
+    return problems
+
+
+def file_problems(text: str, entries: list[Transaction]) -> list[str]:
+    """Return how a ledger file breaks its form, its fields, or its chain.
+
+    Parameters
+    ----------
+    text : str
+        Contents of the file.
+    entries : list[Transaction]
+        Its entries, as ``parse_ledger`` reads them from ``text``.
+
+    Returns
+    -------
+    list[str]
+        The lines of ``form_problems``, then, entry by entry, those of
+        ``entry_problems`` and ``field_problems``.
+    """
+    problems = form_problems(text)
+    previous = None
+    for position, entry in enumerate(entries, start=1):
+        problems += entry_problems(entry, position, previous)
+        problems += field_problems(entry)
+        previous = entry.get("hash")
+    return problems
 
 
 def ledger_of(entry: Transaction) -> str:

@@ -5,7 +5,7 @@ description: Describes where a project that follows the governance corpus keeps 
 
 # Orienting to a project's governance
 
-The corpus of this plugin is `${CLAUDE_PLUGIN_ROOT}/governance`. A project's own records are in the project, not in the plugin. The commands below read and change nothing; ROOT stands for `"${CLAUDE_PLUGIN_ROOT}/governance"`, and each `show` runs as `PYTHONPATH="${CLAUDE_PLUGIN_ROOT}" python3 -B -m govharness show ROOT ID`, or as `govharness show ID` where the package is installed and `GOVHARNESS_ROOT` is set.
+The corpus of this plugin is `${CLAUDE_PLUGIN_ROOT}/governance`. A project's own records are in the project, not in the plugin. The commands below read and change nothing; ROOT stands for `"${CLAUDE_PLUGIN_ROOT}/governance"`, and each `show` runs as `PYTHONPATH="${CLAUDE_PLUGIN_ROOT}" python3 -B -P -m govharness show ROOT ID`, or as `govharness show ID` where the package is installed and `GOVHARNESS_ROOT` is set.
 
 ## Which mechanisms apply
 
@@ -38,7 +38,9 @@ grep -E '"type": ?"(classify|set-class)"' records/ledger.jsonl
 grep -E '"type": ?"(authorize|revoke)"' records/ledger.jsonl
 ```
 
-An authorization states its scope, duration, and the agents to which it extends (STND.DFLT.16, GUARD.12).
+An authorization states its scope and duration (STND.DFLT.16); a standing authorization that an agent proposes also states the agents to which it extends (STND.DFLT.32, GUARD.12).
+
+`PYTHONPATH="${CLAUDE_PLUGIN_ROOT}" python3 -B -P -m govharness ledger check records/ledger.jsonl`, or `govharness ledger check records/ledger.jsonl` where the package is installed, reports each line of the ledger whose form, fields, or hash chain is broken, and writes nothing.
 
 ## What the corpus says about orientation
 

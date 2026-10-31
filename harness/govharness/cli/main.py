@@ -10,8 +10,9 @@ Commands::
     pairs [ROOT] ID [--with ID ...] [--amends LVL0_ID ...]
                                           provision pairs to review before a
                                           change (STND.HARN.28)
-    onset [ROOT] CSQn                     provisions and parts that apply
-                                          from a class (unit 0023)
+    onset [ROOT] CSQn [--from CSQm]       provisions and parts that apply
+                                          from a class, or that a move
+                                          from CSQm to CSQn adds
     verify [--no-logic] [--no-z3] [--cache DIR] [ROOT]
                                           every check; exit 1 on failure
     check ROOT [--out-dir DIR] [--no-z3] [--cache DIR]
@@ -21,14 +22,16 @@ Commands::
                                           References tables (STND.DRAFT.34)
     ledger append ROOT --type ... --rationale ...
                                           append one ledger transaction
+    ledger check LEDGER [--ledger-id ID]  check a ledger file's form,
+                                          fields, and chain; write nothing
     sign {found,add-signer,close-signer,require,check} ...
                                           the signer register SIGNR
     compose ROOT (--check | --write)      reading copies in ROOT/../rendered
     compose ROOT --all DIR [--check]      a reading copy of every document
     rehearse ROOT SCRIPT                  run an amendment on a copy
 
-An omitted ``ROOT`` is ``$GOVHARNESS_ROOT``, else ``./governance``
-(unit 0022). The solve cache of ``verify`` and ``check`` is off unless
+An omitted ``ROOT`` is ``$GOVHARNESS_ROOT``, else ``./governance``.
+The solve cache of ``verify`` and ``check`` is off unless
 ``--cache DIR`` or ``$GOVHARNESS_CACHE`` names a directory.
 """
 
@@ -47,7 +50,12 @@ from govharness.cli.derived import (
     run_references,
 )
 from govharness.cli.query import add_query
-from govharness.cli.records import run_append, run_rehearse, run_sign
+from govharness.cli.records import (
+    run_append,
+    run_check_ledger,
+    run_rehearse,
+    run_sign,
+)
 from govharness.cli.reports import run_check, run_verify
 from govharness.ledger.transactions import GOVERNANCE
 
@@ -140,14 +148,14 @@ def _add_derived(sub: argparse._SubParsersAction) -> None:
 
 
 def _add_ledger(sub: argparse._SubParsersAction) -> None:
-    """Add the ``ledger append`` command.
+    """Add the ``ledger append`` and ``ledger check`` commands.
 
     Parameters
     ----------
     sub : argparse._SubParsersAction
         Subcommand registry of the main parser.
     """
-    ledger = sub.add_parser("ledger", help="append to a ledger")
+    ledger = sub.add_parser("ledger", help="append to or check a ledger")
     actions = ledger.add_subparsers(dest="ledger_command", required=True)
     append = actions.add_parser("append", help="append one transaction")
     append.add_argument("root", type=corpus_root)
@@ -166,6 +174,18 @@ def _add_ledger(sub: argparse._SubParsersAction) -> None:
     append.add_argument("--ledger-file", type=Path, default=None)
     append.add_argument("--ledger-id", default=GOVERNANCE)
     append.set_defaults(run=run_append, usage_parser=append)
+    check = actions.add_parser(
+        "check",
+        help="check a ledger file's form, fields, and chain; write nothing",
+    )
+    check.add_argument("ledger", type=Path, metavar="LEDGER")
+    check.add_argument(
+        "--ledger-id",
+        default=None,
+        metavar="ID",
+        help="the ledger the file holds; else that of its first entry",
+    )
+    check.set_defaults(run=run_check_ledger, usage_parser=check)
 
 
 def _add_sign(sub: argparse._SubParsersAction) -> None:
@@ -260,7 +280,14 @@ def main(argv: list[str]) -> int:
         The process exit code.
     """
     parser = build_parser()
-    args = parser.parse_args(argv)
+    args, extra = parser.parse_known_args(argv)
+    intermixed = getattr(args, "intermixed", None)
+    if intermixed is not None:
+        # find and context take options between their words, which the
+        # parser of subcommands cannot (argparse's intermixed parsing).
+        args = intermixed.parse_intermixed_args(argv[1:])
+    elif extra:
+        parser.error(f"unrecognized arguments: {' '.join(extra)}")
     run: Runner = args.run
     # A usage error names the subcommand whose options were wrong.
     return run(args, getattr(args, "usage_parser", parser))

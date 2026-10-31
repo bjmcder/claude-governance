@@ -9,7 +9,7 @@ The corpus in `harness/governance/` is the system of record. Every adoption and 
 | Guide | For | What it covers |
 | --- | --- | --- |
 | [installation.md](installation.md) | Anyone setting up a project | Each way to install the governance: the Claude Code plugin, a project's committed settings, the harness alone, a vendored copy, and no software at all |
-| [adoption.md](adoption.md) | The human owner of a project | Setting and raising the consequence class, what the human is asked to do at each class, and the known limitations of the corpus as it stands |
+| [adoption.md](adoption.md) | The human owner of a project | Taking up the governance, setting and raising the consequence class, and what the human is asked to do at each class |
 | [operating.md](operating.md) | People and agents working in a project | Querying the corpus, updating the plugin, and pinning a revision |
 | [custodian-guide.md](custodian-guide.md) | The custodian | How the corpus is amended and how a round of review runs |
 | [architecture.md](architecture.md) | Maintainers of the repository or the harness | The layout of the repository and of the harness package |

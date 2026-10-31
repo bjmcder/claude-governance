@@ -14,12 +14,12 @@ from govharness.core.entry import DOC_FILE
 from govharness.ledger.gpg import key_fingerprint
 from govharness.ledger.register import (
     FINGERPRINT_RE,
-    REGISTER_ID,
     skeleton,
     with_requirement,
     with_signer,
     with_signer_closed,
 )
+from govharness.ledger.transactions import REGISTER_ID
 
 
 def found_register(root: Path, date: str) -> Path:

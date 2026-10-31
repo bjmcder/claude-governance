@@ -25,13 +25,13 @@ import unicodedata
 
 from govharness.ledger.gpg import SignerConfig, signing_fingerprint
 from govharness.ledger.register import (
-    REGISTER_ID,
     SignerRegister,
     active_signers,
     applies,
 )
 from govharness.ledger.transactions import (
     GOVERNANCE,
+    REGISTER_ID,
     Transaction,
     entry_digest,
     ledger_of,

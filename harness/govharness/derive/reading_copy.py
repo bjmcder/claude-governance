@@ -231,20 +231,26 @@ def _provision_block(entry: Entry, level: str) -> str:
     Returns
     -------
     str
-        Heading, mode line with the onset beside the mode where the
-        provision carries one (unit 0023), and body, ending in a blank
-        line.
+        Heading, a line of the mode, with the onset beside it where the
+        provision carries one (unit 0023), and of what it instantiates,
+        each part only where the provision has it and the line only
+        where either part is, then the body, ending in a blank line.
     """
     meta = entry.meta
-    mode = str(meta.get("mode", "")).capitalize()
+    mode = str(meta.get("mode") or "").capitalize()
     onset = onset_of(entry)
     if onset is not None:
         said = describe(onset)
         mode = f"{mode}, {said}" if mode else said[0].upper() + said[1:]
     instantiated = ", ".join(meta.get("instantiates") or [])
+    parts = [f"{mode}."] if mode else []
+    if instantiated:
+        parts.append(f"Instantiates {instantiated}.")
+    line = " ".join(parts)
     return (
         f"{level} {meta['id']} {meta.get('title', '')}\n\n"
-        f"{mode}. Instantiates {instantiated}.\n\n{entry.body}\n\n"
+        + (f"{line}\n\n" if line else "")
+        + f"{entry.body}\n\n"
     )
 
 
