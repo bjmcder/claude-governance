@@ -60,24 +60,30 @@ def reason_field(text: str) -> tuple[str, str]:
 # ------------------------------------------------------------------------------------------------------------ CPS 1.1
 
 CPS1 = [
-    ('instantiates: ["GOV.25", "GOV.26"]', 'instantiates: ["GOV.25", "GOV.26", "GOV.12"]'),
+    ('instantiates: ["GOV.25", "GOV.26"]', 'instantiates: ["GOV.25", "GOV.26", "GOV.12", "PRIME.14"]'),
     ("This profile SHALL bind a project whose classification makes at least one attribute of the table of this "
      "provision true (GOV.25, GOV.26).",
      "This profile SHALL bind a project whose classification makes at least one attribute of the table of this "
-     "provision true (GOV.25, GOV.26). Work on a system that commands physical hardware SHALL be classified CSQ3 "
-     "or a more severe class (GOV.12)."),
+     "provision true (GOV.25, GOV.26). Work on a system that commands, configures, or powers physical hardware "
+     "SHALL be classified CSQ3 or a more severe class (GOV.12). Where a class less severe than CSQ3 is recorded "
+     "for such work, an agent SHALL halt that line of work and refer it to the human owner (PRIME.14)."),
 ]
 
 CPS_DOC = [
     ("cites PRIME.13 without instantiating it, so that the floor stays where LVL0 puts it.",
      "cites PRIME.13 without instantiating it, so that the floor stays where LVL0 puts it. CPS.1 has work on a "
-     "system that commands physical hardware classified CSQ3 or a more severe class, as GOV.12 lets a profile "
+     "system that commands, configures, or powers physical hardware classified CSQ3 or a more severe class, as "
+     "GOV.12 lets a profile "
      "require of work in its domain: a wrong command is able to damage the hardware it drives, or what that "
      "hardware acts on, a loss beyond the author's own time that the consequence test of CSQ3 in STND.CLASS.1 "
      "counts, and the minimum keeps CPS.3 to CPS.9 in reach of all such work, the revision of the hazard analysis "
-     "before an uncovered change first drives the hardware among them. A credible path to injury, or to a major and "
+     "before an uncovered change first drives the hardware among them. The human owner sets that class "
+     "(STND.CLASS.1); an agent that finds a less severe class recorded for such work halts that line of work and "
+     "refers it, so that the CSQ3 content of this profile is not left out under a class that the profile does not "
+     "admit, and the referral asks the owner only for the classification that STND.CLASS.1 already asks. A credible "
+     "path to injury, or to a major and "
      "hard-to-reverse loss, still sets CSQ0 or CSQ1 (STND.CLASS.1), and a component that the classification records "
-     "as isolated from every system that commands physical hardware keeps the class recorded for it (GOV.13)."),
+     "as isolated from every such system keeps the class recorded for it (GOV.13)."),
     ("because the failure that such content prevents reaches physical hardware at every class, where PRIME.13 and "
      "PRIME.4 hold. No provision raises the floor (GOV.11).",
      "because the failure that such content prevents reaches physical hardware at every class, where PRIME.13 and "
@@ -86,10 +92,11 @@ CPS_DOC = [
 ]
 
 CPS_READING = (
-    "CPS.1 has work on a system that commands physical hardware classified CSQ3 or a more severe class, as GOV.12 "
-    "lets a profile require of work in its domain, so that CPS.3 to CPS.9, and with them the revision of the hazard "
-    "analysis before an uncovered change first drives the hardware, reach all such work; the Notes give the reason "
-    "and the floor argument")
+    "CPS.1 has work on a system that commands, configures, or powers physical hardware classified CSQ3 or a more "
+    "severe class, as GOV.12 lets a profile require of work in its domain, so that CPS.3 to CPS.9, and with them the "
+    "revision of the hazard analysis before an uncovered change first drives the hardware, reach all such work, and "
+    "has an agent that finds a less severe class recorded for such work halt that line of work and refer it "
+    "(PRIME.14); the Notes give the reason and the floor argument")
 
 
 def apply_cps(root: Path, at: str) -> None:
@@ -102,8 +109,12 @@ def apply_cps(root: Path, at: str) -> None:
         f"Minor amendment of CPS, revision 1.1, ratified by the custodian on {date}: {CPS_READING}. Reading: GOV.12 "
         "provides that a profile MAY require work in its domain to be classified at least as severe as a stated "
         "class, and STND.CLASS.1 has the human owner set the class that a selected profile requires; the domain "
-        "items of CPS are the systems that command physical hardware, so the minimum reaches work on such a system "
-        "and leaves a component recorded as isolated from them under GOV.13. The change is minor under "
+        "items of CPS are the systems that command, configure, or power physical hardware, the reach of the "
+        "attribute Physical hardware control, so the minimum reaches work on such a system and leaves a component "
+        "recorded as isolated from them under GOV.13; the classification stays the human owner's act, and an agent "
+        "that finds a less severe class recorded for such work halts that line of work and refers it (PRIME.14), so "
+        "that the CSQ3 content of the profile is not silently left out under the recorded class. The change is minor "
+        "under "
         "STND.IDENT.3 because it adds an obligation, without altering the motivation or intent of the governance. "
         "Floor (GOV.11): the floor is the set of GOV.10, which holds at every class and is unchanged; the minimum "
         "places work of the domain in a class by the means that GOV.12 itself gives a profile, and the obligations "
@@ -113,11 +124,14 @@ def apply_cps(root: Path, at: str) -> None:
         "time that the consequence test of CSQ3 in STND.CLASS.1 counts and that STND.CLASS.2 already counts met in "
         "doubt. The obligations fall on work at the decisions that the human owner already makes, the "
         "classification and the adoption of the hazard analysis under PRIME.13, and ask of the owner no decision "
-        "beyond those LVL0 assigns (STND.DRAFT.42). Alternative weighed: PRIME.13 carrying the revision duty at "
+        "beyond those LVL0 assigns (STND.DRAFT.42); the referral of the second sentence asks only for the "
+        "classification that STND.CLASS.1 already asks, and it instantiates PRIME.14, which holds at every class. "
+        "Alternative weighed: PRIME.13 carrying the revision duty at "
         "every class, which amends a prime directive and is put to the custodian with the recommendation. "
-        "Transition (GOV.42): a project whose classification records CSQ4 for work on a system that commands "
-        "physical hardware records CSQ3 or a more severe class for it before that system next drives the hardware, "
-        "and until then the work, conforming to revision 1.0.2, is not in defect. "
+        "Transition (GOV.42): a project whose classification records CSQ4 for work on a system that commands, "
+        "configures, or powers physical hardware records CSQ3 or a more severe class for it before that system next "
+        "drives the hardware; the referral of an agent that meets such a record is the occasion for it, and until the "
+        "class is recorded the work, conforming to revision 1.0.2, is not in defect. "
         + cite("S7", "R7") + F.AUTHOR)
     F.finish(root, "CPS", "CPS", "1.0.2", "1.1", row, rationale, at)
 
@@ -134,8 +148,15 @@ NUMER_DOC = [(
     "from the rule of STND.CLASS: an order test, an estimate of rounding error under conditioning, a showing that "
     "the working precision keeps that error within the required precision, evidence that a statistical uncertainty "
     "has settled as the samples grow, and the error rates of a statistical criterion each cost an analysis or added "
-    "computations rather than one statement, and the default methods for each are those of STND.VVUQ beyond its "
-    "core, which start at CSQ2, while VV.1, VV.5, and PRIME.3 hold for such results at CSQ3 in full."),
+    "computations rather than one statement, and STND.VVUQ gives its default method for each only from CSQ2. The "
+    "core of STND.VVUQ still reaches two of them at CSQ3: STND.VVUQ.7 places a tolerance within its bracket, with "
+    "the required precision as the departure to detect, and tiers 3 and 5 of the table of STND.VVUQ.1 rest the "
+    "agreement of a comparison on an estimate of rounding error and on a criterion with stated error rates; HW.QPU.6 "
+    "and HDES.ASIC.5 keep the content of NUMER.23 and NUMER.25 at CSQ3 within their domains. VV.1, VV.5, NUMER.13, "
+    "and PRIME.3 hold for these results at CSQ3 in full, so a result of CSQ3 that lacks the evidence that a moved "
+    "part would supply has the component concerned marked not assessed under NUMER.13, and carries the label "
+    "unverified of PRIME.3 where it lacks the evidence that VV requires. The third sentence of NUMER.5 keeps CSQ3 "
+    "and governs a record of the working precision that work below CSQ2 keeps by choice."),
 ]
 
 NUMER_READING = (
@@ -159,8 +180,10 @@ def apply_numer(root: Path, at: str) -> None:
         "STND.VVUQ.37 for NUMER.12, STND.VVUQ.9, STND.VVUQ.36, STND.VVUQ.37, and STND.VVUQ.38 for the second "
         "sentence of NUMER.5, the second sentence of STND.VVUQ.61 for the second sentence of NUMER.23, and "
         "STND.VVUQ.33 to STND.VVUQ.35 and STND.VVUQ.65 for NUMER.25, start at CSQ2, and the core that applies "
-        "from CSQ3 gives a method for none of them, so that the Notes of STND.CLASS admit a more severe class for "
-        "each. The change is minor under STND.IDENT.3 because it alters the class from which five obligations "
+        "from CSQ3 gives a method for none of them, reaching NUMER.12 and NUMER.25 only through tiers 3 and 5 of "
+        "STND.VVUQ.1 and through STND.VVUQ.7, so that the Notes of STND.CLASS admit a more severe class for each; a "
+        "result of CSQ3 without the evidence that a moved part would supply has the component marked not assessed "
+        "(NUMER.13), and carries the label unverified where it lacks the evidence that VV requires (PRIME.3). The change is minor under STND.IDENT.3 because it alters the class from which five obligations "
         "apply, without altering the motivation or intent of the governance. Floor (GOV.11): moving an onset from "
         "CSQ3 to CSQ2 narrows a waivable default to more severe work, so it lowers no floor and raises none; the "
         "floor of GOV.10 is unchanged, and VV.1, VV.5, and PRIME.3, which these parts serve, apply to work of CSQ3 "
@@ -178,17 +201,20 @@ ML_DOC = [
      "| Learned model use | An attribute, true when the classification records that a learned model sits, or is "
      "admitted to sit, on a path that affects a result the work reports or relies on, or physical hardware. A "
      "learned model in its use as the model through which an agent does the work does not make the attribute "
-     "true. |"),
+     "true. That exclusion does not reach a learned model that the work builds, trains, or runs as part of what it "
+     "delivers, even when it is the model of an agent. |"),
     ("The models through which agents do the work are governed by the agent practice profile (AGENT) and the "
      "Safeguards Article (GUARD), not by this profile.",
      "The term Learned model use leaves out the model through which an agent does the work, which the agent "
-     "practice profile (AGENT) and the Safeguards Article (GUARD) govern; a learned model that the work itself "
-     "places on such a path makes the attribute true, whatever else it is used for."),
+     "practice profile (AGENT) and the Safeguards Article (GUARD) govern, and keeps a learned model that the work "
+     "builds, trains, or runs as part of what it delivers, even when an agent uses that model too."),
 ]
 
 ML_READING = (
     "the term Learned model use leaves out a learned model in its use as the model through which an agent does the "
-    "work, an exclusion that only the informative Selector text stated before, and the Selector text cites the term")
+    "work, an exclusion that only the informative Selector text stated before, and keeps a learned model that the "
+    "work builds, trains, or runs as part of what it delivers, even when it is the model of an agent; the Selector "
+    "text cites the term")
 
 
 def apply_ml(root: Path, at: str) -> None:
@@ -199,7 +225,8 @@ def apply_ml(root: Path, at: str) -> None:
         f"Minor amendment of ML, revision 1.1, ratified by the custodian on {date}: {ML_READING}. Reading: taken "
         "literally, the agent's own model sits on the path of every result that the agent produces, so the "
         "attribute was true for every project in which an agent works, against the Selector text; the term now "
-        "says what the Selector text said, and a learned model that the work itself uses stays in. The change is "
+        "says what the Selector text said, and bounds it, so that a project that builds, trains, or runs a learned model "
+        "as part of what it delivers, an agent among such products, keeps the attribute. The change is "
         "minor under STND.IDENT.3 because it alters a defined meaning, without altering the motivation or intent "
         "of the governance. Floor (GOV.11): the change raises no obligation; it narrows the selector of this "
         "profile to the reach that its Notes always gave it, and the agent's model stays under GOV.48, AGENT, and "
@@ -219,9 +246,10 @@ VVUQ_DOC = [(
     "NUMER.5 and NUMER.23, whose default methods are among them. Work of CSQ3 meets each other provision of NUMER "
     "through the core where the core reaches it, and otherwise by a method that the work chooses or by the "
     "statement that the provision admits, a component of NUMER.13 marked not assessed among them, while the "
-    "obligations of LVL0 that the other provisions serve apply to it in full; a comparison at CSQ3 that takes tier "
-    "3 of STND.VVUQ.1 still sets its tolerance from an estimate of rounding error of the kind that NUMER.12 "
-    "describes."),
+    "obligations of LVL0 that the other provisions serve apply to it in full. For a comparison that takes tier 3, "
+    "the table of STND.VVUQ.1 gives a tolerance set from an estimate of rounding error of the kind that NUMER.12 "
+    "describes, and for one that takes tier 5, a criterion with a stated probability of rejecting a correct result "
+    "and a stated detection power, the content of NUMER.25."),
 ]
 
 VVUQ_READING = (
@@ -318,14 +346,14 @@ def apply_deps(root: Path, at: str) -> None:
 
 # ---------------------------------------------------------------------------------------------------- STND.DOCS 1.0.3
 
-LEAD = ("An agent configuration works across projects under the same agent instructions (STND.DFLT.21), so a rule of "
-        "agent conduct holds alike in each project only where it binds in all; ")
+CARRY = ("; as a binding provision it reaches every agent in every project, since STND.INSTR.10 has an agent meet "
+         "each binding provision of an adopted standard whose sentence names an agent as its actor (GOV.48), so ")
 
 DOCS10_REASON = (
-    LEAD + "the human owner and the reviewers of every project verify the text that an agent writes against the work "
+    "The human owner and the reviewers of every project verify the text that an agent writes against the work "
     "(INTPR.1), and inflated or generic prose, notes about the agent, and known false statements defeat that check "
-    "at every class, so one rule for every agent lets each reader rely on agent-written text without first learning "
-    "the class of the work, while the spelling, content, and patterns stay each project's through the alternatives "
+    "at every class" + CARRY + "each reader relies on agent-written text without first learning the class of the "
+    "work, while the spelling, content, and patterns stay each project's through the alternatives "
     "it adopts.")
 
 DOCS_DOC = [(
@@ -371,9 +399,9 @@ CXX2 = [(
 ]
 
 CXX3_REASON = (
-    LEAD + "an agent that meets a compiler error in any project is able to clear it by lowering the edition, which "
-    "loses the edition in force silently, so one rule for every agent keeps each lowering visible in a decision "
-    "record, at the cost of one sentence, while the edition itself stays each project's (STND.CXX.2 or its "
+    "An agent that meets a compiler error in any project is able to clear it by lowering the edition, which loses "
+    "the edition in force silently" + CARRY + "each lowering is visible in a decision record in every project, at "
+    "the cost of one sentence, while the edition itself stays each project's (STND.CXX.2 or its "
     "alternative).")
 
 CXX3_BODY = (
@@ -429,9 +457,9 @@ def apply_cxx(root: Path, at: str) -> None:
 # ------------------------------------------------------------------------------------------------------ STND.PY 1.5.1
 
 PY4_REASON = (
-    LEAD + "code that an agent writes moves between projects and between classes, and an annotation costs the agent "
-    "only the form of that code while its absence costs a rewrite at each reclassification, so one rule for every "
-    "agent keeps agent-written Python ready for the checker that a project of every class is able to adopt, while "
+    "Code that an agent writes moves between projects and between classes, and an annotation costs the agent only "
+    "the form of that code while its absence costs a rewrite at each reclassification" + CARRY + "agent-written "
+    "Python is ready in every project for the checker that the project adopts, while "
     "the form stays each project's through the alternative it adopts in place of STND.PY.3.")
 
 PY_DOC = [(
@@ -456,9 +484,9 @@ def apply_py(root: Path, at: str) -> None:
 # ---------------------------------------------------------------------------------------------------- STND.RUST 1.5.1
 
 RUST6_REASON = (
-    LEAD + "unsafe code that an agent writes without its soundness argument compiles and passes its tests in every "
-    "project, while it leaves a reviewer nothing to check the code against, so one rule for every agent lets the "
-    "reviewers of every project rely on finding the argument at agent-written unsafe code, while its form stays each "
+    "Unsafe code that an agent writes without its soundness argument compiles and passes its tests in every "
+    "project, while it leaves a reviewer nothing to check the code against" + CARRY + "the reviewers of every "
+    "project find the argument at agent-written unsafe code, while its form stays each "
     "project's (STND.RUST.3 or its alternative).")
 
 RUST_DOC = [(
