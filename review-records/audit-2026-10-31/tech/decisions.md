@@ -8,7 +8,7 @@ Ten transactions, one per document, each a GOV.41 amend by The Custodian, role c
 
 | k | Document | Revision | Class | Findings |
 | --- | --- | --- | --- | --- |
-| 0 | CPS | 1.0.2 to 1.1 | Minor | S7 (R7) |
+| 0 | CPS | 1.0.2 to 1.1 (CPS.1 amended, CPS.10 new) | Minor | S7 (R7) |
 | 1 | NUMER | 1.4.1 to 1.5 | Minor | O3 |
 | 2 | ML | 1.0.2 to 1.1 | Minor | I7 |
 | 3 | STND.VVUQ | 1.5.1 to 1.5.2 | Editorial | O3 |
@@ -25,15 +25,19 @@ ML and NUMER cite each other, and the standards cite each other in cycles, so no
 
 **Mechanism.** GOV.12 ends: "A profile MAY require work in its domain to be classified at least as severe as a stated class." STND.CLASS.1 has the human owner set, among the classes it lists, "the class that a selected profile requires (GOV.12)". So the text supports option (a) as R7 states it, and it needs no LVL0 change. No profile used the permission before.
 
-CPS.1 gains two sentences, and GOV.12 and PRIME.14 in `instantiates`:
+CPS.1 gains a second sentence and GOV.12 in `instantiates`, and a new provision, CPS.10 Lower class referral (section Application, `instantiates: ["PRIME.14"]`, `refers_to: ["CPS.1"]`), carries what an agent does where a lower class is recorded:
 
-> This profile SHALL bind a project whose classification makes at least one attribute of the table of this provision true (GOV.25, GOV.26). Work on a system that commands, configures, or powers physical hardware SHALL be classified CSQ3 or a more severe class (GOV.12). Where a class less severe than CSQ3 is recorded for such work, an agent SHALL halt that line of work and refer it to the human owner (PRIME.14).
+> This profile SHALL bind a project whose classification makes at least one attribute of the table of this provision true (GOV.25, GOV.26). Work on a system that commands, configures, or powers physical hardware SHALL be classified CSQ3 or a more severe class (GOV.12).
 
-The subject is the work on a system that commands, configures, or powers physical hardware, the full reach of the attribute Physical hardware control and of PRIME.13, and the domain item of CPS (STND.DRAFT.37). It is not the whole project, so a component that the classification records as isolated from every such system keeps its own class under GOV.13. The human owner sets the class (STND.CLASS.1). The third sentence says what an agent does when a lower class is recorded for such work: it halts that line of work and refers it (PRIME.14). Without that sentence, CPS.3 to CPS.9, whose onset is CSQ3, would not apply under the recorded class. Through PRIME.14, CPS.1 now derives rank 0. It stays non-waivable, and it has no field `onset`. It holds three modals, the limit of STND.DRAFT, and findings.py lists the review finding g.18 on it ("confirm the bundle is never applied apart"). The bundle is the selector, the minimum it brings, and what an agent does when the minimum is not met, so the three sentences apply together.
+> CPS.10: Where a class less severe than the class that CPS.1 requires is recorded for work on a system that commands, configures, or powers physical hardware, an agent SHALL halt that line of work and refer it to the human owner (PRIME.14).
+
+The subject of CPS.1 is the work on a system that commands, configures, or powers physical hardware, the full reach of the attribute Physical hardware control and of PRIME.13, and the domain item of CPS (STND.DRAFT.37). It is not the whole project, so a component that the classification records as isolated from every such system keeps its own class under GOV.13. The human owner sets the class (STND.CLASS.1). Without CPS.10, CPS.3 to CPS.9, whose onset is CSQ3, would not apply under a recorded lower class. The halt and referral are a provision of their own, not a third sentence of CPS.1, for two reasons. CPS.1 keeps two modals, so the corpus keeps the three-modal warning only on the bundles of STND.DRAFT that the test suite confirms. And the selector keeps its own lineage. CPS.1 still reaches only GOV, so it keeps rank null and stays non-waivable. CPS.10 instantiates PRIME.14, so it derives rank 0 and non-waivability (GOV.17, check l.3). That rank is intended, since the provision is an instance of a prime directive. A binding, non-waivable provision carries no field `onset`. An LVL1 provision carries no mode.
 
 The Notes gain, after the sentence on PRIME.13:
 
-> CPS.1 has work on a system that commands, configures, or powers physical hardware classified CSQ3 or a more severe class, as GOV.12 lets a profile require of work in its domain: a wrong command is able to damage the hardware it drives, or what that hardware acts on, a loss beyond the author's own time that the consequence test of CSQ3 in STND.CLASS.1 counts, and the minimum keeps CPS.3 to CPS.9 in reach of all such work, the revision of the hazard analysis before an uncovered change first drives the hardware among them. The human owner sets that class (STND.CLASS.1); an agent that finds a less severe class recorded for such work halts that line of work and refers it, so that the CSQ3 content of this profile is not left out under a class that the profile does not admit, and the referral asks the owner only for the classification that STND.CLASS.1 already asks. A credible path to injury, or to a major and hard-to-reverse loss, still sets CSQ0 or CSQ1 (STND.CLASS.1), and a component that the classification records as isolated from every such system keeps the class recorded for it (GOV.13).
+> CPS.1 has work on a system that commands, configures, or powers physical hardware classified CSQ3 or a more severe class, as GOV.12 lets a profile require of work in its domain: a wrong command is able to damage the hardware it drives, or what that hardware acts on, a loss beyond the author's own time that the consequence test of CSQ3 in STND.CLASS.1 counts, and the minimum keeps CPS.3 to CPS.9 in reach of all such work, the revision of the hazard analysis before an uncovered change first drives the hardware among them. The human owner sets that class (STND.CLASS.1); under CPS.10, an agent that finds a less severe class recorded for such work halts that line of work and refers it, so that the CSQ3 content of this profile is not left out under a class that the profile does not admit, and the referral asks the owner only for the classification that STND.CLASS.1 already asks. A credible path to injury, or to a major and hard-to-reverse loss, still sets CSQ0 or CSQ1 (STND.CLASS.1), and a component that the classification records as isolated from every such system keeps the class recorded for it (GOV.13).
+
+The class paragraph opens: "Every provision other than the selector, the shared-matters provision, and CPS.10, which instantiates PRIME.14 and binds at every class, instantiates only VV, …".
 
 and the closing sentence of the class paragraph becomes:
 
@@ -43,11 +47,11 @@ and the closing sentence of the class paragraph becomes:
 - The floor is the set of GOV.10, which holds at every class. The minimum leaves it unchanged.
 - The minimum places work of a domain in a class by the means that LVL0 itself gives a profile (GOV.12). The obligations it brings are the ones above the floor that GOV.11 proportions to CSQ3.
 - It proportions them to the consequence, as GOV.11 and PRIN.9 ask, not to the setting or the hardware of the work. A wrong command is able to damage the hardware it drives. That is a loss beyond the author's own time, which the consequence test of CSQ3 in STND.CLASS.1 counts and which STND.CLASS.2 already counts as met in doubt. So the minimum records what the criteria give for the domain, and removes the doubt.
-- It asks no decision of the human owner beyond the classification and the adoption of the hazard analysis under PRIME.13, which LVL0 already assigns (STND.DRAFT.42). The referral of the third sentence asks only for the classification that STND.CLASS.1 already requires. It instantiates PRIME.14, which holds at every class, so it adds nothing to the floor.
+- It asks no decision of the human owner beyond the classification and the adoption of the hazard analysis under PRIME.13, which LVL0 already assigns (STND.DRAFT.42). The referral of CPS.10 asks only for the classification that STND.CLASS.1 already requires. CPS.10 instantiates PRIME.14, which holds at every class, so it adds nothing to the floor.
 
 It fits the LVL0 part as drafted. GOV.13 there presumes CSQ4 until a class is recorded, and that presumption never covers driving physical hardware.
 
-**Transition (GOV.42).** A project whose classification records CSQ4 for work on a system that commands, configures, or powers physical hardware records CSQ3 or a more severe class for that work before the system next drives the hardware. An agent's referral under the third sentence is the occasion for that record. Until the class is recorded, work that conforms to revision 1.0.2 is not in defect.
+**Transition (GOV.42).** A project whose classification records CSQ4 for work on a system that commands, configures, or powers physical hardware records CSQ3 or a more severe class for that work before the system next drives the hardware. An agent's referral under CPS.10 is the occasion for that record. Until the class is recorded, work that conforms to revision 1.0.2 is not in defect.
 
 **For the custodian at ratification.**
 1. Option (a) of R7 is drafted. Option (b), PRIME.13 carrying the revision duty at every class, amends a prime directive. A third mechanism was weighed and is not recommended: setting the field `onset` of CPS.3, and of CPS.5, CPS.6, and CPS.9, to null, so that they apply at every class. GOV.19 marks these provisions default, and an onset of null for a default above the floor raises the floor at CSQ4, which GOV.11 admits only by a recorded project decision that names the consequence. It also leaves the other CPS provisions at CSQ3, so a CSQ4 bench project would owe the revision of CPS.3 without the command record of CPS.7. The minimum class keeps the profile whole and uses the means that GOV.12 provides. *Recommendation: (a), as drafted.*
@@ -162,7 +166,8 @@ The Notes of each standard add, where they say that the provision binds by its o
 
 | Provision | Modals | Conditions first | Excluded expressions, qualifiers, quantifiers | Body IDs equal `instantiates` plus `refers_to` | `onset` |
 | --- | --- | --- | --- | --- | --- |
-| CPS.1 | 3 (g.18 review, explained above) | yes | none | GOV.25, GOV.26, GOV.12, PRIME.14 | none (non-waivable, rank 0) |
+| CPS.1 | 2 | none | none | GOV.25, GOV.26, GOV.12 | none (non-waivable, rank null) |
+| CPS.10 (new; title of three words, distinct) | 1 | yes | none | PRIME.14, CPS.1 | none (binding, rank 0) |
 | STND.CODE.30 | 2 | yes | none | REPRO.3, REPRO.6 | CSQ3, unchanged |
 | STND.CXX.2 | 3, unchanged | yes | none | unchanged | CSQ3, unchanged |
 | STND.CXX.3 | 2 | yes | none | GOV.48, DSGN.3, STND.CXX.2 | none (binding) |
@@ -176,8 +181,8 @@ No title changes. "Such as" and "for example" appear in no drafted text. The Ref
 - `PARTS=apply_audit_lvl0_2026_10_31,apply_audit_tech_2026_10_31 … rehearse`, on the lvl0 part as it stood after the review revisions: every check passes, with only g.18.
 - On a kept copy: `references --check` passes, and `compose --check` reports nothing stale.
 - `pairs`: see `pairs-changed.md`. Only the NUMER provisions have pairs on their changed side, and no pair is a conflict.
-- `findings.py` over the ten documents shows two differences from before. The text of the existing review finding g.11 on STND.CXX.3 (a negated modal over a list) changes, because its list gains "the dependency"; it is the same construct as before, and STND.STDC.3 has it too. The review finding g.18 on CPS.1 is new; it is explained under S7.
-- `pairs` on CPS.1 after the revision: no pair.
+- `findings.py` over the ten documents: the only difference from before is the text of the existing review finding g.11 on STND.CXX.3 (a negated modal over a list), whose list gains "the dependency". It is the same construct as before, and STND.STDC.3 has it too. No new g.18 finding. In `verify`, g.18 warns only on STND.DRAFT.35, .39, and .42, as before.
+- `pairs` on CPS.1 and CPS.10 after the revision: no pair.
 
 ## Review and dispositions
 
@@ -185,7 +190,7 @@ The cold review is `review.md` in this folder.
 
 | Finding | Disposition | Reason |
 | --- | --- | --- |
-| T1, CPS.1 scope and a recorded lower class | Fixed | The minimum names the full reach of the attribute: "commands, configures, or powers". A third sentence has an agent that finds a less severe class recorded for such work halt that line of work and refer it (PRIME.14), as directed. The review proposed instead that the agent apply the CSQ3 obligations. That was not taken, since it would have the agent override a classification that is the owner's act. The Notes, the rationale, and the transition follow. The three modals bring a g.18 review finding, explained under S7. |
+| T1, CPS.1 scope and a recorded lower class | Fixed | CPS.1 names the full reach of the attribute: "commands, configures, or powers". New CPS.10 has an agent that finds a less severe class recorded for such work halt that line of work and refer it (PRIME.14), as directed. It is a provision of its own, so that CPS.1 keeps two modals and adds no g.18 finding. The review proposed instead that the agent apply the CSQ3 obligations; that was not taken, since it would have the agent override a classification that is the owner's act. The Notes (including the class paragraph, which now excepts CPS.10), the rationale, and the transition follow. |
 | T2, the CSQ3 consequence, and sentence 3 of NUMER.5 | Fixed | The NUMER Notes say that a result of CSQ3 lacking the evidence a moved part would supply has the component marked not assessed (NUMER.13), and carries the label unverified where it lacks the evidence that VV requires (PRIME.3). They also say that sentence 3 of NUMER.5 keeps CSQ3 and governs a record kept by choice below CSQ2. |
 | T3, the circular opening of the binding reasons | Fixed | The shared opening, which cited STND.DFLT.21 for something that provision does not say, is gone. Each field opens with its own reason, then states what holds: STND.INSTR.10 has an agent meet each binding provision of an adopted standard whose sentence names an agent as its actor (GOV.48). |
 | T4, Notes overstatement | Fixed | The STND.VVUQ Note now describes what the table of STND.VVUQ.1 gives for tiers 3 and 5, with no indicative obligation. The NUMER Notes name what the core keeps at CSQ3 (STND.VVUQ.7, and tiers 3 and 5 of STND.VVUQ.1) and the domain tightenings of HW.QPU.6 and HDES.ASIC.5. |

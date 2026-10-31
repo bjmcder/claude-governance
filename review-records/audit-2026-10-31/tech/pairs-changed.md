@@ -1,7 +1,7 @@
 # Pairs whose changed side is a provision of part tech
 
 Made with `python3 -B -m govharness pairs <copy> ID` on a kept copy with the part applied, for each changed document and each changed provision (STND.HARN.28).
-The changes to CPS.1, STND.CODE.30, STND.CXX.2, STND.CXX.3, STND.DOCS.10, STND.PY.4, and STND.RUST.6 have no pair. The term changed in ML has none either: the ML pairs all have ML.5, which is unchanged, on their changed side.
+The changes to CPS.1, the new CPS.10, STND.CODE.30, STND.CXX.2, STND.CXX.3, STND.DOCS.10, STND.PY.4, and STND.RUST.6 have no pair. The term changed in ML has none either: the ML pairs all have ML.5, which is unchanged, on their changed side.
 STND.VVUQ, STND.DEPS, STND.DOCS, STND.PY, and STND.RUST have no pair at the level of the document.
 The NUMER pairs below all bear on the change of field `onset`. The text of each NUMER provision is unchanged.
 

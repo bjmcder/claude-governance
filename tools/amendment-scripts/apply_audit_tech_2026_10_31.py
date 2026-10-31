@@ -60,14 +60,21 @@ def reason_field(text: str) -> tuple[str, str]:
 # ------------------------------------------------------------------------------------------------------------ CPS 1.1
 
 CPS1 = [
-    ('instantiates: ["GOV.25", "GOV.26"]', 'instantiates: ["GOV.25", "GOV.26", "GOV.12", "PRIME.14"]'),
+    ('instantiates: ["GOV.25", "GOV.26"]', 'instantiates: ["GOV.25", "GOV.26", "GOV.12"]'),
     ("This profile SHALL bind a project whose classification makes at least one attribute of the table of this "
      "provision true (GOV.25, GOV.26).",
      "This profile SHALL bind a project whose classification makes at least one attribute of the table of this "
      "provision true (GOV.25, GOV.26). Work on a system that commands, configures, or powers physical hardware "
-     "SHALL be classified CSQ3 or a more severe class (GOV.12). Where a class less severe than CSQ3 is recorded "
-     "for such work, an agent SHALL halt that line of work and refer it to the human owner (PRIME.14)."),
+     "SHALL be classified CSQ3 or a more severe class (GOV.12)."),
 ]
+
+CPS10 = "\n".join([
+    "---", 'id: "CPS.10"', 'level: "LVL1"', 'kind: "provision"', 'title: "Lower class referral"',
+    'section: "Application"', 'status: "adopted"', 'adopted: "{date}"', 'instantiates: ["PRIME.14"]',
+    'refers_to: ["CPS.1"]', "rank: null", "waivable: false", "defines: []", 'checked_by: ["review"]', "---", "",
+    "Where a class less severe than the class that CPS.1 requires is recorded for work on a system that commands, "
+    "configures, or powers physical hardware, an agent SHALL halt that line of work and refer it to the human owner "
+    "(PRIME.14).", ""])
 
 CPS_DOC = [
     ("cites PRIME.13 without instantiating it, so that the floor stays where LVL0 puts it.",
@@ -78,12 +85,15 @@ CPS_DOC = [
      "hardware acts on, a loss beyond the author's own time that the consequence test of CSQ3 in STND.CLASS.1 "
      "counts, and the minimum keeps CPS.3 to CPS.9 in reach of all such work, the revision of the hazard analysis "
      "before an uncovered change first drives the hardware among them. The human owner sets that class "
-     "(STND.CLASS.1); an agent that finds a less severe class recorded for such work halts that line of work and "
-     "refers it, so that the CSQ3 content of this profile is not left out under a class that the profile does not "
+     "(STND.CLASS.1); under CPS.10, an agent that finds a less severe class recorded for such work halts that line "
+     "of work and refers it, so that the CSQ3 content of this profile is not left out under a class that the profile does not "
      "admit, and the referral asks the owner only for the classification that STND.CLASS.1 already asks. A credible "
      "path to injury, or to a major and "
      "hard-to-reverse loss, still sets CSQ0 or CSQ1 (STND.CLASS.1), and a component that the classification records "
      "as isolated from every such system keeps the class recorded for it (GOV.13)."),
+    ("Every provision other than the selector and the shared-matters provision instantiates only VV,",
+     "Every provision other than the selector, the shared-matters provision, and CPS.10, which instantiates PRIME.14 "
+     "and binds at every class, instantiates only VV,"),
     ("because the failure that such content prevents reaches physical hardware at every class, where PRIME.13 and "
      "PRIME.4 hold. No provision raises the floor (GOV.11).",
      "because the failure that such content prevents reaches physical hardware at every class, where PRIME.13 and "
@@ -95,15 +105,16 @@ CPS_READING = (
     "CPS.1 has work on a system that commands, configures, or powers physical hardware classified CSQ3 or a more "
     "severe class, as GOV.12 lets a profile require of work in its domain, so that CPS.3 to CPS.9, and with them the "
     "revision of the hazard analysis before an uncovered change first drives the hardware, reach all such work, and "
-    "has an agent that finds a less severe class recorded for such work halt that line of work and refer it "
-    "(PRIME.14); the Notes give the reason and the floor argument")
+    "new CPS.10 has an agent that finds a less severe class recorded for such work halt that line of work and "
+    "refer it (PRIME.14); the Notes give the reason and the floor argument")
 
 
 def apply_cps(root: Path, at: str) -> None:
     date = at[:10]
     replace_text(root, "CPS/1.md", CPS1)
+    (root / "CPS/10.md").write_text(CPS10.format(date=date), encoding="utf-8")
     replace_text(root, "CPS/_doc.md", CPS_DOC)
-    F.check_fields(root, ["CPS.1"], binding=True)
+    F.check_fields(root, ["CPS.1", "CPS.10"], binding=True)
     row = f"| 1.1 | {date} | Minor amendment (GOV.41): {CPS_READING}. |"
     rationale = (
         f"Minor amendment of CPS, revision 1.1, ratified by the custodian on {date}: {CPS_READING}. Reading: GOV.12 "
@@ -111,11 +122,12 @@ def apply_cps(root: Path, at: str) -> None:
         "class, and STND.CLASS.1 has the human owner set the class that a selected profile requires; the domain "
         "items of CPS are the systems that command, configure, or power physical hardware, the reach of the "
         "attribute Physical hardware control, so the minimum reaches work on such a system and leaves a component "
-        "recorded as isolated from them under GOV.13; the classification stays the human owner's act, and an agent "
-        "that finds a less severe class recorded for such work halts that line of work and refers it (PRIME.14), so "
+        "recorded as isolated from them under GOV.13; the classification stays the human owner's act, and under new "
+        "CPS.10, a provision of its own so that CPS.1 keeps two modals, an agent that finds a less severe class "
+        "recorded for such work halts that line of work and refers it (PRIME.14), so "
         "that the CSQ3 content of the profile is not silently left out under the recorded class. The change is minor "
         "under "
-        "STND.IDENT.3 because it adds an obligation, without altering the motivation or intent of the governance. "
+        "STND.IDENT.3 because it adds obligations, without altering the motivation or intent of the governance. "
         "Floor (GOV.11): the floor is the set of GOV.10, which holds at every class and is unchanged; the minimum "
         "places work of the domain in a class by the means that GOV.12 itself gives a profile, and the obligations "
         "that it brings to work that was CSQ4, CPS.3 to CPS.9 among them, are the obligations above the floor that "
@@ -124,13 +136,14 @@ def apply_cps(root: Path, at: str) -> None:
         "time that the consequence test of CSQ3 in STND.CLASS.1 counts and that STND.CLASS.2 already counts met in "
         "doubt. The obligations fall on work at the decisions that the human owner already makes, the "
         "classification and the adoption of the hazard analysis under PRIME.13, and ask of the owner no decision "
-        "beyond those LVL0 assigns (STND.DRAFT.42); the referral of the second sentence asks only for the "
-        "classification that STND.CLASS.1 already asks, and it instantiates PRIME.14, which holds at every class. "
+        "beyond those LVL0 assigns (STND.DRAFT.42); the referral of CPS.10 asks only for the classification that "
+        "STND.CLASS.1 already asks, and CPS.10 instantiates PRIME.14, which holds at every class, so it binds with "
+        "rank 0 and is non-waivable (GOV.17), while CPS.1 keeps rank null. "
         "Alternative weighed: PRIME.13 carrying the revision duty at "
         "every class, which amends a prime directive and is put to the custodian with the recommendation. "
         "Transition (GOV.42): a project whose classification records CSQ4 for work on a system that commands, "
         "configures, or powers physical hardware records CSQ3 or a more severe class for it before that system next "
-        "drives the hardware; the referral of an agent that meets such a record is the occasion for it, and until the "
+        "drives the hardware; the referral of an agent under CPS.10 that meets such a record is the occasion for it, and until the "
         "class is recorded the work, conforming to revision 1.0.2, is not in defect. "
         + cite("S7", "R7") + F.AUTHOR)
     F.finish(root, "CPS", "CPS", "1.0.2", "1.1", row, rationale, at)
