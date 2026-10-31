@@ -700,7 +700,7 @@ class HeldBehavior(unittest.TestCase):
         self.assertIn("- LVL0: 1.6 does not follow the row above", details)
 
     def test_major_step(self) -> None:
-        """Behavior: a major step to 2.0 passes v.3.
+        """Behavior: a major step to the next major revision passes v.3.
 
         Reference: the table of STND.IDENT.3 (Major raises the major
         segment and resets the others); QA.8 part C, M5, the mutation
@@ -708,7 +708,7 @@ class HeldBehavior(unittest.TestCase):
         """
 
         def major(index: Index, ledger: Ledger) -> None:
-            """Raise LVL0 to 2.0 by a major amendment.
+            """Raise LVL0 to its next major revision by a major amendment.
 
             Parameters
             ----------
@@ -718,10 +718,11 @@ class HeldBehavior(unittest.TestCase):
             ledger : Ledger
                 Copy of the ledger entries; changed in place.
             """
+            step = f"{int(index['LVL0'].meta['revision'].split('.')[0]) + 1}.0"
             _history_row(
-                "| 2.0 | 2026-10-12 | Major amendment (GOV.40): x. |"
+                f"| {step} | 2026-10-12 | Major amendment (GOV.40): x. |"
             )(index, ledger)
-            index["LVL0"].meta["revision"] = "2.0"
+            index["LVL0"].meta["revision"] = step
 
         self.assertEqual(result(major, "v.3"), ("PASS", []))
 

@@ -587,18 +587,19 @@ class HeldBehavior(unittest.TestCase):
         back to the reserved clause.
 
         Reference: PRIME.6 and GUARD.5; QA.8 part C, M5, the mutations
-        of lines 485 to 496 of ``authority.py``. In the live corpus
-        PRIME.13 is the one class without a link back; GUARD.5 links
-        back by citation and by the word reserved, and either suffices.
+        of lines 485 to 496 of ``authority.py``. GUARD.5 links back by
+        citation and by the word reserved, and either suffices; the
+        status is INFO exactly when some class does not link back.
         """
         back = "- GUARD.5: refers back to PRIME.6: "
         status, details = results(unchanged, (authority,))["c.4"]
-        self.assertEqual(status, "INFO")
-        self.assertIn("- PRIME.13: refers back to PRIME.6: False", details)
+        unlinked = any(line.endswith(": False") for line in details)
+        self.assertEqual(status, "INFO" if unlinked else "PASS")
         self.assertIn(f"{back}True", details)
         details = results(_uncite_reserved, (authority,))["c.4"][1]
         self.assertIn(f"{back}True", details)
-        details = results(_unlink_reserved, (authority,))["c.4"][1]
+        status, details = results(_unlink_reserved, (authority,))["c.4"]
+        self.assertEqual(status, "INFO")
         self.assertIn(f"{back}False", details)
 
     def test_table_rows_in_d1(self) -> None:
