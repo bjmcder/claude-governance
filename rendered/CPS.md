@@ -77,7 +77,7 @@ Every provision other than the selector and the shared-matters provision instant
 
 #### CPS.1 Physical hardware control selector
 
-. Instantiates GOV.25, GOV.26.
+Instantiates GOV.25, GOV.26.
 
 This profile SHALL bind a project whose classification makes at least one attribute of the table of this provision true (GOV.25, GOV.26).
 
@@ -87,7 +87,7 @@ This profile SHALL bind a project whose classification makes at least one attrib
 
 #### CPS.2 Physical hardware control shared matters
 
-. Instantiates GOV.26.
+Instantiates GOV.26.
 
 Each matter of the table of this provision SHALL be governed in this document by the provisions that the table gives for it (GOV.26).
 

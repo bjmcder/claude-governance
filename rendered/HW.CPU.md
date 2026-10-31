@@ -76,7 +76,7 @@ Each provision other than the selector and the shared-matters provision instanti
 
 #### HW.CPU.1 General-purpose processor selector
 
-. Instantiates GOV.25, GOV.26, GOV.27.
+Instantiates GOV.25, GOV.26, GOV.27.
 
 This sub-profile SHALL bind a project whose classification makes at least one attribute of the table of this provision true (GOV.25, GOV.26, GOV.27).
 
@@ -86,7 +86,7 @@ This sub-profile SHALL bind a project whose classification makes at least one at
 
 #### HW.CPU.2 General-purpose processor shared matters
 
-. Instantiates GOV.26.
+Instantiates GOV.26.
 
 Each matter of the table of this provision SHALL be governed in this document by the provisions that the table gives for it (GOV.26).
 

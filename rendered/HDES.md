@@ -108,7 +108,7 @@ HDES.14 states how PRIME.4 applies to saturation and overflow, and binds at ever
 
 #### HDES.1 Hardware design selector
 
-. Instantiates GOV.25, GOV.26.
+Instantiates GOV.25, GOV.26.
 
 This profile SHALL bind a project whose classification makes at least one attribute of the table of this provision true (GOV.25, GOV.26).
 
@@ -119,7 +119,7 @@ This profile SHALL bind a project whose classification makes at least one attrib
 
 #### HDES.2 Hardware design shared matters
 
-. Instantiates GOV.26.
+Instantiates GOV.26.
 
 Each matter of the table of this provision SHALL be governed in this document by the provisions that the table gives for it (GOV.26).
 
@@ -209,7 +209,7 @@ The design record SHALL state, for each realization of a design, its use of each
 
 #### HDES.14 Visible saturation and overflow
 
-. Instantiates PRIME.4.
+Instantiates PRIME.4.
 
 Where an operation of a design is able, over the inputs that its contract admits, to saturate a value at a limit of its number format, or otherwise to saturate or wrap a value other than as the function that its specification states for that operation, the design SHALL make each occurrence visible at its interface, or in a status that its interface exposes, by operation or by group of operations (PRIME.4).
 
