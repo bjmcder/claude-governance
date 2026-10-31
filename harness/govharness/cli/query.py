@@ -14,9 +14,21 @@ import argparse
 import sys
 from pathlib import Path
 
-from govharness.cli.arguments import corpus_root, default_root, split_root
+from govharness.cli.arguments import (
+    at_least,
+    corpus_root,
+    default_root,
+    split_root,
+)
 from govharness.core.corpus import Corpus, read_corpus
-from govharness.core.onset import STARTS, applying_from, describe, onset_of
+from govharness.core.entry import Entry
+from govharness.core.onset import (
+    CLASSES,
+    STARTS,
+    applying_from,
+    describe,
+    onset_of,
+)
 from govharness.query.combination import document_id, review_pairs
 from govharness.query.graph import build_graph
 from govharness.query.retrieval import (
@@ -55,17 +67,26 @@ def add_query(sub: argparse._SubParsersAction) -> None:
     search = sub.add_parser("find", help="items holding the words, ranked")
     search.add_argument("root", nargs="?", help=ROOT_HELP)
     search.add_argument("words", nargs="+")
-    search.add_argument("--limit", type=int, default=10)
+    search.add_argument(
+        "--limit", type=at_least(1), default=10, help="at least 1"
+    )
     search.add_argument("--in-force", action="store_true")
-    search.set_defaults(run=lambda a, _: run_find(a))
+    # cli.main parses find and context again with their options among
+    # the words.
+    search.set_defaults(run=lambda a, _: run_find(a), intermixed=search)
     topic = sub.add_parser(
         "context", help="the governance on a topic, within a budget"
     )
     topic.add_argument("root", nargs="?", help=ROOT_HELP)
     topic.add_argument("words", nargs="+")
-    topic.add_argument("--budget", type=int, default=8000)
+    topic.add_argument(
+        "--budget",
+        type=at_least(0),
+        default=8000,
+        help="characters of text shown, at least 0",
+    )
     topic.add_argument("--in-force", action="store_true")
-    topic.set_defaults(run=lambda a, _: run_context(a))
+    topic.set_defaults(run=lambda a, _: run_context(a), intermixed=topic)
 
     pairs = sub.add_parser(
         "pairs",
@@ -95,13 +116,24 @@ def add_query(sub: argparse._SubParsersAction) -> None:
     pairs.set_defaults(run=lambda a, _: run_pairs(a))
     onset = sub.add_parser(
         "onset",
-        help="the provisions and parts that apply from a class (unit 0023)",
+        help="the provisions and parts that apply from a class, or that "
+        "a move from one class to another adds",
     )
     onset.add_argument("root", nargs="?", type=corpus_root, help=ROOT_HELP)
     onset.add_argument(
         "cls", metavar="CSQn", choices=STARTS, help="CSQ0 to CSQ3"
     )
-    onset.set_defaults(run=lambda a, _: run_onset(a))
+    onset.add_argument(
+        "--from",
+        dest="after",
+        metavar="CSQm",
+        choices=CLASSES[1:],
+        default=None,
+        help="the class moved from, CSQ1 to CSQ4, less severe than "
+        "CSQn: list what applies from each class more severe than CSQm, "
+        "up to CSQn",
+    )
+    onset.set_defaults(run=lambda a, p: run_onset(a, p), usage_parser=onset)
 
 
 def load(command: str, root: Path | None) -> Corpus | None:
@@ -306,33 +338,74 @@ def run_pairs(args: argparse.Namespace) -> int:
     return 0
 
 
-def run_onset(args: argparse.Namespace) -> int:
-    """Run ``onset``: list what a reclassification to a class adds.
+def run_onset(
+    args: argparse.Namespace, parser: argparse.ArgumentParser
+) -> int:
+    """Run ``onset``: list what applies from a class, or what a move adds.
+
+    Without ``--from``, the list holds what applies from the class
+    itself, which is what a move to it from the class next less severe
+    adds. With ``--from CSQm``, it holds what applies from each class
+    more severe than CSQm and no more severe than CSQn, by class, which
+    is what a move from CSQm to CSQn adds by the field ``onset``.
 
     Parameters
     ----------
     args : argparse.Namespace
-        ``root`` and ``cls``.
+        ``root``, ``cls``, and ``after``, the class moved from, or
+        ``None``.
+    parser : argparse.ArgumentParser
+        Parser that reports a usage error.
 
     Returns
     -------
     int
-        1 when no provision or part applies from the class, 2 when no
-        root is known, else 0. Each line names a provision, or a part of
-        one, with its title; a provision whose field gives other parts a
-        more severe class names them after its title.
+        1 when no provision or part applies, 2 when no root is known
+        or the class moved from is not less severe than ``cls``, else
+        0. Each line names a provision, or a part of one, with its
+        title; a provision whose field gives other parts a more severe
+        class names them after its title.
     """
+    severity = CLASSES.index
+    if args.after is not None and severity(args.after) <= severity(args.cls):
+        parser.error(f"--from {args.after} is not less severe than {args.cls}")
     corpus = load("onset", args.root)
     if corpus is None:
         return 2
-    found = applying_from(corpus.provisions(), args.cls)
-    if not found:
-        print(f"onset: no provision applies from {args.cls}", file=sys.stderr)
+    if args.after is None:
+        classes = [args.cls]
+        what = f"apply from {args.cls}"
+        none = f"no provision applies from {args.cls}"
+    else:
+        start = CLASSES.index(args.cls)
+        classes = list(reversed(CLASSES[start : CLASSES.index(args.after)]))
+        what = f"a move from {args.after} to {args.cls} adds"
+        none = f"a move from {args.after} to {args.cls} adds no provision"
+    listed = [(c, applying_from(corpus.provisions(), c)) for c in classes]
+    count = sum(len(found) for _, found in listed)
+    if not count:
+        print(f"onset: {none}", file=sys.stderr)
         return 1
-    print(f"# Provisions and parts that apply from {args.cls}")
+    print(f"# Provisions and parts that {what}")
     print()
-    print(f"{len(found)} item(s).")
-    print()
+    print(f"{count} item(s).")
+    for cls, found in listed:
+        print()
+        if args.after is not None:
+            print(f"## From {cls}")
+            print()
+        _print_onsets(found)
+    return 0
+
+
+def _print_onsets(found: list[tuple[Entry, str | None]]) -> None:
+    """Print one line for each provision or part that ``onset`` lists.
+
+    Parameters
+    ----------
+    found : list[tuple[Entry, str | None]]
+        What ``applying_from`` returns for one class.
+    """
     for entry, part in found:
         ident = entry.meta["id"]
         name = ident if part is None else f"{ident}, {part}"
@@ -341,4 +414,3 @@ def run_onset(args: argparse.Namespace) -> int:
         if part is None and onset is not None and onset.parts:
             line += f" ({describe(onset)})"
         print(line)
-    return 0

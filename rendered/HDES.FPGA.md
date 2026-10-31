@@ -69,7 +69,7 @@ Every provision other than the selector and the shared-matters provision instant
 
 #### HDES.FPGA.1 Programmable logic design selector
 
-. Instantiates GOV.25, GOV.26, GOV.27.
+Instantiates GOV.25, GOV.26, GOV.27.
 
 This sub-profile SHALL bind a project whose classification makes at least one attribute of the table of this provision true (GOV.25, GOV.26, GOV.27).
 
@@ -79,7 +79,7 @@ This sub-profile SHALL bind a project whose classification makes at least one at
 
 #### HDES.FPGA.2 Programmable logic design shared matters
 
-. Instantiates GOV.26.
+Instantiates GOV.26.
 
 Each matter of the table of this provision SHALL be governed in this document by the provisions that the table gives for it (GOV.26).
 

@@ -12,9 +12,10 @@ This guide is for the human owner of a project: the person accountable for the w
 
 4. Record the classification. Under the defaults, the classification is a record that the human owner adopts by a transaction of the project's ledger, `records/ledger.jsonl` (STND.DFLT.13). An agent can enter it for you: tell the agent in its session that you adopt the draft, and it enters your act as a ledger entry with itself as actor, naming you as the actor of the act and quoting your adoption and the draft (STND.DFLT.17). Such an entry is accepted for work that is not assured (STND.DFLT.23). An agent never appends an entry that names you as its actor (STND.DFLT.5).
 
-   You can also append the entry yourself. The harness does it in one command, run from the top of the project:
+   You can also append the entry yourself. The harness does it in one command, run from the top of the project. It creates the ledger file but no directory, so make `records/` first:
 
    ```bash
+   mkdir -p records
    govharness ledger append "$GOVHARNESS_ROOT" \
        --ledger-file records/ledger.jsonl --ledger-id example-project \
        --type classify --actor "Jane Doe" --role "The Human Owner" \
@@ -22,7 +23,7 @@ This guide is for the human owner of a project: the person accountable for the w
        --rationale "Classification: CSQ3. Credible consequence: ... Reliance: ... Row of STND.CLASS.1: CSQ3."
    ```
 
-   The first argument is the corpus, which the command reads and leaves unchanged. With the plugin alone, the same command runs as `PYTHONPATH="<installPath>" python3 -B -m govharness ledger append "<installPath>/governance" ...`, with `installPath` from `claude plugin list --json`. Without the harness, an entry states what STND.DFLT.5 lists. A ledger that the harness reads or appends to also takes the form of STND.HARN.6 and STND.HARN.7, and [`harness/README.md`](../harness/README.md#reading-and-applying-the-corpus-without-software) shows how to compute an entry's hash by hand.
+   The first argument is the corpus, which the command reads and leaves unchanged. With the plugin alone, the same command runs as `PYTHONPATH="<installPath>" python3 -B -P -m govharness ledger append "<installPath>/governance" ...`, with `installPath` from `claude plugin list --json`. However an entry was added, `govharness ledger check records/ledger.jsonl` checks the whole ledger, the form of each line, its fields, and the hash chain, and writes nothing; it prints `ledger: PASS` and the number of entries, or one line for each problem. Without the harness, an entry states what STND.DFLT.5 lists. A ledger that the harness reads or appends to also takes the form of STND.HARN.6 and STND.HARN.7, and [`harness/README.md`](../harness/README.md#reading-and-applying-the-corpus-without-software) shows how to compute an entry's hash by hand.
 
    Until a class is recorded, the work meets the floor (GOV.10). An agent halts and refers to you only a line of work that needs the class to promote, release, deploy, or drive physical hardware (GOV.13).
 
@@ -54,7 +55,7 @@ To raise the class:
 
 1. Draft the revised classification, with `/governance:classifying-work CSQ2` or by hand.
 2. Record it as a new entry of the project's ledger, as in step 4 above.
-3. Check what the new class adds. `govharness onset CSQ2` lists each provision, and each part of a provision, that applies from CSQ2 by its field `onset`, and the table of STND.CLASS.10 lists the parts of LVL0 that apply only from CSQ2, CSQ1, or CSQ0. STND.CLASS.18 gives the reviewer of each class, and STND.CLASS.19 the auditor.
+3. Check what the new class adds. `govharness onset CSQ2 --from CSQ4`, for a move from CSQ4, lists each provision, and each part of a provision, that applies from CSQ3 or CSQ2 by its field `onset`, under a heading for each class; `govharness onset CSQ2` alone lists only what applies from CSQ2 itself. The table of STND.CLASS.10 (`govharness show STND.CLASS.10`) lists the parts of LVL0 that apply only from CSQ2, CSQ1, or CSQ0, STND.CLASS.18 gives the reviewer of each class, and STND.CLASS.19 the auditor; `onset` lists none of these.
 4. Before the work is relied upon at the new class, bring the work done at the lower class up to it (GOV.14). STND.CLASS.22 lists the steps, from regenerating each result whose record lacks an input to the audit of STND.CLASS.19 and the repeat of each check tied to an earlier event, and says when existing source takes up a default of form or style.
 5. Write a project constitution if the project now promotes a result other than through its adopted classification, releases software, or drives hardware (GOV.20).
 

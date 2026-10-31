@@ -78,8 +78,9 @@ govharness/
 │   │                     from a class
 │   └── report.py         CheckResult and Report, the result model
 ├── ledger/               layer 1
-│   ├── transactions.py   transaction types, chain links, signature digest
-│   ├── chain.py          reads and appends ledger files
+│   ├── transactions.py   transaction types, line form, fields, chain links,
+│   │                     signature digest
+│   ├── chain.py          reads, checks, and appends ledger files
 │   ├── gpg.py            gpg processes and the signer configuration
 │   ├── register.py       the signer register SIGNR and its text edits
 │   └── signatures.py     verifies a ledger's signatures against SIGNR
@@ -120,7 +121,8 @@ govharness/
                           check), derived.py (manifests, references,
                           compose), query.py (show, find, context, pairs,
                           onset),
-                          records.py (ledger append, sign, rehearse),
+                          records.py (ledger append and check, sign,
+                          rehearse),
                           arguments.py
 ```
 

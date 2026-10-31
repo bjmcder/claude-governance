@@ -5,6 +5,7 @@ from __future__ import annotations
 import contextlib
 import io
 import os
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -348,6 +349,147 @@ class ExitCodes(unittest.TestCase):
                     code, _, err = run([command, missing, ident])
                     self.assertEqual(code, 2)
                     self.assertIn(f"{missing}: no such directory", err)
+
+
+class Options(unittest.TestCase):
+    """Options of the queries and of ``check`` (the cleanup audit of
+    2026-10-31, H7, H8, H10, and H13)."""
+
+    def test_options_between_the_words(self) -> None:
+        """Behavior: ``find`` and ``context`` take an option between the
+        root and the words, or among the words, with the result of the
+        option at the end; an unknown option is still a usage error.
+
+        Reference: H7: ``find ROOT --in-force remote`` exited 2,
+        "unrecognized arguments".
+        """
+        for command in ("find", "context"):
+            with self.subTest(command):
+                last = run(
+                    [command, str(ROOT), "remote", "write", "--in-force"]
+                )
+                self.assertEqual(last[0], 0)
+                for argv in (
+                    [command, str(ROOT), "--in-force", "remote", "write"],
+                    [command, str(ROOT), "remote", "--in-force", "write"],
+                    [command, "--in-force", str(ROOT), "remote", "write"],
+                ):
+                    self.assertEqual(run(argv), last)
+                code, _, err = run([command, str(ROOT), "remote", "--nope"])
+                self.assertEqual(code, 2)
+                self.assertIn("unrecognized arguments: --nope", err)
+        code, _, err = run(["show", str(ROOT), "GOV.38", "extra"])
+        self.assertEqual(code, 2)
+        self.assertIn("unrecognized arguments: extra", err)
+
+    def test_limit_and_budget_bounds(self) -> None:
+        """Behavior: ``--limit`` below 1 and ``--budget`` below 0, or
+        either not a whole number, are usage errors, exit 2, naming the
+        option; ``--limit 1`` lists one item and ``--budget 0`` names
+        the matches without text.
+
+        Reference: H8: ``--limit 0`` reported "no item holds a word",
+        ``--limit -2`` dropped two matches, and a negative budget was
+        taken.
+        """
+        for argv in (
+            ["find", str(ROOT), "remote", "--limit", "0"],
+            ["find", str(ROOT), "remote", "--limit", "-2"],
+            ["find", str(ROOT), "remote", "--limit", "two"],
+            ["context", str(ROOT), "remote", "--budget", "-1"],
+        ):
+            with self.subTest(argv[-1]):
+                code, out, err = run(argv)
+                self.assertEqual((code, out), (2, ""))
+                self.assertIn(f"argument {argv[-2]}: {argv[-1]}", err)
+        code, out, _ = run(["find", str(ROOT), "remote", "--limit", "1"])
+        self.assertEqual(code, 0)
+        self.assertEqual(len(out.splitlines()), 1)
+        code, out, _ = run(["context", str(ROOT), "remote", "--budget", "0"])
+        self.assertEqual(code, 0)
+        self.assertIn("Also relevant, not shown", out)
+
+    def test_check_out_dir_outside_the_corpus(self) -> None:
+        """Behavior: ``check --out-dir`` inside the corpus, named
+        directly or through ``..``, is refused, exit 2, before anything
+        runs, and the corpus is unchanged.
+
+        Reference: H10: ``check ROOT --out-dir ROOT/report`` wrote three
+        files into the corpus, and ``verify`` then exited 2.
+        """
+        with corpus_copy() as root:
+            before = sorted(p for p in root.rglob("*"))
+            for out_dir in (root / "report", root / "GOV" / ".." / "x"):
+                with self.subTest(str(out_dir)):
+                    code, out, err = run(
+                        ["check", str(root), "--out-dir", str(out_dir)]
+                    )
+                    self.assertEqual((code, out), (2, ""))
+                    self.assertIn("lies inside the corpus", err)
+            self.assertEqual(sorted(p for p in root.rglob("*")), before)
+
+    def test_help_names_no_unit(self) -> None:
+        """Behavior: the help of the program and of each command names
+        no harness unit, which is a process record, not usage.
+
+        Reference: H13: ``--help`` showed "(unit 0022)" and "(unit
+        0023)".
+        """
+        commands = [[], *([c] for c in ("show", "find", "context"))]
+        commands += [["pairs"], ["onset"], ["verify"], ["check"]]
+        commands += [["ledger", "append"], ["ledger", "check"], ["compose"]]
+        for command in commands:
+            with self.subTest(" ".join(command)):
+                code, out, _ = run([*command, "--help"])
+                self.assertEqual(code, 0)
+                self.assertNotRegex(out, r"\bunits? 00\d\d")
+
+
+class SafePath(unittest.TestCase):
+    """The run form of the documentation imports nothing from the
+    working directory (S9 of the cleanup audit of 2026-10-31)."""
+
+    def test_isolated_form_ignores_the_working_directory(self) -> None:
+        """Behavior: run from a directory that holds a package ``json``,
+        ``python3 -B -m govharness`` imports and runs it, and the form
+        ``PYTHONPATH=HARNESS python3 -B -P -m govharness`` does not and
+        prints GOV.38.
+
+        Reference: S9: an adopting project holding ``json/__init__.py``
+        ran its own code through the skills' command.
+        """
+        harness = Path(__file__).resolve().parents[2]
+        with tempfile.TemporaryDirectory() as tmp:
+            planted = Path(tmp) / "json"
+            planted.mkdir()
+            (planted / "__init__.py").write_text(
+                "raise SystemExit('planted json imported')\n",
+                encoding="utf-8",
+            )
+            env = {
+                "PATH": os.environ.get("PATH", ""),
+                "PYTHONPATH": str(harness),
+            }
+            show = ["-m", "govharness", "show", str(ROOT), "GOV.38"]
+            plain = subprocess.run(
+                [sys.executable, "-B", *show],
+                cwd=tmp,
+                env=env,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertIn("planted json imported", plain.stderr)
+            safe = subprocess.run(
+                [sys.executable, "-B", "-P", *show],
+                cwd=tmp,
+                env=env,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(safe.returncode, 0, safe.stderr)
+            self.assertTrue(safe.stdout.startswith("## GOV.38 — "))
 
 
 class CorpusRoot(unittest.TestCase):

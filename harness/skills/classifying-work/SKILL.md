@@ -13,7 +13,7 @@ The class that the human owner named, if any: $ARGUMENTS
 
 The draft is text in the conversation. It is not a record. The classification is adopted only by the human owner (GOV.24, GOV.50); an agent may draft it. Under the defaults, the adoption is a ledger transaction (STND.DFLT.13). STND.DFLT.5 bars an agent from appending an entry that names the human owner as actor. Where the human owner adopts the draft directly in a session, an agent enters that act as an entry with itself as actor, stating the human owner as the actor of the act and quoting the adoption and the draft (STND.DFLT.17); this skill writes no such entry. A project constitution places the classification in its Classification section (STND.PROJ.1).
 
-The provisions below print with `PYTHONPATH="${CLAUDE_PLUGIN_ROOT}" python3 -B -m govharness show "${CLAUDE_PLUGIN_ROOT}/governance" ID`.
+The provisions below print with `PYTHONPATH="${CLAUDE_PLUGIN_ROOT}" python3 -B -P -m govharness show "${CLAUDE_PLUGIN_ROOT}/governance" ID`.
 
 ## What a classification holds
 
@@ -31,7 +31,7 @@ The provisions below print with `PYTHONPATH="${CLAUDE_PLUGIN_ROOT}" python3 -B -
 ## Facts that bear on the class
 
 - A class attaches to the use of the work and moves toward CSQ0 as reliance or exposure grows (GOV.14). STND.CLASS.7 lists the events that call for a reassessment.
-- What each class requires above the floor, and from which class, is the table of STND.CLASS.10 with the field `onset` of each provision below LVL0; `onset ROOT CSQn` lists what applies from CSQn. Review independence by class is STND.CLASS.18, the audit interval STND.CLASS.19, and what a reclassification owes STND.CLASS.22.
+- What each class requires above the floor, and from which class, is the table of STND.CLASS.10 with the field `onset` of each provision below LVL0. `onset ROOT CSQn` lists what applies from CSQn itself by the field, and `onset ROOT CSQn --from CSQm` everything that a move from CSQm to CSQn adds by it; neither lists the rows of the table of STND.CLASS.10, which `show ROOT STND.CLASS.10` prints. Review independence by class is STND.CLASS.18, the audit interval STND.CLASS.19, and what a reclassification owes STND.CLASS.22.
 - Under the defaults, an entry that records CSQ0 or CSQ1 makes the work assured once the signer register lists a key of the human owner for the work's ledger (the term Assured work of STND.DFLT). For assured work, STND.DFLT.23 accepts only entries signed by the human owner and confirmed by such a key. Until then, the class stands as recorded, and each referral names founding the register as a recommended next step (STND.DFLT.20). The corpus of this plugin has no signer register.
 - An expected class sets no class before its use begins (GOV.13). Where one is recorded, STND.CLASS.21 has the design admit the parts of that class, and STND.CLASS.23 has work of CSQ4 keep the records of its table.
 - For work of CSQ3 or CSQ4, the adopted classification is the promotion of each result that meets its acceptance criteria, for reliance by its author or immediate team (QA.11).

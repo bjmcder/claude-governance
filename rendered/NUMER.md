@@ -116,7 +116,7 @@ NUMER owns seven shared matters and addresses two that HW owns and one that MEAS
 
 #### NUMER.1 Numerical profile selector
 
-. Instantiates GOV.25, GOV.26.
+Instantiates GOV.25, GOV.26.
 
 This profile SHALL bind a project whose classification makes at least one attribute of the table of this provision true (GOV.25, GOV.26).
 
@@ -126,7 +126,7 @@ This profile SHALL bind a project whose classification makes at least one attrib
 
 #### NUMER.2 Shared matters owned
 
-. Instantiates GOV.26.
+Instantiates GOV.26.
 
 Each matter of the table of this provision SHALL be governed in this document by the provisions that the table gives for it (GOV.26).
 
@@ -299,7 +299,7 @@ Each acceptance criterion that compares a stochastic result with a reference ora
 
 #### NUMER.26 No reseeding to pass
 
-. Instantiates PRIME.2, VV.3.
+Instantiates PRIME.2, VV.3.
 
 Where no repetition rule was recorded before a comparison of a stochastic result failed, that comparison SHALL NOT be repeated with other random numbers as the remedy for its failure (PRIME.2, VV.3).
 

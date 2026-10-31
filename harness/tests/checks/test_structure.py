@@ -7,6 +7,7 @@ check, and the files that no scope pins. Ported in part from
 
 from __future__ import annotations
 
+import re
 import unittest
 from pathlib import PurePosixPath
 
@@ -23,8 +24,10 @@ from govharness.checks.structure import (
 from govharness.core.corpus import Corpus, Tree, read_tree
 from govharness.core.entry import Entry
 from govharness.ledger.gpg import SignerConfig
+from tests.cli.test_main import run
 from tests.support import (
     ROOT,
+    corpus_copy,
     corpus_of,
     live_entries,
     live_index,
@@ -198,6 +201,42 @@ class StructureChecks(unittest.TestCase):
             (found.status, found.details),
             ("FAIL", ["- STND.HARN.9: `ledgr` names no check"]),
         )
+
+
+class Manifests(unittest.TestCase):
+    """A stale or missing manifest fails ``verify``."""
+
+    def test_stale_or_missing_manifest_fails_verify(self) -> None:
+        """Behavior: ``verify`` passes a copy, then fails it, exit 1,
+        under the check manifests and naming the file, once a hash of
+        ``GOV/MANIFEST.csv`` is changed, and again once the file is
+        removed; the ledger check passes throughout, since a manifest
+        is no Markdown that a scope pins.
+
+        Reference: H6 of the cleanup audit of 2026-10-31: with the
+        check made to pass always, the whole suite still passed.
+        """
+        with corpus_copy() as root:
+            code, out, _ = run(["verify", "--no-logic", str(root)])
+            self.assertEqual(code, 0)
+            self.assertIn("manifests: PASS", out)
+            manifest = root / "GOV" / "MANIFEST.csv"
+            text = manifest.read_text(encoding="utf-8")
+            digest = re.search(r"[0-9a-f]{64}", text)
+            assert digest is not None
+            changed = ("1" if digest[0][0] == "0" else "0") + digest[0][1:]
+            manifest.write_text(
+                text.replace(digest[0], changed, 1), encoding="utf-8"
+            )
+            for damage in ("stale", "missing"):
+                with self.subTest(damage):
+                    if damage == "missing":
+                        manifest.unlink()
+                    code, out, _ = run(["verify", "--no-logic", str(root)])
+                    self.assertEqual(code, 1)
+                    self.assertIn("manifests: FAIL", out)
+                    self.assertIn("stale manifest: GOV/MANIFEST.csv", out)
+                    self.assertIn("ledger: PASS", out)
 
 
 if __name__ == "__main__":

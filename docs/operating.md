@@ -19,7 +19,7 @@ At a terminal, with `GOVHARNESS_ROOT` set as in [installation.md](installation.m
 | What governs this topic, within a size limit? | `govharness context remote write --in-force --budget 6000` |
 | What does a term mean? | `govharness find remote write`, then `govharness show LEX.remote-write` |
 | What applies from a given class? | `govharness show STND.CLASS.10` |
-| What does reclassification to CSQ2 add? | `govharness onset CSQ2` |
+| What does a move from CSQ4 to CSQ2 add? | `govharness onset CSQ2 --from CSQ4`, then `govharness show STND.CLASS.10` |
 
 The skill `consulting-governance` lists more questions with the commands that answer them: before a destructive action, a remote write, a delegation, a promotion, or a release, and when a line of work halts.
 
@@ -29,23 +29,23 @@ The skill `consulting-governance` lists more questions with the commands that an
 
 `find` prints one line per matching item, best first, and `context` prints the best matches and the items they cite, each in full while the budget of characters lasts, then lists the rest under "Also relevant, not shown". Each text is printed whole or not at all, so a section larger than the remaining budget is listed by name. Both commands match words and their inflected forms, not meanings: "deleting" finds "deletion", but "push" finds only the passages that use that word. The corpus's own terms work best, "remote write" rather than "push" and "destructive action" rather than "delete". Items that hold every word come first. Provisions, Lexicon terms, and Terms sections rank above Notes and other prose, and a document identifier among the words matches the provisions and sections of that document. `--in-force` keeps only adopted and ratified items.
 
-`onset CSQ2` lists each provision, and each named part of a provision, that applies from CSQ2 by its field `onset`, so the list is what a reclassification to CSQ2 adds to work of CSQ3; a provision whose other parts start at a more severe class is shown with its whole onset, as in `from CSQ3; sentence 2 from CSQ2`. A provision that binds carries no field, and one that applies at every class carries the value `null`; neither is in a list.
+`onset CSQ2` lists each provision, and each named part of a provision, that applies from CSQ2 by its field `onset`: what a move from CSQ3 to CSQ2 adds. `onset CSQ1 --from CSQ4` lists, under a heading for each of CSQ3, CSQ2, and CSQ1, what applies from that class: everything a move from CSQ4 to CSQ1 adds by the field. A provision whose other parts start at a more severe class is shown with its whole onset, as in `from CSQ3; sentence 2 from CSQ2`. A provision that binds carries no field, and one that applies at every class carries the value `null`; neither is in a list. Neither form lists the rows of the table of STND.CLASS.10, which are parts of LVL0 that apply from CSQ2, CSQ1, or CSQ0, the reviewer of each class (STND.CLASS.18), or the audit (STND.CLASS.19); `show STND.CLASS.10`, `show STND.CLASS.18`, and `show STND.CLASS.19` print them.
 
 `show`, `find`, `context`, `pairs`, and `onset` exit with status 0 when something was found, 1 when nothing was, with the message on the standard error, and 2 for a usage error.
 
 With no corpus on the command line, a command reads the corpus that `GOVHARNESS_ROOT` names, or else `./governance` where that directory exists. With neither, it exits with status 2 and a line naming the variable. A corpus can also be named as the first argument, as in `govharness show path/to/governance GOV.38`; for `find` and `context`, the first argument is taken as the corpus only where it is a directory that holds `LVL0/_doc.md`, so a query word that happens to name a directory of the project stays a word.
 
-Without installing the harness, the same commands run from a clone of this repository. From its `harness/` directory, name the corpus `governance`:
+Without installing the harness, the same commands run from a clone of this repository. From its `harness/` directory, name the corpus `governance`; these forms import the package from the working directory, which is the harness itself:
 
 ```bash
 python3 -B -m govharness show governance PRIME.6
 python3 -B -m govharness context governance remote write --budget 6000 --in-force
 ```
 
-From any other directory, `PYTHONPATH` names the directory that holds `govharness/`:
+From any other directory, `PYTHONPATH` names the directory that holds `govharness/`, and `-P` keeps the working directory off the import path, so that a module of your project is never imported in place of one of Python's:
 
 ```bash
-PYTHONPATH=governance-harness/harness python3 -B -m govharness show governance-harness/harness/governance GOV.38
+PYTHONPATH=governance-harness/harness python3 -B -P -m govharness show governance-harness/harness/governance GOV.38
 ```
 
 For reading at length, [`rendered/`](../rendered/README.md) has a reading copy of every document, listed by level in its table of contents.

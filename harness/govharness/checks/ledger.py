@@ -1,10 +1,12 @@
 """Structural check of ``verify``: the ledger chain, pins, and signatures.
 
 The hash chain is intact, each entry's sequence number is its position,
-and each transaction's pinned ``corpus_hash`` still matches its scope,
-so an edit made outside the ledger is reported (GOV.36). A pin holds
-until a later transaction's scope reaches each of its paths
-(STND.HARN.9, ``transactions.pins_in_force``). Every signature verifies
+each line is the canonical serialization of its entry (STND.HARN.6)
+with exactly the fields of STND.HARN.7, and each transaction's pinned
+``corpus_hash`` still matches its scope, so an edit made outside the
+ledger is reported (GOV.36). A pin holds until a later transaction's
+scope reaches each of its paths (STND.HARN.9,
+``transactions.pins_in_force``). Every signature verifies
 against the signer register ``SIGNR`` where one exists, every entry the
 register requires to be signed is signed, and every change to the
 register after its founding is signed.
@@ -25,14 +27,17 @@ from pathlib import PurePosixPath
 
 from govharness.checks.base import Check, CheckContext, Verdict
 from govharness.core.corpus import Tree, has_scope_path, scope_hash
-from govharness.core.entry import DOC_FILE
+from govharness.core.entry import DOC_FILE, LEDGER_FILE
 from govharness.ledger.gpg import SignerConfig
-from govharness.ledger.register import REGISTER_ID, read_register
+from govharness.ledger.register import read_register
 from govharness.ledger.signatures import check_signatures
 from govharness.ledger.transactions import (
     GOVERNANCE,
+    REGISTER_ID,
     Transaction,
     entry_problems,
+    field_problems,
+    form_problems,
     head_problems,
     pins_in_force,
     reaches,
@@ -61,9 +66,10 @@ def ledger_problems(
     -------
     list[str]
         One line per failure: a ledger missing where content is to be
-        pinned, the head pin, for each entry its sequence, chain, and
-        scope problems, then the missing register, the signature
-        failures, and the stale pins.
+        pinned, the head pin, each line of the ledger file of the tree
+        not in the form of STND.HARN.6, for each entry its sequence,
+        chain, field, and scope problems, then the missing register,
+        the signature failures, and the stale pins.
     """
     errors: list[str] = []
     if not entries and tree.markdown():
@@ -77,9 +83,15 @@ def ledger_problems(
             "this account, so its anchor and head pin are ignored"
         )
     errors += head_problems(entries, config.head)
+    ledger_file = PurePosixPath(LEDGER_FILE)
+    if ledger_file in tree.files:
+        # The bytes as stored: a carriage return before a line feed is
+        # outside the form, though a text read would drop it.
+        errors += form_problems(tree.files[ledger_file].decode("utf-8"))
     previous = None
     for position, entry in enumerate(entries, start=1):
         errors += entry_problems(entry, position, previous)
+        errors += field_problems(entry)
         previous = entry.get("hash")
         seq = entry.get("seq")
         for path in entry.get("scope") or []:
