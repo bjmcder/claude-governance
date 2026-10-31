@@ -3,14 +3,16 @@
 Eight transactions, one per document, after the lvl0 and tech parts, conforming to LVL0 as the lvl0 part amends it:
 - STND.DFLT 1.7 (minor): R1 lower part (STND.DFLT.33 and the Notes), R3 lower part (the term Given directly and
   new STND.DFLT.36), R4 (STND.DFLT.23 and the term Foreign entry), R10 (the term Working bounds), B3
-  (STND.DFLT.15), O7 (STND.DFLT.20), I1 (STND.DFLT.17), I9 (STND.DFLT.5), and the conforming STND.DFLT.7 and new
-  STND.DFLT.37 (the provisioning record of PRIME.9).
+  (STND.DFLT.15), O7 (STND.DFLT.20), I1 (STND.DFLT.17), I9 (STND.DFLT.5), new STND.DFLT.38 and a row of
+  STND.DFLT.18 (R4), and the conforming STND.DFLT.7, STND.DFLT.19, and new STND.DFLT.37 (the record of PRIME.9).
 - AGENT 1.4 (minor): R1 lower part (AGENT.6 and the Notes on AGENT.6 and AGENT.8).
-- STND.CLASS 1.6 (minor): O7 (STND.CLASS.22), the conforming row of CSQ1 of STND.CLASS.10, and the Notes.
+- STND.CLASS 1.6 (minor): O7 (STND.CLASS.22), the conforming STND.CLASS.20 and row of CSQ1 of STND.CLASS.10, and
+  the Notes.
 - STND.IDENT 1.6 (minor): R6 (STND.IDENT.23).
 - STND.WPROC 1.5 (minor): B9 (the term Main line).
-- STND.CREW 1.4 (minor): the conforming STND.CREW.13, the term Lead agent, and the Notes.
-- STND.PROJ 1.6 (minor): O5 (STND.PROJ.2 and the Notes).
+- STND.CREW 1.4 (minor): the conforming STND.CREW.13 and STND.CREW.21, the term Lead agent, and the Notes.
+- STND.PROJ 1.6 (minor): O5 (STND.PROJ.2 and the Notes), a signing row of STND.PROJ.3, and the conforming row
+  Physical hardware of STND.PROJ.1.
 - STND.INSTR 1.6 (minor): O6 (STND.INSTR.11).
 
 The order: STND.DFLT first, since every other document of the part cites it or its new text (AGENT and STND.CLASS
@@ -39,6 +41,8 @@ AT = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 RECORD = "review-records/audit-2026-10-31/decisions.md"
 PART_RECORD = "review-records/audit-2026-10-31/process/decisions.md"
 FINDINGS = "review-records/audit-2026-10-31/findings.md"
+REVIEWS = ("review-records/audit-2026-10-31/process/review.md and "
+           "review-records/audit-2026-10-31/reconciliation.md")
 LVL0 = f"LVL0 {LVL0_REV}"
 
 
@@ -48,7 +52,7 @@ def cite(findings: str, rulings: str | None = None) -> str:
     text = f"{word} {findings} of {FINDINGS}"
     if rulings:
         text += f"; {rulings} of {FINDINGS}, put to the custodian at ratification"
-    return f"{text}; {RECORD}; {PART_RECORD}."
+    return f"{text}; {RECORD}; {PART_RECORD}, with the reviews {REVIEWS}."
 
 
 def provision(doc_id: str, n: int, title: str, section: str, instantiates: list[str], refers_to: list[str],
@@ -78,6 +82,7 @@ def apply_dflt(root: Path, at: str) -> None:
     for n, title, section, inst, refs, body in D.NEW:
         (root / f"STND/DFLT/{n}.md").write_text(
             provision("STND.DFLT", n, title, section, inst, refs, body, date), encoding="utf-8")
+    replace_text(root, "STND/DFLT/18.md", [D.DFLT18_ROW])
     replace_text(root, "STND/DFLT/_doc.md", D.DOC)
     F.check_fields(root, D.CHANGED, binding=True)
     reading = D.READING.format(lvl0=LVL0)
@@ -90,30 +95,43 @@ def apply_dflt(root: Path, at: str) -> None:
         "makes of presumed CSQ4 work, entered, so STND.DFLT.33 keeps the entry of the direction and no longer "
         "restates a bound; PRIME.11 admits a person whom the human owner names by a recorded act, so the defaults "
         "say what a message given directly is and whose acts an agent takes as the human owner's, without "
-        "establishing ownership (PRIN.1); PRIME.9 asks the human owner's provisioning record that an environment is "
-        "isolated, and STND.DFLT.37 places it in the ledger; GUARD.9 no longer reaches the exempt classes, and the "
-        "sixth class reaches only the agent's own new item, never a revision of the history (GUARD.7); GUARD.10 "
+        "establishing ownership (PRIN.1), and a naming counts only by an accepted entry; an injected ledger line "
+        "gains no authority by whatever route it comes, since every entry of an act of the human owner after the "
+        "accepted point that the agent did not append in its session waits for the owner's confirmation, by "
+        "position and hash, gathered in one statement, and the acceptance entry that an agent appends at the end of "
+        "each session in which it appended an entry keeps its own entries from being foreign to the next; PRIME.9 asks the human owner's provisioning record that an environment is "
+        "isolated, and STND.DFLT.37 places it in the ledger and confines it to the environment it names; GUARD.7 adds "
+        "the ground of an item that the agent created in the current unit, that the history does not yet hold, on "
+        "which no reported result rests, and that no other actor has changed since the agent last wrote it, which "
+        "the sixth class takes exactly, with a digest as its check and references of the history excluded; "
+        "GOV.13 and GOV.20 now read \"commanding, configuring, or powering\" physical hardware, which STND.DFLT.19 "
+        "follows; GUARD.10 "
         "adds revocation, which an agent meets by reading the ledger before each action under a standing grant. "
         "Class: minor under STND.IDENT.3, because obligations, permissions, and defined meanings are added and "
         "altered without altering the motivation or intent of the governance. Floor (GOV.11): every provision of "
         "this standard is binding, since it instantiates GOV.22, and each change either conforms to "
         f"{LVL0} or tightens within it, so that no condition that PRIME or GUARD prohibits becomes reachable: "
         "STND.DFLT.23 accepts fewer unsigned entries than before, and a foreign entry gains authority only by the "
-        "human owner's act; STND.DFLT.17 adds the entry before reliance and the reading before each action under a "
+        "human owner's act; STND.DFLT.38 asks one entry per session that appended one; the new row of STND.DFLT.18 "
+        "states a residual, forgery up to the accepted point, as unprotected (GUARD.16); STND.DFLT.17 adds the entry before reliance and the reading before each action under a "
         "standing grant, each one record or one read; STND.DFLT.33 asks the one entry that it asked before, now of "
-        "each direction, and the bound is PRIME.8's own; STND.DFLT.36 identifies whose messages carry the human "
-        "owner's authority only where no record names another person, and grants nothing, since the acts stay the "
-        "human owner's (PRIME.1); STND.DFLT.37 is one entry of a statement that PRIME.9 already asks; the sixth "
-        "exempt class exposes only the agent's own uncommitted work of the unit, which no other actor has changed, "
-        "and no history (GUARD.6, GUARD.7); the term Working bounds admits the tool's use of the credential means "
-        "only under an authorization of the human owner, in that action alone, and the agent reads no secret "
-        "(PRIME.10, AGENT.45); STND.DFLT.7 follows QA.1 as amended; STND.DFLT.5 and STND.DFLT.20 add a citation "
+        "each direction, the scribe entry that GOV.36 asks of the authorization of PRIME.8 and of the "
+        "promotion of QA.11, without its secrets, and the bound and its figure are PRIME.8's own; STND.DFLT.36 identifies whose messages carry the human "
+        "owner's authority only where no accepted entry names another person, takes a naming only from an accepted "
+        "entry, refers what it is unable to place, and grants nothing, since the acts stay the human owner's "
+        "(PRIME.1); STND.DFLT.37 is one entry of a statement that PRIME.9 already asks, reaching only the "
+        "environment it names; STND.DFLT.19 halts for the same hardware that PRIME.13 names; the sixth "
+        "exempt class is the ground that GUARD.7 as amended admits, and no more; the term Working bounds admits the tool's use of the credential means "
+        "only under an authorization of the human owner, in that action alone, and the agent reads, passes, "
+        "and stores no secret and changes none of the configuration of those means (PRIME.10, AGENT.45); STND.DFLT.7 follows QA.1 as amended; STND.DFLT.5 and STND.DFLT.20 add a citation "
         "and a list. No provision asks a decision of the human owner beyond those LVL0 assigns (STND.DRAFT.42): the "
         "confirmation of a foreign entry is the act by which the owner gives an entry authority, asked once per "
         "entry and gathered into one referral. Onset: none; every provision of this standard is binding and carries "
         "no field onset. " + TRANSITION + "A foreign entry already relied upon before this revision is entered is "
         "confirmed at the next action that relies on it, and an authorization given directly before it and not yet "
-        "entered is entered before that action. " +
+        "entered is entered before that action; a ledger that predates this revision has no acceptance entry, so its "
+        "entries of acts of the human owner are confirmed once, in one statement, when a line of work first relies "
+        "on one. " +
         cite("S4, S5, S6, B1, B3, B4, O7, I1, and I9",
              "recommendations R1, R3, R4, and R10") + F.AUTHOR)
     F.finish(root, "STND/DFLT", "STND.DFLT", "1.6.1", "1.7", row, rationale, at)
@@ -150,9 +168,10 @@ def apply_agent(root: Path, at: str) -> None:
 def apply_class(root: Path, at: str) -> None:
     date = at[:10]
     replace_text(root, "STND/CLASS/10.md", P.CLASS10)
+    F.set_body(root, "STND/CLASS/20.md", P.CLASS20_BODY, refers_to=["QA.11", "GOV.13", "STND.DFLT.33"])
     replace_text(root, "STND/CLASS/22.md", P.CLASS22)
     replace_text(root, "STND/CLASS/_doc.md", P.CLASS_DOC)
-    F.check_fields(root, ["STND.CLASS.22"], binding=True)
+    F.check_fields(root, ["STND.CLASS.20", "STND.CLASS.22"], binding=True)
     F.check_fields(root, ["STND.CLASS.10"])
     reading = P.CLASS_READING.format(lvl0=LVL0)
     row = f"| 1.6 | {date} | Minor amendment (GOV.41): {reading}. |"
@@ -163,12 +182,16 @@ def apply_class(root: Path, at: str) -> None:
         "drafted applies INTPR.11 to agent actions from CSQ3, under the first sentence of STND.CLASS.10, and not "
         "from CSQ1, since it keeps more evidence and moves agent actions only out of CSQ4; once work under the "
         "defaults is assured, STND.DFLT.23 accepts only signed entries, which STND.CLASS.22 now makes a step before "
-        "reliance at the new class. Class: minor under STND.IDENT.3, because the reach of a part and a step of a "
+        "reliance at the new class; under QA.11 as amended, the human owner's direction, not a classification, "
+        "promotes the results of work whose class GOV.13 presumes, so STND.CLASS.20 has the promotion cite the "
+        "entry of that direction, which STND.DFLT.33 makes, and is otherwise unchanged. Class: minor under STND.IDENT.3, because the reach of a part and a step of a "
         "binding provision change, without altering the motivation or intent of the governance. Floor (GOV.11): "
         "STND.CLASS.10 is a default, and its row conforms to the level that LVL0 now gives INTPR.11 for agents, "
         "which is above the floor; STND.CLASS.22 binds at every class and its new step reaches only work made "
         "assured at CSQ1 or CSQ0, where STND.DFLT.23 already bars reliance on an unsigned entry, so it names the act "
-        "that already precedes that reliance and raises no floor. Onset: STND.CLASS.10 keeps the value null, since "
+        "that already precedes that reliance and raises no floor; STND.CLASS.20 binds at every class, as "
+        "before, since it instantiates GOV.11, and asks for presumed work the citation of an entry that exists, "
+        "where before it asked one that could not exist. Onset: STND.CLASS.10 keeps the value null, since "
         "it applies at every class, and STND.CLASS.22 is binding and carries no field. " + TRANSITION +
         cite("O1, O7, and I5", "recommendation R5") + F.AUTHOR)
     F.finish(root, "STND/CLASS", "STND.CLASS", "1.5.1", "1.6", row, rationale, at)
@@ -188,8 +211,10 @@ def apply_ident(root: Path, at: str) -> None:
         "Reading: GOV.41 has a project's human owner adopt that project's LVL3 instruments, and GOV.37 has mnemonics "
         "held in a register that changes only by ledger transaction; a project's ledger transaction meets GOV.37 "
         "for the project's own mnemonic, so a downstream project names itself, and is able to have the "
-        "constitution that GOV.20 asks, without an act of the custodians that LVL0 does not assign them; the "
-        "register MNEM, and the check v.11 that only the custodians change it, stay as they are. Class: minor under "
+        "constitution that GOV.20 asks, without an act of the custodians that LVL0 does not assign them; the duty "
+        "arises only where the project adopts an instrument whose identifier carries its mnemonic, and the Notes fix "
+        "the transaction as one of type register, with the mnemonic as its one target, so that a harness given the "
+        "project's ledger reads it; the register MNEM, and the check v.11 that only the custodians change it, stay as they are. Class: minor under "
         "STND.IDENT.3, because an obligation moves from the custodians to the human owner for one kind of mnemonic, "
         "without altering the motivation or intent of the governance. Floor (GOV.11): STND.IDENT.23 binds at every "
         "class, as before, since it instantiates GOV.41 and GOV.37; the human owner's act replaces the custodians' "
@@ -230,8 +255,9 @@ def apply_wproc(root: Path, at: str) -> None:
 def apply_crew(root: Path, at: str) -> None:
     date = at[:10]
     replace_text(root, "STND/CREW/13.md", P.CREW13)
+    replace_text(root, "STND/CREW/21.md", P.CREW21)
     replace_text(root, "STND/CREW/_doc.md", P.CREW_DOC)
-    F.check_fields(root, ["STND.CREW.13"], binding=True)
+    F.check_fields(root, ["STND.CREW.13", "STND.CREW.21"], binding=True)
     reading = P.CREW_READING.format(lvl0=LVL0)
     row = f"| 1.4 | {date} | Minor amendment (GOV.41): {reading}. |"
     rationale = (
@@ -243,7 +269,9 @@ def apply_crew(root: Path, at: str) -> None:
         "reaches an agent that such a person instructs directly. Class: minor under STND.IDENT.3, because the "
         "content of a record and a defined meaning change, without altering the motivation or intent of the "
         "governance. Floor (GOV.11): STND.CREW.13 binds at every class, as before, since it instantiates GUARD.14 "
-        "and GUARD.15, and it asks the same one record, against the bounds that PRIME.8 now sets; the term Lead "
+        "and GUARD.15, and it asks the same one record, against the bounds that PRIME.8 now sets; STND.CREW.21 "
+        "binds at every class, as before, and asks the same referral where an assignment would pass the bound of "
+        "PRIME.8, whatever kind of bound it is; the term Lead "
         "agent gives a named person no act of PRIME.1, since the record of decisions still goes to the human owner "
         "(STND.CREW.2). Onset: none; STND.CREW.13 is binding, and no default changes. " + TRANSITION +
         cite("S5, B1, and S6", "recommendations R1 and R3") + F.AUTHOR)
@@ -255,22 +283,30 @@ def apply_crew(root: Path, at: str) -> None:
 
 def apply_proj(root: Path, at: str) -> None:
     date = at[:10]
+    replace_text(root, "STND/PROJ/1.md", P.PROJ1)
     replace_text(root, "STND/PROJ/2.md", P.PROJ2)
+    replace_text(root, "STND/PROJ/3.md", P.PROJ3)
     replace_text(root, "STND/PROJ/_doc.md", P.PROJ_DOC)
-    F.check_fields(root, ["STND.PROJ.2"], binding=True)
+    F.check_fields(root, ["STND.PROJ.1", "STND.PROJ.2", "STND.PROJ.3"], binding=True)
     row = f"| 1.6 | {date} | Minor amendment (GOV.41): {P.PROJ_READING}. |"
     rationale = (
         f"Minor amendment of STND.PROJ, revision 1.6, ratified by the custodian on {date}: {P.PROJ_READING}. "
         "Reading: a constitution that cited STND.DFLT took in STND.DFLT.35 but not STND.DFLT.34, and none of the "
         "authorization provisions, so that, once STND.DFLT.1 ended the defaults, a project that adopted a "
         "constitution lost the build and test permission, the route by which the human owner's acts reach the "
-        "ledger, and the entry of directions of work; the citation now carries them. Class: minor under "
+        "ledger, and the entry of directions of work; the citation now carries them, with the rule of "
+        "accepted entries and the acceptance entries that STND.DFLT.17 rests on, the identification of the human "
+        "owner, and the record of isolation; STND.PROJ.3 proposes the standing authorization of signing that the "
+        "term Working bounds of STND.DFLT reads, so that the first referral proposes it; the row Physical hardware "
+        "of STND.PROJ.1 takes the words of PRIME.13, as GOV.20 now does. Class: minor under "
         "STND.IDENT.3, because a permission widens without altering the motivation or intent of the governance. "
         "Floor (GOV.11): STND.PROJ.2 binds at every class, as before, since it instantiates GOV.21 and GOV.22; it "
         "widens only what one citation adopts, each provision adopted keeps its own content, and the items that "
-        "STND.DFLT does not provide are still stated in full, so no obligation is lowered and none is raised. "
-        "Onset: none; the provision is binding. Transition (GOV.42): none; a constitution that already states its "
-        "section Authorizations in full keeps it. " + cite("O5") + F.AUTHOR)
+        "STND.DFLT does not provide are still stated in full, so no obligation is lowered and none is raised; "
+        "STND.PROJ.3 adds a recommendation within a binding provision, which the human owner adopts or not, and the "
+        "row of STND.PROJ.1 reaches the hardware that PRIME.13 already governs at every class. "
+        "Onset: none; the provisions are binding. Transition (GOV.42): none; a constitution that already states "
+        "its sections Identity, Records, and Authorizations in full keeps them. " + cite("O5") + F.AUTHOR)
     F.finish(root, "STND/PROJ", "STND.PROJ", "1.5", "1.6", row, rationale, at)
 
 
@@ -291,7 +327,8 @@ def apply_instr(root: Path, at: str) -> None:
         "without an entry at each edit. Class: minor under STND.IDENT.3, because a permission is added without "
         "altering the motivation or intent of the governance. Floor (GOV.11): STND.INSTR.11 binds at every class, "
         "as before; the permission reaches only an action that no instruction with authority directs and no "
-        "provision of governance requires, so no obligation is lowered, an injected restriction gains no authority "
+        "provision of governance requires, and never the command toward the designed safe state or a step of "
+        "GUARD.3, so no obligation is lowered and no halt is kept from a safe state, an injected restriction gains no authority "
         "to make the agent act, and each restriction honored is stated in the completion report, where the human "
         "owner sees it. Onset: none; the provision is binding. Transition (GOV.42): none. " + cite("O6") + F.AUTHOR)
     F.finish(root, "STND/INSTR", "STND.INSTR", "1.5.1", "1.6", row, rationale, at)
